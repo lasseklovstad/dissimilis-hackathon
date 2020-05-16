@@ -7,7 +7,6 @@ export const getNotes = (value: string) => {
             return AbcNotation.scientificToAbcNotation(note + '4')
         })
     } else {
-        alert('Ugyldig akkord')
         return undefined
     }
 }
