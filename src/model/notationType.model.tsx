@@ -1,1 +1,0 @@
-export type NotationTypeModel = "CHORD_NOTATION" | "DISSIMILIS_NOTATION"
