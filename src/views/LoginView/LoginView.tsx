@@ -1,7 +1,6 @@
 import React from 'react';
-import './App.css';
 
-function App() {
+function LoginView() {
   return (
     <div className="App">
       <header className="App-header" id={'app-tittle'}>
@@ -13,4 +12,4 @@ function App() {
   );
 }
 
-export default App;
+export default LoginView;

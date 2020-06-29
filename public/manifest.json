@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Dissimilis fargenotasjon",
+  "name": "En applikasjon for å lage fargede noteark med Dissimilis fargenotasjon",
   "icons": [
     {
       "src": "favicon.ico",
