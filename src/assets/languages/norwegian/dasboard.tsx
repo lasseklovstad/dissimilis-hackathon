@@ -1,4 +1,4 @@
-{
+export default {
     "newSongLabel": "Nytt partitur",
     "recentLabel": "Nylige",
     "libraryButton": "Bibliotek"

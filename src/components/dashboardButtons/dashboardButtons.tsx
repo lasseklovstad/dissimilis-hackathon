@@ -24,14 +24,15 @@ export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = ({text
   );
 }
 
-export function DashboardButton(text: string) {
+export const DashboardButton: FunctionComponent<ButtonProps> = ({text}) => {
   const styles = useStyles();
-  console.log(styles)
   return (
     <div>
-      <Button  className={styles.button}>
+      <ThemeProvider theme={theme}>
+      <Button size="medium" className={styles.button}>
         <Typography>{text}</Typography>
       </Button>
+      </ThemeProvider>
     </div>
   );
 }
@@ -40,9 +41,8 @@ export default DashboardButton;
 
 const useStyles = makeStyles({
   button: {
-    position: "absolute",
-    width: "268px",
-    height: "56px",
+    width: "100%",
+    padding: "20px",
     backgroundColor: "#FFFFFF",
     boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)",
   }
