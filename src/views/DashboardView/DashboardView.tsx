@@ -1,6 +1,6 @@
 import React from 'react';
 
-function LandingView() {
+function DashboardView() {
   return (
     <div className="App">
       <header className="App-header" id={'app-tittle'}>
@@ -12,4 +12,4 @@ function LandingView() {
   );
 }
 
-export default LandingView;
+export default DashboardView;
