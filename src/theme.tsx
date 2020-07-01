@@ -16,9 +16,8 @@ export const theme : object = createMuiTheme({
         }
     },*/
     typography: {
+        fontFamily: "Roboto", 
         h1: {
-            fontFamily: 
-                "Roboto", 
             fontSize: "32px",
             lineHeight: 1.5,
             '@media(max-width:600px)' : {
@@ -26,9 +25,6 @@ export const theme : object = createMuiTheme({
             }
         },
         h2: {
-            fontFamily: 
-                "Roboto", 
-            
             fontSize: "24px",
             lineHeight: 1.5,
             '@media(max-width:600px)' : {
@@ -36,15 +32,10 @@ export const theme : object = createMuiTheme({
             }
         },
         body1: { //Corresponding to the parapraph in the figma sketches. Can use variant = "p" to use this
-            fontFamily: 
-                "Roboto"
-            ,
             fontSize: "16px",
             lineHeight: 1.5,
         },
         caption: {
-            fontFamily: 
-                "Roboto", 
             fontSize: "12px",
             lineHeight: 1.5,
         }

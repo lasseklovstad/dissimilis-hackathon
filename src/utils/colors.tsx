@@ -1,5 +1,5 @@
 
-export let colors = {
+export const colors = {
     gray_100:  "#FAFAFA",
     gray_200: "#E0E0E0",
     gray_300: "#BDBDBD",
