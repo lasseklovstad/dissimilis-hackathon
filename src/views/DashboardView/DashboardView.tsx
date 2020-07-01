@@ -19,7 +19,7 @@ import staticText from '../../assets/languages/norwegian/dasboard';
 export default function DashboardView() {
   const style = useStyles();
   return (
-    <div className={style.background}>
+    <div>
         <AppBar position="static"><Toolbar style={{color: "inherit"}}>En toolbar som dette tilhører subtask diss100</Toolbar></AppBar>
       
         <Box mt={8}>
@@ -60,7 +60,7 @@ export default function DashboardView() {
         <Box my={6}>
           <Grid container>
             <Grid item sm={1} />
-            <Grid item sm={3}>
+            <Grid item sm={2}>
                 <DashboardLibraryButton text={staticText.libraryButton} link={"/library"} />
             </Grid>
           </Grid>
@@ -70,13 +70,6 @@ export default function DashboardView() {
 }
 
 const useStyles = makeStyles({
-  background: {
-    height: "100vh",
-    width: "100vw"
-  },
-  topComponent: {
-    width: "100%",
-    height: "20vh"
-  },
+  
   
 });
