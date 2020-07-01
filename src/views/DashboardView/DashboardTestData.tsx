@@ -1,33 +1,42 @@
 export default {
     "newSongButtons": [
         {
-            "text": "2/4-takt"
+            text: "2/4-takt",
+            link: "/"
         },
         {
-            "text": "3/4-takt"
+            text: "3/4-takt",
+            link: "/"
         },
         {
-            "text": "4/4-takt"
+            text: "4/4-takt",
+            link: "/"
         },
         {
-            "text": "6/8-takt"
+            text: "6/8-takt",
+            link: ""
         }
     ],
     "recentSongButtons": [
         {
-            "text": "Lisa gikk til skolen"
+            text: "Martin gikk til Ciber",
+            link: "/"
         },
         {
-            "text": "Knocking on heavens door"
+            text: "Knocking on heavens door",
+            link: "/"
         },
         {
-            "text": "Sort og svart"
+            text: "Sort og svart",
+            link: "/"
         },
         {
-            "text": "Blowin in the wind"
+            text: "Blowin in the wind",
+            link: "/"
         },
         {
-            "text": "Lisa gikk til skolen"
+            text: "Lisa gikk til skolen",
+            link: "/"
         }
     ]
 }

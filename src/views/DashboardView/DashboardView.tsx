@@ -1,11 +1,15 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { DashboardButtonWithAddIcon, DashboardButton } from '../../components/dashboardButtons/dashboardButtons';
+import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/dashboardButtons/dashboardButtons';
 import Grid from '@material-ui/core/Grid';
-import { Typography } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/core/styles';
 import testData from './DashboardTestData';
+import { Card } from '@material-ui/core'
+//
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 
 /*This text is for the language-based text*/
 import staticText from '../../assets/languages/norwegian/dasboard';
@@ -17,28 +21,55 @@ export default function DashboardView() {
   return (
     <div className={style.background}>
       <ThemeProvider theme={theme}>
-        <div className={style.topComponent}></div>
+        <AppBar position="static"><Toolbar style={{color: "inherit"}}>En toolbar som dette tilhører subtask diss100</Toolbar></AppBar>
+      
+        <Box mt={8}>
+          <Grid container justify="center">
+            <Grid item sm={10}>
+              <Box m={2}>
+                <Typography variant="h1">{staticText.newSongLabel}</Typography>
+              </Box>
+              <Grid container spacing={3}>
+              {testData.newSongButtons.map(songs => (
+                  <Grid item sm={4} lg={2}>
+                    <DashboardButtonWithAddIcon text={songs.text} link={songs.link} />
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+          </Grid>
+        </Box>
+
+
+        <Box mt={3}>
+          <Grid container justify="center">
+            <Grid item sm={10}>
+              <Box m={2}>
+                <Typography variant="h1">{staticText.recentLabel}</Typography>
+              </Box>
+              <Grid container spacing={3}>
+              {testData.recentSongButtons.map(songs => (
+                  <Grid item sm={4} lg={2}>
+                    <DashboardButton text={songs.text} link={songs.link} />
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+          </Grid>
+        </Box>
+
+        <Box my={6}>
+          <Grid container>
+            <Grid item sm={1} />
+            <Grid item sm={3}>
+                <DashboardLibraryButton text={staticText.libraryButton} link={"/library"} />
+            </Grid>
+          </Grid>
+        </Box>
         
-        <div className={style.newSongContainer}>
-          <Typography variant="h1">{staticText.newSongLabel}</Typography>
-          <Grid container spacing={2}>
-          {testData.newSongButtons.map(songs => (
-              <Grid item xs={4} md={3} lg={2}>
-                <DashboardButtonWithAddIcon text={songs.text} />
-              </Grid>
-            ))}
-          </Grid>
-        </div>
-        <div className={style.recentSongsContainer}>
-          <Typography variant="h1">{staticText.recentLabel}</Typography>
-          <Grid container spacing={2}>
-          {testData.recentSongButtons.map(songs => (
-              <Grid item xs={4} md={3} lg={2}>
-                <DashboardButton text={songs.text} />
-              </Grid>
-            ))}
-          </Grid>
-        </div>
+
+
+
       </ThemeProvider>
     </div>
   );
@@ -54,14 +85,7 @@ const useStyles = makeStyles({
     width: "100%",
     height: "20vh"
   },
-  newSongContainer: {
-    height: "20%",
-    width: "100%"
-  },
-  recentSongsContainer: {
-    height: "20%",
-    width: "100%"
-  }
+  
 });
 
 const theme = createMuiTheme({      
