@@ -1,7 +1,6 @@
 import {createMuiTheme} from "@material-ui/core/styles";
 import {colors} from "./utils/colors";
 
-
 export const theme : object = createMuiTheme({
     overrides: {
         MuiCssBaseline : {
