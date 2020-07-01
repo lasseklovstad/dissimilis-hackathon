@@ -10,8 +10,7 @@ function Routing() {
             <Switch>
                 <Route exact path="/" component={LoginView} />
                 <Route exact path="/dashboard" component={DashboardView} />
-                
-                {/*Insert new routes above this comment */}
+                                  
                 <Route render={() => <Redirect to={{pathname: "/"}} />} />
             </Switch>
         </BrowserRouter>

@@ -20,7 +20,6 @@ export default function DashboardView() {
   const style = useStyles();
   return (
     <div className={style.background}>
-      <ThemeProvider theme={theme}>
         <AppBar position="static"><Toolbar style={{color: "inherit"}}>En toolbar som dette tilhører subtask diss100</Toolbar></AppBar>
       
         <Box mt={8}>
@@ -66,18 +65,12 @@ export default function DashboardView() {
             </Grid>
           </Grid>
         </Box>
-        
-
-
-
-      </ThemeProvider>
     </div>
   );
 }
 
 const useStyles = makeStyles({
   background: {
-    backgroundColor : "#F5F5F5",
     height: "100vh",
     width: "100vw"
   },
@@ -86,12 +79,4 @@ const useStyles = makeStyles({
     height: "20vh"
   },
   
-});
-
-const theme = createMuiTheme({      
-  typography: {
-    h1: {
-      fontSize: '20px'
-    }
-  }
 });
