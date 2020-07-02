@@ -12,7 +12,6 @@ function App() {
             <CssBaseline />  
             <Routing />
           </MuiThemeProvider>
-              
         </div>
   );
 }
