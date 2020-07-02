@@ -1,5 +1,4 @@
 export default {
-    
     "recentSongButtons": [
         {
             text: "Martin gikk til Ciber",
