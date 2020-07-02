@@ -16,12 +16,12 @@ function LoginView() {
   return (
 
     <Grid container className={classes.root} >
-      <BackgroundImage className={classes.BackgroundImage} />
-      <Grid item xs={10} sm={4} className={matches ? classes.container + " " + classes.PaddingLarge : classes.container + " " + classes.PaddingSmall}>
-        <LoginLogo className={classes.LoginLogo} />
-        <TextField className={classes.Textfield} fullWidth label="Brukernavn" variant="filled"></TextField>
-        <TextField className={classes.Textfield} fullWidth label="Passord" variant="filled"></TextField>
-        <Button to='/dashboard' component={Link} className={classes.LoginButton} fullWidth variant="outlined">Logg Inn</Button>
+      <BackgroundImage className={classes.backgroundimage} />
+      <Grid item xs={10} sm={4} className={matches ? classes.container + " " + classes.paddinglarge : classes.container + " " + classes.paddingsmall}>
+        <LoginLogo className={classes.loginlogo} />
+        <TextField className={classes.textfield} fullWidth label="Brukernavn" variant="filled"></TextField>
+        <TextField className={classes.textfield} fullWidth label="Passord" variant="filled"></TextField>
+        <Button to='/dashboard' component={Link} className={classes.loginbutton} fullWidth variant="outlined">Logg Inn</Button>
       </Grid>
     </Grid>
   );
@@ -40,25 +40,25 @@ const useStyles = makeStyles(
       marginTop: '10vh',
       zIndex: 2,
     },
-    PaddingSmall: {
+    paddingsmall: {
       padding: "40px",
       marginTop: '4vh',
     },
-    PaddingLarge: {
+    paddinglarge: {
       padding: "48px"
     },
-    Textfield: {
+    textfield: {
       marginTop: '16px'
     },
-    LoginLogo: {
+    loginlogo: {
       width: '60%'
     },
-    LoginButton: {
+    loginbutton: {
       marginTop: '20px',
       lineHeight: '24px',
       textTransform: 'none'
     },
-    BackgroundImage: {
+    backgroundimage: {
       position: 'absolute',
       zIndex: 1,
       width: '50%',
