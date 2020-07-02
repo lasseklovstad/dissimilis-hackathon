@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/dashboardButtons/dashboardButtons';
+import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/DashboardButtons/DashboardButtons';
 import Grid from '@material-ui/core/Grid';
 import { Typography, Box } from '@material-ui/core';
 import testData from './DashboardTestData';
