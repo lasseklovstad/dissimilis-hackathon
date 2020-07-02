@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/dashboardButtons/dashboardButtons';
 import Grid from '@material-ui/core/Grid';
@@ -18,6 +18,7 @@ import staticText from '../../assets/languages/norwegian/dasboard';
 
 export default function DashboardView() {
   const style = useStyles();
+  const [recentSongs, setRecentSongs] = useState(testData);
   return (
     <div>
         <AppBar position="static"><Toolbar style={{color: "inherit"}}>En toolbar som dette tilhører subtask diss100</Toolbar></AppBar>
@@ -29,7 +30,7 @@ export default function DashboardView() {
                 <Typography variant="h1">{staticText.newSongLabel}</Typography>
               </Box>
               <Grid container spacing={3}>
-              {testData.newSongButtons.map(songs => (
+              {staticText.newSongButtons.map(songs => (
                   <Grid item sm={4} lg={2}>
                     <DashboardButtonWithAddIcon text={songs.text} link={songs.link} />
                   </Grid>
@@ -47,7 +48,7 @@ export default function DashboardView() {
                 <Typography variant="h1">{staticText.recentLabel}</Typography>
               </Box>
               <Grid container spacing={3}>
-              {testData.recentSongButtons.map(songs => (
+              {recentSongs.recentSongButtons.map(songs => (
                   <Grid item sm={4} lg={2}>
                     <DashboardButton text={songs.text} link={songs.link} />
                   </Grid>

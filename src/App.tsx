@@ -1,4 +1,5 @@
 import React from 'react';
+import "./App.css";
 import {MuiThemeProvider} from "@material-ui/core/styles";
 import Routing from './Routing';
 import { theme } from "./theme";
@@ -11,7 +12,6 @@ function App() {
             <CssBaseline />  
             <Routing />
           </MuiThemeProvider>
-              
         </div>
   );
 }
