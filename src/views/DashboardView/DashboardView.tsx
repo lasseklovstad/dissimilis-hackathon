@@ -5,11 +5,35 @@ import { Typography, Box } from '@material-ui/core';
 import testData from './DashboardTestData';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import {useTranslation} from "react-i18next";
 
-import staticText from '../../assets/languages/norwegian/dashboard';
 
 export default function DashboardView() {
+  const {t, i18n} = useTranslation();
   const [recentSongs, setRecentSongs] = useState(testData);
+  const addedToText = t("DashboardView:measure");
+  const musicTacts = [
+    {
+        id: 1,
+        text: "2/4-" + addedToText,
+        link: "/"
+    },
+    {
+        id: 2,
+        text: "3/4-" + addedToText,
+        link: "/"
+    },
+    {
+        id: "3",
+        text: "4/4-" + addedToText,
+        link: "/"
+    },
+    {
+        id: 4,
+        text: "6/8-" + addedToText,
+        link: ""
+    }
+];
   return (
     <div>
         <AppBar position="static"><Toolbar style={{color: "inherit"}}>En toolbar som dette tilhører subtask diss100</Toolbar></AppBar>
@@ -18,10 +42,10 @@ export default function DashboardView() {
           <Grid container justify="center">
             <Grid item sm={10} key="centerContainer">
               <Box m={2}>
-                <Typography variant="h1">{staticText.newSongLabel}</Typography>
+                <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
               </Box>
               <Grid container spacing={3}>
-                {staticText.newSongButtons.map(songs => (
+                {musicTacts.map(songs => (
                   <Grid item sm={4} lg={2} key={songs.id}>
                     <DashboardButtonWithAddIcon text={songs.text} link={songs.link} />
                   </Grid>
@@ -36,7 +60,7 @@ export default function DashboardView() {
           <Grid container justify="center">
             <Grid item sm={10}>
               <Box m={2}>
-                <Typography variant="h1">{staticText.recentLabel}</Typography>
+                <Typography variant="h1">{t("DashboardView:recentLabel")}</Typography>
               </Box>
               <Grid container spacing={3}>
                 {recentSongs.recentSongButtons.map(songs => (
@@ -53,7 +77,7 @@ export default function DashboardView() {
           <Grid container>
             <Grid item sm={1} />
             <Grid item sm={2}>
-              <DashboardLibraryButton text={staticText.libraryButton} link={"/library"} />
+              <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
             </Grid>
           </Grid>
         </Box>
