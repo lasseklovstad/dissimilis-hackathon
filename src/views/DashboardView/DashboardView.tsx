@@ -11,7 +11,7 @@ import {useTranslation} from "react-i18next";
 export default function DashboardView() {
   const {t, i18n} = useTranslation();
   const [recentSongs, setRecentSongs] = useState(testData);
-  const addedToText = t("DashboardView:tact");
+  const addedToText = t("DashboardView:measure");
   const musicTacts = [
     {
         id: 1,
