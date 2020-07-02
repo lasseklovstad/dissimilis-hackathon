@@ -46,6 +46,9 @@ export const theme : object = createMuiTheme({
         caption: {
             fontSize: "0.75rem",
             lineHeight: 1.5,
+        },
+        button: {
+            textTransform: 'none'
         }
     }
 
