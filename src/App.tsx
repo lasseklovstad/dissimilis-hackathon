@@ -8,11 +8,10 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 function App() {
   return (
         <div>
-          <MuiThemeProvider theme={theme}>
-            <CssBaseline />  
-            <Routing />
-          </MuiThemeProvider>
-              
+            <MuiThemeProvider theme={theme}>
+              <CssBaseline />  
+              <Routing />
+            </MuiThemeProvider>
         </div>
   );
 }

@@ -29,14 +29,14 @@ export const theme : object = createMuiTheme({
             fontSize: "2rem",
             lineHeight: 1.5,
             '@media(max-width:600px)' : {
-                fontSize: "20px"
+                fontSize: "1.625rem"
             }
         },
         h2: {
             fontSize: "1.5rem",
             lineHeight: 1.5,
             '@media(max-width:600px)' : {
-                fontSize: "20px"
+                fontSize: "1.25"
             }
         },
         body1: { //Corresponding to the parapraph in the figma sketches. Can use variant = "p" to use this
