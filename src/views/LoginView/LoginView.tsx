@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 
 function LoginView() {
   const matches = useMediaQuery("(min-width:600px)");
-  const classes = useStyles()
+  const classes = useStyles();
   return (
 
     <Grid container className={classes.root} >
