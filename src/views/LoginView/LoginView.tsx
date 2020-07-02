@@ -10,30 +10,22 @@ import { colors } from '../../utils/colors';
 import { Link } from 'react-router-dom';
 
 
-
-
 function LoginView() {
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles()
   return (
 
     <Grid container className={classes.root} >
-
-      <BackgroundImage className={classes.backgroundImage} />
-
-      <Grid item xs={10} sm={4} className={matches ? classes.container + " " + classes.paddingLarge : classes.container + " " + classes.paddingSmall}>
+      <BackgroundImage className={classes.BackgroundImage} />
+      <Grid item xs={10} sm={4} className={matches ? classes.container + " " + classes.PaddingLarge : classes.container + " " + classes.PaddingSmall}>
         <LoginLogo className={classes.LoginLogo} />
-        <TextField className={classes.textfield} fullWidth label="Brukernavn" variant="filled"></TextField>
-        <TextField className={classes.textfield} fullWidth label="Passord" variant="filled"></TextField>
+        <TextField className={classes.Textfield} fullWidth label="Brukernavn" variant="filled"></TextField>
+        <TextField className={classes.Textfield} fullWidth label="Passord" variant="filled"></TextField>
         <Button to='/dashboard' component={Link} className={classes.LoginButton} fullWidth variant="outlined">Logg Inn</Button>
-
       </Grid>
-
     </Grid>
-
   );
 }
-
 export default LoginView;
 
 const useStyles = makeStyles(
@@ -48,29 +40,29 @@ const useStyles = makeStyles(
       marginTop: '10vh',
       zIndex: 2,
     },
-    paddingSmall: {
+    PaddingSmall: {
       padding: "40px",
       marginTop: '4vh',
     },
-    paddingLarge: {
+    PaddingLarge: {
       padding: "48px"
     },
-    textfield: {
+    Textfield: {
       marginTop: '16px'
     },
     LoginLogo: {
-      width: '50%'
+      width: '60%'
     },
     LoginButton: {
       marginTop: '20px',
       lineHeight: '24px',
       textTransform: 'none'
     },
-    backgroundImage: {
+    BackgroundImage: {
       position: 'absolute',
       zIndex: 1,
-      width: '40%',
-      height: '40%',
+      width: '50%',
+      height: '50%',
       left: 0
     }
   });
