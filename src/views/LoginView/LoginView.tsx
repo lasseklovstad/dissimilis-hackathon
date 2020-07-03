@@ -21,7 +21,7 @@ function LoginView() {
         <LoginLogo className={classes.loginlogo} />
         <TextField className={classes.textfield} fullWidth label="Brukernavn" variant="filled"></TextField>
         <TextField className={classes.textfield} fullWidth label="Passord" variant="filled" type="password"></TextField>
-        <Button to='/dashboard' component={Link} className={classes.loginbutton} fullWidth variant="outlined" tabIndex={0}>Logg Inn</Button>
+        <Button to='/dashboard' component={Link} className={classes.loginbutton} fullWidth variant="outlined">Logg Inn</Button>
       </Grid>
     </Grid>
   );
@@ -38,7 +38,7 @@ const useStyles = makeStyles(
       borderRadius: 2,
       backgroundColor: colors.gray_100,
       marginTop: '10vh',
-      zIndex: 2,
+      zIndex: 2
     },
     paddingsmall: {
       padding: "40px",
