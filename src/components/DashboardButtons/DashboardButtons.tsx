@@ -14,7 +14,6 @@ type ButtonProps = {
 export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = ({text, link}) => {
   const styles = useStyles();
   return (
-    <Box>
       <Card className={styles.button}>
         <CardActionArea to={link} component={Link}>
           <Box className={styles.container}>
@@ -23,14 +22,12 @@ export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = ({text
           </Box>
         </CardActionArea>
       </Card>
-    </Box>
   );
 }
 
 export const DashboardButton: FunctionComponent<ButtonProps> = ({text, link}) => {
   const styles = useStyles();
   return (
-    <Box>
       <Card className={styles.button}>
         <CardActionArea to={link} component={Link}>
           <Box className={styles.container}>
@@ -38,7 +35,6 @@ export const DashboardButton: FunctionComponent<ButtonProps> = ({text, link}) =>
           </Box>
         </CardActionArea>
       </Card>
-    </Box>
   );
 }
 
@@ -61,7 +57,7 @@ export default DashboardButton;
 
 const useStyles = makeStyles({
   container: {
-    display: "flex"
+    display: "flex",
   },
   button: {
     backgroundColor: colors.white,
