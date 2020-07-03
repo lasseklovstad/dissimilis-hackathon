@@ -3,8 +3,7 @@ import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } f
 import Grid from '@material-ui/core/Grid';
 import { Typography, Box } from '@material-ui/core';
 import testData from './DashboardTestData';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
 
 import staticText from '../../assets/languages/norwegian/dashboard';
 
@@ -12,9 +11,9 @@ export default function DashboardView() {
   const [recentSongs, setRecentSongs] = useState(testData);
   return (
     <div>
-        <AppBar position="static"><Toolbar style={{color: "inherit"}}>En toolbar som dette tilhører subtask diss100</Toolbar></AppBar>
+        <DashboardTopBar />
       
-        <Box mt={8}>
+        <Box mt={6}>
           <Grid container justify="center">
             <Grid item sm={10} key="centerContainer">
               <Box m={2}>
