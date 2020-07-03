@@ -9,30 +9,33 @@ import butterflyBlue from '../../assets/images/butterflyBlue.svg'
 
 type ButtonProps = {
   text: string,
-  link: string
+  link: string,
+  func? : Function,
+  color? : string,
 };
 
-export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = ({text, link}) => {
+export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = (props) => {
   const styles = useStyles();
+ 
   return (
-      <Card className={styles.button} tabIndex={0}>
-        <CardActionArea to={link} component={Link}>
-          <Box className={styles.container}>
+      <Card className={styles.button}>
+        <CardActionArea onClick={() => props.func && props.func()} >
+          <Box className={styles.container} >
             <Box p={2}><AddIcon /></Box>
-            <Box p={2}><Typography>{text}</Typography></Box>
+            <Box p={2}><Typography>{props.text}</Typography></Box>
           </Box>
         </CardActionArea>
       </Card>
   );
 }
 
-export const DashboardButton: FunctionComponent<ButtonProps> = ({text, link}) => {
+export const DashboardButton: FunctionComponent<ButtonProps> = (props) => {
   const styles = useStyles();
   return (
-      <Card className={styles.button} tabIndex={0}>
-        <CardActionArea to={link} component={Link}>
-          <Box className={styles.container}>
-            <Box p={2}><Typography>{text}</Typography></Box>
+      <Card className={styles.button}>
+        <CardActionArea to={props.link} component={Link}>
+          <Box className={styles.container} style={{backgroundColor: props.color}}>
+            <Box p={2}><Typography>{props.text}</Typography></Box>
           </Box>
         </CardActionArea>
       </Card>
