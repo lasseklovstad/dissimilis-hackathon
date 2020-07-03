@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -10,29 +10,58 @@ import colors from '../../utils/colors';
 import {Box, Grid, Icon} from '@material-ui/core'
 import { DashboardTopBarIcon } from '../../components/DashboardButtons/DashboardButtons'
 
+export default function DashboardTopBar() {
+  const classes = useStyles();
+  const [searchBarFocus, setSearchBarFocus] = useState(false);
+
+  return (
+    <div>
+      <AppBar position="static" className={classes.background} >
+        <Box mt={2} py={2} className={classes.container}>
+            <Grid container spacing={2}>
+              <Grid item xs={1} />
+              <Grid item xs={4} sm={1}>
+                <DashboardTopBarIcon />
+              </Grid>
+              <Grid item sm={6} />
+              <Grid item sm={3}>
+                <Box>
+                  <div className={classes.search}>
+                    <div className={classes.searchIcon}>
+                        <SearchIcon />
+                    </div>
+                    <InputBase
+                    placeholder="Søk"
+                    classes={{
+                        input: classes.inputInput,
+                    }}
+                    inputProps={{ 'aria-label': 'søk' }}
+                    />
+                  </div>
+                </Box>
+              </Grid>
+          </Grid>
+        </Box>
+      </AppBar>
+    </div>
+  );
+}
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
   background: {
     background: 'transparent',
-    boxShadow: 'none'
+    boxShadow: 'none',
   },
-  icon: {
-    marginRight: theme.spacing(2),
+  container: {
+    marginTop: "auto",
+    verticalAlign: "center"
   },
   search: {
-    position: 'absolute',
-    right: 100,
+    position: "relative",
     width: '100%',
     border: '1px solid '+colors.gray_400,
     borderRadius: '2px',
     backgroundColor: colors.gray_100,
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1),
-      width: 'auto',
-    },
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -44,15 +73,13 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     color: colors.black
   },
-  inputRoot: {
-  },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('xs')]: {
       width: '12ch',
       '&:focus': {
         width: '20ch',
@@ -60,47 +87,3 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-export default function DashboardTopBar() {
-  const classes = useStyles();
-
-  return (
-    <div className={classes.root}>
-      <AppBar position="static" className={classes.background} >
-        <Toolbar>
-            <Box mt={2}>
-                <Grid container>
-                <Grid item sm={1}>
-                    <DashboardTopBarIcon />
-                </Grid>
-                <Grid item sm={3}>
-                    <Box>
-                        <div className={classes.search}>
-                            <div className={classes.searchIcon}>
-                                <SearchIcon />
-                            </div>
-                            <InputBase
-                            placeholder="Søk"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{ 'aria-label': 'søk' }}
-                            />
-                        </div>
-                    </Box>
-
-
-                </Grid>
-          </Grid>
-
-
-            </Box>
-          
-          
-          
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
-}

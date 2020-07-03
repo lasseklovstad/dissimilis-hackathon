@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import { Box, Card, CardActionArea } from '@material-ui/core';
+import { Box, Card, CardActionArea, Icon } from '@material-ui/core';
 import { colors } from '../../utils/colors';
-import { ReactComponent as ButterflyIcon } from '../../assets/images/butterflyBlue.svg';
+import butterflyBlue from '../../assets/images/butterflyBlue.svg'
 
 type ButtonProps = {
   text: string,
@@ -16,7 +16,7 @@ export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = ({text
   const styles = useStyles();
   return (
     <Box>
-      <Card className={styles.button}>
+      <Card className={styles.button} tabIndex={0}>
         <CardActionArea to={link} component={Link}>
           <Box className={styles.container}>
             <Box p={2}><AddIcon /></Box>
@@ -32,7 +32,7 @@ export const DashboardButton: FunctionComponent<ButtonProps> = ({text, link}) =>
   const styles = useStyles();
   return (
     <Box>
-      <Card className={styles.button}>
+      <Card className={styles.button} tabIndex={0}>
         <CardActionArea to={link} component={Link}>
           <Box className={styles.container}>
             <Box p={2}><Typography>{text}</Typography></Box>
@@ -47,7 +47,7 @@ export const DashboardLibraryButton: FunctionComponent<ButtonProps> = ({text, li
   const styles = useStyles();
   return (
     <Box>
-      <Card className={styles.button__green}>
+      <Card className={styles.button__green} tabIndex={0}>
         <CardActionArea to={link} component={Link}>
           <Box className={styles.container}>
             <Box p={2}><Typography>{text}</Typography></Box>
@@ -61,11 +61,12 @@ export const DashboardLibraryButton: FunctionComponent<ButtonProps> = ({text, li
 export const DashboardTopBarIcon = () => {
   const styles = useStyles();
   return (
-    <Box className={styles.butterflyIcon}>
-      <Card className={styles.butterflyIcon}>
-        <CardActionArea to='/' component={Link}>
-          <ButterflyIcon ></ButterflyIcon>
-          
+    <Box className={styles.butterflyButton__Container}>
+      <Card className={styles.butterflyButton__Card} tabIndex={0}>
+        <CardActionArea className={styles.butterflyButton__Card__Icon} to="/dashboard" component={Link}>
+          <Icon>
+            <img src={butterflyBlue} />
+          </Icon>
         </CardActionArea>
       </Card>
     </Box>
@@ -86,9 +87,18 @@ const useStyles = makeStyles({
     backgroundColor: colors.teal_100,
     boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)"
   },
-  butterflyIcon: {
-    widht: '48px',
-    height: '48px',
-    backgroundColor: 'blue'
+  butterflyButton__Container: {
+    maxHeight: '48px',
+    maxWidth: '48px',
+    backgroundColor: colors.white,
+    
+  },
+  butterflyButton__Card: {
+    boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)"
+  },
+  butterflyButton__Card__Icon: {
+    padding: "9px",
+    borderRadius: "1px",
+    
   }
 });

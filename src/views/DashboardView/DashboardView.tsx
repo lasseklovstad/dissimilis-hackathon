@@ -4,58 +4,74 @@ import Grid from '@material-ui/core/Grid';
 import { Typography, Box } from '@material-ui/core';
 import testData from './DashboardTestData';
 import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
+import {useTranslation} from "react-i18next";
 
-import staticText from '../../assets/languages/norwegian/dashboard';
 
 export default function DashboardView() {
+  const {t, i18n} = useTranslation();
   const [recentSongs, setRecentSongs] = useState(testData);
+  const addedToText = t("DashboardView:measure");
+  const musicTacts = [
+    {
+        id: 1,
+        text: "2/4-" + addedToText,
+        link: "/"
+    },
+    {
+        id: 2,
+        text: "3/4-" + addedToText,
+        link: "/"
+    },
+    {
+        id: "3",
+        text: "4/4-" + addedToText,
+        link: "/"
+    },
+    {
+        id: 4,
+        text: "6/8-" + addedToText,
+        link: ""
+    }
+];
   return (
     <div>
-        <DashboardTopBar />
-      
-        <Box mt={6}>
-          <Grid container justify="center">
-            <Grid item sm={10} key="centerContainer">
-              <Box m={2}>
-                <Typography variant="h1">{staticText.newSongLabel}</Typography>
-              </Box>
-              <Grid container spacing={3}>
-                {staticText.newSongButtons.map(songs => (
-                  <Grid item sm={4} lg={2} key={songs.id}>
-                    <DashboardButtonWithAddIcon text={songs.text} link={songs.link} />
-                  </Grid>
-                ))}
-              </Grid>
+      <Grid container justify="center" spacing={10} >
+        
+        <Grid item xs={12}>
+          <DashboardTopBar />
+        </Grid>
+
+        <Grid item xs={12} sm={10} key="newSongContainer">
+          
+            <Box m={2}>
+              <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
+            </Box>
+            <Grid container spacing={3}>
+              {musicTacts.map(songs => (
+                <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                  <DashboardButtonWithAddIcon text={songs.text} link={songs.link} />
+                </Grid>
+              ))}
+            </Grid>
+          
+        </Grid>
+
+        <Grid item xs={12} sm={10} key="recentSongsContainer">
+          <Box m={2}>
+            <Typography variant="h1">{t("DashboardView:recentLabel")}</Typography>
+          </Box>
+          <Grid container spacing={3}>
+            {recentSongs.recentSongButtons.map(songs => (
+              <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                <DashboardButton text={songs.text} link={songs.link} />
+                </Grid>
+            ))}
+            <Grid item xs={12} sm={4} lg={3} key="library">
+              <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
             </Grid>
           </Grid>
-        </Box>
-
-
-        <Box mt={3}>
-          <Grid container justify="center">
-            <Grid item sm={10}>
-              <Box m={2}>
-                <Typography variant="h1">{staticText.recentLabel}</Typography>
-              </Box>
-              <Grid container spacing={3}>
-                {recentSongs.recentSongButtons.map(songs => (
-                  <Grid item sm={4} lg={2} key={songs.id}>
-                    <DashboardButton text={songs.text} link={songs.link} />
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-          </Grid>
-        </Box>
-
-        <Box my={6}>
-          <Grid container>
-            <Grid item sm={1} />
-            <Grid item sm={2}>
-              <DashboardLibraryButton text={staticText.libraryButton} link={"/library"} />
-            </Grid>
-          </Grid>
-        </Box>
+        </Grid>
+      </Grid>
     </div>
   );
 }
