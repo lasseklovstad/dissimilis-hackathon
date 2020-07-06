@@ -3,6 +3,7 @@ import { makeStyles, Box, Grid, Typography, useMediaQuery, Fab, AppBar, Toolbar 
 import butterflyBlue from "../../assets/images/butterflyBlue.svg";
 import MenuButton from "../MenuButton/MenuButton";
 import colors from "../../utils/colors";
+import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons";
 
 
 const useStyles = makeStyles({
@@ -40,7 +41,7 @@ function NavBarCreateSong() {
             <AppBar position="static" elevation={0} className={classes.appbar}>
             <Grid container>
                 <Grid item xs={1}>
-                    <img src={butterflyBlue} alt="logo" className={classes.image} />
+                    <DashboardTopBarIcon />
                 </Grid>
                 <Grid item xs={10}>
                     <Typography variant="h1" className={classes.title}>Lisa gikk til skolen</Typography>

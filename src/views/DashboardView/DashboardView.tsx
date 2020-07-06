@@ -1,37 +1,37 @@
 import React, { useState } from 'react';
+import { Grid, Typography, Box } from '@material-ui/core';
+import { useTranslation } from "react-i18next";
 import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/DashboardButtons/DashboardButtons';
-import Grid from '@material-ui/core/Grid';
-import { Typography, Box } from '@material-ui/core';
-import testData from './DashboardTestData';
 import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
-import {useTranslation} from "react-i18next";
+import testData from './DashboardTestData';
 
+export type DashboardViewProps = {
 
-
+}
 
 export default function DashboardView() {
   const {t, i18n} = useTranslation();
   const [recentSongs, setRecentSongs] = useState(testData);
-  const addedToText = t("DashboardView:measure");
+  const measureText = t("DashboardView:measure");
   const musicTacts = [
     {
         id: 1,
-        text: "2/4-" + addedToText,
+        text: "2/4-" + measureText,
         link: "/"
     },
     {
         id: 2,
-        text: "3/4-" + addedToText,
+        text: "3/4-" + measureText,
         link: "/"
     },
     {
         id: "3",
-        text: "4/4-" + addedToText,
+        text: "4/4-" + measureText,
         link: "/"
     },
     {
         id: 4,
-        text: "6/8-" + addedToText,
+        text: "6/8-" + measureText,
         link: ""
     }
 ];
@@ -44,18 +44,16 @@ export default function DashboardView() {
         </Grid>
 
         <Grid item xs={12} sm={10} key="newSongContainer">
-          
-            <Box m={2}>
-              <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
-            </Box>
-            <Grid container spacing={3}>
-              {musicTacts.map(songs => (
-                <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                  <DashboardButtonWithAddIcon text={songs.text} link={songs.link} />
-                </Grid>
-              ))}
-            </Grid>
-          
+          <Box m={2}>
+            <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
+          </Box>
+          <Grid container spacing={3}>
+            {musicTacts.map(songs => (
+              <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                <DashboardButtonWithAddIcon text={songs.text} link={songs.link} />
+              </Grid>
+            ))}
+          </Grid>
         </Grid>
 
         <Grid item xs={12} sm={10} key="recentSongsContainer">
@@ -66,13 +64,14 @@ export default function DashboardView() {
             {recentSongs.recentSongButtons.map(songs => (
               <Grid item xs={12} sm={4} lg={3} key={songs.id}>
                 <DashboardButton text={songs.text} link={songs.link} />
-                </Grid>
+              </Grid>
             ))}
             <Grid item xs={12} sm={4} lg={3} key="library">
               <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
             </Grid>
           </Grid>
         </Grid>
+
       </Grid>
     </div>
   );

@@ -6,8 +6,9 @@ import AddIcon from '@material-ui/icons/Add';
 import { Box, Card, CardActionArea, Icon } from '@material-ui/core';
 import { colors } from '../../utils/colors';
 import butterflyBlue from '../../assets/images/butterflyBlue.svg'
+import { useTranslation } from "react-i18next";
 
-type ButtonProps = {
+export type ButtonProps = {
   text: string,
   link: string,
   func? : Function,
@@ -16,13 +17,12 @@ type ButtonProps = {
 
 export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = (props) => {
   const styles = useStyles();
- 
   return (
       <Card className={styles.button}>
         <CardActionArea onClick={() => props.func && props.func()} >
           <Box className={styles.container} >
-            <Box p={2}><AddIcon /></Box>
-            <Box p={2}><Typography>{props.text}</Typography></Box>
+            <Box py={2} pl={2}><AddIcon /></Box>
+            <Box py={2} pl={1} pr={2}><Typography>{props.text}</Typography></Box>
           </Box>
         </CardActionArea>
       </Card>
@@ -46,7 +46,7 @@ export const DashboardLibraryButton: FunctionComponent<ButtonProps> = ({text, li
   const styles = useStyles();
   return (
     <Box>
-      <Card className={styles.button__green} tabIndex={0}>
+      <Card className={styles.button__green}>
         <CardActionArea to={link} component={Link}>
           <Box className={styles.container}>
             <Box p={2}><Typography>{text}</Typography></Box>
@@ -59,12 +59,14 @@ export const DashboardLibraryButton: FunctionComponent<ButtonProps> = ({text, li
 
 export const DashboardTopBarIcon = () => {
   const styles = useStyles();
+  const {t, i18n} = useTranslation();
+  const altProp = t("DashboardView:altButteflyButtonProp");
   return (
     <Box className={styles.butterflyButton__Container}>
-      <Card className={styles.butterflyButton__Card} tabIndex={0}>
+      <Card className={styles.butterflyButton__Card}>
         <CardActionArea className={styles.butterflyButton__Card__Icon} to="/dashboard" component={Link}>
           <Icon>
-            <img src={butterflyBlue} />
+            <img src={butterflyBlue} alt={altProp} />
           </Icon>
         </CardActionArea>
       </Card>
@@ -90,7 +92,6 @@ const useStyles = makeStyles({
     maxHeight: '48px',
     maxWidth: '48px',
     backgroundColor: colors.white,
-    
   },
   butterflyButton__Card: {
     boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)"
@@ -98,6 +99,5 @@ const useStyles = makeStyles({
   butterflyButton__Card__Icon: {
     padding: "9px",
     borderRadius: "1px",
-    
   }
 });

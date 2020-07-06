@@ -1,10 +1,13 @@
 import React from 'react';
+import { Grid, Box } from '@material-ui/core';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
-import { Grid, Box } from '@material-ui/core';
+
+export type SongViewProps = {
+
+}
 
 function SongView() {
-
 
   return ( 
           <Grid container spacing={2} style={{marginLeft: "24px", marginTop: "32px"}}>

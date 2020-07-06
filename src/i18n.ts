@@ -1,6 +1,5 @@
 import i18n, { Resource } from 'i18next';
 import { initReactI18next } from 'react-i18next';
-
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { dashboardNo } from './assets/languages/norwegian/dashboardNo';
 import { dashboardEn } from './assets/languages/english/dashboardEn';
