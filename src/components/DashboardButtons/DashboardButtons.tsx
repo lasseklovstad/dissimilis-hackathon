@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import { Box, Card, CardActionArea, Icon } from '@material-ui/core';
+import { Box, Card, CardActionArea } from '@material-ui/core';
 import { colors } from '../../utils/colors';
 import butterflyBlue from '../../assets/images/butterflyBlue.svg'
 import { useTranslation } from "react-i18next";
