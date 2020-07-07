@@ -39,9 +39,9 @@ export default function DashboardView() {
   const marginBottom = 4;
 
   return (
-    <div >
+    <Box mx={2}>
       <Grid container justify="center" className={styles.container}>
-
+        
         <Grid item xs={12}>
           <Box mb={marginBottom}>
             <DashboardTopBar />
@@ -82,7 +82,7 @@ export default function DashboardView() {
         </Grid>
 
       </Grid>
-    </div>
+    </Box>
   );
 }
 

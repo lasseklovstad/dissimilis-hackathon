@@ -1,4 +1,4 @@
-import React,  { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -11,8 +11,8 @@ import { useTranslation } from "react-i18next";
 export type ButtonProps = {
   text: string,
   link: string,
-  func? : Function,
-  color? : string,
+  func?: Function,
+  color?: string,
 };
 
 export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = (props) => {
@@ -20,9 +20,9 @@ export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = (props
   return (
       <Card className={styles.button}>
         <CardActionArea onClick={() => props.func && props.func()} >
-          <Box className={styles.container} >
-            <Box py={2} pl={2}><AddIcon /></Box>
-            <Box py={2} pl={1} pr={2}><Typography>{props.text}</Typography></Box>
+          <Box className={styles.container} py={2}>
+            <Box  pl={2}><AddIcon /></Box>
+            <Box  pl={1} pr={2}><Typography>{props.text}</Typography></Box>
           </Box>
         </CardActionArea>
       </Card>
@@ -32,17 +32,17 @@ export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = (props
 export const DashboardButton: FunctionComponent<ButtonProps> = (props) => {
   const styles = useStyles();
   return (
-      <Card className={styles.button}>
-        <CardActionArea to={props.link} component={Link}>
-          <Box className={styles.container} style={{backgroundColor: props.color}}>
-            <Box p={2}><Typography>{props.text}</Typography></Box>
-          </Box>
-        </CardActionArea>
-      </Card>
+    <Card className={styles.button}>
+      <CardActionArea to={props.link} component={Link}>
+        <Box className={styles.container} style={{ backgroundColor: props.color }}>
+          <Box p={2}><Typography>{props.text}</Typography></Box>
+        </Box>
+      </CardActionArea>
+    </Card>
   );
 }
 
-export const DashboardLibraryButton: FunctionComponent<ButtonProps> = ({text, link}) => {
+export const DashboardLibraryButton: FunctionComponent<ButtonProps> = ({ text, link }) => {
   const styles = useStyles();
   return (
     <Box>
@@ -65,9 +65,9 @@ export const DashboardTopBarIcon = () => {
     <Box className={styles.butterflyButton__Container}>
       <Card className={styles.butterflyButton__Card}>
         <CardActionArea className={styles.butterflyButton__Card__Icon} to="/dashboard" component={Link}>
-          <Icon>
+          
             <img src={butterflyBlue} alt={altProp} />
-          </Icon>
+          
         </CardActionArea>
       </Card>
     </Box>
@@ -97,7 +97,7 @@ const useStyles = makeStyles({
     boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)"
   },
   butterflyButton__Card__Icon: {
-    padding: "9px",
+    padding: "8px",
     borderRadius: "1px",
   }
 });

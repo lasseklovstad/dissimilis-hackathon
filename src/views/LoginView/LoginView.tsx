@@ -23,7 +23,7 @@ function LoginView() {
         <LoginLogo className={classes.loginlogo} />
         <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled"></TextField>
         <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled"></TextField>
-        <Button to='/dashboard' component={Link} className={classes.loginbutton} fullWidth variant="outlined">{t("LoginView:login")}</Button>
+        <Button to='/dashboard' size="large" component={Link} className={classes.loginbutton} fullWidth variant="outlined">{t("LoginView:login")}</Button>
       </Grid>
     </Grid>
   );
