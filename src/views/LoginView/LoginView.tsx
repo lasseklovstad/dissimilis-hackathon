@@ -21,7 +21,7 @@ function LoginView() {
         <LoginLogo className={classes.loginlogo} />
         <TextField className={classes.textfield} fullWidth label="Brukernavn" variant="filled"></TextField>
         <TextField className={classes.textfield} fullWidth label="Passord" variant="filled"></TextField>
-        <Button to='/dashboard' component={Link} className={classes.loginbutton} fullWidth variant="outlined">Logg Inn</Button>
+        <Button to='/dashboard' size="large" component={Link} className={classes.loginbutton} fullWidth variant="outlined">Logg Inn</Button>
       </Grid>
     </Grid>
   );
