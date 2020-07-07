@@ -46,7 +46,7 @@ export const DashboardLibraryButton: FunctionComponent<ButtonProps> = ({ text, l
   const styles = useStyles();
   return (
     <Box>
-      <Card className={styles.button__green}>
+      <Card className={styles.buttonGreen}>
         <CardActionArea to={link} component={Link}>
           <Box className={styles.container}>
             <Box p={2}><Typography>{text}</Typography></Box>
@@ -62,9 +62,9 @@ export const DashboardTopBarIcon = () => {
   const {t} = useTranslation();
   const altProp = t("DashboardView:altButteflyButtonProp");
   return (
-    <Box className={styles.butterflyButton__Container}>
-      <Card className={styles.butterflyButton__Card}>
-        <CardActionArea className={styles.butterflyButton__Card__Icon} to="/dashboard" component={Link}>
+    <Box className={styles.butterflyButtonContainer}>
+      <Card className={styles.butterflyButtonCard}>
+        <CardActionArea className={styles.butterflyButtonCardIcon} to="/dashboard" component={Link}>
           
             <img src={butterflyBlue} alt={altProp} />
           
@@ -84,19 +84,19 @@ const useStyles = makeStyles({
     backgroundColor: colors.white,
     boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)"
   },
-  button__green: {
+  buttonGreen: {
     backgroundColor: colors.teal_100,
     boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)"
   },
-  butterflyButton__Container: {
+  butterflyButtonContainer: {
     maxHeight: '48px',
     maxWidth: '48px',
     backgroundColor: colors.white,
   },
-  butterflyButton__Card: {
+  butterflyButtonCard: {
     boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)"
   },
-  butterflyButton__Card__Icon: {
+  butterflyButtonCardIcon: {
     padding: "8px",
     borderRadius: "1px",
   }
