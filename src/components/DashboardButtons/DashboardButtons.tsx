@@ -13,7 +13,28 @@ type ButtonProps = {
   color?: string,
 };
 
+type ButtonNoLinkProps = {
+  text: string,
+  func: Function,
+  color?: string,
+}
+
 export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = (props) => {
+  const styles = useStyles();
+
+  return (
+    <Card className={styles.button}>
+      <CardActionArea to={props.link} component={Link} onClick={() => props.func && props.func()} >
+        <Box className={styles.container} >
+          <Box p={2}><AddIcon /></Box>
+          <Box p={2}><Typography>{props.text}</Typography></Box>
+        </Box>
+      </CardActionArea>
+    </Card>
+  );
+}
+
+export const DashboardButtonWithAddIconNoLink: FunctionComponent<ButtonNoLinkProps> = (props) => {
   const styles = useStyles();
 
   return (
@@ -27,6 +48,8 @@ export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = (props
     </Card>
   );
 }
+
+
 
 export const DashboardButton: FunctionComponent<ButtonProps> = (props) => {
   const styles = useStyles();
