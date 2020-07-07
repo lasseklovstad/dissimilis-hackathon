@@ -8,11 +8,11 @@ import { ReactComponent as BackgroundImage } from '../../assets/images/butterfly
 import { ReactComponent as LoginLogo } from '../../assets/images/LoginLogo.svg';
 import { colors } from '../../utils/colors';
 import { Link } from 'react-router-dom';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 
 function LoginView() {
-  const {t, i18n} = useTranslation();
+  const { t } = useTranslation();
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
   return (

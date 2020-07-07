@@ -1,6 +1,5 @@
 import {createMuiTheme} from "@material-ui/core/styles";
 import {colors} from "./utils/colors";
-import { generateKeyPair } from "crypto";
 
 export const theme : object = createMuiTheme({
     overrides: {

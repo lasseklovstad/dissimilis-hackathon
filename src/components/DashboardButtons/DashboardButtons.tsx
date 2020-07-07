@@ -59,7 +59,7 @@ export const DashboardLibraryButton: FunctionComponent<ButtonProps> = ({text, li
 
 export const DashboardTopBarIcon = () => {
   const styles = useStyles();
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
   const altProp = t("DashboardView:altButteflyButtonProp");
   return (
     <Box className={styles.butterflyButton__Container}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Typography, Box } from '@material-ui/core';
+import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
 import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/DashboardButtons/DashboardButtons';
 import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
@@ -10,69 +10,84 @@ export type DashboardViewProps = {
 }
 
 export default function DashboardView() {
-  const {t, i18n} = useTranslation();
+  const { t } = useTranslation();
   const [recentSongs, setRecentSongs] = useState(testData);
   const measureText = t("DashboardView:measure");
   const musicTacts = [
     {
-        id: 1,
-        text: "2/4-" + measureText,
-        link: "/"
+      id: 1,
+      text: "2/4-" + measureText,
+      link: "/"
     },
     {
-        id: 2,
-        text: "3/4-" + measureText,
-        link: "/"
+      id: 2,
+      text: "3/4-" + measureText,
+      link: "/"
     },
     {
-        id: "3",
-        text: "4/4-" + measureText,
-        link: "/"
+      id: "3",
+      text: "4/4-" + measureText,
+      link: "/"
     },
     {
-        id: 4,
-        text: "6/8-" + measureText,
-        link: ""
+      id: 4,
+      text: "6/8-" + measureText,
+      link: ""
     }
-];
+  ];
+  const styles = useStyles()
+  const marginBottom = 4;
+
   return (
-    <div>
-      <Grid container justify="center" spacing={10} >
-        
+    <div >
+      <Grid container justify="center" className={styles.container}>
+
         <Grid item xs={12}>
-          <DashboardTopBar />
+          <Box mb={marginBottom}>
+            <DashboardTopBar />
+          </Box>
         </Grid>
 
         <Grid item xs={12} sm={10} key="newSongContainer">
-          <Box m={2}>
-            <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
+          <Box mb={marginBottom}>
+            <Box m={2}>
+              <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
+            </Box>
+            <Grid container spacing={3}>
+              {musicTacts.map(songs => (
+                <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                  <DashboardButtonWithAddIcon text={songs.text} link={songs.link} />
+                </Grid>
+              ))}
+            </Grid>
           </Box>
-          <Grid container spacing={3}>
-            {musicTacts.map(songs => (
-              <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                <DashboardButtonWithAddIcon text={songs.text} link={songs.link} />
-              </Grid>
-            ))}
-          </Grid>
         </Grid>
 
         <Grid item xs={12} sm={10} key="recentSongsContainer">
-          <Box m={2}>
-            <Typography variant="h1">{t("DashboardView:recentLabel")}</Typography>
-          </Box>
-          <Grid container spacing={3}>
-            {recentSongs.recentSongButtons.map(songs => (
-              <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                <DashboardButton text={songs.text} link={songs.link} />
+          <Box mb={marginBottom}>
+            <Box m={2}>
+              <Typography variant="h1">{t("DashboardView:recentLabel")}</Typography>
+            </Box>
+            <Grid container spacing={3}>
+              {recentSongs.recentSongButtons.map(songs => (
+                <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                  <DashboardButton text={songs.text} link={songs.link} />
+                </Grid>
+              ))}
+              <Grid item xs={12} sm={4} lg={3} key="library">
+                <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
               </Grid>
-            ))}
-            <Grid item xs={12} sm={4} lg={3} key="library">
-              <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
             </Grid>
-          </Grid>
+          </Box>
         </Grid>
 
       </Grid>
     </div>
   );
 }
+
+const useStyles = makeStyles({
+  container: {
+    width: "100%"
+  }
+})
