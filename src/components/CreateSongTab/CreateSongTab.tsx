@@ -52,7 +52,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         setTextFieldInput(e.target.value);
     }
 
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     return (
         <Grid container>

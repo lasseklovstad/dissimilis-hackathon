@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import { Box, Card, CardActionArea } from '@material-ui/core';
+import { Box, Card, CardActionArea, Icon } from '@material-ui/core';
 import { colors } from '../../utils/colors';
 import butterflyBlue from '../../assets/images/butterflyBlue.svg'
 import { useTranslation } from "react-i18next";
@@ -20,9 +20,9 @@ export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = (props
   return (
       <Card className={styles.button}>
         <CardActionArea onClick={() => props.func && props.func()} >
-          <Box className={styles.container} py={2} pl={1}>
-            <AddIcon />
-            <Box pl={1} pr={2}><Typography>{props.text}</Typography></Box>
+          <Box className={styles.container} py={2}>
+            <Box  pl={2}><AddIcon /></Box>
+            <Box  pl={1} pr={2}><Typography>{props.text}</Typography></Box>
           </Box>
         </CardActionArea>
       </Card>

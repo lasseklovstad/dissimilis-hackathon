@@ -1,7 +1,11 @@
 import React from "react";
 import { makeStyles, Grid, Typography, AppBar, Box, useMediaQuery } from "@material-ui/core";
+import butterflyBlue from "../../assets/images/butterflyBlue.svg";
 import MenuButton from "../MenuButton/MenuButton";
+import colors from "../../utils/colors";
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons";
+
+
 
 export type NavBarCreateSongProps = {
 

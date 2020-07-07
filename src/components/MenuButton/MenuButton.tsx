@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, IconButton } from "@material-ui/core";
+import { Typography, makeStyles, IconButton } from "@material-ui/core";
 import colors from "../../utils/colors";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
