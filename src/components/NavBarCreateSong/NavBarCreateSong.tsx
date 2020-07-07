@@ -56,22 +56,6 @@ const useStyles = makeStyles({
             order: 2
         },
     },
-    image: {
-        width: "48px",
-        height: "48px",
-        backgroundColor: colors.white,
-        '@media (max-width:600px)': {
-            width: "32px",
-            height: "32px",
-        },
-
-    },
-    title: {
-
-    },
-    button: {
-
-    },
     appbar: {
         backgroundColor: "transparent",
     },

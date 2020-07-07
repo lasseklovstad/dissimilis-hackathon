@@ -13,7 +13,7 @@ export default function DashboardTopBar() {
   return (
     <div>
       <AppBar position="static" className={classes.background} >
-        <Box py={3} className={classes.container}>
+        <Box py={3}>
             <Grid container spacing={2}>
               <Grid item sm={1} />
               <Grid item xs={2} >
@@ -35,9 +35,5 @@ const useStyles = makeStyles((theme) => ({
     background: 'transparent',
     boxShadow: 'none',
   },
-  container: {
-    marginTop: "auto",
-    verticalAlign: "center"
-  }
   
 }));
