@@ -11,12 +11,13 @@ export const theme : object = createMuiTheme({
             }
         }
     },
+    spacing: 8,
     palette: {
         primary: {
             main: colors.gray_400
         },
         background: {
-            default: colors.gray_100
+            default: colors.gray_100,
         }
     },
     /*props: {

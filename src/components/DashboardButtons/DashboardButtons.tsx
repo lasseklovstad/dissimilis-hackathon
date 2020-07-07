@@ -1,4 +1,4 @@
-import React,  { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -8,41 +8,40 @@ import { colors } from '../../utils/colors';
 
 type ButtonProps = {
   text: string,
-  link: string
+  link: string,
+  func?: Function,
+  color?: string,
 };
 
-export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = ({text, link}) => {
+export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = (props) => {
   const styles = useStyles();
+
   return (
-    <Box>
-      <Card className={styles.button}>
-        <CardActionArea to={link} component={Link}>
-          <Box className={styles.container}>
-            <Box p={2}><AddIcon /></Box>
-            <Box p={2}><Typography>{text}</Typography></Box>
-          </Box>
-        </CardActionArea>
-      </Card>
-    </Box>
+    <Card className={styles.button}>
+      <CardActionArea onClick={() => props.func && props.func()} >
+        <Box className={styles.container} >
+          <Box p={2}><AddIcon /></Box>
+          <Box p={2}><Typography>{props.text}</Typography></Box>
+        </Box>
+      </CardActionArea>
+    </Card>
   );
 }
 
-export const DashboardButton: FunctionComponent<ButtonProps> = ({text, link}) => {
+export const DashboardButton: FunctionComponent<ButtonProps> = (props) => {
   const styles = useStyles();
   return (
-    <Box>
-      <Card className={styles.button}>
-        <CardActionArea to={link} component={Link}>
-          <Box className={styles.container}>
-            <Box p={2}><Typography>{text}</Typography></Box>
-          </Box>
-        </CardActionArea>
-      </Card>
-    </Box>
+    <Card className={styles.button}>
+      <CardActionArea to={props.link} component={Link}>
+        <Box className={styles.container} style={{ backgroundColor: props.color }}>
+          <Box p={2}><Typography>{props.text}</Typography></Box>
+        </Box>
+      </CardActionArea>
+    </Card>
   );
 }
 
-export const DashboardLibraryButton: FunctionComponent<ButtonProps> = ({text, link}) => {
+export const DashboardLibraryButton: FunctionComponent<ButtonProps> = ({ text, link }) => {
   const styles = useStyles();
   return (
     <Box>
@@ -61,7 +60,7 @@ export default DashboardButton;
 
 const useStyles = makeStyles({
   container: {
-    display: "flex"
+    display: "flex",
   },
   button: {
     backgroundColor: colors.white,
