@@ -37,6 +37,12 @@ export default function DashboardView() {
     }
   ];
 
+  const storeMeasureToLocalStorage = (data: string) => {
+    const regex = /[0-9]+/g;
+    const newData = data.match(regex);
+    writeStorage("measure", newData)
+  }
+
 
   return (
     <div>
@@ -51,7 +57,7 @@ export default function DashboardView() {
             <Grid container spacing={3}>
               {musicTacts.map(songs => (
                 <Grid item sm={4} lg={2} key={songs.id}>
-                  <DashboardButtonWithAddIcon func={() => writeStorage("measure", songs.text.match(/[0-9]+/g))} text={songs.text} link={"/song"} />
+                  <DashboardButtonWithAddIcon func={() => storeMeasureToLocalStorage(songs.text)} text={songs.text} link={"/song"} />
                 </Grid>
               ))}
             </Grid>
