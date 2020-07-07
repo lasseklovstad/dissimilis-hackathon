@@ -1,14 +1,14 @@
 import React from "react";
-import { Typography, makeStyles, IconButton } from "@material-ui/core";
+import { makeStyles, IconButton } from "@material-ui/core";
 import colors from "../../utils/colors";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 
 export type MenuButtonProps = {}
 
-export const MenuButton : React.FC<MenuButtonProps> = props => {
+export const MenuButton: React.FC<MenuButtonProps> = props => {
     const classes = useStyles();
-    return(
+    return (
         <div>
             <IconButton className={classes.root}>
                 <MoreHorizIcon />
