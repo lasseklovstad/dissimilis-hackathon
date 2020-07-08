@@ -9,20 +9,28 @@ import { ReactComponent as LoginLogo } from '../../assets/images/LoginLogo.svg';
 import { colors } from '../../utils/colors';
 import { Link } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
+import {useHistory} from 'react-router';
 
 
 function LoginView() {
   const { t } = useTranslation();
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
+
+
+  const history = useHistory();
+  const tryLogin = () => {
+    history.push("/dashboard");
+  };
+
   return (
 
     <Grid container className={classes.root} >
       <BackgroundImage className={classes.backgroundimage} />
       <Grid item xs={10} sm={4} className={matches ? classes.container + " " + classes.paddinglarge : classes.container + " " + classes.paddingsmall}>
         <LoginLogo className={classes.loginlogo} />
-        <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled"></TextField>
-        <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled"></TextField>
+        <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled" onSubmit={() => tryLogin()}></TextField>
+        <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled" onSubmit={() => tryLogin()}></TextField>
         <Button to='/dashboard' size="large" component={Link} className={classes.loginbutton} fullWidth variant="outlined">{t("LoginView:login")}</Button>
       </Grid>
     </Grid>
