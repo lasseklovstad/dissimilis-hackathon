@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Grid, Button, Modal, TextField, makeStyles, Typography } from "@material-ui/core";
-import DashboardButton, { DashboardButtonWithAddIcon } from "../DashboardButtons/DashboardButtons";
+import DashboardButton, { DashboardButtonWithAddIcon, DashboardButtonWithAddIconNoLink } from "../DashboardButtons/DashboardButtons";
 import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
 
@@ -70,7 +70,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                         )
                     })}
                     <Grid item>
-                        <DashboardButtonWithAddIcon text={t("CreateSongTab:newInstrument")} link={"/"} func={handleOpen} />
+                        <DashboardButtonWithAddIconNoLink text={t("CreateSongTab:newInstrument")} func={handleOpen} />
                     </Grid>
                 </Grid>
             </Grid>

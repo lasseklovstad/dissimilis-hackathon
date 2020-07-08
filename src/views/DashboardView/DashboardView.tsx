@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/DashboardButtons/DashboardButtons';
 import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
 import testData from './DashboardTestData';
+import { writeStorage } from '@rehooks/local-storage';
 
 export type DashboardViewProps = {
 
@@ -38,6 +39,12 @@ export default function DashboardView() {
   const styles = useStyles()
   const marginBottom = 4;
 
+  const storeMeasureToLocalStorage = (data: string) => {
+    const regex = /[0-9]+/g;
+    const newData = data.match(regex);
+    writeStorage("measure", newData)
+  }
+
   return (
     <Box mx={2}>
       <Grid container justify="center" className={styles.container}>
@@ -56,7 +63,7 @@ export default function DashboardView() {
             <Grid container spacing={3}>
               {musicTacts.map(songs => (
                 <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                  <DashboardButtonWithAddIcon text={songs.text} link={songs.link} />
+                  <DashboardButtonWithAddIcon func={() => storeMeasureToLocalStorage(songs.text)} text={songs.text} link={songs.link} />
                 </Grid>
               ))}
             </Grid>

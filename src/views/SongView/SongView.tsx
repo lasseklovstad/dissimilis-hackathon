@@ -6,7 +6,7 @@ import { Grid, makeStyles } from '@material-ui/core';
 export type SongViewProps = {
 
 }
-export const SongView : React.FC<SongViewProps> = props => {
+export const SongView: React.FC<SongViewProps> = props => {
   const classes = useStyles();
 
 
@@ -30,6 +30,6 @@ const useStyles = makeStyles({
     marginRight: "32px",
     width: "auto",
   }
-}) 
+})
 
 export default SongView;
