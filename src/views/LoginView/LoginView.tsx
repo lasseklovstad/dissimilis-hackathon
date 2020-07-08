@@ -8,9 +8,11 @@ import { ReactComponent as BackgroundImage } from '../../assets/images/butterfly
 import { ReactComponent as LoginLogo } from '../../assets/images/LoginLogo.svg';
 import { colors } from '../../utils/colors';
 import { Link } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 
 function LoginView() {
+  const { t } = useTranslation();
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
   return (
@@ -19,9 +21,9 @@ function LoginView() {
       <BackgroundImage className={classes.backgroundimage} />
       <Grid item xs={10} sm={4} className={matches ? classes.container + " " + classes.paddinglarge : classes.container + " " + classes.paddingsmall}>
         <LoginLogo className={classes.loginlogo} />
-        <TextField className={classes.textfield} fullWidth label="Brukernavn" variant="filled"></TextField>
-        <TextField className={classes.textfield} fullWidth label="Passord" variant="filled"></TextField>
-        <Button to='/dashboard' component={Link} className={classes.loginbutton} fullWidth variant="outlined">Logg Inn</Button>
+        <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled"></TextField>
+        <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled"></TextField>
+        <Button to='/dashboard' size="large" component={Link} className={classes.loginbutton} fullWidth variant="outlined">{t("LoginView:login")}</Button>
       </Grid>
     </Grid>
   );
@@ -38,7 +40,7 @@ const useStyles = makeStyles(
       borderRadius: 2,
       backgroundColor: colors.gray_100,
       marginTop: '10vh',
-      zIndex: 2,
+      zIndex: 2
     },
     paddingsmall: {
       padding: "40px",
