@@ -12,6 +12,8 @@ function Routing() {
                 <Route exact path="/" component={LoginView} />
                 <Route exact path="/dashboard" component={DashboardView} />
                 <Route exact path="/song" component={SongView} />
+                <Route exact path="/song/:id" component={SongView} />
+
                 <Route render={() => <Redirect to={{ pathname: "/" }} />} />
             </Switch>
         </BrowserRouter>
