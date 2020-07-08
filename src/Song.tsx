@@ -6,7 +6,7 @@ export interface Song {
     //arranger: User;
     arrangerId: number;
     composer: string;
-    time_signature: string;
+    timeSignature: string;
 }
 
 
