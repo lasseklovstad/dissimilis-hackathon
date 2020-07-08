@@ -7,7 +7,6 @@ import SongViewBarComponent, { SongViewMeasureComponent, SongViewBarNumberCompon
 export type SongViewProps = {
 
 }
-
 export const SongView: React.FC<SongViewProps> = props => {
   const classes = useStyles();
   const xs = useMediaQuery("(max-width: 600px)");
@@ -46,22 +45,30 @@ export const SongView: React.FC<SongViewProps> = props => {
           <CreateSongTab />
         </Box>
       </Grid>
-      
-      <Grid item xs={1}>
-        {leftGrid.map(element => (
-          element
-        ))}
-      </Grid>
 
-      <Grid item xs={10}> {/*Grid for main container, containing the bars, measure and barnumber */}
+      <Grid item xs={12}> {/*Grid for main container, containing the bars, measure and barnumber */}
         <Grid container>
-          {bars.map(element => (
-            <Grid item xs={12} sm={6} xl={3} >
-              {element}
+
+          <Grid item xs={1}>
+            {leftGrid.map(element => (
+              element
+            ))}
+          </Grid>
+
+          <Grid item xs={10}>
+            <Grid container>
+              {bars.map(element => (
+                <Grid item xs={12} sm={6} xl={3} >
+                  {element}
+                </Grid>
+              ))}
             </Grid>
-          ))}
+          </Grid>
+
         </Grid>
       </Grid>
+
+
 
 
       <Box mb={4}>
