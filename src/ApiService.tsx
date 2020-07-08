@@ -50,7 +50,7 @@ const useApiService = <T extends Object>(method: "get" | "post", url: string, se
     fetchData();
   }, [url]);
  
-  return [{ data, isLoading, isError }, baseUrl] as const;
+  return [{ data, isLoading, isError }, url] as const;
 };
 
 export default useApiService
