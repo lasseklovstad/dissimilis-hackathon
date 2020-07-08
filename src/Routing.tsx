@@ -1,9 +1,10 @@
 import React from 'react';
-import {Route, BrowserRouter, Switch, Redirect} from 'react-router-dom';
+import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
 
 import DashboardView from './views/DashboardView/DashboardView';
 import LoginView from './views/LoginView/LoginView';
 import SongView from './views/SongView/SongView';
+import CommonView from './views/CommonView/CommonView';
 
 function Routing() {
     return (
@@ -12,12 +13,13 @@ function Routing() {
                 <Route exact path="/" component={LoginView} />
                 <Route exact path="/dashboard" component={DashboardView} />
                 <Route exact path="/song" component={SongView} />
-                <Route exact path="/song/:id" component={SongView} /> 
-                        
-                <Route render={() => <Redirect to={{pathname: "/"}} />} />
+                <Route exact path="/song/:id" component={SongView} />
+
+                <Route exact path="/common" component={CommonView} />
+                <Route render={() => <Redirect to={{ pathname: "/" }} />} />
             </Switch>
         </BrowserRouter>
-      );
+    );
 }
 
 export default Routing;
