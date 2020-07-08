@@ -32,7 +32,6 @@ export const SongView: React.FC<SongViewProps> = props => {
       }
       setBars([...bars, (<SongViewBarComponent />)])
     }
-
   }
 
   return (
@@ -46,6 +45,7 @@ export const SongView: React.FC<SongViewProps> = props => {
         </Box>
       </Grid>
 
+      
       <Grid item xs={12}> {/*Grid for main container, containing the bars, measure and barnumber */}
         <Grid container>
 
