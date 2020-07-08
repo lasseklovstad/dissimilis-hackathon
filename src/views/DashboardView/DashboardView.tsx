@@ -10,7 +10,7 @@ export type DashboardViewProps = {
 
 }
 
-export default function DashboardView() {
+export const DashboardView: React.FC<DashboardViewProps> = () => {
   const { t } = useTranslation();
   const [recentSongs, setRecentSongs] = useState(testData);
   const measureText = t("DashboardView:measure");
@@ -92,6 +92,7 @@ export default function DashboardView() {
     </Box>
   );
 }
+export default DashboardView;
 
 const useStyles = makeStyles({
   container: {

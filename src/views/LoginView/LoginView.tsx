@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -11,12 +11,14 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import {useHistory} from 'react-router';
 
+export type LoginViewProps = {
 
-function LoginView() {
+} 
+
+const LoginView: FC<LoginViewProps> = () => {
   const { t } = useTranslation();
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
-
 
   const history = useHistory();
   const tryLogin = () => {
@@ -24,7 +26,6 @@ function LoginView() {
   };
 
   return (
-
     <Grid container className={classes.root} >
       <BackgroundImage className={classes.backgroundimage} />
       <Grid item xs={10} sm={4} className={matches ? classes.container + " " + classes.paddinglarge : classes.container + " " + classes.paddingsmall}>
