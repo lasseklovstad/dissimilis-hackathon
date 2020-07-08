@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Grid, Button, Modal, TextField, makeStyles, Typography } from "@material-ui/core";
-import DashboardButton, { DashboardButtonWithAddIcon, DashboardButtonWithAddIconNoLink } from "../DashboardButtons/DashboardButtons";
+import DashboardButton, { DashboardButtonWithAddIconNoLink } from "../DashboardButtons/DashboardButtons";
 import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
 

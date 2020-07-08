@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Box, Grid, makeStyles } from "@material-ui/core";
+import { Box, Grid, makeStyles } from "@material-ui/core";
 import { Divider } from '@material-ui/core';
 import colors from "../../utils/colors";
 import RepetitionSign from "./RepetitionSign.component";
