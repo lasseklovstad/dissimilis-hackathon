@@ -1,7 +1,5 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import axios, { Method } from 'axios';
-import Axios from 'axios';
-import { Song } from './Song';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
  
 
 /**
@@ -50,7 +48,7 @@ const useApiService = <T extends Object>(method: "get" | "post", url: string, se
     fetchData();
   }, [url]);
  
-  return [{ data, isLoading, isError }, url] as const;
+  return { data, isLoading, isError } as const;
 };
 
 export default useApiService
