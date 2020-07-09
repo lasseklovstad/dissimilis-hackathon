@@ -7,9 +7,6 @@ import SongViewBarComponent, { SongViewMeasureComponent, SongViewBarNumberCompon
 export type SongViewProps = {
 
 }
-export interface ILeftGridComponent {
-  type: "measure" | number
-}
 export interface IBar {
   bars: string[]
   //Put additional information here, this is just a start
@@ -21,31 +18,15 @@ export const SongView: React.FC<SongViewProps> = props => {
   const xl = useMediaQuery("(min-width: 1920px)");
 
   const [bars, setBars] = useState<IBar[]>([{ bars: [] }])
-  const [leftGrid, setLeftGrid] = useState<ILeftGridComponent[]>([{ type: "measure" }])
 
   const addEmptyBar = () => {
-    if (xs) {
-      if (bars.length === leftGrid.length) {
-        setLeftGrid([...leftGrid, { type: bars.length + 1 }])
-      }
-      setBars([...bars, { bars: [] }])
-    } else if (xl) {
-      if ((bars.length % 4 === 0)) {
-        setLeftGrid([...leftGrid, { type: bars.length + 1 }])
-      }
-      setBars([...bars, { bars: [] }])
-    } else {
-      if ((bars.length % 2 === 0)) {
-        setLeftGrid([...leftGrid, { type: bars.length + 1 }])
-      }
-      setBars([...bars, { bars: [] }])
-    }
+    setBars([...bars, { bars: [] }])
   }
 
   return (
     <Grid container className={classes.root}>
 
-      <Grid item xs={12} >
+      <Grid item xs={12}>
         <NavBarCreateSong />
       </Grid>
       <Grid item xs={12}>
@@ -54,14 +35,18 @@ export const SongView: React.FC<SongViewProps> = props => {
         </Box>
       </Grid>
 
-
       <Grid item xs={12}> {/*Grid for main container, containing the bars, measure and barnumber */}
         <Grid container>
 
           <Grid item xs={1}>
-            {leftGrid.map(object => (
-              object.type === "measure" ? (<SongViewMeasureComponent />) : (<SongViewBarNumberComponent barNumber={object.type} />)
-            ))}
+            <SongViewMeasureComponent />
+            {bars.map((bar, i) => {
+              if(i===0){return <></>}
+              else if(xl && i%4===0){return (<SongViewBarNumberComponent barNumber={i+1} />)}
+              else if(!xs && !xl && i%2===0){return (<SongViewBarNumberComponent barNumber={i+1} />)}
+              else if(xs){return (<SongViewBarNumberComponent barNumber={i+1} />)}
+              return <></>
+            })}
           </Grid>
 
           <Grid item xs={10}>
@@ -77,7 +62,6 @@ export const SongView: React.FC<SongViewProps> = props => {
         </Grid>
       </Grid>
 
-
       <Box mb={4}>
         <Button variant="outlined" color="primary" onClick={addEmptyBar}>
           Legg til takt
@@ -85,7 +69,6 @@ export const SongView: React.FC<SongViewProps> = props => {
       </Box>
 
     </Grid>
-
   );
 }
 

@@ -7,7 +7,6 @@ import { useMediaQuery } from '@material-ui/core';
 import { ReactComponent as BackgroundImage } from '../../assets/images/butterflyGreen.svg';
 import { ReactComponent as LoginLogo } from '../../assets/images/LoginLogo.svg';
 import { colors } from '../../utils/colors';
-import { Link } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import { useHistory } from 'react-router';
 
