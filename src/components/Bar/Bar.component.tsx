@@ -1,13 +1,14 @@
 import React from "react";
-import { Box, Grid, makeStyles } from "@material-ui/core";
-import { Divider } from '@material-ui/core';
+import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
 import colors from "../../utils/colors";
 import RepetitionSign from "./RepetitionSign.component";
+import Note from "./Note.component";
 
 export type BarProps = {
-    house: boolean,
+    house?: number,
     repBefore: boolean,
     repAfter: boolean,
+    notes: string[],
 }
 
 
@@ -15,26 +16,32 @@ export type BarProps = {
 export const Bar: React.FC<BarProps> = props => {
     const classes = useStyles();
     let centerDivSize: 9 | 10 | 11 = 9;
-    if (!props.repBefore && !props.repAfter) {
-        centerDivSize = 11;
-    } else if (props.repBefore && props.repAfter) {
-        centerDivSize = 9;
-    } else {
+
+
+    if ((props.repBefore && props.repAfter) || (props.repBefore && !props.repAfter)) {
         centerDivSize = 10;
+    } else if ((!props.repBefore && props.repAfter) || (!props.repBefore && !props.repAfter)) {
+        centerDivSize = 11;
+    } else {
+        centerDivSize = 9;
     }
 
     return (
-        <Box className={classes.root} mx="auto" mt={8}>
+        <Box className={classes.root} mx="auto">
             <Grid container>
                 <Grid item xs={12}>
                     <Grid container className={classes.firstRow}>
                         <Grid item xs={1}></Grid>
                         <Grid item xs={9}>
-                            <Box mt={0}>
-                                <Divider variant="middle" className={classes.house} style={{ display: props.house ? "block" : "none" }} />
+                            <Box mb={1}>
+                                <Grid container >
+                                    <Grid item xs={1}></Grid>
+                                    <Grid item xs={11} style={{ textAlign: "left", borderBottom: props.house !== undefined ? "2px solid black" : 0 }}>
+                                        <Typography variant="body1">{props.house !== undefined ? props.house + "." : ""}</Typography>
+                                    </Grid>
+                                </Grid>
                             </Box>
                         </Grid>
-                        <Grid item xs={1}></Grid>
                         <Grid item xs={1}></Grid>
                     </Grid>
                 </Grid>
@@ -46,15 +53,14 @@ export const Bar: React.FC<BarProps> = props => {
                             </Box>
                         </Grid>
                         <Grid item xs={centerDivSize}>
+                            <Note color={"blue"} size={1} notes={props.notes} />
                         </Grid>
-                        <Grid item xs={props.repAfter ? 1 : "auto"}>
+                        <Grid item xs={1} style={{ borderRight: "2px solid black" }}>
                             <Box mt={"20px"} className={classes.repSignHolder}>
                                 <RepetitionSign size="small" display={props.repAfter} />
                             </Box>
                         </Grid>
-                        <Grid item xs={1}>
-                            <Divider orientation="vertical" variant="middle" className={classes.barline} />
-                        </Grid>
+
                     </Grid>
                 </Grid>
             </Grid>
@@ -70,7 +76,7 @@ const useStyles = makeStyles({
         padding: "8px",
     },
     firstRow: {
-        height: "16px",
+        height: "32px",
     },
     secondRow: {
         height: "120px",
