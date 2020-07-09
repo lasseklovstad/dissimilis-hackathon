@@ -14,7 +14,8 @@ export const SongView: React.FC<SongViewProps> = props => {
   const history = useHistory();
 
   useEffect(() => {
-    if (localStorage.getItem("measure") === null) history.push({ pathname: "/dashboard" })
+    const item = localStorage.getItem("measure");
+    if (item !== '["2","4"]' && item !== '["3","4"]' && item !== '["4","4"]' && item !== '["6","8"]') history.push({ pathname: "/dashboard" })
   }, [history]);
 
 
