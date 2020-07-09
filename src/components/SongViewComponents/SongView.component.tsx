@@ -3,19 +3,19 @@ import { makeStyles, Box, Typography } from '@material-ui/core';
 import useLocalStorage from '@rehooks/local-storage';
 import colors from '../../utils/colors';
 
-export const SongViewMeasureComponent = () => {
-  const measure = useLocalStorage('measure')[0];
-  let measureNumerator = null;
-  let measureDenominator: string | null = null;
-  if (measure !== null) {
-    measureNumerator = measure[0];
-    measureDenominator = measure[1];
+export const SongViewTimeSignatureComponent = () => {
+  const timeSignature = useLocalStorage('timeSignature')[0];
+  let timeSignatureNumerator = null;
+  let timeSignatureDenominator: string | null = null;
+  if (timeSignature !== null) {
+    timeSignatureNumerator = timeSignature[0];
+    timeSignatureDenominator = timeSignature[1];
   }
   const style = useStyles();
   return (
-    <Box className={style.MeasureContainer}>
-      <Box><Typography className={style.MeasureNumerator}>{measureNumerator}</Typography></Box>
-      <Box><Typography className={style.MeasureDenominator}>{measureDenominator}</Typography></Box>
+    <Box className={style.TimeSignatureContainer}>
+      <Box><Typography className={style.TimeSignatureNumerator}>{timeSignatureNumerator}</Typography></Box>
+      <Box><Typography className={style.TimeSignatureDenominator}>{timeSignatureDenominator}</Typography></Box>
     </Box>
   );
 }
@@ -41,17 +41,17 @@ export const SongViewBarNumberComponent: FC<SongViewBarNumberProps> = ({ barNumb
 export default SongViewBarComponent;
 
 const useStyles = makeStyles({
-  MeasureContainer: {
+  TimeSignatureContainer: {
     height: "200px",
     flexDirection: "column",
     display: "flex"
   },
-  MeasureNumerator: {
+  TimeSignatureNumerator: {
     margin: "10px 10px 0 0",
     float: "right",
     fontWeight: "bold"
   },
-  MeasureDenominator: {
+  TimeSignatureDenominator: {
     margin: "-5px 10px 0 0",
     float: "right",
     fontWeight: "bold"

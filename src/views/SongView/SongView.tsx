@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
 import { Grid, makeStyles, Box, useMediaQuery, Button, } from '@material-ui/core';
-import SongViewBarComponent, { SongViewMeasureComponent, SongViewBarNumberComponent } from '../../components/SongViewComponents/SongView.component';
+import SongViewBarComponent, { SongViewTimeSignatureComponent, SongViewBarNumberComponent } from '../../components/SongViewComponents/SongView.component';
 
 export type SongViewProps = {
 
@@ -35,11 +35,11 @@ export const SongView: React.FC<SongViewProps> = props => {
         </Box>
       </Grid>
 
-      <Grid item xs={12}> {/*Grid for main container, containing the bars, measure and barnumber */}
+      <Grid item xs={12}> {/*Grid for main container, containing the bars, timeSignature and barnumber */}
         <Grid container>
 
           <Grid item xs={1}>
-            <SongViewMeasureComponent />
+            <SongViewTimeSignatureComponent />
             {bars.map((bar, i) => {
               if(i===0){return <></>}
               else if(xl && i%4===0){return (<SongViewBarNumberComponent barNumber={i+1} />)}

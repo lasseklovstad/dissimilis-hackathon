@@ -39,10 +39,10 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   const styles = useStyles()
   const marginBottom = 4;
 
-  const storeMeasureToLocalStorage = (data: string) => {
+  const storeTimeSignatureToLocalStorage = (data: string) => {
     const regex = /[0-9]+/g;
     const newData = data.match(regex);
-    writeStorage("measure", newData)
+    writeStorage("timeSignature", newData)
   }
 
   return (
@@ -63,7 +63,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
             <Grid container spacing={3}>
               {musicTacts.map(songs => (
                 <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                  <DashboardButtonWithAddIcon func={() => storeMeasureToLocalStorage(songs.text)} text={songs.text} link={songs.link} />
+                  <DashboardButtonWithAddIcon func={() => storeTimeSignatureToLocalStorage(songs.text)} text={songs.text} link={songs.link} />
                 </Grid>
               ))}
             </Grid>
