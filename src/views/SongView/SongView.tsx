@@ -7,28 +7,33 @@ import SongViewBarComponent, { SongViewMeasureComponent, SongViewBarNumberCompon
 export type SongViewProps = {
 
 }
+export interface ILeftGridComponent {
+  type: "measure" | number
+}
+export interface 
+
 export const SongView: React.FC<SongViewProps> = props => {
   const classes = useStyles();
   const xs = useMediaQuery("(max-width: 600px)");
   const xl = useMediaQuery("(min-width: 1920px)");
 
   const [bars, setBars] = useState([(<SongViewBarComponent />)])
-  const [leftGrid, setLeftGrid] = useState([(<SongViewMeasureComponent />)])
+  const [leftGrid, setLeftGrid] = useState<ILeftGridComponent[]>([{ type: "measure" }])
 
   const addEmptyBar = () => {
     if (xs) {
       if (bars.length === leftGrid.length) {
-        setLeftGrid([...leftGrid, (<SongViewBarNumberComponent barNumber={bars.length + 1} />)])
+        setLeftGrid([...leftGrid, {type: bars.length + 1}])
       }
       setBars([...bars, (<SongViewBarComponent />)])
     } else if (xl) {
       if ((bars.length % 4 === 0)) {
-        setLeftGrid([...leftGrid, (<SongViewBarNumberComponent barNumber={bars.length + 1} />)])
+        setLeftGrid([...leftGrid, {type: bars.length + 1}])
       }
       setBars([...bars, (<SongViewBarComponent />)])
     } else {
       if ((bars.length % 2 === 0)) {
-        setLeftGrid([...leftGrid, (<SongViewBarNumberComponent barNumber={bars.length + 1} />)])
+        setLeftGrid([...leftGrid, {type: bars.length + 1}])
       }
       setBars([...bars, (<SongViewBarComponent />)])
     }
@@ -51,8 +56,8 @@ export const SongView: React.FC<SongViewProps> = props => {
         <Grid container>
 
           <Grid item xs={1}>
-            {leftGrid.map(element => (
-              element
+            {leftGrid.map(object => (
+              object.type === "measure" ? (<SongViewMeasureComponent />) : (<SongViewBarNumberComponent barNumber={object.type} />)
             ))}
           </Grid>
 
