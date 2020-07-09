@@ -3,8 +3,6 @@ import { Box, makeStyles } from "@material-ui/core";
 import colors from "../../utils/colors";
 
 export type NoteProps = {
-    color: string,
-    size: 1 | 3,
     notes: string[],
 
 }

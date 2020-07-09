@@ -1,8 +1,8 @@
 import React from "react";
-import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
-import colors from "../../utils/colors";
+import { Box, Grid, makeStyles } from "@material-ui/core";
 import RepetitionSign from "./RepetitionSign.component";
 import Note from "./Note.component";
+import House from "./House.component";
 
 export type BarProps = {
     house?: number,
@@ -27,36 +27,29 @@ export const Bar: React.FC<BarProps> = props => {
     }
 
     return (
-        <Box className={classes.root} mx="auto">
-            <Grid container>
-                <Grid item xs={12}>
-                    <Grid container className={classes.firstRow}>
-                        <Grid item xs={1}></Grid>
-                        <Grid item xs={9}>
-                            <Box mb={1}>
-                                <Grid container >
-                                    <Grid item xs={1}></Grid>
-                                    <Grid item xs={11} style={{ textAlign: "left", borderBottom: props.house !== undefined ? "2px solid black" : 0 }}>
-                                        <Typography variant="body1">{props.house !== undefined ? props.house + "." : ""}</Typography>
-                                    </Grid>
-                                </Grid>
-                            </Box>
+        <Box className={classes.root} mx="auto" role="main" aria-label="BarMainDiv">
+            <Grid container role="grid" aria-label="BarMainGrid">
+                <Grid item xs={12} role="gridcell" aria-label="BarFirstRowCell">
+                    <Grid container className={classes.firstRow} role="grid" aria-label="BarFirstRowContainer">
+                        <Grid item xs={1} role="gridcell" aria-label="BarFirstRowEmptyCell"></Grid>
+                        <Grid item xs={9} role="gridcell" aria-label="BarFirstRowHouseContainer">
+                            <House houseOrder={props.house} />
                         </Grid>
-                        <Grid item xs={1}></Grid>
+                        <Grid item xs={1} role="gridcell" aria-label="BarFirstRowEmptyCell2"></Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.secondRow}>
-                    <Grid container spacing={0} style={{ height: "100%" }}>
-                        <Grid item xs={props.repBefore ? 1 : "auto"} >
+                <Grid item xs={12} className={classes.secondRow} role="gridcell" aria-label="BarSecondRowCell">
+                    <Grid container spacing={0} style={{ height: "100%" }} role="grid" aria-label="BarSecondRowContainer">
+                        <Grid item xs={props.repBefore ? 1 : "auto"} role="gridcell" aria-label="BarSecondRowCell">
                             <Box mt={"20px"}>
                                 <RepetitionSign size="small" display={props.repBefore} />
                             </Box>
                         </Grid>
-                        <Grid item xs={centerDivSize}>
-                            <Note color={"blue"} size={1} notes={props.notes} />
+                        <Grid item xs={centerDivSize} role="gridcell" aria-label="BarSecondRowNoteContainer">
+                            <Note notes={props.notes} />
                         </Grid>
-                        <Grid item xs={1} style={{ borderRight: "2px solid black" }}>
-                            <Box mt={"20px"} className={classes.repSignHolder}>
+                        <Grid item xs={1} style={{ borderRight: "2px solid black" }} role="gridcell" aria-label="BarSecondRowCell1">
+                            <Box mt={"20px"}>
                                 <RepetitionSign size="small" display={props.repAfter} />
                             </Box>
                         </Grid>
@@ -80,19 +73,6 @@ const useStyles = makeStyles({
     },
     secondRow: {
         height: "120px",
-    },
-    house: {
-        backgroundColor: colors.black,
-        height: "2px",
-    },
-    barline: {
-        backgroundColor: colors.black,
-        width: "2px",
-        borderRight: 0,
-        borderLeft: 0,
-    },
-    repSignHolder: {
-
     }
 })
 
