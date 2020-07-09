@@ -71,7 +71,7 @@ export const SongView: React.FC<SongViewProps> = props => {
 
 
       <Box mb={4}>
-        <Button variant="outlined" color="primary" onClick={() => addEmptyBar()}>
+        <Button variant="outlined" color="primary" onClick={addEmptyBar}>
           Legg til takt
         </Button>
       </Box>
