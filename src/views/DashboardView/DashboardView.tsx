@@ -5,6 +5,8 @@ import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } f
 import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
 import testData from './DashboardTestData';
 import { writeStorage } from '@rehooks/local-storage';
+import useApiService from '../../utils/useApiService';
+import { ISong } from '../../models/ISong';
 
 export type DashboardViewProps = {
 
@@ -12,8 +14,10 @@ export type DashboardViewProps = {
 
 export default function DashboardView() {
   const { t } = useTranslation();
-  const [recentSongs, setRecentSongs] = useState(testData);
+  let url = "https://localhost:5001/api/Song/songs?Num=5&ArrangerId=1&OrderByDateTime=true";
+  const [dataFromApi, isLoading, isError] = useApiService<ISong[]>("get", url, undefined, undefined);
   const measureText = t("DashboardView:measure");
+  const recentSongs = dataFromApi ? dataFromApi.slice(0, 5) : [];
   const musicTacts = [
     {
       id: 1,
@@ -76,9 +80,9 @@ export default function DashboardView() {
               <Typography variant="h1">{t("DashboardView:recentLabel")}</Typography>
             </Box>
             <Grid container spacing={3}>
-              {recentSongs.recentSongButtons.map(songs => (
-                <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                  <DashboardButton text={songs.text} link={songs.link} />
+              {recentSongs.map(song => (
+                <Grid item xs={12} sm={4} lg={3} key={song.id}>
+                  <DashboardButton text={song.title} link={`/song/${song.id}`} />
                 </Grid>
               ))}
               <Grid item xs={12} sm={4} lg={3} key="library">
