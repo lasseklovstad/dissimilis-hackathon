@@ -14,6 +14,7 @@
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
+    "axios": "^0.19.2",
     "i18next": "^19.5.3",
     "i18next-browser-languagedetector": "^5.0.0",
     "i18next-http-backend": "^1.0.16",
@@ -33,7 +34,15 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+    "@typescript-eslint/interface-name-prefix": [
+    "error",
+    {
+    "prefixWithI": "always"
+    }
+    ]
+    }
   },
   "browserslist": {
     "production": [
