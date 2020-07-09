@@ -38,9 +38,9 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         <Grid container role="grid">
             <Grid item xs={12} className={classes.firstRow} role="row">
                 <Grid container style={{ height: "100%" }} role="grid" aria-label="barline before the bar">
-                    <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell" aria-label="BarContainerFirstRowBarLineBefore">
+                    <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                     </Grid>
-                    <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar with the music blocks">
+                    <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar with the tones">
                         <Bar house={props.house} repBefore={props.repBefore} repAfter={props.repAfter} notes={props.notes} />
                     </Grid>
                     <Grid item xs={props.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: props.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="barline after the bar"></Grid>

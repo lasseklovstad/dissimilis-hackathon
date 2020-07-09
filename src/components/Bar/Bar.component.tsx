@@ -32,7 +32,7 @@ export const Bar: React.FC<BarProps> = props => {
                 <Grid item xs={12} role="gridcell">
                     <Grid container className={classes.firstRow} role="grid">
                         <Grid item xs={1} role="gridcell"></Grid>
-                        <Grid item xs={9} role="gridcell" aria-label="house of the bar">
+                        <Grid item xs={9} role="gridcell" aria-label={"housenumber: " + props.house + " of the bar"}>
                             <House houseOrder={props.house} />
                         </Grid>
                         <Grid item xs={1} role="gridcell" ></Grid>
@@ -40,15 +40,15 @@ export const Bar: React.FC<BarProps> = props => {
                 </Grid>
                 <Grid item xs={12} className={classes.secondRow} role="gridcell" >
                     <Grid container spacing={0} style={{ height: "100%" }} role="grid" >
-                        <Grid item xs={props.repBefore ? 1 : "auto"} role="gridcell" aria-label="repetition sign before the music bars">
+                        <Grid item xs={props.repBefore ? 1 : "auto"} role="gridcell" aria-label="repetition sign before the tone">
                             <Box mt={"20px"}>
                                 <RepetitionSign size="small" display={props.repBefore} />
                             </Box>
                         </Grid>
-                        <Grid item xs={centerDivSize} role="gridcell" aria-label="all of the music blocks in the bar">
+                        <Grid item xs={centerDivSize} role="gridcell" aria-label="the tones in the bar">
                             <Note notes={props.notes} />
                         </Grid>
-                        <Grid item xs={1} style={{ borderRight: "2px solid black" }} role="gridcell" aria-label="repetition sign after the music bars" >
+                        <Grid item xs={1} style={{ borderRight: "2px solid black" }} role="gridcell" aria-label="repetition sign after the tone" >
                             <Box mt={"20px"}>
                                 <RepetitionSign size="small" display={props.repAfter} />
                             </Box>
