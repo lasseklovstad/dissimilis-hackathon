@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { makeStyles, Grid, Box, Typography } from '@material-ui/core';
+import { makeStyles, Box, Typography } from '@material-ui/core';
 import useLocalStorage from '@rehooks/local-storage';
 import colors from '../../utils/colors';
 
