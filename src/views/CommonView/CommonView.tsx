@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Typography, Grid, makeStyles, Box, useMediaQuery, Button } from '@material-ui/core';
+import React from 'react';
+import { Typography, Grid, makeStyles } from '@material-ui/core';
 import Bar from '../../components/Bar/Bar.component';
-import SongViewBarComponent, { SongViewBarNumberComponent, SongViewMeasureComponent } from '../../components/SongViewComponents/SongView.component';
 
 export type CommonViewProps = {
 
@@ -9,34 +8,6 @@ export type CommonViewProps = {
 
 export const CommonView: React.FC<CommonViewProps> = props => {
     const classes = useStyles();
-    const xs = useMediaQuery("(max-width: 600px)");
-    const xl = useMediaQuery("(min-width: 1920px)");
-
-    const [bars, setBars] = useState([(<SongViewBarComponent />)])
-    const [leftGrid, setLeftGrid] = useState([(<SongViewMeasureComponent />)])
-
-    const addEmptyBar = () => {
-        if (xs) {
-            if (bars.length === leftGrid.length) {
-                setLeftGrid([...leftGrid, (<SongViewBarNumberComponent />)])
-            }
-            setBars([...bars, (<SongViewBarComponent />)])
-        } else if (xl) {
-            if ((bars.length % 4 === 0)) {
-                setLeftGrid([...leftGrid, (<SongViewBarNumberComponent />)])
-            }
-            setBars([...bars, (<SongViewBarComponent />)])
-        } else {
-            if ((bars.length % 2 === 0)) {
-                setLeftGrid([...leftGrid, (<SongViewBarNumberComponent />)])
-            }
-            setBars([...bars, (<SongViewBarComponent />)])
-        }
-    }
-
-
-
-
 
     return (
         <div>
@@ -62,43 +33,6 @@ export const CommonView: React.FC<CommonViewProps> = props => {
                 </Grid>
             </Grid>
 
-            <Box mt={4}>
-
-                <Grid container className={classes.root}>
-                    <Grid item xs={12}>
-                        <Box mx={4}>
-                            <Typography variant="h1">Gridlogikk</Typography>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12}> {/*Grid for main container, containing the bars, measure and barnumber */}
-                        <Grid container>
-                            <Grid item xs={1}>
-                                {leftGrid.map(element => (
-                                    element
-                                ))}
-                            </Grid>
-
-                            <Grid item xs={10}>
-                                <Grid container>
-                                    {bars.map(element => (
-                                        <Grid item xs={12} sm={6} xl={3} >
-                                            {element}
-                                        </Grid>
-                                    ))}
-                                </Grid>
-                            </Grid>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Box mb={4}>
-                                <Button variant="outlined" color="primary" onClick={() => addEmptyBar()}>
-                                    Legg til takt
-                                </Button>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Box>
         </div >
     )
 }

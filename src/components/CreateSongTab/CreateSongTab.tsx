@@ -26,7 +26,7 @@ export type InstrumentCard = {
     link: string,
 }
 export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
-    const [instruments, setInstruments] = useState<InstrumentCard[]>([{ name: "Bass", link: "/" }]);
+    const [instruments, setInstruments] = useState<InstrumentCard[]>([{ name: "Bass", link: "/song" }]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalStyle] = useState(getModalStyle);
     const [textFieldInput, setTextFieldInput] = useState<string>("");
@@ -34,7 +34,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const classes = useStyles();
 
     const addInstrument = (): void => {
-        let newInstrument: InstrumentCard = { name: textFieldInput, link: "/" };
+        let newInstrument: InstrumentCard = { name: textFieldInput, link: "/song" };
         setInstruments(instruments => [...instruments, newInstrument]);
         setModalIsOpen(false);
         setTextFieldInput("");
@@ -60,7 +60,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
             <Grid item xs={12} sm={10}>
                 <Grid container spacing={2}>
                     <Grid item>
-                        <DashboardButton color={colors.gray_200} text={t("CreateSongTab:song")} link={"/"} />
+                        <DashboardButton color={colors.gray_200} text={t("CreateSongTab:song")} link={"/song"} />
                     </Grid>
                     {instruments.map((instrument, index) => {
                         return (

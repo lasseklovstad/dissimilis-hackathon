@@ -18,22 +18,22 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
     {
       id: 1,
       text: "2/4-" + measureText,
-      link: "/"
+      link: "/song"
     },
     {
       id: 2,
       text: "3/4-" + measureText,
-      link: "/"
+      link: "/song"
     },
     {
       id: "3",
       text: "4/4-" + measureText,
-      link: "/"
+      link: "/song"
     },
     {
       id: 4,
       text: "6/8-" + measureText,
-      link: ""
+      link: "/song"
     }
   ];
   const styles = useStyles()

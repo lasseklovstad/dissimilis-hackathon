@@ -18,17 +18,17 @@ export const SongView: React.FC<SongViewProps> = props => {
   const addEmptyBar = () => {
     if (xs) {
       if (bars.length === leftGrid.length) {
-        setLeftGrid([...leftGrid, (<SongViewBarNumberComponent />)])
+        setLeftGrid([...leftGrid, (<SongViewBarNumberComponent barNumber={bars.length + 1} />)])
       }
       setBars([...bars, (<SongViewBarComponent />)])
     } else if (xl) {
       if ((bars.length % 4 === 0)) {
-        setLeftGrid([...leftGrid, (<SongViewBarNumberComponent />)])
+        setLeftGrid([...leftGrid, (<SongViewBarNumberComponent barNumber={bars.length + 1} />)])
       }
       setBars([...bars, (<SongViewBarComponent />)])
     } else {
       if ((bars.length % 2 === 0)) {
-        setLeftGrid([...leftGrid, (<SongViewBarNumberComponent />)])
+        setLeftGrid([...leftGrid, (<SongViewBarNumberComponent barNumber={bars.length + 1} />)])
       }
       setBars([...bars, (<SongViewBarComponent />)])
     }
@@ -36,6 +36,7 @@ export const SongView: React.FC<SongViewProps> = props => {
 
   return (
     <Grid container className={classes.root}>
+
       <Grid item xs={12} >
         <NavBarCreateSong />
       </Grid>
@@ -45,7 +46,7 @@ export const SongView: React.FC<SongViewProps> = props => {
         </Box>
       </Grid>
 
-      
+
       <Grid item xs={12}> {/*Grid for main container, containing the bars, measure and barnumber */}
         <Grid container>
 
@@ -67,8 +68,6 @@ export const SongView: React.FC<SongViewProps> = props => {
 
         </Grid>
       </Grid>
-
-
 
 
       <Box mb={4}>
