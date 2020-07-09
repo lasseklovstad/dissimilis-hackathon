@@ -37,13 +37,13 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     return (
         <Grid container role="grid">
             <Grid item xs={12} className={classes.firstRow} role="row">
-                <Grid container style={{ height: "100%" }} role="grid" aria-label="BarLineBefore">
+                <Grid container style={{ height: "100%" }} role="grid" aria-label="barline before the bar">
                     <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell" aria-label="BarContainerFirstRowBarLineBefore">
                     </Grid>
-                    <Grid item xs={centerDivSize} role="gridcell" aria-label="Bar">
+                    <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar with the music blocks">
                         <Bar house={props.house} repBefore={props.repBefore} repAfter={props.repAfter} notes={props.notes} />
                     </Grid>
-                    <Grid item xs={props.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: props.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="BarLineAfter"></Grid>
+                    <Grid item xs={props.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: props.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="barline after the bar"></Grid>
                 </Grid>
             </Grid>
             <Grid item xs={12} className={classes.secondRow} role="row" >
@@ -51,7 +51,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                     <Grid item xs={props.barLineBefore ? 1 : "auto"} role="gridcell" ></Grid>
                     <Grid item xs={10} role="gridcell" >
                         <Box display="flex" flexGrow={1}>
-                            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} role="button" aria-label="BarSettingsButton">
+                            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} role="button" aria-label="button to make changes to the bar">
                                 <MoreHorizIcon style={{ marginLeft: "0px" }} />
                             </Button>
                             <Menu id="menuBar" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose} role="menu">
