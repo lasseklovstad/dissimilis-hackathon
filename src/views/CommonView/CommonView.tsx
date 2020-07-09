@@ -40,23 +40,23 @@ export const CommonView: React.FC<CommonViewProps> = props => {
                 <Grid item xs={12} style={{ border: "1px dotted black" }}>
                     <Typography variant="subtitle1">Dette er containeren som wrapper rundt takten. Denne har en knapp til hver takt, og gjør det mulig å legge til taktstrek foran (for takter som begynner på ny linje) og taktstrek bak for å få dobbel taktstrek  </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={6} >
                     <BarContainer notes={["C", "A", "F"]} barLineBefore={true} barLineAfter={false} repAfter={false} repBefore={true} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <BarContainer notes={["C", "H"]} barLineBefore={false} barLineAfter={false} repAfter={false} repBefore={false} />
+                    <BarContainer notes={["C", "H"]} barLineBefore={true} barLineAfter={false} repAfter={false} repBefore={false} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <BarContainer notes={["A", "H", "F"]} barLineBefore={true} barLineAfter={false} house={1} repAfter={false} repBefore={false} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <BarContainer notes={["A", "D", "F"]} barLineBefore={false} barLineAfter={false} house={2} repAfter={true} repBefore={false} />
+                    <BarContainer notes={["A", "D", "F"]} barLineBefore={true} barLineAfter={false} house={2} repAfter={true} repBefore={false} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <BarContainer notes={["A"]} barLineBefore={true} barLineAfter={false} repAfter={false} repBefore={false} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <BarContainer notes={["A", "D"]} barLineBefore={false} barLineAfter={true} repAfter={false} repBefore={false} />
+                    <BarContainer notes={["A", "D"]} barLineBefore={true} barLineAfter={true} repAfter={false} repBefore={false} />
                 </Grid>
             </Grid>
         </div >

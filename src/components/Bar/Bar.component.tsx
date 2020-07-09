@@ -27,28 +27,28 @@ export const Bar: React.FC<BarProps> = props => {
     }
 
     return (
-        <Box className={classes.root} mx="auto" role="main" aria-label="BarMainDiv">
-            <Grid container role="grid" aria-label="BarMainGrid">
-                <Grid item xs={12} role="gridcell" aria-label="BarFirstRowCell">
-                    <Grid container className={classes.firstRow} role="grid" aria-label="BarFirstRowContainer">
-                        <Grid item xs={1} role="gridcell" aria-label="BarFirstRowEmptyCell"></Grid>
-                        <Grid item xs={9} role="gridcell" aria-label="BarFirstRowHouseContainer">
+        <Box className={classes.root} mx="auto" role="main">
+            <Grid container role="grid">
+                <Grid item xs={12} role="gridcell">
+                    <Grid container className={classes.firstRow} role="grid">
+                        <Grid item xs={1} role="gridcell"></Grid>
+                        <Grid item xs={9} role="gridcell" aria-label="House">
                             <House houseOrder={props.house} />
                         </Grid>
-                        <Grid item xs={1} role="gridcell" aria-label="BarFirstRowEmptyCell2"></Grid>
+                        <Grid item xs={1} role="gridcell" ></Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.secondRow} role="gridcell" aria-label="BarSecondRowCell">
-                    <Grid container spacing={0} style={{ height: "100%" }} role="grid" aria-label="BarSecondRowContainer">
-                        <Grid item xs={props.repBefore ? 1 : "auto"} role="gridcell" aria-label="BarSecondRowCell">
+                <Grid item xs={12} className={classes.secondRow} role="gridcell" >
+                    <Grid container spacing={0} style={{ height: "100%" }} role="grid" >
+                        <Grid item xs={props.repBefore ? 1 : "auto"} role="gridcell" aria-label="RepetionSignBefore">
                             <Box mt={"20px"}>
                                 <RepetitionSign size="small" display={props.repBefore} />
                             </Box>
                         </Grid>
-                        <Grid item xs={centerDivSize} role="gridcell" aria-label="BarSecondRowNoteContainer">
+                        <Grid item xs={centerDivSize} role="gridcell" aria-label="Music Block">
                             <Note notes={props.notes} />
                         </Grid>
-                        <Grid item xs={1} style={{ borderRight: "2px solid black" }} role="gridcell" aria-label="BarSecondRowCell1">
+                        <Grid item xs={1} style={{ borderRight: "2px solid black" }} role="gridcell" aria-label="RepetionSignAfter" >
                             <Box mt={"20px"}>
                                 <RepetitionSign size="small" display={props.repAfter} />
                             </Box>

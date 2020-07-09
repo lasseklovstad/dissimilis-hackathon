@@ -35,23 +35,23 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     }
 
     return (
-        <Grid container role="grid" aria-label="BarContainerMainContainer">
-            <Grid item xs={12} className={classes.firstRow} role="row" aria-label="BarContainerFirstRow">
-                <Grid container style={{ height: "100%" }} role="grid" aria-label="BarContainerFirstRowMainContainer">
+        <Grid container role="grid">
+            <Grid item xs={12} className={classes.firstRow} role="row">
+                <Grid container style={{ height: "100%" }} role="grid" aria-label="BarLineBefore">
                     <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell" aria-label="BarContainerFirstRowBarLineBefore">
                     </Grid>
-                    <Grid item xs={centerDivSize} role="gridcell" aria-label="BarContainerFirstRowBarContainer">
+                    <Grid item xs={centerDivSize} role="gridcell" aria-label="Bar">
                         <Bar house={props.house} repBefore={props.repBefore} repAfter={props.repAfter} notes={props.notes} />
                     </Grid>
-                    <Grid item xs={props.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: props.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="BarContainerFirstRowBarLineAfter"></Grid>
+                    <Grid item xs={props.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: props.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="BarLineAfter"></Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={12} className={classes.secondRow} role="row" aria-label="BarContainerSecondRow">
-                <Grid container style={{ height: "100%" }} role="grid" aria-label="BarContainerSecondRowMainContainer">
-                    <Grid item xs={props.barLineBefore ? 1 : "auto"} role="gridcell" aria-label="BarContainerSecondRowBarLineBefore"></Grid>
-                    <Grid item xs={10} role="gridcell" aria-label="BarContainerSecondRowMenuButton">
+            <Grid item xs={12} className={classes.secondRow} role="row" >
+                <Grid container style={{ height: "100%" }} role="grid" >
+                    <Grid item xs={props.barLineBefore ? 1 : "auto"} role="gridcell" ></Grid>
+                    <Grid item xs={10} role="gridcell" >
                         <Box display="flex" flexGrow={1}>
-                            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} role="button" aria-label="BarContainerSecondRowButton">
+                            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} role="button" aria-label="BarSettingsButton">
                                 <MoreHorizIcon style={{ marginLeft: "0px" }} />
                             </Button>
                             <Menu id="menuBar" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose} role="menu">
