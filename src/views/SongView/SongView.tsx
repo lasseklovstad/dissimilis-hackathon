@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
 import { Grid, makeStyles, Box, useMediaQuery, Button, } from '@material-ui/core';
@@ -14,6 +15,15 @@ export const SongView: React.FC<SongViewProps> = props => {
   const xl = useMediaQuery("(min-width: 1920px)");
 
   const [bars, setBars] = useState([{ bars: [] }])
+
+  const history = useHistory();
+
+  useEffect(() => {
+    const item = localStorage.getItem("timeSignature");
+    if (item !== '["2","4"]' && item !== '["3","4"]' && item !== '["4","4"]' && item !== '["6","8"]') {
+      history.push({ pathname: "/dashboard" })
+    }
+  }, [history]);
 
   const addEmptyBar = () => {
     setBars([...bars, { bars: [] }])

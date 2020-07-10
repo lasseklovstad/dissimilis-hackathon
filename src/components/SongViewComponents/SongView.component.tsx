@@ -2,14 +2,30 @@ import React, { FC } from 'react';
 import { makeStyles, Box, Typography } from '@material-ui/core';
 import useLocalStorage from '@rehooks/local-storage';
 import colors from '../../utils/colors';
+import { useHistory } from 'react-router-dom';
+
 
 export const TimeSignature = () => {
+  const history = useHistory();
+
+  /*
+    Litt ekkel kode, men denne komponenten skal slettes senere så det får gå
+  */
+
   const timeSignature = useLocalStorage('timeSignature')[0];
   let timeSignatureNumerator: string | null = null;
   let timeSignatureDenominator: string | null = null;
-  if (timeSignature !== null) {
-    timeSignatureNumerator = timeSignature[0];
-    timeSignatureDenominator = timeSignature[1];
+  if (timeSignature === undefined) {
+    history.push({ pathname: "/dashboard" })
+
+  } else {
+    if (timeSignature !== null) {
+      timeSignatureNumerator = timeSignature[0];
+      timeSignatureDenominator = timeSignature[1];
+    }
+
+
+
   }
   const style = useStyles();
   return (
