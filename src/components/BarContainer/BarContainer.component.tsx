@@ -11,7 +11,7 @@ export type BarContainerProps = {
     house?: number,
     repBefore: boolean,
     repAfter: boolean,
-    notes: string[],
+    notes: string[][],
     barNumber: number,
 
 }
