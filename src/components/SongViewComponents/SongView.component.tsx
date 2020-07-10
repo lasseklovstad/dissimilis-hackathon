@@ -5,7 +5,7 @@ import colors from '../../utils/colors';
 
 export const SongViewTimeSignatureComponent = () => {
   const timeSignature = useLocalStorage('timeSignature')[0];
-  let timeSignatureNumerator = null;
+  let timeSignatureNumerator: string | null = null;
   let timeSignatureDenominator: string | null = null;
   if (timeSignature !== null) {
     timeSignatureNumerator = timeSignature[0];

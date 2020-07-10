@@ -39,9 +39,8 @@ export const SongView: React.FC<SongViewProps> = props => {
         <Grid container>
 
           <Grid item xs={1}>
-            <SongViewTimeSignatureComponent />
             {bars.map((bar, i) => {
-              if(i===0){return <></>}
+              if(i===0){return (<SongViewTimeSignatureComponent />)}
               else if(xl && i%4===0){return (<SongViewBarNumberComponent barNumber={i+1} />)}
               else if(!xs && !xl && i%2===0){return (<SongViewBarNumberComponent barNumber={i+1} />)}
               else if(xs){return (<SongViewBarNumberComponent barNumber={i+1} />)}
