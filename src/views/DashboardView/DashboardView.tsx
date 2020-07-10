@@ -10,7 +10,7 @@ export type DashboardViewProps = {
 
 }
 
-export default function DashboardView() {
+export const DashboardView: React.FC<DashboardViewProps> = () => {
   const { t } = useTranslation();
   const [recentSongs, setRecentSongs] = useState(testData);
   const measureText = t("DashboardView:measure");
@@ -18,28 +18,28 @@ export default function DashboardView() {
     {
       id: 1,
       text: "2/4-" + measureText,
-      link: "/"
+      link: "/song"
     },
     {
       id: 2,
       text: "3/4-" + measureText,
-      link: "/"
+      link: "/song"
     },
     {
       id: "3",
       text: "4/4-" + measureText,
-      link: "/"
+      link: "/song"
     },
     {
       id: 4,
       text: "6/8-" + measureText,
-      link: ""
+      link: "/song"
     }
   ];
   const styles = useStyles()
   const marginBottom = 4;
 
-  const storeMeasureToLocalStorage = (data: string) => {
+  const storeTimeSignatureToLocalStorage = (data: string) => {
     const regex = /[0-9]+/g;
     const newData = data.match(regex);
     writeStorage("timeSignature", newData)
@@ -63,7 +63,7 @@ export default function DashboardView() {
             <Grid container spacing={3}>
               {musicTacts.map(songs => (
                 <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                  <DashboardButtonWithAddIcon func={() => storeMeasureToLocalStorage(songs.text)} text={songs.text} link={songs.link} />
+                  <DashboardButtonWithAddIcon func={() => storeTimeSignatureToLocalStorage(songs.text)} text={songs.text} link={songs.link} />
                 </Grid>
               ))}
             </Grid>
@@ -92,6 +92,7 @@ export default function DashboardView() {
     </Box>
   );
 }
+export default DashboardView;
 
 const useStyles = makeStyles({
   container: {
