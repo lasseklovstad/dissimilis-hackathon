@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -21,21 +21,21 @@ type ButtonNoLinkProps = {
   color?: string,
 }
 
-export const DashboardButtonWithAddIcon: FunctionComponent<ButtonProps> = (props) => {
+export const DashboardButtonWithAddIcon: FC<ButtonProps> = (props) => {
   const styles = useStyles();
   return (
     <Card className={styles.button}>
       <CardActionArea to={props.link} component={Link} onClick={() => props.func && props.func()} >
-        <Box className={styles.container} >
-          <Box p={2}><AddIcon /></Box>
-          <Box p={2}><Typography>{props.text}</Typography></Box>
+        <Box className={styles.container} py={2} pl={1}>
+          <AddIcon />
+          <Box pl={1} pr={2}><Typography>{props.text}</Typography></Box>
         </Box>
       </CardActionArea>
     </Card>
   );
 }
 
-export const DashboardButtonWithAddIconNoLink: FunctionComponent<ButtonNoLinkProps> = (props) => {
+export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (props) => {
   const styles = useStyles();
 
   return (
@@ -52,7 +52,7 @@ export const DashboardButtonWithAddIconNoLink: FunctionComponent<ButtonNoLinkPro
 
 
 
-export const DashboardButton: FunctionComponent<ButtonProps> = (props) => {
+export const DashboardButton: FC<ButtonProps> = (props) => {
   const styles = useStyles();
   return (
     <Card className={styles.button}>
@@ -65,7 +65,7 @@ export const DashboardButton: FunctionComponent<ButtonProps> = (props) => {
   );
 }
 
-export const DashboardLibraryButton: FunctionComponent<ButtonProps> = ({ text, link }) => {
+export const DashboardLibraryButton: FC<ButtonProps> = ({ text, link }) => {
   const styles = useStyles();
   return (
     <Box>

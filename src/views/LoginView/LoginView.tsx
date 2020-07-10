@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -7,23 +7,31 @@ import { useMediaQuery } from '@material-ui/core';
 import { ReactComponent as BackgroundImage } from '../../assets/images/butterflyGreen.svg';
 import { ReactComponent as LoginLogo } from '../../assets/images/LoginLogo.svg';
 import { colors } from '../../utils/colors';
-import { Link } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
+import { useHistory } from 'react-router';
 
+export type LoginViewProps = {
 
-function LoginView() {
+}
+
+const LoginView: FC<LoginViewProps> = () => {
   const { t } = useTranslation();
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
-  return (
 
+  const history = useHistory();
+  const tryLogin = () => {
+    history.push("/dashboard");
+  };
+
+  return (
     <Grid container className={classes.root} >
       <BackgroundImage className={classes.backgroundimage} />
       <Grid item xs={10} sm={4} className={matches ? classes.container + " " + classes.paddinglarge : classes.container + " " + classes.paddingsmall}>
         <LoginLogo className={classes.loginlogo} />
-        <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled"></TextField>
-        <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled"></TextField>
-        <Button to='/dashboard' size="large" component={Link} className={classes.loginbutton} fullWidth variant="outlined">{t("LoginView:login")}</Button>
+        <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled" onSubmit={tryLogin}></TextField>
+        <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled" onSubmit={tryLogin}></TextField>
+        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={tryLogin}>{t("LoginView:login")}</Button>
       </Grid>
     </Grid>
   );
