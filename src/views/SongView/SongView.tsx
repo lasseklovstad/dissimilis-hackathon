@@ -7,17 +7,13 @@ import SongViewBarComponent, { SongViewTimeSignatureComponent, SongViewBarNumber
 export type SongViewProps = {
 
 }
-export interface IBar {
-  bars: string[]
-  //Put additional information here, this is just a start
-}
 
 export const SongView: React.FC<SongViewProps> = props => {
   const classes = useStyles();
   const xs = useMediaQuery("(max-width: 600px)");
   const xl = useMediaQuery("(min-width: 1920px)");
 
-  const [bars, setBars] = useState<IBar[]>([{ bars: [] }])
+  const [bars, setBars] = useState([{ bars: [] }])
 
   const addEmptyBar = () => {
     setBars([...bars, { bars: [] }])
@@ -40,10 +36,10 @@ export const SongView: React.FC<SongViewProps> = props => {
 
           <Grid item xs={1}>
             {bars.map((bar, i) => {
-              if(i===0){return (<SongViewTimeSignatureComponent />)}
-              else if(xl && i%4===0){return (<SongViewBarNumberComponent barNumber={i+1} />)}
-              else if(!xs && !xl && i%2===0){return (<SongViewBarNumberComponent barNumber={i+1} />)}
-              else if(xs){return (<SongViewBarNumberComponent barNumber={i+1} />)}
+              if (i === 0) { return (<SongViewTimeSignatureComponent />) }
+              else if (xl && i % 4 === 0) { return (<SongViewBarNumberComponent barNumber={i + 1} />) }
+              else if (!xs && !xl && i % 2 === 0) { return (<SongViewBarNumberComponent barNumber={i + 1} />) }
+              else if (xs) { return (<SongViewBarNumberComponent barNumber={i + 1} />) }
               return <></>
             })}
           </Grid>
