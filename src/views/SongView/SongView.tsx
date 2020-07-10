@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
 import { Grid, makeStyles, Box, useMediaQuery, Button, } from '@material-ui/core';
-import SongViewBarComponent, { SongViewTimeSignatureComponent, SongViewBarNumberComponent } from '../../components/SongViewComponents/SongView.component';
+import { TimeSignature, BarNumber, Bar } from '../../components/SongViewComponents/SongView.component';
 
 export type SongViewProps = {
 
@@ -36,10 +36,10 @@ export const SongView: React.FC<SongViewProps> = props => {
 
           <Grid item xs={1}>
             {bars.map((bar, i) => {
-              if (i === 0) { return (<SongViewTimeSignatureComponent />) }
-              else if (xl && i % 4 === 0) { return (<SongViewBarNumberComponent barNumber={i + 1} />) }
-              else if (!xs && !xl && i % 2 === 0) { return (<SongViewBarNumberComponent barNumber={i + 1} />) }
-              else if (xs) { return (<SongViewBarNumberComponent barNumber={i + 1} />) }
+              if (i === 0) { return (<TimeSignature />) }
+              else if (xl && i % 4 === 0) { return (<BarNumber barNumber={i + 1} />) }
+              else if (!xs && !xl && i % 2 === 0) { return (<BarNumber barNumber={i + 1} />) }
+              else if (xs) { return (<BarNumber barNumber={i + 1} />) }
               return <></>
             })}
           </Grid>
@@ -48,7 +48,7 @@ export const SongView: React.FC<SongViewProps> = props => {
             <Grid container>
               {bars.map(bar => (
                 <Grid item xs={12} sm={6} xl={3} >
-                  <SongViewBarComponent />
+                  <Bar />
                 </Grid>
               ))}
             </Grid>

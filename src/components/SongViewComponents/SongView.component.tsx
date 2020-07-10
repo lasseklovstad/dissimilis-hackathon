@@ -3,7 +3,7 @@ import { makeStyles, Box, Typography } from '@material-ui/core';
 import useLocalStorage from '@rehooks/local-storage';
 import colors from '../../utils/colors';
 
-export const SongViewTimeSignatureComponent = () => {
+export const TimeSignature = () => {
   const timeSignature = useLocalStorage('timeSignature')[0];
   let timeSignatureNumerator: string | null = null;
   let timeSignatureDenominator: string | null = null;
@@ -20,7 +20,7 @@ export const SongViewTimeSignatureComponent = () => {
   );
 }
 
-export const SongViewBarComponent = () => {
+export const Bar = () => {
   const style = useStyles();
   return (
     <Box className={style.BarComponent}></Box>
@@ -30,7 +30,7 @@ export const SongViewBarComponent = () => {
 export type SongViewBarNumberProps = {
   barNumber: number
 }
-export const SongViewBarNumberComponent: FC<SongViewBarNumberProps> = ({ barNumber }) => {
+export const BarNumber: FC<SongViewBarNumberProps> = ({ barNumber }) => {
   const style = useStyles();
   return (
     <Box className={style.BarNumberContainer}>
@@ -38,7 +38,7 @@ export const SongViewBarNumberComponent: FC<SongViewBarNumberProps> = ({ barNumb
     </Box>
   );
 }
-export default SongViewBarComponent;
+export default BarNumber;
 
 const useStyles = makeStyles({
   TimeSignatureContainer: {
