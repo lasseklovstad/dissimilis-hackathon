@@ -3,13 +3,12 @@ import { Box, Grid, makeStyles } from "@material-ui/core";
 import RepetitionSign from "./RepetitionSign.component";
 import Note from "./Note.component";
 import House from "./House.component";
-import Block from "./Block.component";
 
 export type BarProps = {
     house?: number,
     repBefore: boolean,
     repAfter: boolean,
-    notes: string[][],
+    notes: string[],
     barNumber: number,
 }
 
@@ -48,7 +47,7 @@ export const Bar: React.FC<BarProps> = props => {
                             </Box>
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label={"Bar " + props.barNumber}>
-                            <Block notes={props.notes} />
+                            <Note notes={props.notes} />
                         </Grid>
                         <Grid item xs={1} style={{ borderRight: "2px solid black" }} role="gridcell" aria-label="repetition sign after the tone" >
                             <Box mt={"20px"}>
