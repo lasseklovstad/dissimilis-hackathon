@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
 import { Grid, makeStyles } from '@material-ui/core';
+import SongContextProvider from "./SongContextProvider.component";
 
 export type SongViewProps = {
 
@@ -11,14 +12,16 @@ export const SongView: React.FC<SongViewProps> = props => {
 
 
   return (
-    <Grid container className={classes.root}>
-      <Grid item xs={12} >
-        <NavBarCreateSong />
+    <SongContextProvider>
+      <Grid container className={classes.root}>
+        <Grid item xs={12} >
+          <NavBarCreateSong />
+        </Grid>
+        <Grid item xs={12}>
+          <CreateSongTab />
+        </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <CreateSongTab />
-      </Grid>
-    </Grid>
+    </SongContextProvider >
 
   );
 }

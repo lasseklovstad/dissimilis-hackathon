@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles, Grid, Typography, AppBar, Box, useMediaQuery } from "@material-ui/core";
 import MenuButton from "../MenuButton/MenuButton";
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons";
+import SongContext from "../../views/SongView/SongContext";
 
 
 
@@ -14,6 +15,16 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
     const classes = useStyles();
     const matches = useMediaQuery("(max-width:600px)");
 
+    //console.log(useContext(SongContext));
+    //const { song, setSong } = useContext(SongContext);
+
+    const { song: { instruments, title } } = useContext(SongContext);
+
+
+
+
+
+
 
     return (
         <Box className={classes.root} mb={matches ? 2 : 4}>
@@ -23,7 +34,7 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
                         <DashboardTopBarIcon />
                     </Grid>
                     <Grid item xs={12} sm={10} className={classes.center}>
-                        <Typography variant="h1">Lisa gikk til skolen</Typography>
+                        <Typography variant="h1">{title}</Typography>
                     </Grid>
                     <Grid item xs={1} sm={1} className={classes.right} >
                         <MenuButton />

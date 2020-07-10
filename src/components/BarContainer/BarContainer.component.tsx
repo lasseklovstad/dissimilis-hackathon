@@ -13,8 +13,7 @@ export type BarContainerProps = {
     repAfter: boolean,
     notes: string[],
     barNumber: number,
-
-}
+};
 
 export const BarContainer: React.FC<BarContainerProps> = props => {
     const classes = useStyles();
