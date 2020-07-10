@@ -14,7 +14,7 @@ export const SongView: React.FC<SongViewProps> = props => {
   const history = useHistory();
 
   useEffect(() => {
-    const item = localStorage.getItem("measure");
+    const item = localStorage.getItem("timeSignature");
     if (item !== '["2","4"]' && item !== '["3","4"]' && item !== '["4","4"]' && item !== '["6","8"]') history.push({ pathname: "/dashboard" })
   }, [history]);
 

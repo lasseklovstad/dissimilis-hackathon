@@ -42,7 +42,7 @@ export default function DashboardView() {
   const storeMeasureToLocalStorage = (data: string) => {
     const regex = /[0-9]+/g;
     const newData = data.match(regex);
-    writeStorage("measure", newData)
+    writeStorage("timeSignature", newData)
   }
 
   return (
