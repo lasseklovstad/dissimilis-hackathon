@@ -3,10 +3,10 @@ import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
 import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/DashboardButtons/DashboardButtons';
 import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
-import testData from './DashboardTestData';
 import { writeStorage } from '@rehooks/local-storage';
-import useApiService from '../../utils/useApiService';
+import { useApiService } from '../../utils/useApiService';
 import { ISong } from '../../models/ISong';
+import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
 
 export type DashboardViewProps = {
 
@@ -14,9 +14,11 @@ export type DashboardViewProps = {
 
 export default function DashboardView() {
   const { t } = useTranslation();
-  let url = "https://localhost:5001/api/Song/songs?Num=5&ArrangerId=1&OrderByDateTime=true";
-  const [dataFromApi, isLoading, isError] = useApiService<ISong[]>("get", url, undefined, undefined);
+  let url = "Song/songs";
+  let params = { "Num": "5", "ArrangerId": "1", "OrderByDateTime": "true" }
+  const [dataFromApi, isLoading, isError] = useApiService<ISong[]>("get", url, { params: params });
   const measureText = t("DashboardView:measure");
+  //Burde jeg her bare stole på at databsen kun har hentet fem objekter?
   const recentSongs = dataFromApi ? dataFromApi.slice(0, 5) : [];
   const musicTacts = [
     {
