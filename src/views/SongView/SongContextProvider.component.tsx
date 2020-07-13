@@ -17,7 +17,7 @@ const SongContextProvider: React.FC = props => {
 
     //Initial State. 
     const [song, setSong] = useState({
-        title: "Lisa went to the school",
+        title: "Lisa gikk til skolen",
         instruments: [
             "Gitar",
             "Kontrabass",

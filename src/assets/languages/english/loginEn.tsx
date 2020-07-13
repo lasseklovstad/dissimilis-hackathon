@@ -1,5 +1,5 @@
 export const loginEn : any = { 
-    "login" : "Log In",
+    "login" : "Log in",
     "username" : "Username",
     "password" : "Password",
 }
