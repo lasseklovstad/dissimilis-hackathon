@@ -1,6 +1,7 @@
 export const dashboardNo : any =  {
     "newSongLabel": "Nytt partitur",
-    "recentLabel": "Nylige",
+    "recentSongLabel": "Nylige",
+    "searchSongLabel": "Søk",
     "libraryButton": "Bibliotek",
     "measure": "takt",
     "search": "Søk",
