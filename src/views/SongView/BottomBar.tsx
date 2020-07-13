@@ -51,7 +51,7 @@ function BottomBar() {
 
   return (
 
-    < Grid container justify="center">
+    < Grid container justify="center" className={classes.outercontainer}>
       <Grid item xs={12} sm={10} >
         {!matches ? null :
           <Grid container className={classes.container} >
@@ -193,6 +193,12 @@ function BottomBar() {
 
 const useStyles = makeStyles({
 
+  outercontainer: {
+    position: "fixed",
+    bottom: "5vh",
+    left: 0
+  },
+
   container: {
     justifyContent: "space-between",
     marginBottom: "1rem",
@@ -227,7 +233,6 @@ const useStyles = makeStyles({
   },
   input: {
     padding: "18px 10px 10px 10px",
-    border: 0,
     height: "28px",
 
   }
