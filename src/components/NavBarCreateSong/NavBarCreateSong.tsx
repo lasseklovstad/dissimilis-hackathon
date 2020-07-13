@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { makeStyles, Grid, Typography, AppBar, Box, useMediaQuery } from "@material-ui/core";
 import MenuButton from "../MenuButton/MenuButton";
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons";
-import SongContext from "../../views/SongView/SongContext";
+import { SongContext } from "../../views/SongView/SongContextProvider.component";
 
 
 
@@ -18,13 +18,7 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
     //console.log(useContext(SongContext));
     //const { song, setSong } = useContext(SongContext);
 
-    const { song: { instruments, title } } = useContext(SongContext);
-
-
-
-
-
-
+    const { song: { title } } = useContext(SongContext);
 
     return (
         <Box className={classes.root} mb={matches ? 2 : 4}>

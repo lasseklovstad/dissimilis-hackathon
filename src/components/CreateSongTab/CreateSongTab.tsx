@@ -3,7 +3,7 @@ import { Grid, Button, Modal, TextField, makeStyles, Typography } from "@materia
 import DashboardButton, { DashboardButtonWithAddIconNoLink } from "../DashboardButtons/DashboardButtons";
 import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
-import SongContext from "../../views/SongView/SongContext";
+import { SongContext } from "../../views/SongView/SongContextProvider.component";
 
 
 export type CreateSongTabProps = {
@@ -33,12 +33,10 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const [textFieldInput, setTextFieldInput] = useState<string>("");
 
     const { song: { instruments }, addInstrument } = useContext(SongContext);
-    console.log(instruments);
 
     const classes = useStyles();
 
     const addInstrument2 = (): void => {
-        //let newInstrument: InstrumentCard = { name: textFieldInput, link: "/" };
         addInstrument(textFieldInput);
 
         setModalIsOpen(false);

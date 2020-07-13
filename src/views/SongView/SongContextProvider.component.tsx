@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
-import SongContext from './SongContext';
 
 //State handling skjer i denne komponenten 
+
+
+export const SongContext = React.createContext<any>({
+    song: {},
+    title: "",
+    instruments: [],
+    setSong: () => { },
+    addInstrument: () => { },
+});
 
 
 
 const SongContextProvider: React.FC = props => {
 
+    //Initial State. 
     const [song, setSong] = useState({
-        title: "Lisa gikk til skolen",
+        title: "Lisa went to the school",
         instruments: [
             "Gitar",
             "Kontrabass",
@@ -17,12 +26,16 @@ const SongContextProvider: React.FC = props => {
     });
 
 
-
+    //Method to simplify change of state
     const addInstrument = (newInstrument: string) => {
         setSong({ ...song, instruments: [...song.instruments, newInstrument] });
     }
 
 
+
+
+
+    //Add all methods here
     const value = {
         song,
         addInstrument,
