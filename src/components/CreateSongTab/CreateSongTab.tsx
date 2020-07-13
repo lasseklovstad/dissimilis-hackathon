@@ -85,7 +85,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                             <TextField variant="filled" onChange={handleChange} label={t("CreateSongTab:nameOfInstrument")} style={{ width: "100%" }} />
                         </Grid>
                         <Grid item xs={12}>
-                            <Button className={classes.button} size="large" variant="contained" disabled={validateTextInput} onClick={handleAddInstrument} >{t("CreateSongTab:save")}</Button>
+                            <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleAddInstrument} >{t("CreateSongTab:save")}</Button>
                             <Button className={classes.button} size="large" variant="outlined" onClick={() => setModalIsOpen(false)}>{t("CreateSongTab:cancel")}</Button>
                         </Grid>
                     </Grid>
