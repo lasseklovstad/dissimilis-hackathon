@@ -11,6 +11,7 @@ import wholeNote from '../../assets/images/icon_whole-note.svg';
 import halfNote from '../../assets/images/icon_half-note.svg';
 import quarterNote from '../../assets/images/icon_quarter-note.svg';
 import eighthNote from '../../assets/images/icon_eighth-note.svg';
+import { NONAME } from 'dns';
 
 
 
@@ -42,7 +43,7 @@ function BottomBar() {
   const classes = useStyles();
   const matches = useMediaQuery("(min-width:960px)");
   const [toggle, setToggle] = useState(false);
-  const tones: string[] = ["C", "D", "E", "F", "G", "A", "H"];
+  const tones: string[] = ["C", "D", "E", "F", "G", "A", "H", "1", "2", "3", "4", "5"];
   const [note, setNote] = React.useState('');
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setNote(event.target.value as string);
@@ -58,7 +59,7 @@ function BottomBar() {
 
             <DesktopContainer>
               <Grid item xs={3}>
-                <FormControl variant="outlined" fullWidth >
+                <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
 
                   {/* <InputLabel id="testLabel">{t("BottomBar:note")}</InputLabel> */}
                   <Select
@@ -115,7 +116,7 @@ function BottomBar() {
             <MobileContainer>
 
               <Grid item xs={4}>
-                <FormControl variant="outlined" fullWidth >
+                <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }} >
                   {/* <InputLabel id="testLabel">{t("BottomBar:note")}</InputLabel> */}
                   <Select
 
@@ -230,6 +231,14 @@ const useStyles = makeStyles({
     border: 0,
     height: "28px",
 
+  },
+
+
+
+  removeDefaultStyling: {
+    "& .MuiOutlinedInput-notchedOutline": {
+      border: "0px"
+    }
   }
 
 });
