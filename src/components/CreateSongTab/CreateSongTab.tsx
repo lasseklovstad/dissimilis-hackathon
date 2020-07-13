@@ -12,13 +12,13 @@ export type CreateSongTabProps = {
 
 
 function getModalStyle() {
-    const top = 50;
+    const top = 20;
     const left = 50;
 
     return {
         top: "20%",
         left: "50%",
-        transform: `translate(-${top}%, -${left}%)`,
+        transform: `translate(-${left}%)`,
     };
 }
 
@@ -31,7 +31,6 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const [modalStyle] = useState(getModalStyle);
     const [textFieldInput, setTextFieldInput] = useState<string>("");
 
-    let validateTextInput = Boolean(textFieldInput === "" || textFieldInput === undefined || textFieldInput === null);
 
     const { song: { instruments }, addInstrument } = useContext(SongContext);
 
