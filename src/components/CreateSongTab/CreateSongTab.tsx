@@ -12,7 +12,6 @@ export type CreateSongTabProps = {
 
 
 function getModalStyle() {
-    const top = 20;
     const left = 50;
 
     return {
