@@ -31,13 +31,14 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const [modalStyle] = useState(getModalStyle);
     const [textFieldInput, setTextFieldInput] = useState<string>("");
 
+    let validateTextInput = Boolean(textFieldInput === "" || textFieldInput === undefined || textFieldInput === null);
+
     const { song: { instruments }, addInstrument } = useContext(SongContext);
 
     const classes = useStyles();
 
-    const addInstrument2 = (): void => {
+    const handleAddInstrument = () => {
         addInstrument(textFieldInput);
-
         setModalIsOpen(false);
         setTextFieldInput("");
     }
@@ -84,7 +85,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                             <TextField variant="filled" onChange={handleChange} label={t("CreateSongTab:nameOfInstrument")} style={{ width: "100%" }} />
                         </Grid>
                         <Grid item xs={12}>
-                            <Button className={classes.button} size="large" variant="contained" disabled={textFieldInput === "" || textFieldInput === undefined || textFieldInput === null ? true : false} onClick={() => addInstrument2()} >{t("CreateSongTab:save")}</Button>
+                            <Button className={classes.button} size="large" variant="contained" disabled={validateTextInput} onClick={handleAddInstrument} >{t("CreateSongTab:save")}</Button>
                             <Button className={classes.button} size="large" variant="outlined" onClick={() => setModalIsOpen(false)}>{t("CreateSongTab:cancel")}</Button>
                         </Grid>
                     </Grid>

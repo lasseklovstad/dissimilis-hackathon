@@ -2,6 +2,14 @@ import React, { useState } from 'react';
 
 //State handling skjer i denne komponenten 
 
+interface ISongContext {
+    song: object, //Maybe a ISong when created?
+    title: string,
+    instruments: string[],
+    setSong: Function,
+    addInstrument: Function
+
+}
 
 export const SongContext = React.createContext<any>({
     song: {},
