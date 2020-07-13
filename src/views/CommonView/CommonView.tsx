@@ -9,6 +9,7 @@ export type CommonViewProps = {
 
 export const CommonView: React.FC<CommonViewProps> = props => {
     const classes = useStyles();
+
     return (
         <div>
             <Grid container className={classes.root}>
@@ -59,6 +60,7 @@ export const CommonView: React.FC<CommonViewProps> = props => {
                     <BarContainer barNumber={6} notes={["A", "D"]} barLineBefore={true} barLineAfter={true} repAfter={false} repBefore={false} />
                 </Grid>
             </Grid>
+
         </div >
     )
 }

@@ -1,5 +1,5 @@
 {
-  "short_name": "Dissimilis fargenotasjon",
+  "short_name": "Fargenotasjon",
   "name": "En applikasjon for å lage fargede noteark med Dissimilis fargenotasjon",
   "icons": [
     {
@@ -8,9 +8,59 @@
       "type": "image/x-icon"
     },
     {
-      "src": "dissimilis.svg",
-      "type": "image/svg",
-      "sizes": "192x192 512x512"
+      "src": "./appIcons/40px-x-40px.png",
+      "sizes": "40x40",
+      "type": "image/png"
+    },
+    {
+      "src": "./appIcons/58px-x-58px.png",
+      "sizes": "58x58",
+      "type": "image/png"
+    },
+    {
+      "src": "./appIcons/60px-x-60px.png",
+      "sizes": "60x60",
+      "type": "image/png"
+    },
+    {
+      "src": "./appIcons/80px-x-80px.png",
+      "sizes": "80x80",
+      "type": "image/png"
+    },
+    {
+      "src": "./appIcons/87px-x-87px.png",
+      "sizes": "87x87",
+      "type": "image/png"
+    },
+    {
+      "src": "./appIcons/120px-x-120px.png",
+      "sizes": "120x120",
+      "type": "image/png"
+    },
+    {
+      "src": "./appIcons/152px-x-152px.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "./appIcons/167px-x-167px.png",
+      "sizes": "167x167",
+      "type": "image/png"
+    },
+    {
+      "src": "./appIcons/180px-x-180px.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "./appIcons/512px-x-512px.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "./appIcons/1024px-x-1024px.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
     }
   ],
   "start_url": ".",
