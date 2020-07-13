@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, IconButton, Card, useMediaQuery, makeStyles, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { Grid, IconButton, Card, useMediaQuery, makeStyles, FormControl, MenuItem, Select } from '@material-ui/core';
 import MenuButton, { MenuButtonWithAddIcon, DropdownAutocomplete } from '../../components/BottomMenuButtons/BottomMenuButtons';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import AddIcon from '@material-ui/icons/Add';
@@ -37,40 +37,33 @@ function MobileContainer(props: { children: React.ReactNode }) {
   </Grid>
 }
 
-
 function BottomBar() {
   const { t } = useTranslation();
   const classes = useStyles();
-  const matches = useMediaQuery("(min-width:960px)");
+  const desktop = useMediaQuery("(min-width:960px)");
   const [toggle, setToggle] = useState(false);
   const tones: string[] = ["C", "D", "E", "F", "G", "A", "H", "1", "2", "3", "4", "5"];
   const [note, setNote] = React.useState('');
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setNote(event.target.value as string);
-
   };
 
   return (
-
-    < Grid container justify="center" className={classes.outercontainer}>
+    /* Due to the bottombar being fixed, I had to adjust the bottom margin in order to fit the popupcontainer */
+    < Grid container justify="center" className={classes.outercontainer} style={{ bottom: !desktop && toggle ? "7vh" : "4vh" }}>
       <Grid item xs={12} sm={10} >
-        {!matches ? null :
+        {!desktop ? null :
           <Grid container className={classes.container} >
 
             <DesktopContainer>
               <Grid item xs={3}>
                 <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
-
-                  {/* <InputLabel id="testLabel">{t("BottomBar:note")}</InputLabel> */}
                   <Select
-
-
                     value={note}
                     onChange={handleChange}
-                    className={classes.dropdownselect}
+
                     displayEmpty
                     inputProps={{ className: classes.input }}
-
                   >
                     <MenuItem value="" disabled >
                       <em>Note</em>
@@ -110,23 +103,19 @@ function BottomBar() {
 
         {/* Mobile view */}
 
-        {matches ? null :
+        {desktop ? null :
           <Grid container className={classes.container}>
 
             <MobileContainer>
-
               <Grid item xs={4}>
                 <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }} >
                   {/* <InputLabel id="testLabel">{t("BottomBar:note")}</InputLabel> */}
                   <Select
-
-
                     value={note}
                     onChange={handleChange}
-                    className={classes.dropdownselect}
+
                     displayEmpty
                     inputProps={{ className: classes.input }}
-
                   >
                     <MenuItem value="" disabled>
                       <em>Note</em>
@@ -167,10 +156,9 @@ function BottomBar() {
 
       {/* Mobile view Popup section */}
 
-      <Grid container style={{ display: (toggle && !matches) ? " " : " none" }}>
+      <Grid container style={{ display: (toggle && !desktop) ? " " : " none" }}>
         <Grid item xs={12} className={classes.container}  >
           <Grid container className={classes.popupcontainer}>
-
             <Grid item xs={6} >
               <MenuButtonWithAddIcon text={t("BottomBar:addTone")} link={"/dashboard"} />
             </Grid>
@@ -183,26 +171,22 @@ function BottomBar() {
             <Grid item xs={6} >
               <MenuButtonWithAddIcon text={t("BottomBar:addHouse")} link={"/dashboard"} />
             </Grid>
-
           </Grid>
         </Grid>
       </Grid>
     </Grid >
-
   );
 }
 
 const useStyles = makeStyles({
-
   outercontainer: {
     position: "fixed",
     bottom: "5vh",
-    left: 0
+    left: 0,
+    right: 0
   },
-
   container: {
     justifyContent: "space-between",
-    marginBottom: "1rem",
     height: "60px"
   },
   cardsection: {
@@ -229,20 +213,13 @@ const useStyles = makeStyles({
   popupcontainer: {
     backgroundColor: colors.white,
   },
-  dropdownselect: {
-    backgroundColor: ""
-  },
   input: {
     padding: "18px 10px 10px 10px",
     height: "28px",
-
   },
-
-
-
   removeDefaultStyling: {
     "& .MuiOutlinedInput-notchedOutline": {
-      border: "0px"
+      border: "0px",
     }
   }
 
