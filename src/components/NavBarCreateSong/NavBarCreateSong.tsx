@@ -15,9 +15,6 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
     const classes = useStyles();
     const matches = useMediaQuery("(max-width:600px)");
 
-    //console.log(useContext(SongContext));
-    //const { song, setSong } = useContext(SongContext);
-
     const { song: { title } } = useContext(SongContext);
 
     return (
