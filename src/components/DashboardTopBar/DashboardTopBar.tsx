@@ -8,9 +8,6 @@ export default function DashboardTopBar() {
   const classes = useStyles();
   const { t } = useTranslation();
   const searchPlaceholder = t("DashboardView:search");
-  const dataFromApi = useGetFilteredSongs();
-  const searchResult = 
-
   const [searchBarFocus, setSearchBarFocus] = useState(false);
 
   return (
