@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 
 interface ISongContext {
     song: ISong,
-    setSong: Function,
-    addInstrument: Function,
+    setSong: (song: ISong) => void, //Bør endres til Interface ISong når det er klart
+    addInstrument: (instrument: string) => void,
 }
 
 interface ISong {
