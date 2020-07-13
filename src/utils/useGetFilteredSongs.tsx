@@ -6,12 +6,12 @@ import { ISong } from "../models/ISong";
  * @param query title or part of title
  */
 export const useGetFilteredSongs = (query: string) => {
-    let url = "Song/songs";
-    let params = {"Query": query.toString()}
-    const [dataFromApi, isLoading, isError] = useApiService<ISong[]>("get", url, {params : params});
+    const url = "Song/songs";
+    const params = {"Query": query.toString()}
+    const [dataFromApi, isLoading, isError] = useApiService<ISong[]>("get", url, {params});
 
     if(!isLoading && !isError){
         return dataFromApi
-    } 
+    }
     return []
 }

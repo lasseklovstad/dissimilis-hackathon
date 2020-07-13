@@ -14,12 +14,10 @@ export type DashboardViewProps = {
 
 export const DashboardView: React.FC<DashboardViewProps> = () => {
   const { t } = useTranslation();
-  let url = "Song/songs";
-  let params = { "Num": "5", "ArrangerId": "1", "OrderByDateTime": "true" }
+  const url = "Song/songs";
   const measureText = t("DashboardView:measure");
-  //Burde jeg her bare stole på at databsen kun har hentet fem objekter?
   const dataFromApi = useGetRecentSongs()
-  const recentSongs = dataFromApi ? dataFromApi.slice(0, 5) : [];
+  const recentSongs = dataFromApi ? dataFromApi : [];
   const musicTacts = [
     {
       id: 1,

@@ -12,7 +12,7 @@ import axios from 'axios';
 
 //TODO: is initialData neccessary here? 
 
-export const useApiService = <T extends Object>(method: "get" | "post", url: string, options: apiServiceOptions<T>) => {
+export const useApiService = <T extends Object>(method: "get" | "post", url: string, options: ApiServiceOptions<T>) => {
   const [data, setData] = useState<T | undefined>(options.initialData);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -62,8 +62,8 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
  * Params are added to the finalUrl
  * Body is sent as body to api
  */
-export type apiServiceOptions<T> = {
-  body?: T;
+export type ApiServiceOptions<T> = {
+  body?: any;
   initialData?: T;
   params?: Record<string, string>
 }
