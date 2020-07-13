@@ -12,7 +12,7 @@ import axios from 'axios';
 
 //TODO: is initialData neccessary here? 
 
-const useApiService = <T extends Object>(method: "get" | "post", url: string, sendData?: T, initialData?: T) => {
+export const useApiService = <T extends Object>(method: "get" | "post", url: string, sendData?: T, initialData?: T) => {
   const [data, setData] = useState<T | undefined>(initialData);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);

@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 type TopBarProps = {
   onFocus: Function,
-  onBlur: Function
+  onBlur: Function,
+  onChange: Function
 };
 
 export const DashboardTopBar: FC<TopBarProps> = (props: TopBarProps) => {
@@ -15,14 +16,18 @@ export const DashboardTopBar: FC<TopBarProps> = (props: TopBarProps) => {
 
   const [searchBarFocus, setSearchBarFocus] = useState(false);
 
-  function handleOnFocus(){
+  const handleOnFocus = () => {
     setSearchBarFocus(true)
     props.onFocus()
   }
 
-  function handleOnBlur(){
+  const handleOnBlur = () => {
     setSearchBarFocus(false)
     props.onBlur()
+  }
+
+  const handleOnChange = () => {
+    props.onChange()
   }
   
   return (
@@ -36,7 +41,7 @@ export const DashboardTopBar: FC<TopBarProps> = (props: TopBarProps) => {
               </Grid>
               <Grid item xs={6} sm={searchBarFocus ? 2 : 5} md={searchBarFocus ? 3 : 5}/>
               <Grid item xs={12} sm={searchBarFocus ? 6 : 3} md={searchBarFocus ? 5 : 3}>
-                <TextField id="standard-basic" label={searchPlaceholder} variant="outlined" fullWidth onFocus={handleOnFocus} onBlur={handleOnBlur}   />
+                <TextField id="standard-basic" label={searchPlaceholder} variant="outlined" fullWidth onFocus={handleOnFocus} onBlur={handleOnBlur} onChange={handleOnChange}  />
               </Grid>
           </Grid>
         </Box>

@@ -5,6 +5,8 @@ import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } f
 import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBar'
 import testData from './DashboardTestData';
 import { writeStorage } from '@rehooks/local-storage';
+import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
+import { ISong } from '../../models/ISong';
 
 export type DashboardViewProps = {
 
@@ -15,6 +17,8 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   const [recentSongs, setRecentSongs] = useState(testData);
   const measureText = t("DashboardView:measure");
   const [dashboardView, setDashboardView] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("")
+  const searchResult = useGetFilteredSongs(searchTerm)
   const musicTacts = [
     {
       id: 1,
@@ -53,6 +57,11 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
     setDashboardView(true)
   }
 
+  const handleOnChange = (searchTerm: string) => {
+    setSearchTerm(searchTerm)
+  }
+  
+
   return (
     
     <Box mx={2}>
@@ -60,7 +69,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
 
         <Grid item xs={12}>
           <Box mb={marginBottom}>
-            <DashboardTopBar onFocus={handleOnFocus} onBlur={handleOnBlur} />
+            <DashboardTopBar onFocus={handleOnFocus} onBlur={handleOnBlur} onChange={handleOnChange}/>
           </Box>
         </Grid>
 
@@ -108,9 +117,9 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               <Typography variant="h1">{t("DashboardView:searchSongLabel")}</Typography>
             </Box>
             <Grid container spacing={3}>
-              {recentSongs.recentSongButtons.map(songs => (
+              {searchResult.map(songs => (
                 <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                  <DashboardButton text={songs.text} link={songs.link} />
+                  <DashboardButton text={songs.title} link={songs.id!.toString()} />
                 </Grid>
               ))}
               <Grid item xs={12} sm={4} lg={3} key="library">
