@@ -81,7 +81,9 @@ const useStyles = makeStyles({
         boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)"
     },
     dropdown: {
-
+        "& .MuiOutlinedInput-notchedOutline": {
+            border: "0px"
+          }
     },
 
 });
