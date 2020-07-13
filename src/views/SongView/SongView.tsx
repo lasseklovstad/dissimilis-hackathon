@@ -4,6 +4,7 @@ import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
 import { Grid, makeStyles, Box, useMediaQuery, Button, } from '@material-ui/core';
 import { TimeSignature, BarNumber, Bar } from '../../components/SongViewComponents/SongView.component';
+import BottomBar from '../../views/SongView/BottomBar';
 
 export type SongViewProps = {
 
@@ -71,8 +72,11 @@ export const SongView: React.FC<SongViewProps> = props => {
         <Button variant="outlined" color="primary" onClick={addEmptyBar}>
           Legg til takt
         </Button>
-      </Box>
 
+      </Box>
+      <Grid xs={12}>
+        <BottomBar />
+      </Grid>
     </Grid>
   );
 }
