@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Box, Grid, TextField, AppBar, makeStyles } from '@material-ui/core'
 import { DashboardTopBarIcon } from '../../components/DashboardButtons/DashboardButtons'
 import { useTranslation } from 'react-i18next';
-import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
 
 export default function DashboardTopBar() {
   const classes = useStyles();

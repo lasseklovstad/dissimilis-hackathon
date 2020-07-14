@@ -7,11 +7,8 @@ import { ISong } from "../models/ISong";
  */
 export const useGetFilteredSongs = (query: string) => {
     const url = "Song/songs";
-    const params = {"Query": query.toString()}
-    const [dataFromApi, isLoading, isError] = useApiService<ISong[]>("get", url, {params});
-
-    if(!isLoading && !isError){
-        return dataFromApi
-    }
-    return []
+    const params = { "Query": query.toString() };
+    const initialData: ISong[] = [];
+    const [dataFromApi, isLoading, isError, errorMessage] = useApiService<ISong[]>("get", url, { params, initialData });
+    return dataFromApi;
 }
