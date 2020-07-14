@@ -18,16 +18,16 @@ export const CommonView: React.FC<CommonViewProps> = props => {
             repAfter: false,
             chordsAndTones: [
                 {
-                    size: 4,
-                    tones: ["C"]
+                    length: 4,
+                    notes: ["C"]
                 },
                 {
-                    size: 1,
-                    tones: ["C", "A", "H"]
+                    length: 1,
+                    notes: ["C", "A", "H"]
                 },
                 {
-                    size: 1,
-                    tones: ["H", "A", "C"]
+                    length: 1,
+                    notes: ["H", "A", "C"]
                 }
             ]
         },
@@ -41,16 +41,16 @@ export const CommonView: React.FC<CommonViewProps> = props => {
             repAfter: false,
             chordsAndTones: [
                 {
-                    size: 4,
-                    tones: ["C"]
+                    length: 4,
+                    notes: ["C"]
                 },
                 {
-                    size: 2,
-                    tones: ["C", "A", "H"]
+                    length: 2,
+                    notes: ["C", "A", "H"]
                 },
                 {
-                    size: 2,
-                    tones: ["H"]
+                    length: 2,
+                    notes: ["H"]
                 }
             ]
         },

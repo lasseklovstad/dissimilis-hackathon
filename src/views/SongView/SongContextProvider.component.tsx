@@ -57,16 +57,16 @@ const SongContextProvider: React.FC = props => {
                 repAfter: false,
                 chordsAndTones: [
                     {
-                        size: 4,
-                        tones: ["C"]
+                        length: 4,
+                        notes: ["C"]
                     },
                     {
-                        size: 1,
-                        tones: ["C", "A", "H"]
+                        length: 1,
+                        notes: ["C", "A", "H"]
                     },
                     {
-                        size: 1,
-                        tones: ["H", "A", "C"]
+                        length: 1,
+                        notes: ["H", "A", "C"]
                     }
                 ],
             },
@@ -78,8 +78,8 @@ const SongContextProvider: React.FC = props => {
                 repAfter: false,
                 chordsAndTones: [
                     {
-                        size: 6,
-                        tones: ["A"]
+                        length: 6,
+                        notes: ["A"]
                     }
                 ],
             },
@@ -91,16 +91,16 @@ const SongContextProvider: React.FC = props => {
                 repAfter: false,
                 chordsAndTones: [
                     {
-                        size: 2,
-                        tones: ["A", "H", "C"]
+                        length: 2,
+                        notes: ["A", "H", "C"]
                     },
                     {
-                        size: 2,
-                        tones: ["C", "H", "D"]
+                        length: 2,
+                        notes: ["C", "H", "D"]
                     },
                     {
-                        size: 4,
-                        tones: ["H"]
+                        length: 4,
+                        notes: ["H"]
                     }
                 ],
             },
@@ -112,28 +112,28 @@ const SongContextProvider: React.FC = props => {
                 repAfter: false,
                 chordsAndTones: [
                     {
-                        size: 1,
-                        tones: ["A", "H", "C"]
+                        length: 1,
+                        notes: ["A", "H", "C"]
                     },
                     {
-                        size: 1,
-                        tones: ["C", "H", "D"]
+                        length: 1,
+                        notes: ["C", "H", "D"]
                     },
                     {
-                        size: 1,
-                        tones: ["H"]
+                        length: 1,
+                        notes: ["H"]
                     },
                     {
-                        size: 1,
-                        tones: ["C", "H", "D"]
+                        length: 1,
+                        notes: ["C", "H", "D"]
                     },
                     {
-                        size: 2,
-                        tones: ["H"]
+                        length: 2,
+                        notes: ["H"]
                     },
                     {
-                        size: 2,
-                        tones: ["C", "H", "D"]
+                        length: 2,
+                        notes: ["C", "H", "D"]
                     },
 
 

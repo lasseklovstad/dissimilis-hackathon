@@ -44,10 +44,10 @@ export const BarBody: React.FC<BarBodyProps> = props => {
         <Box style={{ height: "100%" }} className={classes.root}>
             {props.chordsAndTones.map((note, i) => {
                 return (
-                    <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.size }} >
-                        {note.tones.map((slag, index) => {
+                    <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length }} >
+                        {note.notes.map((type, index) => {
                             return (
-                                <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(slag) }} ></Box>
+                                <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) }} ></Box>
                             )
                         })}
 

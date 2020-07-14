@@ -1,7 +1,7 @@
 
 export interface IChordAndTones {
-    tones: string[],
-    size: number,
+    notes: string[],
+    length: number,
 }
 
 export interface IBar {

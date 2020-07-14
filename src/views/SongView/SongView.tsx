@@ -36,6 +36,14 @@ export const SongView: React.FC<SongViewProps> = props => {
     //setBars([...bars, { bars: [] }])
   }
 
+  const isBarLineBefore = (index: number) => {
+    return xl && index % 4 === 0 ? true : !xs && !xl && index % 2 === 0 ? true : xs ? true : false
+  }
+
+  const isBarLineAfter = (index: number) => {
+    return index === bars.length - 1 ? true : false;
+  }
+
   return (
     <SongContextProvider>
       <Grid container className={classes.root}>
@@ -62,7 +70,7 @@ export const SongView: React.FC<SongViewProps> = props => {
               <Grid container>
                 {bars.map((bar, i) => (
                   <Grid item xs={12} sm={6} xl={3} key={i} >
-                    <BarContainer barLineBefore={xl && i % 4 === 0 ? true : !xs && !xl && i % 2 === 0 ? true : xs ? true : false} barLineAfter={i === bars.length - 1 ? true : false} house={bar.house} repBefore={bar.repBefore} repAfter={bar.repAfter} chordsAndTones={bar.chordsAndTones} barNumber={i} />
+                    <BarContainer barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} house={bar.house} repBefore={bar.repBefore} repAfter={bar.repAfter} chordsAndTones={bar.chordsAndTones} barNumber={i} />
                   </Grid>
                 ))}
               </Grid>
