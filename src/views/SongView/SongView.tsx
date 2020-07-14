@@ -45,50 +45,45 @@ export const SongView: React.FC<SongViewProps> = props => {
   }
 
   return (
-    <SongContextProvider>
-      <Grid container className={classes.root}>
-        <Grid item xs={12} >
-          <NavBarCreateSong />
-        </Grid>
-        <Grid item xs={12}>
-          <CreateSongTab />
-        </Grid>
-        <Grid item xs={12}> {/*Grid for main container, containing the bars, timeSignature and barnumber */}
-          <Grid container>
-
-            <Grid item xs={1}>
-              {bars.map((bar, i) => {
-                if (i === 0) { return (<TimeSignature key={i} />) }
-                else if (xl && i % 4 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
-                else if (!xs && !xl && i % 2 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
-                else if (xs) { return (<BarNumber key={i} barNumber={i + 1} />) }
-                return <div key={i} ></div>
-              })}
-            </Grid>
-
-            <Grid item xs={10}>
-              <Grid container>
-                {bars.map((bar, i) => (
-                  <Grid item xs={12} sm={6} xl={3} key={i} >
-                    <BarContainer barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} house={bar.house} repBefore={bar.repBefore} repAfter={bar.repAfter} chordsAndTones={bar.chordsAndTones} barNumber={i} />
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-
-          </Grid>
-        </Grid>
-        <Box mb={4}>
-          <Button variant="outlined" color="primary" onClick={addEmptyBar}>
-            Legg til takt
-        </Button>
-        </Box>
-
+    <Grid container className={classes.root}>
+      <Grid item xs={12} >
+        <NavBarCreateSong />
       </Grid>
-    </SongContextProvider >
+      <Grid item xs={12}>
+        <CreateSongTab />
+      </Grid>
+      <Grid item xs={12}> {/*Grid for main container, containing the bars, timeSignature and barnumber */}
+        <Grid container>
 
+          <Grid item xs={1}>
+            {bars.map((bar, i) => {
+              if (i === 0) { return (<TimeSignature key={i} />) }
+              else if (xl && i % 4 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
+              else if (!xs && !xl && i % 2 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
+              else if (xs) { return (<BarNumber key={i} barNumber={i + 1} />) }
+              return <div key={i} ></div>
+            })}
+          </Grid>
 
+          <Grid item xs={10}>
+            <Grid container>
+              {bars.map((bar, i) => (
+                <Grid item xs={12} sm={6} xl={3} key={i} >
+                  <BarContainer barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} house={bar.house} repBefore={bar.repBefore} repAfter={bar.repAfter} chordsAndTones={bar.chordsAndTones} barNumber={i} />
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
 
+        </Grid>
+      </Grid>
+      <Box mb={4}>
+        <Button variant="outlined" color="primary" onClick={addEmptyBar}>
+          Legg til takt
+        </Button>
+      </Box>
+
+    </Grid>
   );
 }
 
