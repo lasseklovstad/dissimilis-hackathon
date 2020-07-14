@@ -53,7 +53,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     };
 
     fetchData();
-  }, [finalUrl]);
+  }, [finalUrl, method, options.body]);
 
   return [data, isLoading, isError, errorMessage] as const;
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
 import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/DashboardButtons/DashboardButtons';
@@ -12,7 +12,6 @@ export type DashboardViewProps = {
 
 export const DashboardView: React.FC<DashboardViewProps> = () => {
   const { t } = useTranslation();
-  const url = "Song/songs";
   const measureText = t("DashboardView:measure");
   const dataFromApi = useGetRecentSongs()
   const recentSongs = dataFromApi;

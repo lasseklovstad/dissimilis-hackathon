@@ -8,6 +8,6 @@ export const useGetRecentSongs = () => {
     const url = "Song/songs";
     const params = { "Num": "5", "ArrangerId": "1", "OrderByDateTime": "true" };
     const initialData: ISong[] = [];
-    const [dataFromApi, isLoading, isError, errorMessage] = useApiService<ISong[]>("get", url, { params, initialData });
+    const [dataFromApi] = useApiService<ISong[]>("get", url, { params, initialData });
     return dataFromApi;
 }
