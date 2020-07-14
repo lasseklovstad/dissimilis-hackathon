@@ -68,7 +68,7 @@ const useStyles = makeStyles({
     },
     button: {
         backgroundColor: colors.white,
-        boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)",
+        boxShadow: "0px 0px 0px rgba(255, 255, 255, 0)",
         margin: "auto"
     },
     dropdown: {
