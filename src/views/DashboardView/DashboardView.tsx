@@ -4,8 +4,6 @@ import { useTranslation } from "react-i18next";
 import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/DashboardButtons/DashboardButtons';
 import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
 import { writeStorage } from '@rehooks/local-storage';
-import { useApiService } from '../../utils/useApiService';
-import { ISong } from '../../models/ISong';
 import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
 
 export type DashboardViewProps = {
@@ -17,7 +15,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   const url = "Song/songs";
   const measureText = t("DashboardView:measure");
   const dataFromApi = useGetRecentSongs()
-  const recentSongs = dataFromApi ? dataFromApi : [];
+  const recentSongs = dataFromApi;
   const musicTacts = [
     {
       id: 1,
@@ -80,7 +78,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               <Typography variant="h1">{t("DashboardView:recentLabel")}</Typography>
             </Box>
             <Grid container spacing={3}>
-              {recentSongs.map(song => (
+              {recentSongs?.map(song => (
                 <Grid item xs={12} sm={4} lg={3} key={song.id}>
                   <DashboardButton text={song.title} link={`/song/${song.id}`} />
                 </Grid>

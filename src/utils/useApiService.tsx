@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
 /**
- * 
  * @param method HTTP method, get or put
  * @param url Url to api
  * @param sendData data to be sent
@@ -16,8 +14,9 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
   const [data, setData] = useState<T | undefined>(options.initialData);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Legg til parametere i urlen    
+  // Add params to the url   
   let baseUrl = 'https://localhost:5001/api/';
   let finalUrl = baseUrl + url;
   if (options.params) {
@@ -46,6 +45,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
 
       } catch (error) {
         setIsError(true);
+        setErrorMessage(error);
         console.log(error);
       }
 
@@ -55,7 +55,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     fetchData();
   }, [finalUrl]);
 
-  return [data, isLoading, isError] as const;
+  return [data, isLoading, isError, errorMessage] as const;
 };
 
 /**
