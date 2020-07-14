@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, makeStyles } from "@material-ui/core";
+import { Box, makeStyles, Typography } from "@material-ui/core";
 import colors from "../../utils/colors";
 import { IChordAndTones } from "../../models/IBar";
 
@@ -9,6 +9,9 @@ export type BarBodyProps = {
 
 function getColor(color: string): string {
     let newColor = "white";
+    if (color.includes("semitone")) {
+        color = "semitone";
+    }
     switch (color) {
         case "C":
             newColor = colors.C;
@@ -31,6 +34,9 @@ function getColor(color: string): string {
         case "H":
             newColor = colors.H;
             break;
+        case "semitone":
+            newColor = colors.semitone;
+            break;
         default:
             newColor = "white";
     }
@@ -39,6 +45,8 @@ function getColor(color: string): string {
 export const BarBody: React.FC<BarBodyProps> = props => {
     const classes = useStyles();
 
+    //Used to filter out the number
+    let regex = /\d+/g;
 
     return (
         <Box style={{ height: "100%" }} className={classes.root}>
@@ -46,8 +54,11 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                 return (
                     <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length }} >
                         {note.notes.map((type, index) => {
+                            const number = type.match(regex);
                             return (
-                                <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) }} ></Box>
+                                <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) }} >
+                                    <Typography className={classes.tangentText} variant="h2">{number}</Typography>
+                                </Box>
                             )
                         })}
 
@@ -78,6 +89,13 @@ const useStyles = makeStyles({
         height: "10px",
         borderRadius: "5px",
         margin: "2px 0",
+    },
+    tangentText: {
+        color: colors.white,
+        marginLeft: "4px",
+        position: "relative",
+        top: "50%",
+        transform: "translateY(-50%)"
     }
 
 })
