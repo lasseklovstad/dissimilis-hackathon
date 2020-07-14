@@ -3,6 +3,7 @@ import { makeStyles, Grid, Box, Button, Menu, MenuItem } from "@material-ui/core
 import colors from "../../utils/colors";
 import Bar from "../Bar/Bar.component";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import { IChordAndTones } from "../../models/IBar";
 
 
 export type BarContainerProps = {
@@ -11,7 +12,7 @@ export type BarContainerProps = {
     house?: number,
     repBefore: boolean,
     repAfter: boolean,
-    notes: string[],
+    chordsAndTones: Array<IChordAndTones>,
     barNumber: number,
 };
 
@@ -41,7 +42,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                     <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                     </Grid>
                     <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar">
-                        <Bar barNumber={props.barNumber} house={props.house} repBefore={props.repBefore} repAfter={props.repAfter} notes={props.notes} />
+                        <Bar barNumber={props.barNumber} house={props.house} repBefore={props.repBefore} repAfter={props.repAfter} chordsAndTones={props.chordsAndTones} />
                     </Grid>
                     <Grid item xs={props.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: props.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="barline after the bar"></Grid>
                 </Grid>

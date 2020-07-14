@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
-import SongContextProvider from "./SongContextProvider.component";
+import SongContextProvider, { SongContext } from "./SongContextProvider.component";
 import { Grid, makeStyles, Box, useMediaQuery, Button, } from '@material-ui/core';
-import { TimeSignature, BarNumber, Bar } from '../../components/SongViewComponents/SongView.component';
+import { TimeSignature, BarNumber } from '../../components/SongViewComponents/SongView.component';
+import { BarContainer } from "../../components/BarContainer/BarContainer.component";
 
 export type SongViewProps = {
 
@@ -15,9 +16,14 @@ export const SongView: React.FC<SongViewProps> = props => {
   const xs = useMediaQuery("(max-width: 600px)");
   const xl = useMediaQuery("(min-width: 1920px)");
 
-  const [bars, setBars] = useState([{ bars: [] }])
+  //const [bars, setBars] = useState([{ bars: [] }])
 
   const history = useHistory();
+
+  //Example on how to get the values from the context
+  const { song: { bars } } = useContext(SongContext);
+
+
 
   useEffect(() => {
     const item = localStorage.getItem("timeSignature");
@@ -27,7 +33,7 @@ export const SongView: React.FC<SongViewProps> = props => {
   }, [history]);
 
   const addEmptyBar = () => {
-    setBars([...bars, { bars: [] }])
+    //setBars([...bars, { bars: [] }])
   }
 
   return (
@@ -44,19 +50,19 @@ export const SongView: React.FC<SongViewProps> = props => {
 
             <Grid item xs={1}>
               {bars.map((bar, i) => {
-                if (i === 0) { return (<TimeSignature />) }
-                else if (xl && i % 4 === 0) { return (<BarNumber barNumber={i + 1} />) }
-                else if (!xs && !xl && i % 2 === 0) { return (<BarNumber barNumber={i + 1} />) }
-                else if (xs) { return (<BarNumber barNumber={i + 1} />) }
-                return <></>
+                if (i === 0) { return (<TimeSignature key={i} />) }
+                else if (xl && i % 4 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
+                else if (!xs && !xl && i % 2 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
+                else if (xs) { return (<BarNumber key={i} barNumber={i + 1} />) }
+                return <div key={i} ></div>
               })}
             </Grid>
 
             <Grid item xs={10}>
               <Grid container>
-                {bars.map(bar => (
-                  <Grid item xs={12} sm={6} xl={3} >
-                    <Bar />
+                {bars.map((bar, i) => (
+                  <Grid item xs={12} sm={6} xl={3} key={i} >
+                    <BarContainer barLineBefore={xl && i % 4 === 0 ? true : !xs && !xl && i % 2 === 0 ? true : xs ? true : false} barLineAfter={i === bars.length - 1 ? true : false} house={bar.house} repBefore={bar.repBefore} repAfter={bar.repAfter} chordsAndTones={bar.chordsAndTones} barNumber={i} />
                   </Grid>
                 ))}
               </Grid>
