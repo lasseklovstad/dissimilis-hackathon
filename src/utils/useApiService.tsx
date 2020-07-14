@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
- 
+
 
 /**
  * 
@@ -12,43 +12,60 @@ import axios from 'axios';
 
 //TODO: is initialData neccessary here? 
 
-export const useApiService = <T extends Object>(method: "get" | "post", url: string, sendData?: T, initialData?: T) => {
-  const [data, setData] = useState<T | undefined>(initialData);
+export const useApiService = <T extends Object>(method: "get" | "post", url: string, options: ApiServiceOptions<T>) => {
+  const [data, setData] = useState<T | undefined>(options.initialData);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  // Legg til parametere i urlen    
+  let baseUrl = 'https://localhost:5001/api/';
+  let finalUrl = baseUrl + url;
+  if (options.params) {
+    finalUrl += '?' + new URLSearchParams(options.params).toString();
+  }
+  console.log("Api-kall")
 
   useEffect(() => {
     const fetchData = async () => {
       setIsError(false);
       setIsLoading(true);
- 
+
       try {
-        switch(method){
-          case "get" : {
-            const result = await axios[method]<T>(url);
+        switch (method) {
+          case "get": {
+            const result = await axios.get<T>(finalUrl);
             setData(result.data);
             break;
           }
-          case "post" : {
-            const result = await axios[method]<T>(url, sendData);
+          case "post": {
+            const result = await axios.post<T>(finalUrl, options.body);
             setData(result.data);
             break;
-          } 
+          }
 
         }
-       
+
       } catch (error) {
         setIsError(true);
         console.log(error);
       }
- 
+
       setIsLoading(false);
     };
- 
+
     fetchData();
-  }, [url]);
- 
-  return { data, isLoading, isError } as const;
+  }, options.dependencies);
+
+  return [data, isLoading, isError] as const;
 };
 
-export default useApiService
+/**
+ * Params are added to the finalUrl
+ * Body is sent as body to api
+ */
+export type ApiServiceOptions<T> = {
+  body?: any;
+  initialData?: T;
+  dependencies?: [any]
+  params?: Record<string, string>
+}

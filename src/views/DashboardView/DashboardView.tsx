@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
 import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/DashboardButtons/DashboardButtons';
@@ -18,7 +18,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   const measureText = t("DashboardView:measure");
   const [dashboardView, setDashboardView] = useState(true);
   const [searchTerm, setSearchTerm] = useState("")
-  const searchResult = useGetFilteredSongs(searchTerm)
+  let searchResult = useGetFilteredSongs(searchTerm, [searchTerm]);
   const musicTacts = [
     {
       id: 1,
@@ -50,86 +50,86 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
     writeStorage("timeSignature", newData)
   }
 
-  const handleOnFocus = () => {
-    setDashboardView(false)
-  }
   const handleOnBlur = () => {
     setDashboardView(true)
   }
 
   const handleOnChange = (searchTerm: string) => {
+    console.log(searchTerm)
     setSearchTerm(searchTerm)
+    setDashboardView(false)
+
   }
-  
+
 
   return (
-    
+
     <Box mx={2}>
       <Grid container justify="center" className={styles.container}>
 
         <Grid item xs={12}>
           <Box mb={marginBottom}>
-            <DashboardTopBar onFocus={handleOnFocus} onBlur={handleOnBlur} onChange={handleOnChange}/>
+            <DashboardTopBar onBlur={handleOnBlur} onChange={handleOnChange} />
           </Box>
         </Grid>
 
-        {dashboardView && 
-        <Grid item xs={12} sm={10} key="newSongContainer">
-          <Box mb={marginBottom}>
-            <Box m={2}>
-              <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
-            </Box>
-            <Grid container spacing={3}>
-              {musicTacts.map(songs => (
-                <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                  <DashboardButtonWithAddIcon func={() => storeTimeSignatureToLocalStorage(songs.text)} text={songs.text} link={songs.link} />
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-        </Grid>
-        } 
-        
-        {dashboardView && 
-        <Grid item xs={12} sm={10} key="recentSongsContainer">
-          <Box mb={marginBottom}>
-            <Box m={2}>
-              <Typography variant="h1">{t("DashboardView:recentSongLabel")}</Typography>
-            </Box>
-            <Grid container spacing={3}>
-              {recentSongs.recentSongButtons.map(songs => (
-                <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                  <DashboardButton text={songs.text} link={songs.link} />
-                </Grid>
-              ))}
-              <Grid item xs={12} sm={4} lg={3} key="library">
-                <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
+        {dashboardView &&
+          <Grid item xs={12} sm={10} key="newSongContainer">
+            <Box mb={marginBottom}>
+              <Box m={2}>
+                <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
+              </Box>
+              <Grid container spacing={3}>
+                {musicTacts.map(songs => (
+                  <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                    <DashboardButtonWithAddIcon func={() => storeTimeSignatureToLocalStorage(songs.text)} text={songs.text} link={songs.link} />
+                  </Grid>
+                ))}
               </Grid>
-            </Grid>
-          </Box>
-        </Grid>
+            </Box>
+          </Grid>
         }
 
-      {!dashboardView && 
-        <Grid item xs={12} sm={10} key="searchSongsContainer">
-          <Box mb={marginBottom}>
-            <Box m={2}>
-              <Typography variant="h1">{t("DashboardView:searchSongLabel")}</Typography>
-            </Box>
-            <Grid container spacing={3}>
-              {searchResult.map(songs => (
-                <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                  <DashboardButton text={songs.title} link={songs.id!.toString()} />
+        {dashboardView &&
+          <Grid item xs={12} sm={10} key="recentSongsContainer">
+            <Box mb={marginBottom}>
+              <Box m={2}>
+                <Typography variant="h1">{t("DashboardView:recentSongLabel")}</Typography>
+              </Box>
+              <Grid container spacing={3}>
+                {recentSongs.recentSongButtons.map(songs => (
+                  <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                    <DashboardButton text={songs.text} link={songs.link} />
+                  </Grid>
+                ))}
+                <Grid item xs={12} sm={4} lg={3} key="library">
+                  <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
                 </Grid>
-              ))}
-              <Grid item xs={12} sm={4} lg={3} key="library">
-                <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
               </Grid>
-            </Grid>
-          </Box>
-        </Grid>
+            </Box>
+          </Grid>
         }
-            
+
+        {!dashboardView &&
+          <Grid item xs={12} sm={10} key="searchSongsContainer">
+            <Box mb={marginBottom}>
+              <Box m={2}>
+                <Typography variant="h1">{t("DashboardView:searchSongLabel")}</Typography>
+              </Box>
+              <Grid container spacing={3}>
+                {searchResult?.map(songs => (
+                  <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                    <DashboardButton text={songs.title} link={songs.id!.toString()} />
+                  </Grid>
+                ))}
+                <Grid item xs={12} sm={4} lg={3} key="library">
+                  <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
+                </Grid>
+              </Grid>
+            </Box>
+          </Grid>
+        }
+
       </Grid>
     </Box>
 
