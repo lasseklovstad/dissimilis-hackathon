@@ -124,8 +124,12 @@ const SongContextProvider: React.FC = props => {
                         notes: ["H"]
                     },
                     {
-                        length: 2,
+                        length: 1,
                         notes: ["C", "H", "D"]
+                    },
+                    {
+                        length: 1,
+                        notes: ["D", "H", "D"]
                     },
 
 
