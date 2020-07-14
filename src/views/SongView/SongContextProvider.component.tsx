@@ -70,7 +70,7 @@ const SongContextProvider: React.FC = props => {
             },
             {
                 barNumber: 2,
-                repBefore: true,
+                repBefore: false,
                 repAfter: false,
                 chordsAndTones: [
                     {
@@ -81,7 +81,7 @@ const SongContextProvider: React.FC = props => {
             },
             {
                 barNumber: 3,
-                repBefore: true,
+                repBefore: false,
                 repAfter: false,
                 chordsAndTones: [
                     {
@@ -100,7 +100,7 @@ const SongContextProvider: React.FC = props => {
             },
             {
                 barNumber: 4,
-                repBefore: true,
+                repBefore: false,
                 repAfter: false,
                 chordsAndTones: [
                     {
@@ -131,8 +131,6 @@ const SongContextProvider: React.FC = props => {
                         length: 1,
                         notes: ["D", "H", "D"]
                     },
-
-
                 ],
             },
         ]
