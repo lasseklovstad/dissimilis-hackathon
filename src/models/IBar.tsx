@@ -6,8 +6,6 @@ export interface IChordAndTones {
 
 export interface IBar {
     barNumber: number | undefined,
-    barLineBefore: boolean,
-    barLineAfter: boolean,
     house?: number | undefined,
     repBefore: boolean,
     repAfter: boolean,
