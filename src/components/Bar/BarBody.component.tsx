@@ -9,9 +9,7 @@ export type BarBodyProps = {
 
 function getColor(color: string): string {
     let newColor = "white";
-    if (color.includes("semitone")) {
-        color = "semitone";
-    }
+
     switch (color) {
         case "C":
             newColor = colors.C;
@@ -34,7 +32,7 @@ function getColor(color: string): string {
         case "H":
             newColor = colors.H;
             break;
-        case "semitone":
+        case "1": case "2": case "3": case "4": case "5":
             newColor = colors.semitone;
             break;
         default:
@@ -45,8 +43,10 @@ function getColor(color: string): string {
 export const BarBody: React.FC<BarBodyProps> = props => {
     const classes = useStyles();
 
-    //Used to filter out the number
-    let regex = /\d+/g;
+    const verifySemiTone = (tone: string) => {
+        return tone === "1" || tone === "2" || tone === "3" || tone === "4" || tone === "5";
+    }
+
 
     return (
         <Box style={{ height: "100%" }} className={classes.root}>
@@ -54,10 +54,9 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                 return (
                     <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length }} >
                         {note.notes.map((type, index) => {
-                            const number = type.match(regex);
                             return (
                                 <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) }} >
-                                    <Typography className={classes.tangentText} variant="h2">{number}</Typography>
+                                    <Typography className={classes.tangentText} variant="h2">{verifySemiTone(type) ? type : ""}</Typography>
                                 </Box>
                             )
                         })}

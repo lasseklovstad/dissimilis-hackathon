@@ -66,7 +66,7 @@ const SongContextProvider: React.FC = props => {
                     },
                     {
                         length: 1,
-                        notes: ["H", "A", "semitone1"]
+                        notes: ["H", "A", "1"]
                     }
                 ],
             },
@@ -79,7 +79,7 @@ const SongContextProvider: React.FC = props => {
                 chordsAndTones: [
                     {
                         length: 6,
-                        notes: ["semitone2"]
+                        notes: ["2"]
                     }
                 ],
             },
