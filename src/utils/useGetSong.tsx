@@ -9,6 +9,6 @@ export const useGetSong = (id: number) => {
     const url = 'Song/songs';
     const params = { 'Id': id.toString() };
     const initialData: ISong[] = [];
-    const [dataFromApi, isLoading, isError, errorMessage] = useApiService<ISong[]>("get", url, { params, initialData });
-    return dataFromApi;
+    const returnObject = useApiService<ISong[]>("get", url, { params, initialData });
+    return returnObject;
 }

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -9,6 +9,7 @@ import { ReactComponent as LoginLogo } from '../../assets/images/LoginLogo.svg';
 import { colors } from '../../utils/colors';
 import { useTranslation } from "react-i18next";
 import { useHistory } from 'react-router';
+import { useLoginRedirect } from '../../utils/useLoginRedirect';
 
 export type LoginViewProps = {
 
@@ -20,17 +21,20 @@ const LoginView: FC<LoginViewProps> = () => {
   const classes = useStyles();
 
   const history = useHistory();
+  const axiosMethod = useLoginRedirect().fetchData;
+  let loginAdress: string;
+
   const tryLogin = () => {
-    history.push("/dashboard");
-  };
+    loginAdress = axiosMethod().header
+  }
 
   return (
     <Grid container className={classes.root} >
       <BackgroundImage className={classes.backgroundimage} />
       <Grid item xs={10} sm={4} className={matches ? classes.container + " " + classes.paddinglarge : classes.container + " " + classes.paddingsmall}>
         <LoginLogo className={classes.loginlogo} />
-        <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled" onSubmit={tryLogin}></TextField>
-        <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled" onSubmit={tryLogin}></TextField>
+        <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled"></TextField>
+        <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled"></TextField>
         <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={tryLogin}>{t("LoginView:login")}</Button>
       </Grid>
     </Grid>

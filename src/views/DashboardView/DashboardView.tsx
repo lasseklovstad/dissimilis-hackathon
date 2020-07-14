@@ -77,7 +77,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               <Typography variant="h1">{t("DashboardView:recentLabel")}</Typography>
             </Box>
             <Grid container spacing={3}>
-              {recentSongs?.map(song => (
+              {recentSongs?.data.map(song => (
                 <Grid item xs={12} sm={4} lg={3} key={song.id}>
                   <DashboardButton text={song.title} link={`/song/${song.id}`} />
                 </Grid>

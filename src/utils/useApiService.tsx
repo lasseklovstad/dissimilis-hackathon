@@ -15,6 +15,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [header, setHeader] = useState("")
 
   // Add params to the url   
   let baseUrl = 'https://localhost:5001/api/';
@@ -23,39 +24,27 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     finalUrl += '?' + new URLSearchParams(options.params).toString();
   }
 
+  const fetchData = async () => {
+    setIsError(false);
+    setIsLoading(true);
+
+    try {
+      const result = await axios.get<T>(finalUrl);
+      setData(result.data);
+      setHeader(result.headers)
+    } catch (error) {
+      setIsError(true);
+      setErrorMessage(error);
+      console.log(error);
+    }
+    setIsLoading(false);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setIsError(false);
-      setIsLoading(true);
+    method == "get" && fetchData()
+  }, options.dependencies);
 
-      try {
-        switch (method) {
-          case "get": {
-            const result = await axios.get<T>(finalUrl);
-            setData(result.data);
-            break;
-          }
-          case "post": {
-            const result = await axios.post<T>(finalUrl, options.body);
-            setData(result.data);
-            break;
-          }
-
-        }
-
-      } catch (error) {
-        setIsError(true);
-        setErrorMessage(error);
-        console.log(error);
-      }
-
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, [finalUrl, method, options.body]);
-
-  return [data, isLoading, isError, errorMessage] as const;
+  return { data, isLoading, isError, errorMessage, fetchData, header } as ApiServiceReturn<T>;
 };
 
 /**
@@ -65,5 +54,15 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
 export type ApiServiceOptions<T> = {
   body?: any;
   initialData?: T;
-  params?: Record<string, string>
+  params?: Record<string, string>;
+  dependencies?: any;
+}
+
+export type ApiServiceReturn<T> = {
+  data: T;
+  isLoading: boolean
+  isError: boolean
+  errorMessage: string
+  fetchData: Function
+  header: string
 }
