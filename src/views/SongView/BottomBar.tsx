@@ -7,12 +7,11 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import { colors } from '../../utils/colors';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
 import { useTranslation } from "react-i18next";
-import wholeNote from '../../assets/images/icon_whole-note.svg';
-import halfNote from '../../assets/images/icon_half-note.svg';
-import quarterNote from '../../assets/images/icon_quarter-note.svg';
-import eighthNote from '../../assets/images/icon_eighth-note.svg';
 import { NONAME } from 'dns';
-
+import { ReactComponent as WholenoteIcon } from '../../assets/images/icon_whole-note.svg';
+import { ReactComponent as HalfnoteIcon } from '../../assets/images/icon_half-note.svg';
+import { ReactComponent as QuarternoteIcon } from '../../assets/images/icon_quarter-note.svg';
+import { ReactComponent as EighthnoteIcon } from '../../assets/images/icon_eighth-note.svg';
 
 
 function DesktopContainer(props: { children: React.ReactNode }) {
@@ -42,11 +41,25 @@ function BottomBar() {
   const classes = useStyles();
   const desktop = useMediaQuery("(min-width:960px)");
   const [toggle, setToggle] = useState(false);
-  const tones: string[] = ["C", "D", "E", "F", "G", "A", "H", "1", "2", "3", "4", "5"];
-  const [note, setNote] = React.useState('');
+  const tones: string[] = ["C", "D", "E", "F", "G", "A", "H", "F#", "G#", "A#", "C#", "D#"];
+  const [note, setNote] = React.useState(1);
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setNote(event.target.value as string);
+    setNote(event.target.value as number);
   };
+
+  const Menu =
+    <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
+      <Select
+        value={note}
+        onChange={handleChange}
+        inputProps={{ className: classes.input }}
+      >
+        <MenuItem value={1}><WholenoteIcon /></MenuItem>
+        <MenuItem value={2}> <HalfnoteIcon /></MenuItem>
+        <MenuItem value={3}> <QuarternoteIcon /></MenuItem>
+        <MenuItem value={4}> <EighthnoteIcon /></MenuItem>
+      </Select>
+    </FormControl>
 
   return (
     /* Due to the bottombar being fixed, I had to adjust the bottom margin in order to fit the popupcontainer */
@@ -57,23 +70,7 @@ function BottomBar() {
 
             <DesktopContainer>
               <Grid item xs={3}>
-                <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
-                  <Select
-                    value={note}
-                    onChange={handleChange}
-
-                    displayEmpty
-                    inputProps={{ className: classes.input }}
-                  >
-                    <MenuItem value="" disabled >
-                      <em>Note</em>
-                    </MenuItem>
-                    <MenuItem value={1}>{<img src={wholeNote} alt={t("BottomBar:wholeNote")} />}</MenuItem>
-                    <MenuItem value={2}>{<img src={halfNote} alt={t("BottomBar:halfNote")} />}</MenuItem>
-                    <MenuItem value={3}>{<img src={quarterNote} alt={t("BottomBar:quarterNote")} />}</MenuItem>
-                    <MenuItem value={4}>{<img src={eighthNote} alt={t("BottomBar:eighthNote")} />}</MenuItem>
-                  </Select>
-                </FormControl>
+                {Menu}
               </Grid>
               <Grid item xs={3}>
                 <DropdownAutocomplete text={<MusicNoteIcon fontSize="small" />} tones={tones} />
@@ -108,24 +105,7 @@ function BottomBar() {
 
             <MobileContainer>
               <Grid item xs={4}>
-                <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }} >
-                  {/* <InputLabel id="testLabel">{t("BottomBar:note")}</InputLabel> */}
-                  <Select
-                    value={note}
-                    onChange={handleChange}
-
-                    displayEmpty
-                    inputProps={{ className: classes.input }}
-                  >
-                    <MenuItem value="" disabled>
-                      <em>Note</em>
-                    </MenuItem>
-                    <MenuItem value={1}>{<img src={wholeNote} alt={t("BottomBar:wholeNote")} />}</MenuItem>
-                    <MenuItem value={2}>{<img src={halfNote} alt={t("BottomBar:halfNote")} />}</MenuItem>
-                    <MenuItem value={3}>{<img src={quarterNote} alt={t("BottomBar:quarterNote")} />}</MenuItem>
-                    <MenuItem value={4}>{<img src={eighthNote} alt={t("BottomBar:eighthNote")} />}</MenuItem>
-                  </Select>
-                </FormControl>
+                {Menu}
               </Grid>
               <Grid item xs={4}>
                 <DropdownAutocomplete text={<MusicNoteIcon fontSize="small" />} tones={tones} />
