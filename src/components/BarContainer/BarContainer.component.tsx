@@ -1,24 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles, Grid, Box, Button, Menu, MenuItem } from "@material-ui/core";
 import colors from "../../utils/colors";
 import Bar from "../Bar/Bar.component";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import { IChordAndTones } from "../../models/IBar";
+import { SongContext } from "../../views/SongView/SongContextProvider.component";
 
 
 export type BarContainerProps = {
     barLineBefore: boolean,
     barLineAfter: boolean,
-    house?: number,
-    repBefore: boolean,
-    repAfter: boolean,
-    chordsAndTones: Array<IChordAndTones>,
     barNumber: number,
 };
 
 export const BarContainer: React.FC<BarContainerProps> = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+    const { song: { bars } } = useContext(SongContext);
+    const bar = bars[props.barNumber];
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -29,7 +28,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     };
 
     let centerDivSize: 10 | 11 | 12 = 10;
-    if (props.barLineBefore && props.barLineAfter) {
+    if (bar.barLineBefore && bar.barLineAfter) {
         centerDivSize = 10;
     } else {
         centerDivSize = 11;
@@ -39,17 +38,17 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         <Grid container role="grid">
             <Grid item xs={12} className={classes.firstRow} role="row">
                 <Grid container style={{ height: "100%" }} role="grid" aria-label="barline before the bar">
-                    <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
+                    <Grid item xs={bar.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ borderRight: bar.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                     </Grid>
                     <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar">
-                        <Bar barNumber={props.barNumber} house={props.house} repBefore={props.repBefore} repAfter={props.repAfter} chordsAndTones={props.chordsAndTones} />
+                        <Bar barNumber={props.barNumber} />
                     </Grid>
-                    <Grid item xs={props.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: props.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="barline after the bar"></Grid>
+                    <Grid item xs={bar.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: bar.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="barline after the bar"></Grid>
                 </Grid>
             </Grid>
             <Grid item xs={12} className={classes.secondRow} role="row" >
                 <Grid container style={{ height: "100%" }} role="grid" >
-                    <Grid item xs={props.barLineBefore ? 1 : "auto"} role="gridcell" ></Grid>
+                    <Grid item xs={bar.barLineBefore ? 1 : "auto"} role="gridcell" ></Grid>
                     <Grid item xs={10} role="gridcell" >
                         <Box display="flex" flexGrow={1}>
                             <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} role="button" aria-label="button to make changes to the bar">

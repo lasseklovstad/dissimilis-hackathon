@@ -14,13 +14,15 @@ function Routing() {
             <Switch>
                 <Route exact path="/" component={LoginView} />
                 <Route exact path="/dashboard" component={DashboardView} />
-                <SongContextProvider>
-                    <Route exact path="/song" component={SongView} />
-                </SongContextProvider>
                 <Route exact path="/song/:id" component={SongView} />
 
                 <Route exact path="/common" component={CommonView} />
                 <Route render={() => <Redirect to={{ pathname: "/" }} />} />
+
+                <SongContextProvider>
+                    <Route exact path="/song" component={SongView} />
+                </SongContextProvider>
+
             </Switch>
         </BrowserRouter>
     );
