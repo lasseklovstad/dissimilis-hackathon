@@ -64,7 +64,7 @@ const SongContextProvider: React.FC = props => {
                 barNumber: 1,
                 barLineBefore: false,
                 barLineAfter: false,
-                repBefore: false,
+                repBefore: true,
                 repAfter: false,
                 chordsAndTones: [
                     {

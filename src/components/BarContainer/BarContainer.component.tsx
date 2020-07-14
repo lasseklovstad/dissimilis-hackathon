@@ -51,7 +51,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                         <Grid item xs={bar.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ borderRight: bar.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar">
-                            <Bar barID={props.barID} />
+                            <Bar barID={props.barID} repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndTones={bar.chordsAndTones} />
                         </Grid>
                         <Grid item xs={bar.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: bar.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="barline after the bar"></Grid>
                     </Grid>
