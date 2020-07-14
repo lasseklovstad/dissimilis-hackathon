@@ -97,24 +97,27 @@ function BottomBar() {
             </Fragment>
             :
             <Fragment>
-              <Grid container style={{ display: (toggle && !desktop) ? " " : " none" }}>
-                <Grid item xs={12} className={classes.container}  >
-                  <Grid container className={classes.popupcontainer}>
-                    <Grid item xs={6} >
-                      <MenuButtonWithAddIcon text={t("BottomBar:addTone")} link={"/dashboard"} />
-                    </Grid>
-                    <Grid item xs={6} >
-                      <MenuButtonWithAddIcon text={t("BottomBar:addBar")} link={"/dashboard"} />
-                    </Grid>
-                    <Grid item xs={6} >
-                      <MenuButtonWithAddIcon text={t("BottomBar:repetition")} link={"/dashboard"} />
-                    </Grid>
-                    <Grid item xs={6} >
-                      <MenuButtonWithAddIcon text={t("BottomBar:addHouse")} link={"/dashboard"} />
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
+
+              {//Only show this menu if toggled
+                (toggle && !desktop) ?
+                  (
+                    <Grid container className={classes.popupcontainer}>
+                      <Grid item xs={6} className={classes.container} >
+                        <MenuButtonWithAddIcon text={t("BottomBar:addTone")} link={"/dashboard"} />
+                      </Grid>
+                      <Grid item xs={6} className={classes.container}>
+                        <MenuButtonWithAddIcon text={t("BottomBar:addBar")} link={"/dashboard"} />
+                      </Grid>
+                      <Grid item xs={6} className={classes.container}>
+                        <MenuButtonWithAddIcon text={t("BottomBar:repetition")} link={"/dashboard"} />
+                      </Grid>
+                      <Grid item xs={6} className={classes.container}>
+                        <MenuButtonWithAddIcon text={t("BottomBar:addHouse")} link={"/dashboard"} />
+                      </Grid>
+                    </Grid>)
+                  :
+                  (<></>)
+              }
 
               <MobileContainer>
                 <Grid item xs={4}>
@@ -184,7 +187,7 @@ const useStyles = makeStyles({
   popupcontainer: {
     backgroundColor: colors.white,
     position: "relative",
-    bottom: "60px"
+    bottom: "600px"
   },
   input: {
     padding: "18px 10px 10px 10px",
