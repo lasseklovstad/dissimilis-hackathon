@@ -16,13 +16,8 @@ export type ButtonProps = {
 };
 
 export type AutocompleteProps = {
-    text: any,
-    onClick?: () => void,
-    color?: string,
+    icon: JSX.Element,
     tones: string[],
-};
-export type SelectProps = {
-
 };
 
 
@@ -79,7 +74,9 @@ const useStyles = makeStyles({
     dropdown: {
         "& .MuiOutlinedInput-notchedOutline": {
             border: "0px",
-        }
+
+        },
+
     },
 
 });

@@ -6,7 +6,7 @@ import SongContextProvider, { SongContext } from "./SongContextProvider.componen
 import { Grid, makeStyles, Box, useMediaQuery, Button, } from '@material-ui/core';
 import { TimeSignature, BarNumber } from '../../components/SongViewComponents/SongView.component';
 import { BarContainer } from "../../components/BarContainer/BarContainer.component";
-import BottomBar from './BottomBar';
+import BottomBar from '../../components/BottomBar/BottomBar.component';
 
 export type SongViewProps = {
 
