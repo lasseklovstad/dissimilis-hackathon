@@ -63,7 +63,7 @@ function BottomBar() {
 
   return (
 
-    < Grid container justify="center" className={classes.outercontainer} >
+    < Grid container justify="center" className={classes.outercontainer} style={{ bottom: "5vh" }} >
       <Grid item xs={12} sm={10} >
         <Grid container className={classes.container} >
 
@@ -144,11 +144,6 @@ function BottomBar() {
           }
         </Grid>
 
-
-        {/* Mobile view Popup section */}
-
-
-
       </Grid>
     </Grid >
   );
@@ -157,7 +152,7 @@ function BottomBar() {
 const useStyles = makeStyles({
   outercontainer: {
     position: "fixed",
-    bottom: "5vh",
+
     left: 0,
     right: 0
   },
@@ -188,7 +183,8 @@ const useStyles = makeStyles({
   },
   popupcontainer: {
     backgroundColor: colors.white,
-    bottom: "600px"
+    position: "relative",
+    bottom: "60px"
   },
   input: {
     padding: "18px 10px 10px 10px",
@@ -205,3 +201,4 @@ const useStyles = makeStyles({
 });
 
 export default BottomBar;
+
