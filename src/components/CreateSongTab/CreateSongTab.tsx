@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Grid, Button, Modal, TextField, makeStyles, Typography } from "@material-ui/core";
 import DashboardButton, { DashboardButtonWithAddIconNoLink } from "../DashboardButtons/DashboardButtons";
 import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
+import { SongContext } from "../../views/SongView/SongContextProvider.component";
 
 
 export type CreateSongTabProps = {
@@ -11,13 +12,12 @@ export type CreateSongTabProps = {
 
 
 function getModalStyle() {
-    const top = 50;
     const left = 50;
 
     return {
         top: "20%",
         left: "50%",
-        transform: `translate(-${top}%, -${left}%)`,
+        transform: `translate(-${left}%)`,
     };
 }
 
@@ -26,16 +26,17 @@ export type InstrumentCard = {
     link: string,
 }
 export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
-    const [instruments, setInstruments] = useState<InstrumentCard[]>([{ name: "Bass", link: "/song" }]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalStyle] = useState(getModalStyle);
     const [textFieldInput, setTextFieldInput] = useState<string>("");
 
+
+    const { song: { instruments }, addInstrument } = useContext(SongContext);
+
     const classes = useStyles();
 
-    const addInstrument = (): void => {
-        let newInstrument: InstrumentCard = { name: textFieldInput, link: "/song" };
-        setInstruments(instruments => [...instruments, newInstrument]);
+    const handleAddInstrument = () => {
+        addInstrument(textFieldInput);
         setModalIsOpen(false);
         setTextFieldInput("");
     }
@@ -62,10 +63,10 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     <Grid item>
                         <DashboardButton color={colors.gray_200} text={t("CreateSongTab:song")} link={"/song"} />
                     </Grid>
-                    {instruments.map((instrument, index) => {
+                    {instruments.map((instrument: string, index: number) => {
                         return (
-                            <Grid item key={instrument.name + index}>
-                                <DashboardButton text={instrument.name} link={instrument.link} />
+                            <Grid item key={index}>
+                                <DashboardButton text={instrument} link={"/"} />
                             </Grid>
                         )
                     })}
@@ -82,7 +83,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                             <TextField variant="filled" onChange={handleChange} label={t("CreateSongTab:nameOfInstrument")} style={{ width: "100%" }} />
                         </Grid>
                         <Grid item xs={12}>
-                            <Button className={classes.button} size="large" variant="contained" disabled={textFieldInput === "" || textFieldInput === undefined || textFieldInput === null ? true : false} onClick={() => addInstrument()} >{t("CreateSongTab:save")}</Button>
+                            <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleAddInstrument} >{t("CreateSongTab:save")}</Button>
                             <Button className={classes.button} size="large" variant="outlined" onClick={() => setModalIsOpen(false)}>{t("CreateSongTab:cancel")}</Button>
                         </Grid>
                     </Grid>
