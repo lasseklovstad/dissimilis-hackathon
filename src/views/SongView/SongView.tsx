@@ -69,7 +69,7 @@ export const SongView: React.FC<SongViewProps> = props => {
             <Grid container>
               {bars.map((bar, i) => (
                 <Grid item xs={12} sm={6} xl={3} key={i} >
-                  <BarContainer barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} barNumber={i} />
+                  <BarContainer barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} barID={bar.barID} />
                 </Grid>
               ))}
             </Grid>

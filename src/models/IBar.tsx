@@ -4,7 +4,10 @@ export interface IChordAndTones {
     length: number,
 }
 
+
+
 export interface IBar {
+    barID: string,
     barNumber: number | undefined,
     barLineBefore: boolean,
     barLineAfter: boolean,
