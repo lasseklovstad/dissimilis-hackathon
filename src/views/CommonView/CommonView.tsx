@@ -1,6 +1,5 @@
 import React from 'react';
 import { Typography, Grid, makeStyles } from '@material-ui/core';
-import BarContainer from '../../components/BarContainer/BarContainer.component';
 
 export type CommonViewProps = {
 
@@ -10,79 +9,9 @@ export const CommonView: React.FC<CommonViewProps> = props => {
     const classes = useStyles();
 
 
-    //This will typically be received from the server by a GET-request. 
-    const takter = [
-        {
-            house: undefined,
-            repBefore: true,
-            repAfter: false,
-            chordsAndTones: [
-                {
-                    length: 4,
-                    notes: ["C"]
-                },
-                {
-                    length: 1,
-                    notes: ["C", "A", "H"]
-                },
-                {
-                    length: 1,
-                    notes: ["H", "A", "C"]
-                }
-            ]
-        },
-    ]
-
-
-    const takter2 = [
-        {
-            house: undefined,
-            repBefore: true,
-            repAfter: false,
-            chordsAndTones: [
-                {
-                    length: 4,
-                    notes: ["C"]
-                },
-                {
-                    length: 2,
-                    notes: ["C", "A", "H"]
-                },
-                {
-                    length: 2,
-                    notes: ["H"]
-                }
-            ]
-        },
-    ]
-
     return (
         <div>
             <Grid container className={classes.root}>
-                <Grid item xs={12}>
-                    <Typography variant="h1">6/8:</Typography>
-                </Grid>
-                {takter.map((takt, index) => {
-                    return (
-                        <Grid item xs={12} sm={6}>
-                            <BarContainer house={takt.house} barNumber={index} chordsAndTones={takt.chordsAndTones} barLineBefore={false} barLineAfter={false} repAfter={takt.repAfter} repBefore={takt.repBefore} />
-                        </Grid>
-                    )
-                })}
-                <Grid item xs={12}>
-                    <Typography variant="h1">4/4:</Typography>
-                </Grid>
-                {takter2.map((takt, index) => {
-                    return (
-                        <Grid item xs={12} sm={6}>
-                            <BarContainer house={takt.house} barNumber={index} chordsAndTones={takt.chordsAndTones} barLineBefore={false} barLineAfter={false} repAfter={takt.repAfter} repBefore={takt.repBefore} />
-                        </Grid>
-                    )
-                })}
-
-                <Grid item xs={12} style={{ height: "200px" }}>
-                    <hr />
-                </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h1">Bar-komponent:</Typography>
                 </Grid>
@@ -131,6 +60,7 @@ const useStyles = makeStyles({
     root: {
         margin: "auto",
         width: "60%",
+        backgroundColor: "blue",
         textAlign: "center",
         "@media (max-width: 600px)": {
             width: "90%",

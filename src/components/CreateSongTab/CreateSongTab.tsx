@@ -5,6 +5,7 @@ import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { IVoice } from "../../models/IVoice";
+import { useHistory } from "react-router-dom";
 
 
 export type CreateSongTabProps = {
@@ -31,6 +32,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const [modalStyle] = useState(getModalStyle);
     const [textFieldInput, setTextFieldInput] = useState<string>("");
 
+    const history = useHistory();
 
     const { song: { voices }, addVoice } = useContext(SongContext);
 
@@ -40,6 +42,8 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         addVoice({ title: textFieldInput, priority: voices.length, bars: [] });
         setModalIsOpen(false);
         setTextFieldInput("");
+        const newIndex = voices.length + 1;
+        history.push("?voice=" + newIndex.toString());
     }
 
     const handleOpen = () => {
@@ -73,7 +77,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                         if (index !== 0) {
                             return (
                                 <Grid item key={index}>
-                                    <DashboardButton selected={selectedVoice === index+1} text={voices.title} link={`/song/1?voice=${index + 1}`} />
+                                    <DashboardButton selected={selectedVoice === index + 1} text={voices.title} link={`/song/1?voice=${index + 1}`} />
                                 </Grid>
                             )
                         }

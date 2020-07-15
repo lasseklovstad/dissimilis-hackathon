@@ -3,14 +3,14 @@ import { Box, Grid, makeStyles } from "@material-ui/core";
 import RepetitionSign from "./RepetitionSign.component";
 import House from "./House.component";
 import { BarBody } from "./BarBody.component";
-import { IChordAndTones } from "../../models/IBar";
+import { IChordAndNotes} from "../../models/IBar";
+
 
 export type BarProps = {
-    house?: number,
     repBefore: boolean,
     repAfter: boolean,
-    chordsAndTones: Array<IChordAndTones>,
-    barNumber: number,
+    house?: number,
+    chordsAndNotes: IChordAndNotes[],
 }
 
 
@@ -27,6 +27,7 @@ export const Bar: React.FC<BarProps> = props => {
     } else {
         centerDivSize = 9;
     }
+
 
     return (
         <Box className={classes.root} mx="auto" role="main">
@@ -47,8 +48,8 @@ export const Bar: React.FC<BarProps> = props => {
                                 <RepetitionSign size="small" display={props.repBefore} />
                             </Box>
                         </Grid>
-                        <Grid item xs={centerDivSize} role="gridcell" aria-label={"Bar " + props.barNumber}>
-                            <BarBody chordsAndTones={props.chordsAndTones} />
+                        <Grid item xs={centerDivSize} role="gridcell" aria-label={"Bar"}>
+                            <BarBody chordsAndNotes={props.chordsAndNotes} />
                         </Grid>
                         <Grid item xs={1} style={{ borderRight: "2px solid black" }} role="gridcell" aria-label="repetition sign after the tone" >
                             <Box mt={"20px"}>
@@ -63,6 +64,8 @@ export const Bar: React.FC<BarProps> = props => {
 
         </Box>
     )
+
+
 }
 
 const useStyles = makeStyles({

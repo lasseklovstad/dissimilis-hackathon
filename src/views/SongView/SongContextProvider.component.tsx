@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { IVoice } from '../../models/IVoice';
+import { IBar } from '../../models/IBar';
+import { BADRESP } from 'dns';
 
 
 //State handling skjer i denne komponenten 
@@ -8,6 +10,9 @@ interface ISongContext {
     song: ISong,
     setSong: (song: ISong) => void,
     addVoice: (voices: IVoice) => void,
+    deleteBar: (index: number, voiceId: number) => void,
+    getBar: (id: string, voiceId: number) => IBar | undefined,
+    duplicateBar: (id: string, voiceId: number) => void,
 }
 
 interface ISong {
@@ -22,11 +27,18 @@ export const SongContext = React.createContext<ISongContext>({
     },
     setSong: (song: ISong) => { },
     addVoice: (voice: IVoice) => { },
+    deleteBar: (index: number, voiceId: number) => { },
+    getBar: (id: string, voiceId: number) => {
+        throw new Error("getBar() in Song Context is not implemented")
+    },
+    duplicateBar: (id: string, voiceId: number) => {
+        throw new Error("duplicateBar() in Song Context is not implemented")
+    },
 });
 
 const SongContextProvider: React.FC = props => {
 
-    //Initial State. 
+    //Initial State.
 
     //For now, I'm just setting it static until we can retrieve the data from the server
 
@@ -41,10 +53,11 @@ const SongContextProvider: React.FC = props => {
                 priority: 1,
                 bars: [
                     {
+                        id: '_' + Math.random().toString(36).substr(2, 9),
                         barNumber: 1,
                         repBefore: false,
                         repAfter: false,
-                        chordsAndTones: [
+                        chordsAndNotes: [
                             {
                                 length: 1,
                                 notes: ["C"]
@@ -64,10 +77,11 @@ const SongContextProvider: React.FC = props => {
                         ],
                     },
                     {
+                        id: '_' + Math.random().toString(36).substr(2, 9),
                         barNumber: 2,
                         repBefore: false,
                         repAfter: false,
-                        chordsAndTones: [
+                        chordsAndNotes: [
                             {
                                 length: 2,
                                 notes: ["G"]
@@ -79,10 +93,11 @@ const SongContextProvider: React.FC = props => {
                         ],
                     },
                     {
+                        id: '_' + Math.random().toString(36).substr(2, 9),
                         barNumber: 3,
                         repBefore: false,
                         repAfter: false,
-                        chordsAndTones: [
+                        chordsAndNotes: [
                             {
                                 length: 2,
                                 notes: ["A"]
@@ -100,10 +115,11 @@ const SongContextProvider: React.FC = props => {
                 priority: 2,
                 bars: [
                     {
+                        id: '_' + Math.random().toString(36).substr(2, 9),
                         barNumber: 1,
                         repBefore: false,
                         repAfter: false,
-                        chordsAndTones: [
+                        chordsAndNotes: [
                             {
                                 length: 1,
                                 notes: [""]
@@ -123,10 +139,11 @@ const SongContextProvider: React.FC = props => {
                         ],
                     },
                     {
+                        id: '_' + Math.random().toString(36).substr(2, 9),
                         barNumber: 2,
                         repBefore: false,
                         repAfter: false,
-                        chordsAndTones: [
+                        chordsAndNotes: [
                             {
                                 length: 2,
                                 notes: ["G"]
@@ -138,10 +155,11 @@ const SongContextProvider: React.FC = props => {
                         ],
                     },
                     {
+                        id: '_' + Math.random().toString(36).substr(2, 9),
                         barNumber: 3,
                         repBefore: false,
                         repAfter: false,
-                        chordsAndTones: [
+                        chordsAndNotes: [
                             {
                                 length: 2,
                                 notes: ["A"]
@@ -160,14 +178,75 @@ const SongContextProvider: React.FC = props => {
 
     //Method to simplify change of state
     const addVoice = (newVoice: IVoice) => {
+        for (let i = 0; i < song.voices[0].bars.length; i++) {
+            const tempBar: IBar = { id: "newBar", barNumber: i + 1, repBefore: false, repAfter: false, chordsAndNotes: [] }
+            newVoice.bars.push(tempBar);
+        }
         setSong({ ...song, voices: [...song.voices, newVoice] });
     }
+
+    const getBar = (id: string, voiceId: number) => {
+        let returnBar = undefined;
+        song.voices[voiceId].bars.forEach(bar => {
+            if (bar.id === id) {
+                returnBar = bar;
+            }
+        });
+        return returnBar;
+    }
+
+    const deleteBar = (id: number, voiceId: number) => {
+        //setSong({ ...song, voices: song.voices.map((voice) => voice.priority - 1 === voiceId ? { ...voice, bars: voice.bars.filter((bar) => bar.id !== id) } : voice) });
+        setSong({ ...song, voices: song.voices.map((voice) => true ? { ...voice, bars: voice.bars.filter((bar, i) => i !== id) } : voice) });
+    }
+
+
+    const copyAndAddEmptyBars = (index: number) => {
+        let tempArray = [];
+        const newBar: IBar = { id: "sdfd", barNumber: index + 1, repBefore: false, repAfter: false, chordsAndNotes: [] };
+        for (let i = 1; i < song.voices.length; i++) {
+            let copyOfArray = song.voices[i].bars.slice();
+            copyOfArray.splice(index + 1, 0, newBar);
+            tempArray.push(copyOfArray);
+            //setSong({ ...song, voices: song.voices.map((voice, i) => true ? { ...voice, bars: copyOfArray } : voice) });
+        }
+        return tempArray;
+
+    }
+
+
+    const duplicateBar = (id: string, voiceId: number) => {
+        const bar = getBar(id, voiceId);
+
+
+        if (bar !== undefined) {
+            const indexOfOriginalBar = song.voices[voiceId].bars.indexOf(bar);
+
+
+            let copyOfBar: IBar = Object.assign({}, bar);
+            let copyOfArray = song.voices[voiceId].bars.slice();
+
+            copyOfArray.splice(indexOfOriginalBar, 0, copyOfBar);
+
+            const tempArray = copyAndAddEmptyBars(indexOfOriginalBar);
+            setSong({ ...song, voices: song.voices.map((voice, i) => i === 0 ? { ...voice, bars: copyOfArray } : { ...voice, bars: tempArray[i - 1] }) });
+        }
+
+
+    }
+
+
+
+
 
     //Add all methods here
     const value = {
         song,
         setSong,
         addVoice,
+        deleteBar,
+        getBar,
+        duplicateBar,
     }
 
 
