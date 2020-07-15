@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -10,6 +10,8 @@ import { colors } from '../../utils/colors';
 import { useTranslation } from "react-i18next";
 import { useHistory } from 'react-router';
 import { useLoginRedirect } from '../../utils/useLoginRedirect';
+import { useLocation } from 'react-router-dom';
+import { useLoginPost } from '../../utils/useLoginPost';
 
 export type LoginViewProps = {
 
@@ -19,14 +21,15 @@ const LoginView: FC<LoginViewProps> = () => {
   const { t } = useTranslation();
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
-
   const history = useHistory();
-  const axiosMethod = useLoginRedirect().fetchData;
-  let loginAdress: string;
+  const axios = useLoginRedirect()
 
   const tryLogin = () => {
-    loginAdress = axiosMethod().header
+    axios.fetchData().then(window.open(axios.header.location))
   }
+
+  const code = new URLSearchParams(useLocation().search);
+  useLoginPost(code.get("code"))
 
   return (
     <Grid container className={classes.root} >
@@ -35,7 +38,9 @@ const LoginView: FC<LoginViewProps> = () => {
         <LoginLogo className={classes.loginlogo} />
         <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled"></TextField>
         <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled"></TextField>
-        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={tryLogin}>{t("LoginView:login")}</Button>
+        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined">{t("LoginView:login")}</Button>
+        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={tryLogin}>{t("LoginView:loginWithMicrosoft")}</Button>
+
       </Grid>
     </Grid>
   );

@@ -15,7 +15,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [header, setHeader] = useState("")
+  const [header, setHeader] = useState()
 
   // Add params to the url   
   let baseUrl = 'https://localhost:5001/api/';
@@ -40,9 +40,22 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     setIsLoading(false);
   };
 
+  const postData = async () => {
+    try {
+      const result = await axios.post<T>(finalUrl, options.body)
+      setData(result.data)
+    } catch {
+    }
+  }
+
   useEffect(() => {
-    method == "get" && fetchData()
-  }, options.dependencies);
+    method == "get" && fetchData();
+  }, options.dependencies || []);
+
+  useEffect(() => {
+    method == "post" && postData();
+  }, options.dependencies || []);
+
 
   return { data, isLoading, isError, errorMessage, fetchData, header } as ApiServiceReturn<T>;
 };
@@ -55,7 +68,7 @@ export type ApiServiceOptions<T> = {
   body?: any;
   initialData?: T;
   params?: Record<string, string>;
-  dependencies?: any;
+  dependencies?: any[];
 }
 
 export type ApiServiceReturn<T> = {
@@ -64,5 +77,5 @@ export type ApiServiceReturn<T> = {
   isError: boolean
   errorMessage: string
   fetchData: Function
-  header: string
+  header: any
 }
