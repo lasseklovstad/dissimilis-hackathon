@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, BrowserRouter, Switch, Redirect, useParams } from 'react-router-dom';
+import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
 
 import DashboardView from './views/DashboardView/DashboardView';
 import LoginView from './views/LoginView/LoginView';

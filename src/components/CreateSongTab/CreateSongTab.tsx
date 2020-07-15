@@ -80,6 +80,8 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                                     <DashboardButton selected={selectedVoice === index + 1} text={voices.title} link={`/song/1?voice=${index + 1}`} />
                                 </Grid>
                             )
+                        } else {
+                            return <div key={index}></div>
                         }
                     })}
                     <Grid item>

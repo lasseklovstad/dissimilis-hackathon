@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
 import { SongContext } from "./SongContextProvider.component";
@@ -19,9 +19,6 @@ export const SongView: React.FC<SongViewProps> = props => {
   const queryString = require('query-string');
   const { song: { voices } } = useContext(SongContext);
 
-  //Find SongID from URL
-  const params: { id: string } = useParams();
-  const id = params.id;
 
   const voiceString = queryString.parse(window.location.search);
   let selectedVoice = 0;
@@ -80,7 +77,7 @@ export const SongView: React.FC<SongViewProps> = props => {
             <Grid container>
               {voices[selectedVoice].bars.map((bar, i) => (
                 <Grid item xs={12} sm={6} xl={3} key={i} >
-                  <BarContainer bar={bar} barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)}/>
+                  <BarContainer masterSheet={selectedVoice === 0} bar={bar} barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} />
                 </Grid>
               ))}
             </Grid>

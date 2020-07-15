@@ -10,7 +10,8 @@ import { IBar } from "../../models/IBar"
 export type BarContainerProps = {
     barLineBefore: boolean,
     barLineAfter: boolean,
-    bar: IBar
+    bar: IBar,
+    masterSheet: boolean,
 };
 
 export const BarContainer: React.FC<BarContainerProps> = props => {
@@ -29,13 +30,12 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     };
 
     const handleClose = (method: string) => {
-
+        const index = voices[0].bars.indexOf(bar);
         if (method === "delete") {
-            //console.log(voices[0].bars.indexOf(bar));
-            deleteBar(voices[0].bars.indexOf(bar), voiceInt - 1);
+            deleteBar(index, voiceInt - 1);
         }
         if (method === "duplicate") {
-            duplicateBar(bar.id, voiceInt - 1);
+            duplicateBar(index, voiceInt - 1);
         }
         setAnchorEl(null);
     };
@@ -62,7 +62,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                         <Grid item xs={props.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: props.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="barline after the bar"></Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.secondRow} role="row" >
+                <Grid item xs={12} className={classes.secondRow} role="row" style={{ display: props.masterSheet ? "block" : "none" }} >
                     <Grid container style={{ height: "100%" }} role="grid" >
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} role="gridcell" ></Grid>
                         <Grid item xs={10} role="gridcell" >
