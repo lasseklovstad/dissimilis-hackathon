@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useMediaQuery, makeStyles, FormControl, MenuItem, Select, } from '@material-ui/core';
+import React from 'react';
+import { makeStyles, FormControl, MenuItem, Select, } from '@material-ui/core';
 import MenuButton, { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
 import { colors } from '../../utils/colors';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
@@ -13,8 +13,6 @@ import { ReactComponent as EighthnoteIcon } from '../../assets/images/icon_eight
 function BottomBar() {
     const { t } = useTranslation();
     const classes = useStyles();
-    const desktop = useMediaQuery("(min-width:960px)");
-
     const tones: string[] = ["C", "D", "E", "F", "G", "A", "H", "F#", "G#", "A#", "C#", "D#"];
     const [note, setNote] = React.useState(1);
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -92,7 +90,6 @@ const useStyles = makeStyles({
         flexDirection: "row",
         justifyContent: "space-between",
         flex: 1,
-
     },
     button: {
         backgroundColor: colors.white,
@@ -100,7 +97,6 @@ const useStyles = makeStyles({
         height: "56px",
         outline: "none",
     },
-
     input: {
         padding: "18px 10px 10px 10px",
         height: "28px",

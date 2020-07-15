@@ -12,16 +12,13 @@ export type AddButtonProps = {
     text: string,
     link: string,
     onClick?: () => void,
-
 };
-
 export type ButtonProps = {
     text: string,
     link: string,
     onClick?: () => void,
     color?: string,
 };
-
 export type AutocompleteProps = {
     icon: React.ReactNode,
     tones: string[],
@@ -87,7 +84,6 @@ const useStyles = makeStyles({
     dropdown: {
         "& .MuiOutlinedInput-notchedOutline": {
             border: "0px",
-
         },
 
     },
