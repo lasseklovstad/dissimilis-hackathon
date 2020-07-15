@@ -62,13 +62,7 @@ const SongContextProvider: React.FC = props => {
             {
                 id: '_' + Math.random().toString(36).substr(2, 9),
                 barNumber: 1,
-<<<<<<< HEAD
                 repBefore: false,
-=======
-                barLineBefore: false,
-                barLineAfter: false,
-                repBefore: true,
->>>>>>> ff48f7d9fafbdbd13feeb14c6cecfa4c87f2c42c
                 repAfter: false,
                 chordsAndTones: [
                     {
