@@ -60,7 +60,7 @@ const SongContextProvider: React.FC = props => {
         ],
         bars: [
             {
-                barID: '_' + Math.random().toString(36).substr(2, 9),
+                id: '_' + Math.random().toString(36).substr(2, 9),
                 barNumber: 1,
                 barLineBefore: false,
                 barLineAfter: false,
@@ -82,7 +82,7 @@ const SongContextProvider: React.FC = props => {
                 ],
             },
             {
-                barID: '_' + Math.random().toString(36).substr(2, 9),
+                id: '_' + Math.random().toString(36).substr(2, 9),
                 barNumber: 2,
                 barLineBefore: false,
                 barLineAfter: true,
@@ -96,7 +96,7 @@ const SongContextProvider: React.FC = props => {
                 ],
             },
             {
-                barID: '_' + Math.random().toString(36).substr(2, 9),
+                id: '_' + Math.random().toString(36).substr(2, 9),
                 barNumber: 3,
                 barLineBefore: false,
                 barLineAfter: true,
@@ -118,7 +118,7 @@ const SongContextProvider: React.FC = props => {
                 ],
             },
             {
-                barID: '_' + Math.random().toString(36).substr(2, 9),
+                id: '_' + Math.random().toString(36).substr(2, 9),
                 barNumber: 4,
                 barLineBefore: false,
                 barLineAfter: true,
@@ -166,7 +166,7 @@ const SongContextProvider: React.FC = props => {
     const getBar = (id: string) => {
         let returnBar = undefined;
         song.bars.forEach(bar => {
-            if (bar.barID === id) {
+            if (bar.id === id) {
                 returnBar = bar;
             }
         });
@@ -174,7 +174,7 @@ const SongContextProvider: React.FC = props => {
     }
 
     const deleteBar = (id: string) => {
-        setSong({ ...song, bars: song.bars.filter((item) => item.barID !== id) });
+        setSong({ ...song, bars: song.bars.filter((item) => item.id !== id) });
     }
 
     const duplicateBar = (id: string) => {
@@ -186,7 +186,7 @@ const SongContextProvider: React.FC = props => {
             let copyOfBar: IBar = Object.assign({}, bar);
             let copyOfArray = song.bars.slice();
 
-            copyOfBar.barID = '_' + Math.random().toString(36).substr(2, 9);
+            copyOfBar.id = '_' + Math.random().toString(36).substr(2, 9);
 
             copyOfArray.splice(indexOfOriginalBar, 0, copyOfBar);
             setSong({ ...song, bars: copyOfArray });

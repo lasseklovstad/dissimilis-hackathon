@@ -4,20 +4,21 @@ import colors from "../../utils/colors";
 import Bar from "../Bar/Bar.component";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
+import {IBar} from "../../models/IBar"
 
 
 export type BarContainerProps = {
     barLineBefore: boolean,
     barLineAfter: boolean,
-    barID: string,
+    bar: IBar
 };
 
 export const BarContainer: React.FC<BarContainerProps> = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const { deleteBar, getBar, duplicateBar } = useContext(SongContext);
-    let bar = getBar(props.barID);
+    const { deleteBar, duplicateBar } = useContext(SongContext);
+    const bar = props.bar
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -26,10 +27,10 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const handleClose = (method: string) => {
 
         if (method === "delete") {
-            deleteBar(props.barID);
+            deleteBar(bar.id);
         }
         if (method === "duplicate") {
-            duplicateBar(props.barID);
+            duplicateBar(bar.id);
         }
         setAnchorEl(null);
     };
@@ -51,7 +52,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                         <Grid item xs={bar.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ borderRight: bar.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar">
-                            <Bar barID={props.barID} repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndTones={bar.chordsAndTones} />
+                            <Bar repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndTones={bar.chordsAndTones} />
                         </Grid>
                         <Grid item xs={bar.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: bar.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="barline after the bar"></Grid>
                     </Grid>

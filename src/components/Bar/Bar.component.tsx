@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Box, Grid, makeStyles } from "@material-ui/core";
 import RepetitionSign from "./RepetitionSign.component";
 import House from "./House.component";
@@ -7,7 +7,6 @@ import { IChordAndTones } from "../../models/IBar";
 
 
 export type BarProps = {
-    barID: string,
     repBefore: boolean,
     repAfter: boolean,
     house?: number,
@@ -49,7 +48,7 @@ export const Bar: React.FC<BarProps> = props => {
                                 <RepetitionSign size="small" display={props.repBefore} />
                             </Box>
                         </Grid>
-                        <Grid item xs={centerDivSize} role="gridcell" aria-label={"Bar " + props.barID}>
+                        <Grid item xs={centerDivSize} role="gridcell" aria-label={"Bar"}>
                             <BarBody chordsAndTones={props.chordsAndTones} />
                         </Grid>
                         <Grid item xs={1} style={{ borderRight: "2px solid black" }} role="gridcell" aria-label="repetition sign after the tone" >
