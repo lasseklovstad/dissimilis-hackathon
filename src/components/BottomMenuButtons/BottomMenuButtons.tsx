@@ -3,10 +3,17 @@ import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import { Box, Card, CardActionArea, TextField } from '@material-ui/core';
+import { Box, Card, CardActionArea, TextField, Button } from '@material-ui/core';
 import { colors } from '../../utils/colors';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
+
+export type AddButtonProps = {
+    text: string,
+    link: string,
+    onClick?: () => void,
+
+};
 
 export type ButtonProps = {
     text: string,
@@ -16,22 +23,22 @@ export type ButtonProps = {
 };
 
 export type AutocompleteProps = {
-    icon: JSX.Element,
+    icon: React.ReactNode,
     tones: string[],
 };
 
 
-export const MenuButtonWithAddIcon: FunctionComponent<ButtonProps> = (props) => {
+export const MenuButtonWithAddIcon: FunctionComponent<AddButtonProps> = (props) => {
     const styles = useStyles();
     return (
-        <Card className={styles.button}>
-            <CardActionArea onClick={() => props.onClick && props.onClick()}  >
-                <Box className={styles.container} py={2} pl={1}>
-                    <AddIcon />
-                    <Box pl={2} pr={2}><Typography>{props.text}</Typography></Box>
-                </Box>
-            </CardActionArea>
-        </Card>
+        <Button
+            variant="outlined"
+            size="large"
+            className={styles.addbutton}
+            startIcon={<AddIcon />}
+        >
+            <Typography>{props.text}</Typography>
+        </Button>
     );
 }
 
@@ -69,7 +76,13 @@ const useStyles = makeStyles({
     button: {
         backgroundColor: colors.white,
         boxShadow: "0px 0px 0px rgba(255, 255, 255, 0)",
-        margin: "auto"
+        margin: "auto",
+    },
+    addbutton: {
+        backgroundColor: colors.white,
+        border: "none",
+        height: "56px",
+        outline: "none",
     },
     dropdown: {
         "& .MuiOutlinedInput-notchedOutline": {

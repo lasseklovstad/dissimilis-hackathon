@@ -46,7 +46,7 @@ export const SongView: React.FC<SongViewProps> = props => {
   }
 
   return (
-    <Grid container className={classes.root}>
+    <><Grid container className={classes.root}>
       <Grid item xs={12} >
         <NavBarCreateSong />
       </Grid>
@@ -76,17 +76,12 @@ export const SongView: React.FC<SongViewProps> = props => {
             </Grid>
           </Grid>
         </Grid>
-        <Box mb={4}>
-          <Button variant="outlined" color="primary" onClick={addEmptyBar}>
-            Legg til takt
-        </Button>
-        </Box>
-        <Grid xs={12}>
-          <BottomBar />
-        </Grid>
+
+
       </Grid>
     </Grid>
-
+      <BottomBar />
+    </>
 
   );
 }
@@ -95,8 +90,10 @@ const useStyles = makeStyles({
   root: {
     marginLeft: "24px",
     marginTop: "32px",
-    marginRight: "32px",
-    width: "auto"
+    marginRight: "24px",
+    marginBottom: "24px",
+    width: "auto",
+
   }
 })
 

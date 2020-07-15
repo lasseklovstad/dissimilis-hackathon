@@ -1,9 +1,6 @@
-import React, { useState, Fragment } from 'react';
-import { Grid, IconButton, Card, useMediaQuery, makeStyles, FormControl, MenuItem, Select } from '@material-ui/core';
-import MenuButton, { MenuButtonWithAddIcon, DropdownAutocomplete } from '../BottomMenuButtons/BottomMenuButtons';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
+import React, { useState } from 'react';
+import { useMediaQuery, makeStyles, FormControl, MenuItem, Select, } from '@material-ui/core';
+import MenuButton, { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
 import { colors } from '../../utils/colors';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
 import { useTranslation } from "react-i18next";
@@ -12,36 +9,18 @@ import { ReactComponent as HalfnoteIcon } from '../../assets/images/icon_half-no
 import { ReactComponent as QuarternoteIcon } from '../../assets/images/icon_quarter-note.svg';
 import { ReactComponent as EighthnoteIcon } from '../../assets/images/icon_eighth-note.svg';
 
-function DesktopContainer(props: { children: React.ReactNode }) {
-    const classes = useStyles();
-    return <Grid item xs={12} md={5} xl={3}>
-        <Card className={classes.cardsection}>
-            <Grid container>
-                {props.children}
-            </Grid>
-        </Card>
-    </Grid >
-}
-function MobileContainer(props: { children: React.ReactNode }) {
-    const classes = useStyles();
-    return <Grid item xs={8} sm={6}>
-        <Card className={classes.minimizedCard}>
-            <Grid container>
-                {props.children}
-            </Grid>
-        </Card>
-    </Grid>
-}
+
 function BottomBar() {
     const { t } = useTranslation();
     const classes = useStyles();
     const desktop = useMediaQuery("(min-width:960px)");
-    const [toggle, setToggle] = useState(false);
+
     const tones: string[] = ["C", "D", "E", "F", "G", "A", "H", "F#", "G#", "A#", "C#", "D#"];
     const [note, setNote] = React.useState(1);
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setNote(event.target.value as number);
     };
+    /* Icon dropdown with note values */
     const Menu =
         <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
             <Select
@@ -55,134 +34,73 @@ function BottomBar() {
                 <MenuItem value={4}> <EighthnoteIcon /></MenuItem>
             </Select>
         </FormControl>
-    return (
-        < Grid container justify="center" className={classes.outercontainer} style={{ bottom: "5vh" }} >
-            <Grid item xs={12} sm={10} >
-                <Grid container className={classes.container} >
-                    {desktop ?
-                        <Fragment>
-                            <DesktopContainer>
-                                <Grid item xs={3}>
-                                    {Menu}
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} tones={tones} />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <MenuButton text={t("BottomBar:chord")} link={"/song"} />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <MenuButton text={t("BottomBar:note")} link={"/song"} />
-                                </Grid>
-                            </DesktopContainer>
-                            <DesktopContainer>
-                                <Grid item xs={5} >
-                                    <MenuButtonWithAddIcon text={t("BottomBar:addTone")} link={"/dashboard"} />
-                                </Grid>
-                                <Grid item xs={5} >
-                                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} link={"/dashboard"} />
-                                </Grid>
-                                <Grid item xs={2} className={classes.vertiIcon}  >
-                                    <MoreVertIcon />
-                                </Grid>
-                            </DesktopContainer>
-                        </Fragment>
-                        :
-                        <Fragment>
-                            {//Only show this menu if toggled
-                                (toggle && !desktop) ?
-                                    (
 
-                                        <Grid container className={classes.popupcontainer} sm={10}>
-                                            <Grid item xs={6} className={classes.container} >
-                                                <MenuButtonWithAddIcon text={t("BottomBar:addTone")} link={"/dashboard"} />
-                                            </Grid>
-                                            <Grid item xs={6} className={classes.container}>
-                                                <MenuButtonWithAddIcon text={t("BottomBar:addBar")} link={"/dashboard"} />
-                                            </Grid>
-                                            <Grid item xs={6} className={classes.container}>
-                                                <MenuButtonWithAddIcon text={t("BottomBar:repetition")} link={"/dashboard"} />
-                                            </Grid>
-                                            <Grid item xs={6} className={classes.container}>
-                                                <MenuButtonWithAddIcon text={t("BottomBar:addHouse")} link={"/dashboard"} />
-                                            </Grid>
-                                        </Grid>)
-                                    :
-                                    (<></>)
-                            }
-                            <MobileContainer>
-                                <Grid item xs={4}>
-                                    {Menu}
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} tones={tones} />
-                                </Grid>
-                                <Grid item xs={4} className={classes.vertiIcon}  >
-                                    <MoreVertIcon />
-                                </Grid>
-                            </MobileContainer>
-                            <Grid item xs={2}>
-                                <Card className={classes.addicon}>
-                                    {toggle ?
-                                        <IconButton >
-                                            <RemoveIcon onClick={() => { setToggle(!toggle) }} fontSize="large" />
-                                        </IconButton>
-                                        :
-                                        <IconButton >
-                                            <AddIcon onClick={() => { setToggle(!toggle) }} fontSize="large" />
-                                        </IconButton>
-                                    }
-                                </Card>
-                            </Grid>
-                        </Fragment>
-                    }
-                </Grid>
-            </Grid>
-        </Grid >
+    return (
+
+        <div className={classes.outercontainer}>
+            <div className={classes.container} >
+                <div className={classes.flexelement}>
+                    {Menu}
+                </div>
+                <div className={classes.flexelement}>
+                    <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} tones={tones} />
+                </div>
+                <div className={classes.flexelement}>
+                    <MenuButton text={t("BottomBar:chord")} link={"/song"} />
+                </div>
+                <div className={classes.flexelement}>
+                    <MenuButton text={t("BottomBar:note")} link={"/song"} />
+                </div>
+            </div>
+
+            <div className={classes.container} >
+                <MenuButtonWithAddIcon text={t("BottomBar:addTone")} link={"/song"} />
+                <MenuButtonWithAddIcon text={t("BottomBar:addBar")} link={"/song"} />
+            </div>
+        </div>
+
     );
 }
 const useStyles = makeStyles({
     outercontainer: {
         position: "fixed",
-        left: 0,
-        right: 0,
-
+        bottom: 0,
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        flexBasis: "auto",
+        flexWrap: "wrap",
+        alignItems: "center",
+        marginBottom: "24px",
+        justifyContent: "space-around",
+        '@media (max-width: 980px)': {
+            flexDirection: "column",
+            alignItems: "flex-end",
+        }
     },
     container: {
-        justifyContent: "space-between",
-        height: "60px",
-
-    },
-    cardsection: {
-        display: "flex",
-        textAlign: "center",
-    },
-    vertiIcon: {
-        margin: "auto",
-        textAlign: "center"
-    },
-    containerSegment: {
-        margin: "auto"
-    },
-    minimizedCard: {
-        margin: "auto"
-    },
-    addicon: {
-        backgroundColor: "white",
-        textAlign: "center",
-        marginLeft: "auto",
-        width: "56px",
-        height: "56px"
-    },
-    popupcontainer: {
-        backgroundColor: colors.white,
-        position: "fixed",
-        bottom: "130px",
         boxShadow: '0 1px 3px 1px rgba(0, 0, 0, 0.1)',
-        borderRadius: 4,
-        padding: "8px"
+        display: "flex",
+        justifyContent: "space-between",
+        flexWrap: "wrap",
+        backgroundColor: colors.white,
+        marginBottom: "8px",
+        marginLeft: "24px",
+        marginRight: "24px",
+    },
+    flexelement: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        flex: 1,
 
     },
+    button: {
+        backgroundColor: colors.white,
+        border: "none",
+        height: "56px",
+        outline: "none",
+    },
+
     input: {
         padding: "18px 10px 10px 10px",
         height: "28px",
