@@ -26,7 +26,7 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
 
     return (
         <div>
-            <IconButton className={classes.root} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} role="button" aria-label="button to make changes to the bar">
+            <IconButton className={classes.root} aria-haspopup="true" onClick={handleClick} aria-label="Bar menu">
                 <MoreHorizIcon />
             </IconButton>
             <Menu id="menuBar" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose} role="menu">
