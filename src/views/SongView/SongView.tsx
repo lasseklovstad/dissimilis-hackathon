@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
 import SongContextProvider, { SongContext } from "./SongContextProvider.component";
@@ -7,23 +7,34 @@ import { Grid, makeStyles, Box, useMediaQuery, Button, } from '@material-ui/core
 import { TimeSignature, BarNumber } from '../../components/SongViewComponents/SongView.component';
 import { BarContainer } from "../../components/BarContainer/BarContainer.component";
 
-export type SongViewProps = {
 
+export type SongViewProps = {
 }
 
 export const SongView: React.FC<SongViewProps> = props => {
   const classes = useStyles();
   const xs = useMediaQuery("(max-width: 600px)");
   const xl = useMediaQuery("(min-width: 1920px)");
-
-  //const [bars, setBars] = useState([{ bars: [] }])
-
   const history = useHistory();
+  const queryString = require('query-string');
+  const { song: { voices } } = useContext(SongContext);
 
-  //Example on how to get the values from the context
-  const { song: { bars } } = useContext(SongContext);
+  //Find SongID from URL
+  const params: { id: string } = useParams();
+  const id = params.id;
 
-
+  const voiceString = queryString.parse(window.location.search);
+  let selectedVoice = 0;
+  if (voiceString.voice !== undefined) {
+    const voiceInt = parseInt(voiceString.voice);
+    if (voiceInt > voices.length || voiceInt <= 0) {
+      history.push(`/song/${1}?voice=1`);
+    } else {
+      selectedVoice = voiceString.voice - 1;
+    }
+  } else {
+    history.push(`/song/${1}?voice=1`);
+  }
 
   useEffect(() => {
     const item = localStorage.getItem("timeSignature");
@@ -41,7 +52,7 @@ export const SongView: React.FC<SongViewProps> = props => {
   }
 
   const isBarLineAfter = (index: number) => {
-    return index === bars.length - 1 ? true : false;
+    return index === voices[selectedVoice].bars.length - 1 ? true : false;
   }
 
   return (
@@ -56,7 +67,7 @@ export const SongView: React.FC<SongViewProps> = props => {
         <Grid container>
 
           <Grid item xs={1}>
-            {bars.map((bar, i) => {
+            {voices[selectedVoice].bars.map((bar, i) => {
               if (i === 0) { return (<TimeSignature key={i} />) }
               else if (xl && i % 4 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
               else if (!xs && !xl && i % 2 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
@@ -67,7 +78,7 @@ export const SongView: React.FC<SongViewProps> = props => {
 
           <Grid item xs={10}>
             <Grid container>
-              {bars.map((bar, i) => (
+              {voices[selectedVoice].bars.map((bar, i) => (
                 <Grid item xs={12} sm={6} xl={3} key={i} >
                   <BarContainer barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} house={bar.house} repBefore={bar.repBefore} repAfter={bar.repAfter} chordsAndTones={bar.chordsAndTones} barNumber={i} />
                 </Grid>

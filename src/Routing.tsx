@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
+import { Route, BrowserRouter, Switch, Redirect, useParams } from 'react-router-dom';
 
 import DashboardView from './views/DashboardView/DashboardView';
 import LoginView from './views/LoginView/LoginView';
@@ -11,8 +11,7 @@ function SongRouting() {
     return (
         <Switch>
             <SongContextProvider>
-                <Route exact path="/song/:id" component={SongView} />
-                <Route exact path="/song" component={SongView} />
+                <Route path="/song/:id" component={SongView} />
             </SongContextProvider>
         </Switch>
 
@@ -25,7 +24,7 @@ function Routing() {
             <Switch>
                 <Route path="/dashboard" component={DashboardView} />
                 <Route path="/common" component={CommonView} />
-                <Route path="/song" component={SongRouting} />
+                <Route path="/song/:id" component={SongRouting} />
 
                 <Route path="/" component={LoginView} />
                 <Route render={() => <Redirect to={{ pathname: "/" }} />} />

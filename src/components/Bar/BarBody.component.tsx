@@ -7,8 +7,8 @@ export type BarBodyProps = {
     chordsAndTones: IChordAndTones[],
 }
 
-function getColor(color: string): string {
-    let newColor = "white";
+export function getColor(color: string): string {
+    let newColor = "transparent";
     switch (color) {
         case "C":
             newColor = colors.C;
@@ -32,7 +32,7 @@ function getColor(color: string): string {
             newColor = colors.H;
             break;
         default:
-            newColor = "white";
+            newColor = "transparent";
     }
     return newColor;
 }

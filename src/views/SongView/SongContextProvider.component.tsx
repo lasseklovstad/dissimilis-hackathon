@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IBar } from '../../models/IBar';
+import { IVoice } from '../../models/IVoice';
 
 
 //State handling skjer i denne komponenten 
@@ -7,30 +7,22 @@ import { IBar } from '../../models/IBar';
 interface ISongContext {
     song: ISong,
     setSong: (song: ISong) => void,
-    addInstrument: (instrument: string) => void,
+    addVoice: (voices: IVoice) => void,
 }
 
-
 interface ISong {
-    instruments: string[],
     title: string,
-    bars: Array<IBar>,
+    voices: IVoice[]
 };
 
 export const SongContext = React.createContext<ISongContext>({
     song: {
-        instruments: [],
         title: "",
-        bars: [],
+        voices: []
     },
     setSong: (song: ISong) => { },
-    addInstrument: (instrument: string) => { },
+    addVoice: (voice: IVoice) => { },
 });
-
-
-
-
-
 
 const SongContextProvider: React.FC = props => {
 
@@ -43,127 +35,139 @@ const SongContextProvider: React.FC = props => {
     //Each instrument will have their own bars when we get to that point
     const [song, setSong] = useState<ISong>({
         title: "Lisa gikk til skolen",
-        instruments: [
-            "Gitar",
-            "Kontrabass",
-            "Klarinett",
+        voices: [
+            {
+                title: "master",
+                priority: 1,
+                bars: [
+                    {
+                        barNumber: 1,
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndTones: [
+                            {
+                                length: 1,
+                                notes: ["C"]
+                            },
+                            {
+                                length: 1,
+                                notes: ["D"]
+                            },
+                            {
+                                length: 1,
+                                notes: ["E"]
+                            },
+                            {
+                                length: 1,
+                                notes: ["F"]
+                            },
+                        ],
+                    },
+                    {
+                        barNumber: 2,
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndTones: [
+                            {
+                                length: 2,
+                                notes: ["G"]
+                            },
+                            {
+                                length: 2,
+                                notes: ["G"]
+                            }
+                        ],
+                    },
+                    {
+                        barNumber: 3,
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndTones: [
+                            {
+                                length: 2,
+                                notes: ["A"]
+                            },
+                            {
+                                length: 2,
+                                notes: [""]
+                            }
+                        ],
+                    },
+                ]
+            },
+            {
+                title: "Gitar",
+                priority: 2,
+                bars: [
+                    {
+                        barNumber: 1,
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndTones: [
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: ["E"]
+                            },
+                            {
+                                length: 1,
+                                notes: ["F"]
+                            },
+                        ],
+                    },
+                    {
+                        barNumber: 2,
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndTones: [
+                            {
+                                length: 2,
+                                notes: ["G"]
+                            },
+                            {
+                                length: 2,
+                                notes: ["G"]
+                            }
+                        ],
+                    },
+                    {
+                        barNumber: 3,
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndTones: [
+                            {
+                                length: 2,
+                                notes: ["A"]
+                            },
+                            {
+                                length: 2,
+                                notes: [""]
+                            }
+                        ],
+                    },
+                ]
+            },
         ],
-        bars: [
-            {
-                barNumber: 1,
-                barLineBefore: false,
-                barLineAfter: false,
-                repBefore: false,
-                repAfter: false,
-                chordsAndTones: [
-                    {
-                        length: 4,
-                        notes: ["C"]
-                    },
-                    {
-                        length: 1,
-                        notes: ["C", "A", "H"]
-                    },
-                    {
-                        length: 1,
-                        notes: ["H", "A", "C"]
-                    }
-                ],
-            },
-            {
-                barNumber: 2,
-                barLineBefore: false,
-                barLineAfter: true,
-                repBefore: true,
-                repAfter: false,
-                chordsAndTones: [
-                    {
-                        length: 6,
-                        notes: ["A"]
-                    }
-                ],
-            },
-            {
-                barNumber: 3,
-                barLineBefore: false,
-                barLineAfter: true,
-                repBefore: true,
-                repAfter: false,
-                chordsAndTones: [
-                    {
-                        length: 2,
-                        notes: ["A", "H", "C"]
-                    },
-                    {
-                        length: 2,
-                        notes: ["C", "H", "D"]
-                    },
-                    {
-                        length: 4,
-                        notes: ["H"]
-                    }
-                ],
-            },
-            {
-                barNumber: 4,
-                barLineBefore: false,
-                barLineAfter: true,
-                repBefore: true,
-                repAfter: false,
-                chordsAndTones: [
-                    {
-                        length: 1,
-                        notes: ["A", "H", "C"]
-                    },
-                    {
-                        length: 1,
-                        notes: ["C", "H", "D"]
-                    },
-                    {
-                        length: 1,
-                        notes: ["H"]
-                    },
-                    {
-                        length: 1,
-                        notes: ["C", "H", "D"]
-                    },
-                    {
-                        length: 2,
-                        notes: ["H"]
-                    },
-                    {
-                        length: 2,
-                        notes: ["C", "H", "D"]
-                    },
 
-
-                ],
-            },
-        ]
     });
 
     //Method to simplify change of state
-    const addInstrument = (newInstrument: string) => {
-        setSong({ ...song, instruments: [...song.instruments, newInstrument] });
+    const addVoice = (newVoice: IVoice) => {
+        setSong({ ...song, voices: [...song.voices, newVoice] });
     }
-
-    /*
-    const addBar = (instrument: string, bar: IBar) => {
-        //Find the instrument
-
-        //Add a new bar to the bar-array of that instrument
-    }
-    */
-
-
-
-
 
     //Add all methods here
     const value = {
         song,
         setSong,
-        addInstrument,
+        addVoice,
     }
 
 
