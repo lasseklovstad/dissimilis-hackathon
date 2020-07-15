@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, makeStyles } from "@material-ui/core";
+import { Box, makeStyles, Typography } from "@material-ui/core";
 import colors from "../../utils/colors";
 import { IChordAndTones } from "../../models/IBar";
 
@@ -9,6 +9,7 @@ export type BarBodyProps = {
 
 function getColor(color: string): string {
     let newColor = "white";
+
     switch (color) {
         case "C":
             newColor = colors.C;
@@ -31,6 +32,9 @@ function getColor(color: string): string {
         case "H":
             newColor = colors.H;
             break;
+        case "1": case "2": case "3": case "4": case "5":
+            newColor = colors.semitone;
+            break;
         default:
             newColor = "white";
     }
@@ -38,6 +42,10 @@ function getColor(color: string): string {
 }
 export const BarBody: React.FC<BarBodyProps> = props => {
     const classes = useStyles();
+
+    const verifySemiTone = (tone: string) => {
+        return tone === "1" || tone === "2" || tone === "3" || tone === "4" || tone === "5";
+    }
 
 
     return (
@@ -47,7 +55,9 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                     <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length }} >
                         {note.notes.map((type, index) => {
                             return (
-                                <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) }} ></Box>
+                                <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) }} >
+                                    <Typography className={classes.tangentText} variant="h2">{verifySemiTone(type) ? type : ""}</Typography>
+                                </Box>
                             )
                         })}
 
@@ -78,6 +88,13 @@ const useStyles = makeStyles({
         height: "10px",
         borderRadius: "5px",
         margin: "2px 0",
+    },
+    tangentText: {
+        color: colors.white,
+        marginLeft: "4px",
+        position: "relative",
+        top: "50%",
+        transform: "translateY(-50%)"
     }
 
 })
