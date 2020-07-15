@@ -8,6 +8,9 @@ interface ISongContext {
     song: ISong,
     setSong: (song: ISong) => void,
     addInstrument: (instrument: string) => void,
+    deleteBar: (index: string) => void,
+    getBar: (id: string) => IBar | undefined,
+    duplicateBar: (id: string) => void,
 }
 
 
@@ -25,6 +28,13 @@ export const SongContext = React.createContext<ISongContext>({
     },
     setSong: (song: ISong) => { },
     addInstrument: (instrument: string) => { },
+    deleteBar: (index: string) => { },
+    getBar: (id: string) => {
+        throw new Error("getBar() in Song Context is not implemented")
+    },
+    duplicateBar: (id: string) => {
+        throw new Error("duplicateBar() in Song Context is not implemented")
+    },
 });
 
 
@@ -34,7 +44,7 @@ export const SongContext = React.createContext<ISongContext>({
 
 const SongContextProvider: React.FC = props => {
 
-    //Initial State. 
+    //Initial State.
 
     //For now, I'm just setting it static until we can retrieve the data from the server
 
@@ -50,8 +60,15 @@ const SongContextProvider: React.FC = props => {
         ],
         bars: [
             {
+                id: '_' + Math.random().toString(36).substr(2, 9),
                 barNumber: 1,
+<<<<<<< HEAD
                 repBefore: false,
+=======
+                barLineBefore: false,
+                barLineAfter: false,
+                repBefore: true,
+>>>>>>> ff48f7d9fafbdbd13feeb14c6cecfa4c87f2c42c
                 repAfter: false,
                 chordsAndTones: [
                     {
@@ -64,22 +81,24 @@ const SongContextProvider: React.FC = props => {
                     },
                     {
                         length: 1,
-                        notes: ["H", "A", "C"]
+                        notes: ["H", "A", "1"]
                     }
                 ],
             },
             {
+                id: '_' + Math.random().toString(36).substr(2, 9),
                 barNumber: 2,
                 repBefore: false,
                 repAfter: false,
                 chordsAndTones: [
                     {
                         length: 6,
-                        notes: ["A"]
+                        notes: ["2"]
                     }
                 ],
             },
             {
+                id: '_' + Math.random().toString(36).substr(2, 9),
                 barNumber: 3,
                 repBefore: false,
                 repAfter: false,
@@ -99,6 +118,7 @@ const SongContextProvider: React.FC = props => {
                 ],
             },
             {
+                id: '_' + Math.random().toString(36).substr(2, 9),
                 barNumber: 4,
                 repBefore: false,
                 repAfter: false,
@@ -141,13 +161,39 @@ const SongContextProvider: React.FC = props => {
         setSong({ ...song, instruments: [...song.instruments, newInstrument] });
     }
 
-    /*
-    const addBar = (instrument: string, bar: IBar) => {
-        //Find the instrument
 
-        //Add a new bar to the bar-array of that instrument
+
+    const getBar = (id: string) => {
+        let returnBar = undefined;
+        song.bars.forEach(bar => {
+            if (bar.id === id) {
+                returnBar = bar;
+            }
+        });
+        return returnBar;
     }
-    */
+
+    const deleteBar = (id: string) => {
+        setSong({ ...song, bars: song.bars.filter((item) => item.id !== id) });
+    }
+
+    const duplicateBar = (id: string) => {
+        const bar = getBar(id);
+
+        if (bar !== undefined) {
+            const indexOfOriginalBar = song.bars.indexOf(bar);
+
+            let copyOfBar: IBar = Object.assign({}, bar);
+            let copyOfArray = song.bars.slice();
+
+            copyOfBar.id = '_' + Math.random().toString(36).substr(2, 9);
+
+            copyOfArray.splice(indexOfOriginalBar, 0, copyOfBar);
+            setSong({ ...song, bars: copyOfArray });
+        }
+
+
+    }
 
 
 
@@ -158,6 +204,9 @@ const SongContextProvider: React.FC = props => {
         song,
         setSong,
         addInstrument,
+        deleteBar,
+        getBar,
+        duplicateBar,
     }
 
 

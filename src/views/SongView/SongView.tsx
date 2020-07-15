@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
-import SongContextProvider, { SongContext } from "./SongContextProvider.component";
+import { SongContext } from "./SongContextProvider.component";
 import { Grid, makeStyles, Box, useMediaQuery, Button, } from '@material-ui/core';
 import { TimeSignature, BarNumber } from '../../components/SongViewComponents/SongView.component';
 import { BarContainer } from "../../components/BarContainer/BarContainer.component";
@@ -70,7 +70,7 @@ export const SongView: React.FC<SongViewProps> = props => {
             <Grid container>
               {bars.map((bar, i) => (
                 <Grid item xs={12} sm={6} xl={3} key={i} >
-                  <BarContainer barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} house={bar.house} repBefore={bar.repBefore} repAfter={bar.repAfter} chordsAndTones={bar.chordsAndTones} barNumber={i} />
+                  <BarContainer bar={bar} barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} />
                 </Grid>
               ))}
             </Grid>

@@ -29,6 +29,8 @@ function Routing() {
 
                 <Route path="/" component={LoginView} />
                 <Route render={() => <Redirect to={{ pathname: "/" }} />} />
+
+
             </Switch>
         </BrowserRouter>
     );
