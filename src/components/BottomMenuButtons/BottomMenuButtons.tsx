@@ -17,7 +17,7 @@ export type ButtonProps = {
     text: string,
     link: string,
     onClick?: () => void,
-    color?: string,
+
 };
 export type AutocompleteProps = {
     icon: React.ReactNode,
@@ -43,13 +43,13 @@ export const MenuButtonWithAddIcon: FunctionComponent<AddButtonProps> = (props) 
 export const MenuButton: FunctionComponent<ButtonProps> = (props) => {
     const styles = useStyles();
     return (
-        <Card className={styles.button}>
-            <CardActionArea to={props.link} component={Link}>
-                <Box className={styles.container} style={{ backgroundColor: props.color }}>
-                    <Box p={2}><Typography>{props.text}</Typography></Box>
-                </Box>
-            </CardActionArea>
-        </Card>
+        <Button
+            variant="outlined"
+            size="large"
+            className={styles.addbutton}
+        >
+            <Typography>{props.text}</Typography>
+        </Button>
     );
 }
 
