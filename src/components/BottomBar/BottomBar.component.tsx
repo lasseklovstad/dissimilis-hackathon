@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, FormControl, MenuItem, Select, } from '@material-ui/core';
+import { makeStyles, FormControl, MenuItem, Select, Button, } from '@material-ui/core';
 import MenuButton, { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
 import { colors } from '../../utils/colors';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
@@ -41,10 +41,12 @@ function BottomBar() {
                     {Menu}
                 </div>
                 <div className={classes.flexelement}>
-                    <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} tones={tones} />
+                    <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} tones={tones} noOptionsText={t("BottomBar:noOptions")} />
                 </div>
                 <div className={classes.flexelement}>
                     <MenuButton text={t("BottomBar:chord")} link={"/song"} />
+
+
                 </div>
                 <div className={classes.flexelement}>
                     <MenuButton text={t("BottomBar:note")} link={"/song"} />

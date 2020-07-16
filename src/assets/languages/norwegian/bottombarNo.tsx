@@ -6,6 +6,7 @@ export const bottombarNo = {
     "addHouse": "Legg til hus",
     "repetition": "Ny repetisjon",
     "note": "Note",
+    "noOptions": "Ingen valg",
     "wholeNote": "Helnote",
     "halfNote": "Halvnote",
     "quarterNote": "Firedelsnote",

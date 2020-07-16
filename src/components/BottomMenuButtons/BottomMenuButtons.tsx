@@ -22,6 +22,7 @@ export type ButtonProps = {
 export type AutocompleteProps = {
     icon: React.ReactNode,
     tones: string[],
+    noOptionsText: string
 };
 
 
@@ -58,6 +59,8 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props
         <Autocomplete className={styles.dropdown}
             options={props.tones}
             defaultValue={props.tones[0]}
+            closeIcon={false}
+            noOptionsText={props.noOptionsText}
             renderInput={(params) => <TextField {...params} variant="outlined" InputProps={{ ...params.InputProps, className: styles.dropdown }} />}
         />
     );
