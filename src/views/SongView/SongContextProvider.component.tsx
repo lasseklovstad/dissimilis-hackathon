@@ -239,7 +239,6 @@ const SongContextProvider: React.FC = props => {
         addEmptyBar
     }
 
-
     return (
         <SongContext.Provider value={value}>
             {props.children}
