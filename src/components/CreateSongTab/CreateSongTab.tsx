@@ -4,6 +4,8 @@ import DashboardButton, { DashboardButtonWithAddIconNoLink } from "../DashboardB
 import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
+import { IVoice } from "../../models/IVoice";
+import { useHistory } from "react-router-dom";
 
 
 export type CreateSongTabProps = {
@@ -30,15 +32,18 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const [modalStyle] = useState(getModalStyle);
     const [textFieldInput, setTextFieldInput] = useState<string>("");
 
+    const history = useHistory();
 
-    const { song: { instruments }, addInstrument } = useContext(SongContext);
+    const { song: { voices }, addVoice } = useContext(SongContext);
 
     const classes = useStyles();
 
     const handleAddInstrument = () => {
-        addInstrument(textFieldInput);
+        addVoice({ title: textFieldInput, priority: voices.length, bars: [] });
         setModalIsOpen(false);
         setTextFieldInput("");
+        const newIndex = voices.length + 1;
+        history.push("?voice=" + newIndex.toString());
     }
 
     const handleOpen = () => {
@@ -55,18 +60,23 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
 
     const { t } = useTranslation();
 
+    const queryString = require('query-string');
+    const voiceString = queryString.parse(window.location.search);
+    const selectedVoice = parseInt(voiceString.voice);
+
+
     return (
         <Grid container>
             <Grid item xs={"auto"} sm={1}></Grid>
             <Grid item xs={12} sm={10}>
                 <Grid container spacing={2}>
                     <Grid item>
-                        <DashboardButton color={colors.gray_200} text={t("CreateSongTab:song")} link={"/song"} />
+                        <DashboardButton selected={selectedVoice === 1} text={t("CreateSongTab:song")} link={"/song/1?voice=1"} />
                     </Grid>
-                    {instruments.map((instrument: string, index: number) => {
+                    {voices.slice(1).map((voices: IVoice, index: number) => {
                         return (
-                            <Grid item key={index}>
-                                <DashboardButton text={instrument} link={"/"} />
+                            <Grid item key={index + 2}>
+                                <DashboardButton selected={selectedVoice === index + 2} text={voices.title} link={`/song/1?voice=${index + 2}`} />
                             </Grid>
                         )
                     })}

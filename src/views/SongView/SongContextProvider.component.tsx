@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { IVoice } from '../../models/IVoice';
 import { IBar } from '../../models/IBar';
 
 
@@ -7,40 +8,32 @@ import { IBar } from '../../models/IBar';
 interface ISongContext {
     song: ISong,
     setSong: (song: ISong) => void,
-    addInstrument: (instrument: string) => void,
-    deleteBar: (index: string) => void,
-    getBar: (id: string) => IBar | undefined,
-    duplicateBar: (id: string) => void,
+    addVoice: (voices: IVoice) => void,
+    deleteBar: (index: number, voiceId: number) => void,
+    getBar: (id: number, voiceId: number) => IBar | undefined,
+    duplicateBar: (id: number, voiceId: number) => void,
 }
 
-
 interface ISong {
-    instruments: string[],
     title: string,
-    bars: Array<IBar>,
+    voices: IVoice[]
 };
 
 export const SongContext = React.createContext<ISongContext>({
     song: {
-        instruments: [],
         title: "",
-        bars: [],
+        voices: []
     },
     setSong: (song: ISong) => { },
-    addInstrument: (instrument: string) => { },
-    deleteBar: (index: string) => { },
-    getBar: (id: string) => {
+    addVoice: (voice: IVoice) => { },
+    deleteBar: (index: number, voiceId: number) => { },
+    getBar: (id: number, voiceId: number) => {
         throw new Error("getBar() in Song Context is not implemented")
     },
-    duplicateBar: (id: string) => {
+    duplicateBar: (id: number, voiceId: number) => {
         throw new Error("duplicateBar() in Song Context is not implemented")
     },
 });
-
-
-
-
-
 
 const SongContextProvider: React.FC = props => {
 
@@ -53,137 +46,176 @@ const SongContextProvider: React.FC = props => {
     //Each instrument will have their own bars when we get to that point
     const [song, setSong] = useState<ISong>({
         title: "Lisa gikk til skolen",
-        instruments: [
-            "Gitar",
-            "Kontrabass",
-            "Klarinett",
+        voices: [
+            {
+                title: "master",
+                priority: 1,
+                bars: [
+                    {
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndNotes: [
+                            {
+                                length: 1,
+                                notes: ["C"]
+                            },
+                            {
+                                length: 1,
+                                notes: ["D"]
+                            },
+                            {
+                                length: 1,
+                                notes: ["E"]
+                            },
+                            {
+                                length: 1,
+                                notes: ["F"]
+                            },
+                        ],
+                    },
+                    {
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndNotes: [
+                            {
+                                length: 2,
+                                notes: ["G"]
+                            },
+                            {
+                                length: 2,
+                                notes: ["G"]
+                            }
+                        ],
+                    },
+                    {
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndNotes: [
+                            {
+                                length: 2,
+                                notes: ["A"]
+                            },
+                            {
+                                length: 2,
+                                notes: [""]
+                            }
+                        ],
+                    },
+                ]
+            },
+            {
+                title: "Gitar",
+                priority: 2,
+                bars: [
+                    {
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndNotes: [
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: ["E"]
+                            },
+                            {
+                                length: 1,
+                                notes: ["F"]
+                            },
+                        ],
+                    },
+                    {
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndNotes: [
+                            {
+                                length: 2,
+                                notes: ["G"]
+                            },
+                            {
+                                length: 2,
+                                notes: ["G"]
+                            }
+                        ],
+                    },
+                    {
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndNotes: [
+                            {
+                                length: 2,
+                                notes: ["A"]
+                            },
+                            {
+                                length: 2,
+                                notes: [""]
+                            }
+                        ],
+                    },
+                ]
+            },
         ],
-        bars: [
-            {
-                id: '_' + Math.random().toString(36).substr(2, 9),
-                barNumber: 1,
-                repBefore: false,
-                repAfter: false,
-                chordsAndTones: [
-                    {
-                        length: 4,
-                        notes: ["C"]
-                    },
-                    {
-                        length: 1,
-                        notes: ["C", "A", "H"]
-                    },
-                    {
-                        length: 1,
-                        notes: ["H", "A", "1"]
-                    }
-                ],
-            },
-            {
-                id: '_' + Math.random().toString(36).substr(2, 9),
-                barNumber: 2,
-                repBefore: false,
-                repAfter: false,
-                chordsAndTones: [
-                    {
-                        length: 6,
-                        notes: ["2"]
-                    }
-                ],
-            },
-            {
-                id: '_' + Math.random().toString(36).substr(2, 9),
-                barNumber: 3,
-                repBefore: false,
-                repAfter: false,
-                chordsAndTones: [
-                    {
-                        length: 2,
-                        notes: ["A", "H", "C"]
-                    },
-                    {
-                        length: 2,
-                        notes: ["C", "H", "D"]
-                    },
-                    {
-                        length: 4,
-                        notes: ["H"]
-                    }
-                ],
-            },
-            {
-                id: '_' + Math.random().toString(36).substr(2, 9),
-                barNumber: 4,
-                repBefore: false,
-                repAfter: false,
-                chordsAndTones: [
-                    {
-                        length: 1,
-                        notes: ["A", "H", "C"]
-                    },
-                    {
-                        length: 1,
-                        notes: ["C", "H", "D"]
-                    },
-                    {
-                        length: 1,
-                        notes: ["H"]
-                    },
-                    {
-                        length: 1,
-                        notes: ["C", "H", "D"]
-                    },
-                    {
-                        length: 2,
-                        notes: ["H"]
-                    },
-                    {
-                        length: 1,
-                        notes: ["C", "H", "D"]
-                    },
-                    {
-                        length: 1,
-                        notes: ["D", "H", "D"]
-                    },
-                ],
-            },
-        ]
+
     });
 
     //Method to simplify change of state
-    const addInstrument = (newInstrument: string) => {
-        setSong({ ...song, instruments: [...song.instruments, newInstrument] });
+    const addVoice = (newVoice: IVoice) => {
+        for (let i = 0; i < song.voices[0].bars.length; i++) {
+            const tempBar: IBar = { repBefore: false, repAfter: false, chordsAndNotes: [] }
+            newVoice.bars.push(tempBar);
+        }
+        setSong({ ...song, voices: [...song.voices, newVoice] });
     }
 
-
-
-    const getBar = (id: string) => {
+    const getBar = (id: number, voiceId: number) => {
         let returnBar = undefined;
-        song.bars.forEach(bar => {
-            if (bar.id === id) {
+        song.voices[voiceId].bars.forEach((bar, i) => {
+            if (i === id) {
                 returnBar = bar;
             }
         });
         return returnBar;
     }
 
-    const deleteBar = (id: string) => {
-        setSong({ ...song, bars: song.bars.filter((item) => item.id !== id) });
+    const deleteBar = (id: number, voiceId: number) => {
+        setSong({ ...song, voices: song.voices.map((voice) => true ? { ...voice, bars: voice.bars.filter((bar, i) => i !== id) } : voice) });
     }
 
-    const duplicateBar = (id: string) => {
-        const bar = getBar(id);
+    //Method to add an empty bar at a specific index to each of all voices except the master sheet/song
+    const copyAndAddEmptyBars = (index: number) => {
+        let tempArray = [];
+        const newBar: IBar = { repBefore: false, repAfter: false, chordsAndNotes: [] };
+        for (let i = 1; i < song.voices.length; i++) {
+            let copyOfArray = song.voices[i].bars.slice();
+            copyOfArray.splice(index + 1, 0, newBar);
+            tempArray.push(copyOfArray);
+        }
+        return tempArray;
+    }
+
+
+    const duplicateBar = (id: number, voiceId: number) => {
+        const bar = getBar(id, voiceId);
+
 
         if (bar !== undefined) {
-            const indexOfOriginalBar = song.bars.indexOf(bar);
+            const indexOfOriginalBar = song.voices[voiceId].bars.indexOf(bar);
 
             let copyOfBar: IBar = Object.assign({}, bar);
-            let copyOfArray = song.bars.slice();
-
-            copyOfBar.id = '_' + Math.random().toString(36).substr(2, 9);
+            let copyOfArray = song.voices[voiceId].bars.slice();
 
             copyOfArray.splice(indexOfOriginalBar, 0, copyOfBar);
-            setSong({ ...song, bars: copyOfArray });
+
+            
+            const tempArray = copyAndAddEmptyBars(indexOfOriginalBar);
+            //If master sheet add the new copy of bar to the array
+            //Else add the copied bar-array with an empty bar
+            setSong({ ...song, voices: song.voices.map((voice, i) => i === 0 ? { ...voice, bars: copyOfArray } : { ...voice, bars: tempArray[i - 1] }) });
         }
 
 
@@ -197,7 +229,7 @@ const SongContextProvider: React.FC = props => {
     const value = {
         song,
         setSong,
-        addInstrument,
+        addVoice,
         deleteBar,
         getBar,
         duplicateBar,

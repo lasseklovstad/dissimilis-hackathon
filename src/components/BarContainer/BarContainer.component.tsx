@@ -10,27 +10,32 @@ import { IBar } from "../../models/IBar"
 export type BarContainerProps = {
     barLineBefore: boolean,
     barLineAfter: boolean,
-    bar: IBar
+    bar: IBar,
+    masterSheet: boolean,
 };
 
 export const BarContainer: React.FC<BarContainerProps> = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const { deleteBar, duplicateBar } = useContext(SongContext);
+    const { deleteBar, duplicateBar, song: { voices } } = useContext(SongContext);
     const bar = props.bar
+
+    const queryString = require('query-string');
+    const voiceStringFromURL = queryString.parse(window.location.search);
+    const voiceId:number = parseInt(voiceStringFromURL.voice);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
 
     const handleClose = (method: string) => {
-
+        const index = voices[0].bars.indexOf(bar);
         if (method === "delete") {
-            deleteBar(bar.id);
+            deleteBar(index, voiceId - 1);
         }
         if (method === "duplicate") {
-            duplicateBar(bar.id);
+            duplicateBar(index, voiceId - 1);
         }
         setAnchorEl(null);
     };
@@ -52,12 +57,12 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar">
-                            <Bar repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndTones={bar.chordsAndTones} />
+                            <Bar repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndNotes={bar.chordsAndNotes} />
                         </Grid>
                         <Grid item xs={props.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: props.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="barline after the bar"></Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.secondRow} role="row" >
+                <Grid item xs={12} className={classes.secondRow} role="row" style={{ display: props.masterSheet ? "block" : "none" }} >
                     <Grid container style={{ height: "100%" }} role="grid" >
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} role="gridcell" ></Grid>
                         <Grid item xs={10} role="gridcell" >
