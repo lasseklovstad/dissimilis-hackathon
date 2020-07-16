@@ -62,10 +62,10 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                         <Grid item xs={props.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: props.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="barline after the bar"></Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.secondRow} role="row" style={{ display: props.masterSheet ? "block" : "none" }} >
+                <Grid item xs={12} className={classes.secondRow} role="row" >
                     <Grid container style={{ height: "100%" }} role="grid" >
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} role="gridcell" ></Grid>
-                        <Grid item xs={10} role="gridcell" >
+                        <Grid item xs={10} role="gridcell" style={{ display: props.masterSheet ? "block" : "none" }}>
                             <Box display="flex" flexGrow={1}>
                                 <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} role="button" aria-label="button to make changes to the bar">
                                     <MoreHorizIcon style={{ marginLeft: "0px" }} />
