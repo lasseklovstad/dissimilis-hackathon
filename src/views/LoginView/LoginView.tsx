@@ -28,7 +28,7 @@ const LoginView: FC<LoginViewProps> = () => {
     history.push("/dashboard");
   };
 
-  const [warningDisplayed, showWarning] = React.useState(false);
+  const [warningDisplayed, setWarningDisplayed] = React.useState(false);
   const warning =
     (<Collapse in={warningDisplayed}>
       <Alert
@@ -37,7 +37,7 @@ const LoginView: FC<LoginViewProps> = () => {
           <IconButton
             size="small"
             onClick={() => {
-              showWarning(false);
+              setWarningDisplayed(false);
             }}
           >
             <CloseIcon />
