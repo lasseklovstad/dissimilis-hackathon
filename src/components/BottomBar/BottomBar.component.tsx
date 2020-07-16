@@ -140,23 +140,7 @@ const useStyles = makeStyles({
     removeDefaultStyling: {
         "& .MuiOutlinedInput-notchedOutline": {
             border: "0",
-        },
-
-    },
-    removeDefaultToggleStyling: {
-        "& .MuiToggleButton-root": {
-            border: "0px"
-        },
-        "& .MuiToggleButton": {
-            border: "10px solid black",
-            borderRadius: "100px",
-            backgroundColor: "blue"
-        },
-        "& .MuiToggleButton-label": {
-            border: "0px",
-            color: colors.black,
-        },
-
+        }
     }
 });
 export default BottomBar;
