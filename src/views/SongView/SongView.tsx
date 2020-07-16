@@ -3,9 +3,10 @@ import { useHistory } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
 import { SongContext } from "./SongContextProvider.component";
-import { Grid, makeStyles, Box, useMediaQuery, Button, } from '@material-ui/core';
+import { Grid, makeStyles, useMediaQuery } from '@material-ui/core';
 import { TimeSignature, BarNumber } from '../../components/SongViewComponents/SongView.component';
 import { BarContainer } from "../../components/BarContainer/BarContainer.component";
+import BottomBar from '../../components/BottomBar/BottomBar.component';
 
 export type SongViewProps = {
 
@@ -32,9 +33,6 @@ export const SongView: React.FC<SongViewProps> = props => {
     }
   }, [history]);
 
-  const addEmptyBar = () => {
-    //setBars([...bars, { bars: [] }])
-  }
 
   const isBarLineBefore = (index: number) => {
     return xl && index % 4 === 0 ? true : !xs && !xl && index % 2 === 0 ? true : xs ? true : false
@@ -45,7 +43,7 @@ export const SongView: React.FC<SongViewProps> = props => {
   }
 
   return (
-    <Grid container className={classes.root}>
+    <><Grid container className={classes.root}>
       <Grid item xs={12} >
         <NavBarCreateSong />
       </Grid>
@@ -69,23 +67,18 @@ export const SongView: React.FC<SongViewProps> = props => {
             <Grid container>
               {bars.map((bar, i) => (
                 <Grid item xs={12} sm={6} xl={3} key={i} >
-                  <BarContainer bar={bar} barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)}/>
+                  <BarContainer bar={bar} barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} />
                 </Grid>
               ))}
             </Grid>
           </Grid>
-
         </Grid>
+
+
       </Grid>
-      <Box mb={4}>
-        <Button variant="outlined" color="primary" onClick={addEmptyBar}>
-          Legg til takt
-        </Button>
-      </Box>
-
     </Grid>
-
-
+      <BottomBar />
+    </>
 
   );
 }
@@ -94,8 +87,10 @@ const useStyles = makeStyles({
   root: {
     marginLeft: "24px",
     marginTop: "32px",
-    marginRight: "32px",
-    width: "auto"
+    marginRight: "24px",
+    marginBottom: "24px",
+    width: "auto",
+
   }
 })
 

@@ -62,9 +62,7 @@ const SongContextProvider: React.FC = props => {
             {
                 id: '_' + Math.random().toString(36).substr(2, 9),
                 barNumber: 1,
-                barLineBefore: false,
-                barLineAfter: false,
-                repBefore: true,
+                repBefore: false,
                 repAfter: false,
                 chordsAndTones: [
                     {
@@ -84,9 +82,7 @@ const SongContextProvider: React.FC = props => {
             {
                 id: '_' + Math.random().toString(36).substr(2, 9),
                 barNumber: 2,
-                barLineBefore: false,
-                barLineAfter: true,
-                repBefore: true,
+                repBefore: false,
                 repAfter: false,
                 chordsAndTones: [
                     {
@@ -98,9 +94,7 @@ const SongContextProvider: React.FC = props => {
             {
                 id: '_' + Math.random().toString(36).substr(2, 9),
                 barNumber: 3,
-                barLineBefore: false,
-                barLineAfter: true,
-                repBefore: true,
+                repBefore: false,
                 repAfter: false,
                 chordsAndTones: [
                     {
@@ -120,9 +114,7 @@ const SongContextProvider: React.FC = props => {
             {
                 id: '_' + Math.random().toString(36).substr(2, 9),
                 barNumber: 4,
-                barLineBefore: false,
-                barLineAfter: true,
-                repBefore: true,
+                repBefore: false,
                 repAfter: false,
                 chordsAndTones: [
                     {
@@ -146,11 +138,13 @@ const SongContextProvider: React.FC = props => {
                         notes: ["H"]
                     },
                     {
-                        length: 2,
+                        length: 1,
                         notes: ["C", "H", "D"]
                     },
-
-
+                    {
+                        length: 1,
+                        notes: ["D", "H", "D"]
+                    },
                 ],
             },
         ]
