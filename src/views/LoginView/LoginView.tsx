@@ -55,7 +55,7 @@ const LoginView: FC<LoginViewProps> = () => {
         <LoginLogo className={classes.loginlogo} />
         <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled" onSubmit={tryLogin}></TextField>
         <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled" onSubmit={tryLogin}></TextField>
-        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={tryLogin}>{t("LoginView:login")}</Button>
+        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={(tryLogin)}>{t("LoginView:login")}</Button>
         {warning}
       </Grid>
     </Grid>
