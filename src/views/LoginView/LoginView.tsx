@@ -13,7 +13,6 @@ import { useLoginRedirect } from '../../utils/useLoginRedirect';
 import { useLocation } from 'react-router-dom';
 import { useLoginPost } from '../../utils/useLoginPost';
 import { AuthContext } from '../../contexts/auth';
-import { dashboardEn } from '../../assets/languages/english/dashboardEn';
 
 export type LoginViewProps = {
 
@@ -30,6 +29,9 @@ const LoginView: FC<LoginViewProps> = () => {
 
 
   //const { setLoggetIn } = useContext(AuthContext);
+  if (isLoggedIn) {
+    history.push("/dashboard");
+  }
 
   const tryLogin = () => {
     axiosGet.fetchData().then(window.open(axiosGet.header.location, "_self"))
@@ -37,21 +39,15 @@ const LoginView: FC<LoginViewProps> = () => {
 
   const code = new URLSearchParams(useLocation().search);
   const axiosPost = useLoginPost(code.get("code"))
+
+  // Burde jeg bruek useEffect her?
   useEffect(() => {
-    if (axiosPost.status === 200) {
+    if (axiosPost && axiosPost.status === 200) {
       setIsLoggedIn(true)
       setToken(axiosPost.data)
       console.log(token)
     }
-  }, [axiosPost.status])
-
-  console.log("Heihei" + isLoggedIn)
-  if (isLoggedIn) {
-    console.log("This is working?")
-    history.push("/dashboard");
-  } else {
-    console.log(isLoggedIn)
-  }
+  }, [axiosPost])
 
   return (
     <Grid container className={classes.root} >
