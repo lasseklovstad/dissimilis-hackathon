@@ -16,6 +16,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [header, setHeader] = useState()
+  const [status, setStatus] = useState(0)
 
   // Add params to the url   
   let baseUrl = 'https://localhost:5001/api/';
@@ -32,6 +33,8 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
       const result = await axios.get<T>(finalUrl);
       setData(result.data);
       setHeader(result.headers)
+      setStatus(result.status)
+
     } catch (error) {
       setIsError(true);
       setErrorMessage(error);
@@ -44,20 +47,26 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     try {
       const result = await axios.post<T>(finalUrl, options.body)
       setData(result.data)
-    } catch {
+      setHeader(result.headers)
+      setStatus(result.status)
+
+    } catch (error) {
+      setIsError(true);
+      setErrorMessage(error);
+      console.log(error);
     }
   }
 
   useEffect(() => {
-    method == "get" && fetchData();
+    method === "get" && fetchData();
   }, options.dependencies || []);
 
   useEffect(() => {
-    method == "post" && postData();
+    method === "post" && postData();
   }, options.dependencies || []);
 
 
-  return { data, isLoading, isError, errorMessage, fetchData, header } as ApiServiceReturn<T>;
+  return { data, isLoading, isError, errorMessage, fetchData, status, header } as ApiServiceReturn<T>;
 };
 
 /**
@@ -77,5 +86,6 @@ export type ApiServiceReturn<T> = {
   isError: boolean
   errorMessage: string
   fetchData: Function
+  status: number
   header: any
 }

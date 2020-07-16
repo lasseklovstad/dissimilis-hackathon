@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -8,10 +8,12 @@ import { ReactComponent as BackgroundImage } from '../../assets/images/butterfly
 import { ReactComponent as LoginLogo } from '../../assets/images/LoginLogo.svg';
 import { colors } from '../../utils/colors';
 import { useTranslation } from "react-i18next";
-import { useHistory } from 'react-router';
+import { useHistory, useRouteMatch } from 'react-router';
 import { useLoginRedirect } from '../../utils/useLoginRedirect';
 import { useLocation } from 'react-router-dom';
 import { useLoginPost } from '../../utils/useLoginPost';
+import { AuthContext } from '../../contexts/auth';
+import { dashboardEn } from '../../assets/languages/english/dashboardEn';
 
 export type LoginViewProps = {
 
@@ -22,14 +24,34 @@ const LoginView: FC<LoginViewProps> = () => {
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
   const history = useHistory();
-  const axios = useLoginRedirect()
+  const axiosGet = useLoginRedirect()
+  const { setIsLoggedIn, isLoggedIn, setToken, token } = useContext(AuthContext)
+
+
+
+  //const { setLoggetIn } = useContext(AuthContext);
 
   const tryLogin = () => {
-    axios.fetchData().then(window.open(axios.header.location))
+    axiosGet.fetchData().then(window.open(axiosGet.header.location, "_self"))
   }
 
   const code = new URLSearchParams(useLocation().search);
-  useLoginPost(code.get("code"))
+  const axiosPost = useLoginPost(code.get("code"))
+  useEffect(() => {
+    if (axiosPost.status === 200) {
+      setIsLoggedIn(true)
+      setToken(axiosPost.data)
+      console.log(token)
+    }
+  }, [axiosPost.status])
+
+  console.log("Heihei" + isLoggedIn)
+  if (isLoggedIn) {
+    console.log("This is working?")
+    history.push("/dashboard");
+  } else {
+    console.log(isLoggedIn)
+  }
 
   return (
     <Grid container className={classes.root} >
