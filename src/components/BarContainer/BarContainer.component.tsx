@@ -22,8 +22,8 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const bar = props.bar
 
     const queryString = require('query-string');
-    const voiceString = queryString.parse(window.location.search);
-    const voiceInt = parseInt(voiceString.voice);
+    const voiceStringFromURL = queryString.parse(window.location.search);
+    const voiceId:number = parseInt(voiceStringFromURL.voice);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -32,10 +32,10 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const handleClose = (method: string) => {
         const index = voices[0].bars.indexOf(bar);
         if (method === "delete") {
-            deleteBar(index, voiceInt - 1);
+            deleteBar(index, voiceId - 1);
         }
         if (method === "duplicate") {
-            duplicateBar(index, voiceInt - 1);
+            duplicateBar(index, voiceId - 1);
         }
         setAnchorEl(null);
     };
