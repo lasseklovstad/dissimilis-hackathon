@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { makeStyles, FormControl, MenuItem, Select, Button, Typography } from '@material-ui/core';
 import MenuButton, { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
 import { colors } from '../../utils/colors';
@@ -18,9 +18,9 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 function BottomBar() {
     const { t } = useTranslation();
     const classes = useStyles();
-    //const notes: string[] = Object.keys(notes);
-    const tones: string[] = Object.keys(notes);
-    const [note, setNote] = React.useState(1);
+    const noteArray: string[] = Object.keys(notes);
+    const chordArray: string[] = Object.keys(chords);
+    const [note, setNote] = React.useState(8);
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setNote(event.target.value as number);
     };
@@ -32,18 +32,19 @@ function BottomBar() {
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
             >
-                <MenuItem value={1}><WholenoteIcon /></MenuItem>
-                <MenuItem value={2}> <HalfnoteIcon /></MenuItem>
-                <MenuItem value={3}> <QuarternoteIcon /></MenuItem>
-                <MenuItem value={4}> <EighthnoteIcon /></MenuItem>
+                <MenuItem value={8}> <WholenoteIcon /></MenuItem>
+                <MenuItem value={4}> <HalfnoteIcon /></MenuItem>
+                <MenuItem value={2}> <QuarternoteIcon /></MenuItem>
+                <MenuItem value={1}> <EighthnoteIcon /></MenuItem>
             </Select>
         </FormControl>
 
 
-    const [alignment, setAlignment] = React.useState<string | null>('left');
+    const [toggle, setToggle] = useState<boolean>(true);
 
-    const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
-        setAlignment(newAlignment);
+    const handleToggle = (newValue: boolean) => {
+        setToggle(newValue);
+        console.log("hello")
     };
 
     return (
@@ -54,23 +55,21 @@ function BottomBar() {
                     {Menu}
                 </div>
                 <div className={classes.flexelement}>
-                    <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} tones={tones} noOptionsText={t("BottomBar:noOptions")} />
+                    <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} notesOrChords={toggle === true ? chordArray : noteArray} noOptionsText={t("BottomBar:noOptions")} />
                 </div>
-                <ToggleButtonGroup className={classes.flexelement} size="large" value={alignment} exclusive onChange={handleAlignment}>
-                    <ToggleButton value="left">
-                        <Typography>{t("BottomBar:chord")}</Typography>
-                    </ToggleButton>
-                    <ToggleButton value="right">
-                        <Typography>{t("BottomBar:note")}</Typography>
-                    </ToggleButton>
-                </ToggleButtonGroup>
+                <div className={classes.flexelement}>
+                    <MenuButton text={t("BottomBar:chord")} onClick={() => handleToggle(true)} selected={toggle} />
+                </div>
+                <div className={classes.flexelement}>
+                    <MenuButton text={t("BottomBar:note")} onClick={() => handleToggle(false)} selected={!toggle} />
+                </div>
 
 
             </div>
 
             <div className={classes.container} >
                 <MenuButtonWithAddIcon text={t("BottomBar:addTone")} link={"/song"} />
-                <MenuButtonWithAddIcon text={t("BottomBar:addBar")} func={() => addEmptyBar()} />
+                <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => addEmptyBar()} />
             </div>
         </div>
 
