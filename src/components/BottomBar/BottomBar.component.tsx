@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, FormControl, MenuItem, Select } from '@material-ui/core';
+import { makeStyles, FormControl, MenuItem, Select, Typography } from '@material-ui/core';
 import MenuButton, { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
 import { colors } from '../../utils/colors';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
@@ -8,6 +8,8 @@ import { ReactComponent as WholenoteIcon } from '../../assets/images/icon_whole-
 import { ReactComponent as HalfnoteIcon } from '../../assets/images/icon_half-note.svg';
 import { ReactComponent as QuarternoteIcon } from '../../assets/images/icon_quarter-note.svg';
 import { ReactComponent as EighthnoteIcon } from '../../assets/images/icon_eighth-note.svg';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import ToggleButton from '@material-ui/lab/ToggleButton';
 
 
 function BottomBar() {
@@ -33,6 +35,13 @@ function BottomBar() {
             </Select>
         </FormControl>
 
+
+    const [alignment, setAlignment] = React.useState<string | null>('left');
+
+    const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
+        setAlignment(newAlignment);
+    };
+
     return (
 
         <div className={classes.outercontainer}>
@@ -43,12 +52,16 @@ function BottomBar() {
                 <div className={classes.flexelement}>
                     <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} tones={tones} noOptionsText={t("BottomBar:noOptions")} />
                 </div>
-                <div className={classes.flexelement}>
-                    <MenuButton text={t("BottomBar:chord")} link={"/song"} />
-                </div>
-                <div className={classes.flexelement}>
-                    <MenuButton text={t("BottomBar:note")} link={"/song"} />
-                </div>
+                <ToggleButtonGroup className={classes.flexelement} size="large" value={alignment} exclusive onChange={handleAlignment}>
+                    <ToggleButton value="left">
+                        <Typography>{t("BottomBar:chord")}</Typography>
+                    </ToggleButton>
+                    <ToggleButton value="right">
+                        <Typography>{t("BottomBar:note")}</Typography>
+                    </ToggleButton>
+                </ToggleButtonGroup>
+
+
             </div>
 
             <div className={classes.container} >
