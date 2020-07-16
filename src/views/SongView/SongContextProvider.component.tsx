@@ -211,7 +211,7 @@ const SongContextProvider: React.FC = props => {
 
             copyOfArray.splice(indexOfOriginalBar, 0, copyOfBar);
 
-            
+
             const tempArray = copyAndAddEmptyBars(indexOfOriginalBar);
             //If master sheet add the new copy of bar to the array
             //Else add the copied bar-array with an empty bar
