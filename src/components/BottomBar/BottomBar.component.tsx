@@ -1,6 +1,6 @@
-import React from 'react';
-import { makeStyles, FormControl, MenuItem, Select } from '@material-ui/core';
-import MenuButton, { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
+import React, { useState, useContext } from 'react';
+import { makeStyles, FormControl, MenuItem, Select, Typography, withStyles } from '@material-ui/core';
+import { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
 import { colors } from '../../utils/colors';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
 import { useTranslation } from "react-i18next";
@@ -8,17 +8,37 @@ import { ReactComponent as WholenoteIcon } from '../../assets/images/icon_whole-
 import { ReactComponent as HalfnoteIcon } from '../../assets/images/icon_half-note.svg';
 import { ReactComponent as QuarternoteIcon } from '../../assets/images/icon_quarter-note.svg';
 import { ReactComponent as EighthnoteIcon } from '../../assets/images/icon_eighth-note.svg';
+import { SongContext } from '../../views/SongView/SongContextProvider.component';
+import { notes } from '../../models/notes';
+import { chords } from '../../models/chords';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import ToggleButton from '@material-ui/lab/ToggleButton';
 
+const StyledToggleButtonGroup = withStyles((theme) => ({
+    grouped: {
+        color: colors.black,
+
+        margin: theme.spacing(1),
+        border: 'none',
+        '&:not(:first-child)': {
+            borderRadius: theme.shape.borderRadius,
+        },
+        '&:first-child': {
+            borderRadius: theme.shape.borderRadius,
+        },
+    }
+}))(ToggleButtonGroup);
 
 function BottomBar() {
     const { t } = useTranslation();
     const classes = useStyles();
-    const tones: string[] = ["C", "D", "E", "F", "G", "A", "H", "F#", "G#", "A#", "C#", "D#"];
-    const [note, setNote] = React.useState(1);
+    const noteArray: string[] = Object.keys(notes);
+    const chordArray: string[] = Object.keys(chords);
+    const [note, setNote] = React.useState(8);
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setNote(event.target.value as number);
     };
-    /* Icon dropdown with note values */
+    const { addEmptyBar } = useContext(SongContext);
     const Menu =
         <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
             <Select
@@ -26,12 +46,21 @@ function BottomBar() {
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
             >
-                <MenuItem value={1}><WholenoteIcon /></MenuItem>
-                <MenuItem value={2}> <HalfnoteIcon /></MenuItem>
-                <MenuItem value={3}> <QuarternoteIcon /></MenuItem>
-                <MenuItem value={4}> <EighthnoteIcon /></MenuItem>
+                <MenuItem value={8}> <WholenoteIcon /></MenuItem>
+                <MenuItem value={4}> <HalfnoteIcon /></MenuItem>
+                <MenuItem value={2}> <QuarternoteIcon /></MenuItem>
+                <MenuItem value={1}> <EighthnoteIcon /></MenuItem>
             </Select>
         </FormControl>
+
+
+    const [toggle, setToggle] = useState<boolean>(true);
+
+    const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) => {
+        if (newToggle !== null) {
+            setToggle(newToggle);
+        }
+    };
 
     return (
 
@@ -41,19 +70,23 @@ function BottomBar() {
                     {Menu}
                 </div>
                 <div className={classes.flexelement}>
-                    <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} tones={tones} noOptionsText={t("BottomBar:noOptions")} />
+                    <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} notesOrChords={toggle === true ? chordArray : noteArray} noOptionsText={t("BottomBar:noOptions")} />
                 </div>
-                <div className={classes.flexelement}>
-                    <MenuButton text={t("BottomBar:chord")} link={"/song"} />
-                </div>
-                <div className={classes.flexelement}>
-                    <MenuButton text={t("BottomBar:note")} link={"/song"} />
-                </div>
+                <StyledToggleButtonGroup value={toggle} exclusive onChange={handleToggle} className={classes.flexelement} size="small">
+                    <ToggleButton value={true}>
+                        <Typography>{t("BottomBar:chord")}</Typography>
+                    </ToggleButton>
+                    <ToggleButton value={false}>
+                        <Typography>{t("BottomBar:note")}</Typography>
+                    </ToggleButton>
+                </StyledToggleButtonGroup>
+
+
             </div>
 
             <div className={classes.container} >
                 <MenuButtonWithAddIcon text={t("BottomBar:addTone")} link={"/song"} />
-                <MenuButtonWithAddIcon text={t("BottomBar:addBar")} link={"/song"} />
+                <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => addEmptyBar()} />
             </div>
         </div>
 
@@ -90,6 +123,9 @@ const useStyles = makeStyles({
         flexDirection: "row",
         justifyContent: "space-between",
         flex: 1,
+        '& .Mui-selected': {
+            color: colors.black
+        }
     },
     button: {
         backgroundColor: colors.white,
@@ -103,9 +139,8 @@ const useStyles = makeStyles({
     },
     removeDefaultStyling: {
         "& .MuiOutlinedInput-notchedOutline": {
-            border: "0px",
-        },
-
+            border: "0",
+        }
     }
 });
 export default BottomBar;

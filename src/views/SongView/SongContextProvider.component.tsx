@@ -12,6 +12,7 @@ interface ISongContext {
     deleteBar: (index: number, voiceId: number) => void,
     getBar: (id: number, voiceId: number) => IBar | undefined,
     duplicateBar: (id: number, voiceId: number) => void,
+    addEmptyBar: () => void,
 }
 
 interface ISong {
@@ -33,6 +34,7 @@ export const SongContext = React.createContext<ISongContext>({
     duplicateBar: (id: number, voiceId: number) => {
         throw new Error("duplicateBar() in Song Context is not implemented")
     },
+    addEmptyBar: () => { }
 });
 
 const SongContextProvider: React.FC = props => {
@@ -187,10 +189,11 @@ const SongContextProvider: React.FC = props => {
     }
 
     //Method to add an empty bar at a specific index to each of all voices except the master sheet/song
-    const copyAndAddEmptyBars = (index: number) => {
+    const copyAndAddEmptyBars = (index: number, withoutMaster: 0 | 1) => {
+        //withoutMaster is either 0 if mastersheet is included, or 1 if it is not
         let tempArray = [];
         const newBar: IBar = { repBefore: false, repAfter: false, chordsAndNotes: [] };
-        for (let i = 1; i < song.voices.length; i++) {
+        for (let i = withoutMaster; i < song.voices.length; i++) {
             let copyOfArray = song.voices[i].bars.slice();
             copyOfArray.splice(index + 1, 0, newBar);
             tempArray.push(copyOfArray);
@@ -198,11 +201,8 @@ const SongContextProvider: React.FC = props => {
         return tempArray;
     }
 
-
     const duplicateBar = (id: number, voiceId: number) => {
         const bar = getBar(id, voiceId);
-
-
         if (bar !== undefined) {
             const indexOfOriginalBar = song.voices[voiceId].bars.indexOf(bar);
 
@@ -211,18 +211,17 @@ const SongContextProvider: React.FC = props => {
 
             copyOfArray.splice(indexOfOriginalBar, 0, copyOfBar);
 
-
-            const tempArray = copyAndAddEmptyBars(indexOfOriginalBar);
+            const tempArray = copyAndAddEmptyBars(indexOfOriginalBar, 1);
             //If master sheet add the new copy of bar to the array
             //Else add the copied bar-array with an empty bar
             setSong({ ...song, voices: song.voices.map((voice, i) => i === 0 ? { ...voice, bars: copyOfArray } : { ...voice, bars: tempArray[i - 1] }) });
         }
-
-
     }
 
-
-
+    const addEmptyBar = () => {
+        const tempArray = copyAndAddEmptyBars(song.voices[0].bars.length, 0);
+        setSong({ ...song, voices: song.voices.map((voice, i) => true ? { ...voice, bars: tempArray[i] } : voice) });
+    }
 
 
     //Add all methods here
@@ -233,8 +232,8 @@ const SongContextProvider: React.FC = props => {
         deleteBar,
         getBar,
         duplicateBar,
+        addEmptyBar
     }
-
 
     return (
         <SongContext.Provider value={value}>
