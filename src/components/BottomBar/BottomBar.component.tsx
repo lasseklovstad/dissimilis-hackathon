@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, FormControl, MenuItem, Select, Button, } from '@material-ui/core';
+import { makeStyles, FormControl, MenuItem, Select } from '@material-ui/core';
 import MenuButton, { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
 import { colors } from '../../utils/colors';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';

@@ -3,12 +3,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import { useMediaQuery } from '@material-ui/core';
+import { useMediaQuery, Collapse } from '@material-ui/core';
 import { ReactComponent as BackgroundImage } from '../../assets/images/butterflyGreen.svg';
 import { ReactComponent as LoginLogo } from '../../assets/images/LoginLogo.svg';
 import { colors } from '../../utils/colors';
 import { useTranslation } from "react-i18next";
 import { useHistory } from 'react-router';
+import Alert from '@material-ui/lab/Alert';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
 
 export type LoginViewProps = {
 
@@ -23,15 +27,36 @@ const LoginView: FC<LoginViewProps> = () => {
   const tryLogin = () => {
     history.push("/dashboard");
   };
+  const [warningDisplayed, showWarning] = React.useState(false);
+  const warning =
+    <Collapse in={warningDisplayed}>
+      <Alert
+        severity="warning"
+        action={
+          <IconButton
+            size="small"
+            onClick={() => {
+              showWarning(false);
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        }
+      >
+        {t("LoginView:loginFailed")}
+      </Alert>
+    </Collapse>
+    
 
   return (
     <Grid container className={classes.root} >
       <BackgroundImage className={classes.backgroundimage} />
-      <Grid item xs={10} sm={4} className={matches ? classes.container + " " + classes.paddinglarge : classes.container + " " + classes.paddingsmall}>
+      <Grid item xs={10} sm={6} md={4} xl={2} className={matches ? classes.container + " " + classes.paddinglarge : classes.container + " " + classes.paddingsmall}>
         <LoginLogo className={classes.loginlogo} />
         <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled" onSubmit={tryLogin}></TextField>
         <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled" onSubmit={tryLogin}></TextField>
-        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={tryLogin}>{t("LoginView:login")}</Button>
+        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={() => showWarning(true)}>{t("LoginView:login")}</Button>
+        {warning}
       </Grid>
     </Grid>
   );
@@ -64,7 +89,8 @@ const useStyles = makeStyles(
       width: '60%'
     },
     loginbutton: {
-      marginTop: '20px',
+      marginTop: '24px',
+      marginBottom: '16px',
       lineHeight: '24px',
       textTransform: 'none'
     },
@@ -74,5 +100,8 @@ const useStyles = makeStyles(
       width: '50%',
       height: '50%',
       left: 0
-    }
+    },
+    alertbox: {
+
+    },
   });

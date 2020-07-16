@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react';
-import { Link } from "react-router-dom";
+
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import { Box, Card, CardActionArea, TextField, Button } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
 import { colors } from '../../utils/colors';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
