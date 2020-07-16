@@ -73,16 +73,12 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     <Grid item>
                         <DashboardButton selected={selectedVoice === 1} text={t("CreateSongTab:song")} link={"/song/1?voice=1"} />
                     </Grid>
-                    {voices.map((voices: IVoice, index: number) => {
-                        if (index !== 0) {
-                            return (
-                                <Grid item key={index}>
-                                    <DashboardButton selected={selectedVoice === index + 1} text={voices.title} link={`/song/1?voice=${index + 1}`} />
-                                </Grid>
-                            )
-                        } else {
-                            return <div key={index}></div>
-                        }
+                    {voices.slice(1).map((voices: IVoice, index: number) => {
+                        return (
+                            <Grid item key={index + 2}>
+                                <DashboardButton selected={selectedVoice === index + 2} text={voices.title} link={`/song/1?voice=${index + 2}`} />
+                            </Grid>
+                        )
                     })}
                     <Grid item>
                         <DashboardButtonWithAddIconNoLink text={t("CreateSongTab:newInstrument")} func={handleOpen} />

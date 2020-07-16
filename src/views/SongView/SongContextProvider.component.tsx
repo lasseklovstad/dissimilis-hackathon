@@ -189,10 +189,11 @@ const SongContextProvider: React.FC = props => {
     }
 
     //Method to add an empty bar at a specific index to each of all voices except the master sheet/song
-    const copyAndAddEmptyBars = (index: number, startIndex: 0 | 1) => {
+    const copyAndAddEmptyBars = (index: number, withoutMaster: 0 | 1) => {
+        //withoutMaster is either 0 if mastersheet is included, or 1 if it is not
         let tempArray = [];
         const newBar: IBar = { repBefore: false, repAfter: false, chordsAndNotes: [] };
-        for (let i = startIndex; i < song.voices.length; i++) {
+        for (let i = withoutMaster; i < song.voices.length; i++) {
             let copyOfArray = song.voices[i].bars.slice();
             copyOfArray.splice(index + 1, 0, newBar);
             tempArray.push(copyOfArray);
@@ -202,8 +203,6 @@ const SongContextProvider: React.FC = props => {
 
     const duplicateBar = (id: number, voiceId: number) => {
         const bar = getBar(id, voiceId);
-
-
         if (bar !== undefined) {
             const indexOfOriginalBar = song.voices[voiceId].bars.indexOf(bar);
 
@@ -217,15 +216,12 @@ const SongContextProvider: React.FC = props => {
             //Else add the copied bar-array with an empty bar
             setSong({ ...song, voices: song.voices.map((voice, i) => i === 0 ? { ...voice, bars: copyOfArray } : { ...voice, bars: tempArray[i - 1] }) });
         }
-
-
     }
 
     const addEmptyBar = () => {
         const tempArray = copyAndAddEmptyBars(song.voices[0].bars.length, 0);
         setSong({ ...song, voices: song.voices.map((voice, i) => true ? { ...voice, bars: tempArray[i] } : voice) });
     }
-
 
 
     //Add all methods here

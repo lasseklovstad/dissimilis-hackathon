@@ -58,7 +58,7 @@ export const SongView: React.FC<SongViewProps> = props => {
       <Grid item xs={12}>
         <CreateSongTab />
       </Grid>
-      <Grid item xs={12}> {/*Grid for main container, containing the bars, timeSignature and barnumber */}
+      <Grid item xs={12} className={classes.songViewContainer}> {/*Grid for main container, containing the bars, timeSignature and barnumber */}
         <Grid container>
 
           <Grid item xs={1}>
@@ -82,7 +82,6 @@ export const SongView: React.FC<SongViewProps> = props => {
           </Grid>
         </Grid>
 
-
       </Grid>
     </Grid>
       <BottomBar />
@@ -96,9 +95,14 @@ const useStyles = makeStyles({
     marginLeft: "24px",
     marginTop: "32px",
     marginRight: "24px",
-    marginBottom: "24px",
+    marginBottom: "120px",
+    '@media (max-width: 1080px)': {
+      marginBottom: "160px",
+    },
     width: "auto",
-
+  },
+  songViewContainer: {
+    marginTop: "24px"
   }
 })
 

@@ -47,8 +47,6 @@ function BottomBar() {
                 </div>
                 <div className={classes.flexelement}>
                     <MenuButton text={t("BottomBar:chord")} link={"/song"} />
-
-
                 </div>
                 <div className={classes.flexelement}>
                     <MenuButton text={t("BottomBar:note")} link={"/song"} />
@@ -109,6 +107,7 @@ const useStyles = makeStyles({
         "& .MuiOutlinedInput-notchedOutline": {
             border: "0px",
         },
+
     }
 });
 export default BottomBar;

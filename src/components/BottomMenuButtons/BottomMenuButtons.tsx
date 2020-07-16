@@ -1,9 +1,8 @@
 import React, { FunctionComponent } from 'react';
-import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import { Box, Card, CardActionArea, TextField, Button } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
 import { colors } from '../../utils/colors';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
@@ -17,7 +16,7 @@ export type ButtonProps = {
     text: string,
     link: string,
     onClick?: () => void,
-    color?: string,
+
 };
 export type AutocompleteProps = {
     icon: React.ReactNode,
@@ -44,13 +43,13 @@ export const MenuButtonWithAddIcon: FunctionComponent<AddButtonProps> = (props) 
 export const MenuButton: FunctionComponent<ButtonProps> = (props) => {
     const styles = useStyles();
     return (
-        <Card className={styles.button}>
-            <CardActionArea to={props.link} component={Link}>
-                <Box className={styles.container} style={{ backgroundColor: props.color }}>
-                    <Box p={2}><Typography>{props.text}</Typography></Box>
-                </Box>
-            </CardActionArea>
-        </Card>
+        <Button
+            variant="outlined"
+            size="large"
+            className={styles.addbutton}
+        >
+            <Typography>{props.text}</Typography>
+        </Button>
     );
 }
 

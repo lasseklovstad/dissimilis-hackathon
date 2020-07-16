@@ -22,8 +22,8 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const bar = props.bar
 
     const queryString = require('query-string');
-    const voiceString = queryString.parse(window.location.search);
-    const voiceInt = parseInt(voiceString.voice);
+    const voiceStringFromURL = queryString.parse(window.location.search);
+    const voiceId:number = parseInt(voiceStringFromURL.voice);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -32,10 +32,10 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const handleClose = (method: string) => {
         const index = voices[0].bars.indexOf(bar);
         if (method === "delete") {
-            deleteBar(index, voiceInt - 1);
+            deleteBar(index, voiceId - 1);
         }
         if (method === "duplicate") {
-            duplicateBar(index, voiceInt - 1);
+            duplicateBar(index, voiceId - 1);
         }
         setAnchorEl(null);
     };
@@ -62,10 +62,10 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                         <Grid item xs={props.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: props.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="barline after the bar"></Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.secondRow} role="row" style={{ display: props.masterSheet ? "block" : "none" }} >
+                <Grid item xs={12} className={classes.secondRow} role="row" >
                     <Grid container style={{ height: "100%" }} role="grid" >
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} role="gridcell" ></Grid>
-                        <Grid item xs={10} role="gridcell" >
+                        <Grid item xs={10} role="gridcell" style={{ display: props.masterSheet ? "block" : "none" }}>
                             <Box display="flex" flexGrow={1}>
                                 <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} role="button" aria-label="button to make changes to the bar">
                                     <MoreHorizIcon style={{ marginLeft: "0px" }} />

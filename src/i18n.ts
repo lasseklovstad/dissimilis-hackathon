@@ -8,6 +8,8 @@ import { createSongTabNo } from "./assets/languages/norwegian/createSongTabNo";
 import { createSongTabEn } from "./assets/languages/english/createSongTabEn";
 import { bottombarEn } from './assets/languages/english/bottombarEn';
 import { bottombarNo } from './assets/languages/norwegian/bottombarNo';
+import { menuButtonEn } from './assets/languages/english/menuButtonEn';
+import { menuButtonNo } from './assets/languages/norwegian/menuButtonNo';
 
 
 
@@ -21,13 +23,14 @@ const resources: Resource = {
     CreateSongTab: createSongTabEn,
     LoginView: loginEn,
     BottomBar: bottombarEn,
+    MenuButton: menuButtonEn,
   },
   no: {
     DashboardView: dashboardNo,
     CreateSongTab: createSongTabNo,
     LoginView: loginNo,
     BottomBar: bottombarNo,
-
+    MenuButton: menuButtonNo,
   },
 }
 
