@@ -22,14 +22,15 @@ const LoginView: FC<LoginViewProps> = () => {
   const { t } = useTranslation();
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
-
   const history = useHistory();
+
   const tryLogin = () => {
     history.push("/dashboard");
   };
+
   const [warningDisplayed, showWarning] = React.useState(false);
   const warning =
-    <Collapse in={warningDisplayed}>
+    (<Collapse in={warningDisplayed}>
       <Alert
         severity="warning"
         action={
@@ -45,8 +46,7 @@ const LoginView: FC<LoginViewProps> = () => {
       >
         {t("LoginView:loginFailed")}
       </Alert>
-    </Collapse>
-    
+    </Collapse>);
 
   return (
     <Grid container className={classes.root} >
@@ -55,7 +55,7 @@ const LoginView: FC<LoginViewProps> = () => {
         <LoginLogo className={classes.loginlogo} />
         <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled" onSubmit={tryLogin}></TextField>
         <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled" onSubmit={tryLogin}></TextField>
-        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={() => showWarning(true)}>{t("LoginView:login")}</Button>
+        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={tryLogin}>{t("LoginView:login")}</Button>
         {warning}
       </Grid>
     </Grid>
