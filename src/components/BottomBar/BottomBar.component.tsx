@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
-import { makeStyles, FormControl, MenuItem, Select, Button, Typography } from '@material-ui/core';
-import MenuButton, { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
+import React, { useState, useContext } from 'react';
+import { makeStyles, FormControl, MenuItem, Select, Typography, withStyles } from '@material-ui/core';
+import { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
 import { colors } from '../../utils/colors';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
 import { useTranslation } from "react-i18next";
@@ -14,6 +14,20 @@ import { chords } from '../../models/chords';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 
+const StyledToggleButtonGroup = withStyles((theme) => ({
+    grouped: {
+        color: colors.black,
+
+        margin: theme.spacing(1),
+        border: 'none',
+        '&:not(:first-child)': {
+            borderRadius: theme.shape.borderRadius,
+        },
+        '&:first-child': {
+            borderRadius: theme.shape.borderRadius,
+        },
+    }
+}))(ToggleButtonGroup);
 
 function BottomBar() {
     const { t } = useTranslation();
@@ -42,9 +56,10 @@ function BottomBar() {
 
     const [toggle, setToggle] = useState<boolean>(true);
 
-    const handleToggle = (newValue: boolean) => {
-        setToggle(newValue);
-        console.log("hello")
+    const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) => {
+        if (newToggle !== null) {
+            setToggle(newToggle);
+        }
     };
 
     return (
@@ -57,12 +72,14 @@ function BottomBar() {
                 <div className={classes.flexelement}>
                     <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} notesOrChords={toggle === true ? chordArray : noteArray} noOptionsText={t("BottomBar:noOptions")} />
                 </div>
-                <div className={classes.flexelement}>
-                    <MenuButton text={t("BottomBar:chord")} onClick={() => handleToggle(true)} selected={toggle} />
-                </div>
-                <div className={classes.flexelement}>
-                    <MenuButton text={t("BottomBar:note")} onClick={() => handleToggle(false)} selected={!toggle} />
-                </div>
+                <StyledToggleButtonGroup value={toggle} exclusive onChange={handleToggle} className={classes.flexelement} size="small">
+                    <ToggleButton value={true}>
+                        <Typography>{t("BottomBar:chord")}</Typography>
+                    </ToggleButton>
+                    <ToggleButton value={false}>
+                        <Typography>{t("BottomBar:note")}</Typography>
+                    </ToggleButton>
+                </StyledToggleButtonGroup>
 
 
             </div>
@@ -106,6 +123,9 @@ const useStyles = makeStyles({
         flexDirection: "row",
         justifyContent: "space-between",
         flex: 1,
+        '& .Mui-selected': {
+            color: colors.black
+        }
     },
     button: {
         backgroundColor: colors.white,
@@ -119,7 +139,22 @@ const useStyles = makeStyles({
     },
     removeDefaultStyling: {
         "& .MuiOutlinedInput-notchedOutline": {
+            border: "0",
+        },
+
+    },
+    removeDefaultToggleStyling: {
+        "& .MuiToggleButton-root": {
+            border: "0px"
+        },
+        "& .MuiToggleButton": {
+            border: "10px solid black",
+            borderRadius: "100px",
+            backgroundColor: "blue"
+        },
+        "& .MuiToggleButton-label": {
             border: "0px",
+            color: colors.black,
         },
 
     }

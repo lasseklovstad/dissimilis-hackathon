@@ -15,9 +15,7 @@ export type AddButtonProps = {
 export type ButtonProps = {
     text: string,
     link?: string,
-    onClick?: Function,
-    selected?: boolean
-
+    onClick?: Function
 };
 export type AutocompleteProps = {
     icon: React.ReactNode,
@@ -49,7 +47,6 @@ export const MenuButton: FunctionComponent<ButtonProps> = (props) => {
             size="large"
             className={styles.addbutton}
             onClick={() => props.onClick && props.onClick()}
-            style={{ backgroundColor: props.selected ? colors.gray_300 : colors.white}}
         >
             <Typography>{props.text}</Typography>
         </Button>
@@ -72,10 +69,7 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props
 export default MenuButton;
 
 const useStyles = makeStyles({
-    container: {
-        display: "flex",
-        margin: "auto",
-    },
+
     button: {
         backgroundColor: colors.white,
         boxShadow: "0px 0px 0px rgba(255, 255, 255, 0)",
@@ -86,6 +80,8 @@ const useStyles = makeStyles({
         border: "none",
         height: "56px",
         outline: "none",
+
+
     },
     dropdown: {
         "& .MuiOutlinedInput-notchedOutline": {

@@ -1,9 +1,9 @@
 export const chords = {
-    "cMajor": ["C", "E", "G"],
-    "fMajor": ["F", "A", "C"],
-    "gMajor": ["G", "H", "D"],
-    "dMinor": ["D", "F", "A"],
-    "eMinor": ["E", "G", "H"],
-    "aMinor": ["A", "C", "E"]
+    "C-dur": ["C", "E", "G"],
+    "F-dur": ["F", "A", "C"],
+    "G-dur": ["G", "H", "D"],
+    "D-dur": ["D", "F", "A"],
+    "E-moll": ["E", "G", "H"],
+    "A-moll": ["A", "C", "E"]
 }
 
