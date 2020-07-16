@@ -9,11 +9,6 @@ export const theme: object = createMuiTheme({
                     fontSize: "100%"
                 }
             }
-        },
-        Mui: {
-            root: {
-                border: "0px"
-            }
         }
     },
     spacing: 8,

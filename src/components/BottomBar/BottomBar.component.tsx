@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, FormControl, MenuItem, Select, Typography } from '@material-ui/core';
+import { makeStyles, FormControl, MenuItem, Select, Typography, withStyles } from '@material-ui/core';
 import MenuButton, { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
 import { colors } from '../../utils/colors';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
@@ -11,6 +11,20 @@ import { ReactComponent as EighthnoteIcon } from '../../assets/images/icon_eight
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 
+const StyledToggleButtonGroup = withStyles((theme) => ({
+    grouped: {
+        color: colors.black,
+    
+        margin: theme.spacing(1),
+        border: 'none',
+        '&:not(:first-child)': {
+            borderRadius: theme.shape.borderRadius,
+        },
+        '&:first-child': {
+            borderRadius: theme.shape.borderRadius,
+        },
+    }
+}))(ToggleButtonGroup);
 
 function BottomBar() {
     const { t } = useTranslation();
@@ -39,8 +53,10 @@ function BottomBar() {
     const [alignment, setAlignment] = React.useState<string | null>('left');
 
     const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
-        setAlignment(newAlignment);
-    };
+        if (newAlignment !== null) {
+          setAlignment(newAlignment);
+        }
+      };
 
     return (
 
@@ -52,14 +68,14 @@ function BottomBar() {
                 <div className={classes.flexelement}>
                     <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} tones={tones} noOptionsText={t("BottomBar:noOptions")} />
                 </div>
-                <ToggleButtonGroup className={classes.flexelement} size="large" value={alignment} exclusive onChange={handleAlignment}>
-                    <ToggleButton className={classes.removeDefaultToggleStyling} value="left">
+                <StyledToggleButtonGroup value={alignment} exclusive  onChange={handleAlignment}  className={classes.flexelement}   size="small">
+                    <ToggleButton value="left">
                         <Typography>{t("BottomBar:chord")}</Typography>
                     </ToggleButton>
-                    <ToggleButton className={classes.removeDefaultToggleStyling} value="right">
+                    <ToggleButton value="right">
                         <Typography>{t("BottomBar:note")}</Typography>
                     </ToggleButton>
-                </ToggleButtonGroup>
+                </StyledToggleButtonGroup>
 
 
             </div>
@@ -103,6 +119,9 @@ const useStyles = makeStyles({
         flexDirection: "row",
         justifyContent: "space-between",
         flex: 1,
+        '& .Mui-selected': {
+            color: colors.black
+        }
     },
     button: {
         backgroundColor: colors.white,
