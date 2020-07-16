@@ -8,5 +8,4 @@ export interface IBar {
     repBefore: boolean,
     repAfter: boolean,
     chordsAndNotes: Array<IChordAndNotes>,
-
 };
