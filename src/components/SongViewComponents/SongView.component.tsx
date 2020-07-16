@@ -58,12 +58,12 @@ export default BarNumber;
 
 const useStyles = makeStyles({
   TimeSignatureContainer: {
-    height: "200px",
+    height: "218px",
     flexDirection: "column",
     display: "flex"
   },
   TimeSignatureNumerator: {
-    margin: "10px 10px 0 0",
+    margin: "36px 10px 0 0",
     float: "right",
     fontWeight: "bold"
   },
@@ -78,10 +78,10 @@ const useStyles = makeStyles({
     borderStyle: "double"
   },
   BarNumberContainer: {
-    height: "200px"
+    height: "218px"
   },
   BarNumberText: {
-    margin: "10px 10px 0 0",
+    margin: "40px 10px 0 0",
     float: "right",
     color: colors.gray_400
   }

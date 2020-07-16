@@ -14,6 +14,7 @@ function SongRouting() {
         <Switch>
             <SongContextProvider>
                 <PrivateRoute path="/song/:id" component={SongView} />
+
             </SongContextProvider>
         </Switch>
 
@@ -27,6 +28,7 @@ function Routing() {
                 <PrivateRoute path="/dashboard" component={DashboardView} />
                 <PrivateRoute path="/common" component={CommonView} />
                 <PrivateRoute path="/song" component={SongRouting} />
+
 
                 <Route path="/" component={LoginView} />
                 <Route render={() => <Redirect to={{ pathname: "/" }} />} />

@@ -6,8 +6,11 @@ import { dashboardNo } from './assets/languages/norwegian/dashboardNo';
 import { dashboardEn } from './assets/languages/english/dashboardEn';
 import { createSongTabNo } from "./assets/languages/norwegian/createSongTabNo";
 import { createSongTabEn } from "./assets/languages/english/createSongTabEn";
+import { bottombarEn } from './assets/languages/english/bottombarEn';
+import { bottombarNo } from './assets/languages/norwegian/bottombarNo';
 import { menuButtonEn } from './assets/languages/english/menuButtonEn';
 import { menuButtonNo } from './assets/languages/norwegian/menuButtonNo';
+
 
 
 // not like to use this?
@@ -19,13 +22,15 @@ const resources: Resource = {
     DashboardView: dashboardEn,
     CreateSongTab: createSongTabEn,
     LoginView: loginEn,
+    BottomBar: bottombarEn,
     MenuButton: menuButtonEn,
   },
   no: {
     DashboardView: dashboardNo,
     CreateSongTab: createSongTabNo,
     LoginView: loginNo,
-    MenuButton: menuButtonNo
+    BottomBar: bottombarNo,
+    MenuButton: menuButtonNo,
   },
 }
 
