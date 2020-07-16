@@ -1,15 +1,14 @@
 import React from "react";
 import { Box, makeStyles, Typography } from "@material-ui/core";
 import colors from "../../utils/colors";
-import { IChordAndTones } from "../../models/IBar";
+import { IChordAndNotes } from "../../models/IBar";
 
 export type BarBodyProps = {
-    chordsAndTones: IChordAndTones[],
+    chordsAndNotes: IChordAndNotes[],
 }
 
-function getColor(color: string): string {
-    let newColor = "white";
-
+export function getColor(color: string): string {
+    let newColor = "transparent";
     switch (color) {
         case "C":
             newColor = colors.C;
@@ -36,7 +35,7 @@ function getColor(color: string): string {
             newColor = colors.semitone;
             break;
         default:
-            newColor = "white";
+            newColor = "transparent";
     }
     return newColor;
 }
@@ -50,7 +49,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
 
     return (
         <Box style={{ height: "100%" }} className={classes.root}>
-            {props.chordsAndTones.map((note, i) => {
+            {props.chordsAndNotes.map((note, i) => {
                 return (
                     <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length }} >
                         {note.notes.map((type, index) => {

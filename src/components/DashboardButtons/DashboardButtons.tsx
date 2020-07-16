@@ -12,7 +12,7 @@ export type ButtonProps = {
   text: string,
   link: string,
   func?: Function,
-  color?: string,
+  selected?: boolean,
 };
 
 type ButtonNoLinkProps = {
@@ -57,7 +57,7 @@ export const DashboardButton: FC<ButtonProps> = (props) => {
   return (
     <Card className={styles.button}>
       <CardActionArea to={props.link} component={Link}>
-        <Box className={styles.container} style={{ backgroundColor: props.color }}>
+        <Box className={styles.container} style={{ backgroundColor: props.selected === true ? colors.gray_400 : colors.white }}>
           <Box p={2}><Typography>{props.text}</Typography></Box>
         </Box>
       </CardActionArea>
