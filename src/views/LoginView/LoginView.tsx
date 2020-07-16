@@ -101,7 +101,4 @@ const useStyles = makeStyles(
       height: '50%',
       left: 0
     },
-    alertbox: {
-
-    },
   });
