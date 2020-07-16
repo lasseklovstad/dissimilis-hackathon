@@ -9,18 +9,20 @@ import { ReactComponent as HalfnoteIcon } from '../../assets/images/icon_half-no
 import { ReactComponent as QuarternoteIcon } from '../../assets/images/icon_quarter-note.svg';
 import { ReactComponent as EighthnoteIcon } from '../../assets/images/icon_eighth-note.svg';
 import { SongContext } from '../../views/SongView/SongContextProvider.component';
+import { notes } from '../../models/notes';
+import { chords } from '../../models/chords';
 
 
 function BottomBar() {
     const { t } = useTranslation();
     const classes = useStyles();
-    const tones: string[] = ["C", "D", "E", "F", "G", "A", "H", "F#", "G#", "A#", "C#", "D#"];
+    //const notes: string[] = Object.keys(notes);
+    const tones: string[] = Object.keys(notes);
     const [note, setNote] = React.useState(1);
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setNote(event.target.value as number);
     };
     const { addEmptyBar } = useContext(SongContext);
-    /* Icon dropdown with note values */
     const Menu =
         <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
             <Select
