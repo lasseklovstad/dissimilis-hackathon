@@ -68,10 +68,7 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props
 export default MenuButton;
 
 const useStyles = makeStyles({
-    container: {
-        display: "flex",
-        margin: "auto",
-    },
+
     button: {
         backgroundColor: colors.white,
         boxShadow: "0px 0px 0px rgba(255, 255, 255, 0)",
@@ -82,6 +79,8 @@ const useStyles = makeStyles({
         border: "none",
         height: "56px",
         outline: "none",
+        
+
     },
     dropdown: {
         "& .MuiOutlinedInput-notchedOutline": {

@@ -1,4 +1,4 @@
-import { createMuiTheme } from "@material-ui/core/styles";
+import { createMuiTheme, createStyles } from "@material-ui/core/styles";
 import { colors } from "./utils/colors";
 
 export const theme: object = createMuiTheme({
@@ -8,6 +8,11 @@ export const theme: object = createMuiTheme({
                 html: {
                     fontSize: "100%"
                 }
+            }
+        },
+        Mui: {
+            root: {
+                border: "0px"
             }
         }
     },

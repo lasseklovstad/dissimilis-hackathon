@@ -53,10 +53,10 @@ function BottomBar() {
                     <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} tones={tones} noOptionsText={t("BottomBar:noOptions")} />
                 </div>
                 <ToggleButtonGroup className={classes.flexelement} size="large" value={alignment} exclusive onChange={handleAlignment}>
-                    <ToggleButton value="left">
+                    <ToggleButton className={classes.removeDefaultToggleStyling} value="left">
                         <Typography>{t("BottomBar:chord")}</Typography>
                     </ToggleButton>
-                    <ToggleButton value="right">
+                    <ToggleButton className={classes.removeDefaultToggleStyling} value="right">
                         <Typography>{t("BottomBar:note")}</Typography>
                     </ToggleButton>
                 </ToggleButtonGroup>
@@ -116,7 +116,22 @@ const useStyles = makeStyles({
     },
     removeDefaultStyling: {
         "& .MuiOutlinedInput-notchedOutline": {
+            border: "0",
+        },
+
+    },
+    removeDefaultToggleStyling: {
+        "& .MuiToggleButton-root": {
+            border: "0px"
+        },
+        "& .MuiToggleButton": {
+            border: "10px solid black",
+            borderRadius: "100px",
+            backgroundColor: "blue"
+        },
+        "& .MuiToggleButton-label": {
             border: "0px",
+            color: colors.black,
         },
 
     }
