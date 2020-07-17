@@ -11,6 +11,7 @@ export type BarProps = {
     repAfter: boolean,
     house?: number,
     chordsAndNotes: IChordAndNotes[],
+    barLineAfter?: boolean
 }
 
 
@@ -18,7 +19,6 @@ export type BarProps = {
 export const Bar: React.FC<BarProps> = props => {
     const classes = useStyles();
     let centerDivSize: 9 | 10 | 11 = 9;
-
 
     if ((props.repBefore && props.repAfter) || (props.repBefore && !props.repAfter)) {
         centerDivSize = 10;
@@ -51,7 +51,7 @@ export const Bar: React.FC<BarProps> = props => {
                         <Grid item xs={centerDivSize} role="gridcell" aria-label={"Bar"}>
                             <BarBody chordsAndNotes={props.chordsAndNotes} />
                         </Grid>
-                        <Grid item xs={1} style={{ borderRight: "2px solid black" }} role="gridcell" aria-label="repetition sign after the tone" >
+                        <Grid item xs={1} style={{ borderRight: props.barLineAfter ? "6px double black" : "2px solid black" }} role="gridcell" aria-label="repetition sign after the tone" >
                             <Box mt={"20px"}>
                                 <RepetitionSign size="small" display={props.repAfter} />
                             </Box>
