@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, Popper } from '@material-ui/core';
 import { colors } from '../../utils/colors';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
@@ -53,6 +53,10 @@ export const MenuButton: FunctionComponent<ButtonProps> = (props) => {
     );
 }
 
+const customPopperPlacement = function (props: any) {
+    return (<Popper {...props} placement='top' />)
+}
+
 export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props) => {
     const styles = useStyles();
     const [options, setOptions] = useState(props.notesOrChords);
@@ -60,6 +64,7 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props
     useEffect(() => {
         setOptions(props.notesOrChords);
     }, [props.notesOrChords]);
+    
     return (
         <Autocomplete
             value={
@@ -70,6 +75,7 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props
                     setValue(newValue);
                 }
             }}
+            PopperComponent={customPopperPlacement}
             options={options}
             closeIcon={false}
             className={styles.dropdown}
