@@ -43,12 +43,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     if (bar === undefined) {
         return <></>
     } else {
-        let centerDivSize: 10 | 11 | 12 = 10;
-        if (props.barLineBefore && props.barLineAfter) {
-            centerDivSize = 10;
-        } else {
-            centerDivSize = 11;
-        }
+        let centerDivSize: 10 | 11 | 12 = 11;
 
         return (
             <Grid container role="grid">
@@ -57,9 +52,8 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar">
-                            <Bar repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndNotes={bar.chordsAndNotes} />
+                            <Bar repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndNotes={bar.chordsAndNotes} barLineAfter={props.barLineAfter} />
                         </Grid>
-                        <Grid item xs={props.barLineAfter ? 1 : "auto"} className={classes.barlineBox} style={{ borderLeft: props.barLineAfter ? "2px solid black" : "0" }} role="gridcell" aria-label="barline after the bar"></Grid>
                     </Grid>
                 </Grid>
                 <Grid item xs={12} className={classes.secondRow} role="row" >
