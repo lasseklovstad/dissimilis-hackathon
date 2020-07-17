@@ -51,40 +51,42 @@ export const SongView: React.FC<SongViewProps> = props => {
   }
 
   return (
-    <><Grid container className={classes.root}>
-      <Grid item xs={12} >
-        <NavBarCreateSong />
-      </Grid>
-      <Grid item xs={12}>
-        <CreateSongTab />
-      </Grid>
-      <Grid item xs={12} className={classes.songViewContainer}> {/*Grid for main container, containing the bars, timeSignature and barnumber */}
-        <Grid container>
+    <>
+      <Grid container className={classes.root}>
+        <Grid item xs={12} >
+          <NavBarCreateSong />
+        </Grid>
+        <Grid item xs={12}>
+          <CreateSongTab />
+        </Grid>
+        <Grid item xs={12} className={classes.songViewContainer}> {/*Grid for main container, containing the bars, timeSignature and barnumber */}
+          <Grid container>
 
-          <Grid item xs={1}>
-            {voices[selectedVoice].bars.map((bar, i) => {
-              if (i === 0) { return (<TimeSignature key={i} />) }
-              else if (xl && i % 4 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
-              else if (!xs && !xl && i % 2 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
-              else if (xs) { return (<BarNumber key={i} barNumber={i + 1} />) }
-              return <div key={i} ></div>
-            })}
-          </Grid>
-
-          <Grid item xs={10}>
-            <Grid container>
-              {voices[selectedVoice].bars.map((bar, i) => (
-                <Grid item xs={12} sm={6} xl={3} key={i} >
-                  <BarContainer masterSheet={selectedVoice === 0} bar={bar} barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} />
-                </Grid>
-              ))}
+            <Grid item xs={1}>
+              {voices[selectedVoice].bars.map((bar, i) => {
+                if (i === 0) { return (<TimeSignature key={i} />) }
+                else if (xl && i % 4 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
+                else if (!xs && !xl && i % 2 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
+                else if (xs) { return (<BarNumber key={i} barNumber={i + 1} />) }
+                return <div key={i} ></div>
+              })}
             </Grid>
+
+            <Grid item xs={10}>
+              <Grid container>
+                {voices[selectedVoice].bars.map((bar, i) => (
+                  <Grid item xs={12} sm={6} xl={3} key={i} >
+                    <BarContainer masterSheet={selectedVoice === 0} bar={bar} barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} />
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+
           </Grid>
         </Grid>
-
       </Grid>
-    </Grid>
       <BottomBar />
+
     </>
 
   );
@@ -92,9 +94,9 @@ export const SongView: React.FC<SongViewProps> = props => {
 
 const useStyles = makeStyles({
   root: {
-    marginLeft: "24px",
+    marginLeft: "16px",
     marginTop: "32px",
-    marginRight: "24px",
+    marginRight: "16px",
     marginBottom: "120px",
     '@media (max-width: 1080px)': {
       marginBottom: "160px",
