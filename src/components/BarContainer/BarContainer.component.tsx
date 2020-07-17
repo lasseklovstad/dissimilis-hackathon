@@ -48,8 +48,8 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
 
         return (
             <Grid container role="grid" style={{ height: "100%" }}>
-                <Grid item xs={12} className={classes.firstRow} role="row">
-                    <Grid container style={{ height: "100%" }} role="grid" aria-label="barline before the bar">
+                <Grid item xs={12} role="row">
+                    <Grid container style={{ height: "auto%" }} role="grid" aria-label="barline before the bar">
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ height: !props.height ? "120px" : props.height, borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar">
@@ -57,7 +57,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.secondRow} role="row" >
+                <Grid item xs={12} role="row" >
                     <Grid container style={{ height: "100%" }} role="grid" >
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} role="gridcell" ></Grid>
                         <Grid item xs={10} role="gridcell" style={{ display: props.masterSheet ? "block" : "none" }}>
@@ -82,11 +82,6 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
 }
 
 const useStyles = makeStyles({
-    firstRow: {
-        height: "100%",
-    },
-    secondRow: {
-    },
     barline: {
         backgroundColor: colors.black,
         width: "2px",
