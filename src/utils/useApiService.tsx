@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { AuthContext } from '../contexts/auth';
 
 /**
  * @param method HTTP method, get or put
@@ -18,6 +19,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
   const [header, setHeader] = useState()
   const [status, setStatus] = useState(0)
 
+
   // Add params to the url   
   let baseUrl = 'https://localhost:5001/api/';
   let finalUrl = baseUrl + url;
@@ -25,6 +27,8 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     finalUrl += '?' + new URLSearchParams(options.params).toString();
   }
 
+  // fetchData og postData er like, men unntak av kallene  await axios.metode<T>(argumenter), hvordan fikser jeg det til én metode? 
+  // axios[method]<T>(finalUrl, options.body) funker ikke.
   const fetchData = async () => {
     setIsError(false);
     setIsLoading(true);
@@ -34,7 +38,6 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
       setData(result.data);
       setHeader(result.headers)
       setStatus(result.status)
-
     } catch (error) {
       setIsError(true);
       setErrorMessage(error);
@@ -44,26 +47,29 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
   };
 
   const postData = async () => {
+    setIsError(false);
+    setIsLoading(true);
+
     try {
       const result = await axios.post<T>(finalUrl, options.body)
       setData(result.data)
       setHeader(result.headers)
       setStatus(result.status)
-
     } catch (error) {
       setIsError(true);
       setErrorMessage(error);
       console.log(error);
     }
+    setIsLoading(false);
   }
 
   useEffect(() => {
     method === "get" && fetchData();
-  }, options.dependencies || []);
+  }, [method, finalUrl]);
 
   useEffect(() => {
     method === "post" && postData();
-  }, options.dependencies || []);
+  }, [method, finalUrl]);
 
 
   return { data, isLoading, isError, errorMessage, fetchData, status, header } as ApiServiceReturn<T>;

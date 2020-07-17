@@ -5,9 +5,9 @@ import { AuthContext } from './contexts/auth';
 
 export const PrivateRoute: React.FC<RouteProps> = props => {
 
-    const { isLoggedIn } = React.useContext(AuthContext)
-    console.log(isLoggedIn);
-    if (isLoggedIn) {
+    const { loggedIn } = React.useContext(AuthContext)
+    console.log(loggedIn);
+    if (loggedIn) {
         return <Route {...props} component={props.component} />;
     } else {
         return <Redirect to={{ pathname: '/' }} />;

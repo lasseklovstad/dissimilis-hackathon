@@ -16,6 +16,8 @@ import { AuthContext } from '../../contexts/auth';
 import Alert from '@material-ui/lab/Alert';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import axios from 'axios';
+
 
 export type LoginViewProps = {
 
@@ -27,30 +29,30 @@ const LoginView: FC<LoginViewProps> = () => {
   const classes = useStyles();
   const history = useHistory();
   const axiosGet = useLoginRedirect()
-  const { setIsLoggedIn, isLoggedIn, setToken, token } = useContext(AuthContext)
+  const { setLoggedIn, loggedIn, setToken, token } = useContext(AuthContext)
 
 
 
   //const { setLoggetIn } = useContext(AuthContext);
-  if (isLoggedIn) {
-    history.push("/dashboard");
-  }
-
   const tryLogin = () => {
     axiosGet.fetchData().then(window.open(axiosGet.header.location, "_self"))
   }
 
-  const code = new URLSearchParams(useLocation().search);
-  const axiosPost = useLoginPost(code.get("code"))
+  const code = new URLSearchParams(useLocation().search).get("code");
+  const axiosPost = useLoginPost(code);
 
-  // Burde jeg bruek useEffect her?
   useEffect(() => {
-    if (axiosPost && axiosPost.status === 200) {
-      setIsLoggedIn(true)
-      setToken(axiosPost.data)
-      console.log(token)
+    if (loggedIn) {
+      console.log("hei")
+      history.push("/dashboard");
+    } else if (code != undefined && !loggedIn && axiosPost.status == 200) {
+      console.log("Hvor ofte skjer dette")
+      setLoggedIn(true)
+      history.push("/dashboard");
+      localStorage.setItem("token", axiosPost.data)
     }
-  }, [axiosPost])
+  }, [axiosPost, loggedIn])
+
 
   const [warningDisplayed, setWarningDisplayed] = React.useState(false);
   const warning =
@@ -79,7 +81,8 @@ const LoginView: FC<LoginViewProps> = () => {
         <LoginLogo className={classes.loginlogo} />
         <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled" onSubmit={tryLogin}></TextField>
         <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled" onSubmit={tryLogin}></TextField>
-        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={(tryLogin)}>{t("LoginView:login")}</Button>
+        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined">{t("LoginView:login")}</Button>
+        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={(tryLogin)}>{t("LoginView:loginWithMicrosoft")}</Button>
         {warning}
       </Grid>
     </Grid>
