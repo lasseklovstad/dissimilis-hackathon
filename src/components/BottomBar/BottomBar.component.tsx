@@ -64,8 +64,6 @@ function BottomBar() {
 
     return (
         <Grid container justify="center">
-
-
             <Grid item xs={12} sm={10} className={classes.outercontainer}>
                 <div className={classes.container} >
                     <div className={classes.flexelement}>
@@ -83,13 +81,11 @@ function BottomBar() {
                         </ToggleButton>
                     </StyledToggleButtonGroup>
                 </div>
-
                 <div className={classes.container} >
                     <MenuButtonWithAddIcon text={t("BottomBar:addTone")} link={"/song"} />
                     <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => addEmptyBar()} />
                 </div>
             </Grid>
-
         </Grid>
     );
 }
@@ -102,13 +98,11 @@ const useStyles = makeStyles({
         flexDirection: "row",
         flexBasis: "auto",
         flexWrap: "wrap",
-        /* padding: "0px 24px 0 24px", */
         marginBottom: "24px",
         justifyContent: "space-between",
         alignItems: "flex-end",
         '@media (max-width: 960px)': {
             flexDirection: "column",
-            /* alignItems: "flex-end", */
         }
     },
     container: {
@@ -129,12 +123,7 @@ const useStyles = makeStyles({
             color: colors.black
         }
     },
-    button: {
-        backgroundColor: colors.white,
-        border: "none",
-        height: "56px",
-        outline: "none",
-    },
+    
     input: {
         padding: "18px 10px 10px 10px",
         height: "28px",
