@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { makeStyles, FormControl, MenuItem, Select, Typography, withStyles } from '@material-ui/core';
+import { makeStyles, FormControl, MenuItem, Select, Typography, withStyles, Grid } from '@material-ui/core';
 import { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
 import { colors } from '../../utils/colors';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
@@ -63,33 +63,34 @@ function BottomBar() {
     };
 
     return (
+        <Grid container justify="center">
 
-        <div className={classes.outercontainer}>
-            <div className={classes.container} >
-                <div className={classes.flexelement}>
-                    {Menu}
+
+            <Grid item xs={12} sm={10} className={classes.outercontainer}>
+                <div className={classes.container} >
+                    <div className={classes.flexelement}>
+                        {Menu}
+                    </div>
+                    <div className={classes.flexelement}>
+                        <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} notesOrChords={toggle === true ? chordArray : noteArray} noOptionsText={t("BottomBar:noOptions")} />
+                    </div>
+                    <StyledToggleButtonGroup value={toggle} exclusive onChange={handleToggle} className={classes.flexelement} size="small">
+                        <ToggleButton value={true}>
+                            <Typography>{t("BottomBar:chord")}</Typography>
+                        </ToggleButton>
+                        <ToggleButton value={false}>
+                            <Typography>{t("BottomBar:note")}</Typography>
+                        </ToggleButton>
+                    </StyledToggleButtonGroup>
                 </div>
-                <div className={classes.flexelement}>
-                    <DropdownAutocomplete icon={<MusicNoteIcon fontSize="small" />} notesOrChords={toggle === true ? chordArray : noteArray} noOptionsText={t("BottomBar:noOptions")} />
+
+                <div className={classes.container} >
+                    <MenuButtonWithAddIcon text={t("BottomBar:addTone")} link={"/song"} />
+                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => addEmptyBar()} />
                 </div>
-                <StyledToggleButtonGroup value={toggle} exclusive onChange={handleToggle} className={classes.flexelement} size="small">
-                    <ToggleButton value={true}>
-                        <Typography>{t("BottomBar:chord")}</Typography>
-                    </ToggleButton>
-                    <ToggleButton value={false}>
-                        <Typography>{t("BottomBar:note")}</Typography>
-                    </ToggleButton>
-                </StyledToggleButtonGroup>
+            </Grid>
 
-
-            </div>
-
-            <div className={classes.container} >
-                <MenuButtonWithAddIcon text={t("BottomBar:addTone")} link={"/song"} />
-                <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => addEmptyBar()} />
-            </div>
-        </div>
-
+        </Grid>
     );
 }
 const useStyles = makeStyles({
@@ -101,12 +102,13 @@ const useStyles = makeStyles({
         flexDirection: "row",
         flexBasis: "auto",
         flexWrap: "wrap",
-        alignItems: "center",
+        /* padding: "0px 24px 0 24px", */
         marginBottom: "24px",
-        justifyContent: "space-around",
-        '@media (max-width: 980px)': {
+        justifyContent: "space-between",
+        alignItems: "flex-end",
+        '@media (max-width: 960px)': {
             flexDirection: "column",
-            alignItems: "flex-end",
+            /* alignItems: "flex-end", */
         }
     },
     container: {
