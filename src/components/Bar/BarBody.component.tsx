@@ -5,6 +5,7 @@ import { IChordAndNotes } from "../../models/IBar";
 
 export type BarBodyProps = {
     chordsAndNotes: IChordAndNotes[],
+    height?: number,
 }
 
 export function getColor(color: string): string {
@@ -48,7 +49,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
 
 
     return (
-        <Box style={{ height: "100%" }} className={classes.root}>
+        <Box style={{ height: !props.height ? "100%" : props.height + "px" }} className={classes.root} >
             {props.chordsAndNotes.map((note, i) => {
                 return (
                     <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length }} >
@@ -84,7 +85,6 @@ const useStyles = makeStyles({
     toneBox: {
         flex: 1,
         width: "100%",
-        height: "10px",
         borderRadius: "5px",
         margin: "2px 0",
     },

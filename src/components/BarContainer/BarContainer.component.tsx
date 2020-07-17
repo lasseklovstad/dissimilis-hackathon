@@ -12,6 +12,7 @@ export type BarContainerProps = {
     barLineAfter: boolean,
     bar: IBar,
     masterSheet: boolean,
+    height?: number,
 };
 
 export const BarContainer: React.FC<BarContainerProps> = props => {
@@ -23,7 +24,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
 
     const queryString = require('query-string');
     const voiceStringFromURL = queryString.parse(window.location.search);
-    const voiceId:number = parseInt(voiceStringFromURL.voice);
+    const voiceId: number = parseInt(voiceStringFromURL.voice);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -46,13 +47,13 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         let centerDivSize: 10 | 11 | 12 = 11;
 
         return (
-            <Grid container role="grid">
+            <Grid container role="grid" style={{ height: "100%" }}>
                 <Grid item xs={12} className={classes.firstRow} role="row">
                     <Grid container style={{ height: "100%" }} role="grid" aria-label="barline before the bar">
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar">
-                            <Bar repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndNotes={bar.chordsAndNotes} barLineAfter={props.barLineAfter} />
+                            <Bar height={props.height} repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndNotes={bar.chordsAndNotes} barLineAfter={props.barLineAfter} />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -82,11 +83,11 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
 
 const useStyles = makeStyles({
     firstRow: {
-        height: "auto",
+        height: "100%",
 
     },
     secondRow: {
-        height: "50px",
+        height: "100%",
     },
     barline: {
         backgroundColor: colors.black,
