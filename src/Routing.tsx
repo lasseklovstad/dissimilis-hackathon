@@ -14,6 +14,8 @@ function SongRouting() {
         <Switch>
             <SongContextProvider>
                 <PrivateRoute path="/song/:id" component={SongView} />
+                <PrivateRoute path="/song" component={SongView} />
+
 
             </SongContextProvider>
         </Switch>
