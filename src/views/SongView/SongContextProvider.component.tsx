@@ -91,6 +91,7 @@ const SongContextProvider: React.FC = props => {
                     },
                     {
                         repBefore: false,
+                        house: 1,
                         repAfter: false,
                         chordsAndNotes: [
                             {

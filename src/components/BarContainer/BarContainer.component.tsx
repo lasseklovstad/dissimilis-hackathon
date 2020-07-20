@@ -12,6 +12,7 @@ export type BarContainerProps = {
     barLineAfter: boolean,
     bar: IBar,
     masterSheet: boolean,
+    height?: number,
 };
 
 export const BarContainer: React.FC<BarContainerProps> = props => {
@@ -23,7 +24,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
 
     const queryString = require('query-string');
     const voiceStringFromURL = queryString.parse(window.location.search);
-    const voiceId:number = parseInt(voiceStringFromURL.voice);
+    const voiceId: number = parseInt(voiceStringFromURL.voice);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -46,18 +47,18 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         let centerDivSize: 10 | 11 | 12 = 11;
 
         return (
-            <Grid container role="grid">
-                <Grid item xs={12} className={classes.firstRow} role="row">
-                    <Grid container style={{ height: "100%" }} role="grid" aria-label="barline before the bar">
-                        <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
+            <Grid container role="grid" className={classes.fullHeight}>
+                <Grid item xs={12} role="row">
+                    <Grid container style={{ height: "auto" }} role="grid" aria-label="barline before the bar">
+                        <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ height: !props.height ? "120px" : props.height, borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar">
-                            <Bar repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndNotes={bar.chordsAndNotes} barLineAfter={props.barLineAfter} />
+                            <Bar height={props.height || 120} repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndNotes={bar.chordsAndNotes} barLineAfter={props.barLineAfter} />
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.secondRow} role="row" >
-                    <Grid container style={{ height: "100%" }} role="grid" >
+                <Grid item xs={12} role="row" style={{ height: "32px" }}>
+                    <Grid container role="grid" >
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} role="gridcell" ></Grid>
                         <Grid item xs={10} role="gridcell" style={{ display: props.masterSheet ? "block" : "none" }}>
                             <Box display="flex" flexGrow={1}>
@@ -81,13 +82,6 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
 }
 
 const useStyles = makeStyles({
-    firstRow: {
-        height: "auto",
-
-    },
-    secondRow: {
-        height: "50px",
-    },
     barline: {
         backgroundColor: colors.black,
         width: "2px",
@@ -95,8 +89,10 @@ const useStyles = makeStyles({
         borderLeft: 0,
     },
     barlineBox: {
-        height: "120px",
         marginTop: "40px",
+    },
+    fullHeight: {
+        height: "100%",
     }
 
 });
