@@ -1,4 +1,4 @@
-import { useApiService } from "./useApiService";
+import { apiService } from "./apiService";
 import { ISong } from "../models/ISong";
 
 /**
@@ -13,6 +13,6 @@ export const useGetRecentSongs = () => {
     console.log("apiKey: " + apiKey + " userId: " + userId)
     const headers = { 'X-API-Key': apiKey, 'X-User-ID': userId, }
     console.log(headers);
-    const getSongs = useApiService<ISong[]>("get", url, { params, initialData, headers }).fetchData;
+    const getSongs = apiService<ISong[]>("get", url, { params, initialData, headers }).fetchData;
     return getSongs;
 }
