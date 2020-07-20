@@ -32,8 +32,8 @@ export const Bar: React.FC<BarProps> = props => {
 
     return (
         <Box className={classes.root} mx="auto" role="main">
-            <Grid container role="grid" style={{ height: "100%" }}>
-                <Grid item xs={12} role="gridcell" style={{ height: "100%" }}>
+            <Grid container role="grid" className={classes.fullHeight}>
+                <Grid item xs={12} role="gridcell" className={classes.fullHeight}>
                     <Grid container className={classes.firstRow} role="grid">
                         <Grid item xs={1} role="gridcell"></Grid>
                         <Grid item xs={9} role="gridcell" aria-label={props.house + ". ending"}>
@@ -43,7 +43,7 @@ export const Bar: React.FC<BarProps> = props => {
                     </Grid>
                 </Grid>
                 <Grid item xs={12} style={{ height: props.height }} role="gridcell" >
-                    <Grid container spacing={0} style={{ height: "100%" }} role="grid" >
+                    <Grid container spacing={0} className={classes.fullHeight} role="grid" >
                         <Grid item xs={props.repBefore ? 1 : "auto"} role="gridcell" aria-label="repetition sign before the tone">
                             <Box mt={"20px"}>
                                 <RepetitionSign size="small" display={props.repBefore} />
@@ -76,6 +76,9 @@ const useStyles = makeStyles({
     firstRow: {
         height: "32px"
     },
+    fullHeight: {
+        height: "100%",
+    }
 
 })
 

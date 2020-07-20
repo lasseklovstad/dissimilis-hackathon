@@ -47,7 +47,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         let centerDivSize: 10 | 11 | 12 = 11;
 
         return (
-            <Grid container role="grid" style={{ height: "100%" }}>
+            <Grid container role="grid" className={classes.fullHeight}>
                 <Grid item xs={12} role="row">
                     <Grid container style={{ height: "auto" }} role="grid" aria-label="barline before the bar">
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ height: !props.height ? "120px" : props.height, borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
@@ -90,6 +90,9 @@ const useStyles = makeStyles({
     },
     barlineBox: {
         marginTop: "40px",
+    },
+    fullHeight: {
+        height: "100%",
     }
 
 });
