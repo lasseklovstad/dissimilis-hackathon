@@ -5,7 +5,10 @@ import colors from '../../utils/colors';
 import { useHistory } from 'react-router-dom';
 
 
-export const TimeSignature = () => {
+export type TimeSignatureProps = {
+  height?: number,
+}
+export const TimeSignature: FC<TimeSignatureProps> = (props) => {
   const history = useHistory();
 
   /*
@@ -29,28 +32,29 @@ export const TimeSignature = () => {
   }
   const style = useStyles();
   return (
-    <Box className={style.TimeSignatureContainer}>
+    <Box className={style.TimeSignatureContainer} style={{ height: !props.height ? "200px" : (props.height + 80) + "px" }}>
       <Box><Typography className={style.TimeSignatureNumerator}>{timeSignatureNumerator}</Typography></Box>
       <Box><Typography className={style.TimeSignatureDenominator}>{timeSignatureDenominator}</Typography></Box>
     </Box>
   );
 }
 
-export const Bar = () => {
+export const Bar: FC<TimeSignatureProps> = (props) => {
   const style = useStyles();
   return (
-    <Box className={style.BarComponent}></Box>
+    <Box className={style.BarComponent} style={{ height: !props.height ? "200px" : (props.height + 80) + "px" }}></Box>
   );
 }
 
 export type SongViewBarNumberProps = {
-  barNumber: number
+  barNumber: number,
+  height?: number,
 }
-export const BarNumber: FC<SongViewBarNumberProps> = ({ barNumber }) => {
+export const BarNumber: FC<SongViewBarNumberProps> = (props) => {
   const style = useStyles();
   return (
-    <Box className={style.BarNumberContainer}>
-      <Typography variant="body1" className={style.BarNumberText}>{barNumber}</Typography>
+    <Box className={style.BarNumberContainer} style={{ height: !props.height ? "200px" : (props.height + 80) + "px" }}>
+      <Typography variant="body1" className={style.BarNumberText}>{props.barNumber}</Typography>
     </Box>
   );
 }
@@ -58,12 +62,11 @@ export default BarNumber;
 
 const useStyles = makeStyles({
   TimeSignatureContainer: {
-    height: "200px",
     flexDirection: "column",
     display: "flex"
   },
   TimeSignatureNumerator: {
-    margin: "10px 10px 0 0",
+    margin: "36px 10px 0 0",
     float: "right",
     fontWeight: "bold"
   },
@@ -74,14 +77,13 @@ const useStyles = makeStyles({
   },
   BarComponent: {
     backgroundColor: "green",
-    height: "200px",
     borderStyle: "double"
   },
   BarNumberContainer: {
     height: "200px"
   },
   BarNumberText: {
-    margin: "10px 10px 0 0",
+    margin: "40px 10px 0 0",
     float: "right",
     color: colors.gray_400
   }

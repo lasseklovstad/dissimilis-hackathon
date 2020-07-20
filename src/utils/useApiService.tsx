@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+<<<<<<< HEAD
 
+=======
+>>>>>>> ff641083b0d54c960c49923ddb8ed02c140e5b7c
 
 /**
- * 
  * @param method HTTP method, get or put
  * @param url Url to api
  * @param sendData data to be sent
@@ -16,6 +18,14 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
   const [data, setData] = useState<T | undefined>(options.initialData);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Add params to the url   
+  let baseUrl = 'https://localhost:5001/api/';
+  let finalUrl = baseUrl + url;
+  if (options.params) {
+    finalUrl += '?' + new URLSearchParams(options.params).toString();
+  }
 
   // Legg til parametere i urlen    
   let baseUrl = 'https://localhost:5001/api/';
@@ -47,6 +57,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
 
       } catch (error) {
         setIsError(true);
+        setErrorMessage(error);
         console.log(error);
       }
 
@@ -54,9 +65,15 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     };
 
     fetchData();
+<<<<<<< HEAD
   }, options.dependencies);
 
   return [data, isLoading, isError] as const;
+=======
+  }, [finalUrl, method, options.body]);
+
+  return [data, isLoading, isError, errorMessage] as const;
+>>>>>>> ff641083b0d54c960c49923ddb8ed02c140e5b7c
 };
 
 /**
@@ -66,6 +83,9 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
 export type ApiServiceOptions<T> = {
   body?: any;
   initialData?: T;
+<<<<<<< HEAD
   dependencies?: [any]
+=======
+>>>>>>> ff641083b0d54c960c49923ddb8ed02c140e5b7c
   params?: Record<string, string>
 }

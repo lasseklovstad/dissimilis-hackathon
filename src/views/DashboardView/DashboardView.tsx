@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
@@ -7,6 +8,15 @@ import testData from './DashboardTestData';
 import { writeStorage } from '@rehooks/local-storage';
 import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
 import { ISong } from '../../models/ISong';
+=======
+import React from 'react';
+import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
+import { useTranslation } from "react-i18next";
+import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/DashboardButtons/DashboardButtons';
+import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
+import { writeStorage } from '@rehooks/local-storage';
+import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
+>>>>>>> ff641083b0d54c960c49923ddb8ed02c140e5b7c
 
 export type DashboardViewProps = {
 
@@ -14,31 +24,35 @@ export type DashboardViewProps = {
 
 export const DashboardView: React.FC<DashboardViewProps> = () => {
   const { t } = useTranslation();
-  const [recentSongs, setRecentSongs] = useState(testData);
   const measureText = t("DashboardView:measure");
+<<<<<<< HEAD
   const [dashboardView, setDashboardView] = useState(true);
   const [searchTerm, setSearchTerm] = useState("")
   let searchResult = useGetFilteredSongs(searchTerm, [searchTerm]);
+=======
+  const dataFromApi = useGetRecentSongs()
+  const recentSongs = dataFromApi;
+>>>>>>> ff641083b0d54c960c49923ddb8ed02c140e5b7c
   const musicTacts = [
     {
       id: 1,
       text: "2/4-" + measureText,
-      link: "/song"
+      link: "/song/1"
     },
     {
       id: 2,
       text: "3/4-" + measureText,
-      link: "/song"
+      link: "/song/1"
     },
     {
       id: "3",
       text: "4/4-" + measureText,
-      link: "/song"
+      link: "/song/1"
     },
     {
       id: 4,
       text: "6/8-" + measureText,
-      link: "/song"
+      link: "/song/1"
     }
   ];
   const styles = useStyles()
@@ -107,6 +121,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                 </Grid>
               </Grid>
             </Box>
+<<<<<<< HEAD
           </Grid>
         }
 
@@ -124,6 +139,12 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                 ))}
                 <Grid item xs={12} sm={4} lg={3} key="library">
                   <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
+=======
+            <Grid container spacing={3}>
+              {recentSongs?.map(song => (
+                <Grid item xs={12} sm={4} lg={3} key={song.id}>
+                  <DashboardButton text={song.title} link={`/song/${song.id}`} />
+>>>>>>> ff641083b0d54c960c49923ddb8ed02c140e5b7c
                 </Grid>
               </Grid>
             </Box>
