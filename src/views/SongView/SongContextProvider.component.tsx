@@ -94,7 +94,6 @@ const SongContextProvider: React.FC = props => {
                     },
                     {
                         repBefore: false,
-                        house: 1,
                         repAfter: false,
                         chordsAndNotes: [
                             {
@@ -135,7 +134,7 @@ const SongContextProvider: React.FC = props => {
                         chordsAndNotes: [
                             {
                                 length: 2,
-                                notes: ["D", "E"]
+                                notes: ["D"]
                             },
                             {
                                 length: 2,
@@ -309,7 +308,7 @@ const SongContextProvider: React.FC = props => {
     //Method to simplify change of state
     const addVoice = (newVoice: IVoice) => {
         for (let i = 0; i < song.voices[0].bars.length; i++) {
-            const tempBar: IBar = { repBefore: false, repAfter: false, chordsAndNotes: [] }
+            const tempBar: IBar = { repBefore: false, repAfter: false, chordsAndNotes: [{length: 8, notes: [""]}] }
             newVoice.bars.push(tempBar);
         }
         setSong({ ...song, voices: [...song.voices, newVoice] });
@@ -338,7 +337,7 @@ const SongContextProvider: React.FC = props => {
                 newChordsOrNotes.push(song.voices[voiceId].bars[barId].chordsAndNotes[noteId])
             }
         }
-        setSong({ ...song, voices: song.voices.map((voice) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newChordsOrNotes } : bar) } : voice) });
+        setSong({ ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newChordsOrNotes } : bar) } : voice) });
     }
 
     //Method to add an empty bar at a specific index to each of all voices except the master sheet/song
