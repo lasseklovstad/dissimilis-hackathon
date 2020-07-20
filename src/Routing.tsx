@@ -11,7 +11,8 @@ function SongRouting() {
     return (
         <Switch>
             <SongContextProvider>
-                <Route path="/song/:id" component={SongView} />
+                <Route exact path="/song/:id" component={SongView} />
+                <Route exact path="/song" component={SongView} />
             </SongContextProvider>
         </Switch>
 
@@ -24,7 +25,7 @@ function Routing() {
             <Switch>
                 <Route path="/dashboard" component={DashboardView} />
                 <Route path="/common" component={CommonView} />
-                <Route path="/song/:id" component={SongRouting} />
+                <Route path="/song" component={SongRouting} />
 
                 <Route path="/" component={LoginView} />
                 <Route render={() => <Redirect to={{ pathname: "/" }} />} />

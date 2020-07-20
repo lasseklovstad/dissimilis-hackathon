@@ -49,16 +49,16 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         return (
             <Grid container role="grid" style={{ height: "100%" }}>
                 <Grid item xs={12} role="row">
-                    <Grid container style={{ height: "auto%" }} role="grid" aria-label="barline before the bar">
+                    <Grid container style={{ height: "auto" }} role="grid" aria-label="barline before the bar">
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ height: !props.height ? "120px" : props.height, borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar">
-                            <Bar height={props.height} repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndNotes={bar.chordsAndNotes} barLineAfter={props.barLineAfter} />
+                            <Bar height={props.height || 120} repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndNotes={bar.chordsAndNotes} barLineAfter={props.barLineAfter} />
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} role="row" >
-                    <Grid container style={{ height: "100%" }} role="grid" >
+                <Grid item xs={12} role="row" style={{ height: "32px" }}>
+                    <Grid container role="grid" >
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} role="gridcell" ></Grid>
                         <Grid item xs={10} role="gridcell" style={{ display: props.masterSheet ? "block" : "none" }}>
                             <Box display="flex" flexGrow={1}>
