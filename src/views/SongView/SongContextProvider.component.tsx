@@ -328,18 +328,6 @@ const SongContextProvider: React.FC = props => {
         setSong({ ...song, voices: song.voices.map((voice) => true ? { ...voice, bars: voice.bars.filter((bar, i) => i !== id) } : voice) });
     }
 
-    const editNote = (voiceId: number, barId: number, noteId: number, newNote: IChordAndNotes) => {
-        let newChordsOrNotes: IChordAndNotes[] = [];
-        for (let i = 0; i < song.voices[voiceId].bars[barId].chordsAndNotes.length; i++) {
-            if (i === noteId) {
-                newChordsOrNotes.push(newNote);
-            } else {
-                newChordsOrNotes.push(song.voices[voiceId].bars[barId].chordsAndNotes[noteId])
-            }
-        }
-        setSong({ ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newChordsOrNotes } : bar) } : voice) });
-    }
-
     //Method to add an empty bar at a specific index to each of all voices except the master sheet/song
     const copyAndAddEmptyBars = (index: number, withoutMaster: 0 | 1) => {
         //withoutMaster is either 0 if mastersheet is included, or 1 if it is not
@@ -373,6 +361,18 @@ const SongContextProvider: React.FC = props => {
     const addEmptyBar = () => {
         const tempArray = copyAndAddEmptyBars(song.voices[0].bars.length, 0);
         setSong({ ...song, voices: song.voices.map((voice, i) => true ? { ...voice, bars: tempArray[i] } : voice) });
+    }
+
+    const editNote = (voiceId: number, barId: number, noteId: number, newNote: IChordAndNotes) => {
+        let newChordsOrNotes: IChordAndNotes[] = [];
+        for (let i = 0; i < song.voices[voiceId].bars[barId].chordsAndNotes.length; i++) {
+            if (i === noteId+1) {
+                newChordsOrNotes.push(newNote);
+            } else {
+                newChordsOrNotes.push(song.voices[voiceId].bars[barId].chordsAndNotes[noteId])
+            }
+        }
+        setSong({ ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newChordsOrNotes } : bar) } : voice) });
     }
 
 
