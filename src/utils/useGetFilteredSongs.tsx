@@ -9,6 +9,6 @@ export const useGetFilteredSongs = (query: string) => {
     const url = "Song/songs";
     const params = { "Query": query.toString() };
     const initialData: ISong[] = [];
-    const returnObject = useApiService<ISong[]>("get", url, { params, initialData });
-    return returnObject;
+    const getSongs = useApiService<ISong[]>("get", url, { params, initialData });
+    return getSongs;
 }

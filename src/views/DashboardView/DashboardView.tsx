@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
 import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/DashboardButtons/DashboardButtons';
 import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
 import { writeStorage } from '@rehooks/local-storage';
 import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
+import { ISong } from '../../models/ISong';
 
 export type DashboardViewProps = {
 
@@ -13,8 +14,11 @@ export type DashboardViewProps = {
 export const DashboardView: React.FC<DashboardViewProps> = () => {
   const { t } = useTranslation();
   const measureText = t("DashboardView:measure");
-  const dataFromApi = useGetRecentSongs()
-  const recentSongs = dataFromApi;
+  const getRecentSongs = useGetRecentSongs()
+  const [recentSongs, setRecentSongs] = useState<ISong[]>([])
+  useEffect(() => {
+    getRecentSongs().then(({ result }) => setRecentSongs(result?.data || []))
+  }, [])
   const musicTacts = [
     {
       id: 1,
@@ -77,7 +81,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               <Typography variant="h1">{t("DashboardView:recentLabel")}</Typography>
             </Box>
             <Grid container spacing={3}>
-              {recentSongs?.data.map(song => (
+              {recentSongs.map(song => (
                 <Grid item xs={12} sm={4} lg={3} key={song.id}>
                   <DashboardButton text={song.title} link={`/song/${song.id}`} />
                 </Grid>

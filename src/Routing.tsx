@@ -29,7 +29,6 @@ function Routing() {
                 <PrivateRoute path="/common" component={CommonView} />
                 <PrivateRoute path="/song" component={SongRouting} />
 
-
                 <Route path="/" component={LoginView} />
                 <Route render={() => <Redirect to={{ pathname: "/" }} />} />
             </Switch>

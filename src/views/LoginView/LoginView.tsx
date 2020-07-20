@@ -16,8 +16,6 @@ import { AuthContext } from '../../contexts/auth';
 import Alert from '@material-ui/lab/Alert';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import axios from 'axios';
-
 
 export type LoginViewProps = {
 
@@ -29,29 +27,40 @@ const LoginView: FC<LoginViewProps> = () => {
   const classes = useStyles();
   const history = useHistory();
   const axiosGet = useLoginRedirect()
-  const { setLoggedIn, loggedIn, setToken, token } = useContext(AuthContext)
+  const { setLoggedIn, loggedIn } = useContext(AuthContext)
 
 
 
   //const { setLoggetIn } = useContext(AuthContext);
   const tryLogin = () => {
-    axiosGet.fetchData().then(window.open(axiosGet.header.location, "_self"))
+    axiosGet().
+      then(({ result }) => {
+        window.open(result?.headers.location, "_self")
+      })
   }
 
-  const code = new URLSearchParams(useLocation().search).get("code");
+  const url = new URLSearchParams(useLocation().search);
+  let code = null;
+  if (url.get("code") !== null) {
+    code = url.get("code")
+  }
   const axiosPost = useLoginPost(code);
 
   useEffect(() => {
     if (loggedIn) {
-      console.log("hei")
+      console.log("if")
       history.push("/dashboard");
-    } else if (code != undefined && !loggedIn && axiosPost.status == 200) {
-      console.log("Hvor ofte skjer dette")
-      setLoggedIn(true)
-      history.push("/dashboard");
-      localStorage.setItem("token", axiosPost.data)
     }
-  }, [axiosPost, loggedIn])
+    axiosPost().then(({ result }) => {
+      if (result && !loggedIn && result.status == 200) {
+        console.log("else")
+        setLoggedIn(true)
+        history.push("/dashboard");
+        sessionStorage.setItem("apiKey", result.data.apiKey);
+        sessionStorage.setItem("userId", result.data.userID?.toString());
+      }
+    })
+  }, [code])
 
 
   const [warningDisplayed, setWarningDisplayed] = React.useState(false);

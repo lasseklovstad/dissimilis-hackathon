@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { AuthContext } from '../contexts/auth';
+import { Token } from './useLoginPost';
 
 /**
  * @param method HTTP method, get or put
@@ -32,26 +33,36 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
   const fetchData = async () => {
     setIsError(false);
     setIsLoading(true);
+    let result: AxiosResponse<T> | undefined = undefined;
+    let error: any
 
     try {
-      const result = await axios.get<T>(finalUrl);
+      console.log("Options.headers:" + options.headers)
+      result = await axios.get<T>(finalUrl, { headers: options.headers });
       setData(result.data);
+      console.log("Her: " + result.headers.location)
       setHeader(result.headers)
       setStatus(result.status)
-    } catch (error) {
+    } catch (err) {
+      error = err
       setIsError(true);
-      setErrorMessage(error);
-      console.log(error);
+      setErrorMessage(err);
+      console.log(err);
     }
     setIsLoading(false);
+    console.log(header);
+    return { result, error }
   };
 
   const postData = async () => {
     setIsError(false);
     setIsLoading(true);
+    let result: AxiosResponse<T> | undefined = undefined;
+    let error: any
 
     try {
-      const result = await axios.post<T>(finalUrl, options.body)
+      console.log("Options.headers:" + options.headers)
+      result = await axios.post<T>(finalUrl, options.body, { headers: options.headers });
       setData(result.data)
       setHeader(result.headers)
       setStatus(result.status)
@@ -61,18 +72,9 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
       console.log(error);
     }
     setIsLoading(false);
+    return { result, error }
   }
-
-  useEffect(() => {
-    method === "get" && fetchData();
-  }, [method, finalUrl]);
-
-  useEffect(() => {
-    method === "post" && postData();
-  }, [method, finalUrl]);
-
-
-  return { data, isLoading, isError, errorMessage, fetchData, status, header } as ApiServiceReturn<T>;
+  return { fetchData, postData }
 };
 
 /**
@@ -83,6 +85,7 @@ export type ApiServiceOptions<T> = {
   body?: any;
   initialData?: T;
   params?: Record<string, string>;
+  headers?: Record<string, string>;
   dependencies?: any[];
 }
 
