@@ -1,11 +1,15 @@
-import React from "react";
-import { Box, makeStyles, Typography } from "@material-ui/core";
+import React, { useContext } from "react";
+import { Box, makeStyles, Typography, ButtonBase } from "@material-ui/core";
 import colors from "../../utils/colors";
 import { IChordAndNotes } from "../../models/IBar";
+import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
+
 
 export type BarBodyProps = {
     chordsAndNotes: IChordAndNotes[],
     height?: number,
+    voiceId: number,
+    barId: number
 }
 
 export function getColor(color: string): string {
@@ -42,6 +46,7 @@ export function getColor(color: string): string {
 }
 export const BarBody: React.FC<BarBodyProps> = props => {
     const classes = useStyles();
+    const { showPossiblePositions, selectedNoteLength, insertNewNoteOrChord } = useContext(SongToolsContext);
 
     const verifySemiTone = (tone: string) => {
         return tone === "1" || tone === "2" || tone === "3" || tone === "4" || tone === "5";
@@ -55,7 +60,11 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                     <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length }} >
                         {note.notes.map((type, index) => {
                             return (
-                                <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) }} >
+                                <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) === "transparent" && showPossiblePositions && note.length >= selectedNoteLength ? "teal" : getColor(type) }} component={ButtonBase} onClick={() => {
+                                    if (getColor(type) === "transparent" && showPossiblePositions && note.length >= selectedNoteLength) {
+                                        insertNewNoteOrChord(index, i, props.barId, props.voiceId)
+                                    }
+                                }}>
                                     <Typography className={classes.tangentText} variant="h2">{verifySemiTone(type) ? type : ""}</Typography>
                                 </Box>
                             )

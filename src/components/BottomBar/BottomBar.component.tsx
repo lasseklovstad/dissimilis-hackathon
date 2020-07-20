@@ -13,6 +13,7 @@ import { notes } from '../../models/notes';
 import { chords } from '../../models/chords';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
+import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component';
 
 const StyledToggleButtonGroup = withStyles((theme) => ({
     grouped: {
@@ -34,15 +35,15 @@ function BottomBar() {
     const classes = useStyles();
     const noteArray: string[] = Object.keys(notes);
     const chordArray: string[] = Object.keys(chords);
-    const [note, setNote] = React.useState(8);
-    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setNote(event.target.value as number);
-    };
+    const { selectedNoteLength, setSelectedNoteLength } = useContext(SongToolsContext);
     const { addEmptyBar } = useContext(SongContext);
+    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setSelectedNoteLength(event.target.value as 1 | 2 | 4 | 8);
+    };
     const Menu =
         <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
             <Select
-                value={note}
+                value={selectedNoteLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
             >
@@ -54,7 +55,8 @@ function BottomBar() {
         </FormControl>
 
 
-    const [toggle, setToggle] = useState<boolean>(true);
+    const [toggle, setToggle] = useState<boolean>(false);
+    const { showPossiblePositions, setShowPossiblePositions } = useContext(SongToolsContext)
 
     const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) => {
         if (newToggle !== null) {
@@ -82,7 +84,7 @@ function BottomBar() {
                     </StyledToggleButtonGroup>
                 </div>
                 <div className={classes.container} >
-                    <MenuButtonWithAddIcon text={t("BottomBar:addTone")} link={"/song"} />
+                    <MenuButtonWithAddIcon text={t("BottomBar:addTone")} onClick={() => setShowPossiblePositions(!showPossiblePositions)} />
                     <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => addEmptyBar()} />
                 </div>
             </Grid>

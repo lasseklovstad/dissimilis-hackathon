@@ -6,13 +6,16 @@ import LoginView from './views/LoginView/LoginView';
 import SongView from './views/SongView/SongView';
 import CommonView from './views/CommonView/CommonView';
 import SongContextProvider from './views/SongView/SongContextProvider.component';
+import SongToolsContextProvider from './views/SongView/SongToolsContextProvider.component';
 
 function SongRouting() {
     return (
         <Switch>
             <SongContextProvider>
-                <Route exact path="/song/:id" component={SongView} />
-                <Route exact path="/song" component={SongView} />
+                <SongToolsContextProvider>
+                    <Route exact path="/song/:id" component={SongView} />
+                    <Route exact path="/song" component={SongView} />
+                </SongToolsContextProvider>
             </SongContextProvider>
         </Switch>
 

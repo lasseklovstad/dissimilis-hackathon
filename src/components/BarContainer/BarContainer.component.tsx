@@ -13,6 +13,8 @@ export type BarContainerProps = {
     bar: IBar,
     masterSheet: boolean,
     height?: number,
+    voiceId: number,
+    barId: number
 };
 
 export const BarContainer: React.FC<BarContainerProps> = props => {
@@ -53,7 +55,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ height: !props.height ? "120px" : props.height, borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar">
-                            <Bar height={props.height || 120} repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndNotes={bar.chordsAndNotes} barLineAfter={props.barLineAfter} />
+                            <Bar voiceId={props.voiceId} barId={props.barId} height={props.height || 120} repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndNotes={bar.chordsAndNotes} barLineAfter={props.barLineAfter} />
                         </Grid>
                     </Grid>
                 </Grid>
