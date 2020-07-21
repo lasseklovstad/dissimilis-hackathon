@@ -3,6 +3,7 @@ import { IVoice } from '../../models/IVoice';
 import { IBar } from '../../models/IBar';
 
 
+
 //State handling skjer i denne komponenten 
 
 interface ISongContext {

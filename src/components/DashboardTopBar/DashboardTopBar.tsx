@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useState, FC } from 'react';
-=======
-import React, { useState } from 'react';
->>>>>>> ff641083b0d54c960c49923ddb8ed02c140e5b7c
 import { Box, Grid, TextField, AppBar, makeStyles } from '@material-ui/core'
 import { DashboardTopBarIcon } from '../../components/DashboardButtons/DashboardButtons'
 import { useTranslation } from 'react-i18next';
@@ -18,7 +14,6 @@ export const DashboardTopBar: FC<TopBarProps> = (props: TopBarProps) => {
   const searchPlaceholder = t("DashboardView:search");
   const [searchBarFocus, setSearchBarFocus] = useState(false);
 
-<<<<<<< HEAD
   const handleOnFocus = () => {
     setSearchBarFocus(true)
   }
@@ -32,8 +27,6 @@ export const DashboardTopBar: FC<TopBarProps> = (props: TopBarProps) => {
     props.onChange(searchTerm)
   }
 
-=======
->>>>>>> ff641083b0d54c960c49923ddb8ed02c140e5b7c
   return (
     <div>
       <AppBar position="static" className={classes.background} >
@@ -45,11 +38,7 @@ export const DashboardTopBar: FC<TopBarProps> = (props: TopBarProps) => {
             </Grid>
             <Grid item xs={6} sm={searchBarFocus ? 2 : 5} md={searchBarFocus ? 3 : 5} />
             <Grid item xs={12} sm={searchBarFocus ? 6 : 3} md={searchBarFocus ? 5 : 3}>
-<<<<<<< HEAD
               <TextField id="standard-basic" label={searchPlaceholder} variant="outlined" fullWidth onFocus={handleOnFocus} onBlur={handleOnBlur} onChange={event => handleOnChange(event.target.value)} />
-=======
-              <TextField id="standard-basic" label={searchPlaceholder} variant="outlined" fullWidth onFocus={() => setSearchBarFocus(true)} onBlur={() => setSearchBarFocus(false)} />
->>>>>>> ff641083b0d54c960c49923ddb8ed02c140e5b7c
             </Grid>
           </Grid>
         </Box>
@@ -64,4 +53,4 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: 'none',
   },
 
-}));
+})); 
