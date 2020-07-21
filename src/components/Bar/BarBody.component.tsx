@@ -96,13 +96,12 @@ export const BarBody: React.FC<BarBodyProps> = props => {
         tempArrayOfChords.push(getChord(voices[0].bars[props.barNumber].chordsAndNotes[i].notes));
 
     }
-    //console.log(tempArrayOfChords);
 
 
 
     const chordsInBar = tempArrayOfChords.map((item: any, i: any) => {
         return (
-            <Typography variant="body1" style={{ flexBasis: 100 / tempArrayOfChords.length + "%" }} className={classes.toneText}>{item}</Typography>
+            <Typography key={i} variant="body1" style={{ flexBasis: 100 / tempArrayOfChords.length + "%" }} className={classes.toneText}>{item}</Typography>
         )
     })
 
