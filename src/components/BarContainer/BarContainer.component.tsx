@@ -20,7 +20,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const { deleteBar, duplicateBar, addRepBefore, song: { voices } } = useContext(SongContext);
+    const { deleteBar, duplicateBar, alterRepBefore, alterRepAfter, song: { voices } } = useContext(SongContext);
     const bar = props.bar
 
     const queryString = require('query-string');
@@ -39,8 +39,11 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         if (method === "duplicate") {
             duplicateBar(index, voiceId - 1);
         }
-        if (method === "addRepBefore") {
-            addRepBefore(index, voiceId - 1);
+        if (method === "alterRepBefore") {
+            alterRepBefore(index);
+        }
+        if (method === "alterRepAfter") {
+            alterRepAfter(index);
         }
         setAnchorEl(null);
     };
@@ -71,7 +74,8 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                                 <Menu id="menuBar" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose} role="menu">
                                     <MenuItem onClick={() => handleClose("delete")}>Slett takt </MenuItem>
                                     <MenuItem onClick={() => handleClose("duplicate")}>Dupliser takt </MenuItem>
-                                    <MenuItem onClick={() => handleClose("addRepBefore")}>Legg til repetisjon foran </MenuItem>
+                                    <MenuItem onClick={() => handleClose("alterRepBefore")}>Legg til repetisjon foran </MenuItem>
+                                    <MenuItem onClick={() => handleClose("alterRepAfter")}>Legg til repetisjon bak </MenuItem>
                                 </Menu>
                             </Box>
                         </Grid>
