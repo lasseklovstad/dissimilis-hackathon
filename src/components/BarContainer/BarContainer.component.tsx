@@ -75,8 +75,8 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                                 <Menu id="menuBar" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose} role="menu">
                                     <MenuItem onClick={() => handleClose("delete")}>{t("BarContainer:deleteBar")} </MenuItem>
                                     <MenuItem onClick={() => handleClose("duplicate")}>{t("BarContainer:duplicateBar")} </MenuItem>
-                                    <MenuItem onClick={() => handleClose("toggleRepBefore")}>{t("BarContainer:repBefore")} </MenuItem>
-                                    <MenuItem onClick={() => handleClose("toggleRepAfter")}>{t("BarContainer:repAfter")} </MenuItem>
+                                    <MenuItem onClick={() => handleClose("toggleRepBefore")}>{voices[0].bars[props.barNumber].repBefore ? t("BarContainer:removeRepBefore") : t("BarContainer:addRepBefore")} </MenuItem>
+                                    <MenuItem onClick={() => handleClose("toggleRepAfter")}>{voices[0].bars[props.barNumber].repAfter ? t("BarContainer:removeRepAfter") : t("BarContainer:addRepAfter")} </MenuItem>
                                 </Menu>
                             </Box>
                         </Grid>
