@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { useHistory } from 'react-router-dom';
 
 
 /**
@@ -9,11 +10,11 @@ import axios, { AxiosResponse } from 'axios';
  */
 
 //TODO: isnn initialData neccessary here? 
-
-export const apiService = <T extends Object>(method: "get" | "post", url: string, options: ApiServiceOptions<T>) => {
+export const useApiService = <T extends Object>(method: "get" | "post", url: string, options: ApiServiceOptions<T>) => {
+  const history = useHistory();
 
   // Add params to the url   
-  let baseUrl = 'https://10.47.132.83:5001/api/';
+  let baseUrl = 'https://localhost:5001/api/';
   let finalUrl = baseUrl + url;
   if (options.params) {
     finalUrl += '?' + new URLSearchParams(options.params).toString();
@@ -28,6 +29,11 @@ export const apiService = <T extends Object>(method: "get" | "post", url: string
     try {
       result = await axios.get<T>(finalUrl, { headers: options.headers });
     } catch (error) {
+      if (error.response.status === 401) {
+        history.push("/");
+        sessionStorage.removeItem("apiKey");
+        sessionStorage.removeItem("userId");
+      }
       isError = true;
       errorMessage = error;
       console.log(error);
@@ -42,6 +48,11 @@ export const apiService = <T extends Object>(method: "get" | "post", url: string
     try {
       result = await axios.post<T>(finalUrl, options.body, { headers: options.headers });
     } catch (error) {
+      if (error.response.status === 401) {
+        history.push("/");
+        sessionStorage.removeItem("apiKey");
+        sessionStorage.removeItem("userId");
+      }
       isError = true;
       errorMessage = error;
       console.log(error);

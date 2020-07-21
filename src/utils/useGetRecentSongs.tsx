@@ -1,4 +1,4 @@
-import { apiService } from "./apiService";
+import { useApiService } from "./useApiService";
 import { ISong } from "../models/ISong";
 
 /**
@@ -11,6 +11,6 @@ export const useGetRecentSongs = () => {
     const apiKey = sessionStorage.getItem("apiKey") || "";
     const userId = sessionStorage.getItem("userId") || "";
     const headers = { 'X-API-Key': apiKey, 'X-User-ID': userId, };
-    const getSongs = apiService<ISong[]>("get", url, { params, initialData, headers }).fetchData;
+    const getSongs = useApiService<ISong[]>("get", url, { params, initialData, headers }).fetchData;
     return getSongs;
 }

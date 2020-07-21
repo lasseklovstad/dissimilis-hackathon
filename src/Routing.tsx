@@ -13,8 +13,8 @@ function SongRouting() {
     return (
         <Switch>
             <SongContextProvider>
-                <PrivateRoute path="/song/:id" component={SongView} />
-                <PrivateRoute path="/song" component={SongView} />
+                <PrivateRoute exact path="/song/:id" component={SongView} />
+                <PrivateRoute exact path="/song" component={SongView} />
 
 
             </SongContextProvider>

@@ -1,4 +1,4 @@
-import { apiService } from "./apiService";
+import { useApiService } from "./useApiService";
 import { ISong } from "../models/ISong";
 
 /**
@@ -9,6 +9,6 @@ export const useGetSong = (id: number) => {
     const url = 'songs/';
     const params = { 'Id': id.toString() };
     const initialData: ISong[] = [];
-    const getSongs = apiService<ISong[]>("get", url, { params, initialData }).fetchData;
+    const getSongs = useApiService<ISong[]>("get", url, { params, initialData }).fetchData;
     return getSongs;
 }

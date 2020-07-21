@@ -45,11 +45,11 @@ const LoginView: FC<LoginViewProps> = () => {
   const axiosPost = useLoginPost(code);
 
   useEffect(() => {
-    if (loggedIn) {
+    if (sessionStorage.getItem("apiKey") && sessionStorage.getItem("userId")) {
       history.push("/dashboard");
     }
     axiosPost().then(({ result }) => {
-      if (result && !loggedIn && result.status == 200) {
+      if (result && (!sessionStorage.getItem("apiKey") || !sessionStorage.getItem("userId")) && result.status === 200) {
         setLoggedIn(true);
         history.push("/dashboard");
         sessionStorage.setItem("apiKey", result.data.apiKey);
