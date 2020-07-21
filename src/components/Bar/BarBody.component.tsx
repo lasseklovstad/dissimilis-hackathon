@@ -60,9 +60,9 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                     <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length }} >
                         {note.notes.map((type, index) => {
                             return (
-                                <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) === "transparent" && showPossiblePositions && note.length >= selectedNoteLength ? "teal" : getColor(type) }} component={ButtonBase} onClick={() => {
-                                    if (getColor(type) === "transparent" && showPossiblePositions && note.length >= selectedNoteLength) {
-                                        insertNewNoteOrChord(index, i, props.barId, props.voiceId)
+                                <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) === "transparent" && showPossiblePositions && note.length >= selectedNoteLength ? colors.focus : getColor(type) }} component={ButtonBase} onClick={() => {
+                                    if (getColor(type) >= "transparent" && showPossiblePositions && note.length === selectedNoteLength) {
+                                        insertNewNoteOrChord(i, props.barId, props.voiceId)
                                     }
                                 }}>
                                     <Typography className={classes.tangentText} variant="h2">{verifySemiTone(type) ? type : ""}</Typography>

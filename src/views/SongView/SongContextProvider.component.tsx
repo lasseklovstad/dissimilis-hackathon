@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { IVoice } from '../../models/IVoice';
 import { IBar, IChordAndNotes } from '../../models/IBar';
+import useLocalStorage from '@rehooks/local-storage';
 
 
 //State handling skjer i denne komponenten 
@@ -14,6 +15,7 @@ interface ISongContext {
     duplicateBar: (id: number, voiceId: number) => void,
     addEmptyBar: () => void,
     editNote: (voiceId: number, barId: number, noteId: number, newNote: IChordAndNotes) => void,
+    getTimeSignature: () => number[]
 }
 
 interface ISong {
@@ -37,6 +39,7 @@ export const SongContext = React.createContext<ISongContext>({
     },
     addEmptyBar: () => { },
     editNote: (voiceId: number, barId: number, noteId: number, newNote: IChordAndNotes) => { },
+    getTimeSignature: () => []
 });
 
 const SongContextProvider: React.FC = props => {
@@ -123,7 +126,19 @@ const SongContextProvider: React.FC = props => {
                                 notes: ["G"]
                             },
                             {
-                                length: 4,
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
                                 notes: [""]
                             }
                         ],
@@ -253,7 +268,19 @@ const SongContextProvider: React.FC = props => {
                                 notes: ["G"]
                             },
                             {
-                                length: 4,
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
                                 notes: [""]
                             }
                         ],
@@ -308,7 +335,15 @@ const SongContextProvider: React.FC = props => {
     //Method to simplify change of state
     const addVoice = (newVoice: IVoice) => {
         for (let i = 0; i < song.voices[0].bars.length; i++) {
-            const tempBar: IBar = { repBefore: false, repAfter: false, chordsAndNotes: [{length: 8, notes: [""]}] }
+            //I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
+            const newChordsAndNotes = [];
+            const newEmptyNote = { length: 1, notes: [""] };
+            let timeSignatureNumerator = getTimeSignature()[0];
+            if (getTimeSignature()[1] == 4) timeSignatureNumerator *= 2;
+            for (let i = 0; i < timeSignatureNumerator; i++) {
+                newChordsAndNotes.push(newEmptyNote)
+            }
+            const tempBar: IBar = { repBefore: false, repAfter: false, chordsAndNotes: newChordsAndNotes }
             newVoice.bars.push(tempBar);
         }
         setSong({ ...song, voices: [...song.voices, newVoice] });
@@ -328,11 +363,33 @@ const SongContextProvider: React.FC = props => {
         setSong({ ...song, voices: song.voices.map((voice) => true ? { ...voice, bars: voice.bars.filter((bar, i) => i !== id) } : voice) });
     }
 
+    //Method to get timeSignature from localstorage
+    const timeSignature = useLocalStorage('timeSignature')[0];
+    const getTimeSignature = () => {
+        let timeSignatureNumerator: string = "";
+        let timeSignatureDenominator: string = "";
+        if (timeSignature !== null) {
+            timeSignatureNumerator = timeSignature[0];
+            timeSignatureDenominator = timeSignature[1];
+        }
+        return [parseInt(timeSignatureNumerator), parseInt(timeSignatureDenominator)];
+    }
+
     //Method to add an empty bar at a specific index to each of all voices except the master sheet/song
     const copyAndAddEmptyBars = (index: number, withoutMaster: 0 | 1) => {
         //withoutMaster is either 0 if mastersheet is included, or 1 if it is not
         let tempArray = [];
-        const newBar: IBar = { repBefore: false, repAfter: false, chordsAndNotes: [{ length: 8, notes: [""] }] };
+
+        //I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
+        const newChordsAndNotes = [];
+        const newEmptyNote = { length: 1, notes: [""] };
+        let timeSignatureNumerator = getTimeSignature()[0];
+        if (getTimeSignature()[1] == 4) timeSignatureNumerator *= 2;
+        for (let i = 0; i < timeSignatureNumerator; i++) {
+            newChordsAndNotes.push(newEmptyNote)
+        }
+
+        const newBar: IBar = { repBefore: false, repAfter: false, chordsAndNotes: newChordsAndNotes };
         for (let i = withoutMaster; i < song.voices.length; i++) {
             let copyOfArray = song.voices[i].bars.slice();
             copyOfArray.splice(index + 1, 0, newBar);
@@ -366,12 +423,13 @@ const SongContextProvider: React.FC = props => {
     const editNote = (voiceId: number, barId: number, noteId: number, newNote: IChordAndNotes) => {
         let newChordsOrNotes: IChordAndNotes[] = [];
         for (let i = 0; i < song.voices[voiceId].bars[barId].chordsAndNotes.length; i++) {
-            if (i === noteId+1) {
+            if (i === noteId) {
                 newChordsOrNotes.push(newNote);
             } else {
-                newChordsOrNotes.push(song.voices[voiceId].bars[barId].chordsAndNotes[noteId])
+                newChordsOrNotes.push(song.voices[voiceId].bars[barId].chordsAndNotes[i])
             }
         }
+        console.log(newChordsOrNotes)
         setSong({ ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newChordsOrNotes } : bar) } : voice) });
     }
 
@@ -385,7 +443,8 @@ const SongContextProvider: React.FC = props => {
         getBar,
         duplicateBar,
         addEmptyBar,
-        editNote
+        editNote,
+        getTimeSignature
     }
 
     return (

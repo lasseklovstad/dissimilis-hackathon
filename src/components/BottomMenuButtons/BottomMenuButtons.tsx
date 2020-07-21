@@ -11,7 +11,8 @@ import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.
 export type AddButtonProps = {
     text: string,
     link?: string,
-    onClick?: Function
+    onClick?: Function,
+    selected?: boolean
 };
 export type ButtonProps = {
     text: string,
@@ -32,6 +33,7 @@ export const MenuButtonWithAddIcon: FunctionComponent<AddButtonProps> = (props) 
             variant="outlined"
             size="large"
             className={styles.addbutton}
+            style={{backgroundColor: props.selected ? colors.gray_200 : colors.white}}
             startIcon={<AddIcon />}
             onClick={() => props.onClick && props.onClick()}
         >

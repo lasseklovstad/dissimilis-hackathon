@@ -84,7 +84,7 @@ function BottomBar() {
                     </StyledToggleButtonGroup>
                 </div>
                 <div className={classes.container} >
-                    <MenuButtonWithAddIcon text={t("BottomBar:addTone")} onClick={() => setShowPossiblePositions(!showPossiblePositions)} />
+                    <MenuButtonWithAddIcon selected={showPossiblePositions} text={t("BottomBar:addTone")} onClick={() => setShowPossiblePositions(!showPossiblePositions)} />
                     <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => addEmptyBar()} />
                 </div>
             </Grid>
