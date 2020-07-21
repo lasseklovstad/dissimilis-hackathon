@@ -13,6 +13,7 @@ interface ISongContext {
     getBar: (id: number, voiceId: number) => IBar | undefined,
     duplicateBar: (id: number, voiceId: number) => void,
     addEmptyBar: () => void,
+    addRepBefore: (index: number, voiceId: number) => void,
 }
 
 interface ISong {
@@ -34,7 +35,8 @@ export const SongContext = React.createContext<ISongContext>({
     duplicateBar: (id: number, voiceId: number) => {
         throw new Error("duplicateBar() in Song Context is not implemented")
     },
-    addEmptyBar: () => { }
+    addEmptyBar: () => { },
+    addRepBefore: (index: number, voiceId: number) => { },
 });
 
 const SongContextProvider: React.FC = props => {
@@ -311,6 +313,11 @@ const SongContextProvider: React.FC = props => {
         setSong({ ...song, voices: [...song.voices, newVoice] });
     }
 
+    const addRepBefore = (id: number, voiceId: number) => {
+        console.log(getBar(id, voiceId).)
+        /*         setSong({...song, voices: song.voices.map((voice) => true ? { ...voice, bars: voice.bars.filter((bar, i) => i !== id) } : voice) }); */
+    }
+
     const getBar = (id: number, voiceId: number) => {
         let returnBar = undefined;
         song.voices[voiceId].bars.forEach((bar, i) => {
@@ -320,6 +327,7 @@ const SongContextProvider: React.FC = props => {
         });
         return returnBar;
     }
+
 
     const deleteBar = (id: number, voiceId: number) => {
         setSong({ ...song, voices: song.voices.map((voice) => true ? { ...voice, bars: voice.bars.filter((bar, i) => i !== id) } : voice) });
@@ -369,7 +377,8 @@ const SongContextProvider: React.FC = props => {
         deleteBar,
         getBar,
         duplicateBar,
-        addEmptyBar
+        addEmptyBar,
+        addRepBefore,
     }
 
     return (
