@@ -13,6 +13,7 @@ interface ISongContext {
     getBar: (id: number, voiceId: number) => IBar | undefined,
     duplicateBar: (id: number, voiceId: number) => void,
     addEmptyBar: () => void,
+    changeTitle: (newTitle: string) => void,
 }
 
 interface ISong {
@@ -35,7 +36,8 @@ export const SongContext = React.createContext<ISongContext>({
     duplicateBar: (id: number, voiceId: number) => {
         throw new Error("duplicateBar() in Song Context is not implemented")
     },
-    addEmptyBar: () => { }
+    addEmptyBar: () => { },
+    changeTitle: (newTitle: string) => { },
 });
 
 const SongContextProvider: React.FC = props => {
@@ -363,6 +365,11 @@ const SongContextProvider: React.FC = props => {
         setSong({ ...song, voices: song.voices.map((voice, i) => true ? { ...voice, bars: tempArray[i] } : voice) });
     }
 
+    const changeTitle = (newTitle: string) => {
+        setSong({ ...song, title: newTitle });
+    }
+
+
 
     //Add all methods here
     const value = {
@@ -372,7 +379,8 @@ const SongContextProvider: React.FC = props => {
         deleteBar,
         getBar,
         duplicateBar,
-        addEmptyBar
+        addEmptyBar,
+        changeTitle,
     }
 
     return (
