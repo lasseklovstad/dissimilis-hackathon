@@ -13,7 +13,7 @@ import axios, { AxiosResponse } from 'axios';
 export const apiService = <T extends Object>(method: "get" | "post", url: string, options: ApiServiceOptions<T>) => {
 
   // Add params to the url   
-  let baseUrl = 'https://localhost:5001/api/';
+  let baseUrl = 'https://10.47.132.83:5001/api/';
   let finalUrl = baseUrl + url;
   if (options.params) {
     finalUrl += '?' + new URLSearchParams(options.params).toString();

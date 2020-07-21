@@ -7,7 +7,7 @@ import { apiService } from "./apiService";
 
 export const useLoginRedirect = () => {
     const url = 'login';
-    const params = { "web_app_url": "https://localhost:3000/" };
+    const params = { "web_app_url": "https://localhost:3000" };
     const getLoginUrl = apiService<string>("get", url, { params }).fetchData;
     return getLoginUrl;
 }

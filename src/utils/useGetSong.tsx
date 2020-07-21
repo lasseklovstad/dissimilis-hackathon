@@ -6,7 +6,7 @@ import { ISong } from "../models/ISong";
  * @param id songs id
  */
 export const useGetSong = (id: number) => {
-    const url = 'Song/songs';
+    const url = 'songs/';
     const params = { 'Id': id.toString() };
     const initialData: ISong[] = [];
     const getSongs = apiService<ISong[]>("get", url, { params, initialData }).fetchData;
