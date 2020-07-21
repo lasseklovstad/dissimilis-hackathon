@@ -59,19 +59,15 @@ const SongContextProvider: React.FC = props => {
                         repAfter: false,
                         chordsAndNotes: [
                             {
-                                length: 1,
-                                notes: ["H", "E", "F#"]
-                            },
-                            {
-                                length: 1,
+                                length: 4,
                                 notes: ["H", "D#", "F#"],
                             },
                             {
-                                length: 1,
+                                length: 2,
                                 notes: ["C", "E", "G", "H"]
                             },
                             {
-                                length: 1,
+                                length: 2,
                                 notes: ["D", "F#", "A", "C"]
                             },
                         ],
@@ -81,11 +77,11 @@ const SongContextProvider: React.FC = props => {
                         repAfter: false,
                         chordsAndNotes: [
                             {
-                                length: 2,
+                                length: 4,
                                 notes: ["G", "A"]
                             },
                             {
-                                length: 2,
+                                length: 4,
                                 notes: ["G"]
                             }
                         ],
@@ -96,92 +92,20 @@ const SongContextProvider: React.FC = props => {
                         repAfter: false,
                         chordsAndNotes: [
                             {
-                                length: 1,
+                                length: 2,
                                 notes: ["A"]
                             },
                             {
-                                length: 1,
+                                length: 2,
                                 notes: ["A"]
                             },
                             {
-                                length: 1,
+                                length: 2,
                                 notes: ["A"]
                             },
                             {
-                                length: 1,
+                                length: 2,
                                 notes: ["A"]
-                            },
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 2,
-                                notes: ["G"]
-                            },
-                            {
-                                length: 2,
-                                notes: [""]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 1,
-                                notes: ["D"]
-                            },
-                            {
-                                length: 1,
-                                notes: ["D"]
-                            },
-                            {
-                                length: 1,
-                                notes: ["D"]
-                            },
-                            {
-                                length: 1,
-                                notes: ["D"]
-                            },
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 2,
-                                notes: ["E"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["E"]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 1,
-                                notes: ["F"]
-                            },
-                            {
-                                length: 1,
-                                notes: ["F"]
-                            },
-                            {
-                                length: 1,
-                                notes: ["F"]
-                            },
-                            {
-                                length: 1,
-                                notes: ["F"]
                             },
                         ],
                     },
@@ -191,6 +115,78 @@ const SongContextProvider: React.FC = props => {
                         chordsAndNotes: [
                             {
                                 length: 4,
+                                notes: ["G"]
+                            },
+                            {
+                                length: 4,
+                                notes: [""]
+                            }
+                        ],
+                    },
+                    {
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndNotes: [
+                            {
+                                length: 2,
+                                notes: ["D"]
+                            },
+                            {
+                                length: 2,
+                                notes: ["D"]
+                            },
+                            {
+                                length: 2,
+                                notes: ["D"]
+                            },
+                            {
+                                length: 2,
+                                notes: ["D"]
+                            },
+                        ],
+                    },
+                    {
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndNotes: [
+                            {
+                                length: 4,
+                                notes: ["E"]
+                            },
+                            {
+                                length: 4,
+                                notes: ["E"]
+                            }
+                        ],
+                    },
+                    {
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndNotes: [
+                            {
+                                length: 2,
+                                notes: ["F"]
+                            },
+                            {
+                                length: 2,
+                                notes: ["F"]
+                            },
+                            {
+                                length: 2,
+                                notes: ["F"]
+                            },
+                            {
+                                length: 2,
+                                notes: ["F"]
+                            },
+                        ],
+                    },
+                    {
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndNotes: [
+                            {
+                                length: 8,
                                 notes: ["C"]
                             }
                         ],
@@ -206,19 +202,19 @@ const SongContextProvider: React.FC = props => {
                         repAfter: false,
                         chordsAndNotes: [
                             {
-                                length: 1,
+                                length: 2,
                                 notes: ["C"]
                             },
                             {
-                                length: 1,
+                                length: 2,
                                 notes: ["D"]
                             },
                             {
-                                length: 1,
+                                length: 2,
                                 notes: ["E"]
                             },
                             {
-                                length: 1,
+                                length: 2,
                                 notes: ["F"]
                             },
                         ],
@@ -228,7 +224,7 @@ const SongContextProvider: React.FC = props => {
                         repAfter: false,
                         chordsAndNotes: [
                             {
-                                length: 4,
+                                length: 8,
                                 notes: ["G"]
                             }
                         ],
@@ -238,7 +234,7 @@ const SongContextProvider: React.FC = props => {
                         repAfter: false,
                         chordsAndNotes: [
                             {
-                                length: 4,
+                                length: 8,
                                 notes: ["A"]
                             }
                         ],
@@ -248,11 +244,11 @@ const SongContextProvider: React.FC = props => {
                         repAfter: false,
                         chordsAndNotes: [
                             {
-                                length: 2,
+                                length: 4,
                                 notes: ["G"]
                             },
                             {
-                                length: 2,
+                                length: 4,
                                 notes: [""]
                             }
                         ],
@@ -262,7 +258,7 @@ const SongContextProvider: React.FC = props => {
                         repAfter: false,
                         chordsAndNotes: [
                             {
-                                length: 4,
+                                length: 8,
                                 notes: ["D"]
                             }
                         ],
@@ -272,7 +268,7 @@ const SongContextProvider: React.FC = props => {
                         repAfter: false,
                         chordsAndNotes: [
                             {
-                                length: 4,
+                                length: 8,
                                 notes: ["E"]
                             },
 
@@ -283,7 +279,7 @@ const SongContextProvider: React.FC = props => {
                         repAfter: false,
                         chordsAndNotes: [
                             {
-                                length: 4,
+                                length: 8,
                                 notes: ["F"]
                             }
                         ],
@@ -293,7 +289,7 @@ const SongContextProvider: React.FC = props => {
                         repAfter: false,
                         chordsAndNotes: [
                             {
-                                length: 4,
+                                length: 8,
                                 notes: ["C"]
                             }
                         ],
