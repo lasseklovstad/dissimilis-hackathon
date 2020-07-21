@@ -15,13 +15,15 @@ interface ISongContext {
     duplicateBar: (id: number, voiceId: number) => void,
     addEmptyBar: () => void,
     editNote: (voiceId: number, barId: number, noteId: number, newNote: IChordAndNotes) => void,
-    getTimeSignature: () => number[]
+    getTimeSignature: () => number[],
+    changeTitle: (newTitle: string) => void,
 }
 
 interface ISong {
     title: string,
     voices: IVoice[]
 };
+
 
 export const SongContext = React.createContext<ISongContext>({
     song: {
@@ -39,7 +41,8 @@ export const SongContext = React.createContext<ISongContext>({
     },
     addEmptyBar: () => { },
     editNote: (voiceId: number, barId: number, noteId: number, newNote: IChordAndNotes) => { },
-    getTimeSignature: () => []
+    getTimeSignature: () => [],
+    changeTitle: (newTitle: string) => { },
 });
 
 const SongContextProvider: React.FC = props => {
@@ -65,7 +68,7 @@ const SongContextProvider: React.FC = props => {
                         chordsAndNotes: [
                             {
                                 length: 2,
-                                notes: ["C"]
+                                notes: ["D", "F", "A", "C"]
                             },
                             {
                                 length: 2,
@@ -87,7 +90,7 @@ const SongContextProvider: React.FC = props => {
                         chordsAndNotes: [
                             {
                                 length: 2,
-                                notes: ["G"]
+                                notes: ["G", "A"]
                             },
                             {
                                 length: 2,
@@ -223,7 +226,7 @@ const SongContextProvider: React.FC = props => {
                         chordsAndNotes: [
                             {
                                 length: 2,
-                                notes: ["C"]
+                                notes: ["D", "F", "A", "C"]
                             },
                             {
                                 length: 2,
@@ -343,7 +346,8 @@ const SongContextProvider: React.FC = props => {
             for (let i = 0; i < timeSignatureNumerator; i++) {
                 newChordsAndNotes.push(newEmptyNote)
             }
-            const tempBar: IBar = { repBefore: false, repAfter: false, chordsAndNotes: newChordsAndNotes }
+            let barInfo = song.voices[0].bars[i]
+            const tempBar: IBar = { repBefore: barInfo.repBefore, repAfter: barInfo.repAfter, house: barInfo.house, chordsAndNotes: newChordsAndNotes }
             newVoice.bars.push(tempBar);
         }
         setSong({ ...song, voices: [...song.voices, newVoice] });
@@ -433,6 +437,11 @@ const SongContextProvider: React.FC = props => {
         setSong({ ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newChordsOrNotes } : bar) } : voice) });
     }
 
+    const changeTitle = (newTitle: string) => {
+        setSong({ ...song, title: newTitle });
+    }
+
+
 
     //Add all methods here
     const value = {
@@ -444,7 +453,8 @@ const SongContextProvider: React.FC = props => {
         duplicateBar,
         addEmptyBar,
         editNote,
-        getTimeSignature
+        getTimeSignature,
+        changeTitle,
     }
 
     return (
