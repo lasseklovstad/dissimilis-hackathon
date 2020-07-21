@@ -32,12 +32,12 @@ export const apiService = <T extends Object>(method: "get" | "post", url: string
       errorMessage = error;
       console.log(error);
     }
-    return { result, errorMessage }
+    return { result, errorMessage };
   };
 
   const postData = async () => {
     let result: AxiosResponse<T> | undefined = undefined;
-    let errorMessage: any
+    let errorMessage: any;
     let isError = false;
     try {
       result = await axios.post<T>(finalUrl, options.body, { headers: options.headers });
@@ -46,9 +46,9 @@ export const apiService = <T extends Object>(method: "get" | "post", url: string
       errorMessage = error;
       console.log(error);
     }
-    return { result, errorMessage }
+    return { result, errorMessage };
   };
-  return { fetchData, postData }
+  return { fetchData, postData };
 };
 
 /**

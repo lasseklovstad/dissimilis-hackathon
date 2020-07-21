@@ -25,8 +25,8 @@ const LoginView: FC<LoginViewProps> = () => {
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
   const history = useHistory();
-  const axiosGet = useLoginRedirect()
-  const { setLoggedIn, loggedIn } = useContext(AuthContext)
+  const axiosGet = useLoginRedirect();
+  const { setLoggedIn, loggedIn } = useContext(AuthContext);
 
 
 
@@ -41,7 +41,7 @@ const LoginView: FC<LoginViewProps> = () => {
   const url = new URLSearchParams(useLocation().search);
   let code = null;
   if (url.get("code") !== null) {
-    code = url.get("code")
+    code = url.get("code");
   }
   const axiosPost = useLoginPost(code);
 
@@ -51,7 +51,7 @@ const LoginView: FC<LoginViewProps> = () => {
     }
     axiosPost().then(({ result }) => {
       if (result && !loggedIn && result.status == 200) {
-        setLoggedIn(true)
+        setLoggedIn(true);
         history.push("/dashboard");
         sessionStorage.setItem("apiKey", result.data.apiKey);
         sessionStorage.setItem("userId", result.data.userID?.toString());
