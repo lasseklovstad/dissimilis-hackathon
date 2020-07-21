@@ -90,18 +90,38 @@ export const BarBody: React.FC<BarBodyProps> = props => {
 
     const { song: { voices } } = useContext(SongContext);
 
-
+    let tempArrayOfChordsLength: any = [];
     let tempArrayOfChords: any = [];
     for (let i = 0; i < voices[0].bars[props.barNumber].chordsAndNotes.length; i++) {
         tempArrayOfChords.push(getChord(voices[0].bars[props.barNumber].chordsAndNotes[i].notes));
-
+        tempArrayOfChordsLength.push(voices[0].bars[props.barNumber].chordsAndNotes[i].length);
     }
 
+    const calculateFlexBasis = (length: number) => {
+        let result;
+        switch (length) {
+            case 1:
+                result = "12.5%";
+                break;
+            case 2:
+                result = "25%";
+                break;
+            case 4:
+                result = "50%";
+                break;
+            case 8:
+                result = "100%";
+                break;
+            default:
+                result = "100%";
+        }
+        return result;
+    }
 
-
+    console.log(tempArrayOfChordsLength)
     const chordsInBar = tempArrayOfChords.map((item: any, i: any) => {
         return (
-            <Typography key={i} variant="body1" style={{ flexBasis: 100 / tempArrayOfChords.length + "%" }} className={classes.toneText}>{item}</Typography>
+            <Typography key={i} variant="body1" style={{ flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]) }} className={classes.toneText}>{item}</Typography>
         )
     })
 
