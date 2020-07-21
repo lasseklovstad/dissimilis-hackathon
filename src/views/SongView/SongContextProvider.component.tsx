@@ -306,7 +306,8 @@ const SongContextProvider: React.FC = props => {
     //Method to simplify change of state
     const addVoice = (newVoice: IVoice) => {
         for (let i = 0; i < song.voices[0].bars.length; i++) {
-            const tempBar: IBar = { repBefore: song.voices[0].bars[i].repBefore, repAfter: song.voices[0].bars[i].repAfter, house: song.voices[0].bars[i].house, chordsAndNotes: [] }
+            let barInfo = song.voices[0].bars[i]
+            const tempBar: IBar = { repBefore: barInfo.repBefore, repAfter: barInfo.repAfter, house: barInfo.house, chordsAndNotes: [] }
             newVoice.bars.push(tempBar);
         }
         setSong({ ...song, voices: [...song.voices, newVoice] });
