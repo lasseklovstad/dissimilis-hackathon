@@ -40,12 +40,15 @@ export const theme: object = createMuiTheme({
             fontSize: "1.5rem",
             lineHeight: 1.5,
             '@media(max-width:600px)': {
-                fontSize: "1.25"
+                fontSize: "1.25rem"
             }
         },
         body1: { //Corresponding to the parapraph in the figma sketches. Can use variant = "p" to use this, 16px
             fontSize: "1rem",
             lineHeight: 1.5,
+            '@media(max-width:600px)': {
+                fontSize: "0.875rem"
+            }
         },
         caption: { //12px
             fontSize: "0.75rem",

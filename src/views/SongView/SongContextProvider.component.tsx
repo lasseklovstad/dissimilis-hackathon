@@ -23,6 +23,7 @@ interface ISong {
     voices: IVoice[]
 };
 
+
 export const SongContext = React.createContext<ISongContext>({
     song: {
         title: "",
@@ -64,19 +65,19 @@ const SongContextProvider: React.FC = props => {
                         chordsAndNotes: [
                             {
                                 length: 1,
-                                notes: ["C"]
+                                notes: ["H", "E", "F#"]
                             },
                             {
                                 length: 1,
-                                notes: ["D"]
+                                notes: ["H", "D#", "F#"],
                             },
                             {
                                 length: 1,
-                                notes: ["E"]
+                                notes: ["C", "E", "G", "H"]
                             },
                             {
                                 length: 1,
-                                notes: ["F"]
+                                notes: ["D", "F#", "A", "C"]
                             },
                         ],
                     },
@@ -86,7 +87,7 @@ const SongContextProvider: React.FC = props => {
                         chordsAndNotes: [
                             {
                                 length: 2,
-                                notes: ["G"]
+                                notes: ["G", "A"]
                             },
                             {
                                 length: 2,
@@ -312,7 +313,7 @@ const SongContextProvider: React.FC = props => {
     const addVoice = (newVoice: IVoice) => {
         for (let i = 0; i < song.voices[0].bars.length; i++) {
             let barInfo = song.voices[0].bars[i]
-            const tempBar: IBar = { repBefore: barInfo.repBefore, repAfter: barInfo.repAfter, house: barInfo.house, chordsAndNotes: [] }
+            const tempBar: IBar = { repBefore: barInfo.repBefore, repAfter: barInfo.repAfter, house: barInfo.house, chordsAndNotes: [{ length: 1, notes: [] }] }
             newVoice.bars.push(tempBar);
         }
         setSong({ ...song, voices: [...song.voices, newVoice] });

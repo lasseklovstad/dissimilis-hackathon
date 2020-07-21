@@ -1,11 +1,56 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, makeStyles, Typography } from "@material-ui/core";
 import colors from "../../utils/colors";
 import { IChordAndNotes } from "../../models/IBar";
+import { Chord } from "@tonaljs/tonal";
+import { SongContext } from "../../views/SongView/SongContextProvider.component";
+
 
 export type BarBodyProps = {
+    barNumber: number,
     chordsAndNotes: IChordAndNotes[],
     height?: number,
+}
+
+
+export function getChord(notes: string[]): string {
+    let tempArray = notes.slice();
+    const index = tempArray.indexOf("H");
+    if (index !== -1) {
+        tempArray[index] = "B";
+    }
+
+    if (tempArray.length === 1) {
+        return notes[0];
+    } else {
+        const result = Chord.detect(tempArray);
+        if (result.length === 0) return notes[0]
+        return result[0];
+    }
+}
+
+export function tangentToNumber(tangent: string): number {
+    let result = -1;
+    switch (tangent) {
+        case "C#":
+            result = 4
+            break;
+        case "D#":
+            result = 5
+            break;
+        case "F#":
+            result = 1
+            break;
+        case "G#":
+            result = 2
+            break;
+        case "A#":
+            result = 3
+            break;
+        default:
+            result = 0
+    }
+    return result;
 }
 
 export function getColor(color: string): string {
@@ -32,7 +77,7 @@ export function getColor(color: string): string {
         case "H":
             newColor = colors.H;
             break;
-        case "1": case "2": case "3": case "4": case "5":
+        case "C#": case "D#": case "F#": case "G#": case "A#":
             newColor = colors.semitone;
             break;
         default:
@@ -43,28 +88,49 @@ export function getColor(color: string): string {
 export const BarBody: React.FC<BarBodyProps> = props => {
     const classes = useStyles();
 
-    const verifySemiTone = (tone: string) => {
-        return tone === "1" || tone === "2" || tone === "3" || tone === "4" || tone === "5";
+    const { song: { voices } } = useContext(SongContext);
+
+
+    let tempArrayOfChords: any = [];
+    for (let i = 0; i < voices[0].bars[props.barNumber].chordsAndNotes.length; i++) {
+        tempArrayOfChords.push(getChord(voices[0].bars[props.barNumber].chordsAndNotes[i].notes));
+
     }
 
 
-    return (
-        <Box style={{ height: !props.height ? "100%" : props.height + "px" }} className={classes.root} >
-            {props.chordsAndNotes.map((note, i) => {
-                return (
-                    <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length }} >
-                        {note.notes.map((type, index) => {
-                            return (
-                                <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) }} >
-                                    <Typography className={classes.tangentText} variant="h2">{verifySemiTone(type) ? type : ""}</Typography>
-                                </Box>
-                            )
-                        })}
 
-                    </Box>
-                )
-            })}
-        </Box>
+    const chordsInBar = tempArrayOfChords.map((item: any, i: any) => {
+        return (
+            <Typography key={i} variant="body1" style={{ flexBasis: 100 / tempArrayOfChords.length + "%" }} className={classes.toneText}>{item}</Typography>
+        )
+    })
+
+
+
+
+    return (
+
+        <Box style={{ height: !props.height ? "100%" : props.height + "px" }} className={classes.root} >
+            {chordsInBar}
+            {
+                props.chordsAndNotes.map((note, i) => {
+                    return (
+                        <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px" }} flexDirection="column" >
+                            {note.notes.map((type, index) => {
+                                const number = tangentToNumber(type);
+                                return (
+                                    <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) }} >
+                                        <Typography className={classes.tangentText} >{number === 0 ? "" : number}</Typography>
+                                    </Box>
+                                )
+                            })}
+
+                        </Box>
+                    )
+                })
+            }
+        </Box >
+
     )
 }
 
@@ -73,17 +139,16 @@ const useStyles = makeStyles({
     root: {
         display: "flex",
         flexFlow: "row wrap",
-        padding: "2px",
+        justifyContent: "center",
     },
     toneAndChordBox: {
         flex: 1,
-        height: "auto",
         display: "flex",
         flexDirection: "column",
-        margin: "0px 4px"
+        margin: "0px 4px",
     },
     toneBox: {
-        flex: 1,
+        flex: 2,
         width: "100%",
         borderRadius: "5px",
         margin: "2px 0",
@@ -95,6 +160,9 @@ const useStyles = makeStyles({
         top: "50%",
         transform: "translateY(-50%)"
     },
+    toneText: {
+        color: "#555555",
+    }
 
 })
 
