@@ -5,7 +5,7 @@ import Bar from "../Bar/Bar.component";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { IBar } from "../../models/IBar"
-
+import { useTranslation } from "react-i18next";
 
 export type BarContainerProps = {
     barNumber: number,
@@ -20,7 +20,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const { deleteBar, duplicateBar, alterRepBefore, alterRepAfter, song: { voices } } = useContext(SongContext);
+    const { deleteBar, duplicateBar, toggleRepBefore, toggleRepAfter, song: { voices } } = useContext(SongContext);
     const bar = props.bar
 
     const queryString = require('query-string');
@@ -30,8 +30,9 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
-
+    const { t } = useTranslation();
     const handleClose = (method: string) => {
+
         const index = voices[0].bars.indexOf(bar);
         if (method === "delete") {
             deleteBar(index, voiceId - 1);
@@ -39,11 +40,11 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         if (method === "duplicate") {
             duplicateBar(index, voiceId - 1);
         }
-        if (method === "alterRepBefore") {
-            alterRepBefore(index);
+        if (method === "toggleRepBefore") {
+            toggleRepBefore(index);
         }
-        if (method === "alterRepAfter") {
-            alterRepAfter(index);
+        if (method === "toggleRepAfter") {
+            toggleRepAfter(index);
         }
         setAnchorEl(null);
     };
@@ -72,10 +73,10 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                                     <MoreHorizIcon style={{ marginLeft: "0px" }} />
                                 </Button>
                                 <Menu id="menuBar" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose} role="menu">
-                                    <MenuItem onClick={() => handleClose("delete")}>Slett takt </MenuItem>
-                                    <MenuItem onClick={() => handleClose("duplicate")}>Dupliser takt </MenuItem>
-                                    <MenuItem onClick={() => handleClose("alterRepBefore")}>Legg til repetisjon foran </MenuItem>
-                                    <MenuItem onClick={() => handleClose("alterRepAfter")}>Legg til repetisjon bak </MenuItem>
+                                    <MenuItem onClick={() => handleClose("delete")}>{t("BarContainer:deleteBar")} </MenuItem>
+                                    <MenuItem onClick={() => handleClose("duplicate")}>{t("BarContainer:duplicateBar")} </MenuItem>
+                                    <MenuItem onClick={() => handleClose("toggleRepBefore")}>{t("BarContainer:repBefore")} </MenuItem>
+                                    <MenuItem onClick={() => handleClose("toggleRepAfter")}>{t("BarContainer:repAfter")} </MenuItem>
                                 </Menu>
                             </Box>
                         </Grid>

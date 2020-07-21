@@ -14,8 +14,8 @@ interface ISongContext {
     getBar: (id: number, voiceId: number) => IBar | undefined,
     duplicateBar: (id: number, voiceId: number) => void,
     addEmptyBar: () => void,
-    alterRepBefore: (barId: number) => void,
-    alterRepAfter: (barId: number) => void,
+    toggleRepBefore: (barId: number) => void,
+    toggleRepAfter: (barId: number) => void,
 }
 
 interface ISong {
@@ -39,8 +39,8 @@ export const SongContext = React.createContext<ISongContext>({
         throw new Error("duplicateBar() in Song Context is not implemented")
     },
     addEmptyBar: () => { },
-    alterRepBefore: (barId: number) => { },
-    alterRepAfter: (barId: number) => { },
+    toggleRepBefore: (barId: number) => { },
+    toggleRepAfter: (barId: number) => { },
 });
 
 const SongContextProvider: React.FC = props => {
@@ -319,14 +319,24 @@ const SongContextProvider: React.FC = props => {
         setSong({ ...song, voices: [...song.voices, newVoice] });
     }
 
-    const alterRepBefore = (barId: number) => {
+    const toggleRepBefore = (barId: number) => {
         //Map through all voices and for the ba which matches the id, toggle the bars repetition value
         setSong({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repBefore: !bar.repBefore } : bar) } : voice) });
     }
-    const alterRepAfter = (barId: number) => {
+    const toggleRepAfter = (barId: number) => {
         //Map through all voices and for the ba which matches the id, toggle the bars repetition value
         setSong({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repAfter: !bar.repAfter } : bar) } : voice) });
     }
+
+
+
+
+
+
+
+
+
+
 
     const getBar = (id: number, voiceId: number) => {
         let returnBar = undefined;
@@ -388,8 +398,8 @@ const SongContextProvider: React.FC = props => {
         getBar,
         duplicateBar,
         addEmptyBar,
-        alterRepBefore,
-        alterRepAfter,
+        toggleRepBefore,
+        toggleRepAfter,
     }
 
     return (
