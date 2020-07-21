@@ -47,12 +47,10 @@ const LoginView: FC<LoginViewProps> = () => {
 
   useEffect(() => {
     if (loggedIn) {
-      console.log("if")
       history.push("/dashboard");
     }
     axiosPost().then(({ result }) => {
       if (result && !loggedIn && result.status == 200) {
-        console.log("else")
         setLoggedIn(true)
         history.push("/dashboard");
         sessionStorage.setItem("apiKey", result.data.apiKey);

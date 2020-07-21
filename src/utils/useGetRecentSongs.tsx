@@ -10,9 +10,7 @@ export const useGetRecentSongs = () => {
     const initialData: ISong[] = [];
     const apiKey = sessionStorage.getItem("apiKey") || "";
     const userId = sessionStorage.getItem("userId") || "";
-    console.log("apiKey: " + apiKey + " userId: " + userId)
     const headers = { 'X-API-Key': apiKey, 'X-User-ID': userId, }
-    console.log(headers);
     const getSongs = apiService<ISong[]>("get", url, { params, initialData, headers }).fetchData;
     return getSongs;
 }

@@ -1,6 +1,6 @@
 export const loginEn: any = {
-    "loginWithMicrosoft": "Log in with Microsoft",
-    "login": "Log in",
+    "loginWithMicrosoft": "Sign in with Microsoft",
+    "login": "Sign in",
     "username": "Username",
     "password": "Password",
     "loginFailed": "Wrong username or password",
