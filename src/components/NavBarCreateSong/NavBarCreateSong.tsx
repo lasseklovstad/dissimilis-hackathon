@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { makeStyles, Grid, Typography, AppBar, Box, useMediaQuery } from "@material-ui/core";
+import React, { useContext, useState } from "react";
+import { makeStyles, Grid, Typography, AppBar, Box, useMediaQuery, TextField } from "@material-ui/core";
 import MenuButton from "../MenuButton/MenuButton";
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
@@ -14,8 +14,30 @@ export type NavBarCreateSongProps = {
 export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
     const classes = useStyles();
     const matches = useMediaQuery("(max-width:600px)");
+    const [changing, setChanging] = useState(false);
 
-    const { song: { title } } = useContext(SongContext);
+    const { song: { title }, changeTitle } = useContext(SongContext);
+
+
+    const [newTitle, setNewTitle] = useState(title)
+
+
+    const handleChange = (e: any) => {
+        setNewTitle(e.target.value)
+    }
+
+
+    const pressDown = (e: any) => {
+        if (e.keyCode === 13) {
+            if (e.target.value !== "") {
+                changeTitle(e.target.value);
+            }
+            setChanging(!changing);
+        }
+        if (e.keyCode === 27) {
+            setChanging(false)
+        }
+    }
 
     return (
         <Box className={classes.root} mb={matches ? 2 : 4}>
@@ -25,7 +47,9 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
                         <DashboardTopBarIcon />
                     </Grid>
                     <Grid item xs={12} sm={10} className={classes.center}>
-                        <Typography variant="h1">{title}</Typography>
+                        <Box onClick={() => setChanging(!changing)}>
+                            {changing ? <TextField error={newTitle === ""} onChange={(e) => handleChange(e)} inputProps={{ style: { fontSize: 24 } }} value={newTitle} className={classes.textField} autoFocus onKeyDown={(e) => pressDown(e)} ></TextField> : <Typography variant="h2">{title}</Typography>}
+                        </Box>
                     </Grid>
                     <Grid item xs={1} sm={1} className={classes.right} >
                         <MenuButton />
@@ -48,6 +72,7 @@ const useStyles = makeStyles({
         order: 2,
         '@media (max-width:600px)': {
             order: 3,
+            marginTop: "8px",
         },
     },
     right: {
@@ -59,6 +84,13 @@ const useStyles = makeStyles({
     appbar: {
         backgroundColor: "transparent",
     },
+    textField: {
+        width: "100%",
+        height: "36px",
+    },
+    textFieldInput: {
+        fontSize: "30",
+    }
 });
 
 
