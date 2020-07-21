@@ -39,8 +39,7 @@ const LoginView: FC<LoginViewProps> = () => {
   }
 
   const url = new URLSearchParams(useLocation().search);
-  let code = null;
-  if (url.get("code") !== null) {
+  let code = null; if (url.get("code") !== null) {
     code = url.get("code");
   }
   const axiosPost = useLoginPost(code);
