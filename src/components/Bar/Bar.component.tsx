@@ -3,7 +3,7 @@ import { Box, Grid, makeStyles } from "@material-ui/core";
 import RepetitionSign from "./RepetitionSign.component";
 import House from "./House.component";
 import { BarBody } from "./BarBody.component";
-import { IChordAndNotes} from "../../models/IBar";
+import { IChordAndNotes } from "../../models/IBar";
 
 
 export type BarProps = {
@@ -11,7 +11,8 @@ export type BarProps = {
     repAfter: boolean,
     house?: number,
     chordsAndNotes: IChordAndNotes[],
-    barLineAfter?: boolean
+    barLineAfter?: boolean,
+    height?: number,
 }
 
 
@@ -31,8 +32,8 @@ export const Bar: React.FC<BarProps> = props => {
 
     return (
         <Box className={classes.root} mx="auto" role="main">
-            <Grid container role="grid">
-                <Grid item xs={12} role="gridcell">
+            <Grid container role="grid" className={classes.fullHeight}>
+                <Grid item xs={12} role="gridcell" className={classes.fullHeight}>
                     <Grid container className={classes.firstRow} role="grid">
                         <Grid item xs={1} role="gridcell"></Grid>
                         <Grid item xs={9} role="gridcell" aria-label={props.house + ". ending"}>
@@ -41,22 +42,21 @@ export const Bar: React.FC<BarProps> = props => {
                         <Grid item xs={1} role="gridcell" ></Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.secondRow} role="gridcell" >
-                    <Grid container spacing={0} style={{ height: "100%" }} role="grid" >
+                <Grid item xs={12} style={{ height: props.height }} role="gridcell" >
+                    <Grid container spacing={0} className={classes.fullHeight} role="grid" >
                         <Grid item xs={props.repBefore ? 1 : "auto"} role="gridcell" aria-label="repetition sign before the tone">
                             <Box mt={"20px"}>
                                 <RepetitionSign size="small" display={props.repBefore} />
                             </Box>
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label={"Bar"}>
-                            <BarBody chordsAndNotes={props.chordsAndNotes} />
+                            <BarBody height={props.height} chordsAndNotes={props.chordsAndNotes} />
                         </Grid>
                         <Grid item xs={1} style={{ borderRight: props.barLineAfter ? "6px double black" : "2px solid black" }} role="gridcell" aria-label="repetition sign after the tone" >
                             <Box mt={"20px"}>
                                 <RepetitionSign size="small" display={props.repAfter} />
                             </Box>
                         </Grid>
-
                     </Grid>
                 </Grid>
             </Grid>
@@ -74,11 +74,12 @@ const useStyles = makeStyles({
         padding: "8px",
     },
     firstRow: {
-        height: "32px",
+        height: "32px"
     },
-    secondRow: {
-        height: "120px",
+    fullHeight: {
+        height: "100%",
     }
+
 })
 
 export default Bar;
