@@ -8,6 +8,7 @@ import { IBar } from "../../models/IBar"
 
 
 export type BarContainerProps = {
+    barNumber: number,
     barLineBefore: boolean,
     barLineAfter: boolean,
     bar: IBar,
@@ -53,8 +54,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                         <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ height: !props.height ? "120px" : props.height, borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar">
-                            <Bar barNumber={voices[voiceId - 1].bars.indexOf(bar)} height={props.height || 120} repBefore={bar.repBefore} repAfter={bar.repAfter} house={bar.house} chordsAndNotes={bar.chordsAndNotes} barLineAfter={props.barLineAfter} />
-                        </Grid>
+                            <Bar barNumber={voices[voiceId - 1].bars.indexOf(bar)} height={props.height || 120} repBefore={voices[0].bars[props.barNumber].repBefore} repAfter={voices[0].bars[props.barNumber].repAfter} house={voices[0].bars[props.barNumber].house} chordsAndNotes={bar.chordsAndNotes} barLineAfter={props.barLineAfter} />                        </Grid>
                     </Grid>
                 </Grid>
                 <Grid item xs={12} role="row" style={{ height: "32px" }}>
