@@ -16,6 +16,8 @@ interface ISongContext {
     addEmptyBar: () => void,
     editNote: (voiceId: number, barId: number, noteId: number, newNote: IChordAndNotes) => void,
     getTimeSignature: () => number[],
+    toggleRepBefore: (barId: number) => void,
+    toggleRepAfter: (barId: number) => void,
     changeTitle: (newTitle: string) => void,
 }
 
@@ -42,6 +44,8 @@ export const SongContext = React.createContext<ISongContext>({
     addEmptyBar: () => { },
     editNote: (voiceId: number, barId: number, noteId: number, newNote: IChordAndNotes) => { },
     getTimeSignature: () => [],
+    toggleRepBefore: (barId: number) => { },
+    toggleRepAfter: (barId: number) => { },
     changeTitle: (newTitle: string) => { },
 });
 
@@ -89,11 +93,11 @@ const SongContextProvider: React.FC = props => {
                         repAfter: false,
                         chordsAndNotes: [
                             {
-                                length: 2,
+                                length: 4,
                                 notes: ["G", "A"]
                             },
                             {
-                                length: 2,
+                                length: 4,
                                 notes: ["G"]
                             }
                         ],
@@ -353,6 +357,25 @@ const SongContextProvider: React.FC = props => {
         setSong({ ...song, voices: [...song.voices, newVoice] });
     }
 
+    const toggleRepBefore = (barId: number) => {
+        //Map through all voices and for the ba which matches the id, toggle the bars repetition value
+        setSong({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repBefore: !bar.repBefore } : bar) } : voice) });
+    }
+    const toggleRepAfter = (barId: number) => {
+        //Map through all voices and for the ba which matches the id, toggle the bars repetition value
+        setSong({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repAfter: !bar.repAfter } : bar) } : voice) });
+    }
+
+
+
+
+
+
+
+
+
+
+
     const getBar = (id: number, voiceId: number) => {
         let returnBar = undefined;
         song.voices[voiceId].bars.forEach((bar, i) => {
@@ -362,6 +385,7 @@ const SongContextProvider: React.FC = props => {
         });
         return returnBar;
     }
+
 
     const deleteBar = (id: number, voiceId: number) => {
         setSong({ ...song, voices: song.voices.map((voice) => true ? { ...voice, bars: voice.bars.filter((bar, i) => i !== id) } : voice) });
@@ -454,6 +478,8 @@ const SongContextProvider: React.FC = props => {
         addEmptyBar,
         editNote,
         getTimeSignature,
+        toggleRepBefore,
+        toggleRepAfter,
         changeTitle,
     }
 
