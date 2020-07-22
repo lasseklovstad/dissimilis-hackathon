@@ -28,9 +28,6 @@ const LoginView: FC<LoginViewProps> = () => {
   const axiosGet = useLoginRedirect();
   const { setLoggedIn, loggedIn } = useContext(AuthContext);
 
-
-
-  //const { setLoggetIn } = useContext(AuthContext);
   const tryLogin = () => {
     axiosGet().
       then(({ result }) => {
@@ -39,12 +36,11 @@ const LoginView: FC<LoginViewProps> = () => {
   }
 
   const url = new URLSearchParams(useLocation().search);
-  let code = null; if (url.get("code") !== null) {
-    code = url.get("code");
-  }
+  let code = (url.get("code") !== null) ? url.get("code") : null;
   const axiosPost = useLoginPost(code);
 
   useEffect(() => {
+    console.log("Code endres");
     if (sessionStorage.getItem("apiKey") && sessionStorage.getItem("userId")) {
       history.push("/dashboard");
     }
