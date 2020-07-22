@@ -89,7 +89,7 @@ export function getColor(color: string): string {
 }
 export const BarBody: React.FC<BarBodyProps> = props => {
     const classes = useStyles();
-    const { showPossiblePositions, selectedNoteLength, insertNewNoteOrChord } = useContext(SongToolsContext);
+    const { showPossiblePositions, selectedNoteLength, insertNewNoteOrChord, availa } = useContext(SongToolsContext);
 
     const { song: { voices } } = useContext(SongContext);
 
@@ -122,7 +122,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                             {note.notes.map((type, index) => {
                                 const number = tangentToNumber(type);
                                 return (
-                                    <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) === "transparent" && showPossiblePositions && note.length >= selectedNoteLength ? colors.focus : getColor(type) }} component={ButtonBase} onClick={() => {
+                                    <Box key={index} className={classes.toneBox} style={{ backgroundColor: showPossiblePositions ? colors.focus : getColor(type) }} component={ButtonBase} onClick={() => {
                                         if (getColor(type) >= "transparent" && showPossiblePositions && note.length === selectedNoteLength) {
                                             insertNewNoteOrChord(i, props.barNumber, props.voiceId)
                                         }

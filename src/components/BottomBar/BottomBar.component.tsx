@@ -39,6 +39,7 @@ function BottomBar() {
     const { addEmptyBar } = useContext(SongContext);
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedNoteLength(event.target.value as 1 | 2 | 4 | 8);
+        setShowPossiblePositions(false);
     };
     const Menu =
         <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
@@ -56,7 +57,7 @@ function BottomBar() {
 
 
     const [toggle, setToggle] = useState<boolean>(false);
-    const { showPossiblePositions, setShowPossiblePositions } = useContext(SongToolsContext)
+    const { showPossiblePositions, setShowPossiblePositions, showAvailableSpace } = useContext(SongToolsContext)
 
     const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) => {
         if (newToggle !== null) {
@@ -84,7 +85,7 @@ function BottomBar() {
                     </StyledToggleButtonGroup>
                 </div>
                 <div className={classes.container} >
-                    <MenuButtonWithAddIcon selected={showPossiblePositions} text={t("BottomBar:addTone")} onClick={() => setShowPossiblePositions(!showPossiblePositions)} />
+                    <MenuButtonWithAddIcon selected={showPossiblePositions} text={t("BottomBar:addTone")} onClick={() => { if (!showPossiblePositions) { showAvailableSpace() }; setShowPossiblePositions(!showPossiblePositions) }} />
                     <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => addEmptyBar()} />
                 </div>
             </Grid>
@@ -125,7 +126,7 @@ const useStyles = makeStyles({
             color: colors.black
         }
     },
-    
+
     input: {
         padding: "18px 10px 10px 10px",
         height: "28px",
