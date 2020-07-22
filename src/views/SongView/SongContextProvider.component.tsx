@@ -17,6 +17,7 @@ interface ISongContext {
     toggleRepBefore: (barId: number) => void,
     toggleRepAfter: (barId: number) => void,
     changeTitle: (newTitle: string) => void,
+    toggleHouse: (barId: number) => void,
 }
 
 interface ISong {
@@ -43,6 +44,7 @@ export const SongContext = React.createContext<ISongContext>({
     toggleRepBefore: (barId: number) => { },
     toggleRepAfter: (barId: number) => { },
     changeTitle: (newTitle: string) => { },
+    toggleHouse: (barId: number) => { },
 });
 
 const SongContextProvider: React.FC = props => {
@@ -64,6 +66,7 @@ const SongContextProvider: React.FC = props => {
                     {
                         repBefore: false,
                         repAfter: false,
+                        house: 2,
                         chordsAndNotes: [
                             {
                                 length: 4,
@@ -95,7 +98,6 @@ const SongContextProvider: React.FC = props => {
                     },
                     {
                         repBefore: false,
-                        house: 1,
                         repAfter: false,
                         chordsAndNotes: [
                             {
@@ -133,6 +135,7 @@ const SongContextProvider: React.FC = props => {
                     {
                         repBefore: false,
                         repAfter: false,
+                        house: 2,
                         chordsAndNotes: [
                             {
                                 length: 2,
@@ -155,6 +158,7 @@ const SongContextProvider: React.FC = props => {
                     {
                         repBefore: false,
                         repAfter: false,
+                        house: 2,
                         chordsAndNotes: [
                             {
                                 length: 4,
@@ -316,7 +320,6 @@ const SongContextProvider: React.FC = props => {
         }
         setSong({ ...song, voices: [...song.voices, newVoice] });
     }
-
     const toggleRepBefore = (barId: number) => {
         //Map through all voices and for the ba which matches the id, toggle the bars repetition value
         setSong({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repBefore: !bar.repBefore } : bar) } : voice) });
@@ -326,14 +329,45 @@ const SongContextProvider: React.FC = props => {
         setSong({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repAfter: !bar.repAfter } : bar) } : voice) });
     }
 
+    const [firstHouse, setFirstHouse] = useState(false);
+    const toggleHouse = (barId: number) => {
+        //iterate through all the bars
+        let houseValue = firstHouse ? 2 : 1
+        setFirstHouse(!firstHouse);
+        let houseNumArray = new Map();
+
+        song.voices[0].bars.forEach((bar, i) => {
+            if (i % 2) {
+                if (houseNumArray.get(i) !== 1) {
+                    houseNumArray.set(i, undefined)
+                } else if (houseNumArray.get(i + 1) !== 2) {
+                    houseNumArray.set(i, undefined)
+                } else {
+                    return
+                }
+            }
+        }
 
 
 
 
+            /*  song.voices[0].bars.forEach((bar, i) => {
+                 //parses the bars and checks for houses
+                 if (bar.house !== undefined) {
+                     houseNumArray.set(i, bar.house)
+                 }
+                 for (let i = 0; i < houseNumArray.size; i++) {
+                     if (houseNumArray.get(i) > i) {
+                         houseNumArray.set(i, ( i + 1 ))     
+                     }
+                 }
+             }*/
+        );
+        console.log(houseNumArray)
 
-
-
-
+        setSong({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, house: houseValue } : bar) } : voice) });
+        setFirstHouse(!firstHouse);
+    }
 
 
     const getBar = (id: number, voiceId: number) => {
@@ -404,6 +438,7 @@ const SongContextProvider: React.FC = props => {
         toggleRepBefore,
         toggleRepAfter,
         changeTitle,
+        toggleHouse,
     }
 
     return (
