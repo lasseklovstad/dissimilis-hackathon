@@ -40,7 +40,6 @@ const LoginView: FC<LoginViewProps> = () => {
   const axiosPost = useLoginPost(code);
 
   useEffect(() => {
-    console.log("Code endres");
     if (sessionStorage.getItem("apiKey") && sessionStorage.getItem("userId")) {
       history.push("/dashboard");
     }
