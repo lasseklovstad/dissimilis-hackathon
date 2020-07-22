@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { IVoice } from '../../models/IVoice';
 import { IBar } from '../../models/IBar';
+import Bar from '../../components/Bar/Bar.component';
 
 
 //State handling skjer i denne komponenten 
@@ -13,6 +14,8 @@ interface ISongContext {
     getBar: (id: number, voiceId: number) => IBar | undefined,
     duplicateBar: (id: number, voiceId: number) => void,
     addEmptyBar: () => void,
+    toggleRepBefore: (barId: number) => void,
+    toggleRepAfter: (barId: number) => void,
     changeTitle: (newTitle: string) => void,
 }
 
@@ -37,6 +40,8 @@ export const SongContext = React.createContext<ISongContext>({
         throw new Error("duplicateBar() in Song Context is not implemented")
     },
     addEmptyBar: () => { },
+    toggleRepBefore: (barId: number) => { },
+    toggleRepAfter: (barId: number) => { },
     changeTitle: (newTitle: string) => { },
 });
 
@@ -312,6 +317,25 @@ const SongContextProvider: React.FC = props => {
         setSong({ ...song, voices: [...song.voices, newVoice] });
     }
 
+    const toggleRepBefore = (barId: number) => {
+        //Map through all voices and for the ba which matches the id, toggle the bars repetition value
+        setSong({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repBefore: !bar.repBefore } : bar) } : voice) });
+    }
+    const toggleRepAfter = (barId: number) => {
+        //Map through all voices and for the ba which matches the id, toggle the bars repetition value
+        setSong({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repAfter: !bar.repAfter } : bar) } : voice) });
+    }
+
+
+
+
+
+
+
+
+
+
+
     const getBar = (id: number, voiceId: number) => {
         let returnBar = undefined;
         song.voices[voiceId].bars.forEach((bar, i) => {
@@ -321,6 +345,7 @@ const SongContextProvider: React.FC = props => {
         });
         return returnBar;
     }
+
 
     const deleteBar = (id: number, voiceId: number) => {
         setSong({ ...song, voices: song.voices.map((voice) => true ? { ...voice, bars: voice.bars.filter((bar, i) => i !== id) } : voice) });
@@ -376,6 +401,8 @@ const SongContextProvider: React.FC = props => {
         getBar,
         duplicateBar,
         addEmptyBar,
+        toggleRepBefore,
+        toggleRepAfter,
         changeTitle,
     }
 
