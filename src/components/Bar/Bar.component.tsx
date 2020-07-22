@@ -7,6 +7,7 @@ import { IChordAndNotes } from "../../models/IBar";
 
 
 export type BarProps = {
+    barNumber: number,
     repBefore: boolean,
     repAfter: boolean,
     house?: number,
@@ -35,7 +36,8 @@ export const Bar: React.FC<BarProps> = props => {
             <Grid container role="grid" className={classes.fullHeight}>
                 <Grid item xs={12} role="gridcell" className={classes.fullHeight}>
                     <Grid container className={classes.firstRow} role="grid">
-                        <Grid item xs={1} role="gridcell"></Grid>
+                        <Grid item xs={1} role="gridcell">
+                        </Grid>
                         <Grid item xs={9} role="gridcell" aria-label={props.house + ". ending"}>
                             <House houseOrder={props.house} />
                         </Grid>
@@ -50,7 +52,7 @@ export const Bar: React.FC<BarProps> = props => {
                             </Box>
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label={"Bar"}>
-                            <BarBody height={props.height} chordsAndNotes={props.chordsAndNotes} />
+                            <BarBody barNumber={props.barNumber} height={props.height} chordsAndNotes={props.chordsAndNotes} />
                         </Grid>
                         <Grid item xs={1} style={{ borderRight: props.barLineAfter ? "6px double black" : "2px solid black" }} role="gridcell" aria-label="repetition sign after the tone" >
                             <Box mt={"20px"}>
