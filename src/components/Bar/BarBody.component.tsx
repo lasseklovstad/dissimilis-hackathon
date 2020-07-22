@@ -118,7 +118,6 @@ export const BarBody: React.FC<BarBodyProps> = props => {
         return result;
     }
 
-    console.log(tempArrayOfChordsLength)
     const chordsInBar = tempArrayOfChords.map((item: any, i: any) => {
         return (
             <Typography key={i} variant="body1" style={{ flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]) }} className={classes.toneText}>{item}</Typography>
