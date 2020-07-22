@@ -6,6 +6,7 @@ import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBa
 import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
 import { writeStorage } from '@rehooks/local-storage';
 import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
+import { ISong } from '../../models/ISong';
 
 export type DashboardViewProps = {
 
@@ -16,9 +17,22 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   const measureText = t("DashboardView:measure");
   const [dashboardView, setDashboardView] = useState(true);
   const [searchTerm, setSearchTerm] = useState("")
-  let searchResult = useGetFilteredSongs(searchTerm);
-  const dataFromApi = useGetRecentSongs();
-  const recentSongs = dataFromApi;
+  const [filteredSongs, setFilteredSongs] = useState<ISong[]>([]);
+  const [recentSongs, setRecentSongs] = useState<ISong[]>([]);
+  const getRecentSongs = useGetRecentSongs();
+  const getFilteredSongs = useGetFilteredSongs();
+
+  useEffect(() => {
+    getRecentSongs().then(({ result }) => { setRecentSongs(result?.data || []) });
+  }, [])
+
+  useEffect(() => {
+    console.log("searchTerm endret")
+    getFilteredSongs({ "Title": searchTerm }).then(({ result }) => { setFilteredSongs(result?.data || []) });
+  }, [searchTerm])
+
+
+
   const musicTacts = [
     {
       id: 1,
@@ -117,7 +131,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                 <Typography variant="h1">{t("DashboardView:searchSongLabel")}</Typography>
               </Box>
               <Grid container spacing={3}>
-                {searchResult?.map(songs => (
+                {filteredSongs?.map(songs => (
                   <Grid item xs={12} sm={4} lg={3} key={songs.id}>
                     <DashboardButton text={songs.title} link={songs.id!.toString()} />
                   </Grid>

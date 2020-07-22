@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import { useHistory } from 'react-router-dom';
+
 
 /**
  * @param method HTTP method, get or put
@@ -8,13 +9,9 @@ import axios from 'axios';
  * @param initialData initial data
  */
 
-//TODO: is initialData neccessary here? 
-
+//TODO: isnn initialData neccessary here? 
 export const useApiService = <T extends Object>(method: "get" | "post", url: string, options: ApiServiceOptions<T>) => {
-  const [data, setData] = useState<T | undefined>(options.initialData);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const history = useHistory();
 
   // Add params to the url   
   let baseUrl = 'https://localhost:5001/api/';
@@ -23,39 +20,51 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     finalUrl += '?' + new URLSearchParams(options.params).toString();
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsError(false);
-      setIsLoading(true);
+  // fetchData og postData er like, men unntak av kallene  await axios.metode<T>(argumenter), hvordan fikser jeg det til én metode? 
+  // axios[method]<T>(finalUrl, options.body) funker ikke.
+  const fetchData = async (newParams?: Record<string, string>) => {
+    let result: AxiosResponse<T> | undefined = undefined;
+    let errorMessage: any
+    let isError = false
 
-      try {
-        switch (method) {
-          case "get": {
-            const result = await axios.get<T>(finalUrl);
-            setData(result.data);
-            break;
-          }
-          case "post": {
-            const result = await axios.post<T>(finalUrl, options.body);
-            setData(result.data);
-            break;
-          }
+    if (newParams) {
+      finalUrl = baseUrl + url + '?' + new URLSearchParams(options.params).toString() + "&" + new URLSearchParams(newParams).toString();
+    }
 
-        }
-
-      } catch (error) {
-        setIsError(true);
-        setErrorMessage(error);
-        console.log(error);
+    try {
+      result = await axios.get<T>(finalUrl, { headers: options.headers });
+    } catch (error) {
+      if (error.response.status === 401) {
+        history.push("/");
+        sessionStorage.removeItem("apiKey");
+        sessionStorage.removeItem("userId");
       }
+      isError = true;
+      errorMessage = error;
+      console.log(error);
+    }
+    return { result, errorMessage };
+  };
 
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, [finalUrl, method, options.body]);
-
-  return [data, isLoading, isError, errorMessage] as const;
+  const postData = async () => {
+    let result: AxiosResponse<T> | undefined = undefined;
+    let errorMessage: any;
+    let isError = false;
+    try {
+      result = await axios.post<T>(finalUrl, options.body, { headers: options.headers });
+    } catch (error) {
+      if (error.response.status === 401) {
+        history.push("/");
+        sessionStorage.removeItem("apiKey");
+        sessionStorage.removeItem("userId");
+      }
+      isError = true;
+      errorMessage = error;
+      console.log(error);
+    }
+    return { result, errorMessage };
+  };
+  return { fetchData, postData };
 };
 
 /**
@@ -65,5 +74,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
 export type ApiServiceOptions<T> = {
   body?: any;
   initialData?: T;
-  params?: Record<string, string>
+  params?: Record<string, string>;
+  headers?: Record<string, string>;
+  dependencies?: any[];
 }

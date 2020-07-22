@@ -5,10 +5,12 @@ import { ISong } from "../models/ISong";
  * Get songs from database based on title or part of tilte
  * @param query title or part of title
  */
-export const useGetFilteredSongs = (query: string) => {
-    const url = "Song/songs";
-    const params = { "Query": query.toString() };
+export const useGetFilteredSongs = () => {
+    const url = "songs/search";
     const initialData: ISong[] = [];
-    const [dataFromApi, isLoading, isError, errorMessage] = useApiService<ISong[]>("get", url, { params, initialData });
-    return dataFromApi;
+    const apiKey = sessionStorage.getItem("apiKey") || "";
+    const userId = sessionStorage.getItem("userId") || "";
+    const headers = { 'X-API-Key': apiKey, 'X-User-ID': userId, };
+    const getSongs = useApiService<ISong[]>("get", url, { initialData, headers }).fetchData;
+    return getSongs;
 }
