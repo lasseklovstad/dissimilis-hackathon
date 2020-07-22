@@ -90,41 +90,6 @@ const SongToolsContextProvider: React.FC = props => {
 
     }
 
-    //Må skrive metoder som sjekker om det er plass til en ny note, viser hvordan det ville sett ut ved hover og en som faktisk setter inn og fjerner x antall tomme bokser før eller etter avhengig av posisjon.
-    //Må også passe på at ved å slette noter legges x antall tomme noter med lengde 1
-
-    /*
-    const changeEmptySpaces = (timeSignatureNumerator: number, barIndex: number, voiceIndex: number) => {
-        console.log(selectedNoteLength);
-        //Her må jeg først finne ut av hvor mye plass jeg har
-        //Lage et nytt objekt av bars med riktige notesOrChords
-        //Sende dette videre til en metode c songContext slik at den bytter ut notesOrChords til riktig nye
-        const lengthAvailable = timeSignatureNumerator;
-        let newBars = [];
-        //For hver bar må man endre alle tomme notes til riktige størrelser dersom det fungerer
-        //Må iterere over alle barene først
-        for (let c = 0; c < song.voices[voiceIndex].bars.length; c++) {
-            let lengthOfConsistentEmptyNotes: number = 0;
-            //Må også her lage en kopi av hver bar før man legger inn ny informasjon
-            let newBar: IBar = Object.assign({}, song.voices[voiceIndex].bars[c]);
-            newBar.chordsAndNotes = [];
-            for (let d = 0; d < song.voices[voiceIndex].bars[c].chordsAndNotes.length; d++) {
-                //Her må man telle over hvor mange "" man har etter hverandre for hvor langt
-                if (song.voices[voiceIndex].bars[c].chordsAndNotes[d].notes === [""]) {
-                    lengthOfConsistentEmptyNotes += song.voices[voiceIndex].bars[c].chordsAndNotes[d].length;
-                } else {
-                    //Må her lage antall tomme takter som man kan plassere her
-                    while (lengthOfConsistentEmptyNotes !== 0) {
-                        if (lengthOfConsistentEmptyNotes < selectedNoteLength) {
-                            newBar.chordsAndNotes.push({ length: lengthOfConsistentEmptyNotes, notes: [""] });
-                        }
-                    }
-                }
-            }
-            newBars.push(newBar);
-        }
-    }
-    */
 
     //Add all methods here
     const value = {
@@ -134,6 +99,8 @@ const SongToolsContextProvider: React.FC = props => {
         setSelectedNoteKey,
         showPossiblePositions,
         setShowPossiblePositions,
+        availablePositions,
+        setAvailablePositions,
         insertNewNoteOrChord,
         showAvailableSpace
     }
