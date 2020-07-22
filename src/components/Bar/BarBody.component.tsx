@@ -123,7 +123,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
         }
         return result;
     }
-    console.log(tempArrayOfChords.length);
+
     const chordsInBar = tempArrayOfChords.map((item: any, i: any) => {
         return (
             <Typography key={i} variant="body1" style={{ flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]) }} className={classes.toneText}>{item}</Typography>
@@ -144,7 +144,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                             {note.notes.map((type, index) => {
                                 const number = tangentToNumber(type);
                                 return (
-                                    <Box key={index} className={classes.toneBox} style={{ backgroundColor: showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) ? colors.focus : getColor(type) }} component={ButtonBase} onClick={() => {
+                                    <Box key={index} className={classes.toneBox} style={{ backgroundColor: showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null ? colors.focus : getColor(type) }} component={ButtonBase} onClick={() => {
                                         if (getColor(type) >= "transparent" && showPossiblePositions && note.length === selectedNoteLength) {
                                             insertNewNoteOrChord(i, props.barNumber, props.voiceId)
                                         }
