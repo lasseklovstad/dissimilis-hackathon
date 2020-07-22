@@ -20,7 +20,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const { deleteBar, duplicateBar, toggleRepBefore, toggleRepAfter, toggleHouse, song: { voices } } = useContext(SongContext);
+    const { deleteBar, duplicateBar, toggleRepBefore, toggleRepAfter, toggleHouse, toggleHouse2, song: { voices } } = useContext(SongContext);
     const bar = props.bar
 
     const queryString = require('query-string');
@@ -49,6 +49,9 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         if (method === "toggleHouse") {
             toggleHouse(index);
         }
+        if (method === "toggleHouse2") {
+            toggleHouse2(index);
+        }
         setAnchorEl(null);
     };
 
@@ -56,7 +59,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         return <></>
     } else {
         let centerDivSize: 10 | 11 | 12 = 11;
-
+        let barConst = voices[0].bars[props.barNumber].house !== undefined
         return (
             <Grid container role="grid" className={classes.fullHeight}>
                 <Grid item xs={12} role="row">
@@ -80,7 +83,8 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                                     <MenuItem onClick={() => handleClose("duplicate")}>{t("BarContainer:duplicateBar")} </MenuItem>
                                     <MenuItem onClick={() => handleClose("toggleRepBefore")}>{voices[0].bars[props.barNumber].repBefore ? t("BarContainer:removeRepBefore") : t("BarContainer:addRepBefore")} </MenuItem>
                                     <MenuItem onClick={() => handleClose("toggleRepAfter")}>{voices[0].bars[props.barNumber].repAfter ? t("BarContainer:removeRepAfter") : t("BarContainer:addRepAfter")} </MenuItem>
-                                    <MenuItem onClick={() => handleClose("toggleHouse")}>{voices[0].bars[props.barNumber].house !== undefined ? "fjern hus" : "legg til hus"} </MenuItem>
+                                    <MenuItem onClick={() => handleClose(barConst ? "toggleHouse" : "toggleHouse2")}>{barConst ? "fjern hus" : "legg til hus"} </MenuItem>
+
                                 </Menu>
                             </Box>
                         </Grid>
