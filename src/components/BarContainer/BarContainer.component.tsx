@@ -6,6 +6,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { IBar } from "../../models/IBar"
 import { useTranslation } from "react-i18next";
+import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 
 export type BarContainerProps = {
     barNumber: number,
@@ -22,6 +23,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const { deleteBar, duplicateBar, toggleRepBefore, toggleRepAfter, song: { voices } } = useContext(SongContext);
+    const { showPossiblePositions, setShowPossiblePositions } = useContext(SongToolsContext);
     const bar = props.bar
 
     const queryString = require('query-string');
@@ -33,6 +35,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     };
     const { t } = useTranslation();
     const handleClose = (method: string) => {
+        setShowPossiblePositions(false)
 
         const index = voices[0].bars.indexOf(bar);
         if (method === "delete") {

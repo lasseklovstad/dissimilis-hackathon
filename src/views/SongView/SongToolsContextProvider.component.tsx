@@ -36,7 +36,7 @@ export const SongToolsContext = React.createContext<ISongToolsContext>({
 const SongToolsContextProvider: React.FC = props => {
     const { song, editNote } = useContext(SongContext);
 
-    const [selectedNoteLength, setSelectedNoteLength] = useState<1 | 2 | 4 | 8>(8);
+    const [selectedNoteLength, setSelectedNoteLength] = useState<1 | 2 | 4 | 8>(1);
     const [selectedNoteKey, setSelectedNoteKey] = useState<string>("C");
     const [showPossiblePositions, setShowPossiblePositions] = useState<boolean>(false);
     const [availablePositions, setAvailablePositions] = useState<number[][][][]>([]);

@@ -36,11 +36,13 @@ function BottomBar() {
     const noteArray: string[] = Object.keys(notes);
     const chordArray: string[] = Object.keys(chords);
     const { selectedNoteLength, setSelectedNoteLength } = useContext(SongToolsContext);
-    const { addEmptyBar } = useContext(SongContext);
+    const { addEmptyBar, getTimeSignature } = useContext(SongContext);
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedNoteLength(event.target.value as 1 | 2 | 4 | 8);
         setShowPossiblePositions(false);
     };
+    let timeSignatureNumerator = getTimeSignature()[0];
+    if (getTimeSignature()[1] == 4) timeSignatureNumerator *= 2;
     const Menu =
         <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
             <Select
@@ -48,8 +50,8 @@ function BottomBar() {
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
             >
-                <MenuItem value={8}> <WholenoteIcon /></MenuItem>
-                <MenuItem value={4}> <HalfnoteIcon /></MenuItem>
+                <MenuItem value={8} style={{ display: timeSignatureNumerator < 8 ? "none" : "block" }}> <WholenoteIcon /></MenuItem>
+                <MenuItem value={4} style={{ display: timeSignatureNumerator < 4 ? "none" : "block" }}> <HalfnoteIcon /></MenuItem>
                 <MenuItem value={2}> <QuarternoteIcon /></MenuItem>
                 <MenuItem value={1}> <EighthnoteIcon /></MenuItem>
             </Select>

@@ -5,8 +5,6 @@ import { IChordAndNotes } from "../../models/IBar";
 import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 import { Chord } from "@tonaljs/tonal";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
-import { notes } from '../../models/notes';
-import { chords } from "../../models/chords";
 
 
 export type BarBodyProps = {
@@ -81,7 +79,7 @@ export function getColor(color: string): string {
         case "H":
             newColor = colors.H;
             break;
-        case "C#": case "D#": case "F#": case "G#": case "A#":
+        case "1": case "2": case "3": case "4": case "5":
             newColor = colors.semitone;
             break;
         default:
@@ -92,8 +90,7 @@ export function getColor(color: string): string {
 export const BarBody: React.FC<BarBodyProps> = props => {
     const classes = useStyles();
     const { showPossiblePositions, insertNewNoteOrChord, availablePositions, selectPositionArray, selectedNoteKey } = useContext(SongToolsContext);
-
-    const { song: { voices } } = useContext(SongContext);
+    const { song: { voices }, getTimeSignature } = useContext(SongContext);
 
     let tempArrayOfChordsLength: any = [];
     let tempArrayOfChords: any = [];
@@ -105,20 +102,23 @@ export const BarBody: React.FC<BarBodyProps> = props => {
     const calculateFlexBasis = (length: number) => {
         //Hente ut [teller, nevner], ligger metode i songContext
         //if (getTimeSignature()[1] == 4) timeSignatureNumerator *= 2;
+        let timeSignatureNumerator = getTimeSignature()[0];
+        if (getTimeSignature()[1] == 4) timeSignatureNumerator *= 2;
 
         let result;
+        let base = 100 / timeSignatureNumerator;
         switch (length) {
             case 1:
-                result = "12.5%";
+                result = base + "%";
                 break;
             case 2:
-                result = "25%";
+                result = base * 2 + "%";
                 break;
             case 4:
-                result = "50%";
+                result = base * 4 + "%";
                 break;
             case 8:
-                result = "100%";
+                result = base * 8 + "%";
                 break;
             default:
                 result = "100%";
@@ -162,9 +162,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                                 insertNewNoteOrChord(i, props.barNumber, props.voiceId)
                                             }
                                         }}
-
                                     >
-
                                         <Typography className={classes.tangentText} >{number === 0 ? "" : number}</Typography>
                                     </Box>
                                 )
