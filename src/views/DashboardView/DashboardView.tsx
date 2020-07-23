@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
 import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/DashboardButtons/DashboardButtons';
-import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
+import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBar'
+import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
 import { writeStorage } from '@rehooks/local-storage';
 import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
 import { ISong } from '../../models/ISong';
@@ -14,11 +15,23 @@ export type DashboardViewProps = {
 export const DashboardView: React.FC<DashboardViewProps> = () => {
   const { t } = useTranslation();
   const measureText = t("DashboardView:measure");
-  const getRecentSongs = useGetRecentSongs()
-  const [recentSongs, setRecentSongs] = useState<ISong[]>([])
+  const [dashboardView, setDashboardView] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("")
+  const [filteredSongs, setFilteredSongs] = useState<ISong[]>([]);
+  const [recentSongs, setRecentSongs] = useState<ISong[]>([]);
+  const getRecentSongs = useGetRecentSongs();
+  const getFilteredSongs = useGetFilteredSongs();
+
   useEffect(() => {
-    getRecentSongs().then(({ result }) => setRecentSongs(result?.data || []))
+    getRecentSongs().then(({ result }) => { setRecentSongs(result?.data || []) });
   }, [])
+
+  useEffect(() => {
+    getFilteredSongs({ "Title": searchTerm }).then(({ result }) => { setFilteredSongs(result?.data || []) });
+  }, [searchTerm])
+
+
+
   const musicTacts = [
     {
       id: 1,
@@ -50,51 +63,85 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
     writeStorage("timeSignature", newData)
   }
 
+  const handleOnBlur = () => {
+    setDashboardView(true)
+  }
+
+  const handleOnChange = (searchTerm: string) => {
+    setSearchTerm(searchTerm)
+    setDashboardView(false)
+
+  }
+
+
   return (
+
     <Box mx={2}>
       <Grid container justify="center" className={styles.container}>
 
         <Grid item xs={12}>
           <Box mb={marginBottom}>
-            <DashboardTopBar />
+            <DashboardTopBar onBlur={handleOnBlur} onChange={handleOnChange} />
           </Box>
         </Grid>
 
-        <Grid item xs={12} sm={10} key="newSongContainer">
-          <Box mb={marginBottom}>
-            <Box m={2}>
-              <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
-            </Box>
-            <Grid container spacing={3}>
-              {musicTacts.map(songs => (
-                <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                  <DashboardButtonWithAddIcon func={() => storeTimeSignatureToLocalStorage(songs.text)} text={songs.text} link={songs.link} />
+        {dashboardView ?
+          <div>
+            <Grid item xs={12} sm={10} key="newSongContainer">
+              <Box mb={marginBottom}>
+                <Box m={2}>
+                  <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
+                </Box>
+                <Grid container spacing={3}>
+                  {musicTacts.map(songs => (
+                    <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                      <DashboardButtonWithAddIcon func={() => storeTimeSignatureToLocalStorage(songs.text)} text={songs.text} link={songs.link} />
+                    </Grid>
+                  ))}
                 </Grid>
-              ))}
+              </Box>
             </Grid>
-          </Box>
-        </Grid>
 
-        <Grid item xs={12} sm={10} key="recentSongsContainer">
-          <Box mb={marginBottom}>
-            <Box m={2}>
-              <Typography variant="h1">{t("DashboardView:recentLabel")}</Typography>
-            </Box>
-            <Grid container spacing={3}>
-              {recentSongs.map(song => (
-                <Grid item xs={12} sm={4} lg={3} key={song.id}>
-                  <DashboardButton text={song.title} link={`/song/${song.id}`} />
+            <Grid item xs={12} sm={10} key="recentSongsContainer">
+              <Box mb={marginBottom}>
+                <Box m={2}>
+                  <Typography variant="h1">{t("DashboardView:recentSongLabel")}</Typography>
+                </Box>
+                <Grid container spacing={3}>
+                  {recentSongs?.map(songs => (
+                    <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                      <DashboardButton text={songs.title} link={songs.id!.toString()} />
+                    </Grid>
+                  ))}
+                  <Grid item xs={12} sm={4} lg={3} key="library">
+                    <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
+                  </Grid>
                 </Grid>
-              ))}
-              <Grid item xs={12} sm={4} lg={3} key="library">
-                <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
+              </Box>
+            </Grid>
+          </div>
+
+          :
+
+          <Grid item xs={12} sm={10} key="searchSongsContainer">
+            <Box mb={marginBottom}>
+              <Box m={2}>
+                <Typography variant="h1">{t("DashboardView:searchSongLabel")}</Typography>
+              </Box>
+              <Grid container spacing={3}>
+                {filteredSongs?.map(songs => (
+                  <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                    <DashboardButton text={songs.title} link={songs.id!.toString()} />
+                  </Grid>
+                ))}
               </Grid>
-            </Grid>
-          </Box>
-        </Grid>
+            </Box>
+          </Grid>
+        }
 
       </Grid>
     </Box>
+
   );
 }
 export default DashboardView;

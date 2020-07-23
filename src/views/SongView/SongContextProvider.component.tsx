@@ -4,6 +4,7 @@ import { IBar } from '../../models/IBar';
 import Bar from '../../components/Bar/Bar.component';
 
 
+
 //State handling skjer i denne komponenten 
 
 interface ISongContext {
