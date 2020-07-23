@@ -85,44 +85,44 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
           </Box>
         </Grid>
 
-        {dashboardView &&
-          <Grid item xs={12} sm={10} key="newSongContainer">
-            <Box mb={marginBottom}>
-              <Box m={2}>
-                <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
-              </Box>
-              <Grid container spacing={3}>
-                {musicTacts.map(songs => (
-                  <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                    <DashboardButtonWithAddIcon func={() => storeTimeSignatureToLocalStorage(songs.text)} text={songs.text} link={songs.link} />
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
-          </Grid>
-        }
-
-        {dashboardView &&
-          <Grid item xs={12} sm={10} key="recentSongsContainer">
-            <Box mb={marginBottom}>
-              <Box m={2}>
-                <Typography variant="h1">{t("DashboardView:recentSongLabel")}</Typography>
-              </Box>
-              <Grid container spacing={3}>
-                {recentSongs?.map(songs => (
-                  <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                    <DashboardButton text={songs.title} link={songs.id!.toString()} />
-                  </Grid>
-                ))}
-                <Grid item xs={12} sm={4} lg={3} key="library">
-                  <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
+        {dashboardView ?
+          <div>
+            <Grid item xs={12} sm={10} key="newSongContainer">
+              <Box mb={marginBottom}>
+                <Box m={2}>
+                  <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
+                </Box>
+                <Grid container spacing={3}>
+                  {musicTacts.map(songs => (
+                    <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                      <DashboardButtonWithAddIcon func={() => storeTimeSignatureToLocalStorage(songs.text)} text={songs.text} link={songs.link} />
+                    </Grid>
+                  ))}
                 </Grid>
-              </Grid>
-            </Box>
-          </Grid>
-        }
+              </Box>
+            </Grid>
 
-        {!dashboardView &&
+            <Grid item xs={12} sm={10} key="recentSongsContainer">
+              <Box mb={marginBottom}>
+                <Box m={2}>
+                  <Typography variant="h1">{t("DashboardView:recentSongLabel")}</Typography>
+                </Box>
+                <Grid container spacing={3}>
+                  {recentSongs?.map(songs => (
+                    <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                      <DashboardButton text={songs.title} link={songs.id!.toString()} />
+                    </Grid>
+                  ))}
+                  <Grid item xs={12} sm={4} lg={3} key="library">
+                    <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Grid>
+          </div>
+
+          :
+
           <Grid item xs={12} sm={10} key="searchSongsContainer">
             <Box mb={marginBottom}>
               <Box m={2}>
