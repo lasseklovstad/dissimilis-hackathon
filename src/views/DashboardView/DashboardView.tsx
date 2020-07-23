@@ -134,9 +134,6 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                     <DashboardButton text={songs.title} link={songs.id!.toString()} />
                   </Grid>
                 ))}
-                <Grid item xs={12} sm={4} lg={3} key="library">
-                  <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
-                </Grid>
               </Grid>
             </Box>
           </Grid>
