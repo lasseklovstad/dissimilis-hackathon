@@ -36,22 +36,23 @@ const LoginView: FC<LoginViewProps> = () => {
   }
 
   const url = new URLSearchParams(useLocation().search);
-  let code = (url.get("code") !== null) ? url.get("code") : null;
+  let code = url.get("code") ? url.get("code") : null
   const axiosPost = useLoginPost(code);
 
   useEffect(() => {
+    console.log("Kjører useeffect i loginview")
     if (sessionStorage.getItem("apiKey") && sessionStorage.getItem("userId")) {
       history.push("/dashboard");
+    } else if (code !== null) {
+      axiosPost().then(({ result }) => {
+        if (result && result.status === 200) {
+          history.push("/dashboard");
+          sessionStorage.setItem("apiKey", result.data.apiKey);
+          sessionStorage.setItem("userId", result.data.userID?.toString());
+        }
+      })
     }
-    axiosPost().then(({ result }) => {
-      if (result && (!sessionStorage.getItem("apiKey") || !sessionStorage.getItem("userId")) && result.status === 200) {
-        setLoggedIn(true);
-        history.push("/dashboard");
-        sessionStorage.setItem("apiKey", result.data.apiKey);
-        sessionStorage.setItem("userId", result.data.userID?.toString());
-      }
-    })
-  }, [code])
+  }, [])
 
 
   const [warningDisplayed, setWarningDisplayed] = React.useState(false);

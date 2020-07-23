@@ -48,7 +48,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     try {
       result = await axios.post<T>(finalUrl, options.body, { headers: options.headers });
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error?.response?.status === 401) {
         history.push("/");
         sessionStorage.removeItem("apiKey");
         sessionStorage.removeItem("userId");

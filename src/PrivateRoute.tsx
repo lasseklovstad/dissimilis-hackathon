@@ -4,6 +4,7 @@ import { AuthContext } from './contexts/auth';
 
 
 export const PrivateRoute: React.FC<RouteProps> = props => {
+    console.log("Kjører private routing");
 
     if (sessionStorage.getItem("apiKey")) {
         return <Route {...props} component={props.component} />;
@@ -11,4 +12,5 @@ export const PrivateRoute: React.FC<RouteProps> = props => {
         return <Redirect to={{ pathname: '/' }} />;
     }
 };
+
 export default PrivateRoute;

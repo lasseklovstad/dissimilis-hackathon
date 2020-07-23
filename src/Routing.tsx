@@ -13,8 +13,8 @@ function SongRouting() {
     return (
         <Switch>
             <SongContextProvider>
-                <PrivateRoute exact path="/song/:id" component={SongView} />
-                <PrivateRoute exact path="/song" component={SongView} />
+                <Route exact path="/song/:id" render={(props) => (<PrivateRoute path="/song/:id" component={SongView} />)} />
+                <Route exact path="/song" render={(props) => (<PrivateRoute path="/song" component={SongView} />)} />
 
 
             </SongContextProvider>
@@ -27,10 +27,9 @@ function Routing() {
     return (
         <BrowserRouter>
             <Switch>
-                <PrivateRoute path="/dashboard" component={DashboardView} />
-                <PrivateRoute path="/common" component={CommonView} />
-                <PrivateRoute path="/song" component={SongRouting} />
-
+                <Route exact path="/dashboard" render={(props) => (<PrivateRoute exact path="/dashboard" component={DashboardView} />)} />
+                <Route exact path="/common" render={(props) => (<PrivateRoute exact path="/common" component={CommonView} />)} />
+                <Route path="/song" component={SongRouting} />
                 <Route path="/" component={LoginView} />
                 <Route render={() => <Redirect to={{ pathname: "/" }} />} />
             </Switch>
