@@ -382,8 +382,11 @@ const SongContextProvider: React.FC = props => {
     }
 
     const addEmptyBar = () => {
+
         const tempArray = copyAndAddEmptyBars(song.voices[0].bars.length, 0);
         setSong({ ...song, voices: song.voices.map((voice, i) => true ? { ...voice, bars: tempArray[i] } : voice) });
+
+
     }
 
     const changeTitle = (newTitle: string) => {
