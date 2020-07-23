@@ -81,7 +81,7 @@ export function getColor(color: string): string {
             newColor = colors.H;
             break;
         case "C#": case "D#": case "F#": case "G#": case "A#":
-            newColor = colors.semitone;
+            newColor = colors.gray_500;
             break;
         default:
             newColor = "transparent";
