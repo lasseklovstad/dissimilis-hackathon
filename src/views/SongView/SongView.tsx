@@ -31,7 +31,7 @@ export const SongView: React.FC<SongViewProps> = props => {
       selectedVoice = voiceString.voice - 1;
     }
   } else {
-    history.push(`/song/${1}?voice=1`);
+    history.replace(`/song/${1}?voice=1`);
   }
 
   useEffect(() => {
