@@ -42,7 +42,7 @@ function BottomBar() {
         setShowPossiblePositions(false);
     };
     let timeSignatureNumerator = getTimeSignature()[0];
-    if (getTimeSignature()[1] == 4) timeSignatureNumerator *= 2;
+    if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
     const Menu =
         <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
             <Select

@@ -89,7 +89,7 @@ export function getColor(color: string): string {
 }
 export const BarBody: React.FC<BarBodyProps> = props => {
     const classes = useStyles();
-    const { showPossiblePositions, insertNewNoteOrChord, availablePositions, selectPositionArray, selectedNoteKey } = useContext(SongToolsContext);
+    const { showPossiblePositions, insertNewNoteOrChord, availablePositions, selectPositionArray } = useContext(SongToolsContext);
     const { song: { voices }, getTimeSignature } = useContext(SongContext);
 
     let tempArrayOfChordsLength: any = [];
@@ -100,10 +100,8 @@ export const BarBody: React.FC<BarBodyProps> = props => {
     }
 
     const calculateFlexBasis = (length: number) => {
-        //Hente ut [teller, nevner], ligger metode i songContext
-        //if (getTimeSignature()[1] == 4) timeSignatureNumerator *= 2;
         let timeSignatureNumerator = getTimeSignature()[0];
-        if (getTimeSignature()[1] == 4) timeSignatureNumerator *= 2;
+        if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
 
         let result;
         let base = 100 / timeSignatureNumerator;
@@ -149,6 +147,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                     return (
                         <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px" }} flexDirection="column" >
                             {note.notes.map((type, index) => {
+                                //srfsdfxdfdx
                                 const number = tangentToNumber(type);
                                 return (
                                     <Box
@@ -163,7 +162,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                             }
                                         }}
                                     >
-                                        <Typography className={classes.tangentText} >{number === 0 ? "" : number}</Typography>
+                                        <Typography className={classes.tangentText} >{number === 0 ? number : ""}</Typography>
                                     </Box>
                                 )
                             })}

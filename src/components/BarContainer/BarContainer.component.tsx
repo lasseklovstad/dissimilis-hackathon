@@ -23,7 +23,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const { deleteBar, duplicateBar, toggleRepBefore, toggleRepAfter, song: { voices } } = useContext(SongContext);
-    const { showPossiblePositions, setShowPossiblePositions } = useContext(SongToolsContext);
+    const { setShowPossiblePositions } = useContext(SongToolsContext);
     const bar = props.bar
 
     const queryString = require('query-string');
