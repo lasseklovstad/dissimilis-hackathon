@@ -26,13 +26,11 @@ export const SongView: React.FC<SongViewProps> = props => {
   if (voiceString.voice !== undefined) {
     const voiceInt = parseInt(voiceString.voice);
     if (voiceInt > voices.length || voiceInt <= 0) {
-      console.log("hola")
       history.push(`/song/${1}?voice=1`);
     } else {
       selectedVoice = voiceString.voice - 1;
     }
   } else {
-    console.log("Hola 2")
     history.replace(`/song/${1}?voice=1`);
   }
 
