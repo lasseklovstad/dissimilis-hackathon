@@ -20,7 +20,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const { deleteBar, duplicateBar, toggleRepBefore, toggleRepAfter, toggleHouse, toggleHouse2, song: { voices } } = useContext(SongContext);
+    const { deleteBar, duplicateBar, toggleRepBefore, toggleRepAfter, addHouse, removeHouse, song: { voices } } = useContext(SongContext);
     const bar = props.bar
 
     const queryString = require('query-string');
@@ -46,11 +46,11 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         if (method === "toggleRepAfter") {
             toggleRepAfter(index);
         }
-        if (method === "toggleHouse") {
-            toggleHouse(index);
+        if (method === "addHouse") {
+            addHouse(index);
         }
-        if (method === "toggleHouse2") {
-            toggleHouse2(index);
+        if (method === "removeHouse") {
+            removeHouse(index);
         }
         setAnchorEl(null);
     };
@@ -83,7 +83,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                                     <MenuItem onClick={() => handleClose("duplicate")}>{t("BarContainer:duplicateBar")} </MenuItem>
                                     <MenuItem onClick={() => handleClose("toggleRepBefore")}>{voices[0].bars[props.barNumber].repBefore ? t("BarContainer:removeRepBefore") : t("BarContainer:addRepBefore")} </MenuItem>
                                     <MenuItem onClick={() => handleClose("toggleRepAfter")}>{voices[0].bars[props.barNumber].repAfter ? t("BarContainer:removeRepAfter") : t("BarContainer:addRepAfter")} </MenuItem>
-                                    <MenuItem onClick={() => handleClose(barConst ? "toggleHouse" : "toggleHouse2")}>{barConst ? "fjern hus" : "legg til hus"} </MenuItem>
+                                    <MenuItem onClick={() => handleClose(barConst ? "removeHouse" : "addHouse")}>{barConst ? t("BarContainer:removeHouse") : t("BarContainer:addHouse")} </MenuItem>
 
                                 </Menu>
                             </Box>

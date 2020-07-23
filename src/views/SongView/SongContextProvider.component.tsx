@@ -17,8 +17,8 @@ interface ISongContext {
     toggleRepBefore: (barId: number) => void,
     toggleRepAfter: (barId: number) => void,
     changeTitle: (newTitle: string) => void,
-    toggleHouse: (barId: number) => void,
-    toggleHouse2: (barId: number) => void,
+    addHouse: (barId: number) => void,
+    removeHouse: (barId: number) => void,
 }
 
 interface ISong {
@@ -45,8 +45,8 @@ export const SongContext = React.createContext<ISongContext>({
     toggleRepBefore: (barId: number) => { },
     toggleRepAfter: (barId: number) => { },
     changeTitle: (newTitle: string) => { },
-    toggleHouse: (barId: number) => { },
-    toggleHouse2: (barId: number) => { },
+    addHouse: (barId: number) => { },
+    removeHouse: (barId: number) => { },
 });
 
 const SongContextProvider: React.FC = props => {
@@ -334,21 +334,15 @@ const SongContextProvider: React.FC = props => {
     }
 
     //adds house to a bar
-    const toggleHouse2 = (barId: number) => {
+    const addHouse = (barId: number) => {
         //Maps through all bars, matching on barId, checking for house values on the chosen bar, along with the adjacent bars, ensuring that they are handled correctly
         setSong({
-            ...song, voices: song.voices.map((voice, index) => true ?
-                {
-                    ...voice, bars: voice.bars.map((bar, i) => i === barId ?
-                        { ...bar, house: 1 } : (i === barId + 1 ? { ...bar, house: 2 } :
-                            (i === barId + 2 && (song.voices[0].bars[barId + 2].house === 2) ?
-                                { ...bar, house: undefined } : bar)))
-                } : voice)
+            ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, house: 1 } : (i === barId + 1 ? { ...bar, house: 2 } : (i === barId + 2 && (song.voices[0].bars[barId + 2].house === 2) ? { ...bar, house: undefined } : bar))) } : voice)
         });
     }
 
     //Function for removing house from a bar
-    const toggleHouse = (barId: number) => {
+    const removeHouse = (barId: number) => {
 
         //Checks the housevalue and sets the value to undefined, along with checking adjacent bars and ensuring they are correct
         let barBase = song.voices[0].bars[barId].house;
@@ -431,8 +425,8 @@ const SongContextProvider: React.FC = props => {
         toggleRepBefore,
         toggleRepAfter,
         changeTitle,
-        toggleHouse,
-        toggleHouse2,
+        addHouse,
+        removeHouse,
     }
 
     return (
