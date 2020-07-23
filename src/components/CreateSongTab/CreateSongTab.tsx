@@ -43,8 +43,8 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         setModalIsOpen(false);
         setTextFieldInput("");
         const newIndex = voices.length + 1;
-        history.push("?voice=" + newIndex.toString());
-    }
+        history.replace("?voice=" + newIndex.toString());
+    };
 
     const handleOpen = () => {
         setModalIsOpen(true);
@@ -56,7 +56,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
 
     const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
         setTextFieldInput(e.target.value);
-    }
+    };
 
     const { t } = useTranslation();
 

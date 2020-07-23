@@ -14,7 +14,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
   const history = useHistory();
 
   // Add params to the url   
-  let baseUrl = 'https://localhost:5001/api/';
+  let baseUrl = 'https://dissimilis-api-dev.azurewebsites.net/api/';
   let finalUrl = baseUrl + url;
   if (options.params) {
     finalUrl += '?' + new URLSearchParams(options.params).toString();
@@ -34,7 +34,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     try {
       result = await axios.get<T>(finalUrl, { headers: options.headers });
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error?.response?.status === 401) {
         history.push("/");
         sessionStorage.removeItem("apiKey");
         sessionStorage.removeItem("userId");
@@ -43,7 +43,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
       errorMessage = error;
       console.log(error);
     }
-    return { result, errorMessage };
+    return { result, isError, errorMessage };
   };
 
   const postData = async () => {
@@ -53,7 +53,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     try {
       result = await axios.post<T>(finalUrl, options.body, { headers: options.headers });
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error?.response?.status === 401) {
         history.push("/");
         sessionStorage.removeItem("apiKey");
         sessionStorage.removeItem("userId");
@@ -62,7 +62,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
       errorMessage = error;
       console.log(error);
     }
-    return { result, errorMessage };
+    return { result, isError, errorMessage };
   };
   return { fetchData, postData };
 };
