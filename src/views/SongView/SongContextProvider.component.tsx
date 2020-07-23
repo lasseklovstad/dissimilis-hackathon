@@ -1,8 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { IVoice } from '../../models/IVoice';
 import { IBar, IChordAndNotes } from '../../models/IBar';
 import useLocalStorage from '@rehooks/local-storage';
-import { SongToolsContext } from './SongToolsContextProvider.component';
 
 
 //State handling skjer i denne komponenten 
@@ -67,6 +66,44 @@ const SongContextProvider: React.FC = props => {
                 title: "master",
                 priority: 1,
                 bars: [
+                    {
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndNotes: [
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                            {
+                                length: 1,
+                                notes: [""]
+                            },
+                        ],
+                    },
                     {
                         repBefore: false,
                         repAfter: false,
@@ -347,7 +384,7 @@ const SongContextProvider: React.FC = props => {
             const newChordsAndNotes = [];
             const newEmptyNote = { length: 1, notes: [""] };
             let timeSignatureNumerator = getTimeSignature()[0];
-            if (getTimeSignature()[1] == 4) timeSignatureNumerator *= 2;
+            if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
             for (let i = 0; i < timeSignatureNumerator; i++) {
                 newChordsAndNotes.push(newEmptyNote)
             }
@@ -366,16 +403,6 @@ const SongContextProvider: React.FC = props => {
         //Map through all voices and for the ba which matches the id, toggle the bars repetition value
         setSong({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repAfter: !bar.repAfter } : bar) } : voice) });
     }
-
-
-
-
-
-
-
-
-
-
 
     const getBar = (id: number, voiceId: number) => {
         let returnBar = undefined;
@@ -413,7 +440,7 @@ const SongContextProvider: React.FC = props => {
         const newChordsAndNotes = [];
         const newEmptyNote = { length: 1, notes: [""] };
         let timeSignatureNumerator = getTimeSignature()[0];
-        if (getTimeSignature()[1] == 4) timeSignatureNumerator *= 2;
+        if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
         for (let i = 0; i < timeSignatureNumerator; i++) {
             newChordsAndNotes.push(newEmptyNote)
         }

@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Box, makeStyles, Typography, ButtonBase } from "@material-ui/core";
 import colors from "../../utils/colors";
 import { IChordAndNotes } from "../../models/IBar";
 import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 import { Chord } from "@tonaljs/tonal";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
+import { notes } from '../../models/notes';
+import { chords } from "../../models/chords";
 
 
 export type BarBodyProps = {
@@ -89,7 +91,7 @@ export function getColor(color: string): string {
 }
 export const BarBody: React.FC<BarBodyProps> = props => {
     const classes = useStyles();
-    const { showPossiblePositions, selectedNoteLength, insertNewNoteOrChord, availablePositions } = useContext(SongToolsContext);
+    const { showPossiblePositions, insertNewNoteOrChord, availablePositions, selectPositionArray, selectedNoteKey } = useContext(SongToolsContext);
 
     const { song: { voices } } = useContext(SongContext);
 
@@ -130,8 +132,13 @@ export const BarBody: React.FC<BarBodyProps> = props => {
         )
     })
 
-
-
+    const [positionArray, setPositionArray] = useState<number[]>([]);
+    const emptySpace = (i: number) => {
+        if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i))) {
+            return true
+        }
+        return false;
+    }
 
     return (
 
@@ -144,11 +151,20 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                             {note.notes.map((type, index) => {
                                 const number = tangentToNumber(type);
                                 return (
-                                    <Box key={index} className={classes.toneBox} style={{ backgroundColor: showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null ? "transparent" : getColor(type), border: showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null ? "2px solid " + colors.gray_300 : "none" }} component={ButtonBase} onClick={() => {
-                                        if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
-                                            insertNewNoteOrChord(i, props.barNumber, props.voiceId)
-                                        }
-                                    }}>
+                                    <Box
+                                        key={index} className={classes.toneBox}
+                                        onMouseEnter={() => { if (showPossiblePositions) { setPositionArray(selectPositionArray(props.voiceId, props.barNumber, i)); } }}
+                                        onMouseLeave={() => { if (showPossiblePositions) { setPositionArray([]) } }}
+                                        style={{ backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), outlineColor: "black", boxShadow: emptySpace(i) ? (positionArray.includes(i) ? "none" : "0 0 5px black") : "none" }}
+                                        component={ButtonBase}
+                                        onClick={() => {
+                                            if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
+                                                insertNewNoteOrChord(i, props.barNumber, props.voiceId)
+                                            }
+                                        }}
+
+                                    >
+
                                         <Typography className={classes.tangentText} >{number === 0 ? "" : number}</Typography>
                                     </Box>
                                 )

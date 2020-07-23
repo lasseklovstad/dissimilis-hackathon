@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { SongContext } from './SongContextProvider.component';
-import { IChordAndNotes, IBar } from '../../models/IBar';
+import { IChordAndNotes } from '../../models/IBar';
 import { notes } from '../../models/notes';
 import { chords } from '../../models/chords';
+
 
 interface ISongToolsContext {
     selectedNoteLength: 1 | 2 | 4 | 8,
@@ -15,6 +16,7 @@ interface ISongToolsContext {
     setAvailablePositions: (number: number[][][][]) => void,
     insertNewNoteOrChord: (noteIndex: number, barIndex: number, voiceIndex: number) => void,
     showAvailableSpace: () => void,
+    selectPositionArray: (voiceIndex: number, barIndex: number, noteIndex: number) => number[]
 }
 
 export const SongToolsContext = React.createContext<ISongToolsContext>({
@@ -27,7 +29,8 @@ export const SongToolsContext = React.createContext<ISongToolsContext>({
     availablePositions: [],
     setAvailablePositions: (number: number[][][][]) => { },
     insertNewNoteOrChord: (noteIndex: number, barIndex: number, voiceIndex: number) => { },
-    showAvailableSpace: () => { }
+    showAvailableSpace: () => { },
+    selectPositionArray: (voiceIndex: number, barIndex: number, noteIndex: number) => []
 });
 
 const SongToolsContextProvider: React.FC = props => {
@@ -53,27 +56,30 @@ const SongToolsContextProvider: React.FC = props => {
             tempChordsAndNotes.push(song.voices[voiceIndex].bars[barIndex].chordsAndNotes[i]);
         }
 
-        const availablePosArray = availablePositions[voiceIndex][barIndex];
-        //Have to select the position in which the noteindex is the smallest index
-        //const selectedPosArray = availablePosArray.find(arr => arr.includes(noteIndex));
-        
-        let selectedPosArray = availablePosArray.find(arr => arr.includes(noteIndex));
-        availablePosArray.map(arr => {if(arr.includes(noteIndex)) {selectedPosArray = arr}});
+        let selectedPosArray = selectPositionArray(voiceIndex, barIndex, noteIndex)
 
-        if (selectedPosArray != undefined) {
+        if (selectedPosArray !== undefined) {
             for (let j = selectedPosArray.length - 1; j >= 0; j--) {
-                if (selectedPosArray[j] == noteIndex) {
+                if (selectedPosArray[j] === noteIndex) {
                     tempChordsAndNotes.splice(selectedPosArray[j], 1, newNote);
-                    console.log("Legg til " + selectedPosArray[j])
                 } else {
                     tempChordsAndNotes.splice(selectedPosArray[j], 1);
-                    console.log("fjern" + selectedPosArray[j])
                 }
             }
         }
 
         editNote(voiceIndex, barIndex, tempChordsAndNotes);
         setShowPossiblePositions(false);
+    }
+
+    const selectPositionArray = (voiceIndex: number, barIndex: number, noteIndex: number) => {
+        const availablePosArray = availablePositions[voiceIndex][barIndex];
+        let selectedPosArray = availablePosArray.find(arr => arr.includes(noteIndex));
+        availablePosArray.map(arr => { if (arr.includes(noteIndex)) { selectedPosArray = arr } });
+        if (selectedPosArray === undefined || selectedPosArray === null) {
+            return [];
+        };
+        return selectedPosArray;
     }
 
     const showAvailableSpace = () => {
@@ -107,10 +113,6 @@ const SongToolsContextProvider: React.FC = props => {
         setAvailablePositions(returnArray);
     }
 
-    const prewiewOfInsertion = () => {
-
-    }
-
 
     //Add all methods here
     const value = {
@@ -123,7 +125,8 @@ const SongToolsContextProvider: React.FC = props => {
         availablePositions,
         setAvailablePositions,
         insertNewNoteOrChord,
-        showAvailableSpace
+        showAvailableSpace,
+        selectPositionArray
     }
 
     return (
