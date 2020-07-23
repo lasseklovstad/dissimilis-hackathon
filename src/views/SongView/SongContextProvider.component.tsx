@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { IVoice } from '../../models/IVoice';
 import { IBar, IChordAndNotes } from '../../models/IBar';
 import useLocalStorage from '@rehooks/local-storage';
+import { SongToolsContext } from './SongToolsContextProvider.component';
 
 
 //State handling skjer i denne komponenten 
@@ -14,7 +15,7 @@ interface ISongContext {
     getBar: (id: number, voiceId: number) => IBar | undefined,
     duplicateBar: (id: number, voiceId: number) => void,
     addEmptyBar: () => void,
-    editNote: (voiceId: number, barId: number, noteId: number, newNote: IChordAndNotes) => void,
+    editNote: (voiceId: number, barId: number, newNotes: IChordAndNotes[]) => void,
     getTimeSignature: () => number[],
     toggleRepBefore: (barId: number) => void,
     toggleRepAfter: (barId: number) => void,
@@ -42,7 +43,7 @@ export const SongContext = React.createContext<ISongContext>({
         throw new Error("duplicateBar() in Song Context is not implemented")
     },
     addEmptyBar: () => { },
-    editNote: (voiceId: number, barId: number, noteId: number, newNote: IChordAndNotes) => { },
+    editNote: (voiceId: number, barId: number, newNotes: IChordAndNotes[]) => { },
     getTimeSignature: () => [],
     toggleRepBefore: (barId: number) => { },
     toggleRepAfter: (barId: number) => { },
@@ -448,17 +449,8 @@ const SongContextProvider: React.FC = props => {
         setSong({ ...song, voices: song.voices.map((voice, i) => true ? { ...voice, bars: tempArray[i] } : voice) });
     }
 
-    const editNote = (voiceId: number, barId: number, noteId: number, newNote: IChordAndNotes) => {
-        let newChordsOrNotes: IChordAndNotes[] = [];
-        for (let i = 0; i < song.voices[voiceId].bars[barId].chordsAndNotes.length; i++) {
-            if (i === noteId) {
-                newChordsOrNotes.push(newNote);
-            } else {
-                newChordsOrNotes.push(song.voices[voiceId].bars[barId].chordsAndNotes[i])
-            }
-        }
-        console.log(newChordsOrNotes)
-        setSong({ ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newChordsOrNotes } : bar) } : voice) });
+    const editNote = (voiceId: number, barId: number, newNotes: IChordAndNotes[]) => {
+        setSong({ ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newNotes } : bar) } : voice) });
     }
 
     const changeTitle = (newTitle: string) => {

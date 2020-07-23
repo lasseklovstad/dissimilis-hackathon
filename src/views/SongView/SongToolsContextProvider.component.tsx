@@ -4,9 +4,6 @@ import { IChordAndNotes, IBar } from '../../models/IBar';
 import { notes } from '../../models/notes';
 import { chords } from '../../models/chords';
 
-
-//State handling skjer c denne komponenten 
-
 interface ISongToolsContext {
     selectedNoteLength: 1 | 2 | 4 | 8,
     setSelectedNoteLength: (number: 1 | 2 | 4 | 8) => void,
@@ -50,28 +47,53 @@ const SongToolsContextProvider: React.FC = props => {
         }
         const newNote: IChordAndNotes = { length: selectedNoteLength, notes: newNoteArray }
 
-        editNote(voiceIndex, barIndex, noteIndex, newNote);
+        //Have now the new note object, will make a copy of the new copy in which will replace the old bar
+        const tempChordsAndNotes = [];
+        for (let i = 0; i < song.voices[voiceIndex].bars[barIndex].chordsAndNotes.length; i++) {
+            tempChordsAndNotes.push(song.voices[voiceIndex].bars[barIndex].chordsAndNotes[i]);
+        }
+
+        const availablePosArray = availablePositions[voiceIndex][barIndex];
+        //Have to select the position in which the noteindex is the smallest index
+        //const selectedPosArray = availablePosArray.find(arr => arr.includes(noteIndex));
+        
+        let selectedPosArray = availablePosArray.find(arr => arr.includes(noteIndex));
+        availablePosArray.map(arr => {if(arr.includes(noteIndex)) {selectedPosArray = arr}});
+
+        if (selectedPosArray != undefined) {
+            for (let j = selectedPosArray.length - 1; j >= 0; j--) {
+                if (selectedPosArray[j] == noteIndex) {
+                    tempChordsAndNotes.splice(selectedPosArray[j], 1, newNote);
+                    console.log("Legg til " + selectedPosArray[j])
+                } else {
+                    tempChordsAndNotes.splice(selectedPosArray[j], 1);
+                    console.log("fjern" + selectedPosArray[j])
+                }
+            }
+        }
+
+        editNote(voiceIndex, barIndex, tempChordsAndNotes);
         setShowPossiblePositions(false);
     }
 
     const showAvailableSpace = () => {
 
         let returnArray = [] //This will return a list of noteIndexLists in which there is available space in the barIndex given. This again tells where it is space to the right, or left if length-index <= selectedKeyLength
-        for (let a = 0; a < song.voices.length; a++) {
+        for (let voiceIndex = 0; voiceIndex < song.voices.length; voiceIndex++) {
             let voiceArray = [];
-            for (let b = 0; b < song.voices[a].bars.length; b++) {
+            for (let barIndex = 0; barIndex < song.voices[voiceIndex].bars.length; barIndex++) {
                 let barArray = [];
                 let availableConsistentLength = 0;
-                for (let c = 0; c < song.voices[a].bars[b].chordsAndNotes.length; c++) {
-                    if (song.voices[a].bars[b].chordsAndNotes[c].notes[0] === "") {
+                for (let noteIndex = 0; noteIndex < song.voices[voiceIndex].bars[barIndex].chordsAndNotes.length; noteIndex++) {
+                    if (song.voices[voiceIndex].bars[barIndex].chordsAndNotes[noteIndex].notes[0] === "") {
                         availableConsistentLength += 1;
                     } else {
                         availableConsistentLength = 0;
                     }
                     if (availableConsistentLength === selectedNoteLength) {
                         let possibleposition = [];
-                        for (let d = c - selectedNoteLength; d < c; d++) {
-                            possibleposition.push(d + 1);
+                        for (let i = noteIndex - selectedNoteLength; i < noteIndex; i++) {
+                            possibleposition.push(i + 1);
                         }
                         barArray.push(possibleposition);
                         availableConsistentLength -= 1;
@@ -82,7 +104,6 @@ const SongToolsContextProvider: React.FC = props => {
             returnArray.push(voiceArray);
 
         }
-        console.log(returnArray)
         setAvailablePositions(returnArray);
     }
 

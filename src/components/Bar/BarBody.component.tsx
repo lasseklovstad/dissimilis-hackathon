@@ -144,8 +144,8 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                             {note.notes.map((type, index) => {
                                 const number = tangentToNumber(type);
                                 return (
-                                    <Box key={index} className={classes.toneBox} style={{ backgroundColor: showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null ? colors.focus : getColor(type) }} component={ButtonBase} onClick={() => {
-                                        if (getColor(type) >= "transparent" && showPossiblePositions && note.length === selectedNoteLength) {
+                                    <Box key={index} className={classes.toneBox} style={{ backgroundColor: showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null ? "transparent" : getColor(type), border: showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null ? "2px solid " + colors.gray_300 : "none" }} component={ButtonBase} onClick={() => {
+                                        if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
                                             insertNewNoteOrChord(i, props.barNumber, props.voiceId)
                                         }
                                     }}>
