@@ -84,7 +84,6 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                                     <MenuItem onClick={() => handleClose("toggleRepBefore")}>{voices[0].bars[props.barNumber].repBefore ? t("BarContainer:removeRepBefore") : t("BarContainer:addRepBefore")} </MenuItem>
                                     <MenuItem onClick={() => handleClose("toggleRepAfter")}>{voices[0].bars[props.barNumber].repAfter ? t("BarContainer:removeRepAfter") : t("BarContainer:addRepAfter")} </MenuItem>
                                     <MenuItem onClick={() => handleClose(barConst ? "removeHouse" : "addHouse")}>{barConst ? t("BarContainer:removeHouse") : t("BarContainer:addHouse")} </MenuItem>
-
                                 </Menu>
                             </Box>
                         </Grid>
@@ -92,7 +91,6 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                     </Grid>
                 </Grid>
             </Grid>
-
         );
     }
 

@@ -3,8 +3,6 @@ import { IVoice } from '../../models/IVoice';
 import { IBar } from '../../models/IBar';
 
 
-
-
 //State handling skjer i denne komponenten 
 
 interface ISongContext {
@@ -26,7 +24,6 @@ interface ISong {
     title: string,
     voices: IVoice[]
 };
-
 
 export const SongContext = React.createContext<ISongContext>({
     song: {
@@ -331,6 +328,7 @@ const SongContextProvider: React.FC = props => {
         song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repBefore: !bar.repBefore } : bar) } : voice) }
         setSong(song)
     }
+
     const toggleRepAfter = (barId: number) => {
         //Map through all voices and for the ba which matches the id, toggle the bars repetition value
         song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repAfter: !bar.repAfter } : bar) } : voice) }
@@ -347,7 +345,6 @@ const SongContextProvider: React.FC = props => {
     //Function for removing house from a bar
     const deleteHouse = (barId: number) => {
         //Checks the housevalue and sets the value to undefined, along with checking adjacent bars and ensuring they are correct
-        //song = ({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => (i === barId || i === barId + 1) && barBase === 1 ? { ...bar, house: undefined } : (i === barId || i === barId - 1 ? { ...bar, house: undefined } : bar)) } : voice) });
 
         let barBase = song.voices[0].bars[barId].house;
         if (barBase === 1) {
@@ -359,7 +356,6 @@ const SongContextProvider: React.FC = props => {
         setSong(song)
     }
 
-
     const getBar = (id: number, voiceId: number) => {
         let returnBar = undefined;
         song.voices[voiceId].bars.forEach((bar, i) => {
@@ -370,14 +366,12 @@ const SongContextProvider: React.FC = props => {
         return returnBar;
     }
 
-
     const deleteBar = (id: number, voiceId: number) => {
         deleteHouse(id)
         song = {
             ...song,
             voices: song.voices.map((voice) => { return { ...voice, bars: voice.bars.filter((bar, i) => i !== id) } })
         }
-
         setSong(song);
     }
 
@@ -431,7 +425,6 @@ const SongContextProvider: React.FC = props => {
         song = { ...song, title: newTitle };
         setSong(song);
     }
-
 
     //Add all methods here
     const value = {
