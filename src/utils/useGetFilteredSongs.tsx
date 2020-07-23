@@ -6,7 +6,7 @@ import { ISong } from "../models/ISong";
  * @param query title or part of title
  */
 export const useGetFilteredSongs = () => {
-    const url = "songs/search";
+    const url = "song/search";
     const initialData: ISong[] = [];
     const apiKey = sessionStorage.getItem("apiKey") || "";
     const userId = sessionStorage.getItem("userId") || "";
