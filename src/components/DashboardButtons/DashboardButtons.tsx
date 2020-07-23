@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
@@ -54,9 +54,10 @@ export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (props) =
 
 export const DashboardButton: FC<ButtonProps> = (props) => {
   const styles = useStyles();
+  const history = useHistory();
   return (
     <Card className={styles.button}>
-      <CardActionArea to={props.link} component={Link}>
+      <CardActionArea onClick={() => { history.replace(props.link) }}>
         <Box className={styles.container} style={{ backgroundColor: props.selected === true ? colors.gray_400 : colors.white }}>
           <Box p={2}><Typography>{props.text}</Typography></Box>
         </Box>
