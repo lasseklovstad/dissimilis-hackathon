@@ -27,7 +27,6 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   }, [])
 
   useEffect(() => {
-    console.log("searchTerm endret")
     getFilteredSongs({ "Title": searchTerm }).then(({ result }) => { setFilteredSongs(result?.data || []) });
   }, [searchTerm])
 
@@ -69,7 +68,6 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   }
 
   const handleOnChange = (searchTerm: string) => {
-    console.log(searchTerm)
     setSearchTerm(searchTerm)
     setDashboardView(false)
 
