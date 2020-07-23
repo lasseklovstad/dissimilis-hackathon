@@ -43,9 +43,9 @@ const LoginView: FC<LoginViewProps> = () => {
     } else if (code !== null) {
       axiosPost().then(({ result }) => {
         if (result && result.status === 200) {
-          history.push("/dashboard");
           sessionStorage.setItem("apiKey", result.data.apiKey);
           sessionStorage.setItem("userId", result.data.userID?.toString());
+          history.push("/dashboard");
         }
       })
     }
