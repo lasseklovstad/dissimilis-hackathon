@@ -6,6 +6,9 @@ import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
 import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
 import { ISong } from '../../models/ISong';
 import { CustomModal } from '../../components/CustomModal/CustomModal'
+import { usePostSong } from '../../utils/usePostSong';
+import { useHistory } from 'react-router-dom';
+import { useGetSong } from '../../utils/useGetSong';
 
 export type DashboardViewProps = {
 
@@ -14,11 +17,16 @@ export type DashboardViewProps = {
 export const DashboardView: React.FC<DashboardViewProps> = () => {
   const { t } = useTranslation();
   const measureText = t("DashboardView:measure");
-  const [recentSongs, setRecentSongs] = useState<ISong[]>([])
+  const [recentSongs, setRecentSongs] = useState<ISong[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [timeSignature, setTimeSignature] = useState("");
   const [textFieldInput, setTextFieldInput] = useState<string>("");
-  const getRecentSongs = useGetRecentSongs()
+  // Denne burde ikke være 0
+  const [newSongId, setNewSongId] = useState<number>(0)
+  const getRecentSongs = useGetRecentSongs();
+  const postSong = usePostSong(textFieldInput, timeSignature)
+  const getSong = useGetSong(newSongId)
+  const history = useHistory();
   const musicTacts: musicTacts[] = [
     {
       id: 1,
@@ -46,16 +54,18 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
 
 
   const handleAddSong = () => {
-    console.log("Add song " + timeSignature + " " + textFieldInput)
-    setModalIsOpen(false)
-    //
-
-  }
+    setModalIsOpen(false);
+    postSong().then(({ result }) => {
+      if (result?.status === 201) {
+        setNewSongId(result.data);
+        history.push("/song/" + result.data);
+      };
+    })
+  };
 
   const handleOpen = (song: musicTacts) => {
     setTimeSignature(song.text)
     setModalIsOpen(true);
-    console.log(modalIsOpen);
   };
 
   const handleClose = () => {
@@ -64,7 +74,6 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
 
 
   const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
-    console.log(e.target.value)
     setTextFieldInput(e.target.value);
   }
 
