@@ -28,11 +28,8 @@ const LoginView: FC<LoginViewProps> = () => {
   const axiosGet = useLoginRedirect();
   const [isLoading, setIsLoading] = useState(false)
   const tryLogin = () => {
-    console.log("trying login");
     axiosGet().then(({ result }) => {
-      console.log("opening window")
       window.open(result?.headers.location, "_self")
-      console.log("Done opening window")
     })
   }
 
@@ -42,7 +39,6 @@ const LoginView: FC<LoginViewProps> = () => {
 
   const axiosPost = useLoginPost(code);
 
-  console.log("done checcking variables")
 
   useEffect(() => {
     console.log("Kjører useeffect i loginview")
