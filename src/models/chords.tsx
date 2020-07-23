@@ -1,6 +1,5 @@
 export const chords = {
     "CM": ["C", "E", "G"],
-    "C#M": ["C#", "E#", "G#"],
     "DM": ["D", "F#", "A"],
     "D#M": ["D#", "G", "A#"],
     "EM": ["E", "G#", "B"],
