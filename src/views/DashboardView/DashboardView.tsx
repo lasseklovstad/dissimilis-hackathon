@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
-import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton, DashboardButtonWithAddIconNoLink } from '../../components/DashboardButtons/DashboardButtons';
+import { DashboardButton, DashboardLibraryButton, DashboardButtonWithAddIconNoLink } from '../../components/DashboardButtons/DashboardButtons';
 import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
-import { writeStorage } from '@rehooks/local-storage';
 import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
 import { ISong } from '../../models/ISong';
+import { CustomModal } from '../../components/CustomModal/CustomModal'
 
 export type DashboardViewProps = {
 
