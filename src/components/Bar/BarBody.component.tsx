@@ -33,6 +33,7 @@ export function getChord(notes: string[]): string {
 
 export function tangentToNumber(tangent: string): number {
     let result = -1;
+    console.log(tangent);
     switch (tangent) {
         case "C#":
             result = 4
@@ -79,7 +80,7 @@ export function getColor(color: string): string {
         case "H":
             newColor = colors.H;
             break;
-        case "1": case "2": case "3": case "4": case "5":
+        case "C#": case "D#": case "F#": case "G#": case "A#":
             newColor = colors.semitone;
             break;
         default:
@@ -147,7 +148,6 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                     return (
                         <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px" }} flexDirection="column" >
                             {note.notes.map((type, index) => {
-                                //srfsdfxdfdx
                                 const number = tangentToNumber(type);
                                 return (
                                     <Box
@@ -162,7 +162,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                             }
                                         }}
                                     >
-                                        <Typography className={classes.tangentText} >{number === 0 ? number : ""}</Typography>
+                                        <Typography className={classes.tangentText} >{number === 0 ? "" : number}</Typography>
                                     </Box>
                                 )
                             })}
@@ -182,6 +182,7 @@ const useStyles = makeStyles({
         display: "flex",
         flexFlow: "row wrap",
         justifyContent: "center",
+
     },
     toneAndChordBox: {
         flex: 1,
@@ -194,13 +195,13 @@ const useStyles = makeStyles({
         width: "100%",
         borderRadius: "5px",
         margin: "2px 0",
+        textAlign: "left",
     },
     tangentText: {
         color: colors.white,
-        marginLeft: "4px",
-        position: "relative",
         top: "50%",
-        transform: "translateY(-50%)"
+        width: "100%",
+        marginLeft: "8px",
     },
     toneText: {
         color: "#555555",

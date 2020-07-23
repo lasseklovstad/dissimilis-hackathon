@@ -65,8 +65,19 @@ const SongContextProvider: React.FC = props => {
             {
                 title: "master",
                 priority: 1,
-                bars: []
-                    
+                bars: [
+                    {
+                        repBefore: false,
+                        repAfter: false,
+                        chordsAndNotes: [
+                            {
+                                length: 8,
+                                notes: ["C#", "A", "H"]
+                            }
+                        ]
+                    }
+                ]
+
             },
             {
                 title: "Gitar",
