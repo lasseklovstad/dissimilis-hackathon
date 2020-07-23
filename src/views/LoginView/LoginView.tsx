@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useContext } from 'react';
+import React, { FC, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -11,7 +11,6 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { useLoginRedirect, useLoginPost } from '../../utils/useLogin';
-import { AuthContext } from '../../contexts/auth';
 import Alert from '@material-ui/lab/Alert';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -26,32 +25,31 @@ const LoginView: FC<LoginViewProps> = () => {
   const classes = useStyles();
   const history = useHistory();
   const axiosGet = useLoginRedirect();
-  const { setLoggedIn, loggedIn } = useContext(AuthContext);
 
   const tryLogin = () => {
-    axiosGet().
-      then(({ result }) => {
-        window.open(result?.headers.location, "_self")
-      })
+    axiosGet().then(({ result }) => {
+      window.open(result?.headers.location, "_self")
+    })
   }
 
   const url = new URLSearchParams(useLocation().search);
-  let code = (url.get("code") !== null) ? url.get("code") : null;
+  let code = url.get("code") ? url.get("code") : null
   const axiosPost = useLoginPost(code);
 
   useEffect(() => {
+    console.log("Kjører useeffect i loginview")
     if (sessionStorage.getItem("apiKey") && sessionStorage.getItem("userId")) {
       history.push("/dashboard");
+    } else if (code !== null) {
+      axiosPost().then(({ result }) => {
+        if (result && result.status === 200) {
+          history.push("/dashboard");
+          sessionStorage.setItem("apiKey", result.data.apiKey);
+          sessionStorage.setItem("userId", result.data.userID?.toString());
+        }
+      })
     }
-    axiosPost().then(({ result }) => {
-      if (result && (!sessionStorage.getItem("apiKey") || !sessionStorage.getItem("userId")) && result.status === 200) {
-        setLoggedIn(true);
-        history.push("/dashboard");
-        sessionStorage.setItem("apiKey", result.data.apiKey);
-        sessionStorage.setItem("userId", result.data.userID?.toString());
-      }
-    })
-  }, [code])
+  }, [])
 
 
   const [warningDisplayed, setWarningDisplayed] = React.useState(false);

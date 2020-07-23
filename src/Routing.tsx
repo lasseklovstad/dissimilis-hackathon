@@ -27,8 +27,8 @@ function Routing() {
     return (
         <BrowserRouter>
             <Switch>
-                <PrivateRoute path="/dashboard" component={DashboardView} />
-                <PrivateRoute path="/common" component={CommonView} />
+                <PrivateRoute exact path="/dashboard" component={DashboardView} />
+                <PrivateRoute exact path="/common" component={CommonView} />
                 <PrivateRoute path="/song" component={SongRouting} />
 
                 <Route path="/" component={LoginView} />
