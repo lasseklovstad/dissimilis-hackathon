@@ -1,6 +1,7 @@
 export const dashboardEn : any =  {
     "newSongLabel": "New song",
-    "recentLabel": "Recent",
+    "recentSongLabel": "Recent",
+    "searchSongLabel": "Search",
     "libraryButton": "Library",
     "measure": "measure",
     "search": "Search",

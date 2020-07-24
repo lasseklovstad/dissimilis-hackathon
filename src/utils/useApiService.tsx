@@ -22,10 +22,15 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
 
   // fetchData og postData er like, men unntak av kallene  await axios.metode<T>(argumenter), hvordan fikser jeg det til én metode? 
   // axios[method]<T>(finalUrl, options.body) funker ikke.
-  const fetchData = async () => {
+  const fetchData = async (newParams?: Record<string, string>) => {
     let result: AxiosResponse<T> | undefined = undefined;
     let errorMessage: any
-    let isError = false;
+    let isError = false
+
+    if (newParams) {
+      finalUrl = baseUrl + url + '?' + new URLSearchParams(options.params).toString() + "&" + new URLSearchParams(newParams).toString();
+    }
+
     try {
       result = await axios.get<T>(finalUrl, { headers: options.headers });
     } catch (error) {

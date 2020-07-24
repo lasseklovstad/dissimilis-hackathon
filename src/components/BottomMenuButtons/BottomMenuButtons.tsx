@@ -1,16 +1,18 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import { TextField, Button, Popper } from '@material-ui/core';
 import { colors } from '../../utils/colors';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component';
 
 
 export type AddButtonProps = {
     text: string,
     link?: string,
-    onClick?: Function
+    onClick?: Function,
+    selected?: boolean
 };
 export type ButtonProps = {
     text: string,
@@ -31,6 +33,7 @@ export const MenuButtonWithAddIcon: FunctionComponent<AddButtonProps> = (props) 
             variant="outlined"
             size="large"
             className={styles.addbutton}
+            style={{backgroundColor: props.selected ? colors.gray_200 : colors.white}}
             startIcon={<AddIcon />}
             onClick={() => props.onClick && props.onClick()}
         >
@@ -60,19 +63,23 @@ const customPopperPlacement = function (props: any) {
 export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props) => {
     const styles = useStyles();
     const [options, setOptions] = useState(props.notesOrChords);
-    const [value, setValue] = useState<string>(options[0]);
+    const { selectedNoteKey, setSelectedNoteKey } = useContext(SongToolsContext);
     useEffect(() => {
         setOptions(props.notesOrChords);
     }, [props.notesOrChords]);
-    
+    const showValue = selectedNoteKey;
+    if(!options.includes(selectedNoteKey)) {
+        setSelectedNoteKey(options[0]);
+    }
+
     return (
         <Autocomplete
             value={
-                options.includes(value) ? value : options[0]
+                showValue
             }
             onChange={(event, newValue: string | null) => {
                 if (newValue != null) {
-                    setValue(newValue);
+                    setSelectedNoteKey(newValue);
                 }
             }}
             PopperComponent={customPopperPlacement}

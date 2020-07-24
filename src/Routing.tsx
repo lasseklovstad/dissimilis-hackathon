@@ -7,16 +7,17 @@ import SongView from './views/SongView/SongView';
 import CommonView from './views/CommonView/CommonView';
 
 import SongContextProvider from './views/SongView/SongContextProvider.component';
+import SongToolsContextProvider from './views/SongView/SongToolsContextProvider.component';
 import PrivateRoute from './PrivateRoute';
 
 function SongRouting() {
     return (
         <Switch>
             <SongContextProvider>
-                <Route exact path="/song/:id" render={(props) => (<PrivateRoute path="/song/:id" component={SongView} />)} />
-                <Route exact path="/song" render={(props) => (<PrivateRoute path="/song" component={SongView} />)} />
-
-
+                <SongToolsContextProvider>
+                    <Route exact path="/song/:id" render={(props) => (<PrivateRoute path="/song/:id" component={SongView} />)} />
+                    <Route exact path="/song" render={(props) => (<PrivateRoute path="/song" component={SongView} />)} />
+                </SongToolsContextProvider>
             </SongContextProvider>
         </Switch>
 

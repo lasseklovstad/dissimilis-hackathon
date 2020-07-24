@@ -41,7 +41,6 @@ const LoginView: FC<LoginViewProps> = () => {
 
 
   useEffect(() => {
-    console.log("Kjører useeffect i loginview")
     if (sessionStorage.getItem("apiKey") && sessionStorage.getItem("userId")) {
       history.push("/dashboard");
     } else if (code !== null) {
