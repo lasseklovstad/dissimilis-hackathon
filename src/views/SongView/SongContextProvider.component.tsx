@@ -20,6 +20,7 @@ interface ISongContext {
     toggleRepBefore: (barId: number) => void,
     toggleRepAfter: (barId: number) => void,
     changeTitle: (newTitle: string) => void,
+    deleteNote: (voiceId: number, barId: number, noteIndex: number) => void,
 }
 
 interface ISong {
@@ -48,6 +49,7 @@ export const SongContext = React.createContext<ISongContext>({
     toggleRepBefore: (barId: number) => { },
     toggleRepAfter: (barId: number) => { },
     changeTitle: (newTitle: string) => { },
+    deleteNote: (voiceId: number, barId: number, noteIndex: number) => { },
 });
 
 const SongContextProvider: React.FC = props => {
@@ -184,6 +186,10 @@ const SongContextProvider: React.FC = props => {
         setSong({ ...song, title: newTitle });
     }
 
+    const deleteNote = (voiceId: number, barId: number, noteIndex: number) => {
+        setSong({ ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: bar.chordsAndNotes.filter((tone, i) => i !== noteIndex) } : bar) } : voice) })
+    }
+
 
 
     //Add all methods here
@@ -200,6 +206,7 @@ const SongContextProvider: React.FC = props => {
         toggleRepBefore,
         toggleRepAfter,
         changeTitle,
+        deleteNote,
     }
 
     return (
