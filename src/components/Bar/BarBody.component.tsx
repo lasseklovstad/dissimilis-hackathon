@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Box, makeStyles, Typography, ButtonBase } from "@material-ui/core";
+import { Box, makeStyles, Typography, ButtonBase, Menu, MenuItem } from "@material-ui/core";
 import colors from "../../utils/colors";
 import { IChordAndNotes } from "../../models/IBar";
 import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
@@ -88,10 +88,17 @@ export function getColor(color: string): string {
     }
     return newColor;
 }
+
+const initialState = {
+    mouseX: null,
+    mouseY: null,
+};
+
+
 export const BarBody: React.FC<BarBodyProps> = props => {
     const classes = useStyles();
     const { showPossiblePositions, insertNewNoteOrChord, availablePositions, selectPositionArray } = useContext(SongToolsContext);
-    const { song: { voices }, getTimeSignature } = useContext(SongContext);
+    const { song: { voices }, getTimeSignature, deleteNote } = useContext(SongContext);
 
     let tempArrayOfChordsLength: any = [];
     let tempArrayOfChords: any = [];
@@ -99,6 +106,45 @@ export const BarBody: React.FC<BarBodyProps> = props => {
         tempArrayOfChords.push(getChord(voices[0].bars[props.barNumber].chordsAndNotes[i].notes));
         tempArrayOfChordsLength.push(voices[0].bars[props.barNumber].chordsAndNotes[i].length);
     }
+
+    const [state, setState] = React.useState<{
+        mouseX: null | number;
+        mouseY: null | number;
+    }>(initialState);
+
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        setState({
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+        });
+    };
+
+    const [rightClicked, setRightClicked] = useState(-1);
+
+    const handleClose = (method?: string) => {
+        if (method === "delete") {
+
+            if (rightClicked >= 0) {
+                let tempChordsAndNotes: IChordAndNotes[] = voices[props.voiceId].bars[props.barNumber].chordsAndNotes.slice();;
+
+                const newNote: IChordAndNotes = { length: 1, notes: [""] };
+                tempChordsAndNotes[rightClicked] = newNote;
+                for (let i = rightClicked; i < voices[props.voiceId].bars[props.barNumber].chordsAndNotes[rightClicked].length + rightClicked - 1; i++) {
+                    tempChordsAndNotes.splice(i, 0, newNote);
+                }
+
+
+
+                deleteNote(props.voiceId, props.barNumber, tempChordsAndNotes);
+                setPositionArray([])
+            }
+
+
+        }
+
+        setState(initialState);
+    };
 
     const calculateFlexBasis = (length: number) => {
         let timeSignatureNumerator = getTimeSignature()[0];
@@ -146,25 +192,40 @@ export const BarBody: React.FC<BarBodyProps> = props => {
             {
                 props.chordsAndNotes.map((note, i) => {
                     return (
-                        <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px", lineHeight: 2 }} flexDirection="column" >
+                        <Box onContextMenu={() => setRightClicked(i)} key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px" }} flexDirection="column" >
                             {note.notes.map((type, index) => {
                                 const number = tangentToNumber(type);
                                 return (
-                                    <Box
-                                        key={index} className={classes.toneBox}
-                                        onMouseEnter={() => { if (showPossiblePositions) { setPositionArray(selectPositionArray(props.voiceId, props.barNumber, i)); } }}
-                                        onMouseLeave={() => { if (showPossiblePositions) { setPositionArray([]) } }}
-                                        style={{ backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), outlineColor: "black", boxShadow: emptySpace(i) ? (positionArray.includes(i) ? "none" : "0 0 5px black") : "none" }}
-                                        component={ButtonBase}
-                                        onClick={() => {
-                                            if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
-                                                insertNewNoteOrChord(i, props.barNumber, props.voiceId)
-
+                                    <>
+                                        <Box
+                                            key={index} className={classes.toneBox}
+                                            onMouseEnter={() => { if (showPossiblePositions) { setPositionArray(selectPositionArray(props.voiceId, props.barNumber, i)); } }}
+                                            onMouseLeave={() => { if (showPossiblePositions) { setPositionArray([]) } }}
+                                            style={{ cursor: 'context-menu', backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), outlineColor: "black", boxShadow: emptySpace(i) ? (positionArray.includes(i) ? "none" : "0 0 5px black") : "none" }}
+                                            component={ButtonBase}
+                                            onClick={() => {
+                                                if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
+                                                    insertNewNoteOrChord(i, props.barNumber, props.voiceId)
+                                                }
+                                            }}
+                                            onContextMenu={handleClick}
+                                        >
+                                            <Typography className={classes.tangentText} >{number === 0 ? "" : number}</Typography>
+                                        </Box>
+                                        <Menu
+                                            keepMounted
+                                            open={state.mouseY !== null}
+                                            onClose={() => handleClose("")}
+                                            anchorReference="anchorPosition"
+                                            anchorPosition={
+                                                state.mouseY !== null && state.mouseX !== null
+                                                    ? { top: state.mouseY, left: state.mouseX }
+                                                    : undefined
                                             }
-                                        }}
-                                    >
-                                        <Typography className={classes.tangentText} >{number === 0 ? "" : number}</Typography>
-                                    </Box>
+                                        >
+                                            <MenuItem onClick={() => handleClose("delete")}>Slett</MenuItem>
+                                        </Menu>
+                                    </>
                                 )
                             })}
 
