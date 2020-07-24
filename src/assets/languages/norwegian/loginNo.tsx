@@ -1,5 +1,5 @@
 export const loginNo: any = {
-    "loginWithMicrosoft": "Logg inn med microsoft",
+    "loginWithMicrosoft": "Logg inn med Microsoft",
     "login": "Logg inn",
     "username": "Brukernavn",
     "password": "Passord",
