@@ -14,6 +14,7 @@ import { chords } from '../../models/chords';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component';
+import { Chord } from '@tonaljs/tonal';
 
 const StyledToggleButtonGroup = withStyles((theme) => ({
     grouped: {
@@ -67,6 +68,10 @@ function BottomBar() {
         }
     };
 
+    const logger = () => {
+        console.log(Chord.chord)
+    }
+
     return (
         <Grid container justify="center">
             <Grid item xs={12} sm={10} className={classes.outercontainer}>
@@ -88,7 +93,7 @@ function BottomBar() {
                 </div>
                 <div className={classes.container} >
                     <MenuButtonWithAddIcon selected={showPossiblePositions} text={t("BottomBar:addTone")} onClick={() => { if (!showPossiblePositions) { showAvailableSpace() }; setShowPossiblePositions(!showPossiblePositions) }} />
-                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => { setShowPossiblePositions(false); addEmptyBar() }} />
+                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => { setShowPossiblePositions(false); addEmptyBar(); logger(); }} />
                 </div>
             </Grid>
         </Grid>
