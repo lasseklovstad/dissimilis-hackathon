@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
-import { DashboardButton, DashboardLibraryButton, DashboardButtonWithAddIconNoLink, DashboardButtonWithAddIcon } from '../../components/DashboardButtons/DashboardButtons';
+import { DashboardButton, DashboardLibraryButton, DashboardButtonWithAddIconNoLink } from '../../components/DashboardButtons/DashboardButtons';
 import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBar'
 import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
-import { writeStorage } from '@rehooks/local-storage';
 import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
 import { ISong } from '../../models/ISong';
 import { CustomModal } from '../../components/CustomModal/CustomModal'
-import { usePostSong } from '../../utils/usePostSong';
 import { useHistory } from 'react-router-dom';
-import { useGetSong } from '../../utils/useGetSong';
+import { usePostSong } from '../../utils/usePostSong';
 
 export type DashboardViewProps = {
 
@@ -23,10 +21,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [timeSignature, setTimeSignature] = useState("");
   const [textFieldInput, setTextFieldInput] = useState<string>("");
-  // Denne burde ikke være 0
-  const [newSongId, setNewSongId] = useState<number>(0);
   const postSong = usePostSong(textFieldInput, timeSignature);
-  const getSong = useGetSong(newSongId);
   const history = useHistory();
   const [dashboardView, setDashboardView] = useState(true);
   const [searchTerm, setSearchTerm] = useState("")
@@ -74,7 +69,6 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
     setModalIsOpen(false);
     postSong().then(({ result }) => {
       if (result?.status === 201) {
-        setNewSongId(result.data);
         history.push("/song/" + result.data);
       };
     })

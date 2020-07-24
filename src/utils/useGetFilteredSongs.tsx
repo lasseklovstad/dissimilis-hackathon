@@ -12,6 +12,6 @@ export const useGetFilteredSongs = (title: string) => {
     const userId = sessionStorage.getItem("userId") || "";
     const headers = { 'X-API-Key': apiKey, 'X-User-ID': userId, };
     const params = { "title": title };
-    const getSongs = useApiService<ISong[]>("get", url, { initialData, headers }).fetchData;
+    const getSongs = useApiService<ISong[]>("get", url, { initialData, headers, params }).fetchData;
     return getSongs;
 }

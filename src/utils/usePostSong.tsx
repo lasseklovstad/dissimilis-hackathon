@@ -1,5 +1,4 @@
 import { useApiService } from "./useApiService";
-import { ISong } from "../models/ISong";
 
 export const usePostSong = (title: string, timeSignature: string) => {
     const url = 'song';

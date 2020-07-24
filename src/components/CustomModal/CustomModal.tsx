@@ -1,7 +1,6 @@
 import { FC, useState } from "react"
 import { Modal, makeStyles, Grid, Typography, TextField, Button } from "@material-ui/core"
 import React from "react"
-import { composeInitialProps } from "react-i18next"
 import { colors } from "../../utils/colors"
 
 type CustomModalProps = {
