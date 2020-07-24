@@ -20,14 +20,15 @@ interface ISongContext {
     toggleRepBefore: (barId: number) => void,
     toggleRepAfter: (barId: number) => void,
     changeTitle: (newTitle: string) => void,
-    deleteNote: (voiceId: number, barId: number, noteIndex: number) => void,
+    deleteNote: (voiceId: number, barId: number, newNote: IChordAndNotes[]) => void,
+    addHouse: (barId: number) => void,
+    removeHouse: (barId: number) => void,
 }
 
 interface ISong {
     title: string,
     voices: IVoice[]
 };
-
 
 export const SongContext = React.createContext<ISongContext>({
     song: {
@@ -49,20 +50,21 @@ export const SongContext = React.createContext<ISongContext>({
     toggleRepBefore: (barId: number) => { },
     toggleRepAfter: (barId: number) => { },
     changeTitle: (newTitle: string) => { },
-    deleteNote: (voiceId: number, barId: number, noteIndex: number) => { },
+    deleteNote: (voiceId: number, barId: number, newNote: IChordAndNotes[]) => { },
+    addHouse: (barId: number) => { },
+    removeHouse: (barId: number) => { },
 });
 
 const SongContextProvider: React.FC = props => {
 
-    //This is where the song JSON is placed. 
-    /*The length of notes is allways considered as a fraction of 8.
-    * Wholenote has length 8
-    * Halfnote has length 4
-    * 1/4note has length 2
-    * 1/8note has length 1
-    */
-    //In the JSON the sum of each length in a chordsAndNotes-list shoould allways be 8. The empty note is [""]
-    const [song, setSong] = useState<ISong>({
+    //Initial State.
+
+    //For now, I'm just setting it static until we can retrieve the data from the server
+
+    //This is just a temporary solution to show how it can be done
+
+    //Each instrument will have their own bars when we get to that point
+    let [song, setSong] = useState<ISong>({
         title: "Lisa gikk til skolen",
         voices: [
             {
@@ -94,16 +96,47 @@ const SongContextProvider: React.FC = props => {
             const tempBar: IBar = { repBefore: barInfo.repBefore, repAfter: barInfo.repAfter, house: barInfo.house, chordsAndNotes: newChordsAndNotes }
             newVoice.bars.push(tempBar);
         }
-        setSong({ ...song, voices: [...song.voices, newVoice] });
+        song = { ...song, voices: [...song.voices, newVoice] }
+        setSong(song)
     }
 
     const toggleRepBefore = (barId: number) => {
         //Map through all voices and for the ba which matches the id, toggle the bars repetition value
-        setSong({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repBefore: !bar.repBefore } : bar) } : voice) });
+        song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repBefore: !bar.repBefore } : bar) } : voice) }
+        setSong(song)
     }
+
     const toggleRepAfter = (barId: number) => {
         //Map through all voices and for the ba which matches the id, toggle the bars repetition value
-        setSong({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repAfter: !bar.repAfter } : bar) } : voice) });
+        song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repAfter: !bar.repAfter } : bar) } : voice) }
+        setSong(song)
+    }
+
+    //adds house to a bar
+    const addHouse = (barId: number) => {
+
+        //Checks if its the last bar in the song, and maps through all the bars, matching on barId, checking for house values on the chosen bar, along with the adjacent bars, ensuring that they are handled correctly
+        if (barId === song.voices[0].bars.length - 1) {
+            song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, house: 2 } : (i === barId - 1 ? { ...bar, house: 1 } : (i === barId - 2 && (song.voices[0].bars[barId - 2].house === 1) ? { ...bar, house: undefined } : bar))) } : voice) }
+
+        } else {
+            song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, house: 1 } : (i === barId + 1 ? { ...bar, house: 2 } : (i === barId + 2 && (song.voices[0].bars[barId + 2].house === 2) ? { ...bar, house: undefined } : bar))) } : voice) }
+        }
+        setSong(song)
+    }
+
+    //Function for removing house from a bar
+    const deleteHouse = (barId: number) => {
+        //Checks the housevalue and sets the value to undefined, along with checking adjacent bars and ensuring they are correct
+
+        let barBase = song.voices[0].bars[barId].house;
+        if (barBase === 1) {
+            song = ({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId || i === barId + 1 ? { ...bar, house: undefined } : bar) } : voice) });
+        }
+        if (barBase === 2) {
+            song = ({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId || i === barId - 1 ? { ...bar, house: undefined } : bar) } : voice) });
+        }
+        setSong(song)
     }
 
     const getBar = (id: number, voiceId: number) => {
@@ -116,9 +149,13 @@ const SongContextProvider: React.FC = props => {
         return returnBar;
     }
 
-
     const deleteBar = (id: number, voiceId: number) => {
-        setSong({ ...song, voices: song.voices.map((voice) => true ? { ...voice, bars: voice.bars.filter((bar, i) => i !== id) } : voice) });
+        deleteHouse(id)
+        song = {
+            ...song,
+            voices: song.voices.map((voice) => { return { ...voice, bars: voice.bars.filter((bar, i) => i !== id) } })
+        }
+        setSong(song);
     }
 
     //Method to get timeSignature from localstorage
@@ -169,13 +206,24 @@ const SongContextProvider: React.FC = props => {
             const tempArray = copyAndAddEmptyBars(indexOfOriginalBar, 1);
             //If master sheet add the new copy of bar to the array
             //Else add the copied bar-array with an empty bar
-            setSong({ ...song, voices: song.voices.map((voice, i) => i === 0 ? { ...voice, bars: copyOfArray } : { ...voice, bars: tempArray[i - 1] }) });
+
+            song = { ...song, voices: song.voices.map((voice, i) => i === 0 ? { ...voice, bars: copyOfArray } : { ...voice, bars: tempArray[i - 1] }) };
+            if (song.voices[0].bars[id].house === 1) {
+                deleteHouse(id)
+                addHouse(id + 1)
+            }
+            if (song.voices[0].bars[id].house === 2) {
+                deleteHouse(id)
+                addHouse(id - 1)
+            }
+            setSong(song);
         }
     }
 
     const addEmptyBar = () => {
         const tempArray = copyAndAddEmptyBars(song.voices[0].bars.length, 0);
-        setSong({ ...song, voices: song.voices.map((voice, i) => true ? { ...voice, bars: tempArray[i] } : voice) });
+        song = { ...song, voices: song.voices.map((voice, i) => true ? { ...voice, bars: tempArray[i] } : voice) };
+        setSong(song);
     }
 
     const editNote = (voiceId: number, barId: number, newNotes: IChordAndNotes[]) => {
@@ -183,11 +231,16 @@ const SongContextProvider: React.FC = props => {
     }
 
     const changeTitle = (newTitle: string) => {
-        setSong({ ...song, title: newTitle });
+        song = { ...song, title: newTitle };
+        setSong(song);
     }
 
-    const deleteNote = (voiceId: number, barId: number, noteIndex: number) => {
-        setSong({ ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: bar.chordsAndNotes.filter((tone, i) => i !== noteIndex) } : bar) } : voice) })
+    const deleteNote = (voiceId: number, barId: number, newNote: IChordAndNotes[]) => {
+
+
+        song = { ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newNote } : bar) } : voice) };
+
+        setSong(song);
     }
 
 
@@ -207,6 +260,8 @@ const SongContextProvider: React.FC = props => {
         toggleRepAfter,
         changeTitle,
         deleteNote,
+        addHouse,
+        removeHouse: deleteHouse,
     }
 
     return (

@@ -121,13 +121,27 @@ export const BarBody: React.FC<BarBodyProps> = props => {
 
     const [rightClicked, setRightClicked] = useState(-1);
 
-    const handleClose = () => {
-        console.log("voiceId: " + props.voiceId)
-        console.log("barId: " + props.barNumber)
-        console.log("noteId: " + rightClicked);
-        if (rightClicked >= 0) {
-            deleteNote(props.voiceId, props.barNumber, rightClicked)
+    const handleClose = (method?: string) => {
+        if (method === "delete") {
+
+            if (rightClicked >= 0) {
+                let tempChordsAndNotes: IChordAndNotes[] = voices[props.voiceId].bars[props.barNumber].chordsAndNotes.slice();;
+
+                const newNote: IChordAndNotes = { length: 1, notes: [""] };
+                tempChordsAndNotes[rightClicked] = newNote;
+                for (let i = rightClicked; i < voices[props.voiceId].bars[props.barNumber].chordsAndNotes[rightClicked].length + rightClicked - 1; i++) {
+                    tempChordsAndNotes.splice(i, 0, newNote);
+                }
+
+
+
+                deleteNote(props.voiceId, props.barNumber, tempChordsAndNotes);
+                setPositionArray([])
+            }
+
+
         }
+
         setState(initialState);
     };
 
@@ -200,7 +214,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                         <Menu
                                             keepMounted
                                             open={state.mouseY !== null}
-                                            onClose={handleClose}
+                                            onClose={() => handleClose("")}
                                             anchorReference="anchorPosition"
                                             anchorPosition={
                                                 state.mouseY !== null && state.mouseX !== null
@@ -208,7 +222,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                                     : undefined
                                             }
                                         >
-                                            <MenuItem onClick={handleClose}>Slett</MenuItem>
+                                            <MenuItem onClick={() => handleClose("delete")}>Slett</MenuItem>
                                         </Menu>
                                     </>
                                 )
