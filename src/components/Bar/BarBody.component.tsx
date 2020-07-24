@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
-import { Box, makeStyles, Typography } from "@material-ui/core";
+import React, { useContext, useState } from "react";
+import { Box, makeStyles, Typography, ButtonBase } from "@material-ui/core";
 import colors from "../../utils/colors";
 import { IChordAndNotes } from "../../models/IBar";
+import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 import { Chord } from "@tonaljs/tonal";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 
@@ -10,6 +11,7 @@ export type BarBodyProps = {
     barNumber: number,
     chordsAndNotes: IChordAndNotes[],
     height?: number,
+    voiceId: number,
 }
 
 
@@ -31,6 +33,7 @@ export function getChord(notes: string[]): string {
 
 export function tangentToNumber(tangent: string): number {
     let result = -1;
+    console.log(tangent);
     switch (tangent) {
         case "C#":
             result = 4
@@ -78,7 +81,7 @@ export function getColor(color: string): string {
             newColor = colors.H;
             break;
         case "C#": case "D#": case "F#": case "G#": case "A#":
-            newColor = colors.semitone;
+            newColor = colors.gray_500;
             break;
         default:
             newColor = "transparent";
@@ -87,8 +90,8 @@ export function getColor(color: string): string {
 }
 export const BarBody: React.FC<BarBodyProps> = props => {
     const classes = useStyles();
-
-    const { song: { voices } } = useContext(SongContext);
+    const { showPossiblePositions, insertNewNoteOrChord, availablePositions, selectPositionArray } = useContext(SongToolsContext);
+    const { song: { voices }, getTimeSignature } = useContext(SongContext);
 
     let tempArrayOfChordsLength: any = [];
     let tempArrayOfChords: any = [];
@@ -98,19 +101,23 @@ export const BarBody: React.FC<BarBodyProps> = props => {
     }
 
     const calculateFlexBasis = (length: number) => {
+        let timeSignatureNumerator = getTimeSignature()[0];
+        if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
+
         let result;
+        let base = 100 / timeSignatureNumerator;
         switch (length) {
             case 1:
-                result = "12.5%";
+                result = base + "%";
                 break;
             case 2:
-                result = "25%";
+                result = base * 2 + "%";
                 break;
             case 4:
-                result = "50%";
+                result = base * 4 + "%";
                 break;
             case 8:
-                result = "100%";
+                result = base * 8 + "%";
                 break;
             default:
                 result = "100%";
@@ -124,8 +131,13 @@ export const BarBody: React.FC<BarBodyProps> = props => {
         )
     })
 
-
-
+    const [positionArray, setPositionArray] = useState<number[]>([]);
+    const emptySpace = (i: number) => {
+        if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i))) {
+            return true
+        }
+        return false;
+    }
 
     return (
 
@@ -138,7 +150,18 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                             {note.notes.map((type, index) => {
                                 const number = tangentToNumber(type);
                                 return (
-                                    <Box key={index} className={classes.toneBox} style={{ backgroundColor: getColor(type) }} >
+                                    <Box
+                                        key={index} className={classes.toneBox}
+                                        onMouseEnter={() => { if (showPossiblePositions) { setPositionArray(selectPositionArray(props.voiceId, props.barNumber, i)); } }}
+                                        onMouseLeave={() => { if (showPossiblePositions) { setPositionArray([]) } }}
+                                        style={{ backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), outlineColor: "black", boxShadow: emptySpace(i) ? (positionArray.includes(i) ? "none" : "0 0 5px black") : "none" }}
+                                        component={ButtonBase}
+                                        onClick={() => {
+                                            if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
+                                                insertNewNoteOrChord(i, props.barNumber, props.voiceId)
+                                            }
+                                        }}
+                                    >
                                         <Typography className={classes.tangentText} >{number === 0 ? "" : number}</Typography>
                                     </Box>
                                 )
@@ -159,6 +182,7 @@ const useStyles = makeStyles({
         display: "flex",
         flexFlow: "row wrap",
         justifyContent: "center",
+
     },
     toneAndChordBox: {
         flex: 1,
@@ -171,13 +195,13 @@ const useStyles = makeStyles({
         width: "100%",
         borderRadius: "5px",
         margin: "2px 0",
+        textAlign: "left",
     },
     tangentText: {
         color: colors.white,
-        marginLeft: "4px",
-        position: "relative",
         top: "50%",
-        transform: "translateY(-50%)"
+        width: "100%",
+        marginLeft: "8px",
     },
     toneText: {
         color: "#555555",

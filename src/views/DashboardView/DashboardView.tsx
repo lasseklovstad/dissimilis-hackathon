@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
-import { DashboardButton, DashboardLibraryButton, DashboardButtonWithAddIconNoLink } from '../../components/DashboardButtons/DashboardButtons';
-import DashboardTopBar from '../../components/DashboardTopBar/DashboardTopBar'
+import { DashboardButton, DashboardLibraryButton, DashboardButtonWithAddIconNoLink, DashboardButtonWithAddIcon } from '../../components/DashboardButtons/DashboardButtons';
+import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBar'
+import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
+import { writeStorage } from '@rehooks/local-storage';
 import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
 import { ISong } from '../../models/ISong';
 import { CustomModal } from '../../components/CustomModal/CustomModal'
@@ -23,10 +25,25 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   const [textFieldInput, setTextFieldInput] = useState<string>("");
   // Denne burde ikke være 0
   const [newSongId, setNewSongId] = useState<number>(0)
-  const getRecentSongs = useGetRecentSongs();
   const postSong = usePostSong(textFieldInput, timeSignature)
   const getSong = useGetSong(newSongId)
   const history = useHistory();
+  const [dashboardView, setDashboardView] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("")
+  const [filteredSongs, setFilteredSongs] = useState<ISong[]>([]);
+  const getRecentSongs = useGetRecentSongs();
+  const getFilteredSongs = useGetFilteredSongs();
+
+  useEffect(() => {
+    getRecentSongs().then(({ result }) => { setRecentSongs(result?.data || []) });
+  }, [])
+
+  useEffect(() => {
+    getFilteredSongs({ "Title": searchTerm }).then(({ result }) => { setFilteredSongs(result?.data || []) });
+  }, [searchTerm])
+
+
+
   const musicTacts: musicTacts[] = [
     {
       id: 1,
@@ -77,63 +94,96 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
     setTextFieldInput(e.target.value);
   }
 
+  const handleOnBlur = () => {
+    setDashboardView(true)
+  }
+
+  const handleOnChange = (searchTerm: string) => {
+    setSearchTerm(searchTerm)
+    setDashboardView(false)
+
+  }
 
 
   return (
+
     <Box mx={2}>
       <Grid container justify="center" className={styles.container}>
 
         <Grid item xs={12}>
           <Box mb={marginBottom}>
-            <DashboardTopBar />
+            <DashboardTopBar onBlur={handleOnBlur} onChange={handleOnChange} />
           </Box>
         </Grid>
 
-        <Grid item xs={12} sm={10} key="newSongContainer">
-          <Box mb={marginBottom}>
-            <Box m={2}>
-              <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
-            </Box>
-            <Grid container spacing={3}>
-              {musicTacts.map(song => (
-                <Grid item xs={12} sm={4} lg={3} key={song.id}>
-                  <DashboardButtonWithAddIconNoLink func={() => handleOpen(song)} text={song.text + "-" + measureText} />
+        {dashboardView ?
+          <Box>
+            <Grid item xs={12} sm={10} key="newSongContainer">
+              <Box mb={marginBottom}>
+                <Box m={2}>
+                  <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
+                </Box>
+                <Grid container spacing={3}>
+                  {musicTacts.map(song => (
+                    <Grid item xs={12} sm={4} lg={3} key={song.id}>
+                      <DashboardButtonWithAddIconNoLink func={() => handleOpen(song)} text={song.text + "-" + measureText} />
+                    </Grid>
+                  ))}
                 </Grid>
-              ))}
+              </Box>
             </Grid>
-          </Box>
-        </Grid>
 
-        <Grid item xs={12} sm={10} key="recentSongsContainer">
-          <Box mb={marginBottom}>
-            <Box m={2}>
-              <Typography variant="h1">{t("DashboardView:recentLabel")}</Typography>
-            </Box>
-            <Grid container spacing={3}>
-              {recentSongs.map(song => (
-                <Grid item xs={12} sm={4} lg={3} key={song.id}>
-                  <DashboardButton text={song.title} link={`/song/${song.id}`} />
+            <Grid item xs={12} sm={10} key="recentSongsContainer">
+              <Box mb={marginBottom}>
+                <Box m={2}>
+                  <Typography variant="h1">{t("DashboardView:recentSongLabel")}</Typography>
+                </Box>
+                <Grid container spacing={3}>
+                  {recentSongs?.map(songs => (
+                    <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                      <DashboardButton text={songs.title} link={songs.id!.toString()} />
+                    </Grid>
+                  ))}
+                  <Grid item xs={12} sm={4} lg={3} key="library">
+                    <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
+                  </Grid>
                 </Grid>
-              ))}
-              <Grid item xs={12} sm={4} lg={3} key="library">
-                <DashboardLibraryButton text={t("DashboardView:libraryButton")} link={"/library"} />
+              </Box>
+            </Grid>
+            <CustomModal handleOnCancelClick={() => handleClose}
+              handleOnSaveClick={() => handleAddSong}
+              handleClosed={() => handleClose}
+              handleOpen={() => handleOpen}
+              modalOpen={modalIsOpen}
+              saveText={t("CreateSongTab:save")}
+              cancelText={t("CreateSongTab:cancel")}
+              headerText={t("CreateSongTab:addInstrument")}
+              labelText={t("CreateSongTab:nameOfInstrument")}
+              handleChange={() => handleChange}
+              textFieldInput={textFieldInput} />
+
+          </Box>
+          :
+
+          <Grid item xs={12} sm={10} key="searchSongsContainer">
+            <Box mb={marginBottom}>
+              <Box m={2}>
+                <Typography variant="h1">{t("DashboardView:searchSongLabel")}</Typography>
+              </Box>
+              <Grid container spacing={3}>
+                {filteredSongs?.map(songs => (
+                  <Grid item xs={12} sm={4} lg={3} key={songs.id}>
+                    <DashboardButton text={songs.title} link={songs.id!.toString()} />
+                  </Grid>
+                ))}
               </Grid>
-            </Grid>
-          </Box>
-        </Grid>
-        <CustomModal handleOnCancelClick={() => handleClose}
-          handleOnSaveClick={() => handleAddSong}
-          handleClosed={() => handleClose}
-          handleOpen={() => handleOpen}
-          modalOpen={modalIsOpen}
-          saveText={t("CreateSongTab:save")}
-          cancelText={t("CreateSongTab:cancel")}
-          headerText={t("CreateSongTab:addInstrument")}
-          labelText={t("CreateSongTab:nameOfInstrument")}
-          handleChange={() => handleChange}
-          textFieldInput={textFieldInput} />
+            </Box>
+          </Grid>
+        }
+
       </Grid>
     </Box>
+
   );
 }
 export default DashboardView;

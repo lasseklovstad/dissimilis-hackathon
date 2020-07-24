@@ -13,6 +13,7 @@ import { notes } from '../../models/notes';
 import { chords } from '../../models/chords';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
+import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component';
 
 const StyledToggleButtonGroup = withStyles((theme) => ({
     grouped: {
@@ -34,27 +35,31 @@ function BottomBar() {
     const classes = useStyles();
     const noteArray: string[] = Object.keys(notes);
     const chordArray: string[] = Object.keys(chords);
-    const [note, setNote] = React.useState(8);
+    const { selectedNoteLength, setSelectedNoteLength } = useContext(SongToolsContext);
+    const { addEmptyBar, getTimeSignature } = useContext(SongContext);
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setNote(event.target.value as number);
+        setSelectedNoteLength(event.target.value as 1 | 2 | 4 | 8);
+        setShowPossiblePositions(false);
     };
-    const { addEmptyBar } = useContext(SongContext);
+    let timeSignatureNumerator = getTimeSignature()[0];
+    if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
     const Menu =
         <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
             <Select
-                value={note}
+                value={selectedNoteLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
             >
-                <MenuItem value={8}> <WholenoteIcon /></MenuItem>
-                <MenuItem value={4}> <HalfnoteIcon /></MenuItem>
+                <MenuItem value={8} style={{ display: timeSignatureNumerator < 8 ? "none" : "block" }}> <WholenoteIcon /></MenuItem>
+                <MenuItem value={4} style={{ display: timeSignatureNumerator < 4 ? "none" : "block" }}> <HalfnoteIcon /></MenuItem>
                 <MenuItem value={2}> <QuarternoteIcon /></MenuItem>
                 <MenuItem value={1}> <EighthnoteIcon /></MenuItem>
             </Select>
         </FormControl>
 
 
-    const [toggle, setToggle] = useState<boolean>(true);
+    const [toggle, setToggle] = useState<boolean>(false);
+    const { showPossiblePositions, setShowPossiblePositions, showAvailableSpace } = useContext(SongToolsContext)
 
     const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) => {
         if (newToggle !== null) {
@@ -82,8 +87,8 @@ function BottomBar() {
                     </StyledToggleButtonGroup>
                 </div>
                 <div className={classes.container} >
-                    <MenuButtonWithAddIcon text={t("BottomBar:addTone")} link={"/song"} />
-                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => addEmptyBar()} />
+                    <MenuButtonWithAddIcon selected={showPossiblePositions} text={t("BottomBar:addTone")} onClick={() => { if (!showPossiblePositions) { showAvailableSpace() }; setShowPossiblePositions(!showPossiblePositions) }} />
+                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => { setShowPossiblePositions(false); addEmptyBar() }} />
                 </div>
             </Grid>
         </Grid>
@@ -123,7 +128,7 @@ const useStyles = makeStyles({
             color: colors.black
         }
     },
-    
+
     input: {
         padding: "18px 10px 10px 10px",
         height: "28px",

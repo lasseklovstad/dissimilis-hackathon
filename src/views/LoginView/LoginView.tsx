@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -14,6 +14,7 @@ import { useLoginRedirect, useLoginPost } from '../../utils/useLogin';
 import Alert from '@material-ui/lab/Alert';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import animatedBird from "../../assets/images/sommerfugl-animert.svg";
 
 export type LoginViewProps = {
 
@@ -25,22 +26,25 @@ const LoginView: FC<LoginViewProps> = () => {
   const classes = useStyles();
   const history = useHistory();
   const axiosGet = useLoginRedirect();
-
+  const [isLoading, setIsLoading] = useState(false)
   const tryLogin = () => {
     axiosGet().then(({ result }) => {
       window.open(result?.headers.location, "_self")
     })
   }
 
+
   const url = new URLSearchParams(useLocation().search);
   let code = url.get("code") ? url.get("code") : null
+
   const axiosPost = useLoginPost(code);
 
+
   useEffect(() => {
-    console.log("Kjører useeffect i loginview")
     if (sessionStorage.getItem("apiKey") && sessionStorage.getItem("userId")) {
       history.push("/dashboard");
     } else if (code !== null) {
+      setIsLoading(true);
       axiosPost().then(({ result }) => {
         if (result && result.status === 200) {
           sessionStorage.setItem("apiKey", result.data.apiKey);
@@ -72,18 +76,25 @@ const LoginView: FC<LoginViewProps> = () => {
       </Alert>
     </Collapse>);
 
+
   return (
     <Grid container className={classes.root} >
-      <BackgroundImage className={classes.backgroundimage} />
-      <Grid item xs={10} sm={6} md={4} xl={2} className={matches ? classes.container + " " + classes.paddinglarge : classes.container + " " + classes.paddingsmall}>
-        <LoginLogo className={classes.loginlogo} />
-        <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled" onSubmit={tryLogin}></TextField>
-        <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled" onSubmit={tryLogin}></TextField>
-        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined">{t("LoginView:login")}</Button>
-        <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={(tryLogin)}>{t("LoginView:loginWithMicrosoft")}</Button>
-        {warning}
-      </Grid>
-    </Grid>
+      <BackgroundImage className={classes.backgroundimage} style={{ display: isLoading ? "none" : "block" }} />
+      {isLoading ?
+        <Grid item xs={10} sm={6} md={4} xl={2} style={{ boxShadow: "none" }} className={matches ? classes.container + " " + classes.paddinglarge : classes.container + " " + classes.paddingsmall}>
+          <object type="image/svg+xml" data={animatedBird} aria-label="bird moving"></object>
+        </Grid>
+        :
+        <Grid item xs={10} sm={6} md={4} xl={2} className={matches ? classes.container + " " + classes.paddinglarge : classes.container + " " + classes.paddingsmall}>
+          <LoginLogo className={classes.loginlogo} />
+          <TextField className={classes.textfield} fullWidth label={t("LoginView:username")} variant="filled" onSubmit={tryLogin}></TextField>
+          <TextField className={classes.textfield} fullWidth label={t("LoginView:password")} type="password" variant="filled" onSubmit={tryLogin}></TextField>
+          <Button size="large" className={classes.loginbutton} fullWidth variant="outlined">{t("LoginView:login")}</Button>
+          <Button size="large" className={classes.loginbutton} fullWidth variant="outlined" onClick={(tryLogin)}>{t("LoginView:loginWithMicrosoft")}</Button>
+          {warning}
+        </Grid>
+      }
+    </Grid >
   );
 }
 export default LoginView;
