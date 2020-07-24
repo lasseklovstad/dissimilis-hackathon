@@ -22,7 +22,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const { deleteBar, duplicateBar, toggleRepBefore, toggleRepAfter, song: { voices } } = useContext(SongContext);
+    const { deleteBar, duplicateBar, toggleRepBefore, toggleRepAfter, addHouse, removeHouse, song: { voices } } = useContext(SongContext);
     const { setShowPossiblePositions } = useContext(SongToolsContext);
     const bar = props.bar
 
@@ -50,6 +50,12 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         if (method === "toggleRepAfter") {
             toggleRepAfter(index);
         }
+        if (method === "addHouse") {
+            addHouse(index);
+        }
+        if (method === "removeHouse") {
+            removeHouse(index);
+        }
         setAnchorEl(null);
     };
 
@@ -57,7 +63,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         return <></>
     } else {
         let centerDivSize: 10 | 11 | 12 = 11;
-
+        let barConst = voices[0].bars[props.barNumber].house !== undefined
         return (
             <Grid container role="grid" className={classes.fullHeight}>
                 <Grid item xs={12} role="row">
@@ -81,6 +87,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                                     <MenuItem onClick={() => handleClose("duplicate")}>{t("BarContainer:duplicateBar")} </MenuItem>
                                     <MenuItem onClick={() => handleClose("toggleRepBefore")}>{voices[0].bars[props.barNumber].repBefore ? t("BarContainer:removeRepBefore") : t("BarContainer:addRepBefore")} </MenuItem>
                                     <MenuItem onClick={() => handleClose("toggleRepAfter")}>{voices[0].bars[props.barNumber].repAfter ? t("BarContainer:removeRepAfter") : t("BarContainer:addRepAfter")} </MenuItem>
+                                    <MenuItem onClick={() => handleClose(barConst ? "removeHouse" : "addHouse")}>{barConst ? t("BarContainer:removeHouse") : t("BarContainer:addHouse")} </MenuItem>
                                 </Menu>
                             </Box>
                         </Grid>
@@ -88,7 +95,6 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                     </Grid>
                 </Grid>
             </Grid>
-
         );
     }
 

@@ -4,6 +4,7 @@ export const barContainerEn = {
     "addRepBefore": "Add left repeat",
     "removeRepBefore": "Remove left repeat",
     "addRepAfter": "Add right repeat",
-    "removeRepAfter": "Remove rigt repeat",
-    "house": "1st / 2nd repetition",
+    "removeRepAfter": "Remove rigth repeat",
+    "addHouse": "Add 1st and 2nd repeat",
+    "removeHouse": "Remove 1st and 2nd repeat",
 }
