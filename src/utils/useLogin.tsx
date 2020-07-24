@@ -5,6 +5,10 @@ import { useApiService } from "./useApiService";
  * @param id songs id
  */
 
+//const url = "https://dissimilisfargenotasjon.azurewebsites.net"
+const url = "https://localhost:3000"
+
+
 export const useLoginRedirect = () => {
     const url = 'login';
     const params = { "web_app_url": "https://dissimilisfargenotasjon.azurewebsites.net" };

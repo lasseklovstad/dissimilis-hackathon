@@ -26,14 +26,14 @@ export function getChord(notes: string[]): string {
         return notes[0];
     } else {
         const result = Chord.detect(tempArray);
-        if (result.length === 0) return notes[0]
-        return result[0];
+        if (result.length === 0) return notes[0];
+        return result[0].replace(/[M]/g, '');
     }
+
 }
 
 export function tangentToNumber(tangent: string): number {
     let result = -1;
-    console.log(tangent);
     switch (tangent) {
         case "C#":
             result = 4
@@ -127,7 +127,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
 
     const chordsInBar = tempArrayOfChords.map((item: any, i: any) => {
         return (
-            <Typography key={i} variant="body1" style={{ flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]) }} className={classes.toneText}>{item}</Typography>
+            <Typography key={i} variant="body1" style={{ flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]), overflow: "hidden", textOverflow: "ellipsis" }} className={classes.toneText}>{item}</Typography>
         )
     })
 
@@ -146,7 +146,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
             {
                 props.chordsAndNotes.map((note, i) => {
                     return (
-                        <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px" }} flexDirection="column" >
+                        <Box key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px", lineHeight: 2 }} flexDirection="column" >
                             {note.notes.map((type, index) => {
                                 const number = tangentToNumber(type);
                                 return (
@@ -159,6 +159,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                         onClick={() => {
                                             if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
                                                 insertNewNoteOrChord(i, props.barNumber, props.voiceId)
+
                                             }
                                         }}
                                     >

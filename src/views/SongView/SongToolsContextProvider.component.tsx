@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { SongContext } from './SongContextProvider.component';
 import { IChordAndNotes } from '../../models/IBar';
-import { notes } from '../../models/notes';
+import { visibleNotes as notes } from '../../models/notes';
 import { chords } from '../../models/chords';
+import { Chord } from '@tonaljs/tonal';
 
 
 interface ISongToolsContext {
@@ -12,6 +13,8 @@ interface ISongToolsContext {
     setSelectedNoteKey: (string: string) => void,
     showPossiblePositions: boolean,
     setShowPossiblePositions: (show: boolean) => void,
+    noteIsSelected: boolean,
+    setNoteIsSelected: (show: boolean) => void,
     availablePositions: number[][][][],
     setAvailablePositions: (number: number[][][][]) => void,
     insertNewNoteOrChord: (noteIndex: number, barIndex: number, voiceIndex: number) => void,
@@ -26,6 +29,8 @@ export const SongToolsContext = React.createContext<ISongToolsContext>({
     setSelectedNoteKey: (string: string) => { },
     showPossiblePositions: false,
     setShowPossiblePositions: (show: boolean) => { },
+    noteIsSelected: true,
+    setNoteIsSelected: (show: boolean) => { },
     availablePositions: [],
     setAvailablePositions: (number: number[][][][]) => { },
     insertNewNoteOrChord: (noteIndex: number, barIndex: number, voiceIndex: number) => { },
@@ -38,15 +43,20 @@ const SongToolsContextProvider: React.FC = props => {
 
     const [selectedNoteLength, setSelectedNoteLength] = useState<1 | 2 | 4 | 8>(1);
     const [selectedNoteKey, setSelectedNoteKey] = useState<string>("C");
+    const [noteIsSelected, setNoteIsSelected] = useState<boolean>(true);
     const [showPossiblePositions, setShowPossiblePositions] = useState<boolean>(false);
     const [availablePositions, setAvailablePositions] = useState<number[][][][]>([]);
 
     const insertNewNoteOrChord = (noteIndex: number, barIndex: number, voiceIndex: number) => {
         let newNoteArray: string[] = ["C"];
-        if (Object.keys(notes).includes(selectedNoteKey)) {
+        if (noteIsSelected) {
             newNoteArray = [Object.values(notes)[Object.keys(notes).indexOf(selectedNoteKey)]];
         } else {
-            newNoteArray = Object.values(chords)[Object.keys(chords).indexOf(selectedNoteKey)];
+            let newNoteObject = chords.find(obj => obj.name === selectedNoteKey);
+            if (newNoteObject !== undefined) {
+                newNoteArray = newNoteObject.notes;
+            }
+            else newNoteArray = [];
         }
         const newNote: IChordAndNotes = { length: selectedNoteLength, notes: newNoteArray }
 
@@ -67,7 +77,8 @@ const SongToolsContextProvider: React.FC = props => {
                 }
             }
         }
-
+        //En test på om akkordene finnes eller ikke
+        //console.log(Chord.get(selectedNoteKey).name !== "" ? Chord.get(selectedNoteKey).name : "Finnes ikke" )
         editNote(voiceIndex, barIndex, tempChordsAndNotes);
         setShowPossiblePositions(false);
     }
@@ -122,6 +133,8 @@ const SongToolsContextProvider: React.FC = props => {
         setSelectedNoteKey,
         showPossiblePositions,
         setShowPossiblePositions,
+        noteIsSelected,
+        setNoteIsSelected,
         availablePositions,
         setAvailablePositions,
         insertNewNoteOrChord,
