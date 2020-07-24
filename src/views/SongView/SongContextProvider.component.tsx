@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { IVoice } from '../../models/IVoice';
-import { IBar } from '../../models/IBar';
+import { IBar, IChordAndNotes } from '../../models/IBar';
+import useLocalStorage from '@rehooks/local-storage';
+
 
 
 //State handling skjer i denne komponenten 
@@ -13,6 +15,8 @@ interface ISongContext {
     getBar: (id: number, voiceId: number) => IBar | undefined,
     duplicateBar: (id: number, voiceId: number) => void,
     addEmptyBar: () => void,
+    editNote: (voiceId: number, barId: number, newNotes: IChordAndNotes[]) => void,
+    getTimeSignature: () => number[],
     toggleRepBefore: (barId: number) => void,
     toggleRepAfter: (barId: number) => void,
     changeTitle: (newTitle: string) => void,
@@ -40,6 +44,8 @@ export const SongContext = React.createContext<ISongContext>({
         throw new Error("duplicateBar() in Song Context is not implemented")
     },
     addEmptyBar: () => { },
+    editNote: (voiceId: number, barId: number, newNotes: IChordAndNotes[]) => { },
+    getTimeSignature: () => [],
     toggleRepBefore: (barId: number) => { },
     toggleRepAfter: (barId: number) => { },
     changeTitle: (newTitle: string) => { },
@@ -62,251 +68,12 @@ const SongContextProvider: React.FC = props => {
             {
                 title: "master",
                 priority: 1,
-                bars: [
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 4,
-                                notes: ["H", "D#", "F#"],
-                            },
-                            {
-                                length: 2,
-                                notes: ["C", "E", "G", "H"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["D", "F#", "A", "C"]
-                            },
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 4,
-                                notes: ["G", "A"]
-                            },
-                            {
-                                length: 4,
-                                notes: ["G"]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 2,
-                                notes: ["A"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["A"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["A"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["A"]
-                            },
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 4,
-                                notes: ["G"]
-                            },
-                            {
-                                length: 4,
-                                notes: [""]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        house: 1,
-                        chordsAndNotes: [
-                            {
-                                length: 2,
-                                notes: ["D"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["D"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["D"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["D"]
-                            },
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        house: 2,
-                        chordsAndNotes: [
-                            {
-                                length: 4,
-                                notes: ["E"]
-                            },
-                            {
-                                length: 4,
-                                notes: ["E"]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        house: 1,
-                        chordsAndNotes: [
-                            {
-                                length: 2,
-                                notes: ["F"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["F"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["F"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["F"]
-                            },
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        house: 2,
-                        chordsAndNotes: [
-                            {
-                                length: 8,
-                                notes: ["C"]
-                            }
-                        ],
-                    },
-                ]
+                bars: []
             },
             {
                 title: "Gitar",
                 priority: 2,
-                bars: [
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 2,
-                                notes: ["C"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["D"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["E"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["F"]
-                            },
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 8,
-                                notes: ["G"]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 8,
-                                notes: ["A"]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 4,
-                                notes: ["G"]
-                            },
-                            {
-                                length: 4,
-                                notes: [""]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 8,
-                                notes: ["D"]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 8,
-                                notes: ["E"]
-                            },
-
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 8,
-                                notes: ["F"]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 8,
-                                notes: ["C"]
-                            }
-                        ],
-                    },
-                ]
+                bars: []
             },
         ],
 
@@ -315,8 +82,16 @@ const SongContextProvider: React.FC = props => {
     //Method to simplify change of state
     const addVoice = (newVoice: IVoice) => {
         for (let i = 0; i < song.voices[0].bars.length; i++) {
+            //I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
+            const newChordsAndNotes = [];
+            const newEmptyNote = { length: 1, notes: [""] };
+            let timeSignatureNumerator = getTimeSignature()[0];
+            if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
+            for (let i = 0; i < timeSignatureNumerator; i++) {
+                newChordsAndNotes.push(newEmptyNote)
+            }
             let barInfo = song.voices[0].bars[i]
-            const tempBar: IBar = { repBefore: barInfo.repBefore, repAfter: barInfo.repAfter, house: barInfo.house, chordsAndNotes: [{ length: 1, notes: [] }] }
+            const tempBar: IBar = { repBefore: barInfo.repBefore, repAfter: barInfo.repAfter, house: barInfo.house, chordsAndNotes: newChordsAndNotes }
             newVoice.bars.push(tempBar);
         }
         song = { ...song, voices: [...song.voices, newVoice] }
@@ -338,7 +113,7 @@ const SongContextProvider: React.FC = props => {
     //adds house to a bar
     const addHouse = (barId: number) => {
 
-         //Checks if its the last bar in the song, and maps through all the bars, matching on barId, checking for house values on the chosen bar, along with the adjacent bars, ensuring that they are handled correctly
+        //Checks if its the last bar in the song, and maps through all the bars, matching on barId, checking for house values on the chosen bar, along with the adjacent bars, ensuring that they are handled correctly
         if (barId === song.voices[0].bars.length - 1) {
             console.log(barId)
             song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, house: 2 } : (i === barId - 1 ? { ...bar, house: 1 } : (i === barId - 2 && (song.voices[0].bars[barId - 2].house === 1) ? { ...bar, house: undefined } : bar))) } : voice) }
@@ -382,11 +157,33 @@ const SongContextProvider: React.FC = props => {
         setSong(song);
     }
 
+    //Method to get timeSignature from localstorage
+    const timeSignature = useLocalStorage('timeSignature')[0];
+    const getTimeSignature = () => {
+        let timeSignatureNumerator: string = "";
+        let timeSignatureDenominator: string = "";
+        if (timeSignature !== null) {
+            timeSignatureNumerator = timeSignature[0];
+            timeSignatureDenominator = timeSignature[1];
+        }
+        return [parseInt(timeSignatureNumerator), parseInt(timeSignatureDenominator)];
+    }
+
     //Method to add an empty bar at a specific index to each of all voices except the master sheet/song
     const copyAndAddEmptyBars = (index: number, withoutMaster: 0 | 1) => {
         //withoutMaster is either 0 if mastersheet is included, or 1 if it is not
         let tempArray = [];
-        const newBar: IBar = { repBefore: false, repAfter: false, chordsAndNotes: [] };
+
+        //I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
+        const newChordsAndNotes = [];
+        const newEmptyNote = { length: 1, notes: [""] };
+        let timeSignatureNumerator = getTimeSignature()[0];
+        if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
+        for (let i = 0; i < timeSignatureNumerator; i++) {
+            newChordsAndNotes.push(newEmptyNote)
+        }
+
+        const newBar: IBar = { repBefore: false, repAfter: false, chordsAndNotes: newChordsAndNotes };
         for (let i = withoutMaster; i < song.voices.length; i++) {
             let copyOfArray = song.voices[i].bars.slice();
             copyOfArray.splice(index + 1, 0, newBar);
@@ -428,6 +225,10 @@ const SongContextProvider: React.FC = props => {
         setSong(song);
     }
 
+    const editNote = (voiceId: number, barId: number, newNotes: IChordAndNotes[]) => {
+        setSong({ ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newNotes } : bar) } : voice) });
+    }
+
     const changeTitle = (newTitle: string) => {
         song = { ...song, title: newTitle };
         setSong(song);
@@ -442,6 +243,8 @@ const SongContextProvider: React.FC = props => {
         getBar,
         duplicateBar,
         addEmptyBar,
+        editNote,
+        getTimeSignature,
         toggleRepBefore,
         toggleRepAfter,
         changeTitle,
