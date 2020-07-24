@@ -21,6 +21,10 @@ type ButtonNoLinkProps = {
   color?: string,
 }
 
+type TopBarIconProps = {
+  func?: Function,
+}
+
 export const DashboardButtonWithAddIcon: FC<ButtonProps> = (props) => {
   const styles = useStyles();
   return (
@@ -81,17 +85,15 @@ export const DashboardLibraryButton: FC<ButtonProps> = ({ text, link }) => {
   );
 }
 
-export const DashboardTopBarIcon = () => {
+export const DashboardTopBarIcon: FC<TopBarIconProps> = (props) => {
   const styles = useStyles();
   const { t } = useTranslation();
   const altProp = t("DashboardView:altButteflyButtonProp");
   return (
     <Box className={styles.butterflyButtonContainer}>
       <Card className={styles.butterflyButtonCard}>
-        <CardActionArea className={styles.butterflyButtonCardIcon} to="/dashboard" component={Link}>
-
+        <CardActionArea onClick={() => props.func && props.func()} className={styles.butterflyButtonCardIcon} to="/dashboard" component={Link}>
           <img src={butterflyBlue} alt={altProp} />
-
         </CardActionArea>
       </Card>
     </Box>

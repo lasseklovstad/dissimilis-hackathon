@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { IVoice } from '../../models/IVoice';
 import { IBar, IChordAndNotes } from '../../models/IBar';
 import useLocalStorage from '@rehooks/local-storage';
+import { ISong } from '../../models/ISong';
 
 
 
@@ -24,15 +25,12 @@ interface ISongContext {
     removeHouse: (barId: number) => void,
 }
 
-interface ISong {
-    title: string,
-    voices: IVoice[]
-};
 
 export const SongContext = React.createContext<ISongContext>({
     song: {
         title: "",
-        voices: []
+        voices: [],
+        timeSignature: "4/4"
     },
     setSong: (song: ISong) => { },
     addVoice: (voice: IVoice) => { },
@@ -76,6 +74,7 @@ const SongContextProvider: React.FC = props => {
                 bars: []
             },
         ],
+        timeSignature: "4/4"
 
     });
 

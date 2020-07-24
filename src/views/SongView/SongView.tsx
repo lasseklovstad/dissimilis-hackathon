@@ -7,6 +7,7 @@ import { Grid, makeStyles, useMediaQuery } from '@material-ui/core';
 import { TimeSignature, BarNumber } from '../../components/SongViewComponents/SongView.component';
 import { BarContainer } from "../../components/BarContainer/BarContainer.component";
 import BottomBar from '../../components/BottomBar/BottomBar.component';
+import { usePutSong } from '../../utils/usePutSong';
 
 
 export type SongViewProps = {
@@ -18,8 +19,8 @@ export const SongView: React.FC<SongViewProps> = props => {
   const xl = useMediaQuery("(min-width: 1920px)");
   const history = useHistory();
   const queryString = require('query-string');
-  const { song: { voices } } = useContext(SongContext);
-
+  const { song, song: { voices } } = useContext(SongContext);
+  const putSong = usePutSong(song)
 
   const voiceString = queryString.parse(window.location.search);
   let selectedVoice = 0;
@@ -50,11 +51,15 @@ export const SongView: React.FC<SongViewProps> = props => {
     return index === voices[selectedVoice].bars.length - 1 ? true : false;
   }
 
+  const saveSong = () => {
+    putSong()
+  }
+
   return (
     <>
       <Grid container className={classes.root}>
         <Grid item xs={12} >
-          <NavBarCreateSong />
+          <NavBarCreateSong saveSongFunc={saveSong} />
         </Grid>
         <Grid item xs={12}>
           <CreateSongTab />

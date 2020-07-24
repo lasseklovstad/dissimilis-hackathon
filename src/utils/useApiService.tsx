@@ -14,7 +14,8 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
   const history = useHistory();
 
   // Add params to the url   
-  let baseUrl = 'https://dissimilis-api-dev.azurewebsites.net/api/';
+  //let baseUrl = 'https://dissimilis-api-dev.azurewebsites.net/api/';
+  let baseUrl = 'https://localhost:5001/api/';
   let finalUrl = baseUrl + url;
   if (options.params) {
     finalUrl += '?' + new URLSearchParams(options.params).toString();
@@ -64,7 +65,27 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     }
     return { result, isError, errorMessage };
   };
-  return { fetchData, postData };
+
+  const putData = async () => {
+    let result: AxiosResponse<T> | undefined = undefined;
+    let errorMessage: any;
+    let isError = false;
+    try {
+      result = await axios.patch<T>(finalUrl, options.body, { headers: options.headers });
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        history.push("/");
+        sessionStorage.removeItem("apiKey");
+        sessionStorage.removeItem("userId");
+      }
+      isError = true;
+      errorMessage = error;
+      console.log(error);
+    }
+    return { result, isError, errorMessage };
+  };
+
+  return { fetchData, postData, putData };
 };
 
 /**
