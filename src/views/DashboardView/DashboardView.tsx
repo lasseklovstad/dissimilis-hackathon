@@ -24,22 +24,22 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   const [timeSignature, setTimeSignature] = useState("");
   const [textFieldInput, setTextFieldInput] = useState<string>("");
   // Denne burde ikke være 0
-  const [newSongId, setNewSongId] = useState<number>(0)
-  const postSong = usePostSong(textFieldInput, timeSignature)
-  const getSong = useGetSong(newSongId)
+  const [newSongId, setNewSongId] = useState<number>(0);
+  const postSong = usePostSong(textFieldInput, timeSignature);
+  const getSong = useGetSong(newSongId);
   const history = useHistory();
   const [dashboardView, setDashboardView] = useState(true);
   const [searchTerm, setSearchTerm] = useState("")
   const [filteredSongs, setFilteredSongs] = useState<ISong[]>([]);
   const getRecentSongs = useGetRecentSongs();
-  const getFilteredSongs = useGetFilteredSongs();
+  const getFilteredSongs = useGetFilteredSongs(searchTerm);
 
   useEffect(() => {
     getRecentSongs().then(({ result }) => { setRecentSongs(result?.data || []) });
   }, [])
 
   useEffect(() => {
-    getFilteredSongs({ "Title": searchTerm }).then(({ result }) => { setFilteredSongs(result?.data || []) });
+    getFilteredSongs().then(({ result }) => { setFilteredSongs(result?.data || []) });
   }, [searchTerm])
 
 
