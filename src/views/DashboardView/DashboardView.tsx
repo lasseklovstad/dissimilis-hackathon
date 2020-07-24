@@ -139,9 +139,9 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                   <Typography variant="h1">{t("DashboardView:recentSongLabel")}</Typography>
                 </Box>
                 <Grid container spacing={3}>
-                  {recentSongs?.map(songs => (
-                    <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                      <DashboardButton text={songs.title} link={songs.id!.toString()} />
+                  {recentSongs?.map(song => (
+                    <Grid item xs={12} sm={4} lg={3} key={song.id}>
+                      <DashboardButton text={song.title} link={"/song/" + song.id!.toString()} />
                     </Grid>
                   ))}
                   <Grid item xs={12} sm={4} lg={3} key="library">
@@ -157,8 +157,8 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               modalOpen={modalIsOpen}
               saveText={t("CreateSongTab:save")}
               cancelText={t("CreateSongTab:cancel")}
-              headerText={t("CreateSongTab:addInstrument")}
-              labelText={t("CreateSongTab:nameOfInstrument")}
+              headerText={t("DashboardView:addSong")}
+              labelText={t("DashboardView:nameOfSong")}
               handleChange={() => handleChange}
               textFieldInput={textFieldInput} />
 
