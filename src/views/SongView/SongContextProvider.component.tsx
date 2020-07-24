@@ -4,6 +4,7 @@ import { IBar, IChordAndNotes } from '../../models/IBar';
 import useLocalStorage from '@rehooks/local-storage';
 
 
+
 //State handling skjer i denne komponenten 
 
 interface ISongContext {
