@@ -40,8 +40,8 @@ function BottomBar() {
     for(let i = 0; i < chords.length; i++){
         chordArray.push(chords[i].name);
         //For adding new chords in the list, you can check if the given chords are showing the same name in the songView as it is shown in the dropdown, or if the chord are undefined or not (wrong name?)
-        //if(chords[i].name !== getChord(chords[i].notes)) console.log(chords[i].name + " = " + getChord(chords[i].notes));
-        //if(chords[i].name === undefined) console.log(chords[i].name + " = undefined ");
+        if(chords[i].name !== getChord(chords[i].notes)) console.log(chords[i].name + " = " + getChord(chords[i].notes));
+        if(getChord(chords[i].notes) === undefined) console.log(chords[i].name + " = undefined !!!!!!!!!!! ");
     }
     const { selectedNoteLength, setSelectedNoteLength } = useContext(SongToolsContext);
     const { addEmptyBar, getTimeSignature } = useContext(SongContext);
