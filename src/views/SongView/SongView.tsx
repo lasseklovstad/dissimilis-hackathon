@@ -18,7 +18,7 @@ export const SongView: React.FC<SongViewProps> = props => {
   const xl = useMediaQuery("(min-width: 1920px)");
   const history = useHistory();
   const queryString = require('query-string');
-  const { song: { voices } } = useContext(SongContext);
+  const { song, song: { voices } } = useContext(SongContext);
 
 
   const voiceString = queryString.parse(window.location.search);
@@ -26,12 +26,12 @@ export const SongView: React.FC<SongViewProps> = props => {
   if (voiceString.voice !== undefined) {
     const voiceInt = parseInt(voiceString.voice);
     if (voiceInt > voices.length || voiceInt <= 0) {
-      history.replace(`/song/${1}?voice=1`);
+      history.replace(`/song/${song.id}?voice=1`);
     } else {
       selectedVoice = voiceString.voice - 1;
     }
   } else {
-    history.replace(`/song/${1}?voice=1`);
+    history.replace(`/song/${song.id}?voice=1`);
   }
 
   useEffect(() => {
