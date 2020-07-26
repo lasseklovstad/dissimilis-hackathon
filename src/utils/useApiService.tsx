@@ -71,7 +71,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     let errorMessage: any;
     let isError = false;
     try {
-      result = await axios.patch<T>(finalUrl, options.body, { headers: options.headers });
+      result = await axios.put<T>(finalUrl, options.body, { headers: options.headers });
     } catch (error) {
       if (error?.response?.status === 401) {
         history.push("/");

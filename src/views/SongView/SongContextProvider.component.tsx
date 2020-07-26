@@ -3,6 +3,7 @@ import { IVoice } from '../../models/IVoice';
 import { IBar, IChordAndNotes } from '../../models/IBar';
 import useLocalStorage from '@rehooks/local-storage';
 import { ISong } from '../../models/ISong';
+import { note } from '@tonaljs/tonal';
 
 
 
@@ -62,16 +63,43 @@ const SongContextProvider: React.FC = props => {
     //Each instrument will have their own bars when we get to that point
     let [song, setSong] = useState<ISong>({
         title: "Lisa gikk til skolen",
+        id: 7,
         voices: [
             {
+                partNumber: 1,
                 title: "master",
-                priority: 1,
-                bars: []
+                bars: [
+                    {
+                        repBefore: false,
+                        repAfter: false,
+                        barNumber: 1,
+                        chordsAndNotes: [
+                            {
+                                noteNumber: 1,
+                                length: 4,
+                                notes: ["C"]
+                            }
+
+                        ]
+                    }
+                ]
             },
             {
+                partNumber: 2,
                 title: "Gitar",
-                priority: 2,
-                bars: []
+                bars: [{
+                    repBefore: false,
+                    repAfter: false,
+                    barNumber: 1,
+                    chordsAndNotes: [
+                        {
+                            noteNumber: 1,
+                            length: 4,
+                            notes: ["C"]
+                        }
+
+                    ]
+                }]
             },
         ],
         timeSignature: "4/4"

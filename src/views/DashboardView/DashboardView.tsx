@@ -110,7 +110,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                 <Grid container spacing={3}>
                   {recentSongs?.map(songs => (
                     <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                      <DashboardButton text={songs.title} link={songs.id!.toString()} />
+                      <DashboardButton text={songs.title} link={"/song/" + songs.id!.toString()} />
                     </Grid>
                   ))}
                   <Grid item xs={12} sm={4} lg={3} key="library">
@@ -131,7 +131,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               <Grid container spacing={3}>
                 {filteredSongs?.map(songs => (
                   <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                    <DashboardButton text={songs.title} link={songs.id!.toString()} />
+                    <DashboardButton text={songs.title} link={"/song/" + songs.id!.toString()} />
                   </Grid>
                 ))}
               </Grid>

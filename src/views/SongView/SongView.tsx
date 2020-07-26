@@ -52,6 +52,7 @@ export const SongView: React.FC<SongViewProps> = props => {
   }
 
   const saveSong = () => {
+    console.log("Saving song");
     putSong()
   }
 

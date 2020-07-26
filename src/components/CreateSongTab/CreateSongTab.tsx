@@ -39,7 +39,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const classes = useStyles();
 
     const handleAddInstrument = () => {
-        addVoice({ title: textFieldInput, priority: voices.length, bars: [] });
+        addVoice({ title: textFieldInput, partNumber: voices.length, bars: [] });
         setModalIsOpen(false);
         setTextFieldInput("");
         const newIndex = voices.length + 1;
