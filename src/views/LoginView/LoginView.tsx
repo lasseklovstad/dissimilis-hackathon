@@ -42,14 +42,14 @@ const LoginView: FC<LoginViewProps> = () => {
 
   useEffect(() => {
     if (sessionStorage.getItem("apiKey") && sessionStorage.getItem("userId")) {
-      history.push("/dashboard");
+      history.replace("/dashboard");
     } else if (code !== null) {
       setIsLoading(true);
       axiosPost().then(({ result }) => {
         if (result && result.status === 200) {
           sessionStorage.setItem("apiKey", result.data.apiKey);
           sessionStorage.setItem("userId", result.data.userID?.toString());
-          history.push("/dashboard");
+          history.replace("/dashboard");
         }
       })
     }
