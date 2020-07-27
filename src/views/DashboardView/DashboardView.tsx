@@ -69,7 +69,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
     setModalIsOpen(false);
     postSong().then(({ result }) => {
       if (result?.status === 201) {
-        history.push("/song/" + result.data);
+        history.push("/song/" + result.data.id);
       };
     })
   };
