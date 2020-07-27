@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Grid, Button, Modal, TextField, makeStyles, Typography } from "@material-ui/core";
+import { Grid, Button, Modal, TextField, makeStyles, Typography, Menu, MenuItem } from "@material-ui/core";
 import DashboardButton, { DashboardButtonWithAddIconNoLink } from "../DashboardButtons/DashboardButtons";
 import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
@@ -64,6 +64,35 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const voiceString = queryString.parse(window.location.search);
     const selectedVoice = parseInt(voiceString.voice);
 
+    const initialState = {
+        mouseX: null,
+        mouseY: null,
+    };
+    const [rightClicked, setRightClicked] = useState(-1);
+    const [state, setState] = React.useState<{
+        mouseX: null | number;
+        mouseY: null | number;
+    }>(initialState);
+
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        setState({
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+        });
+    };
+
+
+    const handleCloseMenu = (method?: string) => {
+        if (method === "renameVoice") {
+            if (rightClicked >= 0) {
+                /*     let songTitle: string = songTitle */
+                console.log("hey")
+            }
+        }
+
+        setState(initialState);
+    };
 
     return (
         <Grid container>
@@ -76,7 +105,20 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     {voices.slice(1).map((voices: IVoice, index: number) => {
                         return (
                             <Grid item key={index + 2}>
-                                <DashboardButton selected={selectedVoice === index + 2} text={voices.title} link={`/song/1?voice=${index + 2}`} />
+                                <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => handleClick(e)} selected={selectedVoice === index + 2} text={voices.title} link={`/song/1?voice=${index + 2}`} />
+                                <Menu
+                                    keepMounted
+                                    open={state.mouseY !== null}
+                                    onClose={() => handleCloseMenu("")}
+                                    anchorReference="anchorPosition"
+                                    anchorPosition={
+                                        state.mouseY !== null && state.mouseX !== null
+                                            ? { top: state.mouseY, left: state.mouseX }
+                                            : undefined
+                                    }
+                                >
+                                    <MenuItem onClick={() => handleCloseMenu("renameVoice")}>Endre navn</MenuItem>
+                                </Menu>
                             </Grid>
                         )
                     })}

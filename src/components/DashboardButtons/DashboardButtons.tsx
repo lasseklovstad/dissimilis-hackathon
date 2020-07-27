@@ -13,6 +13,7 @@ export type ButtonProps = {
   link: string,
   func?: Function,
   selected?: boolean,
+  onContextMenu? : Function,
 };
 
 type ButtonNoLinkProps = {
@@ -58,7 +59,7 @@ export const DashboardButton: FC<ButtonProps> = (props) => {
   return (
     <Card className={styles.button}>
       <CardActionArea onClick={() => { history.replace(props.link) }}>
-        <Box className={styles.container} style={{ backgroundColor: props.selected === true ? colors.gray_400 : colors.white }}>
+        <Box onContextMenu={(e) => props.onContextMenu && props.onContextMenu(e)} className={styles.container} style={{ backgroundColor: props.selected === true ? colors.gray_400 : colors.white }}>
           <Box p={2}><Typography>{props.text}</Typography></Box>
         </Box>
       </CardActionArea>
