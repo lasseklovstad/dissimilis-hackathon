@@ -7,14 +7,14 @@ import { useApiService } from "./useApiService";
 
 export const useLoginRedirect = () => {
     const url = 'login';
-    const params = { "web_app_url": process.env.PUBLIC_URL };
+    const params = { "web_app_url": "dissimilisfargenotasjon.azurewebsites.net" };
     const getLoginUrl = useApiService<string>("get", url, { params }).fetchData;
     return getLoginUrl;
 }
 
 export const useLoginPost = (code: string | null) => {
     const url = 'login';
-    const params = { "web_app_url": process.env.PUBLIC_URL, "X-API-Key": sessionStorage.getItem("apiKey") || "", "X-User-ID": sessionStorage.getItem("userId") || "" };
+    const params = { "web_app_url": "dissimilisfargenotasjon.azurewebsites.net", "X-API-Key": sessionStorage.getItem("apiKey") || "", "X-User-ID": sessionStorage.getItem("userId") || "" };
     const body = { "code": code };
     const postLogin = useApiService<Token>("post", url, { params, body }).postData;
     return postLogin;
