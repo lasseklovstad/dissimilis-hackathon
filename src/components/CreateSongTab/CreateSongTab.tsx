@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { IVoice } from "../../models/IVoice";
 import { useHistory } from "react-router-dom";
-
+import { CustomModal } from '../../components/CustomModal/CustomModal'
 
 export type CreateSongTabProps = {
 
@@ -29,6 +29,7 @@ export type InstrumentCard = {
 }
 export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
     const [modalStyle] = useState(getModalStyle);
     const [textFieldInput, setTextFieldInput] = useState<string>("");
 
@@ -69,7 +70,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         mouseX: null,
         mouseY: null,
     };
-    const [rightClicked, setRightClicked] = useState(-1);
+
     const [state, setState] = React.useState<{
         mouseX: null | number;
         mouseY: null | number;
@@ -82,19 +83,22 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
             mouseY: event.clientY - 4,
         });
     };
-
-
+    const handleRenameOpen = () => {
+        setModalIsOpen(true);
+    };
+    const handleRenameClose = () => {
+        setRenameModalIsOpen(false);
+    };
     const handleCloseMenu = (method?: string) => {
         if (method === "renameVoice") {
-
-            changeVoiceTitle(selectedVoice, "Jonas");
-
-
-
+            //changeVoiceTitle(selectedVoice, "Jonas");
+            setRenameModalIsOpen(true)
         }
-
         setState(initialState);
     };
+    const handleChangeVoiceTitle = () => {
+        changeVoiceTitle(selectedVoice, textFieldInput)
+    }
 
     return (
         <Grid container>
@@ -143,7 +147,18 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                 </div>
             </Modal>
-         
+            <CustomModal handleOnCancelClick={() => handleCloseMenu}
+                handleOnSaveClick={() => handleChangeVoiceTitle}
+                handleClosed={() => handleRenameClose}
+                handleOpen={() => handleRenameOpen}
+                modalOpen={renameModalIsOpen}
+                saveText={"endre navn"}
+                cancelText={"avbryt"}
+                headerText={"endre navn"}
+                labelText={t("DashboardView:nameOfSong")}
+                handleChange={() => handleChange}
+                textFieldInput={textFieldInput} />
+
             <Grid item xs={"auto"} sm={1}></Grid>
         </Grid>
     );
