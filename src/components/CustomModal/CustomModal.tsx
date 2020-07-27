@@ -20,8 +20,6 @@ export const CustomModal: FC<CustomModalProps> = (props) => {
     const classes = useStyles();
     const [modalStyle] = useState(getModalStyle);
 
-
-
     return (
         <Modal open={props.modalOpen} onClose={props.handleClosed()}>
             <div className={classes.modal} style={modalStyle}>
@@ -40,13 +38,12 @@ export const CustomModal: FC<CustomModalProps> = (props) => {
     )
 }
 
-
 function getModalStyle() {
     const left = 50;
 
     return {
         top: "20%",
-        left: "50%",
+        left: `${left}%`,
         transform: `translate(-${left}%)`,
     };
 }
