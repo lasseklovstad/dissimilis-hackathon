@@ -29,7 +29,7 @@ const LoginView: FC<LoginViewProps> = () => {
   const [isLoading, setIsLoading] = useState(false)
   const tryLogin = () => {
     axiosGet().then(({ result }) => {
-      window.open(result?.headers.location, "_self")
+      window.location.href = result?.headers.location
     })
   }
 
