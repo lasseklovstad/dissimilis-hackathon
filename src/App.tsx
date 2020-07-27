@@ -4,6 +4,7 @@ import { MuiThemeProvider } from "@material-ui/core/styles";
 import Routing from './Routing';
 import { theme } from "./theme";
 import CssBaseline from "@material-ui/core/CssBaseline";
+require('dotenv').config()
 
 function App() {
 
