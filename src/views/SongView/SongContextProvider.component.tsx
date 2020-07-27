@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IVoice } from '../../models/IVoice';
 import { IBar, IChordAndNotes } from '../../models/IBar';
 import useLocalStorage from '@rehooks/local-storage';
+import { useGetSong } from '../../utils/useGetSong';
 import { ISong } from '../../models/ISong';
-import { note } from '@tonaljs/tonal';
+import { useParams, useRouteMatch } from 'react-router-dom';
 
 
 
@@ -25,7 +26,6 @@ interface ISongContext {
     addHouse: (barId: number) => void,
     removeHouse: (barId: number) => void,
 }
-
 
 export const SongContext = React.createContext<ISongContext>({
     song: {
@@ -53,13 +53,11 @@ export const SongContext = React.createContext<ISongContext>({
 });
 
 const SongContextProvider: React.FC = props => {
-
+    const [songId, setSongId] = useState<number>(1);
+    const getSong = useGetSong(songId);
     //Initial State.
-
     //For now, I'm just setting it static until we can retrieve the data from the server
-
     //This is just a temporary solution to show how it can be done
-
     //Each instrument will have their own bars when we get to that point
     let [song, setSong] = useState<ISong>({
         title: "Lisa gikk til skolen",
@@ -72,10 +70,8 @@ const SongContextProvider: React.FC = props => {
                     {
                         repBefore: false,
                         repAfter: false,
-                        barNumber: 1,
                         chordsAndNotes: [
                             {
-                                noteNumber: 1,
                                 length: 4,
                                 notes: ["C"]
                             }
@@ -90,10 +86,8 @@ const SongContextProvider: React.FC = props => {
                 bars: [{
                     repBefore: false,
                     repAfter: false,
-                    barNumber: 1,
                     chordsAndNotes: [
                         {
-                            noteNumber: 1,
                             length: 4,
                             notes: ["C"]
                         }
@@ -105,6 +99,20 @@ const SongContextProvider: React.FC = props => {
         timeSignature: "4/4"
 
     });
+
+    const match = useRouteMatch<MatchParams>("/song/:id")
+    let id = match ? +match.params.id : 0
+    if (id !== songId) {
+        setSongId(id);
+    }
+    useEffect(() => {
+        console.log(id);
+        getSong().then(({ result }) => {
+            if (result?.data) {
+                setSong(result.data)
+            }
+        })
+    }, [])
 
     //Method to simplify change of state
     const addVoice = (newVoice: IVoice) => {
@@ -285,5 +293,10 @@ const SongContextProvider: React.FC = props => {
         </SongContext.Provider>
     )
 };
+
+type MatchParams = {
+    id: string
+}
+
 
 export default SongContextProvider;

@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
 import { SongContext } from "./SongContextProvider.component";
@@ -22,17 +22,19 @@ export const SongView: React.FC<SongViewProps> = props => {
   const { song, song: { voices } } = useContext(SongContext);
   const putSong = usePutSong(song)
 
+  const match = useRouteMatch<MatchParams>("/song/:id");
+  let id = match ? +match.params.id : 0;
   const voiceString = queryString.parse(window.location.search);
   let selectedVoice = 0;
   if (voiceString.voice !== undefined) {
     const voiceInt = parseInt(voiceString.voice);
     if (voiceInt > voices.length || voiceInt <= 0) {
-      history.replace(`/song/${1}?voice=1`);
+      history.replace(`/song/${id}?voice=1`);
     } else {
       selectedVoice = voiceString.voice - 1;
     }
   } else {
-    history.replace(`/song/${1}?voice=1`);
+    history.replace(`/song/${id}?voice=1`);
   }
 
   useEffect(() => {
@@ -113,5 +115,9 @@ const useStyles = makeStyles({
     marginTop: "24px"
   }
 })
+
+type MatchParams = {
+  id: string
+}
 
 export default SongView;

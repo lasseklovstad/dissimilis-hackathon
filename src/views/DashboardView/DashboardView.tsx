@@ -27,7 +27,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   }, [])
 
   useEffect(() => {
-    getFilteredSongs({ "Title": searchTerm }).then(({ result }) => { setFilteredSongs(result?.data || []) });
+    getFilteredSongs().then(({ result }) => { setFilteredSongs(result?.data || []) });
   }, [searchTerm])
 
 
