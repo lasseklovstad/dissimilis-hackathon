@@ -34,7 +34,8 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
 
     const history = useHistory();
 
-    const { song: { voices }, addVoice } = useContext(SongContext);
+    const { song: { voices }, addVoice, changeVoiceTitle, } = useContext(SongContext);
+
 
     const classes = useStyles();
 
@@ -85,10 +86,11 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
 
     const handleCloseMenu = (method?: string) => {
         if (method === "renameVoice") {
-            if (rightClicked >= 0) {
-                /*     let songTitle: string = songTitle */
-                console.log("hey")
-            }
+
+            changeVoiceTitle(selectedVoice, "Jonas");
+
+
+
         }
 
         setState(initialState);
@@ -141,6 +143,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                 </div>
             </Modal>
+         
             <Grid item xs={"auto"} sm={1}></Grid>
         </Grid>
     );

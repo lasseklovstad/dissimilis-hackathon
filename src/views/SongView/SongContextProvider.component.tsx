@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { IVoice } from '../../models/IVoice';
 import { IBar, IChordAndNotes } from '../../models/IBar';
 import useLocalStorage from '@rehooks/local-storage';
+import { title } from 'process';
 
 
 
@@ -20,6 +21,7 @@ interface ISongContext {
     toggleRepBefore: (barId: number) => void,
     toggleRepAfter: (barId: number) => void,
     changeTitle: (newTitle: string) => void,
+    changeVoiceTitle: (voiceId: number, newTitle: string) => void,
     deleteNote: (voiceId: number, barId: number, newNote: IChordAndNotes[]) => void,
     addHouse: (barId: number) => void,
     removeHouse: (barId: number) => void,
@@ -50,6 +52,7 @@ export const SongContext = React.createContext<ISongContext>({
     toggleRepBefore: (barId: number) => { },
     toggleRepAfter: (barId: number) => { },
     changeTitle: (newTitle: string) => { },
+    changeVoiceTitle: (voiceId: number, newTitle: string) => { },
     deleteNote: (voiceId: number, barId: number, newNote: IChordAndNotes[]) => { },
     addHouse: (barId: number) => { },
     removeHouse: (barId: number) => { },
@@ -235,6 +238,11 @@ const SongContextProvider: React.FC = props => {
         setSong(song);
     }
 
+    const changeVoiceTitle = (voiceId: number, newTitle: string) => {
+        song = { ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, title: newTitle } : voice) };
+        setSong(song);
+    }
+
     const deleteNote = (voiceId: number, barId: number, newNote: IChordAndNotes[]) => {
 
 
@@ -259,6 +267,7 @@ const SongContextProvider: React.FC = props => {
         toggleRepBefore,
         toggleRepAfter,
         changeTitle,
+        changeVoiceTitle,
         deleteNote,
         addHouse,
         removeHouse: deleteHouse,
