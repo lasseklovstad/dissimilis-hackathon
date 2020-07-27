@@ -77,8 +77,6 @@ const SongToolsContextProvider: React.FC = props => {
                 }
             }
         }
-        //En test på om akkordene finnes eller ikke
-        //console.log(Chord.get(selectedNoteKey).name !== "" ? Chord.get(selectedNoteKey).name : "Finnes ikke" )
         editNote(voiceIndex, barIndex, tempChordsAndNotes);
         setShowPossiblePositions(false)
     }

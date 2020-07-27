@@ -20,10 +20,8 @@ const fillChords = (): { name: string, notes: string[] }[] => {
     let chords = [];
     for (let i = 0; i < chordNames.length; i++) {
         let name: string = chordNames[i];
-        name = name.replace(/H/g, "B"); //Have to change to B for tonaljs
-        console.log(name)
+        name = name.replace(/H/g, "B"); //Have to change H to B for tonaljs
         let notes: string[] = Chord.get(name).notes;
-        //Need to remove octaves
         for (let j = 0; j < notes.length; j++) {
             notes[j] = notes[j].replace(/[0-9]/g, '');
             let keyIndex = Object.keys(noteArray).indexOf(notes[j]);
