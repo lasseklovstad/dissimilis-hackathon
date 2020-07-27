@@ -23,6 +23,7 @@ interface ISongContext {
     toggleRepBefore: (barId: number) => void,
     toggleRepAfter: (barId: number) => void,
     changeTitle: (newTitle: string) => void,
+    deleteNote: (voiceId: number, barId: number, newNote: IChordAndNotes[]) => void,
     addHouse: (barId: number) => void,
     removeHouse: (barId: number) => void,
 }
@@ -48,6 +49,7 @@ export const SongContext = React.createContext<ISongContext>({
     toggleRepBefore: (barId: number) => { },
     toggleRepAfter: (barId: number) => { },
     changeTitle: (newTitle: string) => { },
+    deleteNote: (voiceId: number, barId: number, newNote: IChordAndNotes[]) => { },
     addHouse: (barId: number) => { },
     removeHouse: (barId: number) => { },
 });
@@ -96,8 +98,11 @@ const SongContextProvider: React.FC = props => {
                 }]
             },
         ],
+<<<<<<< HEAD
         timeSignature: "4/4"
 
+=======
+>>>>>>> 31380c6366c9105bfb10eb59f2a518cefd252825
     });
 
     const match = useRouteMatch<MatchParams>("/song/:id")
@@ -150,7 +155,6 @@ const SongContextProvider: React.FC = props => {
 
         //Checks if its the last bar in the song, and maps through all the bars, matching on barId, checking for house values on the chosen bar, along with the adjacent bars, ensuring that they are handled correctly
         if (barId === song.voices[0].bars.length - 1) {
-            console.log(barId)
             song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, house: 2 } : (i === barId - 1 ? { ...bar, house: 1 } : (i === barId - 2 && (song.voices[0].bars[barId - 2].house === 1) ? { ...bar, house: undefined } : bar))) } : voice) }
 
         } else {
@@ -255,6 +259,7 @@ const SongContextProvider: React.FC = props => {
     }
 
     const addEmptyBar = () => {
+
         const tempArray = copyAndAddEmptyBars(song.voices[0].bars.length, 0);
         song = { ...song, voices: song.voices.map((voice, i) => true ? { ...voice, bars: tempArray[i] } : voice) };
         setSong(song);
@@ -268,6 +273,16 @@ const SongContextProvider: React.FC = props => {
         song = { ...song, title: newTitle };
         setSong(song);
     }
+
+    const deleteNote = (voiceId: number, barId: number, newNote: IChordAndNotes[]) => {
+
+
+        song = { ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newNote } : bar) } : voice) };
+
+        setSong(song);
+    }
+
+
 
     //Add all methods here
     const value = {
@@ -283,6 +298,7 @@ const SongContextProvider: React.FC = props => {
         toggleRepBefore,
         toggleRepAfter,
         changeTitle,
+        deleteNote,
         addHouse,
         removeHouse: deleteHouse,
     }

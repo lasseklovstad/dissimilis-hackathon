@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import React, { useEffect, useContext } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
+=======
+import React, { useEffect, useContext, createRef } from 'react';
+import { useHistory } from 'react-router-dom';
+>>>>>>> 31380c6366c9105bfb10eb59f2a518cefd252825
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
 import { SongContext } from "./SongContextProvider.component";
@@ -44,6 +49,10 @@ export const SongView: React.FC<SongViewProps> = props => {
     }
   }, [history]);
 
+  useEffect(() => {
+    window.scrollTo(0, document.body.scrollHeight);
+  }, [voices])
+
 
   const isBarLineBefore = (index: number) => {
     return xl && index % 4 === 0 ? true : !xs && !xl && index % 2 === 0 ? true : xs ? true : false
@@ -60,7 +69,7 @@ export const SongView: React.FC<SongViewProps> = props => {
 
   return (
     <>
-      <Grid container className={classes.root}>
+      <Grid container className={classes.root} >
         <Grid item xs={12} >
           <NavBarCreateSong saveSongFunc={saveSong} />
         </Grid>
