@@ -14,7 +14,7 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
   const history = useHistory();
 
   // Add params to the url   
-  let baseUrl = process.env.API_URL;
+  let baseUrl = process.env.REACT_APP_API_URL as string;
   let finalUrl = baseUrl + url;
   if (options.params) {
     finalUrl += '?' + new URLSearchParams(options.params).toString();
