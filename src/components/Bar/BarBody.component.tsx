@@ -27,7 +27,7 @@ export function getChord(notes: string[]): string {
     } else {
         const result = Chord.detect(tempArray);
         if (result.length === 0) return notes[0];
-        return result[0].replace(/[M]/g, '');
+        return result[0].replace(/M/g, '').replace(/B/g, 'H');
     }
 
 }
@@ -173,7 +173,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
 
     const chordsInBar = tempArrayOfChords.map((item: any, i: any) => {
         return (
-            <Typography key={i} variant="body1" style={{ flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]), overflow: "hidden", textOverflow: "ellipsis" }} className={classes.toneText}>{item}</Typography>
+            <Typography key={i} variant="body1" style={{ flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]), overflow: "hidden", textOverflow: "ellipsis", paddingLeft: "4px" }} className={classes.toneText}>{item}</Typography>
         )
     })
 

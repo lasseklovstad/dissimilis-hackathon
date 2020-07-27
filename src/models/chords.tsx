@@ -13,13 +13,15 @@ const chordNames = [
     "G#", "G#m", "G#7", "G#m7", "G#maj7", "G#m/ma7", "G#6", "G#m6", "G#6/9", "G#5", "G#9", "G#m9", "G#maj9", "G#9sus4", "G#m11", "G#13", "G#m13", "G#maj13", "G#dim", "G#dim7", "G#m7b5", "G#aug", "G#aug7",
     "A", "Am", "A7", "Am7", "Amaj7", "Am/ma7", "A6", "Am6", "A6/9", "A5", "A9", "Am9", "Amaj9", "A9sus4", "Am11", "A13", "Am13", "Amaj13", "Adim", "Adim7", "Am7b5", "Aaug", "Aaug7",
     "A#", "A#m", "A#7", "A#m7", "A#maj7", "A#m/ma7", "A#6", "A#m6", "A#6/9", "A#5", "A#9", "A#m9", "A#maj9", "A#9sus4", "A#m11", "A#13", "A#m13", "A#maj13", "A#dim", "A#dim7", "A#m7b5", "A#aug", "A#aug7",
-    "B", "Bm", "B7", "Bm7", "Bmaj7", "Bm/ma7", "B6", "Bm6", "B6/9", "B5", "B9", "Bm9", "Bmaj9", "B9sus4", "Bm11", "B13", "Bm13", "Bmaj13", "Bdim", "Bdim7", "Bm7b5", "Baug", "Baug7",
+    "H", "Hm", "H7", "Hm7", "Hmaj7", "Hm/ma7", "H6", "Hm6", "H6/9", "H5", "H9", "Hm9", "Hmaj9", "H9sus4", "Hm11", "H13", "Hm13", "Hmaj13", "Hdim", "Hdim7", "Hm7b5", "Haug", "Haug7",
 ]
 
 const fillChords = (): { name: string, notes: string[] }[] => {
     let chords = [];
     for (let i = 0; i < chordNames.length; i++) {
         let name: string = chordNames[i];
+        name = name.replace(/H/g, "B"); //Have to change to B for tonaljs
+        console.log(name)
         let notes: string[] = Chord.get(name).notes;
         //Need to remove octaves
         for (let j = 0; j < notes.length; j++) {
@@ -28,7 +30,7 @@ const fillChords = (): { name: string, notes: string[] }[] => {
             notes[j] = Object.values(noteArray)[keyIndex];
         }
         let obj = {
-            name: name,
+            name: chordNames[i],
             notes: notes
         }
         chords.push(obj)

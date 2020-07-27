@@ -81,7 +81,6 @@ const SongToolsContextProvider: React.FC = props => {
         //console.log(Chord.get(selectedNoteKey).name !== "" ? Chord.get(selectedNoteKey).name : "Finnes ikke" )
         editNote(voiceIndex, barIndex, tempChordsAndNotes);
         setShowPossiblePositions(false)
-        
     }
 
     const selectPositionArray = (voiceIndex: number, barIndex: number, noteIndex: number) => {
