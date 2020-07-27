@@ -121,7 +121,7 @@ const SongContextProvider: React.FC = props => {
         for (let i = 0; i < song.voices[0].bars.length; i++) {
             //I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
             const newChordsAndNotes = [];
-            const newEmptyNote = { length: 1, notes: [""] };
+            const newEmptyNote = { length: 1, notes: [" "] };
             let timeSignatureNumerator = getTimeSignature()[0];
             if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
             for (let i = 0; i < timeSignatureNumerator; i++) {
@@ -212,7 +212,7 @@ const SongContextProvider: React.FC = props => {
 
         //I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
         const newChordsAndNotes = [];
-        const newEmptyNote = { length: 1, notes: [""] };
+        const newEmptyNote = { length: 1, notes: [" "] };
         let timeSignatureNumerator = getTimeSignature()[0];
         if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
         for (let i = 0; i < timeSignatureNumerator; i++) {
