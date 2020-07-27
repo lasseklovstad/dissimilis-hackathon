@@ -5,11 +5,7 @@ import LoginView from './BottomBar.component'
 import BottomBar from './BottomBar.component';
 
 describe('BottomBar', () => {
-    /* 
-        it('Autocomplete should be showing on bottombar', function () {
-            render(<BrowserRouter> <BottomBar /> </BrowserRouter >)
-            expect(screen.findAllByRole('textfield')).not.toBeDisabled
-        }) */
+
 
     it('Add tone button should be showing on bottombar', function () {
         render(<BrowserRouter> <BottomBar /> </BrowserRouter>);
