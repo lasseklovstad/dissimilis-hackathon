@@ -111,7 +111,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
         </Grid>
 
         {dashboardView ?
-          <Box>
+          <>
             <Grid item xs={12} sm={10} key="newSongContainer">
               <Box mb={marginBottom}>
                 <Box m={2}>
@@ -156,7 +156,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               handleChange={() => handleChange}
               textFieldInput={textFieldInput} />
 
-          </Box>
+          </>
           :
 
           <Grid item xs={12} sm={10} key="searchSongsContainer">

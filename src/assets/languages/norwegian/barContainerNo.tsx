@@ -5,5 +5,6 @@ export const barContainerNo = {
     "removeRepBefore": "Fjern repetisjon foran",
     "addRepAfter": "Legg til repetisjon bak",
     "removeRepAfter": "Fjern repetisjon bak",
-    "house": "Hus",
+    "addHouse": "Legg til hus",
+    "removeHouse": "Fjern hus",
 }

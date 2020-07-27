@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, createRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
@@ -41,6 +41,10 @@ export const SongView: React.FC<SongViewProps> = props => {
     }
   }, [history]);
 
+  useEffect(() => {
+    window.scrollTo(0, document.body.scrollHeight);
+  }, [voices])
+
 
   const isBarLineBefore = (index: number) => {
     return xl && index % 4 === 0 ? true : !xs && !xl && index % 2 === 0 ? true : xs ? true : false
@@ -52,7 +56,7 @@ export const SongView: React.FC<SongViewProps> = props => {
 
   return (
     <>
-      <Grid container className={classes.root}>
+      <Grid container className={classes.root} >
         <Grid item xs={12} >
           <NavBarCreateSong />
         </Grid>
