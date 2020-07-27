@@ -62,8 +62,8 @@ const SongContextProvider: React.FC = props => {
     //This is just a temporary solution to show how it can be done
     //Each instrument will have their own bars when we get to that point
     let [song, setSong] = useState<ISong>({
-        title: "Lisa gikk til skolen",
-        id: 7,
+        title: "",
+        id: 0,
         voices: [
             {
                 partNumber: 1,
@@ -73,29 +73,9 @@ const SongContextProvider: React.FC = props => {
                         repBefore: false,
                         repAfter: false,
                         chordsAndNotes: [
-                            {
-                                length: 4,
-                                notes: ["C"]
-                            }
-
                         ]
                     }
                 ]
-            },
-            {
-                partNumber: 2,
-                title: "Gitar",
-                bars: [{
-                    repBefore: false,
-                    repAfter: false,
-                    chordsAndNotes: [
-                        {
-                            length: 4,
-                            notes: ["C"]
-                        }
-
-                    ]
-                }]
             },
         ],
         timeSignature: "4/4"
