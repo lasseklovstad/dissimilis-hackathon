@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import React, { useEffect, useContext } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
-=======
 import React, { useEffect, useContext, createRef } from 'react';
-import { useHistory } from 'react-router-dom';
->>>>>>> 31380c6366c9105bfb10eb59f2a518cefd252825
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
 import { SongContext } from "./SongContextProvider.component";

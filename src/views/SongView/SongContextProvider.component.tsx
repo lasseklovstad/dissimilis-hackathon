@@ -98,11 +98,8 @@ const SongContextProvider: React.FC = props => {
                 }]
             },
         ],
-<<<<<<< HEAD
         timeSignature: "4/4"
 
-=======
->>>>>>> 31380c6366c9105bfb10eb59f2a518cefd252825
     });
 
     const match = useRouteMatch<MatchParams>("/song/:id")

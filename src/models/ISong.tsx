@@ -4,10 +4,10 @@ export interface ISong {
     title: string;
     id?: number;
     //arranger: User;
+    voices: IVoice[]
     arrangerId?: number;
     composer?: string;
     timeSignature?: string;
-    voices: IVoice[]
 }
 
 

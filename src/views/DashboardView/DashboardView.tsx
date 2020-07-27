@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
-import { DashboardButtonWithAddIcon, DashboardButton, DashboardLibraryButton } from '../../components/DashboardButtons/DashboardButtons';
+import { DashboardButton, DashboardLibraryButton, DashboardButtonWithAddIconNoLink } from '../../components/DashboardButtons/DashboardButtons';
 import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBar'
 import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
-import { writeStorage } from '@rehooks/local-storage';
 import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
 import { ISong } from '../../models/ISong';
+import { CustomModal } from '../../components/CustomModal/CustomModal'
+import { useHistory } from 'react-router-dom';
+import { usePostSong } from '../../utils/usePostSong';
 
 export type DashboardViewProps = {
 
@@ -15,12 +17,17 @@ export type DashboardViewProps = {
 export const DashboardView: React.FC<DashboardViewProps> = () => {
   const { t } = useTranslation();
   const measureText = t("DashboardView:measure");
+  const [recentSongs, setRecentSongs] = useState<ISong[]>([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [timeSignature, setTimeSignature] = useState("");
+  const [textFieldInput, setTextFieldInput] = useState<string>("");
+  const postSong = usePostSong(textFieldInput, timeSignature);
+  const history = useHistory();
   const [dashboardView, setDashboardView] = useState(true);
   const [searchTerm, setSearchTerm] = useState("")
   const [filteredSongs, setFilteredSongs] = useState<ISong[]>([]);
-  const [recentSongs, setRecentSongs] = useState<ISong[]>([]);
   const getRecentSongs = useGetRecentSongs();
-  const getFilteredSongs = useGetFilteredSongs();
+  const getFilteredSongs = useGetFilteredSongs(searchTerm);
 
   useEffect(() => {
     getRecentSongs().then(({ result }) => { setRecentSongs(result?.data || []) });
@@ -32,35 +39,53 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
 
 
 
-  const musicTacts = [
+  const musicTacts: musicTacts[] = [
     {
       id: 1,
-      text: "2/4-" + measureText,
-      link: "/song/1"
+      text: "2/4",
     },
     {
       id: 2,
-      text: "3/4-" + measureText,
-      link: "/song/1"
+      text: "3/4",
     },
     {
-      id: "3",
-      text: "4/4-" + measureText,
-      link: "/song/1"
+      id: 3,
+      text: "4/4",
     },
     {
       id: 4,
-      text: "6/8-" + measureText,
-      link: "/song/1"
+      text: "6/8",
     }
   ];
   const styles = useStyles()
   const marginBottom = 4;
 
-  const storeTimeSignatureToLocalStorage = (data: string) => {
-    const regex = /[0-9]+/g;
-    const newData = data.match(regex);
-    writeStorage("timeSignature", newData)
+  useEffect(() => {
+    getRecentSongs().then(({ result }) => setRecentSongs(result?.data || []))
+  }, [])
+
+
+  const handleAddSong = () => {
+    setModalIsOpen(false);
+    postSong().then(({ result }) => {
+      if (result?.status === 201) {
+        history.push("/song/" + result.data);
+      };
+    })
+  };
+
+  const handleOpen = (song: musicTacts) => {
+    setTimeSignature(song.text)
+    setModalIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalIsOpen(false);
+  };
+
+
+  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
+    setTextFieldInput(e.target.value);
   }
 
   const handleOnBlur = () => {
@@ -86,16 +111,16 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
         </Grid>
 
         {dashboardView ?
-          <>
+          <Box>
             <Grid item xs={12} sm={10} key="newSongContainer">
               <Box mb={marginBottom}>
                 <Box m={2}>
                   <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
                 </Box>
                 <Grid container spacing={3}>
-                  {musicTacts.map(songs => (
-                    <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                      <DashboardButtonWithAddIcon func={() => storeTimeSignatureToLocalStorage(songs.text)} text={songs.text} link={songs.link} />
+                  {musicTacts.map(song => (
+                    <Grid item xs={12} sm={4} lg={3} key={song.id}>
+                      <DashboardButtonWithAddIconNoLink func={() => handleOpen(song)} text={song.text + "-" + measureText} />
                     </Grid>
                   ))}
                 </Grid>
@@ -108,9 +133,9 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                   <Typography variant="h1">{t("DashboardView:recentSongLabel")}</Typography>
                 </Box>
                 <Grid container spacing={3}>
-                  {recentSongs?.map(songs => (
-                    <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                      <DashboardButton text={songs.title} link={"/song/" + songs.id!.toString()} />
+                  {recentSongs?.map(song => (
+                    <Grid item xs={12} sm={4} lg={3} key={song.id}>
+                      <DashboardButton text={song.title} link={"/song/" + song.id!.toString()} />
                     </Grid>
                   ))}
                   <Grid item xs={12} sm={4} lg={3} key="library">
@@ -119,8 +144,19 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                 </Grid>
               </Box>
             </Grid>
-          </>
+            <CustomModal handleOnCancelClick={() => handleClose}
+              handleOnSaveClick={() => handleAddSong}
+              handleClosed={() => handleClose}
+              handleOpen={() => handleOpen}
+              modalOpen={modalIsOpen}
+              saveText={t("CreateSongTab:save")}
+              cancelText={t("CreateSongTab:cancel")}
+              headerText={t("DashboardView:addSong")}
+              labelText={t("DashboardView:nameOfSong")}
+              handleChange={() => handleChange}
+              textFieldInput={textFieldInput} />
 
+          </Box>
           :
 
           <Grid item xs={12} sm={10} key="searchSongsContainer">
@@ -151,3 +187,10 @@ const useStyles = makeStyles({
     width: "100%"
   }
 })
+
+export type musicTacts = {
+  id: number,
+  text: string,
+}
+
+
