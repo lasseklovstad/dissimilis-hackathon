@@ -48,7 +48,7 @@ export const Bar: React.FC<BarProps> = props => {
                 <Grid item xs={12} style={{ height: props.height }} role="gridcell" >
                     <Grid container spacing={0} className={classes.fullHeight} role="grid" >
                         <Grid item xs={props.repBefore ? 1 : "auto"} role="gridcell" aria-label="repetition sign before the tone">
-                            <Box mt={"20px"}>
+                            <Box mt={((props.height || 120) - 56) / 2 + "px"}>
                                 <RepetitionSign size="small" display={props.repBefore} />
                             </Box>
                         </Grid>
@@ -56,7 +56,7 @@ export const Bar: React.FC<BarProps> = props => {
                             <BarBody voiceId={props.voiceId} barNumber={props.barNumber} height={props.height} chordsAndNotes={props.chordsAndNotes} />
                         </Grid>
                         <Grid item xs={1} style={{ borderRight: props.barLineAfter ? "6px double black" : "2px solid black" }} role="gridcell" aria-label="repetition sign after the tone" >
-                            <Box mt={"20px"}>
+                            <Box mt={((props.height || 120) - 56) / 2 + "px"}>
                                 <RepetitionSign size="small" display={props.repAfter} />
                             </Box>
                         </Grid>
