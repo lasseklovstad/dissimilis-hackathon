@@ -22,20 +22,22 @@ export const CustomModal: FC<CustomModalProps> = (props) => {
 
 
 
-    return (<Modal open={props.modalOpen} onClose={props.handleClosed()}>
-        <div className={classes.modal} style={modalStyle}>
-            <Grid container >
-                <Typography className={classes.title} variant="h2">{props.headerText}</Typography>
-                <Grid item xs={12} style={{ marginBottom: "16px" }}>
-                    <TextField variant="filled" onChange={props.handleChange()} label={props.labelText} style={{ width: "100%" }} />
+    return (
+        <Modal open={props.modalOpen} onClose={props.handleClosed()}>
+            <div className={classes.modal} style={modalStyle}>
+                <Grid container >
+                    <Typography className={classes.title} variant="h2">{props.headerText}</Typography>
+                    <Grid item xs={12} style={{ marginBottom: "16px" }}>
+                        <TextField variant="filled" onChange={props.handleChange()} label={props.labelText} style={{ width: "100%" }} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button className={classes.button} size="large" variant="contained" disabled={!props.textFieldInput} onClick={props.handleOnSaveClick()} >{props.saveText}</Button>
+                        <Button className={classes.button} size="large" variant="outlined" onClick={props.handleOnCancelClick()}>{props.cancelText}</Button>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                    <Button className={classes.button} size="large" variant="contained" disabled={!props.textFieldInput} onClick={props.handleOnSaveClick()} >{props.saveText}</Button>
-                    <Button className={classes.button} size="large" variant="outlined" onClick={props.handleOnCancelClick()}>{props.cancelText}</Button>
-                </Grid>
-            </Grid>
-        </div>
-    </Modal>)
+            </div>
+        </Modal>
+    )
 }
 
 
