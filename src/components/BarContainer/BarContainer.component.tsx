@@ -63,6 +63,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         return <></>
     } else {
         let centerDivSize: 10 | 11 | 12 = 11;
+        //checks if a bar has a house connected to it
         let barConst = voices[0].bars[props.barNumber].house !== undefined
         return (
             <Grid container role="grid" className={classes.fullHeight}>
@@ -87,7 +88,13 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                                     <MenuItem onClick={() => handleClose("duplicate")}>{t("BarContainer:duplicateBar")} </MenuItem>
                                     <MenuItem onClick={() => handleClose("toggleRepBefore")}>{voices[0].bars[props.barNumber].repBefore ? t("BarContainer:removeRepBefore") : t("BarContainer:addRepBefore")} </MenuItem>
                                     <MenuItem onClick={() => handleClose("toggleRepAfter")}>{voices[0].bars[props.barNumber].repAfter ? t("BarContainer:removeRepAfter") : t("BarContainer:addRepAfter")} </MenuItem>
-                                    <MenuItem onClick={() => handleClose(barConst ? "removeHouse" : "addHouse")}>{barConst ? t("BarContainer:removeHouse") : t("BarContainer:addHouse")} </MenuItem>
+                                    <MenuItem
+                                        disabled={props.barNumber === 0 && voices[0].bars.length === 1}
+                                        onClick={() => handleClose(barConst ? "removeHouse" : "addHouse")}>
+                                        {
+                                            barConst ? t("BarContainer:removeHouse") : t("BarContainer:addHouse")
+                                        }
+                                    </MenuItem>
                                 </Menu>
                             </Box>
                         </Grid>
@@ -97,7 +104,6 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
             </Grid>
         );
     }
-
 }
 
 const useStyles = makeStyles({
