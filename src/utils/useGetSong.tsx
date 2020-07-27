@@ -6,11 +6,10 @@ import { ISong } from "../models/ISong";
  * @param id songs id
  */
 export const useGetSong = (id: number) => {
-    const url = 'song';
-    const params = { 'songId': id.toString() };
+    const url = 'song/' + id;
     const apiKey = sessionStorage.getItem("apiKey") || "";
     const userId = sessionStorage.getItem("userId") || "";
     const headers = { 'X-API-Key': apiKey, 'X-User-ID': userId, };
-    const getSongs = useApiService<ISong>("get", url, { params, headers }).fetchData;
+    const getSongs = useApiService<ISong>("get", url, { headers }).fetchData;
     return getSongs;
 }
