@@ -4,21 +4,15 @@ import MenuButton from "../MenuButton/MenuButton";
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 
-
-
 export type NavBarCreateSongProps = {
     saveSongFunc: Function
 }
-
 
 export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
     const classes = useStyles();
     const matches = useMediaQuery("(max-width:600px)");
     const [changing, setChanging] = useState(false);
-
     const { song: { title }, changeTitle } = useContext(SongContext);
-
-
 
     const [newTitle, setNewTitle] = useState(title)
 
@@ -61,7 +55,6 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
                         <MenuButton />
                     </Grid>
                 </Grid>
-
             </AppBar>
         </Box>
     );
