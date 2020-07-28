@@ -15,17 +15,12 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
     const classes = useStyles();
     const matches = useMediaQuery("(max-width:600px)");
     const [changing, setChanging] = useState(false);
-
     const { song: { title }, changeTitle } = useContext(SongContext);
-
-
     const [newTitle, setNewTitle] = useState(title)
-
 
     const handleChange = (e: any) => {
         setNewTitle(e.target.value)
     }
-
 
     const pressDown = (e: any) => {
         if (e.keyCode === 13) {
@@ -48,7 +43,7 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
                     </Grid>
                     <Grid item xs={12} sm={10} className={classes.center}>
                         <Box onClick={() => setChanging(!changing)}>
-                            {changing ? <TextField error={newTitle === ""} onChange={(e) => handleChange(e)} inputProps={{ style: { fontSize: 24 } }} value={newTitle} className={classes.textField} autoFocus onKeyDown={(e) => pressDown(e)} ></TextField> : <Typography variant="h2">{title}</Typography>}
+                            {changing ? <TextField error={newTitle === ""} onBlur={() => { if (newTitle !== "") { changeTitle(newTitle) } }} onChange={(e) => handleChange(e)} inputProps={{ style: { fontSize: 24 } }} placeholder={title} value={newTitle} className={classes.textField} autoFocus onKeyDown={(e) => pressDown(e)} ></TextField> : <Typography variant="h2">{title}</Typography>}
                         </Box>
                     </Grid>
                     <Grid item xs={1} sm={1} className={classes.right} >
