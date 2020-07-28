@@ -3,6 +3,6 @@ export const menuButtonEn = {
     "change": "Modify bar",
     "transpose": "Transpose",
     "export": "Export",
-    "hide": "Hide numbering of bar",
+    "hide": "Hide bar numbers",
     "save": "Save"
 }

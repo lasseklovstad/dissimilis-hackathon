@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { makeStyles, IconButton, Menu, MenuItem } from "@material-ui/core";
+import { makeStyles, IconButton, Menu, MenuItem, Switch } from "@material-ui/core";
 import colors from "../../utils/colors";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useTranslation } from "react-i18next";
@@ -24,13 +24,14 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
 
     const handleClose = (method = "") => {
         setAnchorEl(null);
-        if (method === "export") {
-            history.push("/song/1/export");
-        }
-        else if (method === "save") {
-            putSong();
+        switch (method) {
+            case "export":
+                history.push("/song/1/export");
+            case "save":
+                putSong();
         }
     };
+
     const { t } = useTranslation();
 
     return (
