@@ -75,11 +75,7 @@ const SongContextProvider: React.FC = props => {
                 priority: 1,
                 bars: []
             },
-            {
-                title: "Gitar",
-                priority: 2,
-                bars: []
-            },
+
         ],
     });
 
@@ -244,10 +240,7 @@ const SongContextProvider: React.FC = props => {
     }
 
     const deleteNote = (voiceId: number, barId: number, newNote: IChordAndNotes[]) => {
-
-
         song = { ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newNote } : bar) } : voice) };
-
         setSong(song);
     }
 

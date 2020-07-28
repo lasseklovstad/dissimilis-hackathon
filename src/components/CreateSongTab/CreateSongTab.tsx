@@ -12,7 +12,6 @@ export type CreateSongTabProps = {
 
 }
 
-
 function getModalStyle() {
     const left = 50;
 
@@ -35,8 +34,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
 
     const history = useHistory();
 
-    const { song: { voices }, addVoice, changeVoiceTitle, } = useContext(SongContext);
-
+    const { song: { voices }, addVoice, changeVoiceTitle, song } = useContext(SongContext);
 
     const classes = useStyles();
 
@@ -54,6 +52,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
 
     const handleClose = () => {
         setModalIsOpen(false);
+        setRenameModalIsOpen(false);
     };
 
     const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
@@ -65,6 +64,8 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const queryString = require('query-string');
     const voiceString = queryString.parse(window.location.search);
     const selectedVoice = parseInt(voiceString.voice);
+    const [voiceToBeEdited, setVoiceToBeEdited] = useState<number>(1);
+
 
     const initialState = {
         mouseX: null,
@@ -83,21 +84,15 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
             mouseY: event.clientY - 4,
         });
     };
-    const handleRenameOpen = () => {
-        setModalIsOpen(true);
-    };
-    const handleRenameClose = () => {
-        setRenameModalIsOpen(false);
-    };
     const handleCloseMenu = (method?: string) => {
         if (method === "renameVoice") {
-            //changeVoiceTitle(selectedVoice, "Jonas");
             setRenameModalIsOpen(true)
         }
         setState(initialState);
     };
     const handleChangeVoiceTitle = () => {
-        changeVoiceTitle(selectedVoice, textFieldInput)
+        setRenameModalIsOpen(false);
+        changeVoiceTitle(voiceToBeEdited, textFieldInput)
     }
 
     return (
@@ -110,12 +105,12 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                     {voices.slice(1).map((voices: IVoice, index: number) => {
                         return (
-                            <Grid item key={index + 2}>
+                            <Grid item key={index}>
                                 <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => handleClick(e)} selected={selectedVoice === index + 2} text={voices.title} link={`/song/1?voice=${index + 2}`} />
                                 <Menu
                                     keepMounted
                                     open={state.mouseY !== null}
-                                    onClose={() => handleCloseMenu("")}
+                                    onClose={() => { handleCloseMenu("") }}
                                     anchorReference="anchorPosition"
                                     anchorPosition={
                                         state.mouseY !== null && state.mouseX !== null
@@ -123,7 +118,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                                             : undefined
                                     }
                                 >
-                                    <MenuItem onClick={() => handleCloseMenu("renameVoice")}>Endre navn</MenuItem>
+                                    <MenuItem onClick={() => { handleCloseMenu("renameVoice"); setVoiceToBeEdited(index + 1); console.log(index) }}>Endre navn</MenuItem>
                                 </Menu>
                             </Grid>
                         )
@@ -147,18 +142,35 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                 </div>
             </Modal>
-            <CustomModal handleOnCancelClick={() => handleCloseMenu}
+            <Modal open={renameModalIsOpen} onClose={handleClose}>
+                <div className={classes.modal} style={modalStyle}>
+                    <Grid container >
+                        <Typography className={classes.title} variant="h2">Endre navn på stemme</Typography>
+                        <Grid item xs={12} style={{ marginBottom: "16px" }}>
+                            <TextField variant="filled" onChange={handleChange} label="Navn" style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleChangeVoiceTitle} >Lagre</Button>
+                            <Button className={classes.button} size="large" variant="outlined" onClick={() => setRenameModalIsOpen(false)}>Avbryt</Button>
+                        </Grid>
+                    </Grid>
+                </div>
+            </Modal>
+
+            {/* CustomModal can be used instead */}
+
+            {/* <CustomModal handleOnCancelClick={() => handleClose}
                 handleOnSaveClick={() => handleChangeVoiceTitle}
-                handleClosed={() => handleRenameClose}
+                handleClosed={() => handleClose}
                 handleOpen={() => handleRenameOpen}
                 modalOpen={renameModalIsOpen}
-                saveText={"endre navn"}
-                cancelText={"avbryt"}
-                headerText={"endre navn"}
+                saveText={"Lagre"}
+                cancelText={"Avbryt"}
+                headerText={"Endre navn"}
                 labelText={t("DashboardView:nameOfSong")}
                 handleChange={() => handleChange}
                 textFieldInput={textFieldInput} />
-
+ */}
             <Grid item xs={"auto"} sm={1}></Grid>
         </Grid>
     );
