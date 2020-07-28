@@ -7,7 +7,7 @@ export interface ISong {
     voices: IVoice[]
     arrangerId?: number;
     composer?: string;
-    timeSignature?: string;
+    timeSignature: string;
 }
 
 

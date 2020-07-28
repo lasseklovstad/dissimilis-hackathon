@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { makeStyles, Box, Typography } from '@material-ui/core';
 import useLocalStorage from '@rehooks/local-storage';
 import colors from '../../utils/colors';
 import { useHistory } from 'react-router-dom';
+import { SongContext } from '../../views/SongView/SongContextProvider.component';
 
 
 export type TimeSignatureProps = {
@@ -10,26 +11,15 @@ export type TimeSignatureProps = {
 }
 export const TimeSignature: FC<TimeSignatureProps> = (props) => {
   const history = useHistory();
-
+  const {song} = useContext(SongContext);
   /*
     Litt ekkel kode, men denne komponenten skal slettes senere så det får gå
   */
 
-  const timeSignature = useLocalStorage('timeSignature')[0];
-  let timeSignatureNumerator: string | null = null;
-  let timeSignatureDenominator: string | null = null;
-  if (timeSignature === undefined) {
-    history.push({ pathname: "/dashboard" })
-
-  } else {
-    if (timeSignature !== null) {
-      timeSignatureNumerator = timeSignature[0];
-      timeSignatureDenominator = timeSignature[1];
-    }
-
-
-
-  }
+  const timeSignatureString = song.timeSignature;
+  const timeSignatureNumerator = timeSignatureString.split("/")[0];
+  const timeSignatureDenominator = timeSignatureString.split("/")[1];
+  
   const style = useStyles();
   return (
     <Box className={style.TimeSignatureContainer} style={{ height: !props.height ? "200px" : (props.height + 80) + "px" }}>

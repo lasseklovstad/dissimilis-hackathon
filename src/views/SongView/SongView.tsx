@@ -38,13 +38,6 @@ export const SongView: React.FC<SongViewProps> = props => {
   }
 
   useEffect(() => {
-    const item = localStorage.getItem("timeSignature");
-    if (item !== '["2","4"]' && item !== '["3","4"]' && item !== '["4","4"]' && item !== '["6","8"]') {
-      history.push({ pathname: "/dashboard" })
-    }
-  }, [history]);
-
-  useEffect(() => {
     window.scrollTo(0, document.body.scrollHeight);
   }, [voices])
 

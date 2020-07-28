@@ -31,8 +31,8 @@ interface ISongContext {
 export const SongContext = React.createContext<ISongContext>({
     song: {
         title: "",
+        timeSignature: "4/4",
         voices: [],
-        timeSignature: "4/4"
     },
     setSong: (song: ISong) => { },
     addVoice: (voice: IVoice) => { },
@@ -64,6 +64,7 @@ const SongContextProvider: React.FC = props => {
     let [song, setSong] = useState<ISong>({
         title: "",
         id: 0,
+        timeSignature: "",
         voices: [
             {
                 partNumber: 1,
@@ -72,8 +73,6 @@ const SongContextProvider: React.FC = props => {
                 ]
             },
         ],
-        timeSignature: ""
-
     });
 
     const match = useRouteMatch<MatchParams>("/song/:id")
@@ -167,15 +166,8 @@ const SongContextProvider: React.FC = props => {
     }
 
     //Method to get timeSignature from localstorage
-    const timeSignature = useLocalStorage('timeSignature')[0];
     const getTimeSignature = () => {
-        let timeSignatureNumerator: string = "";
-        let timeSignatureDenominator: string = "";
-        if (timeSignature !== null) {
-            timeSignatureNumerator = timeSignature[0];
-            timeSignatureDenominator = timeSignature[1];
-        }
-        return [parseInt(timeSignatureNumerator), parseInt(timeSignatureDenominator)];
+        return [parseInt(song.timeSignature.split("/")[0]), parseInt(song.timeSignature.split("/")[1])];
     }
 
     //Method to add an empty bar at a specific index to each of all voices except the master sheet/song
