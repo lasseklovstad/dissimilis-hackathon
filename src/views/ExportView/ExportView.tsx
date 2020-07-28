@@ -1,9 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Box, makeStyles, Typography, Grid, Slider, Button, BottomNavigation } from "@material-ui/core";
+import { Box, makeStyles, Typography, Grid, Slider, Button, BottomNavigation, FormControl, Select, MenuItem, useMediaQuery } from "@material-ui/core";
 import { SongContext } from "../SongView/SongContextProvider.component";
 import colors from "../../utils/colors";
 import BarContainer from "../../components/BarContainer/BarContainer.component";
-import { IBar } from "../../models/IBar";
 import { useHistory } from "react-router-dom";
 import BarNumber, { TimeSignature } from "../../components/SongViewComponents/SongView.component";
 
@@ -12,14 +11,10 @@ export type ExportViewProps = {
 }
 
 export const ExportView: React.FC<ExportViewProps> = props => {
-    //Oppklaring:
-    //Bør man ha mulighet til å overskride A4 / eller få beskjed når dette går
-
-
     //TODO
     // Legge til automatisk oppsett slik at man automatisk får det "beste" oppsettet. 
     //  Altså har du 4 takter, så vil det automatisk være 2 rader med 2 takter på hver?
-    //Se på når det er flere stemmer. AKk nå vil boksen bli lengre og lengre
+    //RepBefore /After fungerer ikke på de på ny side. 
 
 
     const { song: { title, voices } } = useContext(SongContext);
@@ -31,6 +26,7 @@ export const ExportView: React.FC<ExportViewProps> = props => {
     const [rowsPerSheet, setRowsPerSheet] = useState<number>(4);
     const [lengthOfEachBar, setlengthOfEachBar] = useState<1 | 2 | 3 | 4 | 6 | 12>(3);
     const [amountOfPages, setAmountOfPages] = useState<number>(1);
+    const [dropDownMenuSelected, setDropDownMenuSelected] = useState<number>(0);
 
 
     const queryString = require('query-string');
@@ -121,8 +117,8 @@ export const ExportView: React.FC<ExportViewProps> = props => {
         return false;
     }
 
-    const isBarLineAfter = (index: number) => {
-        if (index === voices[selectedVoice].bars.length - 1) return true;
+    const isBarLineAfter = (page: number, index: number) => {
+        if (page + 1 === amountOfPages && index === voices[selectedVoice].bars.length - 1) return true;
         return false;
     }
 
@@ -163,7 +159,12 @@ export const ExportView: React.FC<ExportViewProps> = props => {
         const heightOfDiv = totalRowsUsed * calculateHeightOfBar()
 
         const amountOfPages1 = Math.ceil(heightOfDiv / 770);
-        setAmountOfPages(amountOfPages1);
+        if (amountOfPages1 === 0) {
+            setAmountOfPages(1);
+        } else {
+            setAmountOfPages(amountOfPages1);
+
+        }
 
 
 
@@ -172,33 +173,31 @@ export const ExportView: React.FC<ExportViewProps> = props => {
 
     useEffect(() => {
         calculatePage();
-
     }, [rowsPerSheet, lengthOfEachBar])
 
 
+    const handleChange = (event: any) => {
+        setDropDownMenuSelected(event.target.value);
+    }
 
-
-
+    const matches = useMediaQuery("(min-width:960px)");
 
     return (
         <>
-            {Array.from(Array(amountOfPages), (e, i) => {
-                //Beregn antall per side
+            {Array.from(Array(amountOfPages), (e, pageIndex) => {
                 return (
                     <Box className={classes.root + " page"}>
                         <Grid container >
                             <Grid item xs={12}>
-                                <Typography style={{ textAlign: "center" }} variant="h1">{title + " " + (i + 1) + "/" + amountOfPages}</Typography>
+                                <Typography style={{ textAlign: "center" }} variant="h1">{title + " " + (pageIndex + 1) + "/" + amountOfPages}</Typography>
                             </Grid>
                             <Grid item xs={1}>
                                 {voices[selectedVoice].bars.map((bar, index) => {
-                                    console.log(index);
                                     const amountOfBarsPerRow = convertFromLengthOfBarToAmountOfBarsPerRow();
-                                    const indexToBeDisplayed = (index + 1) + (amountOfBarsPerRow * rowsPerSheet * i);
-                                    //(index + (amountOfBarsPerRow * rowsPerSheet * i)) < (rowsPerSheet * amountOfBarsPerRow) * (i + 1)
-                                    if (indexToBeDisplayed <= (i + 1) * amountOfBarsPerRow * rowsPerSheet) {
+                                    const indexToBeDisplayed = (index + 1) + (amountOfBarsPerRow * rowsPerSheet * pageIndex);
+                                    if (indexToBeDisplayed <= (pageIndex + 1) * amountOfBarsPerRow * rowsPerSheet) {
                                         if (indexToBeDisplayed <= voices[selectedVoice].bars.length) {
-                                            if (i === 0 && index === 0) {
+                                            if (pageIndex === 0 && index === 0) {
                                                 return (<TimeSignature height={calculateHeightOfBar()} />)
                                             } else if (index % amountOfBarsPerRow === 0) {
                                                 return (<BarNumber height={calculateHeightOfBar()} key={index} barNumber={indexToBeDisplayed} />)
@@ -206,7 +205,9 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                                                 return (<></>)
                                             }
                                         }
+                                        return (<></>)
                                     }
+                                    return <></>
                                 })}
                             </Grid>
 
@@ -216,11 +217,15 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                                         <></>
                                         :
                                         <>
-                                            {voices[selectedVoice].bars.slice(i * (rowsPerSheet * convertFromLengthOfBarToAmountOfBarsPerRow()), (i + 1) * rowsPerSheet * convertFromLengthOfBarToAmountOfBarsPerRow()).map((bar, i) => {
+                                            {voices[selectedVoice].bars.slice(pageIndex * (rowsPerSheet * convertFromLengthOfBarToAmountOfBarsPerRow()), (pageIndex + 1) * rowsPerSheet * convertFromLengthOfBarToAmountOfBarsPerRow()).map((bar, i) => {
                                                 return (
                                                     <>
                                                         <Grid item xs={lengthOfEachBar}  >
-                                                            <BarContainer height={calculateHeightOfBar()} voiceId={selectedVoice} barNumber={i} masterSheet={false} barLineAfter={isBarLineAfter(i)} barLineBefore={isBarLineBefore(i)} bar={bar} />
+                                                            {//Need to clarify if barID is stored in each bar? or priority
+                                                                //If that is the case we must use bar.barNumber or something here. That would do thing much easier :))
+
+                                                            }
+                                                            < BarContainer exportMode height={calculateHeightOfBar()} voiceId={selectedVoice} barNumber={i} masterSheet={false} barLineAfter={isBarLineAfter(pageIndex, i)} barLineBefore={isBarLineBefore(i)} bar={bar} />
                                                         </Grid>
                                                     </>
 
@@ -236,28 +241,51 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                     </Box>
                 )
             })}
-
-
             <BottomNavigation className={classes.stickToBottom + " no-print"}>
-                <Box mx={"24px"} mt={"24px"} style={{ display: "flex", width: "100%", height: "100%" }}>
-                    <Box style={{ height: "100%", display: "flex" }}>
-                        {voices.map((voice, i) => {
-                            return <Button onClick={() => history.replace("/song/1/export?voice=" + (i + 1))} style={{ backgroundColor: selectedVoice === i ? colors.gray_400 : "white" }} className={classes.button} variant="outlined">{voice.title}</Button>
-                        })}
-                    </Box>
+                <Grid container style={{ width: "90%", margin: "auto" }} justify="center" >
+                    <Grid item xs={5} md={2} className={classes.box} style={{ padding: "8px", order: 1, marginRight: matches ? "0px" : "8px", marginBottom: matches ? "0px" : "12px" }}  >
+                        {voices.length > 3 ?
+                            (
 
-                    <Box style={{ flex: 2, marginLeft: "8px", marginRight: "8px" }}>
+                                <FormControl className={classes.formControl}>
+                                    <Select value={dropDownMenuSelected} onChange={(e) => handleChange(e)} >
+                                        {voices.map((voice, i) => {
+                                            return <MenuItem onClick={() => history.replace("/song/1/export?voice=" + (i + 1))} key={i} value={i}>{voice.title}</MenuItem>
+                                        })}
+                                    </Select>
+                                </FormControl>
+                            ) :
+                            (
+                                <Box style={{ padding: "8px" }}>
+                                    {voices.map((voice, i) => {
+                                        return <Button onClick={() => history.replace("/song/1/export?voice=" + (i + 1))} style={{ backgroundColor: selectedVoice === i ? colors.gray_400 : "white" }} className={classes.button} variant="outlined">{voice.title}</Button>
+
+                                    })}
+                                </Box>
+
+                            )}
+                    </Grid>
+                    <Grid item xs={"auto"} md={1} style={{ order: 2 }}>
+
+                    </Grid>
+                    <Grid item xs={5} md={3} className={classes.slider} style={{ order: matches ? 3 : 3, marginRight: matches ? "0px" : "8px" }}>
                         <Typography variant="body1">Takt per rad</Typography>
                         <Slider onChange={(event, value) => changeAmount(value)} defaultValue={4} step={null} marks={marks} min={1} max={6} valueLabelDisplay="auto" />
-                    </Box>
-                    <Box style={{ flex: 2 }}>
+                    </Grid>
+                    <Grid item xs={5} md={3} className={classes.slider} style={{ marginRight: matches ? "0px" : "0px", order: matches ? 4 : 4 }}>
                         <Typography variant="body1">Rader per ark</Typography>
                         <Slider onChange={(event, value) => changeRowsPerSheet(value)} defaultValue={4} step={1} marks min={1} max={5} valueLabelDisplay="auto" />
-                    </Box>
-                    <Button onClick={() => window.print()} style={{ marginLeft: "12px", backgroundColor: colors.gray_400, height: "100%" }}>Lag PDF</Button>
-                    <Button onClick={() => history.push("/song/1/")}> {"Avbryt"}</Button>
-                </Box>
-            </BottomNavigation>
+                    </Grid>
+                    <Grid item xs={"auto"} md={1} style={{ order: 5 }}>
+
+                    </Grid>
+                    <Grid item xs={5} md={2} style={{ backgroundColor: "transparent", order: matches ? 5 : 2, marginBottom: matches ? "0px" : "12px" }} >
+                        <Button className={classes.confirmOrCancelButtons} onClick={() => window.print()} style={{ backgroundColor: colors.gray_400 }}>Lag PDF</Button>
+                        <Button className={classes.confirmOrCancelButtons} onClick={() => history.push("/song/1/")}> {"Avbryt"}</Button>
+                    </Grid>
+                </Grid>
+            </BottomNavigation >
+
 
         </ >
 
@@ -275,6 +303,15 @@ const useStyles = makeStyles({
             border: "none"
         }
     },
+    box: {
+        backgroundColor: "white",
+        boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
+
+    },
+    formControl: {
+        width: "90%",
+        marginBottom: "8px",
+    },
     button: {
         backgroundColor: colors.gray_100,
         marginRight: "4px",
@@ -282,16 +319,38 @@ const useStyles = makeStyles({
         borderRadius: "4px",
         border: "1px solid #E0E0E0",
         height: "100%",
-        flex: 1,
     },
+
     slider: {
-        border: "1px solid black",
+        padding: "8px",
+        backgroundColor: "white",
+        boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
+
     },
     stickToBottom: {
         width: '100%',
         position: 'fixed',
+        height: "auto",
+        paddingTop: "24px",
+        paddingBottom: "24px",
         bottom: 0,
-        marginBottom: "60px",
+        borderTop: "1px solid " + colors.gray_300,
+        backgroundColor: colors.gray_100,
+
+
+
+    },
+    confirmOrCancelButtons: {
+        backgroundColor: " ",
+        height: "100%",
+        boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
+        '@media (max-width: 960px)': {
+
+
+        }
+
+
+
     },
 })
 

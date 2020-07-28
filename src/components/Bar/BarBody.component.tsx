@@ -12,6 +12,7 @@ export type BarBodyProps = {
     chordsAndNotes: IChordAndNotes[],
     height?: number,
     voiceId: number,
+    exportMode?: boolean,
 }
 
 
@@ -201,7 +202,8 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                             onMouseEnter={() => { if (showPossiblePositions) { setPositionArray(selectPositionArray(props.voiceId, props.barNumber, i)); } }}
                                             onMouseLeave={() => { if (showPossiblePositions) { setPositionArray([]) } }}
                                             style={{ cursor: 'context-menu', backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), outlineColor: "black", boxShadow: emptySpace(i) ? (positionArray.includes(i) ? "none" : "0 0 5px black") : "none" }}
-                                            component={ButtonBase}
+                                            component={!props.exportMode ? ButtonBase : undefined}
+                                            tabIndex={!props.exportMode ? 1 : -1}
                                             onClick={() => {
                                                 if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
                                                     insertNewNoteOrChord(i, props.barNumber, props.voiceId)
@@ -211,19 +213,23 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                         >
                                             <Typography className={classes.tangentText} >{number === 0 ? "" : number}</Typography>
                                         </Box>
-                                        <Menu
-                                            keepMounted
-                                            open={state.mouseY !== null}
-                                            onClose={() => handleClose("")}
-                                            anchorReference="anchorPosition"
-                                            anchorPosition={
-                                                state.mouseY !== null && state.mouseX !== null
-                                                    ? { top: state.mouseY, left: state.mouseX }
-                                                    : undefined
-                                            }
-                                        >
-                                            <MenuItem onClick={() => handleClose("delete")}>Slett</MenuItem>
-                                        </Menu>
+                                        {!props.exportMode ?
+                                            (
+                                                <Menu
+                                                    keepMounted
+                                                    open={state.mouseY !== null}
+                                                    onClose={() => handleClose("")}
+                                                    anchorReference="anchorPosition"
+                                                    anchorPosition={
+                                                        state.mouseY !== null && state.mouseX !== null
+                                                            ? { top: state.mouseY, left: state.mouseX }
+                                                            : undefined
+                                                    }
+                                                >
+                                                    <MenuItem tabIndex={-1} onClick={() => handleClose("delete")}>Slett</MenuItem>
+                                                </Menu>
+                                            ) : <></>}
+
                                     </>
                                 )
                             })}

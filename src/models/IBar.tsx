@@ -4,6 +4,7 @@ export interface IChordAndNotes {
 }
 
 export interface IBar {
+    barNumber?: number,
     house?: number | undefined,
     repBefore: boolean,
     repAfter: boolean,

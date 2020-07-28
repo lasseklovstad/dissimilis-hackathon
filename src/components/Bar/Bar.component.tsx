@@ -14,7 +14,8 @@ export type BarProps = {
     chordsAndNotes: IChordAndNotes[],
     barLineAfter?: boolean,
     height?: number,
-    voiceId: number
+    voiceId: number,
+    exportMode?: boolean,
 }
 
 
@@ -53,7 +54,7 @@ export const Bar: React.FC<BarProps> = props => {
                             </Box>
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label={"Bar"}>
-                            <BarBody voiceId={props.voiceId} barNumber={props.barNumber} height={props.height} chordsAndNotes={props.chordsAndNotes} />
+                            <BarBody exportMode={props.exportMode} voiceId={props.voiceId} barNumber={props.barNumber} height={props.height} chordsAndNotes={props.chordsAndNotes} />
                         </Grid>
                         <Grid item xs={1} style={{ borderRight: props.barLineAfter ? "6px double black" : "2px solid black" }} role="gridcell" aria-label="repetition sign after the tone" >
                             <Box mt={((props.height || 120) - 56) / 2 + "px"}>

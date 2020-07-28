@@ -68,152 +68,16 @@ const SongContextProvider: React.FC = props => {
         title: "Lisa gikk til skolen",
         voices: [
             {
-                title: "master",
+                title: "Master",
                 priority: 1,
                 bars: [
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 8,
-                                notes: ["G"]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 4,
-                                notes: ["A"]
-                            },
-                            {
-                                length: 4,
-                                notes: ["C", "A", "G"]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 8,
-                                notes: ["G"]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 4,
-                                notes: ["H"]
-                            },
-                            {
-                                length: 4,
-                                notes: ["A", "H", "G"]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 2,
-                                notes: ["A"]
-                            },
-                            {
-                                length: 2,
-                                notes: ["C", "A", "G"]
-                            },
-                            {
-                                length: 4,
-                                notes: ["C#"]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 4,
-                                notes: ["H"]
-                            },
-                            {
-                                length: 4,
-                                notes: ["A", "H", "G"]
-                            }
-                        ],
-                    },
-
                 ]
             },
             {
                 title: "Gitar",
                 priority: 2,
-                bars: [
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 4,
-                                notes: ["H"]
-                            },
-                            {
-                                length: 4,
-                                notes: ["A", "H", "G"]
-                            }
-                        ],
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: []
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: []
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                            {
-                                length: 4,
-                                notes: ["G", "A", "H"]
-                            },
-                            {
-                                length: 4,
-                                notes: ["F"]
-                            }
-                        ]
-                    },
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: []
-                    },
-                    {
-                        repAfter: false,
-                        repBefore: false,
-                        chordsAndNotes: [
-                            {
-                                length: 8,
-                                notes: ["G", "H", "A"]
-                            }
-                        ]
-                    }
-
-                ]
-            },
+                bars: []
+            }
 
         ],
 

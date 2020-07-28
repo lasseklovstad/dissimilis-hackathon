@@ -14,12 +14,21 @@ code {
 .page {
   width: 21cm;
   min-height: 29.7cm;
-  padding: 2cm;
-  margin: 1cm auto;
+  padding-top: 2cm;
+  padding-left: 1cm;
+  padding-right: 1cm ;
+  padding-bottom: 2cm;
+  margin: 1cm auto 4cm;
   border: 1px #D3D3D3 solid;
   border-radius: 5px;
   background: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+
+}
+@media only screen and (max-width: 960px) {
+  .page {
+    margin: 1cm auto 6cm;
+  }
 }
 .subpage {
   padding: 1cm;

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, createRef } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
