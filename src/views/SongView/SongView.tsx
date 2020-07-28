@@ -8,6 +8,7 @@ import { TimeSignature, BarNumber } from '../../components/SongViewComponents/So
 import { BarContainer } from "../../components/BarContainer/BarContainer.component";
 import BottomBar from '../../components/BottomBar/BottomBar.component';
 import { usePutSong } from '../../utils/usePutSong';
+import useUnload from '../../utils/useUnload';
 
 
 export type SongViewProps = {
@@ -44,6 +45,16 @@ export const SongView: React.FC<SongViewProps> = props => {
     }
   }, [history]);
 
+  useUnload();
+
+  useEffect(() => {
+    return () => {
+      saveSong()
+      console.log("Saving")
+    };
+  }, [song]);
+
+
   useEffect(() => {
     window.scrollTo(0, document.body.scrollHeight);
   }, [voices])
@@ -61,11 +72,15 @@ export const SongView: React.FC<SongViewProps> = props => {
     putSong()
   }
 
+  const saveSong1 = () => {
+    //putSong()
+  }
+
   return (
     <>
       <Grid container className={classes.root} >
         <Grid item xs={12} >
-          <NavBarCreateSong saveSongFunc={saveSong} />
+          <NavBarCreateSong saveSongFunc={saveSong1} />
         </Grid>
         <Grid item xs={12}>
           <CreateSongTab />
