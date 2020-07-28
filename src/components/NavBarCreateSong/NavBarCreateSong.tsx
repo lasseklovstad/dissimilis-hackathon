@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { makeStyles, Grid, Typography, AppBar, Box, useMediaQuery, TextField } from "@material-ui/core";
 import MenuButton from "../MenuButton/MenuButton";
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons";
@@ -13,9 +13,14 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
     const matches = useMediaQuery("(max-width:600px)");
     const [changing, setChanging] = useState(false);
     const { song: { title }, changeTitle } = useContext(SongContext);
+
     const [newTitle, setNewTitle] = useState(title)
 
-    const handleChange = (e: any) => {
+    useEffect(() => {
+        setNewTitle(title);
+    }, [title])
+
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setNewTitle(e.target.value)
     }
 
@@ -27,6 +32,9 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
             setChanging(!changing);
         }
         if (e.keyCode === 27) {
+            if (newTitle !== "") {
+                changeTitle(e.target.value);
+            }
             setChanging(false)
         }
     }
@@ -40,7 +48,7 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
                     </Grid>
                     <Grid item xs={12} sm={10} className={classes.center}>
                         <Box onClick={() => setChanging(!changing)}>
-                            {changing ? <TextField error={newTitle === ""} onBlur={() => { if (newTitle !== "") { changeTitle(newTitle) } }} onChange={(e) => handleChange(e)} inputProps={{ style: { fontSize: 24 } }} placeholder={title} value={newTitle} className={classes.textField} autoFocus onKeyDown={(e) => pressDown(e)} ></TextField> : <Typography variant="h2">{title}</Typography>}
+                            {changing ? <TextField error={newTitle === ""} onChange={(e) => handleChange(e)} value={newTitle} inputProps={{ style: { fontSize: 24 } }} className={classes.textField} autoFocus onKeyDown={(e) => pressDown(e)} ></TextField> : <Typography variant="h2">{title}</Typography>}
                         </Box>
                     </Grid>
                     <Grid item xs={1} sm={1} className={classes.right} >
