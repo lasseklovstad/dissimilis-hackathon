@@ -11,21 +11,23 @@ describe('BottomBar', () => {
         expect(addToneButton[0]).toBeEnabled();
 
     });
+
     it('Add Bar button should be showing on login page', function () {
         render(<BrowserRouter> <BottomBar /> </BrowserRouter>);
         const addBarButton = screen.getAllByRole("button", { name: /BottomBar:addBar/i })
         expect(addBarButton[0]).toBeEnabled();
     });
- /*    it('Note and Chord should be exclusively toggled', function () {
+
+    it('Note and Chord should be exclusively toggled', function () {
         render(<BrowserRouter><BottomBar /></BrowserRouter>);
         const toggleChordButton = screen.getByRole("button", { name: /BottomBar:chord/i });
         toggleChordButton.click();
-
+       
         const noteButton = screen.getByRole("button", { name: /BottomBar:note/i });
-        expect(noteButton).toHaveProperty(value = "false")
+        expect(document.activeElement === noteButton).toBeTruthy();
 
 
-    }); */
+    });
 
 
 })
