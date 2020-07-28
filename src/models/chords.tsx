@@ -1,4 +1,4 @@
-import { ChordType, Chord } from '@tonaljs/tonal'
+import { Chord } from '@tonaljs/tonal'
 import { allNotes as noteArray } from './notes'
 
 const chordNames = [

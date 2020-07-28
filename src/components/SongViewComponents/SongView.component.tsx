@@ -1,8 +1,6 @@
 import React, { FC, useContext } from 'react';
 import { makeStyles, Box, Typography } from '@material-ui/core';
-import useLocalStorage from '@rehooks/local-storage';
 import colors from '../../utils/colors';
-import { useHistory } from 'react-router-dom';
 import { SongContext } from '../../views/SongView/SongContextProvider.component';
 
 
@@ -10,12 +8,7 @@ export type TimeSignatureProps = {
   height?: number,
 }
 export const TimeSignature: FC<TimeSignatureProps> = (props) => {
-  const history = useHistory();
   const {song} = useContext(SongContext);
-  /*
-    Litt ekkel kode, men denne komponenten skal slettes senere så det får gå
-  */
-
   const timeSignatureString = song.timeSignature;
   const timeSignatureNumerator = timeSignatureString.split("/")[0];
   const timeSignatureDenominator = timeSignatureString.split("/")[1];

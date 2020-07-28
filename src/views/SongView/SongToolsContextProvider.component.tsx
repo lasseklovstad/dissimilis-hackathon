@@ -3,7 +3,6 @@ import { SongContext } from './SongContextProvider.component';
 import { IChordAndNotes } from '../../models/IBar';
 import { visibleNotes as notes } from '../../models/notes';
 import { chords } from '../../models/chords';
-import { Chord } from '@tonaljs/tonal';
 
 
 interface ISongToolsContext {
@@ -29,7 +28,7 @@ export const SongToolsContext = React.createContext<ISongToolsContext>({
     setSelectedNoteKey: (string: string) => { },
     showPossiblePositions: false,
     setShowPossiblePositions: (show: boolean) => { },
-    noteIsSelected: true,
+    noteIsSelected: false,
     setNoteIsSelected: (show: boolean) => { },
     availablePositions: [],
     setAvailablePositions: (number: number[][][][]) => { },
@@ -40,10 +39,9 @@ export const SongToolsContext = React.createContext<ISongToolsContext>({
 
 const SongToolsContextProvider: React.FC = props => {
     const { song, editNote } = useContext(SongContext);
-
     const [selectedNoteLength, setSelectedNoteLength] = useState<1 | 2 | 4 | 8>(1);
     const [selectedNoteKey, setSelectedNoteKey] = useState<string>("C");
-    const [noteIsSelected, setNoteIsSelected] = useState<boolean>(true);
+    const [noteIsSelected, setNoteIsSelected] = useState<boolean>(false);
     const [showPossiblePositions, setShowPossiblePositions] = useState<boolean>(false);
     const [availablePositions, setAvailablePositions] = useState<number[][][][]>([]);
 
