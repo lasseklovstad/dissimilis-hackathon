@@ -37,18 +37,6 @@ export const SongView: React.FC<SongViewProps> = props => {
     history.replace(`/song/${id}?voice=1`);
   }
 
-  useEffect(() => {
-    const item = localStorage.getItem("timeSignature");
-    if (item !== '["2","4"]' && item !== '["3","4"]' && item !== '["4","4"]' && item !== '["6","8"]') {
-      history.push({ pathname: "/dashboard" })
-    }
-  }, [history]);
-
-  useEffect(() => {
-    window.scrollTo(0, document.body.scrollHeight);
-  }, [voices])
-
-
   const isBarLineBefore = (index: number) => {
     return xl && index % 4 === 0 ? true : !xs && !xl && index % 2 === 0 ? true : xs ? true : false
   }

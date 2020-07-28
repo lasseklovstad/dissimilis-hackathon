@@ -43,7 +43,6 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
             </IconButton>
             <Menu id="menuBar" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={() => handleClose("")} role="menu">
                 <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:duplicate")}</MenuItem>
-                <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:change")}</MenuItem>
                 <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:transpose")}</MenuItem>
                 <MenuItem onClick={() => handleClose("export")}>{t("MenuButton:export")}</MenuItem>
                 <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:hide")}</MenuItem>
