@@ -19,6 +19,7 @@ type ButtonNoLinkProps = {
   text: string,
   func: Function,
   color?: string,
+  selected?: boolean,
 }
 
 type TopBarIconProps = {
@@ -54,14 +55,26 @@ export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (props) =
   );
 }
 
-
+export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
+  const styles = useStyles();
+  const history = useHistory();
+  return (
+    <Card className={styles.button}>
+      <CardActionArea onClick={() => props.func && props.func()} >
+        <Box className={styles.container} style={{ backgroundColor: props.selected === true ? colors.gray_400 : colors.white }}>
+          <Box p={2}><Typography>{props.text}</Typography></Box>
+        </Box>
+      </CardActionArea>
+    </Card>
+  );
+}
 
 export const DashboardButton: FC<ButtonProps> = (props) => {
   const styles = useStyles();
   const history = useHistory();
   return (
     <Card className={styles.button}>
-      <CardActionArea onClick={() => { history.replace(props.link) }}>
+      <CardActionArea to={props.link} component={Link}>
         <Box className={styles.container} style={{ backgroundColor: props.selected === true ? colors.gray_400 : colors.white }}>
           <Box p={2}><Typography>{props.text}</Typography></Box>
         </Box>
