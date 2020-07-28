@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles, IconButton, Menu, MenuItem } from "@material-ui/core";
 import colors from "../../utils/colors";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
+import { SongContext } from "../../views/SongView/SongContextProvider.component";
+import { usePutSong } from "../../utils/usePutSong";
 
 
 export type MenuButtonProps = {}
@@ -11,6 +13,8 @@ export type MenuButtonProps = {}
 export const MenuButton: React.FC<MenuButtonProps> = props => {
     const classes = useStyles();
     const history = useHistory();
+    const { song } = useContext(SongContext);
+    const putSong = usePutSong(song);
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -23,11 +27,11 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
         if (method === "export") {
             history.push("/song/1/export");
         }
+        else if (method === "save") {
+            putSong();
+        }
     };
-
     const { t } = useTranslation();
-
-
 
     return (
         <div>
@@ -35,6 +39,7 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
                 <MoreHorizIcon />
             </IconButton>
             <Menu id="menuBar" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={() => handleClose("")} role="menu">
+                <MenuItem onClick={() => handleClose("save")}>{t("MenuButton:save")}</MenuItem>
                 <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:duplicate")}</MenuItem>
                 <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:transpose")}</MenuItem>
                 <MenuItem onClick={() => handleClose("export")}>{t("MenuButton:export")}</MenuItem>
