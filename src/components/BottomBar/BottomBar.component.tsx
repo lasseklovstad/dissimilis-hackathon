@@ -54,6 +54,10 @@ const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) 
     }
 };
 
+const scrollToBottom = () => {
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
 return (
     <Grid container justify="center">
             <Grid item xs={12} sm={10} className={classes.outercontainer}>
@@ -75,7 +79,7 @@ return (
                 </div>
                 <div className={classes.container} >
                     <MenuButtonWithAddIcon selected={showPossiblePositions} text={t("BottomBar:addTone")} onClick={() => { if (!showPossiblePositions) { showAvailableSpace() }; setShowPossiblePositions(!showPossiblePositions) }} />
-                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => { setShowPossiblePositions(false); addEmptyBar(); }} />
+                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => { setShowPossiblePositions(false); addEmptyBar(); scrollToBottom(); }} />
                 </div>
             </Grid>
         </Grid>

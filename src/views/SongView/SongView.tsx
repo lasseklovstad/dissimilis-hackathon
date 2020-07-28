@@ -37,11 +37,6 @@ export const SongView: React.FC<SongViewProps> = props => {
     history.replace(`/song/${id}?voice=1`);
   }
 
-  useEffect(() => {
-    window.scrollTo(0, document.body.scrollHeight);
-  }, [voices])
-
-
   const isBarLineBefore = (index: number) => {
     return xl && index % 4 === 0 ? true : !xs && !xl && index % 2 === 0 ? true : xs ? true : false
   }

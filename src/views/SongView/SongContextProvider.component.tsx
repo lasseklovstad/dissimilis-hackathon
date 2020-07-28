@@ -195,7 +195,6 @@ const SongContextProvider: React.FC = props => {
             const tempArray = copyAndAddEmptyBars(indexOfOriginalBar, 1);
             //If master sheet add the new copy of bar to the array
             //Else add the copied bar-array with an empty bar
-
             song = { ...song, voices: song.voices.map((voice, i) => i === 0 ? { ...voice, bars: copyOfArray } : { ...voice, bars: tempArray[i - 1] }) };
             if (song.voices[0].bars[id].house === 1) {
                 deleteHouse(id)
@@ -210,7 +209,6 @@ const SongContextProvider: React.FC = props => {
     }
 
     const addEmptyBar = () => {
-
         const tempArray = copyAndAddEmptyBars(song.voices[0].bars.length, 0);
         song = { ...song, voices: song.voices.map((voice, i) => true ? { ...voice, bars: tempArray[i] } : voice) };
         setSong(song);
@@ -226,14 +224,9 @@ const SongContextProvider: React.FC = props => {
     }
 
     const deleteNote = (voiceId: number, barId: number, newNote: IChordAndNotes[]) => {
-
-
         song = { ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newNote } : bar) } : voice) };
-
         setSong(song);
     }
-
-
 
     //Add all methods here
     const value = {
@@ -264,6 +257,5 @@ const SongContextProvider: React.FC = props => {
 type MatchParams = {
     id: string
 }
-
 
 export default SongContextProvider;

@@ -4,7 +4,6 @@ import { IChordAndNotes } from '../../models/IBar';
 import { visibleNotes as notes } from '../../models/notes';
 import { chords } from '../../models/chords';
 
-
 interface ISongToolsContext {
     selectedNoteLength: 1 | 2 | 4 | 8,
     setSelectedNoteLength: (number: 1 | 2 | 4 | 8) => void,
@@ -58,7 +57,6 @@ const SongToolsContextProvider: React.FC = props => {
         }
         const newNote: IChordAndNotes = { length: selectedNoteLength, notes: newNoteArray }
 
-        //Have now the new note object, will make a copy of the new copy in which will replace the old bar
         const tempChordsAndNotes = [];
         for (let i = 0; i < song.voices[voiceIndex].bars[barIndex].chordsAndNotes.length; i++) {
             tempChordsAndNotes.push(song.voices[voiceIndex].bars[barIndex].chordsAndNotes[i]);
@@ -90,7 +88,6 @@ const SongToolsContextProvider: React.FC = props => {
     }
 
     const showAvailableSpace = () => {
-
         let returnArray = [] //This will return a list of noteIndexLists in which there is available space in the barIndex given. This again tells where it is space to the right, or left if length-index <= selectedKeyLength
         for (let voiceIndex = 0; voiceIndex < song.voices.length; voiceIndex++) {
             let voiceArray = [];
@@ -115,7 +112,6 @@ const SongToolsContextProvider: React.FC = props => {
                 voiceArray.push(barArray);
             }
             returnArray.push(voiceArray);
-
         }
         setAvailablePositions(returnArray);
     }
