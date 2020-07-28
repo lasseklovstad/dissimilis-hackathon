@@ -13,6 +13,7 @@ export type BarBodyProps = {
     height?: number,
     voiceId: number,
     exportMode?: boolean,
+    rowsPerSheet?: number,
 }
 
 
@@ -27,9 +28,10 @@ export function getChord(notes: string[]): string {
         return notes[0];
     } else {
         const result = Chord.detect(tempArray);
-        if (result.length === 0) return notes[0]
-        return result[0];
+        if (result.length === 0) return notes[0];
+        return result[0].replace(/M/g, '').replace(/B/g, 'H');
     }
+
 }
 
 export function tangentToNumber(tangent: string): number {
@@ -128,7 +130,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
             if (rightClicked >= 0) {
                 let tempChordsAndNotes: IChordAndNotes[] = voices[props.voiceId].bars[props.barNumber].chordsAndNotes.slice();;
 
-                const newNote: IChordAndNotes = { length: 1, notes: [""] };
+                const newNote: IChordAndNotes = { length: 1, notes: [" "] };
                 tempChordsAndNotes[rightClicked] = newNote;
                 for (let i = rightClicked; i < voices[props.voiceId].bars[props.barNumber].chordsAndNotes[rightClicked].length + rightClicked - 1; i++) {
                     tempChordsAndNotes.splice(i, 0, newNote);
@@ -173,7 +175,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
 
     const chordsInBar = tempArrayOfChords.map((item: any, i: any) => {
         return (
-            <Typography key={i} variant="body1" style={{ flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]) }} className={classes.toneText}>{item}</Typography>
+            <Typography key={i} variant="body1" style={{ flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]), overflow: "hidden", textOverflow: "ellipsis", paddingLeft: "4px" }} className={classes.toneText}>{item}</Typography>
         )
     })
 
@@ -192,7 +194,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
             {
                 props.chordsAndNotes.map((note, i) => {
                     return (
-                        <Box onContextMenu={() => setRightClicked(i)} key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px" }} flexDirection="column" >
+                        <Box onContextMenu={() => setRightClicked(i)} key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px", margin: props.chordsAndNotes.length === 8 ? props.rowsPerSheet === 6 ? "0px 1px" : "0px 4px" : "0px 4px" }} flexDirection="column"  >
                             {note.notes.map((type, index) => {
                                 const number = tangentToNumber(type);
                                 return (
@@ -201,9 +203,9 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                             key={index} className={classes.toneBox}
                                             onMouseEnter={() => { if (showPossiblePositions) { setPositionArray(selectPositionArray(props.voiceId, props.barNumber, i)); } }}
                                             onMouseLeave={() => { if (showPossiblePositions) { setPositionArray([]) } }}
-                                            style={{ cursor: 'context-menu', backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), outlineColor: "black", boxShadow: emptySpace(i) ? (positionArray.includes(i) ? "none" : "0 0 5px black") : "none" }}
-                                            component={!props.exportMode ? ButtonBase : undefined}
+                                            style={{ cursor: showPossiblePositions ? (!availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i))) ? 'context-menu' : "pointer" : "default", backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), outlineColor: "black", boxShadow: emptySpace(i) ? (positionArray.includes(i) ? "none" : "0 0 5px black") : "none" }}
                                             tabIndex={!props.exportMode ? 1 : -1}
+                                            component={ButtonBase}
                                             onClick={() => {
                                                 if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
                                                     insertNewNoteOrChord(i, props.barNumber, props.voiceId)
@@ -211,30 +213,32 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                             }}
                                             onContextMenu={handleClick}
                                         >
-                                            <Typography className={classes.tangentText} >{number === 0 ? "" : number}</Typography>
+                                            <Typography className={classes.tangentText} >{number === 0 ? " " : number}</Typography>
                                         </Box>
-                                        {!props.exportMode ?
-                                            (
-                                                <Menu
-                                                    keepMounted
-                                                    open={state.mouseY !== null}
-                                                    onClose={() => handleClose("")}
-                                                    anchorReference="anchorPosition"
-                                                    anchorPosition={
-                                                        state.mouseY !== null && state.mouseX !== null
-                                                            ? { top: state.mouseY, left: state.mouseX }
-                                                            : undefined
-                                                    }
-                                                >
-                                                    <MenuItem tabIndex={-1} onClick={() => handleClose("delete")}>Slett</MenuItem>
-                                                </Menu>
-                                            ) : <></>}
+                                        {
+                                            !props.exportMode ?
+                                                (
+                                                    <Menu
+                                                        keepMounted
+                                                        open={state.mouseY !== null}
+                                                        onClose={() => handleClose("")}
+                                                        anchorReference="anchorPosition"
+                                                        anchorPosition={
+                                                            state.mouseY !== null && state.mouseX !== null
+                                                                ? { top: state.mouseY, left: state.mouseX }
+                                                                : undefined
+                                                        }
+                                                    >
+                                                        <MenuItem tabIndex={-1} onClick={() => handleClose("delete")}>Slett</MenuItem>
+                                                    </Menu>
+                                                ) : <></>
+                                        }
 
                                     </>
                                 )
                             })}
 
-                        </Box>
+                        </Box >
                     )
                 })
             }
@@ -255,7 +259,6 @@ const useStyles = makeStyles({
         flex: 1,
         display: "flex",
         flexDirection: "column",
-        margin: "0px 4px",
     },
     toneBox: {
         flex: 2,

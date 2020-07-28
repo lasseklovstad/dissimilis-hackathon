@@ -11,16 +11,9 @@ export type ExportViewProps = {
 }
 
 export const ExportView: React.FC<ExportViewProps> = props => {
-    //TODO
-    // Legge til automatisk oppsett slik at man automatisk får det "beste" oppsettet. 
-    //  Altså har du 4 takter, så vil det automatisk være 2 rader med 2 takter på hver?
-    //RepBefore /After fungerer ikke på de på ny side. 
-
-
-    const { song: { title, voices } } = useContext(SongContext);
+    const { song: { title, voices, id } } = useContext(SongContext);
     const classes = useStyles();
     const history = useHistory();
-
 
 
     const [rowsPerSheet, setRowsPerSheet] = useState<number>(4);
@@ -36,15 +29,14 @@ export const ExportView: React.FC<ExportViewProps> = props => {
     if (voiceString.voice !== undefined) {
         const voiceInt = parseInt(voiceString.voice);
         if (voiceInt > voices.length || voiceInt <= 0) {
-            history.replace(`/song/${1}/export?voice=1`);
+            history.replace("./export?voice=1");
         } else {
             selectedVoice = voiceString.voice - 1;
         }
     } else {
-        history.replace(`/song/${1}/export?voice=1`);
+        history.replace("./export?voice=1");
     }
 
-    //Endre denne slik at alt skjer i slideren
     const changeAmount = (amount: number | number[]) => {
         if (amount === 1) {
             setlengthOfEachBar(12)
@@ -59,7 +51,6 @@ export const ExportView: React.FC<ExportViewProps> = props => {
         }
     }
 
-    //Used because slider returns a number | number[]
     const changeRowsPerSheet = (amount: number | number[]) => {
         if (amount === 1) {
             setRowsPerSheet(1)
@@ -118,7 +109,7 @@ export const ExportView: React.FC<ExportViewProps> = props => {
     }
 
     const isBarLineAfter = (page: number, index: number) => {
-        if (page + 1 === amountOfPages && index === voices[selectedVoice].bars.length - 1) return true;
+        if (index === voices[selectedVoice].bars.length) return true;
         return false;
     }
 
@@ -181,7 +172,6 @@ export const ExportView: React.FC<ExportViewProps> = props => {
     }
 
     const matches = useMediaQuery("(min-width:960px)");
-
     return (
         <>
             {Array.from(Array(amountOfPages), (e, pageIndex) => {
@@ -223,9 +213,8 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                                                         <Grid item xs={lengthOfEachBar}  >
                                                             {//Need to clarify if barID is stored in each bar? or priority
                                                                 //If that is the case we must use bar.barNumber or something here. That would do thing much easier :))
-
                                                             }
-                                                            < BarContainer exportMode height={calculateHeightOfBar()} voiceId={selectedVoice} barNumber={i} masterSheet={false} barLineAfter={isBarLineAfter(pageIndex, i)} barLineBefore={isBarLineBefore(i)} bar={bar} />
+                                                            < BarContainer exportMode rowsPerSheet={convertFromLengthOfBarToAmountOfBarsPerRow()} height={calculateHeightOfBar()} voiceId={selectedVoice} barNumber={bar.barNumber as number} masterSheet={false} barLineAfter={isBarLineAfter(pageIndex, bar.barNumber as number)} barLineBefore={isBarLineBefore(i)} bar={bar} />
                                                         </Grid>
                                                     </>
 
@@ -250,7 +239,7 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                                 <FormControl className={classes.formControl}>
                                     <Select value={dropDownMenuSelected} onChange={(e) => handleChange(e)} >
                                         {voices.map((voice, i) => {
-                                            return <MenuItem onClick={() => history.replace("/song/1/export?voice=" + (i + 1))} key={i} value={i}>{voice.title}</MenuItem>
+                                            return <MenuItem onClick={() => history.replace("/song/" + selectedVoice + 1 + "/export?voice=" + (i + 1))} key={i} value={i}>{voice.title}</MenuItem>
                                         })}
                                     </Select>
                                 </FormControl>
@@ -258,7 +247,7 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                             (
                                 <Box style={{ padding: "8px" }}>
                                     {voices.map((voice, i) => {
-                                        return <Button onClick={() => history.replace("/song/1/export?voice=" + (i + 1))} style={{ backgroundColor: selectedVoice === i ? colors.gray_400 : "white" }} className={classes.button} variant="outlined">{voice.title}</Button>
+                                        return <Button onClick={() => history.replace("/song/" + selectedVoice + 1 + "/export?voice=" + (i + 1))} style={{ backgroundColor: selectedVoice === i ? colors.gray_400 : "white" }} className={classes.button} variant="outlined">{voice.title}</Button>
 
                                     })}
                                 </Box>
@@ -281,7 +270,7 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                     </Grid>
                     <Grid item xs={5} md={2} style={{ backgroundColor: "transparent", order: matches ? 5 : 2, marginBottom: matches ? "0px" : "12px" }} >
                         <Button className={classes.confirmOrCancelButtons} onClick={() => window.print()} style={{ backgroundColor: colors.gray_400 }}>Lag PDF</Button>
-                        <Button className={classes.confirmOrCancelButtons} onClick={() => history.push("/song/1/")}> {"Avbryt"}</Button>
+                        <Button className={classes.confirmOrCancelButtons} onClick={() => history.push("/song/" + id + "/")}> {"Avbryt"}</Button>
                     </Grid>
                 </Grid>
             </BottomNavigation >

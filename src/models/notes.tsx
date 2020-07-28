@@ -1,4 +1,4 @@
-export const notes = {
+export const visibleNotes = {
     "C": "C",
     "C#": "C#",
     "D": "D",
@@ -10,5 +10,44 @@ export const notes = {
     "G#": "G#",
     "A": "A",
     "A#": "A#",
-    "H": "H"
+    "H": "H",
+}
+export const allNotes = {
+    "C": "C",
+    "C#": "C#",
+    "Db": "C#",
+    "D": "D",
+    "D#": "D#",
+    "Eb": "D#",
+    "E": "E",
+    "F": "F",
+    "F#": "F#",
+    "Gb": "F#",
+    "G": "G",
+    "G#": "G#",
+    "Ab": "G#",
+    "A": "A",
+    "A#": "A#",
+    "Hb": "A#",
+    "Bb": "A#",
+    "H": "H",
+    "B": "H",
+    //De under er jeg mer usikker på
+    "Cb": "H",
+    "H#": "C",
+    "B#": "C",
+    "E#": "F",
+    "Fb": "E",
+
+    "Bbb": "A",
+    "Abb": "G",
+    "Gbb": "F",
+    "Ebb": "D",
+    "Dbb": "C",
+
+    "C##": "D",
+    "D##": "E",
+    "F##": "G",
+    "G##": "A",
+    "A##": "H",
 }

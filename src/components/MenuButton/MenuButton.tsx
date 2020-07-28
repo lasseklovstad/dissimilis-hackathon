@@ -3,10 +3,15 @@ import { makeStyles, IconButton, Menu, MenuItem } from "@material-ui/core";
 import colors from "../../utils/colors";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 
 export type MenuButtonProps = {}
+
+type MatchParams = {
+    id: string
+}
+
 
 export const MenuButton: React.FC<MenuButtonProps> = props => {
     const classes = useStyles();
@@ -18,10 +23,12 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
         setAnchorEl(event.currentTarget);
     };
 
+    const match = useRouteMatch<MatchParams>("/song/:id")
+    let id = match ? +match.params.id : 0
     const handleClose = (method = "") => {
         setAnchorEl(null);
         if (method === "export") {
-            history.push("/song/1/export");
+            history.push("/song/" + id + "/export");
         }
     };
 
@@ -35,11 +42,11 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
                 <MoreHorizIcon />
             </IconButton>
             <Menu id="menuBar" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={() => handleClose("")} role="menu">
-                <MenuItem onClick={() => handleClose("")}>{t("MenuButton:duplicate")}</MenuItem>
-                <MenuItem onClick={() => handleClose("")}>{t("MenuButton:change")}</MenuItem>
-                <MenuItem onClick={() => handleClose("")}>{t("MenuButton:transpose")}</MenuItem>
+                <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:duplicate")}</MenuItem>
+                <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:change")}</MenuItem>
+                <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:transpose")}</MenuItem>
                 <MenuItem onClick={() => handleClose("export")}>{t("MenuButton:export")}</MenuItem>
-                <MenuItem onClick={() => handleClose("")}>{t("MenuButton:hide")}</MenuItem>
+                <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:hide")}</MenuItem>
             </Menu>
 
         </div>

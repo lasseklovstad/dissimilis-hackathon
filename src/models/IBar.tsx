@@ -1,4 +1,5 @@
 export interface IChordAndNotes {
+    noteNumber?: number
     notes: string[],
     length: number,
 }
