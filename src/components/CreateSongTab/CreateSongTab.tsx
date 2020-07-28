@@ -71,7 +71,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
             <Grid item xs={12} sm={10}>
                 <Grid container spacing={2}>
                     <Grid item>
-                        <DashboardButton selected={selectedVoice === 1} text={t("CreateSongTab:song")} link={`/song/${song.id}?voice=1`} />
+                        <DashboardButtonNoLink selected={selectedVoice === 1} text={t("CreateSongTab:song")} func={() => { history.replace(`/song/${song.id}?voice=1`) }} />
                     </Grid>
                     {voices.slice(1).map((voices: IVoice, index: number) => {
                         return (
