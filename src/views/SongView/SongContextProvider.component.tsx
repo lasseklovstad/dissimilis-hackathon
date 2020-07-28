@@ -88,7 +88,6 @@ const SongContextProvider: React.FC = props => {
         setSongId(id);
     }
     useEffect(() => {
-        console.log(id);
         getSong().then(({ result }) => {
             if (result?.data) {
                 setSong(result.data)
