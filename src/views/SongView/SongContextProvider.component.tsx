@@ -67,18 +67,12 @@ const SongContextProvider: React.FC = props => {
         voices: [
             {
                 partNumber: 1,
-                title: "master",
+                title: "",
                 bars: [
-                    {
-                        repBefore: false,
-                        repAfter: false,
-                        chordsAndNotes: [
-                        ]
-                    }
                 ]
             },
         ],
-        timeSignature: "4/4"
+        timeSignature: ""
 
     });
 
