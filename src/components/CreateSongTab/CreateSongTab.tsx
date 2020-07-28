@@ -118,7 +118,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                                             : undefined
                                     }
                                 >
-                                    <MenuItem onClick={() => { handleCloseMenu("renameVoice"); }}>Endre navn</MenuItem>
+                                    <MenuItem onClick={() => { handleCloseMenu("renameVoice") }}>{t("CreateSongTab:changeVoiceName")}</MenuItem>
                                 </Menu>
                             </Grid>
                         )
@@ -145,18 +145,18 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
             <Modal open={renameModalIsOpen} onClose={handleClose}>
                 <div className={classes.modal} style={modalStyle}>
                     <Grid container >
-                        <Typography className={classes.title} variant="h2">Endre navn på stemme</Typography>
+                        <Typography className={classes.title} variant="h2">{t("CreateSongTab:changeVoiceName")}</Typography>
                         <Grid item xs={12} style={{ marginBottom: "16px" }}>
                             <TextField variant="filled" onChange={handleChange} label="Navn" style={{ width: "100%" }} />
                         </Grid>
                         <Grid item xs={12}>
-                            <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleChangeVoiceTitle} >Lagre</Button>
-                            <Button className={classes.button} size="large" variant="outlined" onClick={() => setRenameModalIsOpen(false)}>Avbryt</Button>
+                            <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleChangeVoiceTitle} >{t("CreateSongTab:saveNewName")}</Button>
+                            <Button className={classes.button} size="large" variant="outlined" onClick={() => setRenameModalIsOpen(false)}>{t("CreateSongTab:cancel")}</Button>
                         </Grid>
                     </Grid>
                 </div>
             </Modal>
- */}
+
             <Grid item xs={"auto"} sm={1}></Grid>
         </Grid>
     );
