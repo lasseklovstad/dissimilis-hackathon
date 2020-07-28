@@ -64,7 +64,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const queryString = require('query-string');
     const voiceString = queryString.parse(window.location.search);
     const selectedVoice = parseInt(voiceString.voice);
-    const [voiceToBeEdited, setVoiceToBeEdited] = useState<number>(1);
+    const [rightClicked, setRightClicked] = useState(-1);
 
 
     const initialState = {
@@ -92,7 +92,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     };
     const handleChangeVoiceTitle = () => {
         setRenameModalIsOpen(false);
-        changeVoiceTitle(voiceToBeEdited, textFieldInput)
+        changeVoiceTitle(rightClicked + 1, textFieldInput)
     }
 
     return (
@@ -106,7 +106,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     {voices.slice(1).map((voices: IVoice, index: number) => {
                         return (
                             <Grid item key={index}>
-                                <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => handleClick(e)} selected={selectedVoice === index + 2} text={voices.title} link={`/song/1?voice=${index + 2}`} />
+                                <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setRightClicked(index); handleClick(e) }} selected={selectedVoice === index + 2} text={voices.title} link={`/song/1?voice=${index + 2}`} />
                                 <Menu
                                     keepMounted
                                     open={state.mouseY !== null}
@@ -118,7 +118,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                                             : undefined
                                     }
                                 >
-                                    <MenuItem onClick={() => { handleCloseMenu("renameVoice"); setVoiceToBeEdited(index + 1); console.log(index) }}>Endre navn</MenuItem>
+                                    <MenuItem onClick={() => { handleCloseMenu("renameVoice"); }}>Endre navn</MenuItem>
                                 </Menu>
                             </Grid>
                         )
@@ -156,20 +156,6 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                 </div>
             </Modal>
-
-            {/* CustomModal can be used instead */}
-
-            {/* <CustomModal handleOnCancelClick={() => handleClose}
-                handleOnSaveClick={() => handleChangeVoiceTitle}
-                handleClosed={() => handleClose}
-                handleOpen={() => handleRenameOpen}
-                modalOpen={renameModalIsOpen}
-                saveText={"Lagre"}
-                cancelText={"Avbryt"}
-                headerText={"Endre navn"}
-                labelText={t("DashboardView:nameOfSong")}
-                handleChange={() => handleChange}
-                textFieldInput={textFieldInput} />
  */}
             <Grid item xs={"auto"} sm={1}></Grid>
         </Grid>
