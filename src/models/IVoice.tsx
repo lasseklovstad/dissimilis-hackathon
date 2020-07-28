@@ -2,6 +2,6 @@ import { IBar } from "./IBar";
 
 export interface IVoice {
     title: string,
-    priority: number,
+    partNumber: number,
     bars: Array<IBar>
 }

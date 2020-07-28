@@ -60,7 +60,27 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     }
     return { result, isError, errorMessage };
   };
-  return { fetchData, postData };
+
+  const putData = async () => {
+    let result: AxiosResponse<T> | undefined = undefined;
+    let errorMessage: any;
+    let isError = false;
+    try {
+      result = await axios.put<T>(finalUrl, options.body, { headers: options.headers });
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        history.push("/");
+        sessionStorage.removeItem("apiKey");
+        sessionStorage.removeItem("userId");
+      }
+      isError = true;
+      errorMessage = error;
+      console.log(error);
+    }
+    return { result, isError, errorMessage };
+  };
+
+  return { fetchData, postData, putData };
 };
 
 /**

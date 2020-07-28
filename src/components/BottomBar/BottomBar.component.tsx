@@ -14,23 +14,6 @@ import { chords } from '../../models/chords';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component';
-import { Chord } from '@tonaljs/tonal';
-import { getChord } from '../Bar/BarBody.component'
-
-const StyledToggleButtonGroup = withStyles((theme) => ({
-    grouped: {
-        color: colors.black,
-
-        margin: theme.spacing(1),
-        border: 'none',
-        '&:not(:first-child)': {
-            borderRadius: theme.shape.borderRadius,
-        },
-        '&:first-child': {
-            borderRadius: theme.shape.borderRadius,
-        },
-    }
-}))(ToggleButtonGroup);
 
 function BottomBar() {
     const { t } = useTranslation();
@@ -47,12 +30,12 @@ function BottomBar() {
     let timeSignatureNumerator = getTimeSignature()[0];
     if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
     const Menu =
-        <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
+    <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
             <Select
                 value={selectedNoteLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
-            >
+                >
                 <MenuItem value={8} style={{ display: timeSignatureNumerator < 8 ? "none" : "block" }}> <WholenoteIcon /></MenuItem>
                 <MenuItem value={4} style={{ display: timeSignatureNumerator < 4 ? "none" : "block" }}> <HalfnoteIcon /></MenuItem>
                 <MenuItem value={2}> <QuarternoteIcon /></MenuItem>
@@ -61,18 +44,22 @@ function BottomBar() {
         </FormControl>
 
 
-    const [toggle, setToggle] = useState<boolean>(false);
-    const { showPossiblePositions, setShowPossiblePositions, showAvailableSpace, setNoteIsSelected, noteIsSelected } = useContext(SongToolsContext)
+const [toggle, setToggle] = useState<boolean>(true);
+const { showPossiblePositions, setShowPossiblePositions, showAvailableSpace, setNoteIsSelected, noteIsSelected } = useContext(SongToolsContext)
 
-    const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) => {
-        if (newToggle !== null) {
-            setToggle(newToggle);
-            setNoteIsSelected(!noteIsSelected);
-        }
-    };
+const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) => {
+    if (newToggle !== null) {
+        setToggle(newToggle);
+        setNoteIsSelected(!noteIsSelected);
+    }
+};
 
-    return (
-        <Grid container justify="center">
+const scrollToBottom = () => {
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
+return (
+    <Grid container justify="center">
             <Grid item xs={12} sm={10} className={classes.outercontainer}>
                 <div className={classes.container} >
                     <div className={classes.flexelement}>
@@ -92,7 +79,7 @@ function BottomBar() {
                 </div>
                 <div className={classes.container} >
                     <MenuButtonWithAddIcon selected={showPossiblePositions} text={t("BottomBar:addTone")} onClick={() => { if (!showPossiblePositions) { showAvailableSpace() }; setShowPossiblePositions(!showPossiblePositions) }} />
-                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => { setShowPossiblePositions(false); addEmptyBar(); }} />
+                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => { setShowPossiblePositions(false); addEmptyBar(); scrollToBottom(); }} />
                 </div>
             </Grid>
         </Grid>
@@ -132,7 +119,7 @@ const useStyles = makeStyles({
             color: colors.black
         }
     },
-
+    
     input: {
         padding: "18px 10px 10px 10px",
         height: "28px",
@@ -143,4 +130,20 @@ const useStyles = makeStyles({
         }
     }
 });
+
+const StyledToggleButtonGroup = withStyles((theme) => ({
+    grouped: {
+        color: colors.black,
+        margin: theme.spacing(1),
+        border: 'none',
+        '&:not(:first-child)': {
+            borderRadius: theme.shape.borderRadius,
+        },
+        '&:first-child': {
+            borderRadius: theme.shape.borderRadius,
+        },
+    }
+}))(ToggleButtonGroup);
+
+
 export default BottomBar;

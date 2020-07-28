@@ -3,8 +3,6 @@ import { SongContext } from './SongContextProvider.component';
 import { IChordAndNotes } from '../../models/IBar';
 import { visibleNotes as notes } from '../../models/notes';
 import { chords } from '../../models/chords';
-import { Chord } from '@tonaljs/tonal';
-
 
 interface ISongToolsContext {
     selectedNoteLength: 1 | 2 | 4 | 8,
@@ -29,7 +27,7 @@ export const SongToolsContext = React.createContext<ISongToolsContext>({
     setSelectedNoteKey: (string: string) => { },
     showPossiblePositions: false,
     setShowPossiblePositions: (show: boolean) => { },
-    noteIsSelected: true,
+    noteIsSelected: false,
     setNoteIsSelected: (show: boolean) => { },
     availablePositions: [],
     setAvailablePositions: (number: number[][][][]) => { },
@@ -40,10 +38,9 @@ export const SongToolsContext = React.createContext<ISongToolsContext>({
 
 const SongToolsContextProvider: React.FC = props => {
     const { song, editNote } = useContext(SongContext);
-
     const [selectedNoteLength, setSelectedNoteLength] = useState<1 | 2 | 4 | 8>(1);
     const [selectedNoteKey, setSelectedNoteKey] = useState<string>("C");
-    const [noteIsSelected, setNoteIsSelected] = useState<boolean>(true);
+    const [noteIsSelected, setNoteIsSelected] = useState<boolean>(false);
     const [showPossiblePositions, setShowPossiblePositions] = useState<boolean>(false);
     const [availablePositions, setAvailablePositions] = useState<number[][][][]>([]);
 
@@ -60,7 +57,6 @@ const SongToolsContextProvider: React.FC = props => {
         }
         const newNote: IChordAndNotes = { length: selectedNoteLength, notes: newNoteArray }
 
-        //Have now the new note object, will make a copy of the new copy in which will replace the old bar
         const tempChordsAndNotes = [];
         for (let i = 0; i < song.voices[voiceIndex].bars[barIndex].chordsAndNotes.length; i++) {
             tempChordsAndNotes.push(song.voices[voiceIndex].bars[barIndex].chordsAndNotes[i]);
@@ -92,7 +88,6 @@ const SongToolsContextProvider: React.FC = props => {
     }
 
     const showAvailableSpace = () => {
-
         let returnArray = [] //This will return a list of noteIndexLists in which there is available space in the barIndex given. This again tells where it is space to the right, or left if length-index <= selectedKeyLength
         for (let voiceIndex = 0; voiceIndex < song.voices.length; voiceIndex++) {
             let voiceArray = [];
@@ -100,7 +95,7 @@ const SongToolsContextProvider: React.FC = props => {
                 let barArray = [];
                 let availableConsistentLength = 0;
                 for (let noteIndex = 0; noteIndex < song.voices[voiceIndex].bars[barIndex].chordsAndNotes.length; noteIndex++) {
-                    if (song.voices[voiceIndex].bars[barIndex].chordsAndNotes[noteIndex].notes[0] === "") {
+                    if (song.voices[voiceIndex].bars[barIndex].chordsAndNotes[noteIndex].notes[0] === " ") {
                         availableConsistentLength += 1;
                     } else {
                         availableConsistentLength = 0;
@@ -117,7 +112,6 @@ const SongToolsContextProvider: React.FC = props => {
                 voiceArray.push(barArray);
             }
             returnArray.push(voiceArray);
-
         }
         setAvailablePositions(returnArray);
     }
