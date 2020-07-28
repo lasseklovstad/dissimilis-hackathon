@@ -6,6 +6,7 @@ import { TextField, Button, Popper } from '@material-ui/core';
 import { colors } from '../../utils/colors';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component';
+import { chords } from '../../models/chords';
 
 
 export type AddButtonProps = {

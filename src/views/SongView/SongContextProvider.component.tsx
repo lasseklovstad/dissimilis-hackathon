@@ -78,7 +78,6 @@ const SongContextProvider: React.FC = props => {
                 bars: []
             },
         ],
-
     });
 
     //Method to simplify change of state

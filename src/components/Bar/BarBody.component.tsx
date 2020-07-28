@@ -26,9 +26,10 @@ export function getChord(notes: string[]): string {
         return notes[0];
     } else {
         const result = Chord.detect(tempArray);
-        if (result.length === 0) return notes[0]
-        return result[0];
+        if (result.length === 0) return notes[0];
+        return result[0].replace(/M/g, '').replace(/B/g, 'H');
     }
+
 }
 
 export function tangentToNumber(tangent: string): number {
@@ -172,7 +173,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
 
     const chordsInBar = tempArrayOfChords.map((item: any, i: any) => {
         return (
-            <Typography key={i} variant="body1" style={{ flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]) }} className={classes.toneText}>{item}</Typography>
+            <Typography key={i} variant="body1" style={{ flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]), overflow: "hidden", textOverflow: "ellipsis", paddingLeft: "4px" }} className={classes.toneText}>{item}</Typography>
         )
     })
 
@@ -200,7 +201,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                             key={index} className={classes.toneBox}
                                             onMouseEnter={() => { if (showPossiblePositions) { setPositionArray(selectPositionArray(props.voiceId, props.barNumber, i)); } }}
                                             onMouseLeave={() => { if (showPossiblePositions) { setPositionArray([]) } }}
-                                            style={{ cursor: 'context-menu', backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), outlineColor: "black", boxShadow: emptySpace(i) ? (positionArray.includes(i) ? "none" : "0 0 5px black") : "none" }}
+                                            style={{ cursor: showPossiblePositions ? (!availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i))) ? 'context-menu' : "pointer" : "default", backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), outlineColor: "black", boxShadow: emptySpace(i) ? (positionArray.includes(i) ? "none" : "0 0 5px black") : "none" }}
                                             component={ButtonBase}
                                             onClick={() => {
                                                 if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {

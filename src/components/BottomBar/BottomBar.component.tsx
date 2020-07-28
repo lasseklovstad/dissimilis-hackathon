@@ -9,11 +9,13 @@ import { ReactComponent as HalfnoteIcon } from '../../assets/images/icon_half-no
 import { ReactComponent as QuarternoteIcon } from '../../assets/images/icon_quarter-note.svg';
 import { ReactComponent as EighthnoteIcon } from '../../assets/images/icon_eighth-note.svg';
 import { SongContext } from '../../views/SongView/SongContextProvider.component';
-import { notes } from '../../models/notes';
+import { visibleNotes as notes } from '../../models/notes';
 import { chords } from '../../models/chords';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component';
+import { Chord } from '@tonaljs/tonal';
+import { getChord } from '../Bar/BarBody.component'
 
 const StyledToggleButtonGroup = withStyles((theme) => ({
     grouped: {
@@ -34,7 +36,8 @@ function BottomBar() {
     const { t } = useTranslation();
     const classes = useStyles();
     const noteArray: string[] = Object.keys(notes);
-    const chordArray: string[] = Object.keys(chords);
+    let chordArray: string[] = [];
+    chords.map(chord => chordArray.push(chord.name));
     const { selectedNoteLength, setSelectedNoteLength } = useContext(SongToolsContext);
     const { addEmptyBar, getTimeSignature } = useContext(SongContext);
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -59,11 +62,12 @@ function BottomBar() {
 
 
     const [toggle, setToggle] = useState<boolean>(false);
-    const { showPossiblePositions, setShowPossiblePositions, showAvailableSpace } = useContext(SongToolsContext)
+    const { showPossiblePositions, setShowPossiblePositions, showAvailableSpace, setNoteIsSelected, noteIsSelected } = useContext(SongToolsContext)
 
     const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) => {
         if (newToggle !== null) {
             setToggle(newToggle);
+            setNoteIsSelected(!noteIsSelected);
         }
     };
 
@@ -88,7 +92,7 @@ function BottomBar() {
                 </div>
                 <div className={classes.container} >
                     <MenuButtonWithAddIcon selected={showPossiblePositions} text={t("BottomBar:addTone")} onClick={() => { if (!showPossiblePositions) { showAvailableSpace() }; setShowPossiblePositions(!showPossiblePositions) }} />
-                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => { setShowPossiblePositions(false); addEmptyBar() }} />
+                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => { setShowPossiblePositions(false); addEmptyBar(); }} />
                 </div>
             </Grid>
         </Grid>
