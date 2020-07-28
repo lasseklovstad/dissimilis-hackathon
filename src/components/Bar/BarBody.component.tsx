@@ -128,7 +128,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
             if (rightClicked >= 0) {
                 let tempChordsAndNotes: IChordAndNotes[] = voices[props.voiceId].bars[props.barNumber].chordsAndNotes.slice();;
 
-                const newNote: IChordAndNotes = { length: 1, notes: [""] };
+                const newNote: IChordAndNotes = { length: 1, notes: [" "] };
                 tempChordsAndNotes[rightClicked] = newNote;
                 for (let i = rightClicked; i < voices[props.voiceId].bars[props.barNumber].chordsAndNotes[rightClicked].length + rightClicked - 1; i++) {
                     tempChordsAndNotes.splice(i, 0, newNote);
@@ -210,12 +210,12 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                             }}
                                             onContextMenu={handleClick}
                                         >
-                                            <Typography className={classes.tangentText} >{number === 0 ? "" : number}</Typography>
+                                            <Typography className={classes.tangentText} >{number === 0 ? " " : number}</Typography>
                                         </Box>
                                         <Menu
                                             keepMounted
                                             open={state.mouseY !== null}
-                                            onClose={() => handleClose("")}
+                                            onClose={() => handleClose(" ")}
                                             anchorReference="anchorPosition"
                                             anchorPosition={
                                                 state.mouseY !== null && state.mouseX !== null

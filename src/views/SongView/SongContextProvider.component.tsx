@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IVoice } from '../../models/IVoice';
 import { IBar, IChordAndNotes } from '../../models/IBar';
 import useLocalStorage from '@rehooks/local-storage';
+import { useGetSong } from '../../utils/useGetSong';
+import { ISong } from '../../models/ISong';
+import { useParams, useRouteMatch } from 'react-router-dom';
 
 
 
@@ -25,15 +28,11 @@ interface ISongContext {
     removeHouse: (barId: number) => void,
 }
 
-interface ISong {
-    title: string,
-    voices: IVoice[]
-};
-
 export const SongContext = React.createContext<ISongContext>({
     song: {
         title: "",
-        voices: []
+        voices: [],
+        timeSignature: "4/4"
     },
     setSong: (song: ISong) => { },
     addVoice: (voice: IVoice) => { },
@@ -56,36 +55,46 @@ export const SongContext = React.createContext<ISongContext>({
 });
 
 const SongContextProvider: React.FC = props => {
-
+    const [songId, setSongId] = useState<number>(1);
+    const getSong = useGetSong(songId);
     //Initial State.
-
     //For now, I'm just setting it static until we can retrieve the data from the server
-
     //This is just a temporary solution to show how it can be done
-
     //Each instrument will have their own bars when we get to that point
     let [song, setSong] = useState<ISong>({
-        title: "Lisa gikk til skolen",
+        title: "",
+        id: 0,
         voices: [
             {
-                title: "master",
-                priority: 1,
-                bars: []
-            },
-            {
-                title: "Gitar",
-                priority: 2,
-                bars: []
+                partNumber: 1,
+                title: "",
+                bars: [
+                ]
             },
         ],
+        timeSignature: ""
+
     });
+
+    const match = useRouteMatch<MatchParams>("/song/:id")
+    let id = match ? +match.params.id : 0
+    if (id !== songId) {
+        setSongId(id);
+    }
+    useEffect(() => {
+        getSong().then(({ result }) => {
+            if (result?.data) {
+                setSong(result.data)
+            }
+        })
+    }, [])
 
     //Method to simplify change of state
     const addVoice = (newVoice: IVoice) => {
         for (let i = 0; i < song.voices[0].bars.length; i++) {
             //I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
             const newChordsAndNotes = [];
-            const newEmptyNote = { length: 1, notes: [""] };
+            const newEmptyNote = { length: 1, notes: [" "] };
             let timeSignatureNumerator = getTimeSignature()[0];
             if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
             for (let i = 0; i < timeSignatureNumerator; i++) {
@@ -176,7 +185,7 @@ const SongContextProvider: React.FC = props => {
 
         //I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
         const newChordsAndNotes = [];
-        const newEmptyNote = { length: 1, notes: [""] };
+        const newEmptyNote = { length: 1, notes: [" "] };
         let timeSignatureNumerator = getTimeSignature()[0];
         if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
         for (let i = 0; i < timeSignatureNumerator; i++) {
@@ -270,5 +279,10 @@ const SongContextProvider: React.FC = props => {
         </SongContext.Provider>
     )
 };
+
+type MatchParams = {
+    id: string
+}
+
 
 export default SongContextProvider;

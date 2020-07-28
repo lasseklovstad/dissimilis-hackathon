@@ -100,7 +100,7 @@ const SongToolsContextProvider: React.FC = props => {
                 let barArray = [];
                 let availableConsistentLength = 0;
                 for (let noteIndex = 0; noteIndex < song.voices[voiceIndex].bars[barIndex].chordsAndNotes.length; noteIndex++) {
-                    if (song.voices[voiceIndex].bars[barIndex].chordsAndNotes[noteIndex].notes[0] === "") {
+                    if (song.voices[voiceIndex].bars[barIndex].chordsAndNotes[noteIndex].notes[0] === " ") {
                         availableConsistentLength += 1;
                     } else {
                         availableConsistentLength = 0;
