@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IVoice } from '../../models/IVoice';
 import { IBar, IChordAndNotes } from '../../models/IBar';
-import useLocalStorage from '@rehooks/local-storage';
-import { title } from 'process';
-
-
-
-//State handling skjer i denne komponenten 
+import { useGetSong } from '../../utils/useGetSong';
+import { ISong } from '../../models/ISong';
+import { useRouteMatch } from 'react-router-dom';
 
 interface ISongContext {
     song: ISong,
@@ -27,15 +24,11 @@ interface ISongContext {
     removeHouse: (barId: number) => void,
 }
 
-interface ISong {
-    title: string,
-    voices: IVoice[]
-};
-
 export const SongContext = React.createContext<ISongContext>({
     song: {
         title: "",
-        voices: []
+        timeSignature: "4/4",
+        voices: [],
     },
     setSong: (song: ISong) => { },
     addVoice: (voice: IVoice) => { },
@@ -59,32 +52,41 @@ export const SongContext = React.createContext<ISongContext>({
 });
 
 const SongContextProvider: React.FC = props => {
-
-    //Initial State.
-
-    //For now, I'm just setting it static until we can retrieve the data from the server
-
-    //This is just a temporary solution to show how it can be done
-
-    //Each instrument will have their own bars when we get to that point
+    const [songId, setSongId] = useState<number>(1);
+    const getSong = useGetSong(songId);
     let [song, setSong] = useState<ISong>({
-        title: "Lisa gikk til skolen",
+        title: "",
+        id: 0,
+        timeSignature: "",
         voices: [
             {
-                title: "master",
-                priority: 1,
-                bars: []
+                partNumber: 1,
+                title: "",
+                bars: [
+                ]
             },
-
         ],
     });
+
+    const match = useRouteMatch<MatchParams>("/song/:id")
+    let id = match ? +match.params.id : 0
+    if (id !== songId) {
+        setSongId(id);
+    }
+    useEffect(() => {
+        getSong().then(({ result }) => {
+            if (result?.data) {
+                setSong(result.data)
+            }
+        })
+    }, [])
 
     //Method to simplify change of state
     const addVoice = (newVoice: IVoice) => {
         for (let i = 0; i < song.voices[0].bars.length; i++) {
             //I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
             const newChordsAndNotes = [];
-            const newEmptyNote = { length: 1, notes: [""] };
+            const newEmptyNote = { length: 1, notes: [" "] };
             let timeSignatureNumerator = getTimeSignature()[0];
             if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
             for (let i = 0; i < timeSignatureNumerator; i++) {
@@ -112,7 +114,6 @@ const SongContextProvider: React.FC = props => {
 
     //adds house to a bar
     const addHouse = (barId: number) => {
-
         //Checks if its the last bar in the song, and maps through all the bars, matching on barId, checking for house values on the chosen bar, along with the adjacent bars, ensuring that they are handled correctly
         if (barId === song.voices[0].bars.length - 1) {
             song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, house: 2 } : (i === barId - 1 ? { ...bar, house: 1 } : (i === barId - 2 && (song.voices[0].bars[barId - 2].house === 1) ? { ...bar, house: undefined } : bar))) } : voice) }
@@ -126,7 +127,6 @@ const SongContextProvider: React.FC = props => {
     //Function for removing house from a bar
     const deleteHouse = (barId: number) => {
         //Checks the housevalue and sets the value to undefined, along with checking adjacent bars and ensuring they are correct
-
         let barBase = song.voices[0].bars[barId].house;
         if (barBase === 1) {
             song = ({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId || i === barId + 1 ? { ...bar, house: undefined } : bar) } : voice) });
@@ -157,15 +157,8 @@ const SongContextProvider: React.FC = props => {
     }
 
     //Method to get timeSignature from localstorage
-    const timeSignature = useLocalStorage('timeSignature')[0];
     const getTimeSignature = () => {
-        let timeSignatureNumerator: string = "";
-        let timeSignatureDenominator: string = "";
-        if (timeSignature !== null) {
-            timeSignatureNumerator = timeSignature[0];
-            timeSignatureDenominator = timeSignature[1];
-        }
-        return [parseInt(timeSignatureNumerator), parseInt(timeSignatureDenominator)];
+        return [parseInt(song.timeSignature.split("/")[0]), parseInt(song.timeSignature.split("/")[1])];
     }
 
     //Method to add an empty bar at a specific index to each of all voices except the master sheet/song
@@ -175,7 +168,7 @@ const SongContextProvider: React.FC = props => {
 
         //I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
         const newChordsAndNotes = [];
-        const newEmptyNote = { length: 1, notes: [""] };
+        const newEmptyNote = { length: 1, notes: [" "] };
         let timeSignatureNumerator = getTimeSignature()[0];
         if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
         for (let i = 0; i < timeSignatureNumerator; i++) {
@@ -204,7 +197,6 @@ const SongContextProvider: React.FC = props => {
             const tempArray = copyAndAddEmptyBars(indexOfOriginalBar, 1);
             //If master sheet add the new copy of bar to the array
             //Else add the copied bar-array with an empty bar
-
             song = { ...song, voices: song.voices.map((voice, i) => i === 0 ? { ...voice, bars: copyOfArray } : { ...voice, bars: tempArray[i - 1] }) };
             if (song.voices[0].bars[id].house === 1) {
                 deleteHouse(id)
@@ -219,7 +211,6 @@ const SongContextProvider: React.FC = props => {
     }
 
     const addEmptyBar = () => {
-
         const tempArray = copyAndAddEmptyBars(song.voices[0].bars.length, 0);
         song = { ...song, voices: song.voices.map((voice, i) => true ? { ...voice, bars: tempArray[i] } : voice) };
         setSong(song);
@@ -243,8 +234,6 @@ const SongContextProvider: React.FC = props => {
         song = { ...song, voices: song.voices.map((voice, index) => voiceId === index ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, chordsAndNotes: newNote } : bar) } : voice) };
         setSong(song);
     }
-
-
 
     //Add all methods here
     const value = {
@@ -272,5 +261,9 @@ const SongContextProvider: React.FC = props => {
         </SongContext.Provider>
     )
 };
+
+type MatchParams = {
+    id: string
+}
 
 export default SongContextProvider;

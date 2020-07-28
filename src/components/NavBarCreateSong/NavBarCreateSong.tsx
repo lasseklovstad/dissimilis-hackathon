@@ -7,7 +7,7 @@ import { SongContext } from "../../views/SongView/SongContextProvider.component"
 
 
 export type NavBarCreateSongProps = {
-
+    saveSongFunc: Function
 }
 
 
@@ -44,7 +44,7 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
             <AppBar position="static" elevation={0} className={classes.appbar}>
                 <Grid container>
                     <Grid item xs={11} sm={1} className={classes.left}>
-                        <DashboardTopBarIcon />
+                        <DashboardTopBarIcon func={props.saveSongFunc} />
                     </Grid>
                     <Grid item xs={12} sm={10} className={classes.center}>
                         <Box onClick={() => setChanging(!changing)}>

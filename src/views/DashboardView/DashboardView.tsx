@@ -69,7 +69,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
     setModalIsOpen(false);
     postSong().then(({ result }) => {
       if (result?.status === 201) {
-        history.push("/song/" + result.data);
+        history.push("/song/" + result.data.id);
       };
     })
   };
@@ -167,7 +167,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               <Grid container spacing={3}>
                 {filteredSongs?.map(songs => (
                   <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                    <DashboardButton text={songs.title} link={songs.id!.toString()} />
+                    <DashboardButton text={songs.title} link={"/song/" + songs.id!.toString()} />
                   </Grid>
                 ))}
               </Grid>

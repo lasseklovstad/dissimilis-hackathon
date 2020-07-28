@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Grid, Button, Modal, TextField, makeStyles, Typography, Menu, MenuItem } from "@material-ui/core";
-import DashboardButton, { DashboardButtonWithAddIconNoLink } from "../DashboardButtons/DashboardButtons";
+import { DashboardButtonWithAddIconNoLink, DashboardButtonNoLink, DashboardButton } from "../DashboardButtons/DashboardButtons";
 import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
@@ -39,7 +39,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const classes = useStyles();
 
     const handleAddInstrument = () => {
-        addVoice({ title: textFieldInput, priority: voices.length, bars: [] });
+        addVoice({ title: textFieldInput, partNumber: voices.length, bars: [] });
         setModalIsOpen(false);
         setTextFieldInput("");
         const newIndex = voices.length + 1;
@@ -101,7 +101,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
             <Grid item xs={12} sm={10}>
                 <Grid container spacing={2}>
                     <Grid item>
-                        <DashboardButton selected={selectedVoice === 1} text={t("CreateSongTab:song")} link={"/song/1?voice=1"} />
+                        <DashboardButtonNoLink selected={selectedVoice === 1} text={t("CreateSongTab:song")} func={() => { history.replace(`/song/${song.id}?voice=1`) }} />
                     </Grid>
                     {voices.slice(1).map((voices: IVoice, index: number) => {
                         return (

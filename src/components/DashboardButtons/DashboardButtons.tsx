@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
@@ -13,13 +13,18 @@ export type ButtonProps = {
   link: string,
   func?: Function,
   selected?: boolean,
-  onContextMenu? : Function,
+  onContextMenu?: Function,
 };
 
 type ButtonNoLinkProps = {
   text: string,
   func: Function,
   color?: string,
+  selected?: boolean,
+}
+
+type TopBarIconProps = {
+  func?: Function,
 }
 
 export const DashboardButtonWithAddIcon: FC<ButtonProps> = (props) => {
@@ -38,7 +43,6 @@ export const DashboardButtonWithAddIcon: FC<ButtonProps> = (props) => {
 
 export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (props) => {
   const styles = useStyles();
-
   return (
     <Card className={styles.button}>
       <CardActionArea onClick={() => props.func && props.func()} >
@@ -51,14 +55,24 @@ export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (props) =
   );
 }
 
-
+export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
+  const styles = useStyles();
+  return (
+    <Card className={styles.button}>
+      <CardActionArea onClick={() => props.func && props.func()} >
+        <Box className={styles.container} style={{ backgroundColor: props.selected === true ? colors.gray_400 : colors.white }}>
+          <Box p={2}><Typography>{props.text}</Typography></Box>
+        </Box>
+      </CardActionArea>
+    </Card>
+  );
+}
 
 export const DashboardButton: FC<ButtonProps> = (props) => {
   const styles = useStyles();
-  const history = useHistory();
   return (
     <Card className={styles.button}>
-      <CardActionArea onClick={() => { history.replace(props.link) }}>
+      <CardActionArea to={props.link} component={Link}>
         <Box onContextMenu={(e) => props.onContextMenu && props.onContextMenu(e)} className={styles.container} style={{ backgroundColor: props.selected === true ? colors.gray_400 : colors.white }}>
           <Box p={2}><Typography>{props.text}</Typography></Box>
         </Box>
@@ -82,17 +96,15 @@ export const DashboardLibraryButton: FC<ButtonProps> = ({ text, link }) => {
   );
 }
 
-export const DashboardTopBarIcon = () => {
+export const DashboardTopBarIcon: FC<TopBarIconProps> = (props) => {
   const styles = useStyles();
   const { t } = useTranslation();
   const altProp = t("DashboardView:altButteflyButtonProp");
   return (
     <Box className={styles.butterflyButtonContainer}>
       <Card className={styles.butterflyButtonCard}>
-        <CardActionArea className={styles.butterflyButtonCardIcon} to="/dashboard" component={Link}>
-
+        <CardActionArea onClick={() => props.func && props.func()} className={styles.butterflyButtonCardIcon} to="/dashboard" component={Link}>
           <img src={butterflyBlue} alt={altProp} />
-
         </CardActionArea>
       </Card>
     </Box>
