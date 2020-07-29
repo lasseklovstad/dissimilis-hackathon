@@ -42,7 +42,8 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         setRenameModalIsOpen(false);
     };
 
-    const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
+    const handleChange = (e: any) => {
+        console.log("Heihei")
         console.log(e.target.value)
         setTextFieldInput(e.target.value);
     };
@@ -73,6 +74,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     };
     const handleCloseMenu = (method?: string) => {
         if (method === "renameVoice") {
+            console.log("Heihei")
             setRenameModalIsOpen(true)
         }
         setRightClickCoordinates(initialState);
@@ -123,18 +125,18 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                 cancelText={t("CreateSongTab:cancel")}
                 headerText={t("CreateSongTab:addInstrument")}
                 labelText={t("CreateSongTab:nameOfInstrument")}
-                handleChange={() => handleChange}
-                textFieldInput={textFieldInput} />
+                handleChange={handleChange}
+            />
             <CustomModal handleOnCancelClick={() => handleClose}
                 handleOnSaveClick={() => handleChangeVoiceTitle}
-                handleClosed={() => setRenameModalIsOpen(false)}
+                handleClosed={() => handleClose}
                 modalOpen={renameModalIsOpen}
                 saveText={t("CreateSongTab:saveNewName")}
                 cancelText={t("CreateSongTab:cancel")}
                 headerText={t("CreateSongTab:changeVoiceName")}
                 labelText={t("CreateSongTab:newVoiceName")}
-                handleChange={() => handleChange}
-                textFieldInput={textFieldInput} />
+                handleChange={handleChange}
+            />
             <Grid item xs={"auto"} sm={1}></Grid>
         </Grid>
     );

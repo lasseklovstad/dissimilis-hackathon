@@ -13,8 +13,8 @@ type CustomModalProps = {
     cancelText: string,
     headerText: string,
     labelText: string,
-    textFieldInput: string
 }
+
 export const CustomModal: FC<CustomModalProps> = (props) => {
     const classes = useStyles();
     const [textFieldInput, setTextFieldInput] = useState("");
@@ -24,20 +24,21 @@ export const CustomModal: FC<CustomModalProps> = (props) => {
 
     const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
         setTextFieldInput(e.target.value);
-        props.handleChange(e)
-    };
+        props.handleChange(e);
+
+    }
 
     return (
-        <Modal open={props.modalOpen} onClose={() => props.handleClosed}>
+        <Modal open={props.modalOpen} onClose={props.handleClosed()}>
             <div className={classes.modal} style={modalStyle}>
                 <Grid container >
                     <Typography className={classes.title} variant="h2">{props.headerText}</Typography>
                     <Grid item xs={12} style={{ marginBottom: "16px" }}>
-                        <TextField inputProps={{ maxlength: CHARACTER_LIMIT }} helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`} autoFocus variant="filled" onChange={handleChange} label={props.labelText} style={{ width: "100%" }} />
+                        <TextField inputProps={{ maxLength: CHARACTER_LIMIT }} helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`} autoFocus variant="filled" onChange={handleChange} label={props.labelText} style={{ width: "100%" }} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Button className={classes.button} size="large" variant="contained" disabled={!props.textFieldInput} onClick={() => props.handleOnSaveClick} >{props.saveText}</Button>
-                        <Button className={classes.button} size="large" variant="outlined" onClick={() => props.handleOnCancelClick}>{() => props.cancelText}</Button>
+                        <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={props.handleOnSaveClick()} >{props.saveText}</Button>
+                        <Button className={classes.button} size="large" variant="outlined" onClick={props.handleOnCancelClick()}>{props.cancelText}</Button>
                     </Grid>
                 </Grid>
             </div>

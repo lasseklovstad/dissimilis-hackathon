@@ -148,8 +148,8 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               cancelText={t("CreateSongTab:cancel")}
               headerText={t("DashboardView:addSong")}
               labelText={t("DashboardView:nameOfSong")}
-              handleChange={() => handleOnChangeModal}
-              textFieldInput={textFieldInput} />
+              handleChange={handleOnChangeModal}
+            />
 
           </>
           :
