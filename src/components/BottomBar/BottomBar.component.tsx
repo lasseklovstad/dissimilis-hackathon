@@ -40,7 +40,7 @@ function BottomBar() {
                 inputProps={{ className: classes.input }}
             >
                 <MenuItem value={8} style={{ display: timeSignatureNumerator < 8 ? "none" : "block" }}> <WholenoteIcon /></MenuItem>
-                <MenuItem value={5} style={{ display: timeSignatureNumerator < 5 ? "none" : "block" }}> <HalfnoteDottedIcon /></MenuItem>
+                <MenuItem value={6} style={{ display: timeSignatureNumerator < 6 ? "none" : "block" }}> <HalfnoteDottedIcon /></MenuItem>
                 <MenuItem value={4} style={{ display: timeSignatureNumerator < 4 ? "none" : "block" }}> <HalfnoteIcon /></MenuItem>
                 <MenuItem value={3} style={{ display: timeSignatureNumerator < 3 ? "none" : "block" }}> <QuarternoteDottedIcon /> </MenuItem>
                 <MenuItem value={2} style={{ display: timeSignatureNumerator < 2 ? "none" : "block" }}> <QuarternoteIcon /> </MenuItem>

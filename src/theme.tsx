@@ -56,6 +56,10 @@ export const theme: object = createMuiTheme({
         },
         button: {
             textTransform: 'none'
+        },
+        body2: {
+            lineHeight: 0,
+            fontSize: '0.875rem'
         }
     }
 
