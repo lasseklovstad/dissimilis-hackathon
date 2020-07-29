@@ -149,22 +149,6 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                 labelText={t("CreateSongTab:newVoiceName")}
                 handleChange={() => handleChange}
                 textFieldInput={textFieldInput} />
-
-            {/* <Modal open={renameModalIsOpen} onClose={handleClose}>
-                <div className={classes.modal} style={modalStyle}>
-                    <Grid container >
-                        <Typography className={classes.title} variant="h2">{t("CreateSongTab:changeVoiceName")}</Typography>
-                        <Grid item xs={12} style={{ marginBottom: "16px" }}>
-                            <TextField variant="filled" autoFocus onChange={handleChange} label="Navn" style={{ width: "100%" }} />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleChangeVoiceTitle} >{t("CreateSongTab:saveNewName")}</Button>
-                            <Button className={classes.button} size="large" variant="outlined" onClick={() => setRenameModalIsOpen(false)}>{t("CreateSongTab:cancel")}</Button>
-                        </Grid>
-                    </Grid>
-                </div>
-            </Modal>
- */}
             <Grid item xs={"auto"} sm={1}></Grid>
         </Grid>
     );
