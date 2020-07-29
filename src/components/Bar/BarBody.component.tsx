@@ -159,8 +159,20 @@ export const BarBody: React.FC<BarBodyProps> = props => {
             case 2:
                 result = base * 2 + "%";
                 break;
+            case 3:
+                result = base * 3 + "%";
+                break;
             case 4:
                 result = base * 4 + "%";
+                break;
+            case 5:
+                result = base * 5 + "%";
+                break;
+            case 6:
+                result = base * 6 + "%";
+                break;
+            case 7:
+                result = base * 7 + "%";
                 break;
             case 8:
                 result = base * 8 + "%";

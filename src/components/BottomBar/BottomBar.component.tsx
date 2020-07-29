@@ -8,6 +8,8 @@ import { ReactComponent as WholenoteIcon } from '../../assets/images/icon_whole-
 import { ReactComponent as HalfnoteIcon } from '../../assets/images/icon_half-note.svg';
 import { ReactComponent as QuarternoteIcon } from '../../assets/images/icon_quarter-note.svg';
 import { ReactComponent as EighthnoteIcon } from '../../assets/images/icon_eighth-note.svg';
+import { ReactComponent as HalfnoteDottedIcon } from '../../assets/images/icon_half-note-dotted.svg';
+import { ReactComponent as QuarternoteDottedIcon } from '../../assets/images/icon_quarter-note-dotted.svg';
 import { SongContext } from '../../views/SongView/SongContextProvider.component';
 import { visibleNotes as notes } from '../../models/notes';
 import { chords } from '../../models/chords';
@@ -37,9 +39,11 @@ function BottomBar() {
                 inputProps={{ className: classes.input }}
             >
                 <MenuItem value={8} style={{ display: timeSignatureNumerator < 8 ? "none" : "block" }}> <WholenoteIcon /></MenuItem>
+                <MenuItem value={5} style={{ display: timeSignatureNumerator < 5 ? "none" : "block" }}> <HalfnoteDottedIcon /></MenuItem>
                 <MenuItem value={4} style={{ display: timeSignatureNumerator < 4 ? "none" : "block" }}> <HalfnoteIcon /></MenuItem>
-                <MenuItem value={2}> <QuarternoteIcon /></MenuItem>
-                <MenuItem value={1}> <EighthnoteIcon /></MenuItem>
+                <MenuItem value={3} style={{ display: timeSignatureNumerator < 3 ? "none" : "block" }}> <QuarternoteDottedIcon /> </MenuItem>
+                <MenuItem value={2} style={{ display: timeSignatureNumerator < 2 ? "none" : "block" }}> <QuarternoteIcon /> </MenuItem>
+                <MenuItem value={1}> <EighthnoteIcon /> </MenuItem>
             </Select>
         </FormControl>
 
