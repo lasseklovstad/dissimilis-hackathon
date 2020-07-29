@@ -1,9 +1,11 @@
-import React from "react";
-import { makeStyles, IconButton, Menu, MenuItem } from "@material-ui/core";
+import React, { useContext } from "react";
+import { makeStyles, IconButton, Menu, MenuItem, Switch } from "@material-ui/core";
 import colors from "../../utils/colors";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
+import { SongContext } from "../../views/SongView/SongContextProvider.component";
+import { usePutSong } from "../../utils/usePutSong";
 
 
 export type MenuButtonProps = {}
@@ -16,6 +18,8 @@ type MatchParams = {
 export const MenuButton: React.FC<MenuButtonProps> = props => {
     const classes = useStyles();
     const history = useHistory();
+    const { song } = useContext(SongContext);
+    const putSong = usePutSong(song);
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -27,14 +31,17 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
     let id = match ? +match.params.id : 0
     const handleClose = (method = "") => {
         setAnchorEl(null);
-        if (method === "export") {
-            history.push("/song/" + id + "/export");
+        switch (method) {
+            case "export":
+                history.push("/song/" + id + "/export");
+                break;
+            case "save":
+                putSong();
+                break;
         }
     };
 
     const { t } = useTranslation();
-
-
 
     return (
         <div>
@@ -42,6 +49,7 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
                 <MoreHorizIcon />
             </IconButton>
             <Menu id="menuBar" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={() => handleClose("")} role="menu">
+                <MenuItem onClick={() => handleClose("save")}>{t("MenuButton:save")}</MenuItem>
                 <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:duplicate")}</MenuItem>
                 <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:transpose")}</MenuItem>
                 <MenuItem onClick={() => handleClose("export")}>{t("MenuButton:export")}</MenuItem>

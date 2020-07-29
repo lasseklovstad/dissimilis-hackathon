@@ -3,5 +3,6 @@ export const menuButtonNo = {
     "change": "Endre takt",
     "transpose": "Transponer",
     "export": "Eksporter",
-    "hide": "Skjul nummerering av takt"
+    "hide": "Skjul nummerering av takt",
+    "save": "Lagre"
 }

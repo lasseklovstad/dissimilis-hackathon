@@ -6,4 +6,6 @@ export const createSongTabNo = {
     "cancel": "Avbryt",
     "nameOfInstrument": "Navn på instrument",
     "addInstrument": "Legg til et instrument",
+    "changeVoiceName": "Endre navn",
+    "saveNewName": "Lagre",
 }

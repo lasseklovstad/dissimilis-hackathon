@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles, FormControl, MenuItem, Select, Typography, withStyles, Grid } from '@material-ui/core';
 import { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
 import { colors } from '../../utils/colors';
@@ -23,19 +23,19 @@ function BottomBar() {
     chords.map(chord => chordArray.push(chord.name));
     const { selectedNoteLength, setSelectedNoteLength } = useContext(SongToolsContext);
     const { addEmptyBar, getTimeSignature } = useContext(SongContext);
+
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedNoteLength(event.target.value as 1 | 2 | 4 | 8);
-        setShowPossiblePositions(false);
     };
     let timeSignatureNumerator = getTimeSignature()[0];
     if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
     const Menu =
-    <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
+        <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
             <Select
                 value={selectedNoteLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
-                >
+            >
                 <MenuItem value={8} style={{ display: timeSignatureNumerator < 8 ? "none" : "block" }}> <WholenoteIcon /></MenuItem>
                 <MenuItem value={4} style={{ display: timeSignatureNumerator < 4 ? "none" : "block" }}> <HalfnoteIcon /></MenuItem>
                 <MenuItem value={2}> <QuarternoteIcon /></MenuItem>
@@ -44,22 +44,22 @@ function BottomBar() {
         </FormControl>
 
 
-const [toggle, setToggle] = useState<boolean>(true);
-const { showPossiblePositions, setShowPossiblePositions, showAvailableSpace, setNoteIsSelected, noteIsSelected } = useContext(SongToolsContext)
+    const [toggle, setToggle] = useState<boolean>(true);
+    const { showPossiblePositions, setShowPossiblePositions, showAvailableSpace, setNoteIsSelected, noteIsSelected } = useContext(SongToolsContext)
 
-const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) => {
-    if (newToggle !== null) {
-        setToggle(newToggle);
-        setNoteIsSelected(!noteIsSelected);
+    const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) => {
+        if (newToggle !== null) {
+            setToggle(newToggle);
+            setNoteIsSelected(!noteIsSelected);
+        }
+    };
+
+    const scrollToBottom = () => {
+        window.scrollTo(0, document.body.scrollHeight);
     }
-};
 
-const scrollToBottom = () => {
-    window.scrollTo(0, document.body.scrollHeight);
-}
-
-return (
-    <Grid container justify="center">
+    return (
+        <Grid container justify="center">
             <Grid item xs={12} sm={10} className={classes.outercontainer}>
                 <div className={classes.container} >
                     <div className={classes.flexelement}>
@@ -119,7 +119,7 @@ const useStyles = makeStyles({
             color: colors.black
         }
     },
-    
+
     input: {
         padding: "18px 10px 10px 10px",
         height: "28px",

@@ -80,8 +80,8 @@ export const SongView: React.FC<SongViewProps> = props => {
                 ))}
               </Grid>
             </Grid>
-
           </Grid>
+
         </Grid>
       </Grid>
       <BottomBar />

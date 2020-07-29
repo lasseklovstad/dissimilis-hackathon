@@ -234,7 +234,7 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                                 <FormControl className={classes.formControl}>
                                     <Select value={dropDownMenuSelected} onChange={(e) => handleChange(e)} >
                                         {voices.map((voice, i) => {
-                                            return <MenuItem onClick={() => history.replace("/song/" + selectedVoice + 1 + "/export?voice=" + (i + 1))} key={i} value={i}>{voice.title}</MenuItem>
+                                            return <MenuItem onClick={() => history.replace("/song/" + id + "/export?voice=" + (i + 1))} key={i} value={i}>{voice.title}</MenuItem>
                                         })}
                                     </Select>
                                 </FormControl>
@@ -242,7 +242,7 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                             (
                                 <Box style={{ padding: "8px" }}>
                                     {voices.map((voice, i) => {
-                                        return <Button onClick={() => history.replace("/song/" + selectedVoice + 1 + "/export?voice=" + (i + 1))} style={{ backgroundColor: selectedVoice === i ? colors.gray_400 : "white" }} className={classes.button} variant="outlined">{voice.title}</Button>
+                                        return <Button onClick={() => history.replace("/song/" + id + "/export?voice=" + (i + 1))} style={{ backgroundColor: selectedVoice === i ? colors.gray_400 : "white" }} className={classes.button} variant="outlined">{voice.title}</Button>
 
                                     })}
                                 </Box>

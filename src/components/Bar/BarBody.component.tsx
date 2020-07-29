@@ -203,7 +203,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                             key={index} className={classes.toneBox}
                                             onMouseEnter={() => { if (showPossiblePositions) { setPositionArray(selectPositionArray(props.voiceId, props.barNumber, i)); } }}
                                             onMouseLeave={() => { if (showPossiblePositions) { setPositionArray([]) } }}
-                                            style={{ cursor: showPossiblePositions ? (!availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i))) ? 'context-menu' : "pointer" : "default", backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), outlineColor: "black", boxShadow: emptySpace(i) ? (positionArray.includes(i) ? "none" : "0 0 5px black") : "none" }}
+                                            style={{ cursor: showPossiblePositions ? (!availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i))) ? 'context-menu' : "pointer" : "default", backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), border: emptySpace(i) ? (positionArray.includes(i) ? "none" : "1px solid" + colors.gray_400) : "none", opacity: (showPossiblePositions && !emptySpace(i)) ? "80%" : "100%" }}
                                             tabIndex={!props.exportMode ? 1 : -1}
                                             component={ButtonBase}
                                             onClick={() => {
