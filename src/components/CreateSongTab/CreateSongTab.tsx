@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { IVoice } from "../../models/IVoice";
 import { useHistory } from "react-router-dom";
-import { CustomModal } from '../../components/CustomModal/CustomModal'
 
 export type CreateSongTabProps = {
 
@@ -71,14 +70,14 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         mouseY: null,
     };
 
-    const [state, setState] = React.useState<{
+    const [rightClickCoordinates, setRightClickCoordinates] = React.useState<{
         mouseX: null | number;
         mouseY: null | number;
     }>(initialState);
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         event.preventDefault();
-        setState({
+        setRightClickCoordinates({
             mouseX: event.clientX - 2,
             mouseY: event.clientY - 4,
         });
@@ -87,7 +86,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         if (method === "renameVoice") {
             setRenameModalIsOpen(true)
         }
-        setState(initialState);
+        setRightClickCoordinates(initialState);
     };
     const handleChangeVoiceTitle = () => {
         setRenameModalIsOpen(false);
@@ -110,12 +109,12 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                                 <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setRightClicked(index); handleClick(e) }} selected={selectedVoice === index + 2} text={voices.title} link={`/song/1?voice=${index + 2}`} />
                                 <Menu
                                     keepMounted
-                                    open={state.mouseY !== null}
+                                    open={rightClickCoordinates.mouseY !== null}
                                     onClose={() => { handleCloseMenu("") }}
                                     anchorReference="anchorPosition"
                                     anchorPosition={
-                                        state.mouseY !== null && state.mouseX !== null
-                                            ? { top: state.mouseY, left: state.mouseX }
+                                        rightClickCoordinates.mouseY !== null && rightClickCoordinates.mouseX !== null
+                                            ? { top: rightClickCoordinates.mouseY, left: rightClickCoordinates.mouseX }
                                             : undefined
                                     }
                                 >
