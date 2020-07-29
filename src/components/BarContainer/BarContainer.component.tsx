@@ -65,7 +65,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     } else {
         let centerDivSize: 10 | 11 | 12 = 11;
         //checks if a bar has a house connected to it
-        let barConst = voices[0].bars[props.barNumber].house !== null
+        let barConst =( voices[0].bars[props.barNumber].house !== undefined) && (voices[0].bars[props.barNumber].house !== null)
         console.log(voices[0].bars[props.barNumber].house);
 
 
@@ -96,7 +96,6 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                                         disabled={props.barNumber === 0 && voices[0].bars.length === 1}
                                         onClick={() => handleClose(barConst ? "removeHouse" : "addHouse")}>
                                         {
-
                                             barConst ? t("BarContainer:removeHouse") : t("BarContainer:addHouse")
                                         }
                                     </MenuItem>
