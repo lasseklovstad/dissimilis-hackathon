@@ -31,6 +31,7 @@ function BottomBar() {
     };
     let timeSignatureNumerator = getTimeSignature()[0];
     if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
+    //When adding new notes to this list of MenuItems with a given value, remember to add the case to the method calculateFlexBasis in BarBody.component.tsx.
     const Menu =
         <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
             <Select
