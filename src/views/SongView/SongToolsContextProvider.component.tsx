@@ -49,9 +49,7 @@ const SongToolsContextProvider: React.FC = props => {
         if (isInitialMount.current) {
             isInitialMount.current = false;
         } else {
-            setShowPossiblePositions(false);
             showAvailableSpace();
-            setShowPossiblePositions(true);
         }
     }, [selectedNoteLength, song]);
 
@@ -85,7 +83,6 @@ const SongToolsContextProvider: React.FC = props => {
             }
         }
         editNote(voiceIndex, barIndex, tempChordsAndNotes);
-        setShowPossiblePositions(false)
     }
 
     const selectPositionArray = (voiceIndex: number, barIndex: number, noteIndex: number) => {
