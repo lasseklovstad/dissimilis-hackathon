@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Grid, Button, Modal, TextField, makeStyles, Typography, Menu, MenuItem } from "@material-ui/core";
+import { Grid, makeStyles, Menu, MenuItem } from "@material-ui/core";
 import { DashboardButtonWithAddIconNoLink, DashboardButtonNoLink, DashboardButton } from "../DashboardButtons/DashboardButtons";
 import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
@@ -12,16 +12,6 @@ export type CreateSongTabProps = {
 
 }
 
-function getModalStyle() {
-    const left = 50;
-
-    return {
-        top: "20%",
-        left: "50%",
-        transform: `translate(-${left}%)`,
-    };
-}
-
 export type InstrumentCard = {
     name: string,
     link: string,
@@ -29,14 +19,11 @@ export type InstrumentCard = {
 export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
-    const [modalStyle] = useState(getModalStyle);
     const [textFieldInput, setTextFieldInput] = useState<string>("");
 
     const history = useHistory();
 
     const { song: { voices }, addVoice, changeVoiceTitle, song } = useContext(SongContext);
-
-    const classes = useStyles();
 
     const handleAddInstrument = () => {
         addVoice({ title: textFieldInput, partNumber: voices.length, bars: [] });
@@ -56,6 +43,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     };
 
     const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
+        console.log(e.target.value)
         setTextFieldInput(e.target.value);
     };
 
@@ -93,8 +81,6 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         setRenameModalIsOpen(false);
         changeVoiceTitle(rightClicked + 1, textFieldInput)
     }
-
-    const CHARACTER_LIMIT = 250;
 
     return (
         <Grid container>
@@ -141,7 +127,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                 textFieldInput={textFieldInput} />
             <CustomModal handleOnCancelClick={() => handleClose}
                 handleOnSaveClick={() => handleChangeVoiceTitle}
-                handleClosed={() => () => setRenameModalIsOpen(false)}
+                handleClosed={() => setRenameModalIsOpen(false)}
                 modalOpen={renameModalIsOpen}
                 saveText={t("CreateSongTab:saveNewName")}
                 cancelText={t("CreateSongTab:cancel")}
@@ -153,33 +139,5 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         </Grid>
     );
 };
-
-
-const useStyles = makeStyles({
-    modal: {
-        position: 'absolute',
-        boxShadow: '0 3px 6px 2px rgba(0, 0, 0, 0.1)',
-        height: "auto",
-        borderRadius: 2,
-        backgroundColor: "white",
-        padding: "40px",
-        "@media (max-width: 600px)": {
-            width: "80%",
-            padding: "48px",
-        },
-        outline: "none",
-    },
-    button: {
-        "&:hover": {
-            backgroundColor: colors.gray_300
-        },
-        marginRight: "8px",
-        float: "left",
-        position: "relative",
-    },
-    title: {
-        padding: "8px",
-    }
-})
 
 export default CreateSongTab;
