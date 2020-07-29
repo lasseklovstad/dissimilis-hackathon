@@ -12,6 +12,8 @@ export type BarBodyProps = {
     chordsAndNotes: IChordAndNotes[],
     height?: number,
     voiceId: number,
+    exportMode?: boolean,
+    rowsPerSheet?: number,
 }
 
 
@@ -195,8 +197,10 @@ export const BarBody: React.FC<BarBodyProps> = props => {
             {chordsInBar}
             {
                 props.chordsAndNotes.map((note, i) => {
+                    console.log("!!!: " + props.chordsAndNotes.length)
+
                     return (
-                        <Box onContextMenu={() => setRightClicked(i)} key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px" }} flexDirection="column" >
+                        <Box onContextMenu={() => setRightClicked(i)} key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px", margin: props.chordsAndNotes.length >= 5 ? props.rowsPerSheet === 6 ? "0px 1px" : "0px 4px" : "0px 4px" }} flexDirection="column"  >
                             {note.notes.map((type, index) => {
                                 const number = tangentToNumber(type);
                                 return (
@@ -206,6 +210,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                             onMouseEnter={() => { if (showPossiblePositions) { setPositionArray(selectPositionArray(props.voiceId, props.barNumber, i)); } }}
                                             onMouseLeave={() => { if (showPossiblePositions) { setPositionArray([]) } }}
                                             style={{ cursor: showPossiblePositions ? (!availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i))) ? 'context-menu' : "pointer" : "default", backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), border: emptySpace(i) ? (positionArray.includes(i) ? "none" : "1px solid" + colors.gray_400) : "none", opacity: (showPossiblePositions && !emptySpace(i)) ? "80%" : "100%" }}
+                                            tabIndex={!props.exportMode ? 1 : -1}
                                             component={ButtonBase}
                                             onClick={() => {
                                                 if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
@@ -216,24 +221,30 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                         >
                                             <Typography className={classes.tangentText} variant={'body2'}>{number === 0 ? " " : number}</Typography>
                                         </Box>
-                                        <Menu
-                                            keepMounted
-                                            open={state.mouseY !== null}
-                                            onClose={() => handleClose(" ")}
-                                            anchorReference="anchorPosition"
-                                            anchorPosition={
-                                                state.mouseY !== null && state.mouseX !== null
-                                                    ? { top: state.mouseY, left: state.mouseX }
-                                                    : undefined
-                                            }
-                                        >
-                                            <MenuItem onClick={() => handleClose("delete")}>Slett</MenuItem>
-                                        </Menu>
+                                        {
+                                            !props.exportMode ?
+                                                (
+                                                    <Menu
+                                                        keepMounted
+                                                        open={state.mouseY !== null}
+                                                        onClose={() => handleClose("")}
+                                                        anchorReference="anchorPosition"
+                                                        anchorPosition={
+                                                            state.mouseY !== null && state.mouseX !== null
+                                                                ? { top: state.mouseY, left: state.mouseX }
+                                                                : undefined
+                                                        }
+                                                    >
+                                                        <MenuItem tabIndex={-1} onClick={() => handleClose("delete")}>Slett</MenuItem>
+                                                    </Menu>
+                                                ) : <></>
+                                        }
+
                                     </>
                                 )
                             })}
 
-                        </Box>
+                        </Box >
                     )
                 })
             }
@@ -253,7 +264,6 @@ const useStyles = makeStyles({
         flex: 1,
         display: "flex",
         flexDirection: "column",
-        margin: "0px 4px",
     },
     toneBox: {
         flex: 2,
