@@ -10,7 +10,7 @@ import { useHistory } from 'react-router-dom';
  */
 
 //TODO: isnn initialData neccessary here? 
-export const useApiService = <T extends Object>(method: "get" | "post", url: string, options: ApiServiceOptions<T>) => {
+export const useApiService = <T extends Object>(url: string, options: ApiServiceOptions<T>) => {
   const history = useHistory();
 
   // Add params to the url   
@@ -80,8 +80,30 @@ export const useApiService = <T extends Object>(method: "get" | "post", url: str
     return { result, isError, errorMessage };
   };
 
-  return { fetchData, postData, putData };
+  const deleteData = async () => {
+    let result: AxiosResponse<T> | undefined = undefined;
+    let errorMessage: any;
+    let isError = false;
+    try {
+      result = await axios.delete<T>(finalUrl, { headers: options.headers });
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        history.push("/");
+        sessionStorage.removeItem("apiKey");
+        sessionStorage.removeItem("userId");
+      }
+      isError = true;
+      errorMessage = error;
+      console.log(error);
+    }
+    return { result, isError, errorMessage };
+  };
+
+  return { fetchData, postData, putData, deleteData };
 };
+
+
+
 
 /**
  * Params are added to the finalUrl

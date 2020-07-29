@@ -16,7 +16,7 @@ export const useLoginPost = (code: string | null) => {
     const url = 'login';
     const params = { "web_app_url": process.env.REACT_APP_PUBLIC_URL as string, "X-API-Key": sessionStorage.getItem("apiKey") || "", "X-User-ID": sessionStorage.getItem("userId") || "" };
     const body = { "code": code };
-    const postLogin = useApiService<Token>("post", url, { params, body }).postData;
+    const postLogin = useApiService<Token>(url, { params, body }).postData;
     return postLogin;
 }
 

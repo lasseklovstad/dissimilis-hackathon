@@ -10,6 +10,6 @@ export const useGetSong = (id: number) => {
     const apiKey = sessionStorage.getItem("apiKey") || "";
     const userId = sessionStorage.getItem("userId") || "";
     const headers = { 'X-API-Key': apiKey, 'X-User-ID': userId, };
-    const getSongs = useApiService<ISong>("get", url, { headers }).fetchData;
+    const getSongs = useApiService<ISong>(url, { headers }).fetchData;
     return getSongs;
 }
