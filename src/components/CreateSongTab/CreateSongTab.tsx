@@ -1,17 +1,15 @@
 import React, { useState, useContext } from "react";
-import { Grid, Button, Modal, TextField, makeStyles, Typography } from "@material-ui/core";
-import { DashboardButtonWithAddIconNoLink, DashboardButtonNoLink } from "../DashboardButtons/DashboardButtons";
+import { Grid, Button, Modal, TextField, makeStyles, Typography, Menu, MenuItem } from "@material-ui/core";
+import { DashboardButtonWithAddIconNoLink, DashboardButtonNoLink, DashboardButton } from "../DashboardButtons/DashboardButtons";
 import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { IVoice } from "../../models/IVoice";
 import { useHistory } from "react-router-dom";
 
-
 export type CreateSongTabProps = {
 
 }
-
 
 function getModalStyle() {
     const left = 50;
@@ -29,12 +27,13 @@ export type InstrumentCard = {
 }
 export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
     const [modalStyle] = useState(getModalStyle);
     const [textFieldInput, setTextFieldInput] = useState<string>("");
 
     const history = useHistory();
 
-    const { song, song: { voices }, addVoice } = useContext(SongContext);
+    const { song: { voices }, addVoice, changeVoiceTitle, song } = useContext(SongContext);
 
     const classes = useStyles();
 
@@ -52,6 +51,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
 
     const handleClose = () => {
         setModalIsOpen(false);
+        setRenameModalIsOpen(false);
     };
 
     const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
@@ -62,8 +62,39 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const queryString = require('query-string');
     const voiceString = queryString.parse(window.location.search);
     const selectedVoice = parseInt(voiceString.voice);
-    const CHARACTER_LIMIT = 250;
+    const [rightClicked, setRightClicked] = useState(-1);
 
+
+    const initialState = {
+        mouseX: null,
+        mouseY: null,
+    };
+
+    const [rightClickCoordinates, setRightClickCoordinates] = React.useState<{
+        mouseX: null | number;
+        mouseY: null | number;
+    }>(initialState);
+
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        setRightClickCoordinates({
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+        });
+    };
+    const handleCloseMenu = (method?: string) => {
+        if (method === "renameVoice") {
+            setRenameModalIsOpen(true)
+        }
+        setRightClickCoordinates(initialState);
+    };
+    const handleChangeVoiceTitle = () => {
+        setRenameModalIsOpen(false);
+        changeVoiceTitle(rightClicked + 1, textFieldInput)
+    }
+
+    const CHARACTER_LIMIT = 250;
+    
     return (
         <Grid container>
             <Grid item xs={"auto"} sm={1}></Grid>
@@ -74,8 +105,21 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                     {voices.slice(1).map((voices: IVoice, index: number) => {
                         return (
-                            <Grid item key={index + 2}>
-                                <DashboardButtonNoLink selected={selectedVoice === index + 2} text={voices.title} func={() => { history.replace(`/song/${song.id}?voice=${index + 2}`) }} />
+                            <Grid item key={index}>
+                                <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setRightClicked(index); handleClick(e) }} selected={selectedVoice === index + 2} text={voices.title} link={`/song/1?voice=${index + 2}`} />
+                                <Menu
+                                    keepMounted
+                                    open={rightClickCoordinates.mouseY !== null}
+                                    onClose={() => { handleCloseMenu("") }}
+                                    anchorReference="anchorPosition"
+                                    anchorPosition={
+                                        rightClickCoordinates.mouseY !== null && rightClickCoordinates.mouseX !== null
+                                            ? { top: rightClickCoordinates.mouseY, left: rightClickCoordinates.mouseX }
+                                            : undefined
+                                    }
+                                >
+                                    <MenuItem onClick={() => { handleCloseMenu("renameVoice") }}>{t("CreateSongTab:changeVoiceName")}</MenuItem>
+                                </Menu>
                             </Grid>
                         )
                     })}
@@ -89,7 +133,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     <Grid container >
                         <Typography className={classes.title} variant="h2">{t("CreateSongTab:addInstrument")}</Typography>
                         <Grid item xs={12} style={{ marginBottom: "16px" }}>
-                            <TextField inputProps={{maxlength: CHARACTER_LIMIT}} helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`} variant="filled" onChange={handleChange} label={t("CreateSongTab:nameOfInstrument")} style={{ width: "100%" }} />
+                            <TextField inputProps={{ maxlength: CHARACTER_LIMIT }} helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`} variant="filled" onChange={handleChange} label={t("CreateSongTab:nameOfInstrument")} style={{ width: "100%" }} />
                         </Grid>
                         <Grid item xs={12}>
                             <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleAddInstrument} >{t("CreateSongTab:save")}</Button>
@@ -98,6 +142,21 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                 </div>
             </Modal>
+            <Modal open={renameModalIsOpen} onClose={handleClose}>
+                <div className={classes.modal} style={modalStyle}>
+                    <Grid container >
+                        <Typography className={classes.title} variant="h2">{t("CreateSongTab:changeVoiceName")}</Typography>
+                        <Grid item xs={12} style={{ marginBottom: "16px" }}>
+                            <TextField variant="filled" onChange={handleChange} label="Navn" style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleChangeVoiceTitle} >{t("CreateSongTab:saveNewName")}</Button>
+                            <Button className={classes.button} size="large" variant="outlined" onClick={() => setRenameModalIsOpen(false)}>{t("CreateSongTab:cancel")}</Button>
+                        </Grid>
+                    </Grid>
+                </div>
+            </Modal>
+
             <Grid item xs={"auto"} sm={1}></Grid>
         </Grid>
     );
