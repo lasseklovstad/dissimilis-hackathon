@@ -126,25 +126,17 @@ export const BarBody: React.FC<BarBodyProps> = props => {
 
     const handleClose = (method?: string) => {
         if (method === "delete") {
-
             if (rightClicked >= 0) {
-                let tempChordsAndNotes: IChordAndNotes[] = voices[props.voiceId].bars[props.barNumber].chordsAndNotes.slice();;
-
+                let tempChordsAndNotes: IChordAndNotes[] = voices[props.voiceId].bars[props.barNumber].chordsAndNotes.slice();
                 const newNote: IChordAndNotes = { length: 1, notes: [" "] };
                 tempChordsAndNotes[rightClicked] = newNote;
                 for (let i = rightClicked; i < voices[props.voiceId].bars[props.barNumber].chordsAndNotes[rightClicked].length + rightClicked - 1; i++) {
                     tempChordsAndNotes.splice(i, 0, newNote);
                 }
-
-
-
                 deleteNote(props.voiceId, props.barNumber, tempChordsAndNotes);
                 setPositionArray([])
             }
-
-
         }
-
         setState(initialState);
     };
 
@@ -205,8 +197,10 @@ export const BarBody: React.FC<BarBodyProps> = props => {
             {chordsInBar}
             {
                 props.chordsAndNotes.map((note, i) => {
+                    console.log("!!!: " + props.chordsAndNotes.length)
+
                     return (
-                        <Box onContextMenu={() => setRightClicked(i)} key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px", margin: props.chordsAndNotes.length === 8 ? props.rowsPerSheet === 6 ? "0px 1px" : "0px 4px" : "0px 4px" }} flexDirection="column"  >
+                        <Box onContextMenu={() => setRightClicked(i)} key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px", margin: props.chordsAndNotes.length >= 5 ? props.rowsPerSheet === 6 ? "0px 1px" : "0px 4px" : "0px 4px" }} flexDirection="column"  >
                             {note.notes.map((type, index) => {
                                 const number = tangentToNumber(type);
                                 return (
@@ -225,7 +219,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                             }}
                                             onContextMenu={handleClick}
                                         >
-                                            <Typography className={classes.tangentText} >{number === 0 ? " " : number}</Typography>
+                                            <Typography className={classes.tangentText} variant={'body2'}>{number === 0 ? " " : number}</Typography>
                                         </Box>
                                         {
                                             !props.exportMode ?
@@ -265,7 +259,6 @@ const useStyles = makeStyles({
         display: "flex",
         flexFlow: "row wrap",
         justifyContent: "center",
-
     },
     toneAndChordBox: {
         flex: 1,

@@ -23,11 +23,9 @@ export type BarContainerProps = {
 export const BarContainer: React.FC<BarContainerProps> = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
     const { deleteBar, duplicateBar, toggleRepBefore, toggleRepAfter, addHouse, removeHouse, song: { voices } } = useContext(SongContext);
     const { setShowPossiblePositions } = useContext(SongToolsContext);
     const bar = props.bar
-
     const queryString = require('query-string');
     const voiceStringFromURL = queryString.parse(window.location.search);
     const voiceId: number = parseInt(voiceStringFromURL.voice);
@@ -76,11 +74,10 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
             <Grid container role="grid" className={classes.fullHeight} >
                 <Grid item xs={12}>
                     <Grid container style={{ height: "auto" }} role="grid" aria-label="barline before the bar">
-                        <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ height: !props.height ? "120px" : props.height, borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
+                        <Grid item xs={props.barLineBefore ? 1 : "auto"} className={classes.barlineBox} style={{ height: !props.height ? "160px" : props.height, borderRight: props.barLineBefore ? "2px solid black" : "0" }} role="gridcell">
                         </Grid>
                         <Grid item xs={centerDivSize} role="gridcell" aria-label="the bar">
-                            <Bar exportMode={props.exportMode || false} rowsPerSheet={props.rowsPerSheet || 0} voiceId={props.voiceId} barNumber={props.barNumber - 1} height={props.height || 120} repBefore={voices[0].bars[props.barNumber - 1].repBefore} repAfter={voices[0].bars[props.barNumber - 1].repAfter} house={voices[0].bars[props.barNumber - 1].house || undefined} chordsAndNotes={bar.chordsAndNotes} barLineAfter={props.barLineAfter} />
-                        </Grid>
+                            <Bar exportMode={props.exportMode || false} rowsPerSheet={props.rowsPerSheet || 0} voiceId={props.voiceId} barNumber={props.barNumber - 1} height={props.height || 160} repBefore={voices[0].bars[props.barNumber - 1].repBefore} repAfter={voices[0].bars[props.barNumber - 1].repAfter} house={voices[0].bars[props.barNumber - 1].house || undefined} chordsAndNotes={bar.chordsAndNotes} barLineAfter={props.barLineAfter} />                        </Grid>
                     </Grid>
                 </Grid>
                 <Grid item xs={12} role="row" style={{ height: "32px" }}>

@@ -51,6 +51,8 @@ export const SongView: React.FC<SongViewProps> = props => {
     putSong();
   }
 
+  const heightOfBar = 160;
+
   return (
     <>
       <Grid container className={classes.root} >
@@ -75,10 +77,10 @@ export const SongView: React.FC<SongViewProps> = props => {
 
               <Grid item xs={1}>
                 {voices[selectedVoice].bars.map((bar, i) => {
-                  if (i === 0) { return (<TimeSignature key={i} />) }
-                  else if (xl && i % 4 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
-                  else if (!xs && !xl && i % 2 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
-                  else if (xs) { return (<BarNumber key={i} barNumber={i + 1} />) }
+                  if (i === 0) { return (<TimeSignature key={i} height={heightOfBar} />) }
+                  else if (xl && i % 4 === 0) { return (<BarNumber key={i} barNumber={i + 1} height={heightOfBar} />) }
+                  else if (!xs && !xl && i % 2 === 0) { return (<BarNumber key={i} barNumber={i + 1} height={heightOfBar} />) }
+                  else if (xs) { return (<BarNumber key={i} barNumber={i + 1} height={heightOfBar} />) }
                   return <div key={i} ></div>
                 })}
               </Grid>
@@ -87,7 +89,7 @@ export const SongView: React.FC<SongViewProps> = props => {
                 <Grid container>
                   {voices[selectedVoice].bars.map((bar, i) => (
                     <Grid item xs={12} sm={6} xl={3} key={i} >
-                      <BarContainer voiceId={selectedVoice} masterSheet={selectedVoice === 0} barNumber={bar.barNumber} bar={bar} barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} />
+                      <BarContainer voiceId={selectedVoice} masterSheet={selectedVoice === 0} barNumber={bar.barNumber} bar={bar} barLineBefore={isBarLineBefore(i)} barLineAfter={isBarLineAfter(i)} height={heightOfBar} />
                     </Grid>
                   ))}
                 </Grid>
