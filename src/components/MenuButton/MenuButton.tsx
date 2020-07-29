@@ -3,18 +3,25 @@ import { makeStyles, IconButton, Menu, MenuItem, Switch } from "@material-ui/cor
 import colors from "../../utils/colors";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { usePutSong } from "../../utils/usePutSong";
+import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 
 
 export type MenuButtonProps = {}
+
+type MatchParams = {
+    id: string
+}
+
 
 export const MenuButton: React.FC<MenuButtonProps> = props => {
     const classes = useStyles();
     const history = useHistory();
     const { song } = useContext(SongContext);
     const putSong = usePutSong(song);
+    const { setShowPossiblePositions } = useContext(SongToolsContext);
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -22,11 +29,14 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
         setAnchorEl(event.currentTarget);
     };
 
+    const match = useRouteMatch<MatchParams>("/song/:id")
+    let id = match ? +match.params.id : 0
     const handleClose = (method = "") => {
         setAnchorEl(null);
         switch (method) {
             case "export":
-                history.push("/song/1/export");
+                setShowPossiblePositions(false);
+                history.push("/song/" + id + "/export");
                 break;
             case "save":
                 putSong();
