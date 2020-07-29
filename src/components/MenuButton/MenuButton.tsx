@@ -41,6 +41,8 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
             case "save":
                 putSong();
                 break;
+            default:
+
         }
     };
 
