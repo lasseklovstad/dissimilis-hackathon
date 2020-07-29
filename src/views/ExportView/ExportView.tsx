@@ -5,6 +5,7 @@ import colors from "../../utils/colors";
 import BarContainer from "../../components/BarContainer/BarContainer.component";
 import { useHistory } from "react-router-dom";
 import BarNumber, { TimeSignature } from "../../components/SongViewComponents/SongView.component";
+import { useTranslation } from "react-i18next";
 
 
 export type ExportViewProps = {
@@ -14,6 +15,8 @@ export const ExportView: React.FC<ExportViewProps> = props => {
     const { song: { title, voices, id } } = useContext(SongContext);
     const classes = useStyles();
     const history = useHistory();
+    const { t } = useTranslation();
+
 
 
     const [rowsPerSheet, setRowsPerSheet] = useState<number>(4);
@@ -154,12 +157,7 @@ export const ExportView: React.FC<ExportViewProps> = props => {
             setAmountOfPages(1);
         } else {
             setAmountOfPages(amountOfPages1);
-
         }
-
-
-
-
     }
 
     useEffect(() => {
@@ -211,9 +209,6 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                                                 return (
                                                     <>
                                                         <Grid item xs={lengthOfEachBar}  >
-                                                            {//Need to clarify if barID is stored in each bar? or priority
-                                                                //If that is the case we must use bar.barNumber or something here. That would do thing much easier :))
-                                                            }
                                                             < BarContainer exportMode rowsPerSheet={convertFromLengthOfBarToAmountOfBarsPerRow()} height={calculateHeightOfBar()} voiceId={selectedVoice} barNumber={bar.barNumber as number} masterSheet={false} barLineAfter={isBarLineAfter(pageIndex, bar.barNumber as number)} barLineBefore={isBarLineBefore(i)} bar={bar} />
                                                         </Grid>
                                                     </>
@@ -258,19 +253,19 @@ export const ExportView: React.FC<ExportViewProps> = props => {
 
                     </Grid>
                     <Grid item xs={5} md={3} className={classes.slider} style={{ order: matches ? 3 : 3, marginRight: matches ? "0px" : "8px" }}>
-                        <Typography variant="body1">Takt per rad</Typography>
+                        <Typography variant="body1">{t("ExportView:barPerRow")}</Typography>
                         <Slider onChange={(event, value) => changeAmount(value)} defaultValue={4} step={null} marks={marks} min={1} max={6} valueLabelDisplay="auto" />
                     </Grid>
                     <Grid item xs={5} md={3} className={classes.slider} style={{ marginRight: matches ? "0px" : "0px", order: matches ? 4 : 4 }}>
-                        <Typography variant="body1">Rader per ark</Typography>
+                        <Typography variant="body1">{t("ExportView:rowsPerSheet")}</Typography>
                         <Slider onChange={(event, value) => changeRowsPerSheet(value)} defaultValue={4} step={1} marks min={1} max={5} valueLabelDisplay="auto" />
                     </Grid>
                     <Grid item xs={"auto"} md={1} style={{ order: 5 }}>
 
                     </Grid>
                     <Grid item xs={5} md={2} style={{ backgroundColor: "transparent", order: matches ? 5 : 2, marginBottom: matches ? "0px" : "12px" }} >
-                        <Button className={classes.confirmOrCancelButtons} onClick={() => window.print()} style={{ backgroundColor: colors.gray_400 }}>Lag PDF</Button>
-                        <Button className={classes.confirmOrCancelButtons} onClick={() => history.push("/song/" + id + "/")}> {"Avbryt"}</Button>
+                        <Button className={classes.confirmOrCancelButtons} onClick={() => window.print()} style={{ backgroundColor: colors.gray_400 }}>{t("ExportView:createPDF")}</Button>
+                        <Button className={classes.confirmOrCancelButtons} onClick={() => history.push("/song/" + id + "/")}> {t("ExportView:cancel")}</Button>
                     </Grid>
                 </Grid>
             </BottomNavigation >
@@ -337,8 +332,6 @@ const useStyles = makeStyles({
 
 
         }
-
-
 
     },
 })

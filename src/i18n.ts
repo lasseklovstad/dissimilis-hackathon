@@ -12,6 +12,8 @@ import { menuButtonEn } from './assets/languages/english/menuButtonEn';
 import { menuButtonNo } from './assets/languages/norwegian/menuButtonNo';
 import { barContainerEn } from './assets/languages/english/barContainerEn';
 import { barContainerNo } from './assets/languages/norwegian/barContainerNo';
+import { exportViewEn } from "./assets/languages/english/exportViewEn";
+import { exportViewNo } from "./assets/languages/norwegian/exportViewNo";
 
 
 
@@ -27,7 +29,7 @@ const resources: Resource = {
     BottomBar: bottombarEn,
     MenuButton: menuButtonEn,
     BarContainer: barContainerEn,
-
+    ExportView: exportViewEn
   },
   no: {
     DashboardView: dashboardNo,
@@ -36,7 +38,7 @@ const resources: Resource = {
     BottomBar: bottombarNo,
     MenuButton: menuButtonNo,
     BarContainer: barContainerNo,
-
+    ExportView: exportViewNo,
   },
 }
 
