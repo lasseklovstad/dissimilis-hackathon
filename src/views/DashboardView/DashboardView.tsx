@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
+import { Grid, Typography, Box, makeStyles, Menu, MenuItem } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
 import { DashboardButton, DashboardLibraryButton, DashboardButtonWithAddIconNoLink } from '../../components/DashboardButtons/DashboardButtons';
 import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBar'
@@ -94,6 +94,32 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
     setDashboardView(false)
   }
 
+  const [rightClicked, setRightClicked] = useState(-1);
+
+  const initialState = {
+    mouseX: null,
+    mouseY: null,
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setRightClickCoordinates({
+      mouseX: event.clientX - 2,
+      mouseY: event.clientY - 4,
+    });
+  };
+
+  const [rightClickCoordinates, setRightClickCoordinates] = React.useState<{
+    mouseX: null | number;
+    mouseY: null | number;
+  }>(initialState);
+
+  const handleCloseMenu = (method?: string) => {
+    if (method === "deleteVoice") {
+
+    }
+    setRightClickCoordinates(initialState);
+  };
 
   return (
 
@@ -129,9 +155,22 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                   <Typography variant="h1">{t("DashboardView:recentSongLabel")}</Typography>
                 </Box>
                 <Grid container spacing={3}>
-                  {recentSongs?.map(song => (
+                  {recentSongs?.map((song, index) => (
                     <Grid item xs={12} sm={4} lg={3} key={song.id}>
-                      <DashboardButton text={song.title} link={"/song/" + song.id!.toString()} />
+                      <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setRightClicked(index); handleClick(e) }} text={song.title} link={"/song/" + song.id!.toString()} />
+                      <Menu
+                        keepMounted
+                        open={rightClickCoordinates.mouseY !== null}
+                        onClose={() => { handleCloseMenu("") }}
+                        anchorReference="anchorPosition"
+                        anchorPosition={
+                          rightClickCoordinates.mouseY !== null && rightClickCoordinates.mouseX !== null
+                            ? { top: rightClickCoordinates.mouseY, left: rightClickCoordinates.mouseX }
+                            : undefined
+                        }
+                      >
+                        <MenuItem onClick={() => { handleCloseMenu("deleteVoice") }}>Slett sang</MenuItem>
+                      </Menu>
                     </Grid>
                   ))}
                   <Grid item xs={12} sm={4} lg={3} key="library">
@@ -151,7 +190,6 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               labelText={t("DashboardView:nameOfSong")}
               handleChange={() => handleOnChangeModal}
               textFieldInput={textFieldInput} />
-
           </>
           :
 
@@ -170,7 +208,6 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
             </Box>
           </Grid>
         }
-
       </Grid>
     </Box>
 
