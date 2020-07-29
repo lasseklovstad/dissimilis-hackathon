@@ -21,6 +21,7 @@ interface ISongContext {
     deleteNote: (voiceId: number, barId: number, newNote: IChordAndNotes[]) => void,
     addHouse: (barId: number) => void,
     removeHouse: (barId: number) => void,
+    isLoading: boolean,
 }
 
 export const SongContext = React.createContext<ISongContext>({
@@ -47,10 +48,12 @@ export const SongContext = React.createContext<ISongContext>({
     deleteNote: (voiceId: number, barId: number, newNote: IChordAndNotes[]) => { },
     addHouse: (barId: number) => { },
     removeHouse: (barId: number) => { },
+    isLoading: false,
 });
 
 const SongContextProvider: React.FC = props => {
     const [songId, setSongId] = useState<number>(1);
+    const [isLoading, setIsloading] = useState<boolean>(false)
     const getSong = useGetSong(songId);
     let [song, setSong] = useState<ISong>({
         title: "",
@@ -72,10 +75,13 @@ const SongContextProvider: React.FC = props => {
         setSongId(id);
     }
     useEffect(() => {
+        setIsloading(true);
         getSong().then(({ result }) => {
             if (result?.data) {
+                setIsloading(false);
                 setSong(result.data)
             }
+            setIsloading(false);
         })
     }, [])
 
@@ -245,6 +251,7 @@ const SongContextProvider: React.FC = props => {
         deleteNote,
         addHouse,
         removeHouse: deleteHouse,
+        isLoading,
     }
 
     return (
