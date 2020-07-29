@@ -242,7 +242,7 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                             (
                                 <Box style={{ padding: "8px" }}>
                                     {voices.map((voice, i) => {
-                                        return <Button onClick={() => history.replace("/song/" + id + "/export?voice=" + (i + 1))} style={{ backgroundColor: selectedVoice === i ? colors.gray_400 : "white" }} className={classes.button} variant="outlined">{voice.title}</Button>
+                                        return <Button onClick={() => history.replace("/song/" + id + "/export?voice=" + (i + 1))} style={{ backgroundColor: selectedVoice === i ? colors.gray_200 : "white" }} className={classes.button} variant="outlined">{voice.title}</Button>
 
                                     })}
                                 </Box>
@@ -264,7 +264,7 @@ export const ExportView: React.FC<ExportViewProps> = props => {
 
                     </Grid>
                     <Grid item xs={5} md={2} style={{ backgroundColor: "transparent", order: matches ? 5 : 2, marginBottom: matches ? "0px" : "12px" }} >
-                        <Button className={classes.confirmOrCancelButtons} onClick={() => window.print()} style={{ backgroundColor: colors.gray_400 }}>{t("ExportView:createPDF")}</Button>
+                        <Button className={classes.confirmOrCancelButtons} onClick={() => window.print()} style={{ backgroundColor: colors.teal_100 }}>{t("ExportView:createPDF")}</Button>
                         <Button className={classes.confirmOrCancelButtons} onClick={() => history.push("/song/" + id + "/")}> {t("ExportView:cancel")}</Button>
                     </Grid>
                 </Grid>

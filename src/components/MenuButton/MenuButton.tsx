@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { usePutSong } from "../../utils/usePutSong";
+import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 
 
 export type MenuButtonProps = {}
@@ -20,6 +21,7 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
     const history = useHistory();
     const { song } = useContext(SongContext);
     const putSong = usePutSong(song);
+    const { setShowPossiblePositions } = useContext(SongToolsContext);
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -33,6 +35,7 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
         setAnchorEl(null);
         switch (method) {
             case "export":
+                setShowPossiblePositions(false);
                 history.push("/song/" + id + "/export");
                 break;
             case "save":

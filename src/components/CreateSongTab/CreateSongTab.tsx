@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { IVoice } from "../../models/IVoice";
 import { useHistory } from "react-router-dom";
+import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 
 export type CreateSongTabProps = {
 
@@ -34,10 +35,12 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const history = useHistory();
 
     const { song: { voices, id }, addVoice, changeVoiceTitle, song } = useContext(SongContext);
+    const { setShowPossiblePositions } = useContext(SongToolsContext);
 
     const classes = useStyles();
 
     const handleAddInstrument = () => {
+        setShowPossiblePositions(false);
         addVoice({ title: textFieldInput, partNumber: voices.length, bars: [] });
         setModalIsOpen(false);
         setTextFieldInput("");
