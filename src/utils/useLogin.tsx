@@ -8,7 +8,7 @@ import { useApiService } from "./useApiService";
 export const useLoginRedirect = () => {
     const url = 'login';
     const params = { "web_app_url": process.env.REACT_APP_PUBLIC_URL as string };
-    const getLoginUrl = useApiService<string>("get", url, { params }).fetchData;
+    const getLoginUrl = useApiService<string>(url, { params }).fetchData;
     return getLoginUrl;
 }
 
