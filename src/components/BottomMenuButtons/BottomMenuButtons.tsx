@@ -33,7 +33,7 @@ export const MenuButtonWithAddIcon: FunctionComponent<AddButtonProps> = (props) 
             variant="outlined"
             size="large"
             className={styles.addbutton}
-            style={{backgroundColor: props.selected ? colors.gray_200 : colors.white}}
+            style={{ backgroundColor: props.selected ? colors.gray_200 : colors.white }}
             startIcon={<AddIcon />}
             onClick={() => props.onClick && props.onClick()}
         >
@@ -68,7 +68,7 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props
         setOptions(props.notesOrChords);
     }, [props.notesOrChords]);
     const showValue = selectedNoteKey;
-    if(!options.includes(selectedNoteKey)) {
+    if (!options.includes(selectedNoteKey)) {
         setSelectedNoteKey(options[0]);
     }
 
