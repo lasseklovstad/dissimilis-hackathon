@@ -20,7 +20,7 @@ interface ISongContext {
     changeTitle: (newTitle: string) => void,
     deleteNote: (voiceId: number, barId: number, newNote: IChordAndNotes[]) => void,
     addHouse: (barId: number) => void,
-    removeHouse: (barId: number) => void,
+    deleteHouse: (barId: number) => void,
 }
 
 export const SongContext = React.createContext<ISongContext>({
@@ -46,7 +46,7 @@ export const SongContext = React.createContext<ISongContext>({
     changeTitle: (newTitle: string) => { },
     deleteNote: (voiceId: number, barId: number, newNote: IChordAndNotes[]) => { },
     addHouse: (barId: number) => { },
-    removeHouse: (barId: number) => { },
+    deleteHouse: (barId: number) => { },
 });
 
 const SongContextProvider: React.FC = props => {
@@ -120,12 +120,14 @@ const SongContextProvider: React.FC = props => {
             song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, house: 1 } : (i === barId + 1 ? { ...bar, house: 2 } : (i === barId + 2 && (song.voices[0].bars[barId + 2].house === 2) ? { ...bar, house: undefined } : bar))) } : voice) }
         }
         setSong(song)
+        console.table(song.voices[0])
     }
 
     //Function for removing house from a bar
     const deleteHouse = (barId: number) => {
         //Checks the housevalue and sets the value to undefined, along with checking adjacent bars and ensuring they are correct
         let barBase = song.voices[0].bars[barId].house;
+
         if (barBase === 1) {
             song = ({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId || i === barId + 1 ? { ...bar, house: undefined } : bar) } : voice) });
         }
@@ -133,6 +135,7 @@ const SongContextProvider: React.FC = props => {
             song = ({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId || i === barId - 1 ? { ...bar, house: undefined } : bar) } : voice) });
         }
         setSong(song)
+        console.table(song.voices[0])
     }
 
     const getBar = (id: number, voiceId: number) => {
@@ -244,7 +247,7 @@ const SongContextProvider: React.FC = props => {
         changeTitle,
         deleteNote,
         addHouse,
-        removeHouse: deleteHouse,
+        deleteHouse,
     }
 
     return (

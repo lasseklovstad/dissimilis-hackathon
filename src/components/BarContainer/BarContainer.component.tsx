@@ -8,6 +8,7 @@ import { IBar } from "../../models/IBar"
 import { useTranslation } from "react-i18next";
 import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 
+
 export type BarContainerProps = {
     barNumber: number,
     barLineBefore: boolean,
@@ -22,7 +23,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const { deleteBar, duplicateBar, toggleRepBefore, toggleRepAfter, addHouse, removeHouse, song: { voices } } = useContext(SongContext);
+    const { deleteBar, duplicateBar, toggleRepBefore, toggleRepAfter, addHouse, deleteHouse, song: { voices } } = useContext(SongContext);
     const { setShowPossiblePositions } = useContext(SongToolsContext);
     const bar = props.bar
 
@@ -54,7 +55,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
             addHouse(index);
         }
         if (method === "removeHouse") {
-            removeHouse(index);
+            deleteHouse(index);
         }
         setAnchorEl(null);
     };
@@ -64,7 +65,10 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     } else {
         let centerDivSize: 10 | 11 | 12 = 11;
         //checks if a bar has a house connected to it
-        let barConst = voices[0].bars[props.barNumber].house !== (undefined || null)
+        let barConst = voices[0].bars[props.barNumber].house !== null
+        console.log(voices[0].bars[props.barNumber].house);
+
+
         return (
             <Grid container role="grid" className={classes.fullHeight}>
                 <Grid item xs={12} role="row">
@@ -92,9 +96,11 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                                         disabled={props.barNumber === 0 && voices[0].bars.length === 1}
                                         onClick={() => handleClose(barConst ? "removeHouse" : "addHouse")}>
                                         {
+
                                             barConst ? t("BarContainer:removeHouse") : t("BarContainer:addHouse")
                                         }
                                     </MenuItem>
+
                                 </Menu>
                             </Box>
                         </Grid>
