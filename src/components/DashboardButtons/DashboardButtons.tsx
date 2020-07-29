@@ -60,7 +60,7 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
   return (
     <Card className={styles.button}>
       <CardActionArea onClick={() => props.func && props.func()} >
-        <Box className={styles.container} style={{ backgroundColor: props.selected === true ? colors.gray_400 : colors.white }}>
+        <Box className={styles.container} style={{ backgroundColor: props.selected === true ? colors.gray_200 : colors.white }}>
           <Box p={2}><Typography>{props.text}</Typography></Box>
         </Box>
       </CardActionArea>

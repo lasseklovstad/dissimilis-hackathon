@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { SongContext } from './SongContextProvider.component';
 import { IChordAndNotes } from '../../models/IBar';
 import { visibleNotes as notes } from '../../models/notes';
@@ -44,6 +44,15 @@ const SongToolsContextProvider: React.FC = props => {
     const [showPossiblePositions, setShowPossiblePositions] = useState<boolean>(false);
     const [availablePositions, setAvailablePositions] = useState<number[][][][]>([]);
 
+    const isInitialMount = useRef(true);
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+        } else {
+            showAvailableSpace();
+        }
+    }, [selectedNoteLength, song]);
+
     const insertNewNoteOrChord = (noteIndex: number, barIndex: number, voiceIndex: number) => {
         let newNoteArray: string[] = ["C"];
         if (noteIsSelected) {
@@ -74,7 +83,6 @@ const SongToolsContextProvider: React.FC = props => {
             }
         }
         editNote(voiceIndex, barIndex, tempChordsAndNotes);
-        setShowPossiblePositions(false)
     }
 
     const selectPositionArray = (voiceIndex: number, barIndex: number, noteIndex: number) => {
