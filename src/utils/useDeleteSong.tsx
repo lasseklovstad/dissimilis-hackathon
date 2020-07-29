@@ -2,7 +2,7 @@ import { useApiService } from "./useApiService";
 import { ISong } from "../models/ISong";
 
 /**
- * Get one song
+ * Delete one song
  * @param id songs id
  */
 export const useDeleteSong = (id: number) => {

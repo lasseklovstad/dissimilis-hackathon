@@ -9,6 +9,7 @@ import { ISong } from '../../models/ISong';
 import { CustomModal } from '../../components/CustomModal/CustomModal'
 import { useHistory } from 'react-router-dom';
 import { usePostSong } from '../../utils/usePostSong';
+import { useDeleteSong } from '../../utils/useDeleteSong';
 
 export type DashboardViewProps = {
 
@@ -94,7 +95,10 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
     setDashboardView(false)
   }
 
+
   const [rightClicked, setRightClicked] = useState(-1);
+  const [clickedSong, setClickedSong] = useState<number>(-1);
+  const deleteSong = useDeleteSong(clickedSong);
 
   const initialState = {
     mouseX: null,
@@ -115,8 +119,8 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   }>(initialState);
 
   const handleCloseMenu = (method?: string) => {
-    if (method === "deleteVoice") {
-
+    if (method === "deleteVoice" && clickedSong) {
+      deleteSong().then();
     }
     setRightClickCoordinates(initialState);
   };
@@ -157,7 +161,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                 <Grid container spacing={3}>
                   {recentSongs?.map((song, index) => (
                     <Grid item xs={12} sm={4} lg={3} key={song.id}>
-                      <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setRightClicked(index); handleClick(e) }} text={song.title} link={"/song/" + song.id!.toString()} />
+                      <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setRightClicked(index); setClickedSong(song!.id!); handleClick(e) }} text={song.title} link={"/song/" + song.id!.toString()} />
                       <Menu
                         keepMounted
                         open={rightClickCoordinates.mouseY !== null}
@@ -190,6 +194,21 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               labelText={t("DashboardView:nameOfSong")}
               handleChange={() => handleOnChangeModal}
               textFieldInput={textFieldInput} />
+
+            {/*  <Modal open={renameModalIsOpen} onClose={handleClose}>
+              <div className={classes.modal} style={modalStyle}>
+                <Grid container >
+                  <Typography className={classes.title} variant="h2">Vil du slette sang?</Typography>
+                  <Grid item xs={12} style={{ marginBottom: "16px" }}>
+                    <TextField variant="filled" autoFocus onChange={handleChange} label="Navn" style={{ width: "100%" }} />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleChangeVoiceTitle} >{t("CreateSongTab:saveNewName")}</Button>
+                    <Button className={classes.button} size="large" variant="outlined" onClick={() => setRenameModalIsOpen(false)}>{t("CreateSongTab:cancel")}</Button>
+                  </Grid>
+                </Grid>
+              </div>
+            </Modal> */}
           </>
           :
 

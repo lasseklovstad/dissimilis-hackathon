@@ -9,7 +9,6 @@ import { useHistory } from 'react-router-dom';
  * @param initialData initial data
  */
 
-//TODO: isnn initialData neccessary here? 
 export const useApiService = <T extends Object>(url: string, options: ApiServiceOptions<T>) => {
   const history = useHistory();
 
@@ -20,8 +19,6 @@ export const useApiService = <T extends Object>(url: string, options: ApiService
     finalUrl += '?' + new URLSearchParams(options.params).toString();
   }
 
-  // fetchData og postData er like, men unntak av kallene  await axios.metode<T>(argumenter), hvordan fikser jeg det til én metode? 
-  // axios[method]<T>(finalUrl, options.body) funker ikke.
   const fetchData = async () => {
     let result: AxiosResponse<T> | undefined = undefined;
     let errorMessage: any
