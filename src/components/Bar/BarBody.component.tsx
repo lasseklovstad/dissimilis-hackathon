@@ -124,25 +124,17 @@ export const BarBody: React.FC<BarBodyProps> = props => {
 
     const handleClose = (method?: string) => {
         if (method === "delete") {
-
             if (rightClicked >= 0) {
-                let tempChordsAndNotes: IChordAndNotes[] = voices[props.voiceId].bars[props.barNumber].chordsAndNotes.slice();;
-
+                let tempChordsAndNotes: IChordAndNotes[] = voices[props.voiceId].bars[props.barNumber].chordsAndNotes.slice();
                 const newNote: IChordAndNotes = { length: 1, notes: [" "] };
                 tempChordsAndNotes[rightClicked] = newNote;
                 for (let i = rightClicked; i < voices[props.voiceId].bars[props.barNumber].chordsAndNotes[rightClicked].length + rightClicked - 1; i++) {
                     tempChordsAndNotes.splice(i, 0, newNote);
                 }
-
-
-
                 deleteNote(props.voiceId, props.barNumber, tempChordsAndNotes);
                 setPositionArray([])
             }
-
-
         }
-
         setState(initialState);
     };
 
@@ -222,7 +214,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                             }}
                                             onContextMenu={handleClick}
                                         >
-                                            <Typography className={classes.tangentText} >{number === 0 ? " " : number}</Typography>
+                                            <Typography className={classes.tangentText} variant={'body2'}>{number === 0 ? " " : number}</Typography>
                                         </Box>
                                         <Menu
                                             keepMounted
@@ -256,7 +248,6 @@ const useStyles = makeStyles({
         display: "flex",
         flexFlow: "row wrap",
         justifyContent: "center",
-
     },
     toneAndChordBox: {
         flex: 1,
