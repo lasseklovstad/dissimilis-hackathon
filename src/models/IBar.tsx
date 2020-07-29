@@ -6,7 +6,7 @@ export interface IChordAndNotes {
 
 export interface IBar {
     barNumber?: number,
-    house?: number | null,
+    house?: number | undefined,
     repBefore: boolean,
     repAfter: boolean,
     chordsAndNotes: Array<IChordAndNotes>,
