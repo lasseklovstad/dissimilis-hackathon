@@ -27,8 +27,12 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
         switch (method) {
             case "export":
                 history.push("/song/1/export");
+                break;
             case "save":
                 putSong();
+                break;
+            default:
+
         }
     };
 
