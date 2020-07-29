@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { IVoice } from "../../models/IVoice";
 import { useHistory } from "react-router-dom";
+import { CustomModal } from "../CustomModal/CustomModal";
 
 export type CreateSongTabProps = {
 
@@ -128,21 +129,28 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Modal open={modalIsOpen} onClose={handleClose}>
-                <div className={classes.modal} style={modalStyle}>
-                    <Grid container >
-                        <Typography className={classes.title} variant="h2">{t("CreateSongTab:addInstrument")}</Typography>
-                        <Grid item xs={12} style={{ marginBottom: "16px" }}>
-                            <TextField inputProps={{ maxlength: CHARACTER_LIMIT }} autoFocus helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`} variant="filled" onChange={handleChange} label={t("CreateSongTab:nameOfInstrument")} style={{ width: "100%" }} />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleAddInstrument} >{t("CreateSongTab:save")}</Button>
-                            <Button className={classes.button} size="large" variant="outlined" onClick={() => setModalIsOpen(false)}>{t("CreateSongTab:cancel")}</Button>
-                        </Grid>
-                    </Grid>
-                </div>
-            </Modal>
-            <Modal open={renameModalIsOpen} onClose={handleClose}>
+            <CustomModal handleOnCancelClick={() => handleClose}
+                handleOnSaveClick={() => handleAddInstrument}
+                handleClosed={() => handleClose}
+                modalOpen={modalIsOpen}
+                saveText={t("CreateSongTab:save")}
+                cancelText={t("CreateSongTab:cancel")}
+                headerText={t("CreateSongTab:addInstrument")}
+                labelText={t("CreateSongTab:nameOfInstrument")}
+                handleChange={() => handleChange}
+                textFieldInput={textFieldInput} />
+            <CustomModal handleOnCancelClick={() => handleClose}
+                handleOnSaveClick={() => handleChangeVoiceTitle}
+                handleClosed={() => () => setRenameModalIsOpen(false)}
+                modalOpen={renameModalIsOpen}
+                saveText={t("CreateSongTab:saveNewName")}
+                cancelText={t("CreateSongTab:cancel")}
+                headerText={t("CreateSongTab:changeVoiceName")}
+                labelText={t("CreateSongTab:newVoiceName")}
+                handleChange={() => handleChange}
+                textFieldInput={textFieldInput} />
+
+            {/* <Modal open={renameModalIsOpen} onClose={handleClose}>
                 <div className={classes.modal} style={modalStyle}>
                     <Grid container >
                         <Typography className={classes.title} variant="h2">{t("CreateSongTab:changeVoiceName")}</Typography>
@@ -156,7 +164,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                 </div>
             </Modal>
-
+ */}
             <Grid item xs={"auto"} sm={1}></Grid>
         </Grid>
     );

@@ -8,7 +8,6 @@ type CustomModalProps = {
     handleOnCancelClick: Function,
     handleChange: Function,
     modalOpen: boolean,
-    handleOpen: Function,
     handleClosed: Function,
     saveText: string,
     cancelText: string,
