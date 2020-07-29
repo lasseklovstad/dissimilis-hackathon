@@ -25,7 +25,7 @@ export const TimeSignature: FC<TimeSignatureProps> = (props) => {
 export const Bar: FC<TimeSignatureProps> = (props) => {
   const style = useStyles();
   return (
-    <Box className={style.BarComponent} style={{ height: !props.height ? "160px" : (props.height + 80) + "px" }}></Box>
+    <Box className={style.BarComponent} style={{ height: !props.height ? "240px" : (props.height + 80) + "px" }}></Box>
   );
 }
 
@@ -36,7 +36,7 @@ export type SongViewBarNumberProps = {
 export const BarNumber: FC<SongViewBarNumberProps> = (props) => {
   const style = useStyles();
   return (
-    <Box className={style.BarNumberContainer} style={{ height: !props.height ? "160px" : (props.height + 80) + "px" }}>
+    <Box className={style.BarNumberContainer} style={{ height: !props.height ? "240px" : (props.height + 80) + "px" }}>
       <Typography variant="body1" className={style.BarNumberText}>{props.barNumber}</Typography>
     </Box>
   );

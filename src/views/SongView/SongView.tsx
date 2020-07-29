@@ -66,9 +66,9 @@ export const SongView: React.FC<SongViewProps> = props => {
             <Grid item xs={1}>
               {voices[selectedVoice].bars.map((bar, i) => {
                 if (i === 0) { return (<TimeSignature key={i} height={heightOfBar} />) }
-                else if (xl && i % 4 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
-                else if (!xs && !xl && i % 2 === 0) { return (<BarNumber key={i} barNumber={i + 1} />) }
-                else if (xs) { return (<BarNumber key={i} barNumber={i + 1} />) }
+                else if (xl && i % 4 === 0) { return (<BarNumber key={i} barNumber={i + 1} height={heightOfBar} />) }
+                else if (!xs && !xl && i % 2 === 0) { return (<BarNumber key={i} barNumber={i + 1} height={heightOfBar} />) }
+                else if (xs) { return (<BarNumber key={i} barNumber={i + 1} height={heightOfBar} />) }
                 return <div key={i} ></div>
               })}
             </Grid>
