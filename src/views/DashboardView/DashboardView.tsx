@@ -28,6 +28,8 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   const [filteredSongs, setFilteredSongs] = useState<ISong[]>([]);
   const getRecentSongs = useGetRecentSongs();
   const getFilteredSongs = useGetFilteredSongs(searchTerm);
+  const styles = useStyles()
+  const marginBottom = 4;
 
   useEffect(() => {
     getRecentSongs().then(({ result }) => { setRecentSongs(result?.data || []) });
@@ -57,13 +59,6 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
       text: "6/8",
     }
   ];
-  const styles = useStyles()
-  const marginBottom = 4;
-
-  useEffect(() => {
-    getRecentSongs().then(({ result }) => setRecentSongs(result?.data || []))
-  }, [])
-
 
   const handleAddSong = () => {
     setModalIsOpen(false);
@@ -84,18 +79,19 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   };
 
 
-  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
+  const handleOnChangeModal: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
     setTextFieldInput(e.target.value);
   }
 
-  const handleOnBlur = () => {
-    setDashboardView(true)
+  const handleOnBlurSearch = () => {
+    setTimeout(() => {
+      setDashboardView(true)
+    }, 320)
   }
 
-  const handleOnChange = (searchTerm: string) => {
-    setSearchTerm(searchTerm)
+  const handleOnChangeSearch = (searchTermParam: string) => {
+    setSearchTerm(searchTermParam)
     setDashboardView(false)
-
   }
 
 
@@ -106,7 +102,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
 
         <Grid item xs={12}>
           <Box mb={marginBottom}>
-            <DashboardTopBar onBlur={handleOnBlur} onChange={handleOnChange} />
+            <DashboardTopBar onBlur={handleOnBlurSearch} onChange={handleOnChangeSearch} />
           </Box>
         </Grid>
 
@@ -153,7 +149,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               cancelText={t("CreateSongTab:cancel")}
               headerText={t("DashboardView:addSong")}
               labelText={t("DashboardView:nameOfSong")}
-              handleChange={() => handleChange}
+              handleChange={() => handleOnChangeModal}
               textFieldInput={textFieldInput} />
 
           </>
@@ -165,9 +161,9 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                 <Typography variant="h1">{t("DashboardView:searchSongLabel")}</Typography>
               </Box>
               <Grid container spacing={3}>
-                {filteredSongs?.map(songs => (
-                  <Grid item xs={12} sm={4} lg={3} key={songs.id}>
-                    <DashboardButton text={songs.title} link={"/song/" + songs.id!.toString()} />
+                {filteredSongs?.map(song => (
+                  <Grid item xs={12} sm={4} lg={3} key={song.id}>
+                    <DashboardButton text={song.title} link={"/song/" + song.id!.toString()} />
                   </Grid>
                 ))}
               </Grid>

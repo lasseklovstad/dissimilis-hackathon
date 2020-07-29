@@ -60,7 +60,6 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     };
 
     const { t } = useTranslation();
-
     const queryString = require('query-string');
     const voiceString = queryString.parse(window.location.search);
     const selectedVoice = parseInt(voiceString.voice);
@@ -95,6 +94,8 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         changeVoiceTitle(rightClicked + 1, textFieldInput)
     }
 
+    const CHARACTER_LIMIT = 250;
+    
     return (
         <Grid container>
             <Grid item xs={"auto"} sm={1}></Grid>
@@ -133,7 +134,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     <Grid container >
                         <Typography className={classes.title} variant="h2">{t("CreateSongTab:addInstrument")}</Typography>
                         <Grid item xs={12} style={{ marginBottom: "16px" }}>
-                            <TextField variant="filled" onChange={handleChange} label={t("CreateSongTab:nameOfInstrument")} style={{ width: "100%" }} />
+                            <TextField inputProps={{ maxlength: CHARACTER_LIMIT }} helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`} variant="filled" onChange={handleChange} label={t("CreateSongTab:nameOfInstrument")} style={{ width: "100%" }} />
                         </Grid>
                         <Grid item xs={12}>
                             <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleAddInstrument} >{t("CreateSongTab:save")}</Button>
