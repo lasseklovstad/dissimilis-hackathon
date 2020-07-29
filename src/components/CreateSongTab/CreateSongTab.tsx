@@ -7,6 +7,7 @@ import { SongContext } from "../../views/SongView/SongContextProvider.component"
 import { IVoice } from "../../models/IVoice";
 import { useHistory } from "react-router-dom";
 import { CustomModal } from "../CustomModal/CustomModal";
+import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 
 export type CreateSongTabProps = {
 
@@ -23,9 +24,11 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
 
     const history = useHistory();
 
-    const { song: { voices }, addVoice, changeVoiceTitle, song } = useContext(SongContext);
+    const { song: { voices, id }, addVoice, changeVoiceTitle, song } = useContext(SongContext);
+    const { setShowPossiblePositions } = useContext(SongToolsContext);
 
     const handleAddInstrument = () => {
+        setShowPossiblePositions(false);
         addVoice({ title: textFieldInput, partNumber: voices.length, bars: [] });
         setModalIsOpen(false);
         setTextFieldInput("");
@@ -90,12 +93,12 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
             <Grid item xs={12} sm={10}>
                 <Grid container spacing={2}>
                     <Grid item>
-                        <DashboardButtonNoLink selected={selectedVoice === 1} text={t("CreateSongTab:song")} func={() => { history.replace(`/song/${song.id}?voice=1`) }} />
+                        <DashboardButtonNoLink selected={selectedVoice === 1} text={t("CreateSongTab:song")} func={() => { history.replace(`/song/${id}?voice=1`) }} />
                     </Grid>
                     {voices.slice(1).map((voices: IVoice, index: number) => {
                         return (
                             <Grid item key={index}>
-                                <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setRightClicked(index); handleClick(e) }} selected={selectedVoice === index + 2} text={voices.title} link={`/song/1?voice=${index + 2}`} />
+                                <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setRightClicked(index); handleClick(e) }} selected={selectedVoice === index + 2} text={voices.title} link={`/song/${id}?voice=${index + 2}`} />
                                 <Menu
                                     keepMounted
                                     open={rightClickCoordinates.mouseY !== null}

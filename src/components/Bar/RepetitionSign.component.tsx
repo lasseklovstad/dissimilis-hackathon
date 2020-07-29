@@ -10,7 +10,7 @@ export type RepetitionSignProps = {
 export const RepetitionSign: React.FC<RepetitionSignProps> = props => {
     const classes = useStyles();
     return (
-        <Box className={classes.root} style={{ display: props.display ? "block" : "none" }}>
+        <Box className={classes.root} style={{ display: props.display ? "block" : "none", marginRight: "2px" }}>
             <Box className={classes.box}>
                 <Box>
                     <FiberManualRecordIcon className={classes.dot} />

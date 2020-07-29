@@ -9,6 +9,7 @@ import CommonView from './views/CommonView/CommonView';
 import SongContextProvider from './views/SongView/SongContextProvider.component';
 import SongToolsContextProvider from './views/SongView/SongToolsContextProvider.component';
 import PrivateRoute from './PrivateRoute';
+import ExportView from './views/ExportView/ExportView';
 import { LibraryView } from './views/LibrayView/LibraryView';
 
 function SongRouting() {
@@ -16,6 +17,7 @@ function SongRouting() {
         <Switch>
             <SongContextProvider>
                 <SongToolsContextProvider>
+                    <Route exact path="/song/:id/export" render={(props) => (<PrivateRoute path="/song/:id/export" component={ExportView} />)} />
                     <Route exact path="/song/:id" render={(props) => (<PrivateRoute path="/song/:id" component={SongView} />)} />
                     <Route exact path="/song" render={(props) => (<PrivateRoute path="/song" component={SongView} />)} />
                 </SongToolsContextProvider>

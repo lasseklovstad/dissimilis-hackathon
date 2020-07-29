@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles, FormControl, MenuItem, Select, Typography, withStyles, Grid } from '@material-ui/core';
 import { DropdownAutocomplete, MenuButtonWithAddIcon } from '../BottomMenuButtons/BottomMenuButtons';
 import { colors } from '../../utils/colors';
@@ -8,6 +8,8 @@ import { ReactComponent as WholenoteIcon } from '../../assets/images/icon_whole-
 import { ReactComponent as HalfnoteIcon } from '../../assets/images/icon_half-note.svg';
 import { ReactComponent as QuarternoteIcon } from '../../assets/images/icon_quarter-note.svg';
 import { ReactComponent as EighthnoteIcon } from '../../assets/images/icon_eighth-note.svg';
+import { ReactComponent as HalfnoteDottedIcon } from '../../assets/images/icon_half-note-dotted.svg';
+import { ReactComponent as QuarternoteDottedIcon } from '../../assets/images/icon_quarter-note-dotted.svg';
 import { SongContext } from '../../views/SongView/SongContextProvider.component';
 import { visibleNotes as notes } from '../../models/notes';
 import { chords } from '../../models/chords';
@@ -23,43 +25,46 @@ function BottomBar() {
     chords.map(chord => chordArray.push(chord.name));
     const { selectedNoteLength, setSelectedNoteLength } = useContext(SongToolsContext);
     const { addEmptyBar, getTimeSignature } = useContext(SongContext);
+
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedNoteLength(event.target.value as 1 | 2 | 4 | 8);
-        setShowPossiblePositions(false);
     };
     let timeSignatureNumerator = getTimeSignature()[0];
     if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2;
+    //When adding new notes to this list of MenuItems with a given value, remember to add the case to the method calculateFlexBasis in BarBody.component.tsx.
     const Menu =
-    <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
+        <FormControl variant="outlined" fullWidth classes={{ root: classes.removeDefaultStyling }}>
             <Select
                 value={selectedNoteLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
-                >
+            >
                 <MenuItem value={8} style={{ display: timeSignatureNumerator < 8 ? "none" : "block" }}> <WholenoteIcon /></MenuItem>
+                <MenuItem value={6} style={{ display: timeSignatureNumerator < 6 ? "none" : "block" }}> <HalfnoteDottedIcon /></MenuItem>
                 <MenuItem value={4} style={{ display: timeSignatureNumerator < 4 ? "none" : "block" }}> <HalfnoteIcon /></MenuItem>
-                <MenuItem value={2}> <QuarternoteIcon /></MenuItem>
-                <MenuItem value={1}> <EighthnoteIcon /></MenuItem>
+                <MenuItem value={3} style={{ display: timeSignatureNumerator < 3 ? "none" : "block" }}> <QuarternoteDottedIcon /> </MenuItem>
+                <MenuItem value={2} style={{ display: timeSignatureNumerator < 2 ? "none" : "block" }}> <QuarternoteIcon /> </MenuItem>
+                <MenuItem value={1}> <EighthnoteIcon /> </MenuItem>
             </Select>
         </FormControl>
 
 
-const [toggle, setToggle] = useState<boolean>(true);
-const { showPossiblePositions, setShowPossiblePositions, showAvailableSpace, setNoteIsSelected, noteIsSelected } = useContext(SongToolsContext)
+    const [toggle, setToggle] = useState<boolean>(true);
+    const { showPossiblePositions, setShowPossiblePositions, showAvailableSpace, setNoteIsSelected, noteIsSelected } = useContext(SongToolsContext)
 
-const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) => {
-    if (newToggle !== null) {
-        setToggle(newToggle);
-        setNoteIsSelected(!noteIsSelected);
+    const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) => {
+        if (newToggle !== null) {
+            setToggle(newToggle);
+            setNoteIsSelected(!noteIsSelected);
+        }
+    };
+
+    const scrollToBottom = () => {
+        window.scrollTo(0, document.body.scrollHeight);
     }
-};
 
-const scrollToBottom = () => {
-    window.scrollTo(0, document.body.scrollHeight);
-}
-
-return (
-    <Grid container justify="center">
+    return (
+        <Grid container justify="center">
             <Grid item xs={12} sm={10} className={classes.outercontainer}>
                 <div className={classes.container} >
                     <div className={classes.flexelement}>
@@ -119,7 +124,7 @@ const useStyles = makeStyles({
             color: colors.black
         }
     },
-    
+
     input: {
         padding: "18px 10px 10px 10px",
         height: "28px",
