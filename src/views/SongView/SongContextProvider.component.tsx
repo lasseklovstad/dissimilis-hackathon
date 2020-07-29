@@ -122,7 +122,6 @@ const SongContextProvider: React.FC = props => {
             song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, house: 1 } : (i === barId + 1 ? { ...bar, house: 2 } : (i === barId + 2 && (song.voices[0].bars[barId + 2].house === 2) ? { ...bar, house: undefined } : bar))) } : voice) }
         }
         setSong(song)
-        console.table(song.voices[0])
     }
 
     //Function for removing house from a bar
@@ -137,7 +136,6 @@ const SongContextProvider: React.FC = props => {
             song = ({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId || i === barId - 1 ? { ...bar, house: undefined } : bar) } : voice) });
         }
         setSong(song)
-        console.table(song.voices[0])
     }
 
     const getBar = (id: number, voiceId: number) => {
