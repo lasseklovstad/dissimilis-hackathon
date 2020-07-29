@@ -66,7 +66,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         let centerDivSize: 10 | 11 | 12 = 11;
         //checks if a bar has a house connected to it
         let barConst =( voices[0].bars[props.barNumber].house !== undefined) && (voices[0].bars[props.barNumber].house !== null)
-        console.log(voices[0].bars[props.barNumber].house);
+        console.log(voices[0].bars.length)
 
 
         return (
