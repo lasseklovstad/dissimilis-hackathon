@@ -99,7 +99,6 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   }
 
 
-  /* const [rightClicked, setRightClicked] = useState(-1); */
   const [clickedSong, setClickedSong] = useState<number>(-1);
   const deleteSong = useDeleteSong(clickedSong);
 
@@ -167,7 +166,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                 <Grid container spacing={3}>
                   {recentSongs?.map((song, index) => (
                     <Grid item xs={12} sm={4} lg={3} key={song.id}>
-                      <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { /* setClickedSong(index);  */setClickedSong(song!.id!); handleOpenMenu(e) }} text={song.title} link={"/song/" + song.id!.toString()} />
+                      <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setClickedSong(song!.id!); handleOpenMenu(e) }} text={song.title} link={"/song/" + song.id!.toString()} />
                       <Menu
                         keepMounted
                         open={rightClickCoordinates.mouseY !== null}
@@ -219,7 +218,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               <Grid container spacing={3}>
                 {filteredSongs?.map(song => (
                   <Grid item xs={12} sm={4} lg={3} key={song.id}>
-                    <DashboardButton text={song.title} link={"/song/" + song.id!.toString()} />
+                    <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setClickedSong(song!.id!); handleOpenMenu(e) }} text={song.title} link={"/song/" + song.id!.toString()} />
                   </Grid>
                 ))}
               </Grid>

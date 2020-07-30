@@ -38,7 +38,7 @@ export const DashboardTopBar: FC<TopBarProps> = (props: TopBarProps) => {
             </Grid>
             <Grid item xs={6} sm={searchBarFocus ? 2 : 5} md={searchBarFocus ? 3 : 5} />
             <Grid item xs={12} sm={searchBarFocus ? 6 : 3} md={searchBarFocus ? 5 : 3}>
-              <TextField id="standard-basic" label={searchPlaceholder} variant="outlined" fullWidth onFocus={handleOnFocus} onBlur={handleOnBlur} onChange={event => handleOnChange(event.target.value)} />
+              <TextField id="standard-basic" label={searchPlaceholder} variant="outlined" type="search" fullWidth onFocus={handleOnFocus} onBlur={handleOnBlur} onChange={event => handleOnChange(event.target.value)} />
             </Grid>
           </Grid>
         </Box>
