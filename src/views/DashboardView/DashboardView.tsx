@@ -179,7 +179,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                             : undefined
                         }
                       >
-                        <MenuItem onClick={() => { handleOpenDeleteSongModal() }}>Slett sang</MenuItem>
+                        <MenuItem onClick={() => { handleOpenDeleteSongModal() }}>{t("DashboardView:deleteSong")}</MenuItem>
                       </Menu>
                     </Grid>
                   ))}
@@ -203,10 +203,10 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               handleOnSaveClick={() => handleDeleteSong}
               handleClosed={() => handleClose}
               modalOpen={deleteSongModalIsOpen}
-              ackText={"Slett sang"}
+              ackText={t("DashboardView:deleteSong")}
               cancelText={t("CreateSongTab:cancel")}
-              headerText={"Slett sang"}
-              descriptionText={"Er du sikker du vil slette sangen?"}
+              headerText={t("DashboardView:deleteSong")}
+              descriptionText={t("DashboardView:deleteDescription")}
               handleChange={handleOnChangeAddSongModal} />
           </>
           :
