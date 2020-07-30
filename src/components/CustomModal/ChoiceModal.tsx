@@ -38,8 +38,10 @@ export const ChoiceModal: FC<ChoiceModalProps> = (props) => {
             <Fade in={props.modalOpen} >
                 <div className={classes.modal} style={modalStyle}>
                     <Grid container >
-                        <Typography className={classes.title} variant="h1">{props.headerText}</Typography>
-                        <Typography className={classes.title} variant="h6">{props.descriptionText}</Typography>
+                        <Grid item xs={12}>
+                            <Typography className={classes.title} variant="h1">{props.headerText}</Typography>
+                            <Typography className={classes.title} variant="h6">{props.descriptionText}</Typography>
+                        </Grid>
                         <Grid item xs={12}>
                             <Button className={classes.button} size="large" variant="contained" onClick={props.handleOnSaveClick()} >{props.ackText}</Button>
                             <Button className={classes.button} size="large" variant="outlined" onClick={props.handleOnCancelClick()}>{props.cancelText}</Button>
