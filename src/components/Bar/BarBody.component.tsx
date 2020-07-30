@@ -27,7 +27,7 @@ export function getChord(notes: string[]): string {
     if (tempArray.length === 1) {
         return notes[0];
     } else {
-        const result = Chord.detect(tempArray);
+        const result = Chord.detect(tempArray.reverse());
         if (result.length === 0) return notes[0];
         return result[0].replace(/M/g, '').replace(/B/g, 'H');
     }
@@ -197,7 +197,6 @@ export const BarBody: React.FC<BarBodyProps> = props => {
             {chordsInBar}
             {
                 props.chordsAndNotes.map((note, i) => {
-                    console.log("!!!: " + props.chordsAndNotes.length)
 
                     return (
                         <Box onContextMenu={() => setRightClicked(i)} key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px", margin: props.chordsAndNotes.length >= 5 ? props.rowsPerSheet === 6 ? "0px 1px" : "0px 4px" : "0px 4px" }} flexDirection="column"  >
