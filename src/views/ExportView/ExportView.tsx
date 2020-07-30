@@ -73,10 +73,10 @@ export const ExportView: React.FC<ExportViewProps> = props => {
     const number = 770;
     const calculateHeightOfBar = () => {
         if (rowsPerSheet === 1) return number
-        if (rowsPerSheet === 2) return number / 2
-        if (rowsPerSheet === 3) return number / 3 - 10
-        if (rowsPerSheet === 4) return number / 4 - 40
-        if (rowsPerSheet === 5) return number / 5 - 20
+        if (rowsPerSheet === 2) return number / 2 - 10
+        if (rowsPerSheet === 3) return number / 3 - 20
+        if (rowsPerSheet === 4) return number / 4 - 50
+        if (rowsPerSheet === 5) return number / 5 - 30
         return 120
     }
 
@@ -168,8 +168,6 @@ export const ExportView: React.FC<ExportViewProps> = props => {
     const handleChange = (event: any) => {
         setDropDownMenuSelected(event.target.value);
     }
-    console.log(selectedVoice)
-    console.log(voices)
     const matches = useMediaQuery("(min-width:960px)");
     return (
         <>
