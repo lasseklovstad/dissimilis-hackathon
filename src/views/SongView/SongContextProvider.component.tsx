@@ -21,7 +21,7 @@ interface ISongContext {
     changeVoiceTitle: (voiceId: number, newTitle: string) => void,
     deleteNote: (voiceId: number, barId: number, newNote: IChordAndNotes[]) => void,
     addHouse: (barId: number) => void,
-    removeHouse: (barId: number) => void,
+    deleteHouse: (barId: number) => void,
     isLoading: boolean,
 }
 
@@ -49,7 +49,7 @@ export const SongContext = React.createContext<ISongContext>({
     changeVoiceTitle: (voiceId: number, newTitle: string) => { },
     deleteNote: (voiceId: number, barId: number, newNote: IChordAndNotes[]) => { },
     addHouse: (barId: number) => { },
-    removeHouse: (barId: number) => { },
+    deleteHouse: (barId: number) => { },
     isLoading: false,
 });
 
@@ -134,6 +134,7 @@ const SongContextProvider: React.FC = props => {
     const deleteHouse = (barId: number) => {
         //Checks the housevalue and sets the value to undefined, along with checking adjacent bars and ensuring they are correct
         let barBase = song.voices[0].bars[barId].house;
+
         if (barBase === 1) {
             song = ({ ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId || i === barId + 1 ? { ...bar, house: undefined } : bar) } : voice) });
         }
@@ -271,7 +272,7 @@ const SongContextProvider: React.FC = props => {
         changeVoiceTitle,
         deleteNote,
         addHouse,
-        removeHouse: deleteHouse,
+        deleteHouse,
         isLoading,
     }
 
