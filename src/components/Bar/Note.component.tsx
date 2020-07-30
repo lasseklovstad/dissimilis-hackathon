@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, makeStyles } from "@material-ui/core";
-import colors from "../../utils/colors";
 import { getColor } from "./BarBody.component";
 
 export type NoteProps = {
@@ -10,8 +9,6 @@ export type NoteProps = {
 
 export const Note: React.FC<NoteProps> = props => {
     const classes = useStyles();
-
-
 
     return (
         <div className={classes.root}>

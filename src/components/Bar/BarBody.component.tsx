@@ -16,7 +16,9 @@ export type BarBodyProps = {
     rowsPerSheet?: number,
 }
 
-
+/*Gets the chord based on notes. The package we use (tonaljs) uses the tone "B" instead of "H" so we need
+to replace H with B to get the right chord. 
+*/
 export function getChord(notes: string[]): string {
     let tempArray = notes.slice();
     const index = tempArray.indexOf("H");
@@ -99,6 +101,15 @@ const initialState = {
 
 export const BarBody: React.FC<BarBodyProps> = props => {
     const classes = useStyles();
+
+    const [positionArray, setPositionArray] = useState<number[]>([]);
+    const [rightClickCoordinates, setRightClickCoordinates] = React.useState<{
+        mouseX: null | number;
+        mouseY: null | number;
+    }>(initialState);
+    const [rightClicked, setRightClicked] = useState(-1);
+
+
     const { showPossiblePositions, insertNewNoteOrChord, availablePositions, selectPositionArray } = useContext(SongToolsContext);
     const { song: { voices }, getTimeSignature, deleteNote } = useContext(SongContext);
 
@@ -109,20 +120,16 @@ export const BarBody: React.FC<BarBodyProps> = props => {
         tempArrayOfChordsLength.push(voices[0].bars[props.barNumber].chordsAndNotes[i].length);
     }
 
-    const [state, setState] = React.useState<{
-        mouseX: null | number;
-        mouseY: null | number;
-    }>(initialState);
+
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         event.preventDefault();
-        setState({
+        setRightClickCoordinates({
             mouseX: event.clientX - 2,
             mouseY: event.clientY - 4,
         });
     };
 
-    const [rightClicked, setRightClicked] = useState(-1);
 
     const handleClose = (method?: string) => {
         if (method === "delete") {
@@ -137,7 +144,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                 setPositionArray([])
             }
         }
-        setState(initialState);
+        setRightClickCoordinates(initialState);
     };
 
     const calculateFlexBasis = (length: number) => {
@@ -177,13 +184,13 @@ export const BarBody: React.FC<BarBodyProps> = props => {
         return result;
     }
 
+    //Displaying the chords from the master sheet in the song
     const chordsInBar = tempArrayOfChords.map((item: any, i: any) => {
         return (
             <Typography key={i} variant="body1" style={{ flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]), overflow: "hidden", textOverflow: "ellipsis", paddingLeft: "4px" }} className={classes.toneText}>{item}</Typography>
         )
     })
 
-    const [positionArray, setPositionArray] = useState<number[]>([]);
     const emptySpace = (i: number) => {
         if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber] !== undefined && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i))) {
             return true
@@ -192,12 +199,10 @@ export const BarBody: React.FC<BarBodyProps> = props => {
     }
 
     return (
-
         <Box style={{ height: !props.height ? "100%" : props.height + "px" }} className={classes.root} >
             {chordsInBar}
             {
                 props.chordsAndNotes.map((note, i) => {
-
                     return (
                         <Box onContextMenu={() => setRightClicked(i)} key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px", margin: props.chordsAndNotes.length >= 5 ? props.rowsPerSheet === 6 ? "0px 1px" : "0px 4px" : "0px 4px" }} flexDirection="column"  >
                             {note.notes.map((type, index) => {
@@ -212,7 +217,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                             tabIndex={!props.exportMode ? 1 : -1}
                                             component={ButtonBase}
                                             onClick={() => {
-                                                if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber] !== undefined  && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
+                                                if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber] !== undefined && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
                                                     insertNewNoteOrChord(i, props.barNumber, props.voiceId)
                                                 }
                                             }}
@@ -225,12 +230,12 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                                 (
                                                     <Menu
                                                         keepMounted
-                                                        open={state.mouseY !== null}
+                                                        open={rightClickCoordinates.mouseY !== null}
                                                         onClose={() => handleClose("")}
                                                         anchorReference="anchorPosition"
                                                         anchorPosition={
-                                                            state.mouseY !== null && state.mouseX !== null
-                                                                ? { top: state.mouseY, left: state.mouseX }
+                                                            rightClickCoordinates.mouseY !== null && rightClickCoordinates.mouseX !== null
+                                                                ? { top: rightClickCoordinates.mouseY, left: rightClickCoordinates.mouseX }
                                                                 : undefined
                                                         }
                                                     >
@@ -242,13 +247,11 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                     </>
                                 )
                             })}
-
                         </Box >
                     )
                 })
             }
         </Box >
-
     )
 }
 
@@ -280,7 +283,6 @@ const useStyles = makeStyles({
     toneText: {
         color: "#555555",
     }
-
 })
 
 export default BarBody;

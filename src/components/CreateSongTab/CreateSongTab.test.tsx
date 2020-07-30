@@ -1,6 +1,6 @@
 import React from "react";
-import { render, screen, findByText } from "@testing-library/react";
-import CreateSongTab from "./CreateSongTab";
+import { render, screen } from "@testing-library/react";
+import CreateSongTab from "./CreateSongTab.component";
 import { BrowserRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 
