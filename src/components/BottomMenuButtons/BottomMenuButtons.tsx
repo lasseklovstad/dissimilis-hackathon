@@ -4,10 +4,11 @@ import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import { TextField, Button, Popper, Box, Grid } from '@material-ui/core';
 import { colors } from '../../utils/colors';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component';
 import { useTranslation } from 'react-i18next';
 import { getColor, tangentToNumber } from '../Bar/BarBody.component';
+
 
 
 
@@ -62,6 +63,7 @@ export const MenuButton: FunctionComponent<ButtonProps> = (props) => {
 const customPopperPlacement = function (props: any) {
     return (<Popper {...props} placement='top' />)
 }
+const filterOptions = createFilterOptions({ matchFrom: 'start' });
 
 export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props) => {
     const styles = useStyles();
@@ -76,15 +78,16 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props
     }
     const { t } = useTranslation();
 
+
     return (
         <Autocomplete
             value={
                 showValue
             }
-
-            onChange={(event, newValue: string | null) => {
-                if (newValue != null) {
-                    setSelectedNoteKey(newValue);
+            filterOptions={filterOptions}
+            onChange={(event, value: any) => {
+                if (value !== null) {
+                    setSelectedNoteKey(value as string);
                 }
             }}
             openText={t("BottomBar:open")}
@@ -102,14 +105,12 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props
                         </Grid>
                         <Grid item xs={3}>
                             {noteIsSelected ?
-                                (<Box style={{ height: "24px", width: "24px", backgroundColor: getColor(options), borderRadius: "5px", verticalAlign: "center" }}>{tangentToNumber(options) !== 0 ? <Typography style={{color: colors.white, textAlign: "center"}}>{tangentToNumber(options)}</Typography> : <></>}</Box>)
+                                (<Box style={{ height: "24px", width: "24px", backgroundColor: getColor(options), borderRadius: "5px", verticalAlign: "center" }}>{tangentToNumber(options) !== 0 ? <Typography style={{ color: colors.white, textAlign: "center" }}>{tangentToNumber(options)}</Typography> : <></>}</Box>)
                                 :
                                 (<></>)
                             }
                         </Grid>
                     </Grid>
-
-
                 </React.Fragment>)}
         />
     );

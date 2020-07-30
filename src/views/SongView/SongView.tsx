@@ -12,8 +12,6 @@ import animatedBird from "../../assets/images/sommerfugl-animert.svg";
 import Alert from '@material-ui/lab/Alert';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
-
-
 export type SongViewProps = {
 }
 
