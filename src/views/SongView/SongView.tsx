@@ -7,7 +7,7 @@ import { Grid, makeStyles, useMediaQuery, Box } from '@material-ui/core';
 import { TimeSignature, BarNumber } from '../../components/SongViewComponents/SongView.component';
 import { BarContainer } from "../../components/BarContainer/BarContainer.component";
 import BottomBar from '../../components/BottomBar/BottomBar.component';
-import { usePutSong } from '../../utils/usePutSong';
+import { usePutSong } from '../../utils/useApiServiceSongs';
 import animatedBird from "../../assets/images/sommerfugl-animert.svg";
 
 

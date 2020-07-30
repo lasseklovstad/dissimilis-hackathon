@@ -5,7 +5,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
-import { usePutSong } from "../../utils/usePutSong";
+import { usePutSong } from "../../utils/useApiServiceSongs";
 import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 
 
