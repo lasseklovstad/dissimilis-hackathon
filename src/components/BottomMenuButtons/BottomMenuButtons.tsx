@@ -102,7 +102,7 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props
                         </Grid>
                         <Grid item xs={3}>
                             {noteIsSelected ?
-                                (<Box style={{ height: "24px", width: "24px", border: "1px solid " + colors.black    , backgroundColor: getColor(options), borderRadius: "5px", verticalAlign: "center" }}>{tangentToNumber(options) !== 0 ? <Typography style={{color: colors.white, textAlign: "center"}}>{tangentToNumber(options)}</Typography> : <></>}</Box>)
+                                (<Box style={{ height: "24px", width: "24px", backgroundColor: getColor(options), borderRadius: "5px", verticalAlign: "center" }}>{tangentToNumber(options) !== 0 ? <Typography style={{color: colors.white, textAlign: "center"}}>{tangentToNumber(options)}</Typography> : <></>}</Box>)
                                 :
                                 (<></>)
                             }
