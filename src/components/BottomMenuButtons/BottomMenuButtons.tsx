@@ -9,7 +9,6 @@ import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.
 import { useTranslation } from 'react-i18next';
 
 
-
 export type AddButtonProps = {
     text: string,
     link?: string,
@@ -111,8 +110,6 @@ const useStyles = makeStyles({
         border: "none",
         height: "56px",
         outline: "none",
-
-
     },
     dropdown: {
         "& .MuiOutlinedInput-notchedOutline": {

@@ -6,8 +6,8 @@ import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBa
 import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
 import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
 import { ISong } from '../../models/ISong';
-import { CustomModal } from '../../components/CustomModal/CustomModal'
-import { ChoiceModal } from '../../components/CustomModal/ChoiceModal'
+import { CustomModal } from '../../components/CustomModal/CustomModal.component'
+import { ChoiceModal } from '../../components/CustomModal/ChoiceModal.component'
 import { useHistory } from 'react-router-dom';
 import { usePostSong } from '../../utils/usePostSong';
 import { useDeleteSong } from '../../utils/useDeleteSong';
