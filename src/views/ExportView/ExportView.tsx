@@ -177,7 +177,8 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                     <Box className={classes.root + " page"}>
                         <Grid container >
                             <Grid item xs={12}>
-                                <Typography style={{ textAlign: "center" }} variant="h1">{title + " " + (pageIndex + 1) + "/" + amountOfPages}</Typography>
+                                <Typography style={{ textAlign: "center" }} variant="h1">{title}</Typography>
+                                <Typography style={{ textAlign: "center" }} variant="body1">{voices[selectedVoice].title}</Typography>
                             </Grid>
                             <Grid item xs={1}>
                                 {voices[selectedVoice].bars.map((bar, index) => {

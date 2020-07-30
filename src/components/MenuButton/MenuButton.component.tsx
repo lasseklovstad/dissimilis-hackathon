@@ -21,7 +21,7 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const { song } = useContext(SongContext);
+    const { song, setIsSaving } = useContext(SongContext);
     const { setShowPossiblePositions } = useContext(SongToolsContext);
 
     const { t } = useTranslation();
@@ -41,10 +41,15 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
         switch (method) {
             case "export":
                 setShowPossiblePositions(false);
-                history.push("/song/" + id + "/export");
+                putSong().then(() => {
+                    history.push("/song/" + id + "/export");
+                })
+
                 break;
             case "save":
-                putSong();
+                putSong().then(() => {
+                    setIsSaving(true);
+                })
                 break;
             default:
         }
