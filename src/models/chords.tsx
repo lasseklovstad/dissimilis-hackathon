@@ -29,7 +29,7 @@ const fillChords = (): { name: string, notes: string[] }[] => {
         }
         let obj = {
             name: chordNames[i],
-            notes: notes
+            notes: notes.reverse()
         }
         chords.push(obj)
     }

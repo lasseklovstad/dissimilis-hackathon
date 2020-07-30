@@ -1,25 +1,16 @@
 import React, { useState, useContext } from "react";
-import { Grid, Button, Modal, TextField, makeStyles, Typography, Menu, MenuItem } from "@material-ui/core";
+import { Grid, makeStyles, Menu, MenuItem } from "@material-ui/core";
 import { DashboardButtonWithAddIconNoLink, DashboardButtonNoLink, DashboardButton } from "../DashboardButtons/DashboardButtons";
 import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { IVoice } from "../../models/IVoice";
 import { useHistory } from "react-router-dom";
+import { CustomModal } from "../CustomModal/CustomModal";
 import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 
 export type CreateSongTabProps = {
 
-}
-
-function getModalStyle() {
-    const left = 50;
-
-    return {
-        top: "20%",
-        left: "50%",
-        transform: `translate(-${left}%)`,
-    };
 }
 
 export type InstrumentCard = {
@@ -29,15 +20,12 @@ export type InstrumentCard = {
 export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
-    const [modalStyle] = useState(getModalStyle);
     const [textFieldInput, setTextFieldInput] = useState<string>("");
 
     const history = useHistory();
 
     const { song: { voices, id }, addVoice, changeVoiceTitle, song } = useContext(SongContext);
     const { setShowPossiblePositions } = useContext(SongToolsContext);
-
-    const classes = useStyles();
 
     const handleAddInstrument = () => {
         setShowPossiblePositions(false);
@@ -57,7 +45,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         setRenameModalIsOpen(false);
     };
 
-    const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
+    const handleChange = (e: any) => {
         setTextFieldInput(e.target.value);
     };
 
@@ -96,8 +84,6 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         changeVoiceTitle(rightClicked + 1, textFieldInput)
     }
 
-    const CHARACTER_LIMIT = 250;
-
     return (
         <Grid container>
             <Grid item xs={"auto"} sm={1}></Grid>
@@ -131,66 +117,29 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Modal open={modalIsOpen} onClose={handleClose}>
-                <div className={classes.modal} style={modalStyle}>
-                    <Grid container >
-                        <Typography className={classes.title} variant="h2">{t("CreateSongTab:addInstrument")}</Typography>
-                        <Grid item xs={12} style={{ marginBottom: "16px" }}>
-                            <TextField inputProps={{ maxlength: CHARACTER_LIMIT }} autoFocus helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`} variant="filled" onChange={handleChange} label={t("CreateSongTab:nameOfInstrument")} style={{ width: "100%" }} />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleAddInstrument} >{t("CreateSongTab:save")}</Button>
-                            <Button className={classes.button} size="large" variant="outlined" onClick={() => setModalIsOpen(false)}>{t("CreateSongTab:cancel")}</Button>
-                        </Grid>
-                    </Grid>
-                </div>
-            </Modal>
-            <Modal open={renameModalIsOpen} onClose={handleClose}>
-                <div className={classes.modal} style={modalStyle}>
-                    <Grid container >
-                        <Typography className={classes.title} variant="h2">{t("CreateSongTab:changeVoiceName")}</Typography>
-                        <Grid item xs={12} style={{ marginBottom: "16px" }}>
-                            <TextField variant="filled" autoFocus onChange={handleChange} label="Navn" style={{ width: "100%" }} />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleChangeVoiceTitle} >{t("CreateSongTab:saveNewName")}</Button>
-                            <Button className={classes.button} size="large" variant="outlined" onClick={() => setRenameModalIsOpen(false)}>{t("CreateSongTab:cancel")}</Button>
-                        </Grid>
-                    </Grid>
-                </div>
-            </Modal>
-
+            <CustomModal handleOnCancelClick={() => handleClose}
+                handleOnSaveClick={() => handleAddInstrument}
+                handleClosed={() => handleClose}
+                modalOpen={modalIsOpen}
+                saveText={t("CreateSongTab:save")}
+                cancelText={t("CreateSongTab:cancel")}
+                headerText={t("CreateSongTab:addInstrument")}
+                labelText={t("CreateSongTab:nameOfInstrument")}
+                handleChange={handleChange}
+            />
+            <CustomModal handleOnCancelClick={() => handleClose}
+                handleOnSaveClick={() => handleChangeVoiceTitle}
+                handleClosed={() => handleClose}
+                modalOpen={renameModalIsOpen}
+                saveText={t("CreateSongTab:saveNewName")}
+                cancelText={t("CreateSongTab:cancel")}
+                headerText={t("CreateSongTab:changeVoiceName")}
+                labelText={t("CreateSongTab:newVoiceName")}
+                handleChange={handleChange}
+            />
             <Grid item xs={"auto"} sm={1}></Grid>
         </Grid>
     );
 };
-
-
-const useStyles = makeStyles({
-    modal: {
-        position: 'absolute',
-        boxShadow: '0 3px 6px 2px rgba(0, 0, 0, 0.1)',
-        height: "auto",
-        borderRadius: 2,
-        backgroundColor: "white",
-        padding: "40px",
-        "@media (max-width: 600px)": {
-            width: "80%",
-            padding: "48px",
-        },
-        outline: "none",
-    },
-    button: {
-        "&:hover": {
-            backgroundColor: colors.gray_300
-        },
-        marginRight: "8px",
-        float: "left",
-        position: "relative",
-    },
-    title: {
-        padding: "8px",
-    }
-})
 
 export default CreateSongTab;
