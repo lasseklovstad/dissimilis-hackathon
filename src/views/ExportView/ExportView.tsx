@@ -4,7 +4,7 @@ import { SongContext } from "../SongView/SongContextProvider.component";
 import colors from "../../utils/colors";
 import BarContainer from "../../components/BarContainer/BarContainer.component";
 import { useHistory } from "react-router-dom";
-import BarNumber, { TimeSignature } from "../../components/SongViewComponents/SongView.component";
+import BarheightAvailableToBars, { TimeSignature } from "../../components/SongViewComponents/SongView.component";
 import { useTranslation } from "react-i18next";
 
 
@@ -12,20 +12,19 @@ export type ExportViewProps = {
 }
 
 export const ExportView: React.FC<ExportViewProps> = props => {
-    const { song: { title, voices, id } } = useContext(SongContext);
-    const classes = useStyles();
-    const history = useHistory();
-    const { t } = useTranslation();
-
-
-
     const [rowsPerSheet, setRowsPerSheet] = useState<number>(4);
     const [lengthOfEachBar, setlengthOfEachBar] = useState<1 | 2 | 3 | 4 | 6 | 12>(3);
     const [amountOfPages, setAmountOfPages] = useState<number>(1);
     const [dropDownMenuSelected, setDropDownMenuSelected] = useState<number>(0);
 
+    const { song: { title, voices, id } } = useContext(SongContext);
 
+    const classes = useStyles();
+    const history = useHistory();
+    const { t } = useTranslation();
     const queryString = require('query-string');
+
+    const matches = useMediaQuery("(min-width:960px)");
 
     const voiceString = queryString.parse(window.location.search);
     let selectedVoice = 0;
@@ -40,7 +39,8 @@ export const ExportView: React.FC<ExportViewProps> = props => {
         history.replace("./export?voice=1");
     }
 
-    const changeAmount = (amount: number | number[]) => {
+    //Converts amount of bars per row to the length according to the Material UI-grid (12 columns)
+    const convertAmountOfBarsPerRowToLengthOfEachBar = (amount: number | number[]) => {
         if (amount === 1) {
             setlengthOfEachBar(12)
         } else if (amount === 2) {
@@ -54,6 +54,7 @@ export const ExportView: React.FC<ExportViewProps> = props => {
         }
     }
 
+    //The slider returns a value which is either a number or number[]. Therefore we need to convert it to number
     const changeRowsPerSheet = (amount: number | number[]) => {
         if (amount === 1) {
             setRowsPerSheet(1)
@@ -70,13 +71,13 @@ export const ExportView: React.FC<ExportViewProps> = props => {
         }
     }
 
-    const number = 770;
+    const heightAvailableToBars = 770;
     const calculateHeightOfBar = () => {
-        if (rowsPerSheet === 1) return number
-        if (rowsPerSheet === 2) return number / 2
-        if (rowsPerSheet === 3) return number / 3 - 10
-        if (rowsPerSheet === 4) return number / 4 - 40
-        if (rowsPerSheet === 5) return number / 5 - 20
+        if (rowsPerSheet === 1) return heightAvailableToBars
+        if (rowsPerSheet === 2) return heightAvailableToBars / 2
+        if (rowsPerSheet === 3) return heightAvailableToBars / 3 - 10
+        if (rowsPerSheet === 4) return heightAvailableToBars / 4 - 40
+        if (rowsPerSheet === 5) return heightAvailableToBars / 5 - 20
         return 120
     }
 
@@ -99,7 +100,6 @@ export const ExportView: React.FC<ExportViewProps> = props => {
     ];
 
     const isBarLineBefore = (index: number) => {
-
         if (lengthOfEachBar === 12) {
             return true;
         }
@@ -152,11 +152,11 @@ export const ExportView: React.FC<ExportViewProps> = props => {
         const totalRowsUsed = Math.ceil(amountOfBars / lengthOfEachBarCalculated);
         const heightOfDiv = totalRowsUsed * calculateHeightOfBar()
 
-        const amountOfPages1 = Math.ceil(heightOfDiv / 770);
-        if (amountOfPages1 === 0) {
+        const amountOfPagesCalculated = Math.ceil(heightOfDiv / 770);
+        if (amountOfPagesCalculated === 0) {
             setAmountOfPages(1);
         } else {
-            setAmountOfPages(amountOfPages1);
+            setAmountOfPages(amountOfPagesCalculated);
         }
     }
 
@@ -169,7 +169,7 @@ export const ExportView: React.FC<ExportViewProps> = props => {
         setDropDownMenuSelected(event.target.value);
     }
 
-    const matches = useMediaQuery("(min-width:960px)");
+
     return (
         <>
             {Array.from(Array(amountOfPages), (e, pageIndex) => {
@@ -177,7 +177,8 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                     <Box className={classes.root + " page"}>
                         <Grid container >
                             <Grid item xs={12}>
-                                <Typography style={{ textAlign: "center" }} variant="h1">{title + " " + (pageIndex + 1) + "/" + amountOfPages}</Typography>
+                                <Typography style={{ textAlign: "center" }} variant="h1">{title}</Typography>
+                                <Typography style={{ textAlign: "center" }} variant="body1">{voices[selectedVoice].title}</Typography>
                             </Grid>
                             <Grid item xs={1}>
                                 {voices[selectedVoice].bars.map((bar, index) => {
@@ -188,7 +189,7 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                                             if (pageIndex === 0 && index === 0) {
                                                 return (<TimeSignature height={calculateHeightOfBar()} />)
                                             } else if (index % amountOfBarsPerRow === 0) {
-                                                return (<BarNumber height={calculateHeightOfBar()} key={index} barNumber={indexToBeDisplayed} />)
+                                                return (<BarheightAvailableToBars height={calculateHeightOfBar()} key={index} barNumber={indexToBeDisplayed} />)
                                             } else {
                                                 return (<></>)
                                             }
@@ -217,8 +218,6 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                                             })}
                                         </>
                                     }
-
-
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -250,11 +249,10 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                             )}
                     </Grid>
                     <Grid item xs={"auto"} md={1} style={{ order: 2 }}>
-
                     </Grid>
                     <Grid item xs={5} md={3} className={classes.slider} style={{ order: matches ? 3 : 3, marginRight: matches ? "0px" : "8px" }}>
                         <Typography variant="body1">{t("ExportView:barPerRow")}</Typography>
-                        <Slider onChange={(event, value) => changeAmount(value)} defaultValue={4} step={null} marks={marks} min={1} max={6} valueLabelDisplay="auto" />
+                        <Slider onChange={(event, value) => convertAmountOfBarsPerRowToLengthOfEachBar(value)} defaultValue={4} step={null} marks={marks} min={1} max={6} valueLabelDisplay="auto" />
                     </Grid>
                     <Grid item xs={5} md={3} className={classes.slider} style={{ marginRight: matches ? "0px" : "0px", order: matches ? 4 : 4 }}>
                         <Typography variant="body1">{t("ExportView:rowsPerSheet")}</Typography>
@@ -269,13 +267,8 @@ export const ExportView: React.FC<ExportViewProps> = props => {
                     </Grid>
                 </Grid>
             </BottomNavigation >
-
-
         </ >
-
-
     )
-
 }
 
 
@@ -290,7 +283,6 @@ const useStyles = makeStyles({
     box: {
         backgroundColor: "white",
         boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
-
     },
     formControl: {
         width: "90%",
@@ -304,12 +296,10 @@ const useStyles = makeStyles({
         border: "1px solid #E0E0E0",
         height: "100%",
     },
-
     slider: {
         padding: "8px",
         backgroundColor: "white",
         boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
-
     },
     stickToBottom: {
         width: '100%',
@@ -320,19 +310,11 @@ const useStyles = makeStyles({
         bottom: 0,
         borderTop: "1px solid " + colors.gray_300,
         backgroundColor: colors.gray_100,
-
-
-
     },
     confirmOrCancelButtons: {
         backgroundColor: " ",
         height: "100%",
         boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
-        '@media (max-width: 960px)': {
-
-
-        }
-
     },
 })
 

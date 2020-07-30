@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { makeStyles, IconButton, Menu, MenuItem, Switch } from "@material-ui/core";
+import { makeStyles, IconButton, Menu, MenuItem } from "@material-ui/core";
 import colors from "../../utils/colors";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useTranslation } from "react-i18next";
@@ -18,35 +18,43 @@ type MatchParams = {
 
 export const MenuButton: React.FC<MenuButtonProps> = props => {
     const classes = useStyles();
-    const history = useHistory();
-    const { song } = useContext(SongContext);
-    const putSong = usePutSong(song);
-    const { setShowPossiblePositions } = useContext(SongToolsContext);
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+    const { song, setIsSaving } = useContext(SongContext);
+    const { setShowPossiblePositions } = useContext(SongToolsContext);
+
+    const { t } = useTranslation();
+    const history = useHistory();
+    const putSong = usePutSong(song);
+
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
 
     const match = useRouteMatch<MatchParams>("/song/:id")
-    let id = match ? +match.params.id : 0
+    let id = match ? +match.params.id : 0;
+
     const handleClose = (method = "") => {
         setAnchorEl(null);
         switch (method) {
             case "export":
                 setShowPossiblePositions(false);
-                history.push("/song/" + id + "/export");
+                putSong().then(() => {
+                    history.push("/song/" + id + "/export");
+                })
+
                 break;
             case "save":
-                putSong();
+                putSong().then(() => {
+                    setIsSaving(true);
+                })
                 break;
             default:
-
         }
     };
 
-    const { t } = useTranslation();
 
     return (
         <div>
@@ -60,7 +68,6 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
                 <MenuItem onClick={() => handleClose("export")}>{t("MenuButton:export")}</MenuItem>
                 <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:hide")}</MenuItem>
             </Menu>
-
         </div>
     );
 };

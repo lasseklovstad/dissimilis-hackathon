@@ -23,11 +23,15 @@ export type BarContainerProps = {
 
 export const BarContainer: React.FC<BarContainerProps> = props => {
     const classes = useStyles();
+
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const { deleteBar, duplicateBar, toggleRepBefore, toggleRepAfter, addHouse, deleteHouse, song: { voices } } = useContext(SongContext);
     const { setShowPossiblePositions } = useContext(SongToolsContext);
+
+    const { t } = useTranslation();
     const bar = props.bar
+
     const queryString = require('query-string');
     const voiceStringFromURL = queryString.parse(window.location.search);
     const voiceId: number = parseInt(voiceStringFromURL.voice);
@@ -35,7 +39,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
-    const { t } = useTranslation();
+
     const handleClose = (method: string) => {
         setShowPossiblePositions(false)
 
@@ -60,6 +64,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
         }
         setAnchorEl(null);
     };
+
 
     if (bar === undefined) {
         return <></>
@@ -103,7 +108,6 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
                                             barConst ? t("BarContainer:removeHouse") : t("BarContainer:addHouse")
                                         }
                                     </MenuItem>
-
                                 </Menu>
                             </Box>
                         </Grid>

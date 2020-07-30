@@ -17,10 +17,6 @@ import { exportViewNo } from "./assets/languages/norwegian/exportViewNo";
 
 
 
-// not like to use this?
-// have a look at the Quick start guide 
-// for passing in lng and translations on init
-
 const resources: Resource = {
   en: {
     DashboardView: dashboardEn,
@@ -43,8 +39,6 @@ const resources: Resource = {
 }
 
 i18n
-  //.use(Backend)
-  //.use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources,
