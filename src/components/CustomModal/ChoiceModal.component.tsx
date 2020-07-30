@@ -6,7 +6,6 @@ import { colors } from "../../utils/colors"
 type ChoiceModalProps = {
     handleOnSaveClick: Function,
     handleOnCancelClick: Function,
-    handleChange: Function,
     modalOpen: boolean,
     handleClosed: Function,
     ackText: string,
@@ -18,16 +17,7 @@ type ChoiceModalProps = {
 
 export const ChoiceModal: FC<ChoiceModalProps> = (props) => {
     const classes = useStyles();
-    const [textFieldInput, setTextFieldInput] = useState("");
     const [modalStyle] = useState(getModalStyle);
-
-    const CHARACTER_LIMIT = 250;
-
-    const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
-        setTextFieldInput(e.target.value);
-        props.handleChange(e);
-
-    }
 
     return (
         <Modal open={props.modalOpen} onClose={props.handleClosed()}

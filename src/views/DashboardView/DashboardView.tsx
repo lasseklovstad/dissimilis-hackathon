@@ -7,10 +7,8 @@ import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
 import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
 import { ISong } from '../../models/ISong';
 import { InputModal } from '../../components/CustomModal/InputModal.component';
-import { ChoiceModal } from '../../components/CustomModal/ChoiceModal.component';
 import { useHistory } from 'react-router-dom';
 import { usePostSong } from '../../utils/usePostSong';
-import { useDeleteSong } from '../../utils/useDeleteSong';
 
 export type DashboardViewProps = {
 
@@ -21,7 +19,6 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   const measureText = t("DashboardView:measure");
   const [recentSongs, setRecentSongs] = useState<ISong[]>([]);
   const [addSongModalIsOpen, setAddSongModalIsOpen] = useState(false);
-  const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false);
   const [timeSignature, setTimeSignature] = useState("");
   const [textFieldInput, setTextFieldInput] = useState<string>("");
   const postSong = usePostSong(textFieldInput, timeSignature);
@@ -79,8 +76,6 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
 
   const handleClose = () => {
     setAddSongModalIsOpen(false);
-    setDeleteSongModalIsOpen(false);
-    getRecentSongs().then(({ result }) => { setRecentSongs(result?.data || []) });
   };
 
   const handleOnChangeAddSongModal: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
@@ -96,38 +91,6 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   const handleOnChangeSearch = (searchTermParam: string) => {
     setSearchTerm(searchTermParam)
     setDashboardView(false)
-  }
-
-
-  const [clickedSong, setClickedSong] = useState<number>(-1);
-  const deleteSong = useDeleteSong(clickedSong);
-
-
-  const initialState = {
-    mouseX: null,
-    mouseY: null,
-  };
-
-  const handleOpenMenu = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setRightClickCoordinates({
-      mouseX: event.clientX - 2,
-      mouseY: event.clientY - 4,
-    });
-  };
-
-  const [rightClickCoordinates, setRightClickCoordinates] = React.useState<{
-    mouseX: null | number;
-    mouseY: null | number;
-  }>(initialState);
-
-  const handleOpenDeleteSongModal = () => {
-    setDeleteSongModalIsOpen(true);
-    setRightClickCoordinates(initialState);
-  };
-  const handleDeleteSong = () => {
-    setDeleteSongModalIsOpen(false);
-    deleteSong().then(() => { getRecentSongs().then(({ result }) => { setRecentSongs(result?.data || []) }) });
   }
 
   return (
@@ -166,20 +129,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                 <Grid container spacing={3}>
                   {recentSongs?.map((song, index) => (
                     <Grid item xs={12} sm={4} lg={3} key={song.id}>
-                      <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setClickedSong(song!.id!); handleOpenMenu(e) }} text={song.title} link={"/song/" + song.id!.toString()} />
-                      <Menu
-                        keepMounted
-                        open={rightClickCoordinates.mouseY !== null}
-                        onClose={() => { setRightClickCoordinates(initialState) }}
-                        anchorReference="anchorPosition"
-                        anchorPosition={
-                          rightClickCoordinates.mouseY !== null && rightClickCoordinates.mouseX !== null
-                            ? { top: rightClickCoordinates.mouseY, left: rightClickCoordinates.mouseX }
-                            : undefined
-                        }
-                      >
-                        <MenuItem onClick={() => { handleOpenDeleteSongModal() }}>{t("DashboardView:deleteSong")}</MenuItem>
-                      </Menu>
+                      <DashboardButton text={song.title} link={"/song/" + song.id!.toString()} />
                     </Grid>
                   ))}
                   <Grid item xs={12} sm={4} lg={3} key="library">
@@ -198,15 +148,6 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               labelText={t("DashboardView:nameOfSong")}
               handleChange={handleOnChangeAddSongModal}
             />
-            < ChoiceModal handleOnCancelClick={() => handleClose}
-              handleOnSaveClick={() => handleDeleteSong}
-              handleClosed={() => handleClose}
-              modalOpen={deleteSongModalIsOpen}
-              ackText={t("DashboardView:deleteSong")}
-              cancelText={t("CreateSongTab:cancel")}
-              headerText={t("DashboardView:deleteSong")}
-              descriptionText={t("DashboardView:deleteDescription")}
-              handleChange={handleOnChangeAddSongModal} />
           </>
           :
 
@@ -218,7 +159,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               <Grid container spacing={3}>
                 {filteredSongs?.map(song => (
                   <Grid item xs={12} sm={4} lg={3} key={song.id}>
-                    <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setClickedSong(song!.id!); handleOpenMenu(e) }} text={song.title} link={"/song/" + song.id!.toString()} />
+                    <DashboardButton text={song.title} link={"/song/" + song.id!.toString()} />
                   </Grid>
                 ))}
               </Grid>
