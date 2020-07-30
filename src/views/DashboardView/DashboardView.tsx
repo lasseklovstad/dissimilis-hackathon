@@ -118,8 +118,8 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
     mouseY: null | number;
   }>(initialState);
 
-  const handleCloseMenu = (method?: string) => {
-    if (method === "deleteVoice" && clickedSong) {
+  const handleDeleteSong = (method?: string) => {
+    if (method === "deleteSong" && clickedSong) {
       deleteSong().then();
     }
     setRightClickCoordinates(initialState);
@@ -165,7 +165,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                       <Menu
                         keepMounted
                         open={rightClickCoordinates.mouseY !== null}
-                        onClose={() => { handleCloseMenu("") }}
+                        onClose={() => { handleDeleteSong("") }}
                         anchorReference="anchorPosition"
                         anchorPosition={
                           rightClickCoordinates.mouseY !== null && rightClickCoordinates.mouseX !== null
@@ -173,7 +173,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                             : undefined
                         }
                       >
-                        <MenuItem onClick={() => { handleCloseMenu("deleteVoice") }}>Slett sang</MenuItem>
+                        <MenuItem onClick={() => { handleDeleteSong("deleteSong") }}>Slett sang</MenuItem>
                       </Menu>
                     </Grid>
                   ))}
@@ -194,7 +194,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               handleChange={handleOnChangeModal}
             />
 
-            {/*  <Modal open={renameModalIsOpen} onClose={handleClose}>
+            <Modal open={renameModalIsOpen} onClose={handleClose}>
               <div className={classes.modal} style={modalStyle}>
                 <Grid container >
                   <Typography className={classes.title} variant="h2">Vil du slette sang?</Typography>
@@ -207,7 +207,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                   </Grid>
                 </Grid>
               </div>
-            </Modal> */}
+            </Modal>
           </>
           :
 
