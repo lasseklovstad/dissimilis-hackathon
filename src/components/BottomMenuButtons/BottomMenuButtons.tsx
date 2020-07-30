@@ -4,8 +4,10 @@ import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import { TextField, Button, Popper } from '@material-ui/core';
 import { colors } from '../../utils/colors';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component';
+import { useTranslation } from 'react-i18next';
+
 
 
 export type AddButtonProps = {
@@ -71,17 +73,20 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props
     if (!options.includes(selectedNoteKey)) {
         setSelectedNoteKey(options[0]);
     }
+    const { t } = useTranslation();
 
     return (
         <Autocomplete
             value={
                 showValue
             }
+            
             onChange={(event, newValue: string | null) => {
                 if (newValue != null) {
                     setSelectedNoteKey(newValue);
                 }
             }}
+            openText={t("BottomBar:open")}
             PopperComponent={customPopperPlacement}
             options={options}
             closeIcon={false}

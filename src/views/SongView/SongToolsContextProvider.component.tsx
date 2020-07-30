@@ -16,7 +16,7 @@ interface ISongToolsContext {
     availablePositions: number[][][][],
     setAvailablePositions: (number: number[][][][]) => void,
     insertNewNoteOrChord: (noteIndex: number, barIndex: number, voiceIndex: number) => void,
-    showAvailableSpace: () => void,
+    calculateAvailableSpace: () => void,
     selectPositionArray: (voiceIndex: number, barIndex: number, noteIndex: number) => number[]
 }
 
@@ -32,7 +32,7 @@ export const SongToolsContext = React.createContext<ISongToolsContext>({
     availablePositions: [],
     setAvailablePositions: (number: number[][][][]) => { },
     insertNewNoteOrChord: (noteIndex: number, barIndex: number, voiceIndex: number) => { },
-    showAvailableSpace: () => { },
+    calculateAvailableSpace: () => { },
     selectPositionArray: (voiceIndex: number, barIndex: number, noteIndex: number) => []
 });
 
@@ -49,7 +49,7 @@ const SongToolsContextProvider: React.FC = props => {
         if (isInitialMount.current) {
             isInitialMount.current = false;
         } else {
-            showAvailableSpace();
+            calculateAvailableSpace();
         }
     }, [selectedNoteLength, song]);
 
@@ -95,7 +95,7 @@ const SongToolsContextProvider: React.FC = props => {
         return selectedPosArray;
     }
 
-    const showAvailableSpace = () => {
+    const calculateAvailableSpace = () => {
         let returnArray = [] //This will return a list of noteIndexLists in which there is available space in the barIndex given. This again tells where it is space to the right, or left if length-index <= selectedKeyLength
         for (let voiceIndex = 0; voiceIndex < song.voices.length; voiceIndex++) {
             let voiceArray = [];
@@ -138,7 +138,7 @@ const SongToolsContextProvider: React.FC = props => {
         availablePositions,
         setAvailablePositions,
         insertNewNoteOrChord,
-        showAvailableSpace,
+        calculateAvailableSpace,
         selectPositionArray
     }
 
