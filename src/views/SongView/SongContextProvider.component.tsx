@@ -23,6 +23,7 @@ interface ISongContext {
     addHouse: (barId: number) => void,
     deleteHouse: (barId: number) => void,
     isLoading: boolean,
+    setIsLoading: (newValue: boolean) => void,
     isSaving: boolean,
     setIsSaving: (newValue: boolean) => void,
 }
@@ -53,13 +54,14 @@ export const SongContext = React.createContext<ISongContext>({
     addHouse: (barId: number) => { },
     deleteHouse: (barId: number) => { },
     isLoading: false,
+    setIsLoading: (newValue: boolean) => { },
     isSaving: false,
     setIsSaving: (newValue: boolean) => { }
 });
 
 const SongContextProvider: React.FC = props => {
     const [songId, setSongId] = useState<number>(1);
-    const [isLoading, setIsloading] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const getSong = useGetSong(songId);
     let [song, setSong] = useState<ISong>({
@@ -82,13 +84,13 @@ const SongContextProvider: React.FC = props => {
         setSongId(id);
     }
     useEffect(() => {
-        setIsloading(true);
+        setIsLoading(true);
         getSong().then(({ result }) => {
             if (result?.data) {
-                setIsloading(false);
+                setIsLoading(false);
                 setSong(result.data)
             }
-            setIsloading(false);
+            setIsLoading(false);
         })
     }, [])
 
@@ -307,6 +309,7 @@ const SongContextProvider: React.FC = props => {
         addHouse,
         deleteHouse,
         isLoading,
+        setIsLoading,
         isSaving,
         setIsSaving
     }

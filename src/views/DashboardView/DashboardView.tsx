@@ -142,10 +142,10 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               handleOnSaveClick={() => handleAddSong}
               handleClosed={() => handleClose}
               modalOpen={addSongModalIsOpen}
-              saveText={t("CreateSongTab:save")}
-              cancelText={t("CreateSongTab:cancel")}
-              headerText={t("DashboardView:addSong")}
-              labelText={t("DashboardView:nameOfSong")}
+              saveText={t("Modal:create")}
+              cancelText={t("Modal:cancel")}
+              headerText={t("Modal:addSong")}
+              labelText={t("Modal:nameOfSong")}
               handleChange={handleOnChangeAddSongModal}
             />
           </>

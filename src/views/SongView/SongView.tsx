@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong.component';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab.component';
@@ -11,18 +11,24 @@ import { usePutSong } from '../../utils/usePutSong';
 import animatedBird from "../../assets/images/sommerfugl-animert.svg";
 import Alert from '@material-ui/lab/Alert';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import { ChoiceModal } from '../../components/CustomModal/ChoiceModal.component';
+import { useTranslation } from 'react-i18next';
 
 export type SongViewProps = {
 }
 
 export const SongView: React.FC<SongViewProps> = props => {
   const classes = useStyles();
+  const [saveSongModalIsOpen, setSaveSongModalIsOpen] = useState(false);
+
   const xs = useMediaQuery("(max-width: 600px)");
   const xl = useMediaQuery("(min-width: 1920px)");
-  const history = useHistory();
   const queryString = require('query-string');
-  const { song, song: { voices }, isLoading, isSaving, setIsSaving } = useContext(SongContext);
+  const { song, song: { voices }, setIsLoading, isLoading, isSaving, setIsSaving } = useContext(SongContext);
   const putSong = usePutSong(song)
+  const { t } = useTranslation();
+  const history = useHistory();
+
 
   const match = useRouteMatch<MatchParams>("/song/:id");
   let id = match ? +match.params.id : 0;
@@ -55,17 +61,34 @@ export const SongView: React.FC<SongViewProps> = props => {
     return index === voices[selectedVoice].bars.length - 1 ? true : false;
   }
 
-  const saveSong = () => {
-    putSong().then(() => {
-      setIsSaving(true)
+  const handleOpenSaveSongModal = () => {
+    setSaveSongModalIsOpen(true)
+  }
+
+  const handleSaveSong = () => {
+    setIsLoading(true)
+    setSaveSongModalIsOpen(false)
+    putSong().then(({ result }) => {
+      if (result && result.status >= 200 && result.status <= 299) {
+        setIsLoading(false)
+        setIsSaving(true)
+        setTimeout(() => history.push("/dashboard"), 1000)
+      }
+      setSaveSongModalIsOpen(false)
     });
   }
+
+
+  const handleCloseSaveSongModal = () => {
+    history.push("/dashbaord")
+  }
+
+
 
   const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
-
     setIsSaving(false);
   };
 
@@ -79,7 +102,7 @@ export const SongView: React.FC<SongViewProps> = props => {
     <>
       <Grid container className={classes.root} >
         <Grid item xs={12} >
-          <NavBarCreateSong saveSongFunc={saveSong} />
+          <NavBarCreateSong onClick={handleOpenSaveSongModal} />
         </Grid>
         <Grid item xs={12}>
           <CreateSongTab />
@@ -88,7 +111,6 @@ export const SongView: React.FC<SongViewProps> = props => {
           <Grid item xs={12} >
             <Box width="30%" margin="auto">
               <object type="image/svg+xml" data={animatedBird} aria-label="bird moving" style={{ width: "100%", height: "20%" }}></object>
-
             </Box>
           </Grid>
 
@@ -128,7 +150,16 @@ export const SongView: React.FC<SongViewProps> = props => {
         </Alert>
       </Snackbar>
       <BottomBar />
-
+      <ChoiceModal
+        handleOnCancelClick={() => handleCloseSaveSongModal}
+        handleOnSaveClick={() => handleSaveSong}
+        handleClosed={() => () => { setSaveSongModalIsOpen(false) }}
+        modalOpen={saveSongModalIsOpen}
+        ackText={t("Modal:saveChanges")}
+        cancelText={t("Modal:dontSaveChanges")}
+        headerText={t("Modal:saveChangesPrompt")}
+        descriptionText={t("Modal:saveChangesPromptDescription")}
+      />
     </>
 
   );

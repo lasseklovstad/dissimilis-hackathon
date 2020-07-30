@@ -103,7 +103,7 @@ export const DashboardTopBarIcon: FC<TopBarIconProps> = (props) => {
   return (
     <Box className={styles.butterflyButtonContainer}>
       <Card className={styles.butterflyButtonCard}>
-        <CardActionArea onClick={() => props.func && props.func()} className={styles.butterflyButtonCardIcon} to="/dashboard" component={Link}>
+        <CardActionArea onClick={() => props.func && props.func()} className={styles.butterflyButtonCardIcon}>
           <img src={butterflyBlue} alt={altProp} />
         </CardActionArea>
       </Card>

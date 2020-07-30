@@ -56,9 +56,11 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
 
                 break;
             case "save":
-                putSong().then(() => {
-                    setIsSaving(true);
-                })
+                putSong().then(({ result }) => {
+                    if (result && result.status >= 200 && result.status <= 299) {
+                        setIsSaving(true)
+                    }
+                });
                 break;
             case "delete":
                 handleOpenDeleteSongModal()
@@ -84,10 +86,10 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
                 handleOnSaveClick={() => handleDeleteSong}
                 handleClosed={() => handleClose}
                 modalOpen={deleteSongModalIsOpen}
-                ackText={t("DashboardView:deleteSong")}
-                cancelText={t("CreateSongTab:cancel")}
-                headerText={t("DashboardView:deleteSong")}
-                descriptionText={t("DashboardView:deleteDescription")}
+                ackText={t("Modal:deleteSong")}
+                cancelText={t("Modal:cancel")}
+                headerText={t("Modal:deleteSong")}
+                descriptionText={t("Modal:deleteDescription")}
             />
         </div>
     );
