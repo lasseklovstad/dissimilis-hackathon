@@ -71,7 +71,7 @@ export const BarContainer: React.FC<BarContainerProps> = props => {
             centerDivSize = 12;
         }
         //checks if a bar has a house connected to it
-        let barConst =( voices[0].bars[props.barNumber].house !== undefined) && (voices[0].bars[props.barNumber].house !== null)
+        let barConst = (voices[0].bars[props.barNumber - 1].house !== undefined) && (voices[0].bars[props.barNumber - 1].house !== null)
 
         return (
             <Grid container role="grid" className={classes.fullHeight} >
