@@ -39,8 +39,8 @@ export const ChoiceModal: FC<ChoiceModalProps> = (props) => {
                 <div className={classes.modal} style={modalStyle}>
                     <Grid container >
                         <Grid item xs={12}>
-                            <Typography className={classes.title} variant="h1">{props.headerText}</Typography>
-                            <Typography className={classes.title} variant="h6">{props.descriptionText}</Typography>
+                            <Typography className={classes.title} variant="h2">{props.headerText}</Typography>
+                            <Typography className={classes.paragraph}>{props.descriptionText}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Button className={classes.button} size="large" variant="contained" onClick={props.handleOnSaveClick()} >{props.ackText}</Button>
@@ -82,11 +82,15 @@ const useStyles = makeStyles({
             backgroundColor: colors.gray_300
         },
         marginRight: "8px",
+
         float: "left",
         position: "relative",
     },
     title: {
-        padding: "8px",
+        marginBottom: "8px",
+    },
+    paragraph: {
+        marginBottom: "24px",
     },
     container: {
         width: "100%"
