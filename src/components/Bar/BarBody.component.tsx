@@ -27,7 +27,7 @@ export function getChord(notes: string[]): string {
     if (tempArray.length === 1) {
         return notes[0];
     } else {
-        const result = Chord.detect(tempArray);
+        const result = Chord.detect(tempArray.reverse());
         if (result.length === 0) return notes[0];
         return result[0].replace(/M/g, '').replace(/B/g, 'H');
     }
