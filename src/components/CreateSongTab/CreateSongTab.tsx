@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { IVoice } from "../../models/IVoice";
 import { useHistory } from "react-router-dom";
-import { CustomModal } from "../CustomModal/CustomModal.component";
+import { InputModal } from "../CustomModal/InputModal.component";
 import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 
 export type CreateSongTabProps = {
@@ -117,7 +117,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                 </Grid>
             </Grid>
-            <CustomModal handleOnCancelClick={() => handleClose}
+            <InputModal handleOnCancelClick={() => handleClose}
                 handleOnSaveClick={() => handleAddInstrument}
                 handleClosed={() => handleClose}
                 modalOpen={modalIsOpen}
@@ -127,7 +127,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                 labelText={t("CreateSongTab:nameOfInstrument")}
                 handleChange={handleChange}
             />
-            <CustomModal handleOnCancelClick={() => handleClose}
+            <InputModal handleOnCancelClick={() => handleClose}
                 handleOnSaveClick={() => handleChangeVoiceTitle}
                 handleClosed={() => handleClose}
                 modalOpen={renameModalIsOpen}

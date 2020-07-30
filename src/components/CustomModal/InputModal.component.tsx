@@ -15,7 +15,7 @@ type CustomModalProps = {
     labelText: string,
 }
 
-export const CustomModal: FC<CustomModalProps> = (props) => {
+export const InputModal: FC<CustomModalProps> = (props) => {
     const classes = useStyles();
     const [textFieldInput, setTextFieldInput] = useState("");
     const [modalStyle] = useState(getModalStyle);

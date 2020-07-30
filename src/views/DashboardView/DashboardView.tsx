@@ -6,8 +6,8 @@ import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBa
 import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
 import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
 import { ISong } from '../../models/ISong';
-import { CustomModal } from '../../components/CustomModal/CustomModal.component'
-import { ChoiceModal } from '../../components/CustomModal/ChoiceModal.component'
+import { InputModal } from '../../components/CustomModal/InputModal.component';
+import { ChoiceModal } from '../../components/CustomModal/ChoiceModal.component';
 import { useHistory } from 'react-router-dom';
 import { usePostSong } from '../../utils/usePostSong';
 import { useDeleteSong } from '../../utils/useDeleteSong';
@@ -128,7 +128,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   };
   const handleDeleteSong = () => {
     setDeleteSongModalIsOpen(false);
-    deleteSong();
+    deleteSong().then(() => { getRecentSongs().then(({ result }) => { setRecentSongs(result?.data || []) }) });
   }
 
   return (
@@ -189,7 +189,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                 </Grid>
               </Box>
             </Grid>
-            <CustomModal handleOnCancelClick={() => handleClose}
+            <InputModal handleOnCancelClick={() => handleClose}
               handleOnSaveClick={() => handleAddSong}
               handleClosed={() => handleClose}
               modalOpen={addSongModalIsOpen}
