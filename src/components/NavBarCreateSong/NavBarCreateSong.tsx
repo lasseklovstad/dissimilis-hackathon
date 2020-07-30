@@ -82,6 +82,7 @@ const useStyles = makeStyles({
     },
     appbar: {
         backgroundColor: "transparent",
+        marginBottom: "24px"
     },
     textField: {
         width: "100%",
