@@ -7,7 +7,7 @@ import { colors } from '../../utils/colors';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component';
 import { useTranslation } from 'react-i18next';
-
+import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
 
 export type AddButtonProps = {
@@ -61,11 +61,13 @@ export const MenuButton: FunctionComponent<ButtonProps> = (props) => {
 const customPopperPlacement = function (props: any) {
     return (<Popper {...props} placement='top' />)
 }
+const filterOptions = createFilterOptions({ matchFrom: 'start' });
 
 export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props) => {
     const styles = useStyles();
     const [options, setOptions] = useState(props.notesOrChords);
     const { selectedNoteKey, setSelectedNoteKey } = useContext(SongToolsContext);
+
     useEffect(() => {
         setOptions(props.notesOrChords);
     }, [props.notesOrChords]);
@@ -75,17 +77,19 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props
     }
     const { t } = useTranslation();
 
+    const onDropdownChange = (event: any, value: string) => {
+        if (value !== "") {
+            setSelectedNoteKey(value)
+        }
+    }
+
+
     return (
         <Autocomplete
             value={
                 showValue
             }
-            
-            onChange={(event, newValue: string | null) => {
-                if (newValue != null) {
-                    setSelectedNoteKey(newValue);
-                }
-            }}
+            onChange={onDropdownChange}
             openText={t("BottomBar:open")}
             PopperComponent={customPopperPlacement}
             options={options}
@@ -93,6 +97,7 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props
             className={styles.dropdown}
             noOptionsText={props.noOptionsText}
             renderInput={(params) => <TextField {...params} variant="outlined" InputProps={{ ...params.InputProps, className: styles.dropdown }} />}
+            filterOptions={filterOptions}
         />
     );
 }
