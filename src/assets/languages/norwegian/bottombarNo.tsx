@@ -11,4 +11,5 @@ export const bottombarNo = {
     "halfNote": "Halvnote",
     "quarterNote": "Firedelsnote",
     "eighthNote": "Åttendelsnote",
+    "open": "Åpne"
 }
