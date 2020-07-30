@@ -19,7 +19,7 @@ type MatchParams = {
 export const MenuButton: React.FC<MenuButtonProps> = props => {
     const classes = useStyles();
     const history = useHistory();
-    const { song } = useContext(SongContext);
+    const { song, setIsSaving } = useContext(SongContext);
     const putSong = usePutSong(song);
     const { setShowPossiblePositions } = useContext(SongToolsContext);
 
@@ -36,10 +36,15 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
         switch (method) {
             case "export":
                 setShowPossiblePositions(false);
-                history.push("/song/" + id + "/export");
+                putSong().then(() => {
+                    history.push("/song/" + id + "/export");
+                })
+
                 break;
             case "save":
-                putSong();
+                putSong().then(() => {
+                    setIsSaving(true);
+                })
                 break;
             default:
 

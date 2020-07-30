@@ -3,12 +3,14 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
 import { SongContext } from "./SongContextProvider.component";
-import { Grid, makeStyles, useMediaQuery, Box } from '@material-ui/core';
+import { Grid, makeStyles, useMediaQuery, Box, Snackbar, Typography } from '@material-ui/core';
 import { TimeSignature, BarNumber } from '../../components/SongViewComponents/SongView.component';
 import { BarContainer } from "../../components/BarContainer/BarContainer.component";
 import BottomBar from '../../components/BottomBar/BottomBar.component';
 import { usePutSong } from '../../utils/usePutSong';
 import animatedBird from "../../assets/images/sommerfugl-animert.svg";
+import Alert from '@material-ui/lab/Alert';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 
 
@@ -21,7 +23,7 @@ export const SongView: React.FC<SongViewProps> = props => {
   const xl = useMediaQuery("(min-width: 1920px)");
   const history = useHistory();
   const queryString = require('query-string');
-  const { song, song: { voices }, isLoading } = useContext(SongContext);
+  const { song, song: { voices }, isLoading, isSaving, setIsSaving } = useContext(SongContext);
   const putSong = usePutSong(song)
 
   const match = useRouteMatch<MatchParams>("/song/:id");
@@ -48,7 +50,21 @@ export const SongView: React.FC<SongViewProps> = props => {
   }
 
   const saveSong = () => {
-    putSong();
+    putSong().then(() => {
+      setIsSaving(true)
+    });
+  }
+
+  const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setIsSaving(false);
+  };
+
+  function Alert(props: AlertProps) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
 
   const heightOfBar = 160;
@@ -100,6 +116,11 @@ export const SongView: React.FC<SongViewProps> = props => {
         }
 
       </Grid>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} autoHideDuration={4000} open={isSaving} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" >
+          <Typography variant="caption">Lagring vellykket</Typography>
+        </Alert>
+      </Snackbar>
       <BottomBar />
 
     </>
@@ -120,7 +141,7 @@ const useStyles = makeStyles({
   },
   songViewContainer: {
     marginTop: "24px"
-  }
+  },
 })
 
 type MatchParams = {
