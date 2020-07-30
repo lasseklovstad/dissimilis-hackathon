@@ -77,19 +77,13 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (props
     }
     const { t } = useTranslation();
 
-    const onDropdownChange = (event: any, value: string) => {
-        if (value !== "") {
-            setSelectedNoteKey(value)
-        }
-    }
-
 
     return (
         <Autocomplete
             value={
                 showValue
             }
-            onChange={onDropdownChange}
+            onChange={(e) => setSelectedNoteKey(String(e.target.value))}
             openText={t("BottomBar:open")}
             PopperComponent={customPopperPlacement}
             options={options}
