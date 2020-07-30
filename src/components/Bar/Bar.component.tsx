@@ -23,6 +23,8 @@ export type BarProps = {
 
 export const Bar: React.FC<BarProps> = props => {
     const classes = useStyles();
+
+
     let centerDivSize: 9 | 10 | 11 = 9;
 
     if ((props.repBefore && props.repAfter) || (props.repBefore && !props.repAfter)) {
@@ -65,12 +67,8 @@ export const Bar: React.FC<BarProps> = props => {
                     </Grid>
                 </Grid>
             </Grid>
-
-
         </Box>
     )
-
-
 }
 
 const useStyles = makeStyles({

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
-import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
+import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong.component';
+import CreateSongTab from '../../components/CreateSongTab/CreateSongTab.component';
 import { SongContext } from "./SongContextProvider.component";
 import { Grid, makeStyles, useMediaQuery, Box } from '@material-ui/core';
 import { TimeSignature, BarNumber } from '../../components/SongViewComponents/SongView.component';
