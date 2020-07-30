@@ -7,6 +7,7 @@ import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
 import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
 import { ISong } from '../../models/ISong';
 import { CustomModal } from '../../components/CustomModal/CustomModal'
+import { ChoiceModal } from '../../components/CustomModal/ChoiceModal'
 import { useHistory } from 'react-router-dom';
 import { usePostSong } from '../../utils/usePostSong';
 import { useDeleteSong } from '../../utils/useDeleteSong';
@@ -19,7 +20,8 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   const { t } = useTranslation();
   const measureText = t("DashboardView:measure");
   const [recentSongs, setRecentSongs] = useState<ISong[]>([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [addSongModalIsOpen, setAddSongModalIsOpen] = useState(false);
+  const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false);
   const [timeSignature, setTimeSignature] = useState("");
   const [textFieldInput, setTextFieldInput] = useState<string>("");
   const postSong = usePostSong(textFieldInput, timeSignature);
@@ -62,7 +64,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   ];
 
   const handleAddSong = () => {
-    setModalIsOpen(false);
+    setAddSongModalIsOpen(false);
     postSong().then(({ result }) => {
       if (result?.status === 201) {
         history.push("/song/" + result.data.id);
@@ -70,17 +72,18 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
     })
   };
 
-  const handleOpen = (song: musicTacts) => {
+  const handleOpenAddSongModal = (song: musicTacts) => {
     setTimeSignature(song.text)
-    setModalIsOpen(true);
+    setAddSongModalIsOpen(true);
   };
 
   const handleClose = () => {
-    setModalIsOpen(false);
+    setAddSongModalIsOpen(false);
+    setDeleteSongModalIsOpen(false);
+    getRecentSongs().then(({ result }) => { setRecentSongs(result?.data || []) });
   };
 
-
-  const handleOnChangeModal: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
+  const handleOnChangeAddSongModal: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (e: any) => {
     setTextFieldInput(e.target.value);
   }
 
@@ -96,16 +99,17 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   }
 
 
-  const [rightClicked, setRightClicked] = useState(-1);
+  /* const [rightClicked, setRightClicked] = useState(-1); */
   const [clickedSong, setClickedSong] = useState<number>(-1);
   const deleteSong = useDeleteSong(clickedSong);
+
 
   const initialState = {
     mouseX: null,
     mouseY: null,
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleOpenMenu = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     setRightClickCoordinates({
       mouseX: event.clientX - 2,
@@ -118,12 +122,14 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
     mouseY: null | number;
   }>(initialState);
 
-  const handleDeleteSong = (method?: string) => {
-    if (method === "deleteSong" && clickedSong) {
-      deleteSong().then();
-    }
+  const handleOpenDeleteSongModal = () => {
+    setDeleteSongModalIsOpen(true);
     setRightClickCoordinates(initialState);
   };
+  const handleDeleteSong = () => {
+    setDeleteSongModalIsOpen(false);
+    deleteSong();
+  }
 
   return (
 
@@ -146,7 +152,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                 <Grid container spacing={3}>
                   {musicTacts.map(song => (
                     <Grid item xs={12} sm={4} lg={3} key={song.id}>
-                      <DashboardButtonWithAddIconNoLink func={() => handleOpen(song)} text={song.text + "-" + measureText} />
+                      <DashboardButtonWithAddIconNoLink func={() => handleOpenAddSongModal(song)} text={song.text + "-" + measureText} />
                     </Grid>
                   ))}
                 </Grid>
@@ -161,11 +167,11 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                 <Grid container spacing={3}>
                   {recentSongs?.map((song, index) => (
                     <Grid item xs={12} sm={4} lg={3} key={song.id}>
-                      <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setRightClicked(index); setClickedSong(song!.id!); handleClick(e) }} text={song.title} link={"/song/" + song.id!.toString()} />
+                      <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { /* setClickedSong(index);  */setClickedSong(song!.id!); handleOpenMenu(e) }} text={song.title} link={"/song/" + song.id!.toString()} />
                       <Menu
                         keepMounted
                         open={rightClickCoordinates.mouseY !== null}
-                        onClose={() => { handleDeleteSong("") }}
+                        onClose={() => { setRightClickCoordinates(initialState) }}
                         anchorReference="anchorPosition"
                         anchorPosition={
                           rightClickCoordinates.mouseY !== null && rightClickCoordinates.mouseX !== null
@@ -173,7 +179,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                             : undefined
                         }
                       >
-                        <MenuItem onClick={() => { handleDeleteSong("deleteSong") }}>Slett sang</MenuItem>
+                        <MenuItem onClick={() => { handleOpenDeleteSongModal() }}>Slett sang</MenuItem>
                       </Menu>
                     </Grid>
                   ))}
@@ -186,28 +192,22 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
             <CustomModal handleOnCancelClick={() => handleClose}
               handleOnSaveClick={() => handleAddSong}
               handleClosed={() => handleClose}
-              modalOpen={modalIsOpen}
+              modalOpen={addSongModalIsOpen}
               saveText={t("CreateSongTab:save")}
               cancelText={t("CreateSongTab:cancel")}
               headerText={t("DashboardView:addSong")}
               labelText={t("DashboardView:nameOfSong")}
-              handleChange={handleOnChangeModal}
+              handleChange={handleOnChangeAddSongModal}
             />
-
-            <Modal open={renameModalIsOpen} onClose={handleClose}>
-              <div className={classes.modal} style={modalStyle}>
-                <Grid container >
-                  <Typography className={classes.title} variant="h2">Vil du slette sang?</Typography>
-                  <Grid item xs={12} style={{ marginBottom: "16px" }}>
-                    <TextField variant="filled" autoFocus onChange={handleChange} label="Navn" style={{ width: "100%" }} />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={handleChangeVoiceTitle} >{t("CreateSongTab:saveNewName")}</Button>
-                    <Button className={classes.button} size="large" variant="outlined" onClick={() => setRenameModalIsOpen(false)}>{t("CreateSongTab:cancel")}</Button>
-                  </Grid>
-                </Grid>
-              </div>
-            </Modal>
+            < ChoiceModal handleOnCancelClick={() => handleClose}
+              handleOnSaveClick={() => handleDeleteSong}
+              handleClosed={() => handleClose}
+              modalOpen={deleteSongModalIsOpen}
+              ackText={"Slett sang"}
+              cancelText={t("CreateSongTab:cancel")}
+              headerText={"Slett sang"}
+              descriptionText={"Er du sikker du vil slette sangen?"}
+              handleChange={handleOnChangeAddSongModal} />
           </>
           :
 
@@ -227,7 +227,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
           </Grid>
         }
       </Grid>
-    </Box>
+    </Box >
 
   );
 }
