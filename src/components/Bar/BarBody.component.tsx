@@ -197,7 +197,6 @@ export const BarBody: React.FC<BarBodyProps> = props => {
             {chordsInBar}
             {
                 props.chordsAndNotes.map((note, i) => {
-                    console.log("!!!: " + props.chordsAndNotes.length)
 
                     return (
                         <Box onContextMenu={() => setRightClicked(i)} key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px", margin: props.chordsAndNotes.length >= 5 ? props.rowsPerSheet === 6 ? "0px 1px" : "0px 4px" : "0px 4px" }} flexDirection="column"  >

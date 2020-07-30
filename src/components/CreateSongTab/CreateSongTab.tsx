@@ -46,8 +46,6 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     };
 
     const handleChange = (e: any) => {
-        console.log("Heihei")
-        console.log(e.target.value)
         setTextFieldInput(e.target.value);
     };
 
@@ -77,7 +75,6 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     };
     const handleCloseMenu = (method?: string) => {
         if (method === "renameVoice") {
-            console.log("Heihei")
             setRenameModalIsOpen(true)
         }
         setRightClickCoordinates(initialState);

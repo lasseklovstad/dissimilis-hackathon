@@ -1,5 +1,5 @@
 import { FC, useState } from "react"
-import { Modal, makeStyles, Grid, Typography, TextField, Button } from "@material-ui/core"
+import { Modal, makeStyles, Grid, Typography, TextField, Button, Fade, Backdrop } from "@material-ui/core"
 import React from "react"
 import { colors } from "../../utils/colors"
 
@@ -29,20 +29,26 @@ export const CustomModal: FC<CustomModalProps> = (props) => {
     }
 
     return (
-        <Modal open={props.modalOpen} onClose={props.handleClosed()}>
-            <div className={classes.modal} style={modalStyle}>
-                <Grid container >
-                    <Typography className={classes.title} variant="h2">{props.headerText}</Typography>
-                    <Grid item xs={12} style={{ marginBottom: "16px" }}>
-                        <TextField inputProps={{ maxLength: CHARACTER_LIMIT }} helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`} autoFocus variant="filled" onChange={handleChange} label={props.labelText} style={{ width: "100%" }} />
+        <Modal open={props.modalOpen} onClose={props.handleClosed()}
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+                timeout: 240,
+            }}>
+            <Fade in={props.modalOpen} >
+                <div className={classes.modal} style={modalStyle}>
+                    <Grid container >
+                        <Typography className={classes.title} variant="h2">{props.headerText}</Typography>
+                        <Grid item xs={12} style={{ marginBottom: "16px" }}>
+                            <TextField inputProps={{ maxLength: CHARACTER_LIMIT }} helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`} autoFocus variant="filled" onChange={handleChange} label={props.labelText} style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={props.handleOnSaveClick()} >{props.saveText}</Button>
+                            <Button className={classes.button} size="large" variant="outlined" onClick={props.handleOnCancelClick()}>{props.cancelText}</Button>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <Button className={classes.button} size="large" variant="contained" disabled={!textFieldInput} onClick={props.handleOnSaveClick()} >{props.saveText}</Button>
-                        <Button className={classes.button} size="large" variant="outlined" onClick={props.handleOnCancelClick()}>{props.cancelText}</Button>
-                    </Grid>
-                </Grid>
-            </div>
-        </Modal>
+                </div>
+            </Fade>
+        </Modal >
     )
 }
 
