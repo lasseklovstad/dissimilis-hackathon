@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import { TextField, Button, Popper } from '@material-ui/core';
 import { colors } from '../../utils/colors';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component';
 import { useTranslation } from 'react-i18next';
 
