@@ -10,7 +10,7 @@ import { useHistory } from 'react-router-dom';
  */
 
 //TODO: isnn initialData neccessary here? 
-export const useApiService = <T extends Object>(method: "get" | "post", url: string, options: ApiServiceOptions<T>) => {
+export const useApiService = <T extends Object>(url: string, options: ApiServiceOptions<T>) => {
   const history = useHistory();
 
   // Add params to the url   
