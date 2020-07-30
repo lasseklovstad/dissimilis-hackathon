@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong';
-import CreateSongTab from '../../components/CreateSongTab/CreateSongTab';
+import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong.component';
+import CreateSongTab from '../../components/CreateSongTab/CreateSongTab.component';
 import { SongContext } from "./SongContextProvider.component";
 import { Grid, makeStyles, useMediaQuery, Box, Snackbar, Typography } from '@material-ui/core';
 import { TimeSignature, BarNumber } from '../../components/SongViewComponents/SongView.component';
@@ -41,10 +41,18 @@ export const SongView: React.FC<SongViewProps> = props => {
     history.replace(`/song/${id}?voice=1`);
   }
 
+  /**
+   * This method checks if the bar is on a new line, and therefore should have a barline before the bar
+   * @param index
+   */
   const isBarLineBefore = (index: number) => {
-    return xl && index % 4 === 0 ? true : !xs && !xl && index % 2 === 0 ? true : xs ? true : false
+    return (xl && index % 4 === 0) ? true : (!xs && !xl && index % 2 === 0) ? true : (xs) ? true : false
   }
 
+  /**
+   * This method checks if the bar is the last one, and therefore gets a double barline
+   * @param index 
+   */
   const isBarLineAfter = (index: number) => {
     return index === voices[selectedVoice].bars.length - 1 ? true : false;
   }
