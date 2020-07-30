@@ -5,18 +5,22 @@ import LoginView from './LoginView'
 
 describe('LoginView', () => {
 
-    it('button should be showing on login page', async () => {
-        render(<BrowserRouter> <LoginView /> </BrowserRouter>)
+    it('textfield should be showing on login page', function () {
 
-
-        expect(screen.getByRole('button')).not.toHaveAttribute('disabled')
-
+        render(<BrowserRouter> <LoginView /> </BrowserRouter >)
+        expect(screen.findAllByRole('textfield')).not.toBeDisabled
     })
 
-    it('textfield should be showing on login page', async () => {
-        render(<BrowserRouter> <LoginView /> </BrowserRouter>)
+    it('LoginButton should be showing on login page', function () {
+        render(<BrowserRouter> <LoginView /> </BrowserRouter>);
+        const LoginButton = screen.getAllByRole("button", { name: /LoginView:login/i })
+        expect(LoginButton[0]).toBeEnabled();
 
-        expect(screen.findAllByRole('textfield')).not.toBeDisabled
+    })
+    it('LoginButton for Microsoft should be showing on login page', function () {
+        render(<BrowserRouter> <LoginView /> </BrowserRouter>);
+        const LoginButtonMicrosoft = screen.getAllByRole("button", { name: /LoginView:loginWithMicrosoft/i })
+        expect(LoginButtonMicrosoft[0]).toBeEnabled();
 
     })
 

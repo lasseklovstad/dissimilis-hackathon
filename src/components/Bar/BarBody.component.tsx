@@ -27,7 +27,7 @@ export function getChord(notes: string[]): string {
     if (tempArray.length === 1) {
         return notes[0];
     } else {
-        const result = Chord.detect(tempArray);
+        const result = Chord.detect(tempArray.reverse());
         if (result.length === 0) return notes[0];
         return result[0].replace(/M/g, '').replace(/B/g, 'H');
     }
@@ -185,7 +185,7 @@ export const BarBody: React.FC<BarBodyProps> = props => {
 
     const [positionArray, setPositionArray] = useState<number[]>([]);
     const emptySpace = (i: number) => {
-        if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i))) {
+        if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber] != undefined && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i))) {
             return true
         }
         return false;
@@ -197,7 +197,6 @@ export const BarBody: React.FC<BarBodyProps> = props => {
             {chordsInBar}
             {
                 props.chordsAndNotes.map((note, i) => {
-                    console.log("!!!: " + props.chordsAndNotes.length)
 
                     return (
                         <Box onContextMenu={() => setRightClicked(i)} key={i} className={classes.toneAndChordBox} style={{ flex: note.length, height: !props.height ? "100%" : props.height - 24 + "px", margin: props.chordsAndNotes.length >= 5 ? props.rowsPerSheet === 6 ? "0px 1px" : "0px 4px" : "0px 4px" }} flexDirection="column"  >
@@ -209,11 +208,11 @@ export const BarBody: React.FC<BarBodyProps> = props => {
                                             key={index} className={classes.toneBox}
                                             onMouseEnter={() => { if (showPossiblePositions) { setPositionArray(selectPositionArray(props.voiceId, props.barNumber, i)); } }}
                                             onMouseLeave={() => { if (showPossiblePositions) { setPositionArray([]) } }}
-                                            style={{ cursor: showPossiblePositions ? (!availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i))) ? 'context-menu' : "pointer" : "default", backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), border: emptySpace(i) ? (positionArray.includes(i) ? "none" : "1px solid" + colors.gray_400) : "none", opacity: (showPossiblePositions && !emptySpace(i)) ? "80%" : "100%" }}
+                                            style={{ cursor: showPossiblePositions ? (availablePositions[props.voiceId][props.barNumber] != undefined && !availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i))) ? 'context-menu' : "pointer" : "default", backgroundColor: emptySpace(i) ? (positionArray.includes(i) ? colors.focus : "transparent") : getColor(type), border: emptySpace(i) ? (positionArray.includes(i) ? "none" : "1px solid" + colors.gray_400) : "none", opacity: (showPossiblePositions && !emptySpace(i)) ? "80%" : "100%" }}
                                             tabIndex={!props.exportMode ? 1 : -1}
                                             component={ButtonBase}
                                             onClick={() => {
-                                                if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
+                                                if (showPossiblePositions && availablePositions[props.voiceId][props.barNumber] != undefined  && availablePositions[props.voiceId][props.barNumber].find(arr => arr.includes(i)) != null) {
                                                     insertNewNoteOrChord(i, props.barNumber, props.voiceId)
                                                 }
                                             }}

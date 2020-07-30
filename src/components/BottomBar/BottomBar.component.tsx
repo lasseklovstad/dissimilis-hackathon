@@ -84,7 +84,7 @@ function BottomBar() {
                 </div>
                 <div className={classes.container} >
                     <MenuButtonWithAddIcon selected={showPossiblePositions} text={t("BottomBar:addTone")} onClick={() => { if (!showPossiblePositions) { showAvailableSpace() }; setShowPossiblePositions(!showPossiblePositions) }} />
-                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => { setShowPossiblePositions(false); addEmptyBar(); scrollToBottom(); }} />
+                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => { addEmptyBar(); scrollToBottom(); showAvailableSpace(); setShowPossiblePositions(true) }} />
                 </div>
             </Grid>
         </Grid>
