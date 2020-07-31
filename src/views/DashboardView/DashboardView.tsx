@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Typography, Box, makeStyles, Menu, MenuItem } from '@material-ui/core';
+import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
 import { DashboardButton, DashboardLibraryButton, DashboardButtonWithAddIconNoLink } from '../../components/DashboardButtons/DashboardButtons';
 import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBar'
@@ -140,10 +140,10 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
               handleOnSaveClick={() => handleAddSong}
               handleClosed={() => handleClose}
               modalOpen={addSongModalIsOpen}
-              saveText={t("CreateSongTab:save")}
-              cancelText={t("CreateSongTab:cancel")}
-              headerText={t("DashboardView:addSong")}
-              labelText={t("DashboardView:nameOfSong")}
+              saveText={t("Modal:create")}
+              cancelText={t("Modal:cancel")}
+              headerText={t("Modal:addSong")}
+              labelText={t("Modal:nameOfSong")}
               handleChange={handleOnChangeAddSongModal}
             />
           </>

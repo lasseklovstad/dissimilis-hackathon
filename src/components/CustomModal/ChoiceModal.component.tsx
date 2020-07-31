@@ -1,7 +1,8 @@
 import { FC, useState } from "react"
-import { Modal, makeStyles, Grid, Typography, Button, Fade, Backdrop } from "@material-ui/core"
+import { Modal, makeStyles, Grid, Typography, Button, Fade, Backdrop, Box } from "@material-ui/core"
 import React from "react"
 import { colors } from "../../utils/colors"
+import animatedBird from "../../assets/images/sommerfugl-animert.svg";
 
 type ChoiceModalProps = {
     handleOnSaveClick: Function,
@@ -12,7 +13,7 @@ type ChoiceModalProps = {
     cancelText: string,
     headerText: string,
     descriptionText: string,
-
+    isLoading?: boolean,
 }
 
 export const ChoiceModal: FC<ChoiceModalProps> = (props) => {
@@ -28,14 +29,22 @@ export const ChoiceModal: FC<ChoiceModalProps> = (props) => {
             <Fade in={props.modalOpen} >
                 <div className={classes.modal} style={modalStyle}>
                     <Grid container >
-                        <Grid item xs={12}>
-                            <Typography className={classes.title} variant="h2">{props.headerText}</Typography>
-                            <Typography className={classes.paragraph}>{props.descriptionText}</Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button className={classes.button} size="large" variant="contained" onClick={props.handleOnSaveClick()} >{props.ackText}</Button>
-                            <Button className={classes.button} size="large" variant="outlined" onClick={props.handleOnCancelClick()}>{props.cancelText}</Button>
-                        </Grid>
+                        {props.isLoading ?
+                            <Grid item xs={12}>
+                                <object type="image/svg+xml" data={animatedBird} width="100%" aria-label="bird moving"></object>
+                            </Grid>
+                            :
+                            <Box>
+                                <Grid item xs={12}>
+                                    <Typography className={classes.title} variant="h2">{props.headerText}</Typography>
+                                    <Typography className={classes.paragraph}>{props.descriptionText}</Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button className={classes.button} size="large" variant="contained" onClick={props.handleOnSaveClick()} >{props.ackText}</Button>
+                                    <Button className={classes.button} size="large" variant="outlined" onClick={props.handleOnCancelClick()}>{props.cancelText}</Button>
+                                </Grid>
+                            </Box>
+                        }
                     </Grid>
                 </div>
             </Fade>

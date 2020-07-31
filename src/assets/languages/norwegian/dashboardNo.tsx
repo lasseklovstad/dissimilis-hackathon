@@ -1,7 +1,5 @@
 export const dashboardNo: any = {
     "newSongLabel": "Nytt partitur",
-    "nameOfSong": "Navn på sang",
-    "addSong": "Legg til ny sang",
     "recentSongLabel": "Nylige",
     "searchSongLabel": "Søk",
     "allSongLabel": "Alle sanger",
@@ -9,6 +7,4 @@ export const dashboardNo: any = {
     "measure": "takt",
     "search": "Søk",
     "altButterflyButtonProp": "Bilde av Dissimilis' sommerfugl",
-    "deleteSong": "Slett sang",
-    "deleteDescription": "Er du sikker du vil slette sangen?",
 }

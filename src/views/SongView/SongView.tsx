@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong.component';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab.component';
@@ -7,7 +7,6 @@ import { Grid, makeStyles, useMediaQuery, Box, Snackbar, Typography } from '@mat
 import { TimeSignature, BarNumber } from '../../components/SongViewComponents/SongView.component';
 import { BarContainer } from "../../components/BarContainer/BarContainer.component";
 import BottomBar from '../../components/BottomBar/BottomBar.component';
-import { usePutSong } from '../../utils/useApiServiceSongs';
 import animatedBird from "../../assets/images/sommerfugl-animert.svg";
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
@@ -20,12 +19,14 @@ export type SongViewProps = {
 
 export const SongView: React.FC<SongViewProps> = props => {
   const classes = useStyles();
+
   const xs = useMediaQuery("(max-width: 600px)");
   const xl = useMediaQuery("(min-width: 1920px)");
-  const history = useHistory();
   const queryString = require('query-string');
-  const { song, song: { voices }, isLoading, isSaving, setIsSaving } = useContext(SongContext);
-  const putSong = usePutSong(song)
+  const { song, song: { voices }, setIsLoading, isLoading, isSaving, setIsSaving } = useContext(SongContext);
+
+  const history = useHistory();
+
 
   const match = useRouteMatch<MatchParams>("/song/:id");
   let id = match ? +match.params.id : 0;
@@ -58,11 +59,7 @@ export const SongView: React.FC<SongViewProps> = props => {
     return index === voices[selectedVoice].bars.length - 1 ? true : false;
   }
 
-  const saveSong = () => {
-    putSong().then(() => {
-      setIsSaving(true)
-    });
-  }
+
 
   const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -80,7 +77,7 @@ export const SongView: React.FC<SongViewProps> = props => {
     <>
       <Grid container className={classes.root} >
         <Grid item xs={12} >
-          <NavBarCreateSong saveSongFunc={saveSong} />
+          <NavBarCreateSong />
         </Grid>
         <Grid item xs={12}>
           <CreateSongTab />

@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
-import { Grid, makeStyles, Menu, MenuItem } from "@material-ui/core";
+import { Grid, Menu, MenuItem, makeStyles } from "@material-ui/core";
 import { DashboardButtonWithAddIconNoLink, DashboardButtonNoLink, DashboardButton } from "../DashboardButtons/DashboardButtons";
-import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { IVoice } from "../../models/IVoice";
@@ -25,7 +24,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
 
     const history = useHistory();
 
-    const { song: { voices, id }, addVoice, changeVoiceTitle, song } = useContext(SongContext);
+    const { song: { voices, id }, addVoice, changeVoiceTitle } = useContext(SongContext);
     const { setShowPossiblePositions } = useContext(SongToolsContext);
 
     const handleAddInstrument = () => {
@@ -118,26 +117,26 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                 </Grid>
             </Grid>
-            <InputModal handleOnCancelClick={
-                () => handleClose}
+            <InputModal
+                handleOnCancelClick={() => handleClose}
                 handleOnSaveClick={() => handleAddInstrument}
                 handleClosed={() => handleClose}
                 modalOpen={modalIsOpen}
-                saveText={t("CreateSongTab:save")}
-                cancelText={t("CreateSongTab:cancel")}
-                headerText={t("CreateSongTab:addInstrument")}
-                labelText={t("CreateSongTab:nameOfInstrument")}
+                saveText={t("Modal:create")}
+                cancelText={t("Modal:cancel")}
+                headerText={t("Modal:addInstrument")}
+                labelText={t("Modal:nameOfInstrument")}
                 handleChange={handleChange}
             />
-            <InputModal handleOnCancelClick={
-                () => handleClose}
+            <InputModal
+                handleOnCancelClick={() => handleClose}
                 handleOnSaveClick={() => handleChangeVoiceTitle}
                 handleClosed={() => handleClose}
                 modalOpen={renameModalIsOpen}
-                saveText={t("CreateSongTab:saveNewName")}
-                cancelText={t("CreateSongTab:cancel")}
-                headerText={t("CreateSongTab:changeVoiceName")}
-                labelText={t("CreateSongTab:newVoiceName")}
+                saveText={t("Modal:save")}
+                cancelText={t("Modal:cancel")}
+                headerText={t("Modal:changeVoiceName")}
+                labelText={t("Modal:newVoiceName")}
                 handleChange={handleChange}
             />
             <Grid item xs={"auto"} sm={1}></Grid>
