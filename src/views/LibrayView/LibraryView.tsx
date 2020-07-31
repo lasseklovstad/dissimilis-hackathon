@@ -41,7 +41,22 @@ export const LibraryView: React.FC<LibraryViewProps> = () => {
         setSearchTerm(searchTermParam)
         setLibraryView(false)
     }
-
+    const [clickedSong, setClickedSong] = useState<number>(-1);
+    const handleOpenMenu = (event: React.MouseEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        setRightClickCoordinates({
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+        });
+    };
+    const initialState = {
+        mouseX: null,
+        mouseY: null,
+    };
+    const [rightClickCoordinates, setRightClickCoordinates] = React.useState<{
+        mouseX: null | number;
+        mouseY: null | number;
+    }>(initialState);
 
     return (
 
@@ -64,7 +79,7 @@ export const LibraryView: React.FC<LibraryViewProps> = () => {
                             <Grid container spacing={3}>
                                 {allSongs?.map(song => (
                                     <Grid item xs={12} sm={4} lg={3} key={song.id}>
-                                        <DashboardButton text={song.title} link={"/song/" + song.id!.toString()} />
+                                        <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setClickedSong(song!.id!); handleOpenMenu(e) }} text={song.title} link={"/song/" + song.id!.toString()} />
                                     </Grid>
                                 ))}
                             </Grid>
@@ -81,7 +96,7 @@ export const LibraryView: React.FC<LibraryViewProps> = () => {
                             <Grid container spacing={3}>
                                 {filteredSongs?.map(song => (
                                     <Grid item xs={12} sm={4} lg={3} key={song.id}>
-                                        <DashboardButton text={song.title} link={"/song/" + song.id!.toString()} />
+                                        <DashboardButton onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { setClickedSong(song!.id!); handleOpenMenu(e) }} text={song.title} link={"/song/" + song.id!.toString()} />
                                     </Grid>
                                 ))}
                             </Grid>

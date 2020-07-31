@@ -88,6 +88,7 @@ const SongToolsContextProvider: React.FC = props => {
                 if (selectedPosArray[j] === noteIndex) {
                     tempChordsAndNotes.splice(selectedPosArray[j], 1, newNote);
                 } else {
+                        
                     tempChordsAndNotes.splice(selectedPosArray[j], 1);
                 }
             }

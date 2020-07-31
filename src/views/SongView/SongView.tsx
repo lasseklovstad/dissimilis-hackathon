@@ -9,8 +9,11 @@ import { BarContainer } from "../../components/BarContainer/BarContainer.compone
 import BottomBar from '../../components/BottomBar/BottomBar.component';
 import { usePutSong } from '../../utils/useApiServiceSongs';
 import animatedBird from "../../assets/images/sommerfugl-animert.svg";
-import Alert from '@material-ui/lab/Alert';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+
+type MatchParams = {
+  id: string
+}
 
 export type SongViewProps = {
 }
@@ -65,7 +68,6 @@ export const SongView: React.FC<SongViewProps> = props => {
     if (reason === 'clickaway') {
       return;
     }
-
     setIsSaving(false);
   };
 
@@ -74,7 +76,6 @@ export const SongView: React.FC<SongViewProps> = props => {
   }
 
   const heightOfBar = 160;
-
   return (
     <>
       <Grid container className={classes.root} >
@@ -88,13 +89,12 @@ export const SongView: React.FC<SongViewProps> = props => {
           <Grid item xs={12} >
             <Box width="30%" margin="auto">
               <object type="image/svg+xml" data={animatedBird} aria-label="bird moving" style={{ width: "100%", height: "20%" }}></object>
-
             </Box>
           </Grid>
 
         )
           :
-          <Grid item xs={12} className={classes.songViewContainer}> {/*Grid for main container, containing the bars, timeSignature and barnumber */}
+          <Grid item xs={12} > {/*Grid for main container, containing the bars, timeSignature and barnumber */}
             <Grid container>
 
               <Grid item xs={1}>
@@ -120,7 +120,6 @@ export const SongView: React.FC<SongViewProps> = props => {
             </Grid>
           </Grid>
         }
-
       </Grid>
       <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} autoHideDuration={4000} open={isSaving} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" >
@@ -128,9 +127,7 @@ export const SongView: React.FC<SongViewProps> = props => {
         </Alert>
       </Snackbar>
       <BottomBar />
-
     </>
-
   );
 }
 
@@ -145,13 +142,8 @@ const useStyles = makeStyles({
     },
     width: "auto",
   },
-  songViewContainer: {
-    marginTop: "24px"
-  },
-})
 
-type MatchParams = {
-  id: string
-}
+
+})
 
 export default SongView;

@@ -4,5 +4,4 @@ export const loginNo: any = {
     "username": "Brukernavn",
     "password": "Passord",
     "loginFailed": "Feil brukernavn eller passord",
-
 }

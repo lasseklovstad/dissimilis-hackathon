@@ -10,18 +10,14 @@ export type NavBarCreateSongProps = {
 
 export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
     const classes = useStyles();
-
     const [changing, setChanging] = useState(false);
-
     const { song: { title }, changeTitle } = useContext(SongContext);
     const [newTitle, setNewTitle] = useState(title)
-
     const matches = useMediaQuery("(max-width:600px)");
 
     useEffect(() => {
         setNewTitle(title);
     }, [title])
-
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setNewTitle(e.target.value)
@@ -85,6 +81,7 @@ const useStyles = makeStyles({
     },
     appbar: {
         backgroundColor: "transparent",
+        marginBottom: "24px"
     },
     textField: {
         width: "100%",

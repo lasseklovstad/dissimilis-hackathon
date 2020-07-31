@@ -11,7 +11,6 @@ import { getColor, tangentToNumber } from '../Bar/BarBody.component';
 
 
 
-
 export type AddButtonProps = {
     text: string,
     link?: string,
@@ -130,8 +129,6 @@ const useStyles = makeStyles({
         border: "none",
         height: "56px",
         outline: "none",
-
-
     },
     dropdown: {
         "& .MuiOutlinedInput-notchedOutline": {
