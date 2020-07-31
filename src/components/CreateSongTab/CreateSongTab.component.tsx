@@ -117,7 +117,8 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                 </Grid>
             </Grid>
-            <InputModal handleOnCancelClick={() => handleClose}
+            <InputModal handleOnCancelClick={
+                () => handleClose}
                 handleOnSaveClick={() => handleAddInstrument}
                 handleClosed={() => handleClose}
                 modalOpen={modalIsOpen}
@@ -127,7 +128,8 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                 labelText={t("CreateSongTab:nameOfInstrument")}
                 handleChange={handleChange}
             />
-            <InputModal handleOnCancelClick={() => handleClose}
+            <InputModal handleOnCancelClick={
+                () => handleClose}
                 handleOnSaveClick={() => handleChangeVoiceTitle}
                 handleClosed={() => handleClose}
                 modalOpen={renameModalIsOpen}

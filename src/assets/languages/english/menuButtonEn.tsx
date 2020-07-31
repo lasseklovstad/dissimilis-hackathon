@@ -4,5 +4,7 @@ export const menuButtonEn = {
     "transpose": "Transpose",
     "export": "Export",
     "hide": "Hide bar numbers",
-    "save": "Save"
+    "save": "Save",
+    "delete": "Delete song",
+
 }
