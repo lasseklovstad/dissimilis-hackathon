@@ -4,7 +4,7 @@ import MenuButton from "../MenuButton/MenuButton.component";
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component";
-import { usePutSong } from "../../utils/usePutSong";
+import { usePutSong } from "../../utils/useApiServiceSongs";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 

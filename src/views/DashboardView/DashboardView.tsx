@@ -3,12 +3,10 @@ import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
 import { DashboardButton, DashboardLibraryButton, DashboardButtonWithAddIconNoLink } from '../../components/DashboardButtons/DashboardButtons';
 import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBar'
-import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
-import { useGetRecentSongs } from '../../utils/useGetRecentSongs';
+import { useGetRecentSongs, useGetFilteredSongs, usePostSong } from '../../utils/useApiServiceSongs';
 import { ISong } from '../../models/ISong';
 import { InputModal } from '../../components/CustomModal/InputModal.component';
 import { useHistory } from 'react-router-dom';
-import { usePostSong } from '../../utils/usePostSong';
 
 export type DashboardViewProps = {
 
