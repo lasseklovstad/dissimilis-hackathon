@@ -8,8 +8,7 @@ export const dashboardEn: any = {
     "libraryButton": "Library",
     "measure": "measure",
     "search": "Search",
-    "altButteflyButtonProp": "Image of Dissimilis' butterfly-logo",
+    "altButterflyButtonProp": "Image of Dissimilis' butterfly-logo",
     "deleteSong": "Delete song",
     "deleteDescription": "Are you sure you want to delete the song?",
-
 }

@@ -17,7 +17,6 @@ type MatchParams = {
     id: string
 }
 
-
 export const MenuButton: React.FC<MenuButtonProps> = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -31,19 +30,18 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
     let id = match ? +match.params.id : 0;
     const deleteSong = useDeleteSong(id);
 
-
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
+
     const handleOpenDeleteSongModal = () => {
         setDeleteSongModalIsOpen(true)
     }
+
     const handleDeleteSong = () => {
         setDeleteSongModalIsOpen(false);
         deleteSong().then(() => { history.replace("/dashboard") });
     }
-
-
 
     const handleClose = (method = "") => {
         setAnchorEl(null);
@@ -67,7 +65,6 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
 
         }
     };
-
 
     return (
         <div>
