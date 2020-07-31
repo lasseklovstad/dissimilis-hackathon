@@ -30,8 +30,8 @@ export const ChoiceModal: FC<ChoiceModalProps> = (props) => {
                 <div className={classes.modal} style={modalStyle}>
                     <Grid container >
                         {props.isLoading ?
-                            <Grid>
-                                <object type="image/svg+xml" data={animatedBird} aria-labe="bird moving"></object>
+                            <Grid item xs={12}>
+                                <object type="image/svg+xml" data={animatedBird} width="100%" aria-label="bird moving"></object>
                             </Grid>
                             :
                             <Box>
