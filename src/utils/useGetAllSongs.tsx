@@ -11,6 +11,6 @@ export const useGetAllSongs = () => {
     const apiKey = sessionStorage.getItem("apiKey") || "";
     const userId = sessionStorage.getItem("userId") || "";
     const headers = { 'X-API-Key': apiKey, 'X-User-ID': userId, };
-    const getSongs = useApiService<ISong[]>("get", url, { params, initialData, headers }).fetchData;
+    const getSongs = useApiService<ISong[]>(url, { params, initialData, headers }).fetchData;
     return getSongs;
 }
