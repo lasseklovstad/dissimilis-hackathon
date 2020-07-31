@@ -113,19 +113,19 @@ const useStyles = makeStyles(
     },
     paddingsmall: {
       padding: "40px",
-      marginTop: '4vh',
+      marginBottom: '4vh',
     },
     paddinglarge: {
       padding: "48px"
     },
     textfield: {
-      marginTop: '16px'
+      marginBottom: '16px'
     },
     loginlogo: {
+      marginBottom: '16px',
       width: '60%'
     },
     loginbutton: {
-      marginTop: '24px',
       marginBottom: '16px',
       lineHeight: '24px',
       textTransform: 'none'

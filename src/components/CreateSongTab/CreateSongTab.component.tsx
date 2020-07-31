@@ -17,6 +17,7 @@ export type InstrumentCard = {
     link: string,
 }
 export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
+    const classes = useStyles();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
     const [textFieldInput, setTextFieldInput] = useState<string>("");
@@ -87,7 +88,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         <Grid container>
             <Grid item xs={"auto"} sm={1}></Grid>
             <Grid item xs={12} sm={10}>
-                <Grid container spacing={2}>
+                <Grid container spacing={2} className={classes.createSongTab}>
                     <Grid item>
                         <DashboardButtonNoLink selected={selectedVoice === 1} text={t("CreateSongTab:song")} func={() => { history.replace(`/song/${id}?voice=1`) }} />
                     </Grid>
@@ -142,5 +143,13 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         </Grid>
     );
 };
+
+
+const useStyles = makeStyles({
+    createSongTab: {
+        marginBottom: "24px"
+    }
+})
+
 
 export default CreateSongTab;
