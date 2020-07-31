@@ -29,7 +29,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
   const getRecentSongs = useGetRecentSongs();
   const getFilteredSongs = useGetFilteredSongs(searchTerm);
   const styles = useStyles()
-  const marginBottom = 4;
+  const marginBottom = 10;
 
   useEffect(() => {
     getRecentSongs().then(({ result }) => { setRecentSongs(result?.data || []) });
@@ -108,7 +108,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
           <>
             <Grid item xs={12} sm={10} key="newSongContainer">
               <Box mb={marginBottom}>
-                <Box m={2}>
+                <Box mb={2}>
                   <Typography variant="h1">{t("DashboardView:newSongLabel")}</Typography>
                 </Box>
                 <Grid container spacing={3}>
@@ -123,7 +123,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
 
             <Grid item xs={12} sm={10} key="recentSongsContainer">
               <Box mb={marginBottom}>
-                <Box m={2}>
+                <Box mb={2}>
                   <Typography variant="h1">{t("DashboardView:recentSongLabel")}</Typography>
                 </Box>
                 <Grid container spacing={3}>

@@ -94,7 +94,7 @@ export const SongView: React.FC<SongViewProps> = props => {
 
         )
           :
-          <Grid item xs={12} className={classes.songViewContainer}> {/*Grid for main container, containing the bars, timeSignature and barnumber */}
+          <Grid item xs={12} > {/*Grid for main container, containing the bars, timeSignature and barnumber */}
             <Grid container>
 
               <Grid item xs={1}>
@@ -142,9 +142,8 @@ const useStyles = makeStyles({
     },
     width: "auto",
   },
-  songViewContainer: {
-    marginTop: "24px"
-  },
+
+
 })
 
 export default SongView;
