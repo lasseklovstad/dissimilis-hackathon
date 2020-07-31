@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { makeStyles, Grid, Typography, AppBar, Box, useMediaQuery, TextField } from "@material-ui/core";
-import MenuButton from "../MenuButton/MenuButton";
+import MenuButton from "../MenuButton/MenuButton.component";
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 
@@ -10,11 +10,10 @@ export type NavBarCreateSongProps = {
 
 export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
     const classes = useStyles();
-    const matches = useMediaQuery("(max-width:600px)");
     const [changing, setChanging] = useState(false);
     const { song: { title }, changeTitle } = useContext(SongContext);
-
     const [newTitle, setNewTitle] = useState(title)
+    const matches = useMediaQuery("(max-width:600px)");
 
     useEffect(() => {
         setNewTitle(title);

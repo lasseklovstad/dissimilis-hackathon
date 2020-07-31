@@ -25,7 +25,6 @@ function BottomBar() {
     chords.map(chord => chordArray.push(chord.name));
     const { selectedNoteLength, setSelectedNoteLength } = useContext(SongToolsContext);
     const { addEmptyBar, getTimeSignature } = useContext(SongContext);
-
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedNoteLength(event.target.value as 1 | 2 | 4 | 8);
     };
@@ -50,8 +49,7 @@ function BottomBar() {
 
 
     const [toggle, setToggle] = useState<boolean>(true);
-    const { showPossiblePositions, setShowPossiblePositions, showAvailableSpace, setNoteIsSelected, noteIsSelected } = useContext(SongToolsContext)
-
+    const { showPossiblePositions, setShowPossiblePositions, calculateAvailableSpace, setNoteIsSelected, noteIsSelected } = useContext(SongToolsContext)
     const handleToggle = (event: React.MouseEvent<HTMLElement>, newToggle: boolean) => {
         if (newToggle !== null) {
             setToggle(newToggle);
@@ -83,8 +81,8 @@ function BottomBar() {
                     </StyledToggleButtonGroup>
                 </div>
                 <div className={classes.container} >
-                    <MenuButtonWithAddIcon selected={showPossiblePositions} text={t("BottomBar:addTone")} onClick={() => { if (!showPossiblePositions) { showAvailableSpace() }; setShowPossiblePositions(!showPossiblePositions) }} />
-                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => { addEmptyBar(); scrollToBottom(); showAvailableSpace(); setShowPossiblePositions(true) }} />
+                    <MenuButtonWithAddIcon selected={showPossiblePositions} text={t("BottomBar:addTone")} onClick={() => { if (!showPossiblePositions) { calculateAvailableSpace() }; setShowPossiblePositions(!showPossiblePositions) }} />
+                    <MenuButtonWithAddIcon text={t("BottomBar:addBar")} onClick={() => { addEmptyBar(); scrollToBottom(); calculateAvailableSpace(); setShowPossiblePositions(true) }} />
                 </div>
             </Grid>
         </Grid>

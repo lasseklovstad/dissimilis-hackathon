@@ -16,7 +16,7 @@ interface ISongToolsContext {
     availablePositions: number[][][][],
     setAvailablePositions: (number: number[][][][]) => void,
     insertNewNoteOrChord: (noteIndex: number, barIndex: number, voiceIndex: number) => void,
-    showAvailableSpace: () => void,
+    calculateAvailableSpace: () => void,
     selectPositionArray: (voiceIndex: number, barIndex: number, noteIndex: number) => number[]
 }
 
@@ -32,7 +32,7 @@ export const SongToolsContext = React.createContext<ISongToolsContext>({
     availablePositions: [],
     setAvailablePositions: (number: number[][][][]) => { },
     insertNewNoteOrChord: (noteIndex: number, barIndex: number, voiceIndex: number) => { },
-    showAvailableSpace: () => { },
+    calculateAvailableSpace: () => { },
     selectPositionArray: (voiceIndex: number, barIndex: number, noteIndex: number) => []
 });
 
@@ -49,10 +49,21 @@ const SongToolsContextProvider: React.FC = props => {
         if (isInitialMount.current) {
             isInitialMount.current = false;
         } else {
-            showAvailableSpace();
+            calculateAvailableSpace();
         }
     }, [selectedNoteLength, song]);
 
+
+    /**
+     * This method inserts a new note or chord
+     * First it creates the new note
+     * Then it takes a copy of the list of chords or notes in the bar
+     * Further on it replaces the empty spaces with the new note
+     * In the end it sends the new list of chordsAndNotes for the given bar to the method editNote()
+     * @param noteIndex 
+     * @param barIndex 
+     * @param voiceIndex 
+     */
     const insertNewNoteOrChord = (noteIndex: number, barIndex: number, voiceIndex: number) => {
         let newNoteArray: string[] = ["C"];
         if (noteIsSelected) {
@@ -72,12 +83,12 @@ const SongToolsContextProvider: React.FC = props => {
         }
 
         let selectedPosArray = selectPositionArray(voiceIndex, barIndex, noteIndex)
-
         if (selectedPosArray !== undefined) {
             for (let j = selectedPosArray.length - 1; j >= 0; j--) {
                 if (selectedPosArray[j] === noteIndex) {
                     tempChordsAndNotes.splice(selectedPosArray[j], 1, newNote);
                 } else {
+                        
                     tempChordsAndNotes.splice(selectedPosArray[j], 1);
                 }
             }
@@ -85,6 +96,15 @@ const SongToolsContextProvider: React.FC = props => {
         editNote(voiceIndex, barIndex, tempChordsAndNotes);
     }
 
+
+    /**
+     * This method selects the right positions to replace based on the empty space clicked on. 
+     * It checks the availablePositionsArray (calculated by calculateAvailablePositions) for the list in which the noteindex has the lowest index of all possible possitionarrays.
+     * This is because you want the new note to be placed where you click, or fill the entire right if not place from your click to the right. 
+     * @param voiceIndex 
+     * @param barIndex 
+     * @param noteIndex 
+     */
     const selectPositionArray = (voiceIndex: number, barIndex: number, noteIndex: number) => {
         const availablePosArray = availablePositions[voiceIndex][barIndex];
         let selectedPosArray = availablePosArray.find(arr => arr.includes(noteIndex));
@@ -95,8 +115,16 @@ const SongToolsContextProvider: React.FC = props => {
         return selectedPosArray;
     }
 
-    const showAvailableSpace = () => {
-        let returnArray = [] //This will return a list of noteIndexLists in which there is available space in the barIndex given. This again tells where it is space to the right, or left if length-index <= selectedKeyLength
+
+    /**
+    * This method returns an array consisting of an array of bars, one array for each voice. 
+    * This again includes a list of arrays, telling where it is space. 
+    * For example a halfnote which takes 4 places, can in an empty bar return the following list of positions (in a list for the voice it is placed in):
+    * [[0,1,2,3], [1,2,3,4], [2,3,4,5], [3,4,5,6], [4,5,6,7]] - each list contains 4 indexes, as the halfnote takes 4 out of 8 places. 
+    * We have decided to use 8 as the denominator for each time signature as this makes it simpler for us, therefore allways 8 empty spaces in the bar.
+    */
+    const calculateAvailableSpace = () => {
+        let returnArray = []
         for (let voiceIndex = 0; voiceIndex < song.voices.length; voiceIndex++) {
             let voiceArray = [];
             for (let barIndex = 0; barIndex < song.voices[voiceIndex].bars.length; barIndex++) {
@@ -125,7 +153,9 @@ const SongToolsContextProvider: React.FC = props => {
     }
 
 
-    //Add all methods here
+    /**
+     * This is where all the methods given to other components through the context is declared
+     */
     const value = {
         selectedNoteLength,
         setSelectedNoteLength,
@@ -138,7 +168,7 @@ const SongToolsContextProvider: React.FC = props => {
         availablePositions,
         setAvailablePositions,
         insertNewNoteOrChord,
-        showAvailableSpace,
+        calculateAvailableSpace,
         selectPositionArray
     }
 

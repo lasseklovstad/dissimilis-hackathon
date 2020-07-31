@@ -23,6 +23,8 @@ interface ISongContext {
     addHouse: (barId: number) => void,
     deleteHouse: (barId: number) => void,
     isLoading: boolean,
+    isSaving: boolean,
+    setIsSaving: (newValue: boolean) => void,
 }
 
 export const SongContext = React.createContext<ISongContext>({
@@ -51,11 +53,14 @@ export const SongContext = React.createContext<ISongContext>({
     addHouse: (barId: number) => { },
     deleteHouse: (barId: number) => { },
     isLoading: false,
+    isSaving: false,
+    setIsSaving: (newValue: boolean) => { }
 });
 
 const SongContextProvider: React.FC = props => {
     const [songId, setSongId] = useState<number>(1);
     const [isLoading, setIsloading] = useState<boolean>(false)
+    const [isSaving, setIsSaving] = useState<boolean>(false);
     const getSong = useGetSong(songId);
     let [song, setSong] = useState<ISong>({
         title: "",
@@ -108,13 +113,25 @@ const SongContextProvider: React.FC = props => {
 
     const toggleRepBefore = (barId: number) => {
         //Map through all voices and for the ba which matches the id, toggle the bars repetition value
-        song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repBefore: !bar.repBefore } : bar) } : voice) }
+        song = {
+            ...song, voices: song.voices.map((voice, index) => true ?
+                {
+                    ...voice, bars: voice.bars.map((bar, i) => i === barId ?
+                        { ...bar, repBefore: !bar.repBefore } : bar)
+                } : voice)
+        }
         setSong(song)
     }
 
     const toggleRepAfter = (barId: number) => {
         //Map through all voices and for the ba which matches the id, toggle the bars repetition value
-        song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repAfter: !bar.repAfter } : bar) } : voice) }
+        song = {
+            ...song, voices: song.voices.map((voice, index) => true ?
+                {
+                    ...voice, bars: voice.bars.map((bar, i) => i === barId ?
+                        { ...bar, repAfter: !bar.repAfter } : bar)
+                } : voice)
+        }
         setSong(song)
     }
 
@@ -122,10 +139,26 @@ const SongContextProvider: React.FC = props => {
     const addHouse = (barId: number) => {
         //Checks if its the last bar in the song, and maps through all the bars, matching on barId, checking for house values on the chosen bar, along with the adjacent bars, ensuring that they are handled correctly
         if (barId === song.voices[0].bars.length - 1) {
-            song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, house: 2 } : (i === barId - 1 ? { ...bar, house: 1 } : (i === barId - 2 && (song.voices[0].bars[barId - 2].house === 1) ? { ...bar, house: undefined } : bar))) } : voice) }
+            song = {
+                ...song, voices: song.voices.map((voice, index) => true ?
+                    {
+                        ...voice, bars: voice.bars.map((bar, i) => i === barId ?
+                            { ...bar, house: 2 } : (i === barId - 1 ?
+                                { ...bar, house: 1 } : (i === barId - 2 && (song.voices[0].bars[barId - 2].house === 1) ?
+                                    { ...bar, house: undefined } : bar)))
+                    } : voice)
+            }
 
         } else {
-            song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, house: 1 } : (i === barId + 1 ? { ...bar, house: 2 } : (i === barId + 2 && (song.voices[0].bars[barId + 2].house === 2) ? { ...bar, house: undefined } : bar))) } : voice) }
+            song = {
+                ...song, voices: song.voices.map((voice, index) => true ?
+                    {
+                        ...voice, bars: voice.bars.map((bar, i) => i === barId ?
+                            { ...bar, house: 1 } : (i === barId + 1 ?
+                                { ...bar, house: 2 } : (i === barId + 2 && (song.voices[0].bars[barId + 2].house === 2) ?
+                                    { ...bar, house: undefined } : bar)))
+                    } : voice)
+            }
         }
         setSong(song)
     }
@@ -274,6 +307,8 @@ const SongContextProvider: React.FC = props => {
         addHouse,
         deleteHouse,
         isLoading,
+        isSaving,
+        setIsSaving
     }
 
     return (
