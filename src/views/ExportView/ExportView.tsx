@@ -72,12 +72,13 @@ export const ExportView: React.FC<ExportViewProps> = props => {
     }
 
     const heightAvailableToBars = 770;
+
     const calculateHeightOfBar = () => {
         if (rowsPerSheet === 1) return heightAvailableToBars
-        if (rowsPerSheet === 2) return heightAvailableToBars / 2
-        if (rowsPerSheet === 3) return heightAvailableToBars / 3 - 10
-        if (rowsPerSheet === 4) return heightAvailableToBars / 4 - 40
-        if (rowsPerSheet === 5) return heightAvailableToBars / 5 - 20
+        if (rowsPerSheet === 2) return heightAvailableToBars / 2 - 20
+        if (rowsPerSheet === 3) return heightAvailableToBars / 3 - 30
+        if (rowsPerSheet === 4) return heightAvailableToBars / 4 - 50
+        if (rowsPerSheet === 5) return heightAvailableToBars / 5 - 30
         return 120
     }
 

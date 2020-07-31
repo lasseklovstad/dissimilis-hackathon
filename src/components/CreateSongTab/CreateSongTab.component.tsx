@@ -1,11 +1,12 @@
 import React, { useState, useContext } from "react";
-import { Grid, Menu, MenuItem } from "@material-ui/core";
+import { Grid, makeStyles, Menu, MenuItem } from "@material-ui/core";
 import { DashboardButtonWithAddIconNoLink, DashboardButtonNoLink, DashboardButton } from "../DashboardButtons/DashboardButtons";
+import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { IVoice } from "../../models/IVoice";
 import { useHistory } from "react-router-dom";
-import { CustomModal } from "../CustomModal/CustomModal";
+import { InputModal } from "../CustomModal/InputModal.component";
 import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 
 export type CreateSongTabProps = {
@@ -16,32 +17,15 @@ export type InstrumentCard = {
     name: string,
     link: string,
 }
-
 export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
     const [textFieldInput, setTextFieldInput] = useState<string>("");
-    const [rightClicked, setRightClicked] = useState(-1);
-    const initialState = {
-        mouseX: null,
-        mouseY: null,
-    };
-    const [rightClickCoordinates, setRightClickCoordinates] = React.useState<{
-        mouseX: null | number;
-        mouseY: null | number;
-    }>(initialState);
-
-    const { song: { voices, id }, addVoice, changeVoiceTitle } = useContext(SongContext);
-    const { setShowPossiblePositions } = useContext(SongToolsContext);
 
     const history = useHistory();
 
-    const { t } = useTranslation();
-    const queryString = require('query-string');
-    const voiceString = queryString.parse(window.location.search);
-    const selectedVoice = parseInt(voiceString.voice);
-
-
+    const { song: { voices, id }, addVoice, changeVoiceTitle, song } = useContext(SongContext);
+    const { setShowPossiblePositions } = useContext(SongToolsContext);
 
     const handleAddInstrument = () => {
         setShowPossiblePositions(false);
@@ -65,6 +49,22 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
         setTextFieldInput(e.target.value);
     };
 
+    const { t } = useTranslation();
+    const queryString = require('query-string');
+    const voiceString = queryString.parse(window.location.search);
+    const selectedVoice = parseInt(voiceString.voice);
+    const [rightClicked, setRightClicked] = useState(-1);
+
+
+    const initialState = {
+        mouseX: null,
+        mouseY: null,
+    };
+
+    const [rightClickCoordinates, setRightClickCoordinates] = React.useState<{
+        mouseX: null | number;
+        mouseY: null | number;
+    }>(initialState);
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         event.preventDefault();
@@ -117,7 +117,8 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                     </Grid>
                 </Grid>
             </Grid>
-            <CustomModal handleOnCancelClick={() => handleClose}
+            <InputModal handleOnCancelClick={
+                () => handleClose}
                 handleOnSaveClick={() => handleAddInstrument}
                 handleClosed={() => handleClose}
                 modalOpen={modalIsOpen}
@@ -127,7 +128,8 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
                 labelText={t("CreateSongTab:nameOfInstrument")}
                 handleChange={handleChange}
             />
-            <CustomModal handleOnCancelClick={() => handleClose}
+            <InputModal handleOnCancelClick={
+                () => handleClose}
                 handleOnSaveClick={() => handleChangeVoiceTitle}
                 handleClosed={() => handleClose}
                 modalOpen={renameModalIsOpen}

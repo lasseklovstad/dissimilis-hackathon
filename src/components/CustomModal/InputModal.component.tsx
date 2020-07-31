@@ -15,7 +15,7 @@ type CustomModalProps = {
     labelText: string,
 }
 
-export const CustomModal: FC<CustomModalProps> = (props) => {
+export const InputModal: FC<CustomModalProps> = (props) => {
     const classes = useStyles();
     const [textFieldInput, setTextFieldInput] = useState("");
     const [modalStyle] = useState(getModalStyle);
@@ -38,7 +38,7 @@ export const CustomModal: FC<CustomModalProps> = (props) => {
                 <div className={classes.modal} style={modalStyle}>
                     <Grid container >
                         <Typography className={classes.title} variant="h2">{props.headerText}</Typography>
-                        <Grid item xs={12} style={{ marginBottom: "16px" }}>
+                        <Grid item className={classes.insertName} xs={12}>
                             <TextField inputProps={{ maxLength: CHARACTER_LIMIT }} helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`} autoFocus variant="filled" onChange={handleChange} label={props.labelText} style={{ width: "100%" }} />
                         </Grid>
                         <Grid item xs={12}>
@@ -76,6 +76,9 @@ const useStyles = makeStyles({
         },
         outline: "none",
     },
+    insertName: {
+        marginBottom: "24px",
+    },
     button: {
         "&:hover": {
             backgroundColor: colors.gray_300
@@ -85,7 +88,7 @@ const useStyles = makeStyles({
         position: "relative",
     },
     title: {
-        padding: "8px",
+        marginBottom: "8px",
     },
     container: {
         width: "100%"

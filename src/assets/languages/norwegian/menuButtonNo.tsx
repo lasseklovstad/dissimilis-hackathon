@@ -4,5 +4,7 @@ export const menuButtonNo = {
     "transpose": "Transponer",
     "export": "Eksporter",
     "hide": "Skjul nummerering av takt",
-    "save": "Lagre"
+    "save": "Lagre",
+    "delete": "Slett sang",
+
 }
