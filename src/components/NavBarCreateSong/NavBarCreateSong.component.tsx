@@ -3,21 +3,56 @@ import { makeStyles, Grid, Typography, AppBar, Box, useMediaQuery, TextField } f
 import MenuButton from "../MenuButton/MenuButton.component";
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
+import { ChoiceModal } from "../CustomModal/ChoiceModal.component";
+import { usePutSong } from "../../utils/usePutSong";
+import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router-dom";
 
 export type NavBarCreateSongProps = {
-    saveSongFunc: Function
 }
 
 export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
     const classes = useStyles();
     const [changing, setChanging] = useState(false);
-    const { song: { title }, changeTitle } = useContext(SongContext);
+    const [saveSongModalIsOpen, setSaveSongModalIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
+
+    const { song, song: { title }, changeTitle } = useContext(SongContext);
     const [newTitle, setNewTitle] = useState(title)
     const matches = useMediaQuery("(max-width:600px)");
+    const putSong = usePutSong(song)
+    const { t } = useTranslation();
+    const history = useHistory();
 
     useEffect(() => {
         setNewTitle(title);
     }, [title])
+
+
+
+
+    const handleOpenSaveSongModal = () => {
+        setSaveSongModalIsOpen(true)
+    }
+
+    const handleSaveSong = () => {
+        setIsLoading(true)
+        putSong().then(({ result }) => {
+            if (result && result.status >= 200 && result.status <= 299) {
+                setIsLoading(false);
+                setSaveSongModalIsOpen(false);
+                history.push("/dashboard");
+            } else {
+                setIsLoading(false);
+                setSaveSongModalIsOpen(false);
+            }
+        });
+    }
+
+
+    const handleCloseSaveSongModal = () => {
+        history.push("/dashbaord")
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setNewTitle(e.target.value)
@@ -43,7 +78,7 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
             <AppBar position="static" elevation={0} className={classes.appbar}>
                 <Grid container>
                     <Grid item xs={11} sm={1} className={classes.left}>
-                        <DashboardTopBarIcon func={props.saveSongFunc} />
+                        <DashboardTopBarIcon func={handleOpenSaveSongModal} />
                     </Grid>
                     <Grid item xs={12} sm={10} className={classes.center}>
                         <Box onClick={() => setChanging(!changing)}>
@@ -55,6 +90,17 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
                     </Grid>
                 </Grid>
             </AppBar>
+            <ChoiceModal
+                handleOnCancelClick={() => handleCloseSaveSongModal}
+                handleOnSaveClick={() => handleSaveSong}
+                handleClosed={() => () => { setSaveSongModalIsOpen(false) }}
+                modalOpen={saveSongModalIsOpen}
+                ackText={t("Modal:saveChanges")}
+                cancelText={t("Modal:dontSaveChanges")}
+                headerText={t("Modal:saveChangesPrompt")}
+                descriptionText={t("Modal:saveChangesPromptDescription")}
+                isLoading={isLoading}
+            />
         </Box>
     );
 };
