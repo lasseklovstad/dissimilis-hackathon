@@ -10,7 +10,7 @@ import { colors } from '../../utils/colors';
 import { useTranslation } from "react-i18next";
 import { useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
-import { useLoginRedirect, useLoginPost } from '../../utils/useLogin';
+import { useLoginRedirect, useLoginPost } from '../../utils/useApiServiceLogin';
 import Alert from '@material-ui/lab/Alert';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';

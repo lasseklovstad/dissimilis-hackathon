@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { IVoice } from '../../models/IVoice';
 import { IBar, IChordAndNotes } from '../../models/IBar';
-import { useGetSong } from '../../utils/useGetSong';
+import { useGetSong } from '../../utils/useApiServiceSongs';
 import { ISong } from '../../models/ISong';
 import { useRouteMatch } from 'react-router-dom';
 

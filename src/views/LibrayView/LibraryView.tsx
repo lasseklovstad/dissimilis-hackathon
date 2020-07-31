@@ -3,10 +3,10 @@ import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
 import { DashboardButton } from '../../components/DashboardButtons/DashboardButtons';
 import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBar'
-import { useGetFilteredSongs } from '../../utils/useGetFilteredSongs';
+import { useGetFilteredSongs } from '../../utils/useApiServiceSongs';
 import { ISong } from '../../models/ISong';
 
-import { useGetAllSongs } from '../../utils/useGetAllSongs';
+import { useGetAllSongs } from '../../utils/useApiServiceSongs';
 
 export type LibraryViewProps = {
 
