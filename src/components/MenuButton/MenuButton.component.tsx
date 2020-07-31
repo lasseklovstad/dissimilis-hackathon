@@ -59,6 +59,8 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
                 putSong().then(({ result }) => {
                     if (result && result.status >= 200 && result.status <= 299) {
                         setIsSaving(true)
+                    } else {
+                        setIsSaving(false)
                     }
                 });
                 break;
@@ -82,7 +84,8 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
                 <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:hide")}</MenuItem>
                 <MenuItem onClick={() => handleClose("delete")}>{t("MenuButton:delete")}</MenuItem>
             </Menu>
-            < ChoiceModal handleOnCancelClick={() => handleClose}
+            < ChoiceModal
+                handleOnCancelClick={() => handleClose}
                 handleOnSaveClick={() => handleDeleteSong}
                 handleClosed={() => handleClose}
                 modalOpen={deleteSongModalIsOpen}

@@ -7,26 +7,21 @@ import { Grid, makeStyles, useMediaQuery, Box, Snackbar, Typography } from '@mat
 import { TimeSignature, BarNumber } from '../../components/SongViewComponents/SongView.component';
 import { BarContainer } from "../../components/BarContainer/BarContainer.component";
 import BottomBar from '../../components/BottomBar/BottomBar.component';
-import { usePutSong } from '../../utils/usePutSong';
 import animatedBird from "../../assets/images/sommerfugl-animert.svg";
 import Alert from '@material-ui/lab/Alert';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-import { ChoiceModal } from '../../components/CustomModal/ChoiceModal.component';
-import { useTranslation } from 'react-i18next';
 
 export type SongViewProps = {
 }
 
 export const SongView: React.FC<SongViewProps> = props => {
   const classes = useStyles();
-  const [saveSongModalIsOpen, setSaveSongModalIsOpen] = useState(false);
 
   const xs = useMediaQuery("(max-width: 600px)");
   const xl = useMediaQuery("(min-width: 1920px)");
   const queryString = require('query-string');
   const { song, song: { voices }, setIsLoading, isLoading, isSaving, setIsSaving } = useContext(SongContext);
-  const putSong = usePutSong(song)
-  const { t } = useTranslation();
+
   const history = useHistory();
 
 
@@ -61,28 +56,6 @@ export const SongView: React.FC<SongViewProps> = props => {
     return index === voices[selectedVoice].bars.length - 1 ? true : false;
   }
 
-  const handleOpenSaveSongModal = () => {
-    setSaveSongModalIsOpen(true)
-  }
-
-  const handleSaveSong = () => {
-    setIsLoading(true)
-    setSaveSongModalIsOpen(false)
-    putSong().then(({ result }) => {
-      if (result && result.status >= 200 && result.status <= 299) {
-        setIsLoading(false)
-        setIsSaving(true)
-        setTimeout(() => history.push("/dashboard"), 1000)
-      }
-      setSaveSongModalIsOpen(false)
-    });
-  }
-
-
-  const handleCloseSaveSongModal = () => {
-    history.push("/dashbaord")
-  }
-
 
 
   const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
@@ -102,7 +75,7 @@ export const SongView: React.FC<SongViewProps> = props => {
     <>
       <Grid container className={classes.root} >
         <Grid item xs={12} >
-          <NavBarCreateSong onClick={handleOpenSaveSongModal} />
+          <NavBarCreateSong />
         </Grid>
         <Grid item xs={12}>
           <CreateSongTab />
@@ -150,16 +123,6 @@ export const SongView: React.FC<SongViewProps> = props => {
         </Alert>
       </Snackbar>
       <BottomBar />
-      <ChoiceModal
-        handleOnCancelClick={() => handleCloseSaveSongModal}
-        handleOnSaveClick={() => handleSaveSong}
-        handleClosed={() => () => { setSaveSongModalIsOpen(false) }}
-        modalOpen={saveSongModalIsOpen}
-        ackText={t("Modal:saveChanges")}
-        cancelText={t("Modal:dontSaveChanges")}
-        headerText={t("Modal:saveChangesPrompt")}
-        descriptionText={t("Modal:saveChangesPromptDescription")}
-      />
     </>
 
   );
