@@ -13,14 +13,16 @@ export type LibraryViewProps = {
 }
 
 export const LibraryView: React.FC<LibraryViewProps> = () => {
+    const styles = useStyles()
     const { t } = useTranslation();
     const [libraryView, setLibraryView] = useState(true);
     const [allSongs, setAllSongs] = useState<ISong[]>([]);
     const [searchTerm, setSearchTerm] = useState("")
     const [filteredSongs, setFilteredSongs] = useState<ISong[]>([]);
+    const [clickedSong, setClickedSong] = useState<number>(-1);
+
     const getAllSongs = useGetAllSongs();
     const getFilteredSongs = useGetFilteredSongs(searchTerm);
-    const styles = useStyles()
     const marginBottom = 4;
 
     useEffect(() => {
@@ -41,7 +43,6 @@ export const LibraryView: React.FC<LibraryViewProps> = () => {
         setSearchTerm(searchTermParam)
         setLibraryView(false)
     }
-    const [clickedSong, setClickedSong] = useState<number>(-1);
     const handleOpenMenu = (event: React.MouseEvent<HTMLDivElement>) => {
         event.preventDefault();
         setRightClickCoordinates({

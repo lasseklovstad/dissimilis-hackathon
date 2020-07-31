@@ -21,25 +21,26 @@ export type LoginViewProps = {
 }
 
 const LoginView: FC<LoginViewProps> = () => {
+  const classes = useStyles();
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [warningDisplayed, setWarningDisplayed] = React.useState(false);
+
   const { t } = useTranslation();
   const matches = useMediaQuery("(min-width:600px)");
-  const classes = useStyles();
   const history = useHistory();
   const axiosGet = useLoginRedirect();
-  const [isLoading, setIsLoading] = useState(false)
-  const tryLogin = () => {
-    axiosGet().then(({ result }) => {
-      window.location.href = result?.headers.location
-    })
-  }
-
 
   const url = new URLSearchParams(useLocation().search);
   let code = url.get("code") ? url.get("code") : null
 
   const axiosPost = useLoginPost(code);
 
-
+  const tryLogin = () => {
+    axiosGet().then(({ result }) => {
+      window.location.href = result?.headers.location
+    })
+  }
   useEffect(() => {
     if (sessionStorage.getItem("apiKey") && sessionStorage.getItem("userId")) {
       history.replace("/dashboard");
@@ -56,7 +57,6 @@ const LoginView: FC<LoginViewProps> = () => {
   }, [])
 
 
-  const [warningDisplayed, setWarningDisplayed] = React.useState(false);
   const warning =
     (<Collapse in={warningDisplayed}>
       <Alert

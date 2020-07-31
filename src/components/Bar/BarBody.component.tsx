@@ -6,6 +6,10 @@ import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.
 import { Chord } from "@tonaljs/tonal";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 
+const initialState = {
+    mouseX: null,
+    mouseY: null,
+};
 
 export type BarBodyProps = {
     barNumber: number,
@@ -93,10 +97,6 @@ export function getColor(color: string): string {
     return newColor;
 }
 
-const initialState = {
-    mouseX: null,
-    mouseY: null,
-};
 
 
 export const BarBody: React.FC<BarBodyProps> = props => {
