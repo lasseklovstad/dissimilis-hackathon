@@ -7,6 +7,4 @@ export const dashboardNo: any = {
     "measure": "takt",
     "search": "Søk",
     "altButterflyButtonProp": "Bilde av Dissimilis' sommerfugl",
-    "deleteSong": "Slett sang",
-    "deleteDescription": "Er du sikker du vil slette sangen?",
 }

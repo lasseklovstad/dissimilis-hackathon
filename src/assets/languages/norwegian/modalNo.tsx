@@ -9,6 +9,8 @@ export const modalNo = {
     "saveChangesPromptDescription": "Trykk 'ikke lagre' for å gå tilbake til dashboard uten å lagre",
     "dontSaveChanges": "Ikke lagre endringer",
     "saveChanges": "Lagre endringer",
+    "deleteSong": "Slett sang",
+    "deleteDescription": "Er du sikker du vil slette sangen?",
     "cancel": "Avbryt",
     "create": "Opprett",
     "save": "Lagre",

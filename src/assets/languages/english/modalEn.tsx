@@ -9,6 +9,8 @@ export const modalEn = {
     "saveChangesPromptDescription": "Click 'don't save' to go to dashboard without saving",
     "dontSaveChanges": "Don't save changes",
     "saveChanges": "Save changes",
+    "deleteSong": "Delete song",
+    "deleteDescription": "Are you sure you want to delete the song?",
     "cancel": "Cancel",
     "create": "Create",
     "save": "Save",
