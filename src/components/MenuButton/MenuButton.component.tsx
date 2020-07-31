@@ -8,7 +8,7 @@ import { SongContext } from "../../views/SongView/SongContextProvider.component"
 import { usePutSong } from "../../utils/useApiServiceSongs";
 import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component";
-import { useDeleteSong } from "../../utils/useDeleteSong";
+import { useDeleteSong } from "../../utils/useApiServiceSongs";
 
 
 export type MenuButtonProps = {}

@@ -74,6 +74,17 @@ export const usePutSong = (song: ISong) => {
     return putSong;
 }
 
+/**
+ * Delete one song
+ * @param id songs id
+ */
+export const useDeleteSong = (id: number) => {
+    const url = 'song/' + id;
+    const headers = getHeaders();
+    const getSongs = useApiService<ISong>(url, { headers }).deleteData;
+    return getSongs;
+}
+
 const getHeaders = () => {
     const apiKey = sessionStorage.getItem("apiKey") || "";
     const userId = sessionStorage.getItem("userId") || "";
