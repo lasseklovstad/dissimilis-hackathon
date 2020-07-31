@@ -47,6 +47,7 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
 
     const handleClose = (method = "") => {
         setAnchorEl(null);
+        setDeleteSongModalIsOpen(false)
         switch (method) {
             case "export":
                 setShowPossiblePositions(false);
@@ -63,6 +64,7 @@ export const MenuButton: React.FC<MenuButtonProps> = props => {
             case "delete":
                 handleOpenDeleteSongModal()
             default:
+
         }
     };
 
