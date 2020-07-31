@@ -13,20 +13,22 @@ export type DashboardViewProps = {
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = () => {
+  const styles = useStyles()
   const { t } = useTranslation();
-  const measureText = t("DashboardView:measure");
+
+  const [dashboardView, setDashboardView] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("")
+  const [filteredSongs, setFilteredSongs] = useState<ISong[]>([]);
   const [recentSongs, setRecentSongs] = useState<ISong[]>([]);
   const [addSongModalIsOpen, setAddSongModalIsOpen] = useState(false);
   const [timeSignature, setTimeSignature] = useState("");
   const [textFieldInput, setTextFieldInput] = useState<string>("");
+
   const postSong = usePostSong(textFieldInput, timeSignature);
   const history = useHistory();
-  const [dashboardView, setDashboardView] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("")
-  const [filteredSongs, setFilteredSongs] = useState<ISong[]>([]);
+  const measureText = t("DashboardView:measure");
   const getRecentSongs = useGetRecentSongs();
   const getFilteredSongs = useGetFilteredSongs(searchTerm);
-  const styles = useStyles()
   const marginBottom = 10;
 
   useEffect(() => {

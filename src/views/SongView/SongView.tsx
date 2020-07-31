@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong.component';
 import CreateSongTab from '../../components/CreateSongTab/CreateSongTab.component';
@@ -20,14 +20,12 @@ export type SongViewProps = {
 export const SongView: React.FC<SongViewProps> = props => {
   const classes = useStyles();
 
+  const { song, song: { voices }, isLoading, isSaving, setIsSaving } = useContext(SongContext);
+
   const xs = useMediaQuery("(max-width: 600px)");
   const xl = useMediaQuery("(min-width: 1920px)");
   const queryString = require('query-string');
-  const { song, song: { voices }, setIsLoading, isLoading, isSaving, setIsSaving } = useContext(SongContext);
-
   const history = useHistory();
-
-
   const match = useRouteMatch<MatchParams>("/song/:id");
   let id = match ? +match.params.id : 0;
   const voiceString = queryString.parse(window.location.search);
@@ -58,8 +56,6 @@ export const SongView: React.FC<SongViewProps> = props => {
   const isBarLineAfter = (index: number) => {
     return index === voices[selectedVoice].bars.length - 1 ? true : false;
   }
-
-
 
   const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
     if (reason === 'clickaway') {
