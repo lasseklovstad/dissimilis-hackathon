@@ -13,14 +13,12 @@ export type NavBarCreateSongProps = {
 
 export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
     const classes = useStyles();
-
     const [changing, setChanging] = useState(false);
     const [saveSongModalIsOpen, setSaveSongModalIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
 
-    const { song, song: { title }, changeTitle, setIsSaving } = useContext(SongContext);
+    const { song, song: { title }, changeTitle } = useContext(SongContext);
     const [newTitle, setNewTitle] = useState(title)
-
     const matches = useMediaQuery("(max-width:600px)");
     const putSong = usePutSong(song)
     const { t } = useTranslation();
@@ -41,16 +39,13 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
         setIsLoading(true)
         putSong().then(({ result }) => {
             if (result && result.status >= 200 && result.status <= 299) {
-                setTimeout(() => setIsSaving(true), 3000)
-                setIsLoading(false)
-                setSaveSongModalIsOpen(false)
-                history.push("/dashboard")
+                setIsLoading(false);
+                setSaveSongModalIsOpen(false);
+                history.push("/dashboard");
             } else {
-                setIsSaving(false)
-                setIsLoading(false)
-                setSaveSongModalIsOpen(false)
+                setIsLoading(false);
+                setSaveSongModalIsOpen(false);
             }
-
         });
     }
 

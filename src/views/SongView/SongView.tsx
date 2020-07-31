@@ -8,8 +8,11 @@ import { TimeSignature, BarNumber } from '../../components/SongViewComponents/So
 import { BarContainer } from "../../components/BarContainer/BarContainer.component";
 import BottomBar from '../../components/BottomBar/BottomBar.component';
 import animatedBird from "../../assets/images/sommerfugl-animert.svg";
-import Alert from '@material-ui/lab/Alert';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+
+type MatchParams = {
+  id: string
+}
 
 export type SongViewProps = {
 }
@@ -70,7 +73,6 @@ export const SongView: React.FC<SongViewProps> = props => {
   }
 
   const heightOfBar = 160;
-
   return (
     <>
       <Grid container className={classes.root} >
@@ -115,7 +117,6 @@ export const SongView: React.FC<SongViewProps> = props => {
             </Grid>
           </Grid>
         }
-
       </Grid>
       <Snackbar anchorOrigin={{ vertical: "top", horizontal: "right" }} autoHideDuration={4000} open={isSaving} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" >
@@ -124,7 +125,6 @@ export const SongView: React.FC<SongViewProps> = props => {
       </Snackbar>
       <BottomBar />
     </>
-
   );
 }
 
@@ -143,9 +143,5 @@ const useStyles = makeStyles({
     marginTop: "24px"
   },
 })
-
-type MatchParams = {
-  id: string
-}
 
 export default SongView;

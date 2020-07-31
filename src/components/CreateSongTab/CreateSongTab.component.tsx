@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
-import { Grid, makeStyles, Menu, MenuItem } from "@material-ui/core";
+import { Grid, Menu, MenuItem } from "@material-ui/core";
 import { DashboardButtonWithAddIconNoLink, DashboardButtonNoLink, DashboardButton } from "../DashboardButtons/DashboardButtons";
-import colors from "../../utils/colors";
 import { useTranslation } from "react-i18next";
 import { SongContext } from "../../views/SongView/SongContextProvider.component";
 import { IVoice } from "../../models/IVoice";
@@ -24,7 +23,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = props => {
 
     const history = useHistory();
 
-    const { song: { voices, id }, addVoice, changeVoiceTitle, song } = useContext(SongContext);
+    const { song: { voices, id }, addVoice, changeVoiceTitle } = useContext(SongContext);
     const { setShowPossiblePositions } = useContext(SongToolsContext);
 
     const handleAddInstrument = () => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Typography, Box, makeStyles, Menu, MenuItem } from '@material-ui/core';
+import { Grid, Typography, Box, makeStyles } from '@material-ui/core';
 import { useTranslation } from "react-i18next";
 import { DashboardButton, DashboardLibraryButton, DashboardButtonWithAddIconNoLink } from '../../components/DashboardButtons/DashboardButtons';
 import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBar'
