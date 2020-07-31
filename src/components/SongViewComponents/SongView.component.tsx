@@ -7,13 +7,14 @@ import { SongContext } from '../../views/SongView/SongContextProvider.component'
 export type TimeSignatureProps = {
   height?: number,
 }
+
 export const TimeSignature: FC<TimeSignatureProps> = (props) => {
+  const style = useStyles();
   const { song } = useContext(SongContext);
   const timeSignatureString = song.timeSignature;
   const timeSignatureNumerator = timeSignatureString.split("/")[0];
   const timeSignatureDenominator = timeSignatureString.split("/")[1];
 
-  const style = useStyles();
   return (
     <Box className={style.TimeSignatureContainer} style={{ height: !props.height ? "240px" : (props.height + 80) + "px" }}>
       <Box><Typography className={style.TimeSignatureNumerator}>{timeSignatureNumerator}</Typography></Box>
@@ -22,6 +23,7 @@ export const TimeSignature: FC<TimeSignatureProps> = (props) => {
   );
 }
 
+
 export const Bar: FC<TimeSignatureProps> = (props) => {
   const style = useStyles();
   return (
@@ -29,10 +31,12 @@ export const Bar: FC<TimeSignatureProps> = (props) => {
   );
 }
 
+
 export type SongViewBarNumberProps = {
   barNumber: number,
   height?: number,
 }
+
 export const BarNumber: FC<SongViewBarNumberProps> = (props) => {
   const style = useStyles();
   return (

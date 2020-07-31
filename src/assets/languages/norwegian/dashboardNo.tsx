@@ -8,5 +8,5 @@ export const dashboardNo: any = {
     "libraryButton": "Bibliotek",
     "measure": "takt",
     "search": "Søk",
-    "altButteflyButtonProp": "Bilde av Dissimilis' sommerfugl"
+    "altButterflyButtonProp": "Bilde av Dissimilis' sommerfugl"
 }

@@ -4,7 +4,6 @@ import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
 import DashboardView from './views/DashboardView/DashboardView';
 import LoginView from './views/LoginView/LoginView';
 import SongView from './views/SongView/SongView';
-import CommonView from './views/CommonView/CommonView';
 
 import SongContextProvider from './views/SongView/SongContextProvider.component';
 import SongToolsContextProvider from './views/SongView/SongToolsContextProvider.component';
@@ -33,7 +32,6 @@ function Routing() {
             <Switch>
                 <Route exact path="/dashboard" render={(props) => (<PrivateRoute exact path="/dashboard" component={DashboardView} />)} />
                 <Route exact path="/library" render={(props) => (<PrivateRoute exact path="/library" component={LibraryView} />)} />
-                <Route exact path="/common" render={(props) => (<PrivateRoute exact path="/common" component={CommonView} />)} />
                 <Route path="/song" component={SongRouting} />
                 <Route path="/" component={LoginView} />
                 <Route render={() => <Redirect to={{ pathname: "/" }} />} />

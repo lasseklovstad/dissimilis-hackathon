@@ -112,13 +112,13 @@ const SongContextProvider: React.FC = props => {
     }
 
     const toggleRepBefore = (barId: number) => {
-        //Map through all voices and for the ba which matches the id, toggle the bars repetition value
+        //Map through all voices and for the bar which matches the id, toggle the bars repetition value
         song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repBefore: !bar.repBefore } : bar) } : voice) }
         setSong(song)
     }
 
     const toggleRepAfter = (barId: number) => {
-        //Map through all voices and for the ba which matches the id, toggle the bars repetition value
+        //Map through all voices and for the bar which matches the id, toggle the bars repetition value
         song = { ...song, voices: song.voices.map((voice, index) => true ? { ...voice, bars: voice.bars.map((bar, i) => i === barId ? { ...bar, repAfter: !bar.repAfter } : bar) } : voice) }
         setSong(song)
     }

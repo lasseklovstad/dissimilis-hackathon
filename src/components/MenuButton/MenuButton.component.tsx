@@ -15,19 +15,14 @@ type MatchParams = {
     id: string
 }
 
-
 export const MenuButton: React.FC<MenuButtonProps> = props => {
     const classes = useStyles();
-
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
     const { song, setIsSaving } = useContext(SongContext);
     const { setShowPossiblePositions } = useContext(SongToolsContext);
-
     const { t } = useTranslation();
     const history = useHistory();
     const putSong = usePutSong(song);
-
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
