@@ -1,35 +1,43 @@
-import React, { useContext, useState, useEffect } from "react";
-import { makeStyles, Grid, Typography, AppBar, Box, useMediaQuery, TextField } from "@material-ui/core";
-import MenuButton from "../MenuButton/MenuButton.component";
-import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons";
-import { SongContext } from "../../views/SongView/SongContextProvider.component";
-import { ChoiceModal } from "../CustomModal/ChoiceModal.component";
-import { usePutSong } from "../../utils/useApiServiceSongs";
-import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import React, { useContext, useState, useEffect } from 'react'
+import {
+    makeStyles,
+    Grid,
+    Typography,
+    AppBar,
+    Box,
+    useMediaQuery,
+    TextField,
+} from '@material-ui/core'
+import MenuButton from '../MenuButton/MenuButton.component'
+import { DashboardTopBarIcon } from '../DashboardButtons/DashboardButtons'
+import { SongContext } from '../../views/SongView/SongContextProvider.component'
+import { ChoiceModal } from '../CustomModal/ChoiceModal.component'
+import { usePutSong } from '../../utils/useApiServiceSongs'
+import { useTranslation } from 'react-i18next'
+import { useHistory } from 'react-router-dom'
 
-export type NavBarCreateSongProps = {
-}
+export type NavBarCreateSongProps = {}
 
-export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
-    const classes = useStyles();
-    const [changing, setChanging] = useState(false);
-    const [saveSongModalIsOpen, setSaveSongModalIsOpen] = useState(false);
+export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = (props) => {
+    const classes = useStyles()
+    const [changing, setChanging] = useState(false)
+    const [saveSongModalIsOpen, setSaveSongModalIsOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
-    const { song, song: { title }, changeTitle } = useContext(SongContext);
+    const {
+        song,
+        song: { title },
+        changeTitle,
+    } = useContext(SongContext)
     const [newTitle, setNewTitle] = useState(title)
-    const matches = useMediaQuery("(max-width:600px)");
+    const matches = useMediaQuery('(max-width:600px)')
     const putSong = usePutSong(song)
-    const { t } = useTranslation();
-    const history = useHistory();
+    const { t } = useTranslation()
+    const history = useHistory()
 
     useEffect(() => {
-        setNewTitle(title);
+        setNewTitle(title)
     }, [title])
-
-
-
 
     const handleOpenSaveSongModal = () => {
         setSaveSongModalIsOpen(true)
@@ -39,35 +47,36 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
         setIsLoading(true)
         putSong().then(({ result }) => {
             if (result && result.status >= 200 && result.status <= 299) {
-                setIsLoading(false);
-                setSaveSongModalIsOpen(false);
-                history.push("/dashboard");
+                setIsLoading(false)
+                setSaveSongModalIsOpen(false)
+                history.push('/dashboard')
             } else {
-                setIsLoading(false);
-                setSaveSongModalIsOpen(false);
+                setIsLoading(false)
+                setSaveSongModalIsOpen(false)
             }
-        });
+        })
     }
-
 
     const handleCloseSaveSongModal = () => {
-        history.push("/dashbaord")
+        history.push('/dashbaord')
     }
 
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    ) => {
         setNewTitle(e.target.value)
     }
 
     const pressDown = (e: any) => {
         if (e.keyCode === 13) {
-            if (e.target.value !== "") {
-                changeTitle(e.target.value);
+            if (e.target.value !== '') {
+                changeTitle(e.target.value)
             }
-            setChanging(!changing);
+            setChanging(!changing)
         }
         if (e.keyCode === 27) {
-            if (newTitle !== "") {
-                changeTitle(e.target.value);
+            if (newTitle !== '') {
+                changeTitle(e.target.value)
             }
             setChanging(false)
         }
@@ -82,10 +91,22 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
                     </Grid>
                     <Grid item xs={12} sm={10} className={classes.center}>
                         <Box onClick={() => setChanging(!changing)}>
-                            {changing ? <TextField error={newTitle === ""} onChange={(e) => handleChange(e)} value={newTitle} inputProps={{ style: { fontSize: 24 } }} className={classes.textField} autoFocus onKeyDown={(e) => pressDown(e)} ></TextField> : <Typography variant="h2">{title}</Typography>}
+                            {changing ? (
+                                <TextField
+                                    error={newTitle === ''}
+                                    onChange={(e) => handleChange(e)}
+                                    value={newTitle}
+                                    inputProps={{ style: { fontSize: 24 } }}
+                                    className={classes.textField}
+                                    autoFocus
+                                    onKeyDown={(e) => pressDown(e)}
+                                ></TextField>
+                            ) : (
+                                <Typography variant="h2">{title}</Typography>
+                            )}
                         </Box>
                     </Grid>
-                    <Grid item xs={1} sm={1} className={classes.right} >
+                    <Grid item xs={1} sm={1} className={classes.right}>
                         <MenuButton />
                     </Grid>
                 </Grid>
@@ -93,17 +114,19 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = props => {
             <ChoiceModal
                 handleOnCancelClick={() => handleCloseSaveSongModal}
                 handleOnSaveClick={() => handleSaveSong}
-                handleClosed={() => () => { setSaveSongModalIsOpen(false) }}
+                handleClosed={() => () => {
+                    setSaveSongModalIsOpen(false)
+                }}
                 modalOpen={saveSongModalIsOpen}
-                ackText={t("Modal:saveChanges")}
-                cancelText={t("Modal:dontSaveChanges")}
-                headerText={t("Modal:saveChangesPrompt")}
-                descriptionText={t("Modal:saveChangesPromptDescription")}
+                ackText={t('Modal:saveChanges')}
+                cancelText={t('Modal:dontSaveChanges')}
+                headerText={t('Modal:saveChangesPrompt')}
+                descriptionText={t('Modal:saveChangesPromptDescription')}
                 isLoading={isLoading}
             />
         </Box>
-    );
-};
+    )
+}
 
 const useStyles = makeStyles({
     root: {
@@ -116,27 +139,26 @@ const useStyles = makeStyles({
         order: 2,
         '@media (max-width:600px)': {
             order: 3,
-            marginTop: "8px",
+            marginTop: '8px',
         },
     },
     right: {
         order: 3,
         '@media (max-width:600px)': {
-            order: 2
+            order: 2,
         },
     },
     appbar: {
-        backgroundColor: "transparent",
-        marginBottom: "24px"
+        backgroundColor: 'transparent',
+        marginBottom: '24px',
     },
     textField: {
-        width: "100%",
-        height: "36px",
+        width: '100%',
+        height: '36px',
     },
     textFieldInput: {
-        fontSize: "30",
-    }
-});
+        fontSize: '30',
+    },
+})
 
-
-export default NavBarCreateSong;
+export default NavBarCreateSong

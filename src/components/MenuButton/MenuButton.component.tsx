@@ -1,15 +1,14 @@
-import React, { useContext, useState } from "react";
-import { makeStyles, IconButton, Menu, MenuItem } from "@material-ui/core";
-import colors from "../../utils/colors";
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import { useTranslation } from "react-i18next";
-import { useHistory, useRouteMatch } from "react-router-dom";
-import { SongContext } from "../../views/SongView/SongContextProvider.component";
-import { usePutSong } from "../../utils/useApiServiceSongs";
-import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component";
-import { ChoiceModal } from "../CustomModal/ChoiceModal.component";
-import { useDeleteSong } from "../../utils/useApiServiceSongs";
-
+import React, { useContext, useState } from 'react'
+import { makeStyles, IconButton, Menu, MenuItem } from '@material-ui/core'
+import colors from '../../utils/colors'
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import { useTranslation } from 'react-i18next'
+import { useHistory, useRouteMatch } from 'react-router-dom'
+import { SongContext } from '../../views/SongView/SongContextProvider.component'
+import { usePutSong } from '../../utils/useApiServiceSongs'
+import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component'
+import { ChoiceModal } from '../CustomModal/ChoiceModal.component'
+import { useDeleteSong } from '../../utils/useApiServiceSongs'
 
 export type MenuButtonProps = {}
 
@@ -17,94 +16,123 @@ type MatchParams = {
     id: string
 }
 
-export const MenuButton: React.FC<MenuButtonProps> = props => {
-    const classes = useStyles();
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false);
-    const { song, setIsSaving } = useContext(SongContext);
-    const { setShowPossiblePositions } = useContext(SongToolsContext);
-    const { t } = useTranslation();
-    const history = useHistory();
-    const putSong = usePutSong(song);
-    const match = useRouteMatch<MatchParams>("/song/:id")
-    let id = match ? +match.params.id : 0;
-    const deleteSong = useDeleteSong(id);
+export const MenuButton: React.FC<MenuButtonProps> = (props) => {
+    const classes = useStyles()
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
+    const { song, setIsSaving } = useContext(SongContext)
+    const { setShowPossiblePositions } = useContext(SongToolsContext)
+    const { t } = useTranslation()
+    const history = useHistory()
+    const putSong = usePutSong(song)
+    const match = useRouteMatch<MatchParams>('/song/:id')
+    let id = match ? +match.params.id : 0
+    const deleteSong = useDeleteSong(id)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
+        setAnchorEl(event.currentTarget)
+    }
 
     const handleOpenDeleteSongModal = () => {
         setDeleteSongModalIsOpen(true)
     }
 
     const handleDeleteSong = () => {
-        setDeleteSongModalIsOpen(false);
-        deleteSong().then(() => { history.replace("/dashboard") });
+        setDeleteSongModalIsOpen(false)
+        deleteSong().then(() => {
+            history.replace('/dashboard')
+        })
     }
 
-    const handleClose = (method = "") => {
-        setAnchorEl(null);
+    const handleClose = (method = '') => {
+        setAnchorEl(null)
         setDeleteSongModalIsOpen(false)
         switch (method) {
-            case "export":
-                setShowPossiblePositions(false);
+            case 'export':
+                setShowPossiblePositions(false)
                 putSong().then(() => {
-                    history.push("/song/" + id + "/export");
+                    history.push('/song/' + id + '/export')
                 })
 
-                break;
-            case "save":
+                break
+            case 'save':
                 putSong().then(({ result }) => {
-                    if (result && result.status >= 200 && result.status <= 299) {
+                    if (
+                        result &&
+                        result.status >= 200 &&
+                        result.status <= 299
+                    ) {
                         setIsSaving(true)
                     } else {
                         setIsSaving(false)
                     }
-                });
-                break;
-            case "delete":
+                })
+                break
+            case 'delete':
                 handleOpenDeleteSongModal()
             default:
-
         }
-    };
+    }
 
     return (
         <div>
-            <IconButton className={classes.root} aria-haspopup="true" onClick={handleClick} aria-label="Bar menu">
+            <IconButton
+                className={classes.root}
+                aria-haspopup="true"
+                onClick={handleClick}
+                aria-label="Bar menu"
+            >
                 <MoreHorizIcon />
             </IconButton>
-            <Menu id="menuBar" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={() => handleClose("")} role="menu">
-                <MenuItem onClick={() => handleClose("save")}>{t("MenuButton:save")}</MenuItem>
-                <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:duplicate")}</MenuItem>
-                <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:transpose")}</MenuItem>
-                <MenuItem onClick={() => handleClose("export")}>{t("MenuButton:export")}</MenuItem>
-                <MenuItem disabled onClick={() => handleClose("")}>{t("MenuButton:hide")}</MenuItem>
-                <MenuItem onClick={() => handleClose("delete")}>{t("MenuButton:delete")}</MenuItem>
+            <Menu
+                id="menuBar"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={() => handleClose('')}
+                role="menu"
+            >
+                <MenuItem onClick={() => handleClose('save')}>
+                    {t('MenuButton:save')}
+                </MenuItem>
+                <MenuItem disabled onClick={() => handleClose('')}>
+                    {t('MenuButton:duplicate')}
+                </MenuItem>
+                <MenuItem disabled onClick={() => handleClose('')}>
+                    {t('MenuButton:transpose')}
+                </MenuItem>
+                <MenuItem onClick={() => handleClose('export')}>
+                    {t('MenuButton:export')}
+                </MenuItem>
+                <MenuItem disabled onClick={() => handleClose('')}>
+                    {t('MenuButton:hide')}
+                </MenuItem>
+                <MenuItem onClick={() => handleClose('delete')}>
+                    {t('MenuButton:delete')}
+                </MenuItem>
             </Menu>
-            < ChoiceModal
+            <ChoiceModal
                 handleOnCancelClick={() => handleClose}
                 handleOnSaveClick={() => handleDeleteSong}
                 handleClosed={() => handleClose}
                 modalOpen={deleteSongModalIsOpen}
-                ackText={t("Modal:deleteSong")}
-                cancelText={t("Modal:cancel")}
-                headerText={t("Modal:deleteSong")}
-                descriptionText={t("Modal:deleteDescription")}
+                ackText={t('Modal:deleteSong')}
+                cancelText={t('Modal:cancel')}
+                headerText={t('Modal:deleteSong')}
+                descriptionText={t('Modal:deleteDescription')}
             />
         </div>
-    );
-};
+    )
+}
 
 const useStyles = makeStyles({
     root: {
         backgroundColor: colors.gray_200,
-        borderRadius: "50%",
-        height: "48px",
-        width: "48px",
-        float: "right",
-    }
+        borderRadius: '50%',
+        height: '48px',
+        width: '48px',
+        float: 'right',
+    },
 })
 
-export default MenuButton;
+export default MenuButton
