@@ -115,9 +115,9 @@ export const MenuButton = () => {
                 </MenuItem>
             </Menu>
             <ChoiceModal
-                handleOnCancelClick={() => handleClose}
-                handleOnSaveClick={() => handleDeleteSong}
-                handleClosed={() => handleClose}
+                handleOnCancelClick={() => handleClose()}
+                handleOnSaveClick={() => handleDeleteSong()}
+                handleClosed={() => handleClose()}
                 modalOpen={deleteSongModalIsOpen}
                 ackText={t("Modal:deleteSong")}
                 cancelText={t("Modal:cancel")}

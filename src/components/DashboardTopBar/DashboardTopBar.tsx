@@ -11,26 +11,13 @@ const useStyles = makeStyles(() => ({
 }))
 
 export const DashboardTopBar = (props: {
-    onBlur: Function
-    onChange: Function
+    onBlur: () => void
+    onChange: (txt: string) => void
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
     const searchPlaceholder = t("DashboardView:search")
     const [searchBarFocus, setSearchBarFocus] = useState(false)
-
-    const handleOnFocus = () => {
-        setSearchBarFocus(true)
-    }
-
-    const handleOnBlur = () => {
-        setSearchBarFocus(false)
-        props.onBlur()
-    }
-
-    const handleOnChange = (searchTerm: string) => {
-        props.onChange(searchTerm)
-    }
 
     return (
         <div>
@@ -59,10 +46,15 @@ export const DashboardTopBar = (props: {
                                 variant="outlined"
                                 type="search"
                                 fullWidth
-                                onFocus={handleOnFocus}
-                                onBlur={handleOnBlur}
+                                onFocus={() => {
+                                    setSearchBarFocus(true)
+                                }}
+                                onBlur={() => {
+                                    setSearchBarFocus(false)
+                                    props.onBlur()
+                                }}
                                 onChange={(event) =>
-                                    handleOnChange(event.target.value)
+                                    props.onChange(event.target.value)
                                 }
                             />
                         </Grid>

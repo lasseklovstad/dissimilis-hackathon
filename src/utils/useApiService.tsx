@@ -23,7 +23,7 @@ export const useApiService = <T extends Object>(
 
     const fetchData = async () => {
         let result: AxiosResponse<T> | undefined
-        let errorMessage: any
+        let errorMessage
         let isError = false
 
         try {
@@ -43,7 +43,7 @@ export const useApiService = <T extends Object>(
 
     const postData = async () => {
         let result: AxiosResponse<T> | undefined
-        let errorMessage: any
+        let errorMessage
         let isError = false
         try {
             result = await axios.post<T>(finalUrl, options.body, {
@@ -64,7 +64,7 @@ export const useApiService = <T extends Object>(
 
     const putData = async () => {
         let result: AxiosResponse<T> | undefined
-        let errorMessage: any
+        let errorMessage
         let isError = false
         try {
             result = await axios.put<T>(finalUrl, options.body, {
@@ -85,7 +85,7 @@ export const useApiService = <T extends Object>(
 
     const deleteData = async () => {
         let result: AxiosResponse<T> | undefined
-        let errorMessage: any
+        let errorMessage
         let isError = false
         try {
             result = await axios.delete<T>(finalUrl, {

@@ -89,10 +89,7 @@ export const Bar = (props: {
                             aria-label="repetition sign before the tone"
                         >
                             <Box mt={`${((props.height || 120) - 56) / 2}px`}>
-                                <RepetitionSign
-                                    size="small"
-                                    display={props.repBefore}
-                                />
+                                <RepetitionSign display={props.repBefore} />
                             </Box>
                         </Grid>
                         <Grid
@@ -122,10 +119,7 @@ export const Bar = (props: {
                             aria-label="repetition sign after the tone"
                         >
                             <Box mt={`${((props.height || 120) - 56) / 2}px`}>
-                                <RepetitionSign
-                                    size="small"
-                                    display={props.repAfter}
-                                />
+                                <RepetitionSign display={props.repAfter} />
                             </Box>
                         </Grid>
                     </Grid>

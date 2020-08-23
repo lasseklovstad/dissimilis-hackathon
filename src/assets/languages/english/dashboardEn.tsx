@@ -1,4 +1,4 @@
-export const dashboardEn: any = {
+export const dashboardEn = {
     newSongLabel: "New song",
     recentSongLabel: "Recent",
     searchSongLabel: "Search",

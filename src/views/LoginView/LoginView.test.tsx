@@ -2,7 +2,7 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import { BrowserRouter } from "react-router-dom"
-import LoginView from "./LoginView"
+import { LoginView } from "./LoginView"
 
 describe("LoginView", () => {
     it("textfield should be showing on login page", function () {

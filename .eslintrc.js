@@ -40,6 +40,7 @@ module.exports = {
     "linebreak-style": "off",
     "no-restricted-syntax": "off",
     "no-plusplus": "off",
+    "no-shadow": "off",
     "prettier/prettier": [
       "error",
       {

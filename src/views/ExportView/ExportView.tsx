@@ -23,8 +23,6 @@ import {
     TimeSignature,
 } from "../../components/SongViewComponents/SongView.component"
 
-export type ExportViewProps = {}
-
 const useStyles = makeStyles({
     root: {
         border: "1px solid black",
@@ -70,7 +68,7 @@ const useStyles = makeStyles({
     },
 })
 
-export const ExportView: React.FC<ExportViewProps> = () => {
+export const ExportView = () => {
     const [rowsPerSheet, setRowsPerSheet] = useState<number>(4)
     const [lengthOfEachBar, setlengthOfEachBar] = useState<
         1 | 2 | 3 | 4 | 6 | 12

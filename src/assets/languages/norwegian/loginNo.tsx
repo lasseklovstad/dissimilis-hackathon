@@ -1,4 +1,4 @@
-export const loginNo: any = {
+export const loginNo = {
     loginWithMicrosoft: "Logg inn med Microsoft",
     login: "Logg inn",
     username: "Brukernavn",

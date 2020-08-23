@@ -21,10 +21,7 @@ const useStyles = makeStyles({
     },
 })
 
-export const RepetitionSign = (props: {
-    size: "small" | "inherit" | "large"
-    display: boolean
-}) => {
+export const RepetitionSign = (props: { display: boolean }) => {
     const classes = useStyles()
     return (
         <Box

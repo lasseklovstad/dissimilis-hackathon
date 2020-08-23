@@ -60,8 +60,8 @@ export const BarContainer = (props: {
     const { t } = useTranslation()
     const { bar } = props
 
-    const voiceStringFromURL = queryString.parse(window.location.search) as any // TODO
-    const voiceId: number = parseInt(voiceStringFromURL.voice, 10)
+    const voiceStringFromURL = queryString.parse(window.location.search)
+    const voiceId = parseInt(voiceStringFromURL.voice as string, 10)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)

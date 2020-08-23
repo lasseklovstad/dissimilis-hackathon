@@ -76,6 +76,36 @@ export const SongToolsContextProvider: React.FC = (props) => {
     }, [selectedNoteLength, song])
 
     /**
+     * This method selects the right positions to replace based on the empty space clicked on.
+     * It checks the availablePositionsArray (calculated by calculateAvailablePositions) for the list in which the noteindex has the lowest index of all possible possitionarrays.
+     * This is because you want the new note to be placed where you click, or fill the entire right if not place from your click to the right.
+     * @param voiceIndex
+     * @param barIndex
+     * @param noteIndex
+     */
+    const selectPositionArray = (
+        voiceIndex: number,
+        barIndex: number,
+        noteIndex: number
+    ) => {
+        const availablePosArray = availablePositions[voiceIndex][barIndex]
+        let selectedPosArray = availablePosArray.find((arr) =>
+            arr.includes(noteIndex)
+        )
+
+        for (const arr of availablePosArray) {
+            if (arr.includes(noteIndex)) {
+                selectedPosArray = arr
+            }
+        }
+
+        if (selectedPosArray === undefined || selectedPosArray === null) {
+            return []
+        }
+        return selectedPosArray
+    }
+
+    /**
      * This method inserts a new note or chord
      * First it creates the new note
      * Then it takes a copy of the list of chords or notes in the bar
@@ -136,34 +166,6 @@ export const SongToolsContextProvider: React.FC = (props) => {
             }
         }
         editNote(voiceIndex, barIndex, tempChordsAndNotes)
-    }
-
-    /**
-     * This method selects the right positions to replace based on the empty space clicked on.
-     * It checks the availablePositionsArray (calculated by calculateAvailablePositions) for the list in which the noteindex has the lowest index of all possible possitionarrays.
-     * This is because you want the new note to be placed where you click, or fill the entire right if not place from your click to the right.
-     * @param voiceIndex
-     * @param barIndex
-     * @param noteIndex
-     */
-    const selectPositionArray = (
-        voiceIndex: number,
-        barIndex: number,
-        noteIndex: number
-    ) => {
-        const availablePosArray = availablePositions[voiceIndex][barIndex]
-        let selectedPosArray = availablePosArray.find((arr) =>
-            arr.includes(noteIndex)
-        )
-        availablePosArray.map((arr) => {
-            if (arr.includes(noteIndex)) {
-                selectedPosArray = arr
-            }
-        })
-        if (selectedPosArray === undefined || selectedPosArray === null) {
-            return []
-        }
-        return selectedPosArray
     }
 
     /**

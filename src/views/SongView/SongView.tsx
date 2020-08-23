@@ -37,7 +37,6 @@ export const SongView = () => {
     const classes = useStyles()
 
     const {
-        song,
         song: { voices },
         isLoading,
         isSaving,
@@ -53,7 +52,7 @@ export const SongView = () => {
     const voiceString = queryString.parse(window.location.search)
     let selectedVoice = 0
     if (voiceString.voice !== undefined) {
-        const voiceInt = parseInt(voiceString.voice)
+        const voiceInt = parseInt(voiceString.voice, 10)
         if (voiceInt > voices.length || voiceInt <= 0) {
             history.replace(`/song/${id}?voice=1`)
         } else {
@@ -93,7 +92,7 @@ export const SongView = () => {
         setIsSaving(false)
     }
 
-    function Alert(props: AlertProps) {
+    const Alert = (props: AlertProps) => {
         return <MuiAlert elevation={6} variant="filled" {...props} />
     }
 

@@ -95,31 +95,21 @@ export const DashboardView = () => {
         setAddSongModalIsOpen(false)
     }
 
-    const handleOnChangeAddSongModal: React.ChangeEventHandler<
-        HTMLTextAreaElement | HTMLInputElement
-    > = (e: any) => {
-        setTextFieldInput(e.target.value)
-    }
-
-    const handleOnBlurSearch = () => {
-        setTimeout(() => {
-            setDashboardView(true)
-        }, 320)
-    }
-
-    const handleOnChangeSearch = (searchTermParam: string) => {
-        setSearchTerm(searchTermParam)
-        setDashboardView(false)
-    }
-
     return (
         <Box mx={2}>
             <Grid container justify="center" className={styles.container}>
                 <Grid item xs={12}>
                     <Box mb={marginBottom}>
                         <DashboardTopBar
-                            onBlur={handleOnBlurSearch}
-                            onChange={handleOnChangeSearch}
+                            onBlur={() => {
+                                setTimeout(() => {
+                                    setDashboardView(true)
+                                }, 320)
+                            }}
+                            onChange={(txt) => {
+                                setSearchTerm(txt)
+                                setDashboardView(false)
+                            }}
                         />
                     </Box>
                 </Grid>
@@ -162,7 +152,7 @@ export const DashboardView = () => {
                                     </Typography>
                                 </Box>
                                 <Grid container spacing={3}>
-                                    {recentSongs?.map((song, index) => (
+                                    {recentSongs.map((song) => (
                                         <Grid
                                             item
                                             xs={12}
@@ -172,7 +162,7 @@ export const DashboardView = () => {
                                         >
                                             <DashboardButton
                                                 text={song.title}
-                                                link={`/song/${song.id!.toString()}`}
+                                                link={`/song/${song.id}`}
                                             />
                                         </Grid>
                                     ))}
@@ -194,15 +184,15 @@ export const DashboardView = () => {
                             </Box>
                         </Grid>
                         <InputModal
-                            handleOnCancelClick={() => handleClose}
-                            handleOnSaveClick={() => handleAddSong}
-                            handleClosed={() => handleClose}
+                            handleOnCancelClick={() => handleClose()}
+                            handleOnSaveClick={() => handleAddSong()}
+                            handleClosed={() => handleClose()}
                             modalOpen={addSongModalIsOpen}
                             saveText={t("Modal:create")}
                             cancelText={t("Modal:cancel")}
                             headerText={t("Modal:addSong")}
                             labelText={t("Modal:nameOfSong")}
-                            handleChange={handleOnChangeAddSongModal}
+                            handleChange={(txt) => setTextFieldInput(txt)}
                         />
                     </>
                 ) : (
@@ -224,7 +214,7 @@ export const DashboardView = () => {
                                     >
                                         <DashboardButton
                                             text={song.title}
-                                            link={`/song/${song.id!.toString()}`}
+                                            link={`/song/${song.id}`}
                                         />
                                     </Grid>
                                 ))}

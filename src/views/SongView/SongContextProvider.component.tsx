@@ -38,41 +38,34 @@ interface ISongContext {
 
 export const SongContext = React.createContext<ISongContext>({
     song: {
+        id: 0,
         title: "",
         timeSignature: "4/4",
         voices: [],
     },
-    setSong: (song: ISong) => {},
-    addVoice: (voice: IVoice) => {},
-    deleteBar: (index: number, voiceId: number) => {},
-    getBar: (id: number, voiceId: number) => {
+    setSong: () => {},
+    addVoice: () => {},
+    deleteBar: () => {},
+    getBar: () => {
         throw new Error("getBar() in Song Context is not implemented")
     },
-    duplicateBar: (id: number, voiceId: number) => {
+    duplicateBar: () => {
         throw new Error("duplicateBar() in Song Context is not implemented")
     },
     addEmptyBar: () => {},
-    editNote: (
-        voiceId: number,
-        barId: number,
-        newNotes: IChordAndNotes[]
-    ) => {},
+    editNote: () => {},
     getTimeSignature: () => [],
-    toggleRepBefore: (barId: number) => {},
-    toggleRepAfter: (barId: number) => {},
-    changeTitle: (newTitle: string) => {},
-    changeVoiceTitle: (voiceId: number, newTitle: string) => {},
-    deleteNote: (
-        voiceId: number,
-        barId: number,
-        newNote: IChordAndNotes[]
-    ) => {},
-    addHouse: (barId: number) => {},
-    deleteHouse: (barId: number) => {},
+    toggleRepBefore: () => {},
+    toggleRepAfter: () => {},
+    changeTitle: () => {},
+    changeVoiceTitle: () => {},
+    deleteNote: () => {},
+    addHouse: () => {},
+    deleteHouse: () => {},
     isLoading: false,
-    setIsLoading: (newValue: boolean) => {},
+    setIsLoading: () => {},
     isSaving: false,
-    setIsSaving: (newValue: boolean) => {},
+    setIsSaving: () => {},
 })
 
 export const SongContextProvider: React.FC = (props) => {
@@ -109,6 +102,14 @@ export const SongContextProvider: React.FC = (props) => {
         })
     }, [])
 
+    // Method to get timeSignature from localstorage
+    const getTimeSignature = () => {
+        return [
+            parseInt(song.timeSignature.split("/")[0], 10),
+            parseInt(song.timeSignature.split("/")[1], 10),
+        ]
+    }
+
     // Method to simplify change of state
     const addVoice = (newVoice: IVoice) => {
         for (let i = 0; i < song.voices[0].bars.length; i++) {
@@ -138,18 +139,12 @@ export const SongContextProvider: React.FC = (props) => {
         // Map through all voices and for the ba which matches the id, toggle the bars repetition value
         song = {
             ...song,
-            voices: song.voices.map((voice, index) =>
-                true
-                    ? {
-                          ...voice,
-                          bars: voice.bars.map((bar, i) =>
-                              i === barId
-                                  ? { ...bar, repBefore: !bar.repBefore }
-                                  : bar
-                          ),
-                      }
-                    : voice
-            ),
+            voices: song.voices.map((voice) => ({
+                ...voice,
+                bars: voice.bars.map((bar, i) =>
+                    i === barId ? { ...bar, repBefore: !bar.repBefore } : bar
+                ),
+            })),
         }
         setSong(song)
     }
@@ -158,18 +153,12 @@ export const SongContextProvider: React.FC = (props) => {
         // Map through all voices and for the ba which matches the id, toggle the bars repetition value
         song = {
             ...song,
-            voices: song.voices.map((voice, index) =>
-                true
-                    ? {
-                          ...voice,
-                          bars: voice.bars.map((bar, i) =>
-                              i === barId
-                                  ? { ...bar, repAfter: !bar.repAfter }
-                                  : bar
-                          ),
-                      }
-                    : voice
-            ),
+            voices: song.voices.map((voice) => ({
+                ...voice,
+                bars: voice.bars.map((bar, i) =>
+                    i === barId ? { ...bar, repAfter: !bar.repAfter } : bar
+                ),
+            })),
         }
         setSong(song)
     }
@@ -180,46 +169,36 @@ export const SongContextProvider: React.FC = (props) => {
         if (barId === song.voices[0].bars.length - 1) {
             song = {
                 ...song,
-                voices: song.voices.map((voice, index) =>
-                    true
-                        ? {
-                              ...voice,
-                              bars: voice.bars.map((bar, i) =>
-                                  i === barId
-                                      ? { ...bar, house: 2 }
-                                      : i === barId - 1
-                                      ? { ...bar, house: 1 }
-                                      : i === barId - 2 &&
-                                        song.voices[0].bars[barId - 2].house ===
-                                            1
-                                      ? { ...bar, house: undefined }
-                                      : bar
-                              ),
-                          }
-                        : voice
-                ),
+                voices: song.voices.map((voice) => ({
+                    ...voice,
+                    bars: voice.bars.map((bar, i) =>
+                        i === barId
+                            ? { ...bar, house: 2 }
+                            : i === barId - 1
+                            ? { ...bar, house: 1 }
+                            : i === barId - 2 &&
+                              song.voices[0].bars[barId - 2].house === 1
+                            ? { ...bar, house: undefined }
+                            : bar
+                    ),
+                })),
             }
         } else {
             song = {
                 ...song,
-                voices: song.voices.map((voice, index) =>
-                    true
-                        ? {
-                              ...voice,
-                              bars: voice.bars.map((bar, i) =>
-                                  i === barId
-                                      ? { ...bar, house: 1 }
-                                      : i === barId + 1
-                                      ? { ...bar, house: 2 }
-                                      : i === barId + 2 &&
-                                        song.voices[0].bars[barId + 2].house ===
-                                            2
-                                      ? { ...bar, house: undefined }
-                                      : bar
-                              ),
-                          }
-                        : voice
-                ),
+                voices: song.voices.map((voice) => ({
+                    ...voice,
+                    bars: voice.bars.map((bar, i) =>
+                        i === barId
+                            ? { ...bar, house: 1 }
+                            : i === barId + 1
+                            ? { ...bar, house: 2 }
+                            : i === barId + 2 &&
+                              song.voices[0].bars[barId + 2].house === 2
+                            ? { ...bar, house: undefined }
+                            : bar
+                    ),
+                })),
             }
         }
         setSong(song)
@@ -233,35 +212,27 @@ export const SongContextProvider: React.FC = (props) => {
         if (barBase === 1) {
             song = {
                 ...song,
-                voices: song.voices.map((voice, index) =>
-                    true
-                        ? {
-                              ...voice,
-                              bars: voice.bars.map((bar, i) =>
-                                  i === barId || i === barId + 1
-                                      ? { ...bar, house: undefined }
-                                      : bar
-                              ),
-                          }
-                        : voice
-                ),
+                voices: song.voices.map((voice) => ({
+                    ...voice,
+                    bars: voice.bars.map((bar, i) =>
+                        i === barId || i === barId + 1
+                            ? { ...bar, house: undefined }
+                            : bar
+                    ),
+                })),
             }
         }
         if (barBase === 2) {
             song = {
                 ...song,
-                voices: song.voices.map((voice, index) =>
-                    true
-                        ? {
-                              ...voice,
-                              bars: voice.bars.map((bar, i) =>
-                                  i === barId || i === barId - 1
-                                      ? { ...bar, house: undefined }
-                                      : bar
-                              ),
-                          }
-                        : voice
-                ),
+                voices: song.voices.map((voice) => ({
+                    ...voice,
+                    bars: voice.bars.map((bar, i) =>
+                        i === barId || i === barId - 1
+                            ? { ...bar, house: undefined }
+                            : bar
+                    ),
+                })),
             }
         }
         setSong(song)
@@ -277,7 +248,7 @@ export const SongContextProvider: React.FC = (props) => {
         return undefined
     }
 
-    const deleteBar = (id: number, voiceId: number) => {
+    const deleteBar = (id: number) => {
         deleteHouse(id)
         song = {
             ...song,
@@ -291,20 +262,11 @@ export const SongContextProvider: React.FC = (props) => {
 
         for (let i = 0; i < song.voices.length; i++) {
             for (let j = id; j < song.voices[i].bars.length; j++) {
-                song.voices[i].bars[j].barNumber =
-                    song.voices[i].bars[j].barNumber - 1
+                song.voices[i].bars[j].barNumber -= 1
             }
         }
 
         setSong(song)
-    }
-
-    // Method to get timeSignature from localstorage
-    const getTimeSignature = () => {
-        return [
-            parseInt(song.timeSignature.split("/")[0]),
-            parseInt(song.timeSignature.split("/")[1]),
-        ]
     }
 
     // Method to add an empty bar at a specific index to each of all voices except the master sheet/song
@@ -368,8 +330,7 @@ export const SongContextProvider: React.FC = (props) => {
                 addHouse(id - 1)
             }
             for (let i = id + 1; i < song.voices[0].bars.length; i++) {
-                song.voices[0].bars[i].barNumber =
-                    song.voices[0].bars[i].barNumber + 1
+                song.voices[0].bars[i].barNumber += 1
             }
             setSong(song)
         }
@@ -379,9 +340,10 @@ export const SongContextProvider: React.FC = (props) => {
         const tempArray = copyAndAddEmptyBars(song.voices[0].bars.length, 0)
         song = {
             ...song,
-            voices: song.voices.map((voice, i) =>
-                true ? { ...voice, bars: tempArray[i] } : voice
-            ),
+            voices: song.voices.map((voice, i) => ({
+                ...voice,
+                bars: tempArray[i],
+            })),
         }
         setSong(song)
     }

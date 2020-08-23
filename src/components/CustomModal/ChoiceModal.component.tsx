@@ -48,10 +48,10 @@ const useStyles = makeStyles({
 })
 
 export const ChoiceModal = (props: {
-    handleOnSaveClick: Function
-    handleOnCancelClick: Function
+    handleOnSaveClick: () => void
+    handleOnCancelClick: () => void
     modalOpen: boolean
-    handleClosed: Function
+    handleClosed: () => void
     ackText: string
     cancelText: string
     headerText: string
@@ -63,7 +63,7 @@ export const ChoiceModal = (props: {
     return (
         <Modal
             open={props.modalOpen}
-            onClose={props.handleClosed()}
+            onClose={() => props.handleClosed()}
             BackdropComponent={Backdrop}
             BackdropProps={{
                 timeout: 240,
@@ -106,7 +106,9 @@ export const ChoiceModal = (props: {
                                         className={classes.button}
                                         size="large"
                                         variant="contained"
-                                        onClick={props.handleOnSaveClick()}
+                                        onClick={() =>
+                                            props.handleOnSaveClick()
+                                        }
                                     >
                                         {props.ackText}
                                     </Button>
@@ -114,7 +116,9 @@ export const ChoiceModal = (props: {
                                         className={classes.button}
                                         size="large"
                                         variant="outlined"
-                                        onClick={props.handleOnCancelClick()}
+                                        onClick={() =>
+                                            props.handleOnCancelClick()
+                                        }
                                     >
                                         {props.cancelText}
                                     </Button>

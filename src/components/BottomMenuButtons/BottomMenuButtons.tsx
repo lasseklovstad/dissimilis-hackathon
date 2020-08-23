@@ -1,13 +1,15 @@
-import React, {
-    FunctionComponent,
-    useState,
-    useEffect,
-    useContext,
-} from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
-import { TextField, Button, Popper, Box, Grid } from "@material-ui/core"
+import {
+    TextField,
+    Button,
+    Popper,
+    Box,
+    Grid,
+    PopperProps,
+} from "@material-ui/core"
 import Autocomplete, {
     createFilterOptions,
 } from "@material-ui/lab/Autocomplete"
@@ -37,8 +39,7 @@ const useStyles = makeStyles({
 
 export const MenuButtonWithAddIcon = (props: {
     text: string
-    link?: string
-    onClick?: Function
+    onClick?: () => void
     selected?: boolean
 }) => {
     const styles = useStyles()
@@ -60,11 +61,7 @@ export const MenuButtonWithAddIcon = (props: {
     )
 }
 
-export const MenuButton = (props: {
-    text: string
-    link?: string
-    onClick?: Function
-}) => {
+export const MenuButton = (props: { text: string; onClick?: () => void }) => {
     const styles = useStyles()
     return (
         <Button
@@ -78,10 +75,10 @@ export const MenuButton = (props: {
     )
 }
 
-const customPopperPlacement = (props: any) => {
+const customPopperPlacement = (props: PopperProps) => {
     return <Popper {...props} placement="top" />
 }
-const filterOptions = createFilterOptions({ matchFrom: "start" })
+const filterOptions = createFilterOptions<string>({ matchFrom: "start" })
 
 export const DropdownAutocomplete = (props: {
     icon: React.ReactNode
@@ -103,17 +100,17 @@ export const DropdownAutocomplete = (props: {
     const { t } = useTranslation()
 
     return (
-        <Autocomplete
+        <Autocomplete<string>
+            options={options}
             value={showValue}
             filterOptions={filterOptions}
-            onChange={(event, value: any) => {
-                if (value !== null) {
-                    setSelectedNoteKey(value as string)
+            onChange={(event, value) => {
+                if (typeof value === "string") {
+                    setSelectedNoteKey(value)
                 }
             }}
             openText={t("BottomBar:open")}
             PopperComponent={customPopperPlacement}
-            options={options}
             closeIcon={false}
             className={styles.dropdown}
             noOptionsText={props.noOptionsText}

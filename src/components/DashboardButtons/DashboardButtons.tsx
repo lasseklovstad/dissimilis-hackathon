@@ -37,20 +37,20 @@ const useStyles = makeStyles({
 export type ButtonProps = {
     text: string
     link: string
-    func?: Function
+    func?: () => void
     selected?: boolean
-    onContextMenu?: Function
+    onContextMenu?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
 }
 
 type ButtonNoLinkProps = {
     text: string
-    func: Function
+    func: () => void
     color?: string
     selected?: boolean
 }
 
 type TopBarIconProps = {
-    func?: Function
+    func?: () => void
 }
 
 export const DashboardButtonWithAddIcon: FC<ButtonProps> = (props) => {

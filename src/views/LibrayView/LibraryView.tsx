@@ -22,7 +22,7 @@ export const LibraryView = () => {
     const [allSongs, setAllSongs] = useState<ISong[]>([])
     const [searchTerm, setSearchTerm] = useState("")
     const [filteredSongs, setFilteredSongs] = useState<ISong[]>([])
-    const [clickedSong, setClickedSong] = useState<number>(-1)
+    const [, setClickedSong] = useState<number>(-1)
 
     const getAllSongs = useGetAllSongs()
     const getFilteredSongs = useGetFilteredSongs(searchTerm)
@@ -49,13 +49,7 @@ export const LibraryView = () => {
         setSearchTerm(searchTermParam)
         setLibraryView(false)
     }
-    const handleOpenMenu = (event: React.MouseEvent<HTMLDivElement>) => {
-        event.preventDefault()
-        setRightClickCoordinates({
-            mouseX: event.clientX - 2,
-            mouseY: event.clientY - 4,
-        })
-    }
+
     const initialState = {
         mouseX: null,
         mouseY: null,
@@ -65,6 +59,13 @@ export const LibraryView = () => {
         mouseY: null | number
     }>(initialState)
 
+    const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+        event.preventDefault()
+        setRightClickCoordinates({
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+        })
+    }
     return (
         <Box mx={2}>
             <Grid container justify="center" className={styles.container}>
@@ -95,13 +96,7 @@ export const LibraryView = () => {
                                         key={song.id}
                                     >
                                         <DashboardButton
-                                            onContextMenu={(
-                                                e: React.MouseEvent<
-                                                    HTMLDivElement,
-                                                    MouseEvent
-                                                >
-                                            ) => {
-                                                setClickedSong(song!.id!)
+                                            onContextMenu={(e) => {
                                                 handleOpenMenu(e)
                                             }}
                                             text={song.title}
@@ -130,13 +125,7 @@ export const LibraryView = () => {
                                         key={song.id}
                                     >
                                         <DashboardButton
-                                            onContextMenu={(
-                                                e: React.MouseEvent<
-                                                    HTMLDivElement,
-                                                    MouseEvent
-                                                >
-                                            ) => {
-                                                setClickedSong(song!.id!)
+                                            onContextMenu={(e) => {
                                                 handleOpenMenu(e)
                                             }}
                                             text={song.title}

@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react"
+import React, { useState } from "react"
 import {
     Modal,
     makeStyles,
@@ -46,11 +46,11 @@ const useStyles = makeStyles({
 })
 
 export const InputModal = (props: {
-    handleOnSaveClick: Function
-    handleOnCancelClick: Function
-    handleChange: Function
+    handleOnSaveClick: () => void
+    handleOnCancelClick: () => void
+    handleChange: (txt: string) => void
     modalOpen: boolean
-    handleClosed: Function
+    handleClosed: () => void
     saveText: string
     cancelText: string
     headerText: string
@@ -61,17 +61,10 @@ export const InputModal = (props: {
 
     const CHARACTER_LIMIT = 250
 
-    const handleChange: React.ChangeEventHandler<
-        HTMLTextAreaElement | HTMLInputElement
-    > = (e: any) => {
-        setTextFieldInput(e.target.value)
-        props.handleChange(e)
-    }
-
     return (
         <Modal
             open={props.modalOpen}
-            onClose={props.handleClosed()}
+            onClose={() => props.handleClosed()}
             BackdropComponent={Backdrop}
             BackdropProps={{
                 timeout: 240,
@@ -96,7 +89,10 @@ export const InputModal = (props: {
                                 helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`}
                                 autoFocus
                                 variant="filled"
-                                onChange={handleChange}
+                                onChange={(e) => {
+                                    setTextFieldInput(e.target.value)
+                                    props.handleChange(e.target.value)
+                                }}
                                 label={props.labelText}
                                 style={{ width: "100%" }}
                             />
@@ -107,7 +103,7 @@ export const InputModal = (props: {
                                 size="large"
                                 variant="contained"
                                 disabled={!textFieldInput}
-                                onClick={props.handleOnSaveClick()}
+                                onClick={() => props.handleOnSaveClick()}
                             >
                                 {props.saveText}
                             </Button>
@@ -115,7 +111,7 @@ export const InputModal = (props: {
                                 className={classes.button}
                                 size="large"
                                 variant="outlined"
-                                onClick={props.handleOnCancelClick()}
+                                onClick={() => props.handleOnCancelClick()}
                             >
                                 {props.cancelText}
                             </Button>

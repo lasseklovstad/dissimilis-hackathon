@@ -1,4 +1,4 @@
-export const dashboardNo: any = {
+export const dashboardNo = {
     newSongLabel: "Nytt partitur",
     recentSongLabel: "Nylige",
     searchSongLabel: "Søk",

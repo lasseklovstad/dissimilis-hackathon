@@ -58,7 +58,6 @@ export const NavBarCreateSong = () => {
     const {
         song,
         song: { title },
-        changeTitle,
     } = useContext(SongContext)
     const [newTitle, setNewTitle] = useState(title)
     const matches = useMediaQuery("(max-width:600px)")
@@ -69,10 +68,6 @@ export const NavBarCreateSong = () => {
     useEffect(() => {
         setNewTitle(title)
     }, [title])
-
-    const handleOpenSaveSongModal = () => {
-        setSaveSongModalIsOpen(true)
-    }
 
     const handleSaveSong = () => {
         setIsLoading(true)
@@ -88,49 +83,27 @@ export const NavBarCreateSong = () => {
         })
     }
 
-    const handleCloseSaveSongModal = () => {
-        history.push("/dashbaord")
-    }
-
-    const handleChange = (
-        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-    ) => {
-        setNewTitle(e.target.value)
-    }
-
-    const pressDown = (e: any) => {
-        if (e.keyCode === 13) {
-            if (e.target.value !== "") {
-                changeTitle(e.target.value)
-            }
-            setChanging(!changing)
-        }
-        if (e.keyCode === 27) {
-            if (newTitle !== "") {
-                changeTitle(e.target.value)
-            }
-            setChanging(false)
-        }
-    }
-
     return (
         <Box className={classes.root} mb={matches ? 2 : 4}>
             <AppBar position="static" elevation={0} className={classes.appbar}>
                 <Grid container>
                     <Grid item xs={11} sm={1} className={classes.left}>
-                        <DashboardTopBarIcon func={handleOpenSaveSongModal} />
+                        <DashboardTopBarIcon
+                            func={() => setSaveSongModalIsOpen(true)}
+                        />
                     </Grid>
                     <Grid item xs={12} sm={10} className={classes.center}>
                         <Box onClick={() => setChanging(!changing)}>
                             {changing ? (
                                 <TextField
                                     error={newTitle === ""}
-                                    onChange={(e) => handleChange(e)}
+                                    onChange={(e) =>
+                                        setNewTitle(e.target.value)
+                                    }
                                     value={newTitle}
                                     inputProps={{ style: { fontSize: 24 } }}
                                     className={classes.textField}
                                     autoFocus
-                                    onKeyDown={(e) => pressDown(e)}
                                 />
                             ) : (
                                 <Typography variant="h2">{title}</Typography>
@@ -143,11 +116,9 @@ export const NavBarCreateSong = () => {
                 </Grid>
             </AppBar>
             <ChoiceModal
-                handleOnCancelClick={() => handleCloseSaveSongModal}
-                handleOnSaveClick={() => handleSaveSong}
-                handleClosed={() => () => {
-                    setSaveSongModalIsOpen(false)
-                }}
+                handleOnCancelClick={() => history.push("/dashbaord")}
+                handleOnSaveClick={() => handleSaveSong()}
+                handleClosed={() => setSaveSongModalIsOpen(false)}
                 modalOpen={saveSongModalIsOpen}
                 ackText={t("Modal:saveChanges")}
                 cancelText={t("Modal:dontSaveChanges")}

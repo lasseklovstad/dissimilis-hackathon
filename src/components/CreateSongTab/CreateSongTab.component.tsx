@@ -42,17 +42,9 @@ export const CreateSongTab = () => {
         history.replace(`?voice=${newIndex.toString()}`)
     }
 
-    const handleOpen = () => {
-        setModalIsOpen(true)
-    }
-
     const handleClose = () => {
         setModalIsOpen(false)
         setRenameModalIsOpen(false)
-    }
-
-    const handleChange = (e: any) => {
-        setTextFieldInput(e.target.value)
     }
 
     const { t } = useTranslation()
@@ -71,13 +63,6 @@ export const CreateSongTab = () => {
         mouseY: null | number
     }>(initialState)
 
-    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        event.preventDefault()
-        setRightClickCoordinates({
-            mouseX: event.clientX - 2,
-            mouseY: event.clientY - 4,
-        })
-    }
     const handleCloseMenu = (method?: string) => {
         if (method === "renameVoice") {
             setRenameModalIsOpen(true)
@@ -107,14 +92,13 @@ export const CreateSongTab = () => {
                         return (
                             <Grid item key={index}>
                                 <DashboardButton
-                                    onContextMenu={(
-                                        e: React.MouseEvent<
-                                            HTMLDivElement,
-                                            MouseEvent
-                                        >
-                                    ) => {
+                                    onContextMenu={(event) => {
                                         setRightClicked(index)
-                                        handleClick(e)
+                                        event.preventDefault()
+                                        setRightClickCoordinates({
+                                            mouseX: event.clientX - 2,
+                                            mouseY: event.clientY - 4,
+                                        })
                                     }}
                                     selected={selectedVoice === index + 2}
                                     text={voices.title}
@@ -153,32 +137,32 @@ export const CreateSongTab = () => {
                     <Grid item>
                         <DashboardButtonWithAddIconNoLink
                             text={t("CreateSongTab:newInstrument")}
-                            func={handleOpen}
+                            func={() => setModalIsOpen(true)}
                         />
                     </Grid>
                 </Grid>
             </Grid>
             <InputModal
-                handleOnCancelClick={() => handleClose}
-                handleOnSaveClick={() => handleAddInstrument}
-                handleClosed={() => handleClose}
+                handleOnCancelClick={() => handleClose()}
+                handleOnSaveClick={() => handleAddInstrument()}
+                handleClosed={() => handleClose()}
                 modalOpen={modalIsOpen}
                 saveText={t("Modal:create")}
                 cancelText={t("Modal:cancel")}
                 headerText={t("Modal:addInstrument")}
                 labelText={t("Modal:nameOfInstrument")}
-                handleChange={handleChange}
+                handleChange={(txt) => setTextFieldInput(txt)}
             />
             <InputModal
-                handleOnCancelClick={() => handleClose}
-                handleOnSaveClick={() => handleChangeVoiceTitle}
-                handleClosed={() => handleClose}
+                handleOnCancelClick={() => handleClose()}
+                handleOnSaveClick={() => handleChangeVoiceTitle()}
+                handleClosed={() => handleClose()}
                 modalOpen={renameModalIsOpen}
                 saveText={t("Modal:save")}
                 cancelText={t("Modal:cancel")}
                 headerText={t("Modal:changeVoiceName")}
                 labelText={t("Modal:newVoiceName")}
-                handleChange={handleChange}
+                handleChange={(txt) => setTextFieldInput(txt)}
             />
             <Grid item xs="auto" sm={1} />
         </Grid>

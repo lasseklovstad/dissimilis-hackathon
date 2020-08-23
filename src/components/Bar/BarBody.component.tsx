@@ -157,20 +157,13 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
         deleteNote,
     } = useContext(SongContext)
 
-    const tempArrayOfChordsLength: any = []
-    const tempArrayOfChords: any = []
-    for (
-        let i = 0;
-        i < voices[0].bars[props.barNumber].chordsAndNotes.length;
-        i++
-    ) {
-        tempArrayOfChords.push(
-            getChord(voices[0].bars[props.barNumber].chordsAndNotes[i].notes)
-        )
-        tempArrayOfChordsLength.push(
-            voices[0].bars[props.barNumber].chordsAndNotes[i].length
-        )
-    }
+    const tempArrayOfChordsLength = voices[0].bars[
+        props.barNumber
+    ].chordsAndNotes.map((val) => val.length)
+
+    const tempArrayOfChords = voices[0].bars[
+        props.barNumber
+    ].chordsAndNotes.map((val) => getChord(val.notes))
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         event.preventDefault()
@@ -245,7 +238,7 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
     }
 
     // Displaying the chords from the master sheet in the song
-    const chordsInBar = tempArrayOfChords.map((item: any, i: any) => {
+    const chordsInBar = tempArrayOfChords.map((item, i) => {
         return (
             <Typography
                 key={i}

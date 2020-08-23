@@ -19,7 +19,7 @@ export const SongRouting = () => {
                     <Route
                         exact
                         path="/song/:id/export"
-                        render={(props) => (
+                        render={() => (
                             <PrivateRoute
                                 path="/song/:id/export"
                                 component={ExportView}
@@ -29,7 +29,7 @@ export const SongRouting = () => {
                     <Route
                         exact
                         path="/song/:id"
-                        render={(props) => (
+                        render={() => (
                             <PrivateRoute
                                 path="/song/:id"
                                 component={SongView}
@@ -39,7 +39,7 @@ export const SongRouting = () => {
                     <Route
                         exact
                         path="/song"
-                        render={(props) => (
+                        render={() => (
                             <PrivateRoute path="/song" component={SongView} />
                         )}
                     />
@@ -56,7 +56,7 @@ export const Routing = () => {
                 <Route
                     exact
                     path="/dashboard"
-                    render={(props) => (
+                    render={() => (
                         <PrivateRoute
                             exact
                             path="/dashboard"
@@ -67,7 +67,7 @@ export const Routing = () => {
                 <Route
                     exact
                     path="/library"
-                    render={(props) => (
+                    render={() => (
                         <PrivateRoute
                             exact
                             path="/library"
