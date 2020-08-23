@@ -171,16 +171,24 @@ export const SongContextProvider: React.FC = (props) => {
                 ...song,
                 voices: song.voices.map((voice) => ({
                     ...voice,
-                    bars: voice.bars.map((bar, i) =>
-                        i === barId
-                            ? { ...bar, house: 2 }
-                            : i === barId - 1
-                            ? { ...bar, house: 1 }
-                            : i === barId - 2 &&
-                              song.voices[0].bars[barId - 2].house === 1
-                            ? { ...bar, house: undefined }
-                            : bar
-                    ),
+                    bars: voice.bars.map((bar, i) => {
+                        if (i === barId) {
+                            return { ...bar, house: 2 }
+                        }
+
+                        if (i === barId - 1) {
+                            return { ...bar, house: 1 }
+                        }
+
+                        if (
+                            i === barId - 2 &&
+                            song.voices[0].bars[barId - 2].house === 1
+                        ) {
+                            return { ...bar, house: undefined }
+                        }
+
+                        return bar
+                    }),
                 })),
             }
         } else {
