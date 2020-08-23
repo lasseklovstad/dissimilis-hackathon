@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect, useRef } from 'react'
-import { SongContext } from './SongContextProvider.component'
-import { IChordAndNotes } from '../../models/IBar'
-import { visibleNotes as notes } from '../../models/notes'
-import { chords } from '../../models/chords'
+import React, { useState, useContext, useEffect, useRef } from "react"
+import { SongContext } from "./SongContextProvider.component"
+import { IChordAndNotes } from "../../models/IBar"
+import { visibleNotes as notes } from "../../models/notes"
+import { chords } from "../../models/chords"
 
 interface ISongToolsContext {
     selectedNoteLength: 1 | 2 | 4 | 8
@@ -31,7 +31,7 @@ interface ISongToolsContext {
 export const SongToolsContext = React.createContext<ISongToolsContext>({
     selectedNoteLength: 8,
     setSelectedNoteLength: (number: 1 | 2 | 4 | 8) => {},
-    selectedNoteKey: 'C',
+    selectedNoteKey: "C",
     setSelectedNoteKey: (string: string) => {},
     showPossiblePositions: false,
     setShowPossiblePositions: (show: boolean) => {},
@@ -52,12 +52,12 @@ export const SongToolsContext = React.createContext<ISongToolsContext>({
     ) => [],
 })
 
-const SongToolsContextProvider: React.FC = (props) => {
+export const SongToolsContextProvider: React.FC = (props) => {
     const { song, editNote } = useContext(SongContext)
     const [selectedNoteLength, setSelectedNoteLength] = useState<1 | 2 | 4 | 8>(
         1
     )
-    const [selectedNoteKey, setSelectedNoteKey] = useState<string>('C')
+    const [selectedNoteKey, setSelectedNoteKey] = useState<string>("C")
     const [noteIsSelected, setNoteIsSelected] = useState<boolean>(false)
     const [showPossiblePositions, setShowPossiblePositions] = useState<boolean>(
         false
@@ -90,7 +90,7 @@ const SongToolsContextProvider: React.FC = (props) => {
         barIndex: number,
         voiceIndex: number
     ) => {
-        let newNoteArray: string[] = ['C']
+        let newNoteArray: string[] = ["C"]
         if (noteIsSelected) {
             newNoteArray = [
                 Object.values(notes)[
@@ -198,7 +198,7 @@ const SongToolsContextProvider: React.FC = (props) => {
                     if (
                         song.voices[voiceIndex].bars[barIndex].chordsAndNotes[
                             noteIndex
-                        ].notes[0] === ' '
+                        ].notes[0] === " "
                     ) {
                         availableConsistentLength += 1
                     } else {
@@ -249,5 +249,3 @@ const SongToolsContextProvider: React.FC = (props) => {
         </SongToolsContext.Provider>
     )
 }
-
-export default SongToolsContextProvider

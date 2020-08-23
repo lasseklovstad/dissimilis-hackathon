@@ -1,4 +1,4 @@
-import { useApiService } from './useApiService'
+import { useApiService } from "./useApiService"
 
 /**
  * Get one song
@@ -6,20 +6,20 @@ import { useApiService } from './useApiService'
  */
 
 export const useLoginRedirect = () => {
-    const url = 'login'
+    const url = "login"
     const params = { web_app_url: process.env.REACT_APP_PUBLIC_URL as string }
     const getLoginUrl = useApiService<string>(url, { params }).fetchData
     return getLoginUrl
 }
 
 export const useLoginPost = (code: string | null) => {
-    const url = 'login'
+    const url = "login"
     const params = {
         web_app_url: process.env.REACT_APP_PUBLIC_URL as string,
-        'X-API-Key': sessionStorage.getItem('apiKey') || '',
-        'X-User-ID': sessionStorage.getItem('userId') || '',
+        "X-API-Key": sessionStorage.getItem("apiKey") || "",
+        "X-User-ID": sessionStorage.getItem("userId") || "",
     }
-    const body = { code: code }
+    const body = { code }
     const postLogin = useApiService<Token>(url, { params, body }).postData
     return postLogin
 }

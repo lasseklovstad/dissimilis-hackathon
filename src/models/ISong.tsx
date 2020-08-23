@@ -1,9 +1,9 @@
-import { IVoice } from './IVoice'
+import { IVoice } from "./IVoice"
 
 export interface ISong {
     title: string
     id?: number
-    //arranger: User;
+    // arranger: User;
     voices: IVoice[]
     arrangerId?: number
     composer?: string

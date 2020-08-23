@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import React from "react"
 import {
     Modal,
     makeStyles,
@@ -8,12 +8,46 @@ import {
     Fade,
     Backdrop,
     Box,
-} from '@material-ui/core'
-import React from 'react'
-import { colors } from '../../utils/colors'
-import animatedBird from '../../assets/images/sommerfugl-animert.svg'
+} from "@material-ui/core"
 
-type ChoiceModalProps = {
+import { colors } from "../../utils/colors"
+import animatedBird from "../../assets/images/sommerfugl-animert.svg"
+
+const useStyles = makeStyles({
+    modal: {
+        position: "absolute",
+        boxShadow: "0 3px 6px 2px rgba(0, 0, 0, 0.1)",
+        height: "auto",
+        borderRadius: 2,
+        backgroundColor: "white",
+        padding: "40px",
+        "@media (max-width: 600px)": {
+            width: "80%",
+            padding: "48px",
+        },
+        outline: "none",
+    },
+    button: {
+        "&:hover": {
+            backgroundColor: colors.gray_300,
+        },
+        marginRight: "8px",
+
+        float: "left",
+        position: "relative",
+    },
+    title: {
+        marginBottom: "8px",
+    },
+    paragraph: {
+        marginBottom: "24px",
+    },
+    container: {
+        width: "100%",
+    },
+})
+
+export const ChoiceModal = (props: {
     handleOnSaveClick: Function
     handleOnCancelClick: Function
     modalOpen: boolean
@@ -23,11 +57,8 @@ type ChoiceModalProps = {
     headerText: string
     descriptionText: string
     isLoading?: boolean
-}
-
-export const ChoiceModal: FC<ChoiceModalProps> = (props) => {
+}) => {
     const classes = useStyles()
-    const [modalStyle] = useState(getModalStyle)
 
     return (
         <Modal
@@ -39,7 +70,14 @@ export const ChoiceModal: FC<ChoiceModalProps> = (props) => {
             }}
         >
             <Fade in={props.modalOpen}>
-                <div className={classes.modal} style={modalStyle}>
+                <div
+                    className={classes.modal}
+                    style={{
+                        top: "20%",
+                        left: `50%`,
+                        transform: `translate(-50%)`,
+                    }}
+                >
                     <Grid container>
                         {props.isLoading ? (
                             <Grid item xs={12}>
@@ -48,7 +86,7 @@ export const ChoiceModal: FC<ChoiceModalProps> = (props) => {
                                     data={animatedBird}
                                     width="100%"
                                     aria-label="bird moving"
-                                ></object>
+                                />
                             </Grid>
                         ) : (
                             <Box>
@@ -89,47 +127,3 @@ export const ChoiceModal: FC<ChoiceModalProps> = (props) => {
         </Modal>
     )
 }
-
-function getModalStyle() {
-    const left = 50
-
-    return {
-        top: '20%',
-        left: `${left}%`,
-        transform: `translate(-${left}%)`,
-    }
-}
-
-const useStyles = makeStyles({
-    modal: {
-        position: 'absolute',
-        boxShadow: '0 3px 6px 2px rgba(0, 0, 0, 0.1)',
-        height: 'auto',
-        borderRadius: 2,
-        backgroundColor: 'white',
-        padding: '40px',
-        '@media (max-width: 600px)': {
-            width: '80%',
-            padding: '48px',
-        },
-        outline: 'none',
-    },
-    button: {
-        '&:hover': {
-            backgroundColor: colors.gray_300,
-        },
-        marginRight: '8px',
-
-        float: 'left',
-        position: 'relative',
-    },
-    title: {
-        marginBottom: '8px',
-    },
-    paragraph: {
-        marginBottom: '24px',
-    },
-    container: {
-        width: '100%',
-    },
-})

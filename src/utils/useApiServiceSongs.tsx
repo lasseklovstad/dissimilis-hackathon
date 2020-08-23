@@ -1,12 +1,19 @@
-import { useApiService } from './useApiService'
-import { ISong } from '../models/ISong'
+import { useApiService } from "./useApiService"
+import { ISong } from "../models/ISong"
+
+const getHeaders = () => {
+    const apiKey = sessionStorage.getItem("apiKey") || ""
+    const userId = sessionStorage.getItem("userId") || ""
+    const headers = { "X-API-Key": apiKey, "X-User-ID": userId }
+    return headers
+}
 
 /**
  * Get one song
  * @param id songs id
  */
 export const useGetSong = (id: number) => {
-    const url = 'song/' + id
+    const url = `song/${id}`
     const headers = getHeaders()
     const getSongs = useApiService<ISong>(url, { headers }).fetchData
     return getSongs
@@ -14,10 +21,10 @@ export const useGetSong = (id: number) => {
 
 /**
  * Get all songs
- **/
+ * */
 export const useGetAllSongs = () => {
-    const url = 'song/search'
-    const params = { OrderByDateTime: 'true' }
+    const url = "song/search"
+    const params = { OrderByDateTime: "true" }
     const initialData: ISong[] = []
     const headers = getHeaders()
     const getSongs = useApiService<ISong[]>(url, {
@@ -33,10 +40,10 @@ export const useGetAllSongs = () => {
  * @param query title or part of title
  */
 export const useGetFilteredSongs = (title: string) => {
-    const url = 'song/search'
+    const url = "song/search"
     const initialData: ISong[] = []
     const headers = getHeaders()
-    const params = { title: title }
+    const params = { title }
     const getSongs = useApiService<ISong[]>(url, {
         initialData,
         headers,
@@ -47,10 +54,10 @@ export const useGetFilteredSongs = (title: string) => {
 
 /**
  * Get songs based on recent songs
- **/
+ * */
 export const useGetRecentSongs = () => {
-    const url = 'song/search'
-    const params = { Num: '5', OrderByDateTime: 'true' }
+    const url = "song/search"
+    const params = { Num: "5", OrderByDateTime: "true" }
     const initialData: ISong[] = []
     const headers = getHeaders()
     const getSongs = useApiService<ISong[]>(url, {
@@ -66,9 +73,9 @@ export const useGetRecentSongs = () => {
  * @param Title and time signature of new song, id of new song is returned from backend
  */
 export const usePostSong = (title: string, timeSignature: string) => {
-    const url = 'song'
+    const url = "song"
     const headers = getHeaders()
-    const body = { title: title, timeSignature: timeSignature }
+    const body = { title, timeSignature }
     const postSong = useApiService<ISong>(url, { headers, body }).postData
     return postSong
 }
@@ -77,7 +84,7 @@ export const usePostSong = (title: string, timeSignature: string) => {
  * Post exisitng song
  */
 export const usePutSong = (song: ISong) => {
-    const url = 'song/' + song.id
+    const url = `song/${song.id}`
     const body = song
     const headers = getHeaders()
     const putSong = useApiService<number>(url, { body, headers }).putData
@@ -89,15 +96,8 @@ export const usePutSong = (song: ISong) => {
  * @param id songs id
  */
 export const useDeleteSong = (id: number) => {
-    const url = 'song/' + id
+    const url = `song/${id}`
     const headers = getHeaders()
     const getSongs = useApiService<ISong>(url, { headers }).deleteData
     return getSongs
-}
-
-const getHeaders = () => {
-    const apiKey = sessionStorage.getItem('apiKey') || ''
-    const userId = sessionStorage.getItem('userId') || ''
-    const headers = { 'X-API-Key': apiKey, 'X-User-ID': userId }
-    return headers
 }

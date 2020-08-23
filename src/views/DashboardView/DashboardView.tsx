@@ -1,38 +1,47 @@
-import React, { useState, useEffect } from 'react'
-import { Grid, Typography, Box, makeStyles } from '@material-ui/core'
-import { useTranslation } from 'react-i18next'
+import React, { useState, useEffect } from "react"
+import { Grid, Typography, Box, makeStyles } from "@material-ui/core"
+import { useTranslation } from "react-i18next"
+import { useHistory } from "react-router-dom"
 import {
     DashboardButton,
     DashboardLibraryButton,
     DashboardButtonWithAddIconNoLink,
-} from '../../components/DashboardButtons/DashboardButtons'
-import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBar'
+} from "../../components/DashboardButtons/DashboardButtons"
+import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import {
     useGetRecentSongs,
     useGetFilteredSongs,
     usePostSong,
-} from '../../utils/useApiServiceSongs'
-import { ISong } from '../../models/ISong'
-import { InputModal } from '../../components/CustomModal/InputModal.component'
-import { useHistory } from 'react-router-dom'
+} from "../../utils/useApiServiceSongs"
+import { ISong } from "../../models/ISong"
+import { InputModal } from "../../components/CustomModal/InputModal.component"
 
-export type DashboardViewProps = {}
+const useStyles = makeStyles({
+    container: {
+        width: "100%",
+    },
+})
 
-export const DashboardView: React.FC<DashboardViewProps> = () => {
+type MusicTacts = {
+    id: number
+    text: string
+}
+
+export const DashboardView = () => {
     const styles = useStyles()
     const { t } = useTranslation()
 
     const [dashboardView, setDashboardView] = useState(true)
-    const [searchTerm, setSearchTerm] = useState('')
+    const [searchTerm, setSearchTerm] = useState("")
     const [filteredSongs, setFilteredSongs] = useState<ISong[]>([])
     const [recentSongs, setRecentSongs] = useState<ISong[]>([])
     const [addSongModalIsOpen, setAddSongModalIsOpen] = useState(false)
-    const [timeSignature, setTimeSignature] = useState('')
-    const [textFieldInput, setTextFieldInput] = useState<string>('')
+    const [timeSignature, setTimeSignature] = useState("")
+    const [textFieldInput, setTextFieldInput] = useState<string>("")
 
     const postSong = usePostSong(textFieldInput, timeSignature)
     const history = useHistory()
-    const measureText = t('DashboardView:measure')
+    const measureText = t("DashboardView:measure")
     const getRecentSongs = useGetRecentSongs()
     const getFilteredSongs = useGetFilteredSongs(searchTerm)
     const marginBottom = 10
@@ -49,22 +58,22 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
         })
     }, [searchTerm])
 
-    const musicTacts: musicTacts[] = [
+    const musicTacts: MusicTacts[] = [
         {
             id: 1,
-            text: '2/4',
+            text: "2/4",
         },
         {
             id: 2,
-            text: '3/4',
+            text: "3/4",
         },
         {
             id: 3,
-            text: '4/4',
+            text: "4/4",
         },
         {
             id: 4,
-            text: '6/8',
+            text: "6/8",
         },
     ]
 
@@ -72,12 +81,12 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
         setAddSongModalIsOpen(false)
         postSong().then(({ result }) => {
             if (result?.status === 201) {
-                history.push('/song/' + result.data.id)
+                history.push(`/song/${result.data.id}`)
             }
         })
     }
 
-    const handleOpenAddSongModal = (song: musicTacts) => {
+    const handleOpenAddSongModal = (song: MusicTacts) => {
         setTimeSignature(song.text)
         setAddSongModalIsOpen(true)
     }
@@ -121,7 +130,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                             <Box mb={marginBottom}>
                                 <Box mb={2}>
                                     <Typography variant="h1">
-                                        {t('DashboardView:newSongLabel')}
+                                        {t("DashboardView:newSongLabel")}
                                     </Typography>
                                 </Box>
                                 <Grid container spacing={3}>
@@ -137,11 +146,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                                                 func={() =>
                                                     handleOpenAddSongModal(song)
                                                 }
-                                                text={
-                                                    song.text +
-                                                    '-' +
-                                                    measureText
-                                                }
+                                                text={`${song.text}-${measureText}`}
                                             />
                                         </Grid>
                                     ))}
@@ -153,7 +158,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                             <Box mb={marginBottom}>
                                 <Box mb={2}>
                                     <Typography variant="h1">
-                                        {t('DashboardView:recentSongLabel')}
+                                        {t("DashboardView:recentSongLabel")}
                                     </Typography>
                                 </Box>
                                 <Grid container spacing={3}>
@@ -167,10 +172,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                                         >
                                             <DashboardButton
                                                 text={song.title}
-                                                link={
-                                                    '/song/' +
-                                                    song.id!.toString()
-                                                }
+                                                link={`/song/${song.id!.toString()}`}
                                             />
                                         </Grid>
                                     ))}
@@ -183,9 +185,9 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                                     >
                                         <DashboardLibraryButton
                                             text={t(
-                                                'DashboardView:libraryButton'
+                                                "DashboardView:libraryButton"
                                             )}
-                                            link={'/library'}
+                                            link="/library"
                                         />
                                     </Grid>
                                 </Grid>
@@ -196,10 +198,10 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                             handleOnSaveClick={() => handleAddSong}
                             handleClosed={() => handleClose}
                             modalOpen={addSongModalIsOpen}
-                            saveText={t('Modal:create')}
-                            cancelText={t('Modal:cancel')}
-                            headerText={t('Modal:addSong')}
-                            labelText={t('Modal:nameOfSong')}
+                            saveText={t("Modal:create")}
+                            cancelText={t("Modal:cancel")}
+                            headerText={t("Modal:addSong")}
+                            labelText={t("Modal:nameOfSong")}
                             handleChange={handleOnChangeAddSongModal}
                         />
                     </>
@@ -208,7 +210,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                         <Box mb={marginBottom}>
                             <Box m={2}>
                                 <Typography variant="h1">
-                                    {t('DashboardView:searchSongLabel')}
+                                    {t("DashboardView:searchSongLabel")}
                                 </Typography>
                             </Box>
                             <Grid container spacing={3}>
@@ -222,9 +224,7 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
                                     >
                                         <DashboardButton
                                             text={song.title}
-                                            link={
-                                                '/song/' + song.id!.toString()
-                                            }
+                                            link={`/song/${song.id!.toString()}`}
                                         />
                                     </Grid>
                                 ))}
@@ -235,16 +235,4 @@ export const DashboardView: React.FC<DashboardViewProps> = () => {
             </Grid>
         </Box>
     )
-}
-export default DashboardView
-
-const useStyles = makeStyles({
-    container: {
-        width: '100%',
-    },
-})
-
-export type musicTacts = {
-    id: number
-    text: string
 }

@@ -1,12 +1,38 @@
-import React, { FC } from 'react'
-import { Link } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
-import AddIcon from '@material-ui/icons/Add'
-import { Box, Card, CardActionArea } from '@material-ui/core'
-import { colors } from '../../utils/colors'
-import butterflyBlue from '../../assets/images/butterflyBlue.svg'
-import { useTranslation } from 'react-i18next'
+import React, { FC } from "react"
+import { Link } from "react-router-dom"
+import { makeStyles } from "@material-ui/core/styles"
+import Typography from "@material-ui/core/Typography"
+import AddIcon from "@material-ui/icons/Add"
+import { Box, Card, CardActionArea } from "@material-ui/core"
+import { useTranslation } from "react-i18next"
+import { colors } from "../../utils/colors"
+import butterflyBlue from "../../assets/images/butterflyBlue.svg"
+
+const useStyles = makeStyles({
+    container: {
+        display: "flex",
+    },
+    button: {
+        backgroundColor: colors.white,
+        boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)",
+    },
+    buttonGreen: {
+        backgroundColor: colors.teal_100,
+        boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)",
+    },
+    butterflyButtonContainer: {
+        maxHeight: "48px",
+        maxWidth: "48px",
+        backgroundColor: colors.white,
+    },
+    butterflyButtonCard: {
+        boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)",
+    },
+    butterflyButtonCardIcon: {
+        padding: "8px",
+        borderRadius: "1px",
+    },
+})
 
 export type ButtonProps = {
     text: string
@@ -134,7 +160,7 @@ export const DashboardLibraryButton: FC<ButtonProps> = ({ text, link }) => {
 export const DashboardTopBarIcon: FC<TopBarIconProps> = (props) => {
     const styles = useStyles()
     const { t } = useTranslation()
-    const altProp = t('DashboardView:altButterflyButtonProp')
+    const altProp = t("DashboardView:altButterflyButtonProp")
     return (
         <Box className={styles.butterflyButtonContainer}>
             <Card className={styles.butterflyButtonCard}>
@@ -148,31 +174,3 @@ export const DashboardTopBarIcon: FC<TopBarIconProps> = (props) => {
         </Box>
     )
 }
-
-export default DashboardButton
-
-const useStyles = makeStyles({
-    container: {
-        display: 'flex',
-    },
-    button: {
-        backgroundColor: colors.white,
-        boxShadow: '2px 0px 3px rgba(66, 66, 66, 0.05)',
-    },
-    buttonGreen: {
-        backgroundColor: colors.teal_100,
-        boxShadow: '2px 0px 3px rgba(66, 66, 66, 0.05)',
-    },
-    butterflyButtonContainer: {
-        maxHeight: '48px',
-        maxWidth: '48px',
-        backgroundColor: colors.white,
-    },
-    butterflyButtonCard: {
-        boxShadow: '2px 0px 3px rgba(66, 66, 66, 0.05)',
-    },
-    butterflyButtonCardIcon: {
-        padding: '8px',
-        borderRadius: '1px',
-    },
-})

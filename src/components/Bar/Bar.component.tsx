@@ -1,11 +1,24 @@
-import React from 'react'
-import { Box, Grid, makeStyles } from '@material-ui/core'
-import RepetitionSign from './RepetitionSign.component'
-import House from './House.component'
-import { BarBody } from './BarBody.component'
-import { IChordAndNotes } from '../../models/IBar'
+import React from "react"
+import { Box, Grid, makeStyles } from "@material-ui/core"
+import { RepetitionSign } from "./RepetitionSign.component"
+import { House } from "./House.component"
+import { BarBody } from "./BarBody.component"
+import { IChordAndNotes } from "../../models/IBar"
 
-export type BarProps = {
+const useStyles = makeStyles({
+    root: {
+        width: "100%",
+        padding: "8px",
+    },
+    firstRow: {
+        height: "32px",
+    },
+    fullHeight: {
+        height: "100%",
+    },
+})
+
+export const Bar = (props: {
     barNumber: number
     repBefore: boolean
     repAfter: boolean
@@ -16,9 +29,7 @@ export type BarProps = {
     voiceId: number
     exportMode?: boolean
     rowsPerSheet?: number
-}
-
-export const Bar: React.FC<BarProps> = (props) => {
+}) => {
     const classes = useStyles()
 
     let centerDivSize: 9 | 10 | 11 = 9
@@ -47,16 +58,16 @@ export const Bar: React.FC<BarProps> = (props) => {
                     className={classes.fullHeight}
                 >
                     <Grid container className={classes.firstRow} role="grid">
-                        <Grid item xs={1} role="gridcell"></Grid>
+                        <Grid item xs={1} role="gridcell" />
                         <Grid
                             item
                             xs={9}
                             role="gridcell"
-                            aria-label={props.house + '. ending'}
+                            aria-label={`${props.house}. ending`}
                         >
                             <House houseOrder={props.house} />
                         </Grid>
-                        <Grid item xs={1} role="gridcell"></Grid>
+                        <Grid item xs={1} role="gridcell" />
                     </Grid>
                 </Grid>
                 <Grid
@@ -73,11 +84,11 @@ export const Bar: React.FC<BarProps> = (props) => {
                     >
                         <Grid
                             item
-                            xs={props.repBefore ? 1 : 'auto'}
+                            xs={props.repBefore ? 1 : "auto"}
                             role="gridcell"
                             aria-label="repetition sign before the tone"
                         >
-                            <Box mt={((props.height || 120) - 56) / 2 + 'px'}>
+                            <Box mt={`${((props.height || 120) - 56) / 2}px`}>
                                 <RepetitionSign
                                     size="small"
                                     display={props.repBefore}
@@ -88,7 +99,7 @@ export const Bar: React.FC<BarProps> = (props) => {
                             item
                             xs={centerDivSize}
                             role="gridcell"
-                            aria-label={'Bar'}
+                            aria-label="Bar"
                         >
                             <BarBody
                                 exportMode={props.exportMode}
@@ -104,13 +115,13 @@ export const Bar: React.FC<BarProps> = (props) => {
                             xs={1}
                             style={{
                                 borderRight: props.barLineAfter
-                                    ? '6px double black'
-                                    : '2px solid black',
+                                    ? "6px double black"
+                                    : "2px solid black",
                             }}
                             role="gridcell"
                             aria-label="repetition sign after the tone"
                         >
-                            <Box mt={((props.height || 120) - 56) / 2 + 'px'}>
+                            <Box mt={`${((props.height || 120) - 56) / 2}px`}>
                                 <RepetitionSign
                                     size="small"
                                     display={props.repAfter}
@@ -123,18 +134,3 @@ export const Bar: React.FC<BarProps> = (props) => {
         </Box>
     )
 }
-
-const useStyles = makeStyles({
-    root: {
-        width: '100%',
-        padding: '8px',
-    },
-    firstRow: {
-        height: '32px',
-    },
-    fullHeight: {
-        height: '100%',
-    },
-})
-
-export default Bar

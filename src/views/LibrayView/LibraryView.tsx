@@ -1,21 +1,26 @@
-import React, { useState, useEffect } from 'react'
-import { Grid, Typography, Box, makeStyles } from '@material-ui/core'
-import { useTranslation } from 'react-i18next'
-import { DashboardButton } from '../../components/DashboardButtons/DashboardButtons'
-import { DashboardTopBar } from '../../components/DashboardTopBar/DashboardTopBar'
-import { useGetFilteredSongs } from '../../utils/useApiServiceSongs'
-import { ISong } from '../../models/ISong'
+import React, { useState, useEffect } from "react"
+import { Grid, Typography, Box, makeStyles } from "@material-ui/core"
+import { useTranslation } from "react-i18next"
+import { DashboardButton } from "../../components/DashboardButtons/DashboardButtons"
+import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
+import {
+    useGetFilteredSongs,
+    useGetAllSongs,
+} from "../../utils/useApiServiceSongs"
+import { ISong } from "../../models/ISong"
 
-import { useGetAllSongs } from '../../utils/useApiServiceSongs'
+const useStyles = makeStyles({
+    container: {
+        width: "100%",
+    },
+})
 
-export type LibraryViewProps = {}
-
-export const LibraryView: React.FC<LibraryViewProps> = () => {
+export const LibraryView = () => {
     const styles = useStyles()
     const { t } = useTranslation()
     const [libraryView, setLibraryView] = useState(true)
     const [allSongs, setAllSongs] = useState<ISong[]>([])
-    const [searchTerm, setSearchTerm] = useState('')
+    const [searchTerm, setSearchTerm] = useState("")
     const [filteredSongs, setFilteredSongs] = useState<ISong[]>([])
     const [clickedSong, setClickedSong] = useState<number>(-1)
 
@@ -77,7 +82,7 @@ export const LibraryView: React.FC<LibraryViewProps> = () => {
                         <Box mb={marginBottom}>
                             <Box m={2}>
                                 <Typography variant="h1">
-                                    {t('DashboardView:allSongLabel')}
+                                    {t("DashboardView:allSongLabel")}
                                 </Typography>
                             </Box>
                             <Grid container spacing={3}>
@@ -100,9 +105,7 @@ export const LibraryView: React.FC<LibraryViewProps> = () => {
                                                 handleOpenMenu(e)
                                             }}
                                             text={song.title}
-                                            link={
-                                                '/song/' + song.id!.toString()
-                                            }
+                                            link={`/song/${song.id!.toString()}`}
                                         />
                                     </Grid>
                                 ))}
@@ -114,7 +117,7 @@ export const LibraryView: React.FC<LibraryViewProps> = () => {
                         <Box mb={marginBottom}>
                             <Box m={2}>
                                 <Typography variant="h1">
-                                    {t('DashboardView:searchSongLabel')}
+                                    {t("DashboardView:searchSongLabel")}
                                 </Typography>
                             </Box>
                             <Grid container spacing={3}>
@@ -137,9 +140,7 @@ export const LibraryView: React.FC<LibraryViewProps> = () => {
                                                 handleOpenMenu(e)
                                             }}
                                             text={song.title}
-                                            link={
-                                                '/song/' + song.id!.toString()
-                                            }
+                                            link={`/song/${song.id!.toString()}`}
                                         />
                                     </Grid>
                                 ))}
@@ -150,16 +151,4 @@ export const LibraryView: React.FC<LibraryViewProps> = () => {
             </Grid>
         </Box>
     )
-}
-export default LibraryView
-
-const useStyles = makeStyles({
-    container: {
-        width: '100%',
-    },
-})
-
-export type musicTacts = {
-    id: number
-    text: string
 }

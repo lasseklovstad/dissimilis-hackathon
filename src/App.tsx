@@ -1,12 +1,12 @@
-import React from 'react'
-import './App.css'
-import { MuiThemeProvider } from '@material-ui/core/styles'
-import Routing from './Routing'
-import { theme } from './theme'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import * as dotenv from 'dotenv'
+import React from "react"
+import "./App.css"
+import { MuiThemeProvider } from "@material-ui/core/styles"
+import CssBaseline from "@material-ui/core/CssBaseline"
+import * as dotenv from "dotenv"
+import { Routing } from "./Routing"
+import { theme } from "./theme"
 
-function App() {
+export const App = () => {
     dotenv.config()
 
     return (
@@ -18,5 +18,3 @@ function App() {
         </div>
     )
 }
-
-export default App

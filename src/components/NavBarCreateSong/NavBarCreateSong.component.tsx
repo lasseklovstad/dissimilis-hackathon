@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from "react"
 import {
     makeStyles,
     Grid,
@@ -7,18 +7,49 @@ import {
     Box,
     useMediaQuery,
     TextField,
-} from '@material-ui/core'
-import MenuButton from '../MenuButton/MenuButton.component'
-import { DashboardTopBarIcon } from '../DashboardButtons/DashboardButtons'
-import { SongContext } from '../../views/SongView/SongContextProvider.component'
-import { ChoiceModal } from '../CustomModal/ChoiceModal.component'
-import { usePutSong } from '../../utils/useApiServiceSongs'
-import { useTranslation } from 'react-i18next'
-import { useHistory } from 'react-router-dom'
+} from "@material-ui/core"
+import { useTranslation } from "react-i18next"
+import { useHistory } from "react-router-dom"
+import { MenuButton } from "../MenuButton/MenuButton.component"
+import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
+import { SongContext } from "../../views/SongView/SongContextProvider.component"
+import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
+import { usePutSong } from "../../utils/useApiServiceSongs"
 
-export type NavBarCreateSongProps = {}
+const useStyles = makeStyles({
+    root: {
+        flexGrow: 1,
+    },
+    left: {
+        order: 1,
+    },
+    center: {
+        order: 2,
+        "@media (max-width:600px)": {
+            order: 3,
+            marginTop: "8px",
+        },
+    },
+    right: {
+        order: 3,
+        "@media (max-width:600px)": {
+            order: 2,
+        },
+    },
+    appbar: {
+        backgroundColor: "transparent",
+        marginBottom: "24px",
+    },
+    textField: {
+        width: "100%",
+        height: "36px",
+    },
+    textFieldInput: {
+        fontSize: "30",
+    },
+})
 
-export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = (props) => {
+export const NavBarCreateSong = () => {
     const classes = useStyles()
     const [changing, setChanging] = useState(false)
     const [saveSongModalIsOpen, setSaveSongModalIsOpen] = useState(false)
@@ -30,7 +61,7 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = (props) => {
         changeTitle,
     } = useContext(SongContext)
     const [newTitle, setNewTitle] = useState(title)
-    const matches = useMediaQuery('(max-width:600px)')
+    const matches = useMediaQuery("(max-width:600px)")
     const putSong = usePutSong(song)
     const { t } = useTranslation()
     const history = useHistory()
@@ -49,7 +80,7 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = (props) => {
             if (result && result.status >= 200 && result.status <= 299) {
                 setIsLoading(false)
                 setSaveSongModalIsOpen(false)
-                history.push('/dashboard')
+                history.push("/dashboard")
             } else {
                 setIsLoading(false)
                 setSaveSongModalIsOpen(false)
@@ -58,7 +89,7 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = (props) => {
     }
 
     const handleCloseSaveSongModal = () => {
-        history.push('/dashbaord')
+        history.push("/dashbaord")
     }
 
     const handleChange = (
@@ -69,13 +100,13 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = (props) => {
 
     const pressDown = (e: any) => {
         if (e.keyCode === 13) {
-            if (e.target.value !== '') {
+            if (e.target.value !== "") {
                 changeTitle(e.target.value)
             }
             setChanging(!changing)
         }
         if (e.keyCode === 27) {
-            if (newTitle !== '') {
+            if (newTitle !== "") {
                 changeTitle(e.target.value)
             }
             setChanging(false)
@@ -93,14 +124,14 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = (props) => {
                         <Box onClick={() => setChanging(!changing)}>
                             {changing ? (
                                 <TextField
-                                    error={newTitle === ''}
+                                    error={newTitle === ""}
                                     onChange={(e) => handleChange(e)}
                                     value={newTitle}
                                     inputProps={{ style: { fontSize: 24 } }}
                                     className={classes.textField}
                                     autoFocus
                                     onKeyDown={(e) => pressDown(e)}
-                                ></TextField>
+                                />
                             ) : (
                                 <Typography variant="h2">{title}</Typography>
                             )}
@@ -118,47 +149,12 @@ export const NavBarCreateSong: React.FC<NavBarCreateSongProps> = (props) => {
                     setSaveSongModalIsOpen(false)
                 }}
                 modalOpen={saveSongModalIsOpen}
-                ackText={t('Modal:saveChanges')}
-                cancelText={t('Modal:dontSaveChanges')}
-                headerText={t('Modal:saveChangesPrompt')}
-                descriptionText={t('Modal:saveChangesPromptDescription')}
+                ackText={t("Modal:saveChanges")}
+                cancelText={t("Modal:dontSaveChanges")}
+                headerText={t("Modal:saveChangesPrompt")}
+                descriptionText={t("Modal:saveChangesPromptDescription")}
                 isLoading={isLoading}
             />
         </Box>
     )
 }
-
-const useStyles = makeStyles({
-    root: {
-        flexGrow: 1,
-    },
-    left: {
-        order: 1,
-    },
-    center: {
-        order: 2,
-        '@media (max-width:600px)': {
-            order: 3,
-            marginTop: '8px',
-        },
-    },
-    right: {
-        order: 3,
-        '@media (max-width:600px)': {
-            order: 2,
-        },
-    },
-    appbar: {
-        backgroundColor: 'transparent',
-        marginBottom: '24px',
-    },
-    textField: {
-        width: '100%',
-        height: '36px',
-    },
-    textFieldInput: {
-        fontSize: '30',
-    },
-})
-
-export default NavBarCreateSong

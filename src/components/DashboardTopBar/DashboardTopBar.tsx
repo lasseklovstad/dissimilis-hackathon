@@ -1,17 +1,22 @@
-import React, { useState, FC } from 'react'
-import { Box, Grid, TextField, AppBar, makeStyles } from '@material-ui/core'
-import { DashboardTopBarIcon } from '../../components/DashboardButtons/DashboardButtons'
-import { useTranslation } from 'react-i18next'
+import React, { useState } from "react"
+import { Box, Grid, TextField, AppBar, makeStyles } from "@material-ui/core"
+import { useTranslation } from "react-i18next"
+import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 
-type TopBarProps = {
+const useStyles = makeStyles(() => ({
+    background: {
+        background: "transparent",
+        boxShadow: "none",
+    },
+}))
+
+export const DashboardTopBar = (props: {
     onBlur: Function
     onChange: Function
-}
-
-export const DashboardTopBar: FC<TopBarProps> = (props: TopBarProps) => {
+}) => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const searchPlaceholder = t('DashboardView:search')
+    const searchPlaceholder = t("DashboardView:search")
     const [searchBarFocus, setSearchBarFocus] = useState(false)
 
     const handleOnFocus = () => {
@@ -67,10 +72,3 @@ export const DashboardTopBar: FC<TopBarProps> = (props: TopBarProps) => {
         </div>
     )
 }
-
-const useStyles = makeStyles((theme) => ({
-    background: {
-        background: 'transparent',
-        boxShadow: 'none',
-    },
-}))

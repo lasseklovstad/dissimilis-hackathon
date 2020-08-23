@@ -1,8 +1,5 @@
-import React, { useContext } from 'react'
-import { useHistory, useRouteMatch } from 'react-router-dom'
-import NavBarCreateSong from '../../components/NavBarCreateSong/NavBarCreateSong.component'
-import CreateSongTab from '../../components/CreateSongTab/CreateSongTab.component'
-import { SongContext } from './SongContextProvider.component'
+import React, { useContext } from "react"
+import { useHistory, useRouteMatch } from "react-router-dom"
 import {
     Grid,
     makeStyles,
@@ -10,23 +7,33 @@ import {
     Box,
     Snackbar,
     Typography,
-} from '@material-ui/core'
+} from "@material-ui/core"
+import MuiAlert, { AlertProps } from "@material-ui/lab/Alert"
+import { NavBarCreateSong } from "../../components/NavBarCreateSong/NavBarCreateSong.component"
+import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.component"
+import { SongContext } from "./SongContextProvider.component"
 import {
     TimeSignature,
     BarNumber,
-} from '../../components/SongViewComponents/SongView.component'
-import { BarContainer } from '../../components/BarContainer/BarContainer.component'
-import BottomBar from '../../components/BottomBar/BottomBar.component'
-import animatedBird from '../../assets/images/sommerfugl-animert.svg'
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
+} from "../../components/SongViewComponents/SongView.component"
+import { BarContainer } from "../../components/BarContainer/BarContainer.component"
+import { BottomBar } from "../../components/BottomBar/BottomBar.component"
+import animatedBird from "../../assets/images/sommerfugl-animert.svg"
 
-type MatchParams = {
-    id: string
-}
+const useStyles = makeStyles({
+    root: {
+        marginLeft: "16px",
+        marginTop: "32px",
+        marginRight: "16px",
+        marginBottom: "120px",
+        "@media (max-width: 1080px)": {
+            marginBottom: "160px",
+        },
+        width: "auto",
+    },
+})
 
-export type SongViewProps = {}
-
-export const SongView: React.FC<SongViewProps> = (props) => {
+export const SongView = () => {
     const classes = useStyles()
 
     const {
@@ -37,12 +44,12 @@ export const SongView: React.FC<SongViewProps> = (props) => {
         setIsSaving,
     } = useContext(SongContext)
 
-    const xs = useMediaQuery('(max-width: 600px)')
-    const xl = useMediaQuery('(min-width: 1920px)')
-    const queryString = require('query-string')
+    const xs = useMediaQuery("(max-width: 600px)")
+    const xl = useMediaQuery("(min-width: 1920px)")
+    const queryString = require("query-string")
     const history = useHistory()
-    const match = useRouteMatch<MatchParams>('/song/:id')
-    let id = match ? +match.params.id : 0
+    const match = useRouteMatch<{ id: string }>("/song/:id")
+    const id = match ? +match.params.id : 0
     const voiceString = queryString.parse(window.location.search)
     let selectedVoice = 0
     if (voiceString.voice !== undefined) {
@@ -65,9 +72,7 @@ export const SongView: React.FC<SongViewProps> = (props) => {
             ? true
             : !xs && !xl && index % 2 === 0
             ? true
-            : xs
-            ? true
-            : false
+            : !!xs
     }
 
     /**
@@ -75,14 +80,14 @@ export const SongView: React.FC<SongViewProps> = (props) => {
      * @param index
      */
     const isBarLineAfter = (index: number) => {
-        return index === voices[selectedVoice].bars.length - 1 ? true : false
+        return index === voices[selectedVoice].bars.length - 1
     }
 
     const handleClose = (
         event: React.SyntheticEvent | React.MouseEvent,
         reason?: string
     ) => {
-        if (reason === 'clickaway') {
+        if (reason === "clickaway") {
             return
         }
         setIsSaving(false)
@@ -109,14 +114,14 @@ export const SongView: React.FC<SongViewProps> = (props) => {
                                 type="image/svg+xml"
                                 data={animatedBird}
                                 aria-label="bird moving"
-                                style={{ width: '100%', height: '20%' }}
-                            ></object>
+                                style={{ width: "100%", height: "20%" }}
+                            />
                         </Box>
                     </Grid>
                 ) : (
                     <Grid item xs={12}>
-                        {' '}
-                        {/*Grid for main container, containing the bars, timeSignature and barnumber */}
+                        {" "}
+                        {/* Grid for main container, containing the bars, timeSignature and barnumber */}
                         <Grid container>
                             <Grid item xs={1}>
                                 {voices[selectedVoice].bars.map((bar, i) => {
@@ -127,23 +132,8 @@ export const SongView: React.FC<SongViewProps> = (props) => {
                                                 height={heightOfBar}
                                             />
                                         )
-                                    } else if (xl && i % 4 === 0) {
-                                        return (
-                                            <BarNumber
-                                                key={i}
-                                                barNumber={i + 1}
-                                                height={heightOfBar}
-                                            />
-                                        )
-                                    } else if (!xs && !xl && i % 2 === 0) {
-                                        return (
-                                            <BarNumber
-                                                key={i}
-                                                barNumber={i + 1}
-                                                height={heightOfBar}
-                                            />
-                                        )
-                                    } else if (xs) {
+                                    }
+                                    if (xl && i % 4 === 0) {
                                         return (
                                             <BarNumber
                                                 key={i}
@@ -152,7 +142,25 @@ export const SongView: React.FC<SongViewProps> = (props) => {
                                             />
                                         )
                                     }
-                                    return <div key={i}></div>
+                                    if (!xs && !xl && i % 2 === 0) {
+                                        return (
+                                            <BarNumber
+                                                key={i}
+                                                barNumber={i + 1}
+                                                height={heightOfBar}
+                                            />
+                                        )
+                                    }
+                                    if (xs) {
+                                        return (
+                                            <BarNumber
+                                                key={i}
+                                                barNumber={i + 1}
+                                                height={heightOfBar}
+                                            />
+                                        )
+                                    }
+                                    return <div key={i} />
                                 })}
                             </Grid>
 
@@ -192,7 +200,7 @@ export const SongView: React.FC<SongViewProps> = (props) => {
                 )}
             </Grid>
             <Snackbar
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
                 autoHideDuration={4000}
                 open={isSaving}
                 onClose={handleClose}
@@ -205,18 +213,3 @@ export const SongView: React.FC<SongViewProps> = (props) => {
         </>
     )
 }
-
-const useStyles = makeStyles({
-    root: {
-        marginLeft: '16px',
-        marginTop: '32px',
-        marginRight: '16px',
-        marginBottom: '120px',
-        '@media (max-width: 1080px)': {
-            marginBottom: '160px',
-        },
-        width: 'auto',
-    },
-})
-
-export default SongView

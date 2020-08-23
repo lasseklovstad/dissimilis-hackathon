@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from "react"
 import {
     Box,
     makeStyles,
@@ -11,19 +11,66 @@ import {
     Select,
     MenuItem,
     useMediaQuery,
-} from '@material-ui/core'
-import { useHistory } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { SongContext } from '../SongView/SongContextProvider.component'
-import { colors } from '../../utils/colors'
-import { BarContainer } from '../../components/BarContainer/BarContainer.component'
-import BarheightAvailableToBars, {
+} from "@material-ui/core"
+import { useHistory } from "react-router-dom"
+import { useTranslation } from "react-i18next"
+import { parse as queryStringParse } from "query-string"
+import { SongContext } from "../SongView/SongContextProvider.component"
+import { colors } from "../../utils/colors"
+import { BarContainer } from "../../components/BarContainer/BarContainer.component"
+import {
+    BarNumber,
     TimeSignature,
-} from '../../components/SongViewComponents/SongView.component'
+} from "../../components/SongViewComponents/SongView.component"
 
 export type ExportViewProps = {}
 
-export const ExportView: React.FC<ExportViewProps> = (props) => {
+const useStyles = makeStyles({
+    root: {
+        border: "1px solid black",
+        "@media print": {
+            border: "none",
+        },
+    },
+    box: {
+        backgroundColor: "white",
+        boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
+    },
+    formControl: {
+        width: "90%",
+        marginBottom: "8px",
+    },
+    button: {
+        backgroundColor: colors.gray_100,
+        marginRight: "4px",
+        marginBottom: "4px",
+        borderRadius: "4px",
+        border: "1px solid #E0E0E0",
+        height: "100%",
+    },
+    slider: {
+        padding: "8px",
+        backgroundColor: "white",
+        boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
+    },
+    stickToBottom: {
+        width: "100%",
+        position: "fixed",
+        height: "auto",
+        paddingTop: "24px",
+        paddingBottom: "24px",
+        bottom: 0,
+        borderTop: `1px solid ${colors.gray_300}`,
+        backgroundColor: colors.gray_100,
+    },
+    confirmOrCancelButtons: {
+        backgroundColor: " ",
+        height: "100%",
+        boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
+    },
+})
+
+export const ExportView: React.FC<ExportViewProps> = () => {
     const [rowsPerSheet, setRowsPerSheet] = useState<number>(4)
     const [lengthOfEachBar, setlengthOfEachBar] = useState<
         1 | 2 | 3 | 4 | 6 | 12
@@ -38,21 +85,20 @@ export const ExportView: React.FC<ExportViewProps> = (props) => {
     const classes = useStyles()
     const history = useHistory()
     const { t } = useTranslation()
-    const queryString = require('query-string')
 
-    const matches = useMediaQuery('(min-width:960px)')
+    const matches = useMediaQuery("(min-width:960px)")
 
-    const voiceString = queryString.parse(window.location.search)
+    const voiceString = queryStringParse(window.location.search) as any // TODO
     let selectedVoice = 0
     if (voiceString.voice !== undefined) {
-        const voiceInt = parseInt(voiceString.voice)
+        const voiceInt = parseInt(voiceString.voice, 10)
         if (voiceInt > voices.length || voiceInt <= 0) {
-            history.replace('./export?voice=1')
+            history.replace("./export?voice=1")
         } else {
             selectedVoice = voiceString.voice - 1
         }
     } else {
-        history.replace('./export?voice=1')
+        history.replace("./export?voice=1")
     }
 
     // Converts amount of bars per row to the length according to the Material UI-grid (12 columns)
@@ -195,13 +241,13 @@ export const ExportView: React.FC<ExportViewProps> = (props) => {
                         <Grid container>
                             <Grid item xs={12}>
                                 <Typography
-                                    style={{ textAlign: 'center' }}
+                                    style={{ textAlign: "center" }}
                                     variant="h1"
                                 >
                                     {title}
                                 </Typography>
                                 <Typography
-                                    style={{ textAlign: 'center' }}
+                                    style={{ textAlign: "center" }}
                                     variant="body1"
                                 >
                                     {voices[selectedVoice].title}
@@ -244,7 +290,7 @@ export const ExportView: React.FC<ExportViewProps> = (props) => {
                                                     0
                                                 ) {
                                                     return (
-                                                        <BarheightAvailableToBars
+                                                        <BarNumber
                                                             height={calculateHeightOfBar()}
                                                             key={index}
                                                             barNumber={
@@ -323,7 +369,7 @@ export const ExportView: React.FC<ExportViewProps> = (props) => {
             <BottomNavigation className={`${classes.stickToBottom} no-print`}>
                 <Grid
                     container
-                    style={{ width: '90%', margin: 'auto' }}
+                    style={{ width: "90%", margin: "auto" }}
                     justify="center"
                 >
                     <Grid
@@ -332,10 +378,10 @@ export const ExportView: React.FC<ExportViewProps> = (props) => {
                         md={2}
                         className={classes.box}
                         style={{
-                            padding: '8px',
+                            padding: "8px",
                             order: 1,
-                            marginRight: matches ? '0px' : '8px',
-                            marginBottom: matches ? '0px' : '12px',
+                            marginRight: matches ? "0px" : "8px",
+                            marginBottom: matches ? "0px" : "12px",
                         }}
                     >
                         {voices.length > 3 ? (
@@ -364,7 +410,7 @@ export const ExportView: React.FC<ExportViewProps> = (props) => {
                                 </Select>
                             </FormControl>
                         ) : (
-                            <Box style={{ padding: '8px' }}>
+                            <Box style={{ padding: "8px" }}>
                                 {voices.map((voice, i) => {
                                     return (
                                         <Button
@@ -379,7 +425,7 @@ export const ExportView: React.FC<ExportViewProps> = (props) => {
                                                 backgroundColor:
                                                     selectedVoice === i
                                                         ? colors.gray_200
-                                                        : 'white',
+                                                        : "white",
                                             }}
                                             className={classes.button}
                                             variant="outlined"
@@ -399,11 +445,11 @@ export const ExportView: React.FC<ExportViewProps> = (props) => {
                         className={classes.slider}
                         style={{
                             order: matches ? 3 : 3,
-                            marginRight: matches ? '0px' : '8px',
+                            marginRight: matches ? "0px" : "8px",
                         }}
                     >
                         <Typography variant="body1">
-                            {t('ExportView:barPerRow')}
+                            {t("ExportView:barPerRow")}
                         </Typography>
                         <Slider
                             onChange={(event, value) =>
@@ -425,12 +471,12 @@ export const ExportView: React.FC<ExportViewProps> = (props) => {
                         md={3}
                         className={classes.slider}
                         style={{
-                            marginRight: matches ? '0px' : '0px',
+                            marginRight: matches ? "0px" : "0px",
                             order: matches ? 4 : 4,
                         }}
                     >
                         <Typography variant="body1">
-                            {t('ExportView:rowsPerSheet')}
+                            {t("ExportView:rowsPerSheet")}
                         </Typography>
                         <Slider
                             onChange={(event, value) =>
@@ -450,9 +496,9 @@ export const ExportView: React.FC<ExportViewProps> = (props) => {
                         xs={5}
                         md={2}
                         style={{
-                            backgroundColor: 'transparent',
+                            backgroundColor: "transparent",
                             order: matches ? 5 : 2,
-                            marginBottom: matches ? '0px' : '12px',
+                            marginBottom: matches ? "0px" : "12px",
                         }}
                     >
                         <Button
@@ -460,14 +506,14 @@ export const ExportView: React.FC<ExportViewProps> = (props) => {
                             onClick={() => window.print()}
                             style={{ backgroundColor: colors.teal_100 }}
                         >
-                            {t('ExportView:createPDF')}
+                            {t("ExportView:createPDF")}
                         </Button>
                         <Button
                             className={classes.confirmOrCancelButtons}
                             onClick={() => history.push(`/song/${id}/`)}
                         >
-                            {' '}
-                            {t('ExportView:cancel')}
+                            {" "}
+                            {t("ExportView:cancel")}
                         </Button>
                     </Grid>
                 </Grid>
@@ -475,50 +521,3 @@ export const ExportView: React.FC<ExportViewProps> = (props) => {
         </>
     )
 }
-
-const useStyles = makeStyles({
-    root: {
-        border: '1px solid black',
-        '@media print': {
-            border: 'none',
-        },
-    },
-    box: {
-        backgroundColor: 'white',
-        boxShadow: '3px 2px 4px rgba(66,66,66,0.06)',
-    },
-    formControl: {
-        width: '90%',
-        marginBottom: '8px',
-    },
-    button: {
-        backgroundColor: colors.gray_100,
-        marginRight: '4px',
-        marginBottom: '4px',
-        borderRadius: '4px',
-        border: '1px solid #E0E0E0',
-        height: '100%',
-    },
-    slider: {
-        padding: '8px',
-        backgroundColor: 'white',
-        boxShadow: '3px 2px 4px rgba(66,66,66,0.06)',
-    },
-    stickToBottom: {
-        width: '100%',
-        position: 'fixed',
-        height: 'auto',
-        paddingTop: '24px',
-        paddingBottom: '24px',
-        bottom: 0,
-        borderTop: `1px solid ${colors.gray_300}`,
-        backgroundColor: colors.gray_100,
-    },
-    confirmOrCancelButtons: {
-        backgroundColor: ' ',
-        height: '100%',
-        boxShadow: '3px 2px 4px rgba(66,66,66,0.06)',
-    },
-})
-
-export default ExportView

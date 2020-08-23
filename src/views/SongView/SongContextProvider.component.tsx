@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { IVoice } from '../../models/IVoice'
-import { IBar, IChordAndNotes } from '../../models/IBar'
-import { useGetSong } from '../../utils/useApiServiceSongs'
-import { ISong } from '../../models/ISong'
-import { useRouteMatch } from 'react-router-dom'
+import React, { useState, useEffect } from "react"
+import { useRouteMatch } from "react-router-dom"
+import { IVoice } from "../../models/IVoice"
+import { IBar, IChordAndNotes } from "../../models/IBar"
+import { useGetSong } from "../../utils/useApiServiceSongs"
+import { ISong } from "../../models/ISong"
 
 interface ISongContext {
     song: ISong
@@ -38,18 +38,18 @@ interface ISongContext {
 
 export const SongContext = React.createContext<ISongContext>({
     song: {
-        title: '',
-        timeSignature: '4/4',
+        title: "",
+        timeSignature: "4/4",
         voices: [],
     },
     setSong: (song: ISong) => {},
     addVoice: (voice: IVoice) => {},
     deleteBar: (index: number, voiceId: number) => {},
     getBar: (id: number, voiceId: number) => {
-        throw new Error('getBar() in Song Context is not implemented')
+        throw new Error("getBar() in Song Context is not implemented")
     },
     duplicateBar: (id: number, voiceId: number) => {
-        throw new Error('duplicateBar() in Song Context is not implemented')
+        throw new Error("duplicateBar() in Song Context is not implemented")
     },
     addEmptyBar: () => {},
     editNote: (
@@ -75,26 +75,26 @@ export const SongContext = React.createContext<ISongContext>({
     setIsSaving: (newValue: boolean) => {},
 })
 
-const SongContextProvider: React.FC = (props) => {
+export const SongContextProvider: React.FC = (props) => {
     const [songId, setSongId] = useState<number>(1)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isSaving, setIsSaving] = useState<boolean>(false)
     const getSong = useGetSong(songId)
     let [song, setSong] = useState<ISong>({
-        title: '',
+        title: "",
         id: 0,
-        timeSignature: '',
+        timeSignature: "",
         voices: [
             {
                 partNumber: 1,
-                title: '',
+                title: "",
                 bars: [],
             },
         ],
     })
 
-    const match = useRouteMatch<MatchParams>('/song/:id')
-    let id = match ? +match.params.id : 0
+    const match = useRouteMatch<{ id: string }>("/song/:id")
+    const id = match ? +match.params.id : 0
     if (id !== songId) {
         setSongId(id)
     }
@@ -109,18 +109,18 @@ const SongContextProvider: React.FC = (props) => {
         })
     }, [])
 
-    //Method to simplify change of state
+    // Method to simplify change of state
     const addVoice = (newVoice: IVoice) => {
         for (let i = 0; i < song.voices[0].bars.length; i++) {
-            //I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
+            // I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
             const newChordsAndNotes = []
-            const newEmptyNote = { length: 1, notes: [' '] }
+            const newEmptyNote = { length: 1, notes: [" "] }
             let timeSignatureNumerator = getTimeSignature()[0]
             if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2
             for (let i = 0; i < timeSignatureNumerator; i++) {
                 newChordsAndNotes.push(newEmptyNote)
             }
-            let barInfo = song.voices[0].bars[i]
+            const barInfo = song.voices[0].bars[i]
             const tempBar: IBar = {
                 barNumber: i + 1,
                 repBefore: barInfo.repBefore,
@@ -135,7 +135,7 @@ const SongContextProvider: React.FC = (props) => {
     }
 
     const toggleRepBefore = (barId: number) => {
-        //Map through all voices and for the ba which matches the id, toggle the bars repetition value
+        // Map through all voices and for the ba which matches the id, toggle the bars repetition value
         song = {
             ...song,
             voices: song.voices.map((voice, index) =>
@@ -155,7 +155,7 @@ const SongContextProvider: React.FC = (props) => {
     }
 
     const toggleRepAfter = (barId: number) => {
-        //Map through all voices and for the ba which matches the id, toggle the bars repetition value
+        // Map through all voices and for the ba which matches the id, toggle the bars repetition value
         song = {
             ...song,
             voices: song.voices.map((voice, index) =>
@@ -174,9 +174,9 @@ const SongContextProvider: React.FC = (props) => {
         setSong(song)
     }
 
-    //adds house to a bar
+    // adds house to a bar
     const addHouse = (barId: number) => {
-        //Checks if its the last bar in the song, and maps through all the bars, matching on barId, checking for house values on the chosen bar, along with the adjacent bars, ensuring that they are handled correctly
+        // Checks if its the last bar in the song, and maps through all the bars, matching on barId, checking for house values on the chosen bar, along with the adjacent bars, ensuring that they are handled correctly
         if (barId === song.voices[0].bars.length - 1) {
             song = {
                 ...song,
@@ -225,10 +225,10 @@ const SongContextProvider: React.FC = (props) => {
         setSong(song)
     }
 
-    //Function for removing house from a bar
+    // Function for removing house from a bar
     const deleteHouse = (barId: number) => {
-        //Checks the housevalue and sets the value to undefined, along with checking adjacent bars and ensuring they are correct
-        let barBase = song.voices[0].bars[barId].house
+        // Checks the housevalue and sets the value to undefined, along with checking adjacent bars and ensuring they are correct
+        const barBase = song.voices[0].bars[barId].house
 
         if (barBase === 1) {
             song = {
@@ -268,13 +268,13 @@ const SongContextProvider: React.FC = (props) => {
     }
 
     const getBar = (id: number, voiceId: number) => {
-        let returnBar = undefined
-        song.voices[voiceId].bars.forEach((bar, i) => {
+        for (const [i, bar] of song.voices[voiceId].bars.entries()) {
             if (i === id) {
-                returnBar = bar
+                return bar
             }
-        })
-        return returnBar
+        }
+
+        return undefined
     }
 
     const deleteBar = (id: number, voiceId: number) => {
@@ -299,21 +299,21 @@ const SongContextProvider: React.FC = (props) => {
         setSong(song)
     }
 
-    //Method to get timeSignature from localstorage
+    // Method to get timeSignature from localstorage
     const getTimeSignature = () => {
         return [
-            parseInt(song.timeSignature.split('/')[0]),
-            parseInt(song.timeSignature.split('/')[1]),
+            parseInt(song.timeSignature.split("/")[0]),
+            parseInt(song.timeSignature.split("/")[1]),
         ]
     }
 
-    //Method to add an empty bar at a specific index to each of all voices except the master sheet/song
+    // Method to add an empty bar at a specific index to each of all voices except the master sheet/song
     const copyAndAddEmptyBars = (index: number, withoutMaster: 0 | 1) => {
-        //withoutMaster is either 0 if mastersheet is included, or 1 if it is not
-        let tempArray = []
-        //I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
+        // withoutMaster is either 0 if mastersheet is included, or 1 if it is not
+        const tempArray = []
+        // I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
         const newChordsAndNotes = []
-        const newEmptyNote = { length: 1, notes: [' '] }
+        const newEmptyNote = { length: 1, notes: [" "] }
         let timeSignatureNumerator = getTimeSignature()[0]
         if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2
         for (let i = 0; i < timeSignatureNumerator; i++) {
@@ -326,12 +326,12 @@ const SongContextProvider: React.FC = (props) => {
             chordsAndNotes: newChordsAndNotes,
         }
         for (let i = withoutMaster; i < song.voices.length; i++) {
-            let copyOfArray = song.voices[i].bars.slice()
+            const copyOfArray = song.voices[i].bars.slice()
             copyOfArray.splice(index, 0, newBar)
             tempArray.push(copyOfArray)
         }
 
-        //Updating barNumbers for each element
+        // Updating barNumbers for each element
         for (let i = 0; i < tempArray.length; i++) {
             for (let j = index; j < tempArray[i].length; j++) {
                 tempArray[i][j].barNumber = j + 1
@@ -342,15 +342,15 @@ const SongContextProvider: React.FC = (props) => {
 
     const duplicateBar = (id: number, voiceId: number) => {
         const bar = getBar(id, voiceId)
-        if (bar !== undefined) {
+        if (bar) {
             const indexOfOriginalBar = song.voices[voiceId].bars.indexOf(bar)
-            let copyOfBar: IBar = Object.assign({}, bar)
-            let copyOfArray = song.voices[voiceId].bars.slice()
+            const copyOfBar: IBar = { ...bar }
+            const copyOfArray = song.voices[voiceId].bars.slice()
             copyOfArray.splice(indexOfOriginalBar, 0, copyOfBar)
             const tempArray = copyAndAddEmptyBars(indexOfOriginalBar + 1, 1)
 
-            //If master sheet add the new copy of bar to the array
-            //Else add the copied bar-array with an empty bar
+            // If master sheet add the new copy of bar to the array
+            // Else add the copied bar-array with an empty bar
             song = {
                 ...song,
                 voices: song.voices.map((voice, i) =>
@@ -446,7 +446,7 @@ const SongContextProvider: React.FC = (props) => {
         setSong(song)
     }
 
-    //Add all methods here
+    // Add all methods here
     const value = {
         song,
         setSong,
@@ -476,9 +476,3 @@ const SongContextProvider: React.FC = (props) => {
         </SongContext.Provider>
     )
 }
-
-type MatchParams = {
-    id: string
-}
-
-export default SongContextProvider

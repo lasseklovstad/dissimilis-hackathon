@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from 'axios'
-import { useHistory } from 'react-router-dom'
+import axios, { AxiosResponse } from "axios"
+import { useHistory } from "react-router-dom"
 
 /**
  * @param method HTTP method, get or put
@@ -15,14 +15,14 @@ export const useApiService = <T extends Object>(
     const history = useHistory()
 
     // Add params to the url
-    let baseUrl = process.env.REACT_APP_API_URL as string
+    const baseUrl = process.env.REACT_APP_API_URL as string
     let finalUrl = baseUrl + url
     if (options.params) {
-        finalUrl += '?' + new URLSearchParams(options.params).toString()
+        finalUrl += `?${new URLSearchParams(options.params).toString()}`
     }
 
     const fetchData = async () => {
-        let result: AxiosResponse<T> | undefined = undefined
+        let result: AxiosResponse<T> | undefined
         let errorMessage: any
         let isError = false
 
@@ -30,9 +30,9 @@ export const useApiService = <T extends Object>(
             result = await axios.get<T>(finalUrl, { headers: options.headers })
         } catch (error) {
             if (error?.response?.status === 401) {
-                history.push('/')
-                sessionStorage.removeItem('apiKey')
-                sessionStorage.removeItem('userId')
+                history.push("/")
+                sessionStorage.removeItem("apiKey")
+                sessionStorage.removeItem("userId")
             }
             isError = true
             errorMessage = error
@@ -42,7 +42,7 @@ export const useApiService = <T extends Object>(
     }
 
     const postData = async () => {
-        let result: AxiosResponse<T> | undefined = undefined
+        let result: AxiosResponse<T> | undefined
         let errorMessage: any
         let isError = false
         try {
@@ -51,9 +51,9 @@ export const useApiService = <T extends Object>(
             })
         } catch (error) {
             if (error?.response?.status === 401) {
-                history.push('/')
-                sessionStorage.removeItem('apiKey')
-                sessionStorage.removeItem('userId')
+                history.push("/")
+                sessionStorage.removeItem("apiKey")
+                sessionStorage.removeItem("userId")
             }
             isError = true
             errorMessage = error
@@ -63,7 +63,7 @@ export const useApiService = <T extends Object>(
     }
 
     const putData = async () => {
-        let result: AxiosResponse<T> | undefined = undefined
+        let result: AxiosResponse<T> | undefined
         let errorMessage: any
         let isError = false
         try {
@@ -72,9 +72,9 @@ export const useApiService = <T extends Object>(
             })
         } catch (error) {
             if (error?.response?.status === 401) {
-                history.push('/')
-                sessionStorage.removeItem('apiKey')
-                sessionStorage.removeItem('userId')
+                history.push("/")
+                sessionStorage.removeItem("apiKey")
+                sessionStorage.removeItem("userId")
             }
             isError = true
             errorMessage = error
@@ -84,7 +84,7 @@ export const useApiService = <T extends Object>(
     }
 
     const deleteData = async () => {
-        let result: AxiosResponse<T> | undefined = undefined
+        let result: AxiosResponse<T> | undefined
         let errorMessage: any
         let isError = false
         try {
@@ -93,9 +93,9 @@ export const useApiService = <T extends Object>(
             })
         } catch (error) {
             if (error?.response?.status === 401) {
-                history.push('/')
-                sessionStorage.removeItem('apiKey')
-                sessionStorage.removeItem('userId')
+                history.push("/")
+                sessionStorage.removeItem("apiKey")
+                sessionStorage.removeItem("userId")
             }
             isError = true
             errorMessage = error

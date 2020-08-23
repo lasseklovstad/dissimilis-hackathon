@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from "react"
 import {
     Box,
     makeStyles,
@@ -6,12 +6,41 @@ import {
     ButtonBase,
     Menu,
     MenuItem,
-} from '@material-ui/core'
-import colors from '../../utils/colors'
-import { IChordAndNotes } from '../../models/IBar'
-import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component'
-import { Chord } from '@tonaljs/tonal'
-import { SongContext } from '../../views/SongView/SongContextProvider.component'
+} from "@material-ui/core"
+import { Chord } from "@tonaljs/tonal"
+import { colors } from "../../utils/colors"
+import { IChordAndNotes } from "../../models/IBar"
+import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component"
+import { SongContext } from "../../views/SongView/SongContextProvider.component"
+
+const useStyles = makeStyles({
+    root: {
+        display: "flex",
+        flexFlow: "row wrap",
+        justifyContent: "center",
+    },
+    toneAndChordBox: {
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+    },
+    toneBox: {
+        flex: 2,
+        width: "100%",
+        borderRadius: "5px",
+        margin: "2px 0",
+        textAlign: "left",
+    },
+    tangentText: {
+        color: colors.white,
+        top: "50%",
+        width: "100%",
+        marginLeft: "8px",
+    },
+    toneText: {
+        color: "#555555",
+    },
+})
 
 const initialState = {
     mouseX: null,
@@ -27,41 +56,40 @@ export type BarBodyProps = {
     rowsPerSheet?: number
 }
 
-/*Gets the chord based on notes. The package we use (tonaljs) uses the tone "B" instead of "H" so we need
+/* Gets the chord based on notes. The package we use (tonaljs) uses the tone "B" instead of "H" so we need
 to replace H with B to get the right chord. 
 */
-export function getChord(notes: string[]): string {
-    let tempArray = notes.slice()
-    const index = tempArray.indexOf('H')
+export const getChord = (notes: string[]): string => {
+    const tempArray = notes.slice()
+    const index = tempArray.indexOf("H")
     if (index !== -1) {
-        tempArray[index] = 'B'
+        tempArray[index] = "B"
     }
 
     if (tempArray.length === 1) {
         return notes[0]
-    } else {
-        const result = Chord.detect(tempArray.reverse())
-        if (result.length === 0) return notes[0]
-        return result[0].replace(/M/g, '').replace(/B/g, 'H')
     }
+    const result = Chord.detect(tempArray.reverse())
+    if (result.length === 0) return notes[0]
+    return result[0].replace(/M/g, "").replace(/B/g, "H")
 }
 
-export function tangentToNumber(tangent: string): number {
+export const tangentToNumber = (tangent: string): number => {
     let result = -1
     switch (tangent) {
-        case 'C#':
+        case "C#":
             result = 4
             break
-        case 'D#':
+        case "D#":
             result = 5
             break
-        case 'F#':
+        case "F#":
             result = 1
             break
-        case 'G#':
+        case "G#":
             result = 2
             break
-        case 'A#':
+        case "A#":
             result = 3
             break
         default:
@@ -70,39 +98,39 @@ export function tangentToNumber(tangent: string): number {
     return result
 }
 
-export function getColor(color: string): string {
-    let newColor = 'transparent'
+export const getColor = (color: string): string => {
+    let newColor = "transparent"
     switch (color) {
-        case 'C':
+        case "C":
             newColor = colors.C
             break
-        case 'D':
+        case "D":
             newColor = colors.D
             break
-        case 'E':
+        case "E":
             newColor = colors.E
             break
-        case 'F':
+        case "F":
             newColor = colors.F
             break
-        case 'G':
+        case "G":
             newColor = colors.G
             break
-        case 'A':
+        case "A":
             newColor = colors.A
             break
-        case 'H':
+        case "H":
             newColor = colors.H
             break
-        case 'C#':
-        case 'D#':
-        case 'F#':
-        case 'G#':
-        case 'A#':
+        case "C#":
+        case "D#":
+        case "F#":
+        case "G#":
+        case "A#":
             newColor = colors.gray_500
             break
         default:
-            newColor = 'transparent'
+            newColor = "transparent"
     }
     return newColor
 }
@@ -129,8 +157,8 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
         deleteNote,
     } = useContext(SongContext)
 
-    let tempArrayOfChordsLength: any = []
-    let tempArrayOfChords: any = []
+    const tempArrayOfChordsLength: any = []
+    const tempArrayOfChords: any = []
     for (
         let i = 0;
         i < voices[0].bars[props.barNumber].chordsAndNotes.length;
@@ -153,12 +181,12 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
     }
 
     const handleClose = (method?: string) => {
-        if (method === 'delete') {
+        if (method === "delete") {
             if (rightClicked >= 0) {
-                let tempChordsAndNotes: IChordAndNotes[] = voices[
+                const tempChordsAndNotes: IChordAndNotes[] = voices[
                     props.voiceId
                 ].bars[props.barNumber].chordsAndNotes.slice()
-                const newNote: IChordAndNotes = { length: 1, notes: [' '] }
+                const newNote: IChordAndNotes = { length: 1, notes: [" "] }
                 tempChordsAndNotes[rightClicked] = newNote
                 for (
                     let i = rightClicked;
@@ -184,39 +212,39 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
         if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2
 
         let result
-        let base = 100 / timeSignatureNumerator
+        const base = 100 / timeSignatureNumerator
         switch (length) {
             case 1:
-                result = base + '%'
+                result = `${base}%`
                 break
             case 2:
-                result = base * 2 + '%'
+                result = `${base * 2}%`
                 break
             case 3:
-                result = base * 3 + '%'
+                result = `${base * 3}%`
                 break
             case 4:
-                result = base * 4 + '%'
+                result = `${base * 4}%`
                 break
             case 5:
-                result = base * 5 + '%'
+                result = `${base * 5}%`
                 break
             case 6:
-                result = base * 6 + '%'
+                result = `${base * 6}%`
                 break
             case 7:
-                result = base * 7 + '%'
+                result = `${base * 7}%`
                 break
             case 8:
-                result = base * 8 + '%'
+                result = `${base * 8}%`
                 break
             default:
-                result = '100%'
+                result = "100%"
         }
         return result
     }
 
-    //Displaying the chords from the master sheet in the song
+    // Displaying the chords from the master sheet in the song
     const chordsInBar = tempArrayOfChords.map((item: any, i: any) => {
         return (
             <Typography
@@ -224,9 +252,9 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
                 variant="body1"
                 style={{
                     flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]),
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    paddingLeft: '4px',
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    paddingLeft: "4px",
                 }}
                 className={classes.toneText}
             >
@@ -250,7 +278,7 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
 
     return (
         <Box
-            style={{ height: !props.height ? '100%' : props.height + 'px' }}
+            style={{ height: !props.height ? "100%" : `${props.height}px` }}
             className={classes.root}
         >
             {chordsInBar}
@@ -263,14 +291,14 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
                         style={{
                             flex: note.length,
                             height: !props.height
-                                ? '100%'
-                                : props.height - 24 + 'px',
+                                ? "100%"
+                                : `${props.height - 24}px`,
                             margin:
                                 props.chordsAndNotes.length >= 5
                                     ? props.rowsPerSheet === 6
-                                        ? '0px 1px'
-                                        : '0px 4px'
-                                    : '0px 4px',
+                                        ? "0px 1px"
+                                        : "0px 4px"
+                                    : "0px 4px",
                         }}
                         flexDirection="column"
                     >
@@ -310,25 +338,24 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
                                                   ].find((arr) =>
                                                       arr.includes(i)
                                                   )
-                                                    ? 'context-menu'
-                                                    : 'pointer'
-                                                : 'default',
+                                                    ? "context-menu"
+                                                    : "pointer"
+                                                : "default",
                                             backgroundColor: emptySpace(i)
                                                 ? positionArray.includes(i)
                                                     ? colors.focus
-                                                    : 'transparent'
+                                                    : "transparent"
                                                 : getColor(type),
                                             border: emptySpace(i)
                                                 ? positionArray.includes(i)
-                                                    ? 'none'
-                                                    : '1px solid' +
-                                                      colors.gray_400
-                                                : 'none',
+                                                    ? "none"
+                                                    : `1px solid${colors.gray_400}`
+                                                : "none",
                                             opacity:
                                                 showPossiblePositions &&
                                                 !emptySpace(i)
-                                                    ? '80%'
-                                                    : '100%',
+                                                    ? "80%"
+                                                    : "100%",
                                         }}
                                         tabIndex={!props.exportMode ? 1 : -1}
                                         component={ButtonBase}
@@ -356,9 +383,9 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
                                     >
                                         <Typography
                                             className={classes.tangentText}
-                                            variant={'body2'}
+                                            variant="body2"
                                         >
-                                            {number === 0 ? ' ' : number}
+                                            {number === 0 ? " " : number}
                                         </Typography>
                                     </Box>
                                     {!props.exportMode ? (
@@ -368,7 +395,7 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
                                                 rightClickCoordinates.mouseY !==
                                                 null
                                             }
-                                            onClose={() => handleClose('')}
+                                            onClose={() => handleClose("")}
                                             anchorReference="anchorPosition"
                                             anchorPosition={
                                                 rightClickCoordinates.mouseY !==
@@ -387,7 +414,7 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
                                             <MenuItem
                                                 tabIndex={-1}
                                                 onClick={() =>
-                                                    handleClose('delete')
+                                                    handleClose("delete")
                                                 }
                                             >
                                                 Slett
@@ -405,34 +432,3 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
         </Box>
     )
 }
-
-const useStyles = makeStyles({
-    root: {
-        display: 'flex',
-        flexFlow: 'row wrap',
-        justifyContent: 'center',
-    },
-    toneAndChordBox: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    toneBox: {
-        flex: 2,
-        width: '100%',
-        borderRadius: '5px',
-        margin: '2px 0',
-        textAlign: 'left',
-    },
-    tangentText: {
-        color: colors.white,
-        top: '50%',
-        width: '100%',
-        marginLeft: '8px',
-    },
-    toneText: {
-        color: '#555555',
-    },
-})
-
-export default BarBody

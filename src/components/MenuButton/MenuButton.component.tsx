@@ -1,22 +1,24 @@
-import React, { useContext, useState } from 'react'
-import { makeStyles, IconButton, Menu, MenuItem } from '@material-ui/core'
-import colors from '../../utils/colors'
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { useTranslation } from 'react-i18next'
-import { useHistory, useRouteMatch } from 'react-router-dom'
-import { SongContext } from '../../views/SongView/SongContextProvider.component'
-import { usePutSong } from '../../utils/useApiServiceSongs'
-import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component'
-import { ChoiceModal } from '../CustomModal/ChoiceModal.component'
-import { useDeleteSong } from '../../utils/useApiServiceSongs'
+import React, { useContext, useState } from "react"
+import { makeStyles, IconButton, Menu, MenuItem } from "@material-ui/core"
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
+import { useTranslation } from "react-i18next"
+import { useHistory, useRouteMatch } from "react-router-dom"
+import { colors } from "../../utils/colors"
+import { SongContext } from "../../views/SongView/SongContextProvider.component"
+import { usePutSong, useDeleteSong } from "../../utils/useApiServiceSongs"
+import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component"
+import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
 
-export type MenuButtonProps = {}
-
-type MatchParams = {
-    id: string
-}
-
-export const MenuButton: React.FC<MenuButtonProps> = (props) => {
+const useStyles = makeStyles({
+    root: {
+        backgroundColor: colors.gray_200,
+        borderRadius: "50%",
+        height: "48px",
+        width: "48px",
+        float: "right",
+    },
+})
+export const MenuButton = () => {
     const classes = useStyles()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
@@ -25,8 +27,8 @@ export const MenuButton: React.FC<MenuButtonProps> = (props) => {
     const { t } = useTranslation()
     const history = useHistory()
     const putSong = usePutSong(song)
-    const match = useRouteMatch<MatchParams>('/song/:id')
-    let id = match ? +match.params.id : 0
+    const match = useRouteMatch<{ id: string }>("/song/:id")
+    const id = match ? +match.params.id : 0
     const deleteSong = useDeleteSong(id)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -40,22 +42,22 @@ export const MenuButton: React.FC<MenuButtonProps> = (props) => {
     const handleDeleteSong = () => {
         setDeleteSongModalIsOpen(false)
         deleteSong().then(() => {
-            history.replace('/dashboard')
+            history.replace("/dashboard")
         })
     }
 
-    const handleClose = (method = '') => {
+    const handleClose = (method = "") => {
         setAnchorEl(null)
         setDeleteSongModalIsOpen(false)
         switch (method) {
-            case 'export':
+            case "export":
                 setShowPossiblePositions(false)
                 putSong().then(() => {
-                    history.push('/song/' + id + '/export')
+                    history.push(`/song/${id}/export`)
                 })
 
                 break
-            case 'save':
+            case "save":
                 putSong().then(({ result }) => {
                     if (
                         result &&
@@ -68,8 +70,9 @@ export const MenuButton: React.FC<MenuButtonProps> = (props) => {
                     }
                 })
                 break
-            case 'delete':
+            case "delete":
                 handleOpenDeleteSongModal()
+                break
             default:
         }
     }
@@ -89,26 +92,26 @@ export const MenuButton: React.FC<MenuButtonProps> = (props) => {
                 anchorEl={anchorEl}
                 keepMounted
                 open={Boolean(anchorEl)}
-                onClose={() => handleClose('')}
+                onClose={() => handleClose("")}
                 role="menu"
             >
-                <MenuItem onClick={() => handleClose('save')}>
-                    {t('MenuButton:save')}
+                <MenuItem onClick={() => handleClose("save")}>
+                    {t("MenuButton:save")}
                 </MenuItem>
-                <MenuItem disabled onClick={() => handleClose('')}>
-                    {t('MenuButton:duplicate')}
+                <MenuItem disabled onClick={() => handleClose("")}>
+                    {t("MenuButton:duplicate")}
                 </MenuItem>
-                <MenuItem disabled onClick={() => handleClose('')}>
-                    {t('MenuButton:transpose')}
+                <MenuItem disabled onClick={() => handleClose("")}>
+                    {t("MenuButton:transpose")}
                 </MenuItem>
-                <MenuItem onClick={() => handleClose('export')}>
-                    {t('MenuButton:export')}
+                <MenuItem onClick={() => handleClose("export")}>
+                    {t("MenuButton:export")}
                 </MenuItem>
-                <MenuItem disabled onClick={() => handleClose('')}>
-                    {t('MenuButton:hide')}
+                <MenuItem disabled onClick={() => handleClose("")}>
+                    {t("MenuButton:hide")}
                 </MenuItem>
-                <MenuItem onClick={() => handleClose('delete')}>
-                    {t('MenuButton:delete')}
+                <MenuItem onClick={() => handleClose("delete")}>
+                    {t("MenuButton:delete")}
                 </MenuItem>
             </Menu>
             <ChoiceModal
@@ -116,23 +119,11 @@ export const MenuButton: React.FC<MenuButtonProps> = (props) => {
                 handleOnSaveClick={() => handleDeleteSong}
                 handleClosed={() => handleClose}
                 modalOpen={deleteSongModalIsOpen}
-                ackText={t('Modal:deleteSong')}
-                cancelText={t('Modal:cancel')}
-                headerText={t('Modal:deleteSong')}
-                descriptionText={t('Modal:deleteDescription')}
+                ackText={t("Modal:deleteSong")}
+                cancelText={t("Modal:cancel")}
+                headerText={t("Modal:deleteSong")}
+                descriptionText={t("Modal:deleteDescription")}
             />
         </div>
     )
 }
-
-const useStyles = makeStyles({
-    root: {
-        backgroundColor: colors.gray_200,
-        borderRadius: '50%',
-        height: '48px',
-        width: '48px',
-        float: 'right',
-    },
-})
-
-export default MenuButton

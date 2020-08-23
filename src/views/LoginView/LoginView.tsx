@@ -1,36 +1,73 @@
-import React, { FC, useEffect, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import TextField from '@material-ui/core/TextField'
-import { useMediaQuery, Collapse } from '@material-ui/core'
-import { ReactComponent as BackgroundImage } from '../../assets/images/butterflyGreen.svg'
-import { ReactComponent as LoginLogo } from '../../assets/images/LoginLogo.svg'
-import { colors } from '../../utils/colors'
-import { useTranslation } from 'react-i18next'
-import { useHistory } from 'react-router'
-import { useLocation } from 'react-router-dom'
-import { useLoginRedirect, useLoginPost } from '../../utils/useApiServiceLogin'
-import Alert from '@material-ui/lab/Alert'
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
-import animatedBird from '../../assets/images/sommerfugl-animert.svg'
+import React, { FC, useEffect, useState } from "react"
+import { makeStyles } from "@material-ui/core/styles"
+import Button from "@material-ui/core/Button"
+import Grid from "@material-ui/core/Grid"
+import TextField from "@material-ui/core/TextField"
+import { useMediaQuery, Collapse } from "@material-ui/core"
+import { useTranslation } from "react-i18next"
+import { useHistory } from "react-router"
+import { useLocation } from "react-router-dom"
+import Alert from "@material-ui/lab/Alert"
+import IconButton from "@material-ui/core/IconButton"
+import CloseIcon from "@material-ui/icons/Close"
+import { useLoginRedirect, useLoginPost } from "../../utils/useApiServiceLogin"
+import { colors } from "../../utils/colors"
+import { ReactComponent as LoginLogo } from "../../assets/images/LoginLogo.svg"
+import { ReactComponent as BackgroundImage } from "../../assets/images/butterflyGreen.svg"
+import animatedBird from "../../assets/images/sommerfugl-animert.svg"
 
-export type LoginViewProps = {}
+const useStyles = makeStyles({
+    root: {
+        justifyContent: "center",
+    },
+    container: {
+        boxShadow: "0 3px 6px 2px rgba(0, 0, 0, 0.1)",
+        borderRadius: 2,
+        backgroundColor: colors.gray_100,
+        marginTop: "10vh",
+        zIndex: 2,
+    },
+    paddingsmall: {
+        padding: "40px",
+        marginBottom: "4vh",
+    },
+    paddinglarge: {
+        padding: "48px",
+    },
+    textfield: {
+        marginBottom: "16px",
+    },
+    loginlogo: {
+        marginBottom: "16px",
+        width: "60%",
+    },
+    loginbutton: {
+        marginBottom: "16px",
+        lineHeight: "24px",
+        textTransform: "none",
+    },
+    backgroundimage: {
+        position: "absolute",
+        zIndex: 1,
+        width: "50%",
+        height: "50%",
+        left: 0,
+    },
+})
 
-const LoginView: FC<LoginViewProps> = () => {
+export const LoginView = () => {
     const classes = useStyles()
 
     const [isLoading, setIsLoading] = useState(false)
     const [warningDisplayed, setWarningDisplayed] = React.useState(false)
 
     const { t } = useTranslation()
-    const matches = useMediaQuery('(min-width:600px)')
+    const matches = useMediaQuery("(min-width:600px)")
     const history = useHistory()
     const axiosGet = useLoginRedirect()
 
     const url = new URLSearchParams(useLocation().search)
-    let code = url.get('code') ? url.get('code') : null
+    const code = url.get("code") ? url.get("code") : null
 
     const axiosPost = useLoginPost(code)
 
@@ -41,20 +78,20 @@ const LoginView: FC<LoginViewProps> = () => {
     }
     useEffect(() => {
         if (
-            sessionStorage.getItem('apiKey') &&
-            sessionStorage.getItem('userId')
+            sessionStorage.getItem("apiKey") &&
+            sessionStorage.getItem("userId")
         ) {
-            history.replace('/dashboard')
+            history.replace("/dashboard")
         } else if (code !== null) {
             setIsLoading(true)
             axiosPost().then(({ result }) => {
                 if (result && result.status === 200) {
-                    sessionStorage.setItem('apiKey', result.data.apiKey)
+                    sessionStorage.setItem("apiKey", result.data.apiKey)
                     sessionStorage.setItem(
-                        'userId',
+                        "userId",
                         result.data.userID?.toString()
                     )
-                    history.replace('/dashboard')
+                    history.replace("/dashboard")
                 }
             })
         }
@@ -75,7 +112,7 @@ const LoginView: FC<LoginViewProps> = () => {
                     </IconButton>
                 }
             >
-                {t('LoginView:loginFailed')}
+                {t("LoginView:loginFailed")}
             </Alert>
         </Collapse>
     )
@@ -84,7 +121,7 @@ const LoginView: FC<LoginViewProps> = () => {
         <Grid container className={classes.root}>
             <BackgroundImage
                 className={classes.backgroundimage}
-                style={{ display: isLoading ? 'none' : 'block' }}
+                style={{ display: isLoading ? "none" : "block" }}
             />
             {isLoading ? (
                 <Grid
@@ -93,18 +130,18 @@ const LoginView: FC<LoginViewProps> = () => {
                     sm={6}
                     md={4}
                     xl={2}
-                    style={{ boxShadow: 'none' }}
+                    style={{ boxShadow: "none" }}
                     className={
                         matches
-                            ? classes.container + ' ' + classes.paddinglarge
-                            : classes.container + ' ' + classes.paddingsmall
+                            ? `${classes.container} ${classes.paddinglarge}`
+                            : `${classes.container} ${classes.paddingsmall}`
                     }
                 >
                     <object
                         type="image/svg+xml"
                         data={animatedBird}
                         aria-label="bird moving"
-                    ></object>
+                    />
                 </Grid>
             ) : (
                 <Grid
@@ -115,33 +152,33 @@ const LoginView: FC<LoginViewProps> = () => {
                     xl={2}
                     className={
                         matches
-                            ? classes.container + ' ' + classes.paddinglarge
-                            : classes.container + ' ' + classes.paddingsmall
+                            ? `${classes.container} ${classes.paddinglarge}`
+                            : `${classes.container} ${classes.paddingsmall}`
                     }
                 >
                     <LoginLogo className={classes.loginlogo} />
                     <TextField
                         className={classes.textfield}
                         fullWidth
-                        label={t('LoginView:username')}
+                        label={t("LoginView:username")}
                         variant="filled"
                         onSubmit={tryLogin}
-                    ></TextField>
+                    />
                     <TextField
                         className={classes.textfield}
                         fullWidth
-                        label={t('LoginView:password')}
+                        label={t("LoginView:password")}
                         type="password"
                         variant="filled"
                         onSubmit={tryLogin}
-                    ></TextField>
+                    />
                     <Button
                         size="large"
                         className={classes.loginbutton}
                         fullWidth
                         variant="outlined"
                     >
-                        {t('LoginView:login')}
+                        {t("LoginView:login")}
                     </Button>
                     <Button
                         size="large"
@@ -150,7 +187,7 @@ const LoginView: FC<LoginViewProps> = () => {
                         variant="outlined"
                         onClick={tryLogin}
                     >
-                        {t('LoginView:loginWithMicrosoft')}
+                        {t("LoginView:loginWithMicrosoft")}
                     </Button>
                     {warning}
                 </Grid>
@@ -158,43 +195,3 @@ const LoginView: FC<LoginViewProps> = () => {
         </Grid>
     )
 }
-export default LoginView
-
-const useStyles = makeStyles({
-    root: {
-        justifyContent: 'center',
-    },
-    container: {
-        boxShadow: '0 3px 6px 2px rgba(0, 0, 0, 0.1)',
-        borderRadius: 2,
-        backgroundColor: colors.gray_100,
-        marginTop: '10vh',
-        zIndex: 2,
-    },
-    paddingsmall: {
-        padding: '40px',
-        marginBottom: '4vh',
-    },
-    paddinglarge: {
-        padding: '48px',
-    },
-    textfield: {
-        marginBottom: '16px',
-    },
-    loginlogo: {
-        marginBottom: '16px',
-        width: '60%',
-    },
-    loginbutton: {
-        marginBottom: '16px',
-        lineHeight: '24px',
-        textTransform: 'none',
-    },
-    backgroundimage: {
-        position: 'absolute',
-        zIndex: 1,
-        width: '50%',
-        height: '50%',
-        left: 0,
-    },
-})

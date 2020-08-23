@@ -1,28 +1,28 @@
-import React, { useState, useContext } from 'react'
-import { Grid, Menu, MenuItem, makeStyles } from '@material-ui/core'
+import React, { useState, useContext } from "react"
+import { Grid, Menu, MenuItem, makeStyles } from "@material-ui/core"
+import { useTranslation } from "react-i18next"
+import { useHistory } from "react-router-dom"
 import {
     DashboardButtonWithAddIconNoLink,
     DashboardButtonNoLink,
     DashboardButton,
-} from '../DashboardButtons/DashboardButtons'
-import { useTranslation } from 'react-i18next'
-import { SongContext } from '../../views/SongView/SongContextProvider.component'
-import { IVoice } from '../../models/IVoice'
-import { useHistory } from 'react-router-dom'
-import { InputModal } from '../CustomModal/InputModal.component'
-import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component'
+} from "../DashboardButtons/DashboardButtons"
+import { SongContext } from "../../views/SongView/SongContextProvider.component"
+import { IVoice } from "../../models/IVoice"
+import { InputModal } from "../CustomModal/InputModal.component"
+import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component"
 
-export type CreateSongTabProps = {}
+const useStyles = makeStyles({
+    createSongTab: {
+        marginBottom: "24px",
+    },
+})
 
-export type InstrumentCard = {
-    name: string
-    link: string
-}
-export const CreateSongTab: React.FC<CreateSongTabProps> = (props) => {
+export const CreateSongTab = () => {
     const classes = useStyles()
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false)
-    const [textFieldInput, setTextFieldInput] = useState<string>('')
+    const [textFieldInput, setTextFieldInput] = useState<string>("")
 
     const history = useHistory()
 
@@ -37,9 +37,9 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = (props) => {
         setShowPossiblePositions(false)
         addVoice({ title: textFieldInput, partNumber: voices.length, bars: [] })
         setModalIsOpen(false)
-        setTextFieldInput('')
+        setTextFieldInput("")
         const newIndex = voices.length + 1
-        history.replace('?voice=' + newIndex.toString())
+        history.replace(`?voice=${newIndex.toString()}`)
     }
 
     const handleOpen = () => {
@@ -56,7 +56,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = (props) => {
     }
 
     const { t } = useTranslation()
-    const queryString = require('query-string')
+    const queryString = require("query-string")
     const voiceString = queryString.parse(window.location.search)
     const selectedVoice = parseInt(voiceString.voice)
     const [rightClicked, setRightClicked] = useState(-1)
@@ -79,7 +79,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = (props) => {
         })
     }
     const handleCloseMenu = (method?: string) => {
-        if (method === 'renameVoice') {
+        if (method === "renameVoice") {
             setRenameModalIsOpen(true)
         }
         setRightClickCoordinates(initialState)
@@ -91,13 +91,13 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = (props) => {
 
     return (
         <Grid container>
-            <Grid item xs={'auto'} sm={1}></Grid>
+            <Grid item xs="auto" sm={1} />
             <Grid item xs={12} sm={10}>
                 <Grid container spacing={2} className={classes.createSongTab}>
                     <Grid item>
                         <DashboardButtonNoLink
                             selected={selectedVoice === 1}
-                            text={t('CreateSongTab:song')}
+                            text={t("CreateSongTab:song")}
                             func={() => {
                                 history.replace(`/song/${id}?voice=1`)
                             }}
@@ -124,7 +124,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = (props) => {
                                     keepMounted
                                     open={rightClickCoordinates.mouseY !== null}
                                     onClose={() => {
-                                        handleCloseMenu('')
+                                        handleCloseMenu("")
                                     }}
                                     anchorReference="anchorPosition"
                                     anchorPosition={
@@ -141,10 +141,10 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = (props) => {
                                 >
                                     <MenuItem
                                         onClick={() => {
-                                            handleCloseMenu('renameVoice')
+                                            handleCloseMenu("renameVoice")
                                         }}
                                     >
-                                        {t('CreateSongTab:changeVoiceName')}
+                                        {t("CreateSongTab:changeVoiceName")}
                                     </MenuItem>
                                 </Menu>
                             </Grid>
@@ -152,7 +152,7 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = (props) => {
                     })}
                     <Grid item>
                         <DashboardButtonWithAddIconNoLink
-                            text={t('CreateSongTab:newInstrument')}
+                            text={t("CreateSongTab:newInstrument")}
                             func={handleOpen}
                         />
                     </Grid>
@@ -163,10 +163,10 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = (props) => {
                 handleOnSaveClick={() => handleAddInstrument}
                 handleClosed={() => handleClose}
                 modalOpen={modalIsOpen}
-                saveText={t('Modal:create')}
-                cancelText={t('Modal:cancel')}
-                headerText={t('Modal:addInstrument')}
-                labelText={t('Modal:nameOfInstrument')}
+                saveText={t("Modal:create")}
+                cancelText={t("Modal:cancel")}
+                headerText={t("Modal:addInstrument")}
+                labelText={t("Modal:nameOfInstrument")}
                 handleChange={handleChange}
             />
             <InputModal
@@ -174,21 +174,13 @@ export const CreateSongTab: React.FC<CreateSongTabProps> = (props) => {
                 handleOnSaveClick={() => handleChangeVoiceTitle}
                 handleClosed={() => handleClose}
                 modalOpen={renameModalIsOpen}
-                saveText={t('Modal:save')}
-                cancelText={t('Modal:cancel')}
-                headerText={t('Modal:changeVoiceName')}
-                labelText={t('Modal:newVoiceName')}
+                saveText={t("Modal:save")}
+                cancelText={t("Modal:cancel")}
+                headerText={t("Modal:changeVoiceName")}
+                labelText={t("Modal:newVoiceName")}
                 handleChange={handleChange}
             />
-            <Grid item xs={'auto'} sm={1}></Grid>
+            <Grid item xs="auto" sm={1} />
         </Grid>
     )
 }
-
-const useStyles = makeStyles({
-    createSongTab: {
-        marginBottom: '24px',
-    },
-})
-
-export default CreateSongTab

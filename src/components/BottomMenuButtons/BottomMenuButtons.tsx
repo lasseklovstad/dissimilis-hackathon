@@ -3,39 +3,44 @@ import React, {
     useState,
     useEffect,
     useContext,
-} from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
-import AddIcon from '@material-ui/icons/Add'
-import { TextField, Button, Popper, Box, Grid } from '@material-ui/core'
-import { colors } from '../../utils/colors'
+} from "react"
+import { makeStyles } from "@material-ui/core/styles"
+import Typography from "@material-ui/core/Typography"
+import AddIcon from "@material-ui/icons/Add"
+import { TextField, Button, Popper, Box, Grid } from "@material-ui/core"
 import Autocomplete, {
     createFilterOptions,
-} from '@material-ui/lab/Autocomplete'
-import { SongToolsContext } from '../../views/SongView/SongToolsContextProvider.component'
-import { useTranslation } from 'react-i18next'
-import { getColor, tangentToNumber } from '../Bar/BarBody.component'
+} from "@material-ui/lab/Autocomplete"
+import { useTranslation } from "react-i18next"
+import { colors } from "../../utils/colors"
+import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component"
+import { getColor, tangentToNumber } from "../Bar/BarBody.component"
 
-export type AddButtonProps = {
+const useStyles = makeStyles({
+    button: {
+        backgroundColor: colors.white,
+        boxShadow: "0px 0px 0px rgba(255, 255, 255, 0)",
+        margin: "auto",
+    },
+    addbutton: {
+        backgroundColor: colors.white,
+        border: "none",
+        height: "56px",
+        outline: "none",
+    },
+    dropdown: {
+        "& .MuiOutlinedInput-notchedOutline": {
+            border: "0px",
+        },
+    },
+})
+
+export const MenuButtonWithAddIcon = (props: {
     text: string
     link?: string
     onClick?: Function
     selected?: boolean
-}
-export type ButtonProps = {
-    text: string
-    link?: string
-    onClick?: Function
-}
-export type AutocompleteProps = {
-    icon: React.ReactNode
-    notesOrChords: string[]
-    noOptionsText: string
-}
-
-export const MenuButtonWithAddIcon: FunctionComponent<AddButtonProps> = (
-    props
-) => {
+}) => {
     const styles = useStyles()
     return (
         <Button
@@ -55,7 +60,11 @@ export const MenuButtonWithAddIcon: FunctionComponent<AddButtonProps> = (
     )
 }
 
-export const MenuButton: FunctionComponent<ButtonProps> = (props) => {
+export const MenuButton = (props: {
+    text: string
+    link?: string
+    onClick?: Function
+}) => {
     const styles = useStyles()
     return (
         <Button
@@ -69,14 +78,16 @@ export const MenuButton: FunctionComponent<ButtonProps> = (props) => {
     )
 }
 
-const customPopperPlacement = function (props: any) {
+const customPopperPlacement = (props: any) => {
     return <Popper {...props} placement="top" />
 }
-const filterOptions = createFilterOptions({ matchFrom: 'start' })
+const filterOptions = createFilterOptions({ matchFrom: "start" })
 
-export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (
-    props
-) => {
+export const DropdownAutocomplete = (props: {
+    icon: React.ReactNode
+    notesOrChords: string[]
+    noOptionsText: string
+}) => {
     const styles = useStyles()
     const [options, setOptions] = useState(props.notesOrChords)
     const { selectedNoteKey, setSelectedNoteKey, noteIsSelected } = useContext(
@@ -100,7 +111,7 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (
                     setSelectedNoteKey(value as string)
                 }
             }}
-            openText={t('BottomBar:open')}
+            openText={t("BottomBar:open")}
             PopperComponent={customPopperPlacement}
             options={options}
             closeIcon={false}
@@ -117,7 +128,7 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (
                 />
             )}
             renderOption={(options) => (
-                <React.Fragment>
+                <>
                     <Grid container>
                         <Grid item xs={9}>
                             <Typography>{options}</Typography>
@@ -126,18 +137,18 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (
                             {noteIsSelected ? (
                                 <Box
                                     style={{
-                                        height: '24px',
-                                        width: '24px',
+                                        height: "24px",
+                                        width: "24px",
                                         backgroundColor: getColor(options),
-                                        borderRadius: '5px',
-                                        verticalAlign: 'center',
+                                        borderRadius: "5px",
+                                        verticalAlign: "center",
                                     }}
                                 >
                                     {tangentToNumber(options) !== 0 ? (
                                         <Typography
                                             style={{
                                                 color: colors.white,
-                                                textAlign: 'center',
+                                                textAlign: "center",
                                             }}
                                         >
                                             {tangentToNumber(options)}
@@ -151,29 +162,8 @@ export const DropdownAutocomplete: FunctionComponent<AutocompleteProps> = (
                             )}
                         </Grid>
                     </Grid>
-                </React.Fragment>
+                </>
             )}
         />
     )
 }
-
-export default MenuButton
-
-const useStyles = makeStyles({
-    button: {
-        backgroundColor: colors.white,
-        boxShadow: '0px 0px 0px rgba(255, 255, 255, 0)',
-        margin: 'auto',
-    },
-    addbutton: {
-        backgroundColor: colors.white,
-        border: 'none',
-        height: '56px',
-        outline: 'none',
-    },
-    dropdown: {
-        '& .MuiOutlinedInput-notchedOutline': {
-            border: '0px',
-        },
-    },
-})
