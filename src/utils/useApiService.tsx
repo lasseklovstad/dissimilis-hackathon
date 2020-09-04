@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom"
  * @param initialData initial data
  */
 
-export const useApiService = <T extends Object>(
+export const useApiService = <T extends unknown>(
     url: string,
     options: ApiServiceOptions<T>
 ) => {

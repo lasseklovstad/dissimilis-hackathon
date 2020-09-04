@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core"
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 import { useTranslation } from "react-i18next"
-import queryString from "query-string"
+import { parse } from "query-string"
 import { colors } from "../../utils/colors"
 import { Bar } from "../Bar/Bar.component"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
@@ -60,7 +60,7 @@ export const BarContainer = (props: {
     const { t } = useTranslation()
     const { bar } = props
 
-    const voiceStringFromURL = queryString.parse(window.location.search)
+    const voiceStringFromURL = parse(window.location.search)
     const voiceId = parseInt(voiceStringFromURL.voice as string, 10)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

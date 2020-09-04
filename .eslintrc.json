@@ -29,11 +29,11 @@
         "project": "./tsconfig.json"
     },
     "rules": {
-        "func-style": ["error", "expression"],
+        "func-style": ["warn", "expression"],
         "react/prop-types": "off",
         "react/require-default-props": "off",
         "react/destructuring-assignment": "off",
-        "import/no-default-export": "error",
+        "import/no-default-export": "warn",
         "import/prefer-default-export": "off",
         "react/jsx-props-no-spreading": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
@@ -42,10 +42,25 @@
         "no-plusplus": "off",
         "no-shadow": "off",
         "prettier/prettier": [
-            "error",
+            "warn",
             {
             "endOfLine": "auto"
             }
-        ]
+        ],
+        "@typescript-eslint/naming-convention": [
+            "warn",
+            {
+                "selector": "variable",
+                "format": ["camelCase"]
+            }
+        ],
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "react-hooks/exhaustive-deps": "warn",
+        "react/no-array-index-key": "warn",
+        "no-nested-ternary": "warn",
+        "@typescript-eslint/camelcase": "warn",
+        "@typescript-eslint/interface-name-prefix": "warn",
+        "@typescript-eslint/no-use-before-define": "warn",
+        "prefer-const": "warn"
     }
 }

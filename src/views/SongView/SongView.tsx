@@ -8,6 +8,7 @@ import {
     Snackbar,
     Typography,
 } from "@material-ui/core"
+import { parse } from "query-string"
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert"
 import { NavBarCreateSong } from "../../components/NavBarCreateSong/NavBarCreateSong.component"
 import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.component"
@@ -45,18 +46,17 @@ export const SongView = () => {
 
     const xs = useMediaQuery("(max-width: 600px)")
     const xl = useMediaQuery("(min-width: 1920px)")
-    const queryString = require("query-string")
     const history = useHistory()
     const match = useRouteMatch<{ id: string }>("/song/:id")
     const id = match ? +match.params.id : 0
-    const voiceString = queryString.parse(window.location.search)
+    const voiceString = parse(window.location.search)
     let selectedVoice = 0
-    if (voiceString.voice !== undefined) {
+    if (typeof voiceString.voice === "string") {
         const voiceInt = parseInt(voiceString.voice, 10)
         if (voiceInt > voices.length || voiceInt <= 0) {
             history.replace(`/song/${id}?voice=1`)
         } else {
-            selectedVoice = voiceString.voice - 1
+            selectedVoice = voiceInt - 1
         }
     } else {
         history.replace(`/song/${id}?voice=1`)

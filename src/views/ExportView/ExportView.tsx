@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core"
 import { useHistory } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { parse as queryStringParse } from "query-string"
+import { parse } from "query-string"
 import { SongContext } from "../SongView/SongContextProvider.component"
 import { colors } from "../../utils/colors"
 import { BarContainer } from "../../components/BarContainer/BarContainer.component"
@@ -86,14 +86,14 @@ export const ExportView = () => {
 
     const matches = useMediaQuery("(min-width:960px)")
 
-    const voiceString = queryStringParse(window.location.search) as any // TODO
+    const voiceString = parse(window.location.search)
     let selectedVoice = 0
-    if (voiceString.voice !== undefined) {
+    if (typeof voiceString.voice === "string") {
         const voiceInt = parseInt(voiceString.voice, 10)
         if (voiceInt > voices.length || voiceInt <= 0) {
             history.replace("./export?voice=1")
         } else {
-            selectedVoice = voiceString.voice - 1
+            selectedVoice = voiceInt - 1
         }
     } else {
         history.replace("./export?voice=1")

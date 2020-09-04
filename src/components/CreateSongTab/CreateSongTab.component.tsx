@@ -2,6 +2,8 @@ import React, { useState, useContext } from "react"
 import { Grid, Menu, MenuItem, makeStyles } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
+import { parse } from "query-string"
+
 import {
     DashboardButtonWithAddIconNoLink,
     DashboardButtonNoLink,
@@ -48,9 +50,8 @@ export const CreateSongTab = () => {
     }
 
     const { t } = useTranslation()
-    const queryString = require("query-string")
-    const voiceString = queryString.parse(window.location.search)
-    const selectedVoice = parseInt(voiceString.voice)
+    const voiceString = parse(window.location.search)
+    const selectedVoice = parseInt(voiceString.voice as string, 10)
     const [rightClicked, setRightClicked] = useState(-1)
 
     const initialState = {
