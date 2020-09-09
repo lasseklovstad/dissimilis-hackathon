@@ -1,7 +1,7 @@
-import { IBar } from "./IBar";
+import { IBar } from "./IBar"
 
 export interface IVoice {
-    title: string,
-    partNumber: number,
+    title: string
+    partNumber: number
     bars: Array<IBar>
 }

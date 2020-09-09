@@ -1,7 +1,7 @@
-export const loginNo: any = {
-    "loginWithMicrosoft": "Logg inn med Microsoft",
-    "login": "Logg inn",
-    "username": "Brukernavn",
-    "password": "Passord",
-    "loginFailed": "Feil brukernavn eller passord",
+export const loginNo = {
+    loginWithMicrosoft: "Logg inn med Microsoft",
+    login: "Logg inn",
+    username: "Brukernavn",
+    password: "Passord",
+    loginFailed: "Feil brukernavn eller passord",
 }

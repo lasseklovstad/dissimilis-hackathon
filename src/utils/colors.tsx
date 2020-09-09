@@ -1,4 +1,3 @@
-
 export const colors = {
     gray_100: "#FAFAFA",
     gray_200: "#E0E0E0",
@@ -17,5 +16,4 @@ export const colors = {
     H: "#FB8C00",
     semitone: "#616161",
     teal_100: "#B2DFDB",
-};
-export default colors;
+}

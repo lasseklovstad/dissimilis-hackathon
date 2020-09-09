@@ -1,32 +1,47 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import CreateSongTab from "./CreateSongTab.component";
-import { BrowserRouter } from "react-router-dom";
-import userEvent from "@testing-library/user-event";
+/* eslint-disable func-names */
+import React from "react"
+import { render, screen } from "@testing-library/react"
+import { BrowserRouter } from "react-router-dom"
+import userEvent from "@testing-library/user-event"
+import { CreateSongTab } from "./CreateSongTab.component"
 
 describe("CreateSongTab", () => {
     it("should create a new instrument", function () {
-        render(<BrowserRouter><CreateSongTab /></BrowserRouter>);
-        const addNewInstrumentButton = screen.getByRole("button", { name: /CreateSongTab:newInstrument/i });
-        addNewInstrumentButton.click();
+        render(
+            <BrowserRouter>
+                <CreateSongTab />
+            </BrowserRouter>
+        )
+        const addNewInstrumentButton = screen.getByRole("button", {
+            name: /CreateSongTab:newInstrument/i,
+        })
+        addNewInstrumentButton.click()
 
+        const textInputField = screen.getByRole("textbox")
+        userEvent.type(textInputField, "Guitar")
 
-        const textInputField = screen.getByRole("textbox");
-        userEvent.type(textInputField, "Guitar");
+        const saveButton = screen.getByRole("button", {
+            name: /CreateSongTab:save/i,
+        })
 
-        const saveButton = screen.getByRole("button", { name: /CreateSongTab:save/i });
-
-        expect(saveButton).toBeEnabled();
-
-    });
+        expect(saveButton).toBeEnabled()
+    })
 
     it("should not create a new instrument when field is empty", function () {
-        render(<BrowserRouter><CreateSongTab /></BrowserRouter>);
-        const addNewInstrumentButton = screen.getByRole("button", { name: /CreateSongTab:newInstrument/i });
-        addNewInstrumentButton.click();
+        render(
+            <BrowserRouter>
+                <CreateSongTab />
+            </BrowserRouter>
+        )
+        const addNewInstrumentButton = screen.getByRole("button", {
+            name: /CreateSongTab:newInstrument/i,
+        })
+        addNewInstrumentButton.click()
 
-        const saveButton = screen.getByRole("button", { name: /CreateSongTab:save/i });
+        const saveButton = screen.getByRole("button", {
+            name: /CreateSongTab:save/i,
+        })
 
-        expect(saveButton).toBeDisabled();
-    });
-});
+        expect(saveButton).toBeDisabled()
+    })
+})

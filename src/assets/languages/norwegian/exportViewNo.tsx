@@ -1,6 +1,6 @@
-export const exportViewNo: any = {
-    "barPerRow": "Takt per rad",
-    "rowsPerSheet": "Rader per ark",
-    "createPDF": "Opprett PDF",
-    "cancel": "Avbryt",
+export const exportViewNo = {
+    barPerRow: "Takt per rad",
+    rowsPerSheet: "Rader per ark",
+    createPDF: "Opprett PDF",
+    cancel: "Avbryt",
 }
