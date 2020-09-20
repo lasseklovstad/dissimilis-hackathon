@@ -21,11 +21,8 @@ export const LibraryView = () => {
     const [libraryView, setLibraryView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
 
-    const { getData: getAllSongs, data: allSongs } = useGetAllSongs()
-    const {
-        getData: getFilteredSongs,
-        data: filteredSongs,
-    } = useGetFilteredSongs(searchTerm)
+    const { getAllSongs, allSongs } = useGetAllSongs()
+    const { getFilteredSongs, filteredSongs } = useGetFilteredSongs(searchTerm)
     const marginBottom = 4
 
     useEffect(() => {
