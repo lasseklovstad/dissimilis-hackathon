@@ -51,7 +51,7 @@
             "warn",
             {
                 "selector": "variable",
-                "format": ["camelCase"]
+                "format": ["camelCase", "PascalCase"]
             }
         ],
         "@typescript-eslint/explicit-function-return-type": "off",
