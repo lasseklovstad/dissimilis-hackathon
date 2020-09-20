@@ -116,7 +116,10 @@ export const usePutSong = (song: ISong) => {
     const body = song
     const headers = getHeaders()
     const api = useApiService<number>(url, { body, headers })
-    return { putSong: api.putData }
+    return {
+        putSong: api.putData,
+        putSongError: { error: api.state.error, isError: api.state.isError },
+    }
 }
 
 /**
@@ -127,5 +130,9 @@ export const useDeleteSong = (id: number) => {
     const url = `song/${id}`
     const headers = getHeaders()
     const api = useApiService<ISong>(url, { headers })
-    return { deleteSong: api.deleteData }
+    return {
+        deleteSong: api.deleteData,
+        deleteSongError: { error: api.state.error, isError: api.state.isError },
+        deleteSongLoading: api.state.loading,
+    }
 }

@@ -73,6 +73,9 @@ export const useApiService = <T extends unknown>(
             let axiosError: AxiosError<IServerError> | undefined
             let isError = false
 
+            // reset states
+            setIsError(false)
+            setError(undefined)
             setLoading(true)
 
             try {

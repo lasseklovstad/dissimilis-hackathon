@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useRouteMatch } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import { IVoice } from "../../models/IVoice"
 import { IBar, IChordAndNotes } from "../../models/IBar"
 import { useGetSong } from "../../utils/useApiServiceSongs"
@@ -70,6 +71,7 @@ export const SongContext = React.createContext<ISongContext>({
 })
 
 export const SongContextProvider: React.FC = (props) => {
+    const { t } = useTranslation()
     const [songId, setSongId] = useState<number>(1)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isSaving, setIsSaving] = useState<boolean>(false)
@@ -443,7 +445,11 @@ export const SongContextProvider: React.FC = (props) => {
 
     return (
         <>
-            <ErrorDialog isError={songError.isError} error={songError.error} />
+            <ErrorDialog
+                isError={songError.isError}
+                error={songError.error}
+                title={t("Modal:getSongError")}
+            />
             <SongContext.Provider value={value}>
                 {props.children}
             </SongContext.Provider>
