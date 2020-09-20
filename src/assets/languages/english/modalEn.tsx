@@ -15,4 +15,5 @@ export const modalEn = {
     cancel: "Cancel",
     create: "Create",
     save: "Save",
+    errorTitle: "Error",
 }

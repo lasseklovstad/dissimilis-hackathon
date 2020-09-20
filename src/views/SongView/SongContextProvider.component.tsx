@@ -4,6 +4,7 @@ import { IVoice } from "../../models/IVoice"
 import { IBar, IChordAndNotes } from "../../models/IBar"
 import { useGetSong } from "../../utils/useApiServiceSongs"
 import { ISong } from "../../models/ISong"
+import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 
 interface ISongContext {
     song: ISong
@@ -72,7 +73,7 @@ export const SongContextProvider: React.FC = (props) => {
     const [songId, setSongId] = useState<number>(1)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isSaving, setIsSaving] = useState<boolean>(false)
-    const { getData: getSong } = useGetSong(songId)
+    const { getData: getSong, isError, error } = useGetSong(songId)
     let [song, setSong] = useState<ISong>({
         title: "",
         id: 0,
@@ -441,8 +442,11 @@ export const SongContextProvider: React.FC = (props) => {
     }
 
     return (
-        <SongContext.Provider value={value}>
-            {props.children}
-        </SongContext.Provider>
+        <>
+            <ErrorDialog isError={isError} error={error} />
+            <SongContext.Provider value={value}>
+                {props.children}
+            </SongContext.Provider>
+        </>
     )
 }

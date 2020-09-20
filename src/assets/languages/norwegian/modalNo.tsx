@@ -15,4 +15,5 @@ export const modalNo = {
     cancel: "Avbryt",
     create: "Opprett",
     save: "Lagre",
+    errorTitle: "Det oppstod en feil",
 }
