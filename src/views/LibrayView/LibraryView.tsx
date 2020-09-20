@@ -19,24 +19,22 @@ export const LibraryView = () => {
     const styles = useStyles()
     const { t } = useTranslation()
     const [libraryView, setLibraryView] = useState(true)
-    const [allSongs, setAllSongs] = useState<ISong[]>([])
     const [searchTerm, setSearchTerm] = useState("")
-    const [filteredSongs, setFilteredSongs] = useState<ISong[]>([])
 
-    const getAllSongs = useGetAllSongs()
-    const getFilteredSongs = useGetFilteredSongs(searchTerm)
+    const { getData: getAllSongs, data: allSongs } = useGetAllSongs()
+    const {
+        getData: getFilteredSongs,
+        data: filteredSongs,
+    } = useGetFilteredSongs(searchTerm)
     const marginBottom = 4
 
     useEffect(() => {
-        getAllSongs().then(({ result }) => {
-            setAllSongs(result?.data || [])
-        })
-    }, [])
+        getAllSongs()
+    }, [getAllSongs])
+
     useEffect(() => {
-        getFilteredSongs().then(({ result }) => {
-            setFilteredSongs(result?.data || [])
-        })
-    }, [searchTerm])
+        getFilteredSongs()
+    }, [getFilteredSongs])
 
     const handleOnBlurSearch = () => {
         setTimeout(() => {
