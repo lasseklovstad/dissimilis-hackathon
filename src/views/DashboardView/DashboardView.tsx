@@ -38,14 +38,11 @@ export const DashboardView = () => {
     const [timeSignature, setTimeSignature] = useState("")
     const [textFieldInput, setTextFieldInput] = useState<string>("")
 
-    const { postData: postSong } = usePostSong(textFieldInput, timeSignature)
+    const { postSong } = usePostSong(textFieldInput, timeSignature)
     const history = useHistory()
     const measureText = t("DashboardView:measure")
-    const { getData: getRecentSongs, data: recentSongs } = useGetRecentSongs()
-    const {
-        getData: getFilteredSongs,
-        data: filteredSongs,
-    } = useGetFilteredSongs(searchTerm)
+    const { getRecentSongs, recentSongs } = useGetRecentSongs()
+    const { getFilteredSongs, filteredSongs } = useGetFilteredSongs(searchTerm)
 
     useEffect(() => {
         getRecentSongs()
