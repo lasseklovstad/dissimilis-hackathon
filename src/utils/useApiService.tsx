@@ -31,13 +31,6 @@ export type ApiServiceOptions<T> = {
     headers?: Record<string, string>
 }
 
-/**
- * @param method HTTP method, get or put
- * @param url Url to api
- * @param sendData data to be sent
- * @param initialData initial data
- */
-
 export const useApiService = <T extends unknown>(
     url: string,
     options: ApiServiceOptions<T>
@@ -48,7 +41,7 @@ export const useApiService = <T extends unknown>(
     const [error, setError] = useState<string | undefined>(undefined)
     const [data, setData] = useState<T | undefined>(initialData)
     const [isError, setIsError] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const updateStates = (
         result: AxiosResponse<T> | undefined,
@@ -77,7 +70,7 @@ export const useApiService = <T extends unknown>(
             let errorMessage
             let isError = false
 
-            setIsLoading(true)
+            setLoading(true)
 
             try {
                 switch (method) {
@@ -117,7 +110,7 @@ export const useApiService = <T extends unknown>(
                 isError = true
                 errorMessage = error
             } finally {
-                setIsLoading(false)
+                setLoading(false)
                 updateStates(result, isError, errorMessage)
             }
             return { result, isError, errorMessage }
@@ -154,8 +147,10 @@ export const useApiService = <T extends unknown>(
         putData,
         deleteData,
         data,
-        isError,
-        error,
-        isLoading,
+        state: {
+            isError,
+            error,
+            loading,
+        },
     }
 }
