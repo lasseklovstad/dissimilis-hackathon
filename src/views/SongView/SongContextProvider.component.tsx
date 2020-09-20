@@ -72,7 +72,7 @@ export const SongContextProvider: React.FC = (props) => {
     const [songId, setSongId] = useState<number>(1)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isSaving, setIsSaving] = useState<boolean>(false)
-    const getSong = useGetSong(songId)
+    const { getSong } = useGetSong(songId)
     let [song, setSong] = useState<ISong>({
         title: "",
         id: 0,

@@ -26,6 +26,7 @@ type MusicTacts = {
     id: number
     text: string
 }
+const marginBottom = 10
 
 export const DashboardView = () => {
     const styles = useStyles()
@@ -33,30 +34,23 @@ export const DashboardView = () => {
 
     const [dashboardView, setDashboardView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
-    const [filteredSongs, setFilteredSongs] = useState<ISong[]>([])
-    const [recentSongs, setRecentSongs] = useState<ISong[]>([])
     const [addSongModalIsOpen, setAddSongModalIsOpen] = useState(false)
     const [timeSignature, setTimeSignature] = useState("")
     const [textFieldInput, setTextFieldInput] = useState<string>("")
 
-    const postSong = usePostSong(textFieldInput, timeSignature)
+    const { postSong } = usePostSong(textFieldInput, timeSignature)
     const history = useHistory()
     const measureText = t("DashboardView:measure")
-    const getRecentSongs = useGetRecentSongs()
-    const getFilteredSongs = useGetFilteredSongs(searchTerm)
-    const marginBottom = 10
+    const { getRecentSongs, recentSongs } = useGetRecentSongs()
+    const { getFilteredSongs, filteredSongs } = useGetFilteredSongs(searchTerm)
 
     useEffect(() => {
-        getRecentSongs().then(({ result }) => {
-            setRecentSongs(result?.data || [])
-        })
-    }, [])
+        getRecentSongs()
+    }, [getRecentSongs])
 
     useEffect(() => {
-        getFilteredSongs().then(({ result }) => {
-            setFilteredSongs(result?.data || [])
-        })
-    }, [searchTerm])
+        getFilteredSongs()
+    }, [getFilteredSongs, searchTerm])
 
     const musicTacts: MusicTacts[] = [
         {
@@ -152,7 +146,7 @@ export const DashboardView = () => {
                                     </Typography>
                                 </Box>
                                 <Grid container spacing={3}>
-                                    {recentSongs.map((song) => (
+                                    {recentSongs?.map((song) => (
                                         <Grid
                                             item
                                             xs={12}

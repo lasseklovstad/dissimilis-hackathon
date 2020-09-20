@@ -26,10 +26,10 @@ export const MenuButton = () => {
     const { setShowPossiblePositions } = useContext(SongToolsContext)
     const { t } = useTranslation()
     const history = useHistory()
-    const putSong = usePutSong(song)
+    const { putSong } = usePutSong(song)
     const match = useRouteMatch<{ id: string }>("/song/:id")
     const id = match ? +match.params.id : 0
-    const deleteSong = useDeleteSong(id)
+    const { deleteSong } = useDeleteSong(id)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)

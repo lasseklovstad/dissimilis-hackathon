@@ -61,7 +61,7 @@ export const NavBarCreateSong = () => {
     } = useContext(SongContext)
     const [newTitle, setNewTitle] = useState(title)
     const matches = useMediaQuery("(max-width:600px)")
-    const putSong = usePutSong(song)
+    const { putSong } = usePutSong(song)
     const { t } = useTranslation()
     const history = useHistory()
 
