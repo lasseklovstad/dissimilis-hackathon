@@ -20,6 +20,7 @@ import {
 import { BarContainer } from "../../components/BarContainer/BarContainer.component"
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
 import animatedBird from "../../assets/images/sommerfugl-animert.svg"
+import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 
 const useStyles = makeStyles({
     root: {
@@ -108,14 +109,7 @@ export const SongView = () => {
                 </Grid>
                 {isLoading ? (
                     <Grid item xs={12}>
-                        <Box width="30%" margin="auto">
-                            <object
-                                type="image/svg+xml"
-                                data={animatedBird}
-                                aria-label="bird moving"
-                                style={{ width: "100%", height: "20%" }}
-                            />
-                        </Box>
+                        <LoadingLogo />
                     </Grid>
                 ) : (
                     <Grid item xs={12}>
