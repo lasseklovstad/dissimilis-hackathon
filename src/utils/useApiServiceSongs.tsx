@@ -16,7 +16,10 @@ export const useGetSong = (id: number) => {
     const url = `song/${id}`
     const headers = getHeaders()
     const api = useApiService<ISong>(url, { headers })
-    return { getSong: api.getData }
+    return {
+        getSong: api.getData,
+        songError: { error: api.state.error, isError: api.state.isError },
+    }
 }
 
 /**
@@ -33,7 +36,15 @@ export const useGetAllSongs = () => {
         headers,
     })
 
-    return { getAllSongs: api.getData, allSongs: api.data }
+    return {
+        getAllSongs: api.getData,
+        allSongs: api.data,
+        allSongsError: {
+            isError: api.state.isError,
+            error: api.state.error,
+        },
+        isAllSongsLoading: api.state.loading,
+    }
 }
 
 /**
@@ -53,6 +64,11 @@ export const useGetFilteredSongs = (title: string) => {
     return {
         getFilteredSongs: api.getData,
         filteredSongs: api.data,
+        isFilteredSongsLoading: api.state.loading,
+        filteredSongsError: {
+            isError: api.state.isError,
+            error: api.state.error,
+        },
     }
 }
 
@@ -69,7 +85,11 @@ export const useGetRecentSongs = () => {
         initialData,
         headers,
     })
-    return { getRecentSongs: api.getData, recentSongs: api.data }
+    return {
+        getRecentSongs: api.getData,
+        recentSongs: api.data,
+        isRecentSongsLoading: api.state.loading,
+    }
 }
 
 /**
@@ -81,7 +101,11 @@ export const usePostSong = (title: string, timeSignature: string) => {
     const headers = getHeaders()
     const body = { title, timeSignature }
     const api = useApiService<ISong>(url, { headers, body })
-    return { postSong: api.postData }
+    return {
+        postSong: api.postData,
+        postSongError: { error: api.state.error, isError: api.state.isError },
+        isPostSongLoading: api.state.loading,
+    }
 }
 
 /**

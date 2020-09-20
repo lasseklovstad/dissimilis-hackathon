@@ -21,6 +21,7 @@ import { BarContainer } from "../../components/BarContainer/BarContainer.compone
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
 import animatedBird from "../../assets/images/sommerfugl-animert.svg"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
+import { Loading } from "../../components/loading/Loading.component"
 
 const useStyles = makeStyles({
     root: {
@@ -121,7 +122,7 @@ export const SongView = () => {
                                     if (i === 0) {
                                         return (
                                             <TimeSignature
-                                                key={i}
+                                                key={bar.barNumber}
                                                 height={heightOfBar}
                                             />
                                         )
@@ -129,7 +130,7 @@ export const SongView = () => {
                                     if (xl && i % 4 === 0) {
                                         return (
                                             <BarNumber
-                                                key={i}
+                                                key={bar.barNumber}
                                                 barNumber={i + 1}
                                                 height={heightOfBar}
                                             />
@@ -138,7 +139,7 @@ export const SongView = () => {
                                     if (!xs && !xl && i % 2 === 0) {
                                         return (
                                             <BarNumber
-                                                key={i}
+                                                key={bar.barNumber}
                                                 barNumber={i + 1}
                                                 height={heightOfBar}
                                             />
@@ -147,13 +148,13 @@ export const SongView = () => {
                                     if (xs) {
                                         return (
                                             <BarNumber
-                                                key={i}
+                                                key={bar.barNumber}
                                                 barNumber={i + 1}
                                                 height={heightOfBar}
                                             />
                                         )
                                     }
-                                    return <div key={i} />
+                                    return <div key={bar.barNumber} />
                                 })}
                             </Grid>
 

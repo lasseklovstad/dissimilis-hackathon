@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Box, Grid, TextField, AppBar, makeStyles } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
+import { useHistory } from "react-router"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 
 const useStyles = makeStyles(() => ({
@@ -16,8 +17,13 @@ export const DashboardTopBar = (props: {
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
+    const history = useHistory()
     const searchPlaceholder = t("DashboardView:search")
     const [searchBarFocus, setSearchBarFocus] = useState(false)
+
+    const goHome = () => {
+        history.push("/dashboard")
+    }
 
     return (
         <div>
@@ -26,7 +32,7 @@ export const DashboardTopBar = (props: {
                     <Grid container spacing={2}>
                         <Grid item sm={1} />
                         <Grid item xs={2}>
-                            <DashboardTopBarIcon />
+                            <DashboardTopBarIcon onClick={goHome} />
                         </Grid>
                         <Grid
                             item

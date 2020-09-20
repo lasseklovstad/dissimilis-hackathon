@@ -73,7 +73,7 @@ export const SongContextProvider: React.FC = (props) => {
     const [songId, setSongId] = useState<number>(1)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isSaving, setIsSaving] = useState<boolean>(false)
-    const { getSong } = useGetSong(songId)
+    const { getSong, songError } = useGetSong(songId)
     let [song, setSong] = useState<ISong>({
         title: "",
         id: 0,
@@ -443,10 +443,7 @@ export const SongContextProvider: React.FC = (props) => {
 
     return (
         <>
-            <ErrorDialog
-                isError={getSongState.isError}
-                error={getSongState.error}
-            />
+            <ErrorDialog isError={songError.isError} error={songError.error} />
             <SongContext.Provider value={value}>
                 {props.children}
             </SongContext.Provider>
