@@ -137,11 +137,7 @@ export const LoginView = () => {
                             : `${classes.container} ${classes.paddingsmall}`
                     }
                 >
-                    <object
-                        type="image/svg+xml"
-                        data={animatedBird}
-                        aria-label="bird moving"
-                    />
+                    <LoginLogo />
                 </Grid>
             ) : (
                 <Grid
