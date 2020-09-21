@@ -15,6 +15,7 @@ import { SongContext } from "../../views/SongView/SongContextProvider.component"
 
 const useStyles = makeStyles({
     root: {
+        width: "100%",
         display: "flex",
         flexFlow: "row wrap",
         justifyContent: "center",
@@ -59,7 +60,7 @@ export type BarBodyProps = {
 /* Gets the chord based on notes. The package we use (tonaljs) uses the tone "B" instead of "H" so we need
 to replace H with B to get the right chord. 
 */
-export const getChord = (notes: string[]): string => {
+const getChord = (notes: string[]): string => {
     const tempArray = notes.slice()
     const index = tempArray.indexOf("H")
     if (index !== -1) {
@@ -98,9 +99,9 @@ export const tangentToNumber = (tangent: string): number => {
     return result
 }
 
-export const getColor = (color: string): string => {
+export const getColor = (note: string): string => {
     let newColor = "transparent"
-    switch (color) {
+    switch (note) {
         case "C":
             newColor = colors.C
             break
@@ -245,9 +246,11 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
                 variant="body1"
                 style={{
                     flexBasis: calculateFlexBasis(tempArrayOfChordsLength[i]),
-                    overflow: "hidden",
                     textOverflow: "ellipsis",
                     paddingLeft: "4px",
+                    position: "relative",
+                    top: "-10px",
+                    height: "0",
                 }}
                 className={classes.toneText}
             >
@@ -270,29 +273,14 @@ export const BarBody: React.FC<BarBodyProps> = (props) => {
     }
 
     return (
-        <Box
-            style={{ height: !props.height ? "100%" : `${props.height}px` }}
-            className={classes.root}
-        >
+        <Box height={props.height || "100%"} display="flex" width="100%">
             {chordsInBar}
             {props.chordsAndNotes.map((note, i) => {
                 return (
                     <Box
-                        onContextMenu={() => setRightClicked(i)}
                         key={i}
-                        className={classes.toneAndChordBox}
-                        style={{
-                            flex: note.length,
-                            height: !props.height
-                                ? "100%"
-                                : `${props.height - 24}px`,
-                            margin:
-                                props.chordsAndNotes.length >= 5
-                                    ? props.rowsPerSheet === 6
-                                        ? "0px 1px"
-                                        : "0px 4px"
-                                    : "0px 4px",
-                        }}
+                        onContextMenu={() => setRightClicked(i)}
+                        flex={note.length}
                         flexDirection="column"
                     >
                         {note.notes.map((type, index) => {

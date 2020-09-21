@@ -3,96 +3,25 @@ import { makeStyles, Box, Typography } from "@material-ui/core"
 import { colors } from "../../utils/colors"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
 
-export type TimeSignatureProps = {
-    height?: number
-}
-
-const useStyles = makeStyles({
-    TimeSignatureContainer: {
-        flexDirection: "column",
-        display: "flex",
-    },
-    TimeSignatureNumerator: {
-        margin: "36px 10px 0 0",
-        float: "right",
-        fontWeight: "bold",
-    },
-    TimeSignatureDenominator: {
-        margin: "-5px 10px 0 0",
-        float: "right",
-        fontWeight: "bold",
-    },
-    BarComponent: {
-        backgroundColor: "green",
-        borderStyle: "double",
-    },
-    BarNumberContainer: {
-        height: "200px",
-    },
-    BarNumberText: {
-        margin: "40px 10px 0 0",
-        float: "right",
-        color: colors.gray_400,
-    },
-})
-
-export const TimeSignature = (props: { height?: number }) => {
-    const style = useStyles()
-    const { song } = useContext(SongContext)
-    const timeSignatureString = song.timeSignature
+export const TimeSignature = (props: { timeSignature: string }) => {
+    const timeSignatureString = props.timeSignature
     const timeSignatureNumerator = timeSignatureString.split("/")[0]
     const timeSignatureDenominator = timeSignatureString.split("/")[1]
 
     return (
-        <Box
-            className={style.TimeSignatureContainer}
-            style={{
-                height: !props.height ? "240px" : `${props.height + 80}px`,
-            }}
-        >
-            <Box>
-                <Typography className={style.TimeSignatureNumerator}>
-                    {timeSignatureNumerator}
-                </Typography>
+        <Typography variant="body1">
+            <Box mr={1} fontWeight="fontWeightBold">
+                <Box>{timeSignatureNumerator}</Box>
+                <Box>{timeSignatureDenominator}</Box>
             </Box>
-            <Box>
-                <Typography className={style.TimeSignatureDenominator}>
-                    {timeSignatureDenominator}
-                </Typography>
-            </Box>
-        </Box>
+        </Typography>
     )
 }
 
-export const Bar: FC<TimeSignatureProps> = (props) => {
-    const style = useStyles()
+export const BarNumber = (props: { barNumber: number }) => {
     return (
-        <Box
-            className={style.BarComponent}
-            style={{
-                height: !props.height ? "240px" : `${props.height + 80}px`,
-            }}
-        />
-    )
-}
-
-export type SongViewBarNumberProps = {
-    barNumber: number
-    height?: number
-}
-
-export const BarNumber: FC<SongViewBarNumberProps> = (props) => {
-    const style = useStyles()
-    return (
-        <Box
-            className={style.BarNumberContainer}
-            style={{
-                height: !props.height ? "240px" : `${props.height + 80}px`,
-            }}
-        >
-            <Typography variant="body1" className={style.BarNumberText}>
-                {props.barNumber}
-            </Typography>
+        <Box mr={1}>
+            <Typography variant="body1">{props.barNumber}</Typography>
         </Box>
     )
 }

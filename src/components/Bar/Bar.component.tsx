@@ -1,9 +1,15 @@
-import React from "react"
+import React, { useContext, useState } from "react"
 import { Box, Grid, makeStyles } from "@material-ui/core"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { House } from "./House.component"
 import { BarBody } from "./BarBody.component"
 import { IChordAndNotes } from "../../models/IBar"
+import { Chord } from "./Chord.component"
+import { ChordMenu } from "./ChordMenu.component"
+import {
+    SongToolsContext,
+    SongToolsContextProvider,
+} from "../../views/SongView/SongToolsContextProvider.component"
 
 const useStyles = makeStyles({
     root: {
@@ -24,107 +30,69 @@ export const Bar = (props: {
     repAfter: boolean
     house?: number
     chordsAndNotes: IChordAndNotes[]
-    barLineAfter?: boolean
     height?: number
     voiceId: number
     exportMode?: boolean
     rowsPerSheet?: number
 }) => {
-    const classes = useStyles()
+    const [menuPosition, setMenuPosition] = useState<
+        { top: number; left: number } | undefined
+    >()
+    const [activeChord, setActiveChord] = useState<number | undefined>()
+    const { selectedNoteLength } = useContext(SongToolsContext)
 
-    let centerDivSize: 9 | 10 | 11 = 9
+    const handleRightClick = (event: React.MouseEvent) => {
+        event.preventDefault()
+        setMenuPosition({ top: event.clientY - 4, left: event.clientX - 2 })
+    }
 
-    if (
-        (props.repBefore && props.repAfter) ||
-        (props.repBefore && !props.repAfter)
-    ) {
-        centerDivSize = 10
-    } else if (
-        (!props.repBefore && props.repAfter) ||
-        (!props.repBefore && !props.repAfter)
-    ) {
-        centerDivSize = 11
-    } else {
-        centerDivSize = 9
+    const handleMenuSelect = (action: "delete") => {}
+
+    const handleClick = () => {}
+
+    const onMouseEnterChord = (index: number) => {
+        setActiveChord(index)
+    }
+
+    const onMouseLeaveChord = () => {
+        setActiveChord(undefined)
     }
 
     return (
-        <Box className={classes.root} mx="auto" role="main">
-            <Grid container role="grid" className={classes.fullHeight}>
-                <Grid
-                    item
-                    xs={12}
-                    role="gridcell"
-                    className={classes.fullHeight}
+        <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="flex-start"
+            width="100%"
+        >
+            <House houseOrder={props.house} />
+
+            <Box display="flex" flexBasis="100%">
+                <RepetitionSign display={props.repBefore} />
+                <Box
+                    height={props.height || "100%"}
+                    display="flex"
+                    width="100%"
                 >
-                    <Grid container className={classes.firstRow} role="grid">
-                        <Grid item xs={1} role="gridcell" />
-                        <Grid
-                            item
-                            xs={9}
-                            role="gridcell"
-                            aria-label={`${props.house}. ending`}
-                        >
-                            <House houseOrder={props.house} />
-                        </Grid>
-                        <Grid item xs={1} role="gridcell" />
-                    </Grid>
-                </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    style={{ height: props.height }}
-                    role="gridcell"
-                >
-                    <Grid
-                        container
-                        spacing={0}
-                        className={classes.fullHeight}
-                        role="grid"
-                    >
-                        <Grid
-                            item
-                            xs={props.repBefore ? 1 : "auto"}
-                            role="gridcell"
-                            aria-label="repetition sign before the tone"
-                        >
-                            <Box mt={`${((props.height || 120) - 56) / 2}px`}>
-                                <RepetitionSign display={props.repBefore} />
-                            </Box>
-                        </Grid>
-                        <Grid
-                            item
-                            xs={centerDivSize}
-                            role="gridcell"
-                            aria-label="Bar"
-                        >
-                            <BarBody
-                                exportMode={props.exportMode}
-                                rowsPerSheet={props.rowsPerSheet}
-                                voiceId={props.voiceId}
-                                barNumber={props.barNumber}
-                                height={props.height}
-                                chordsAndNotes={props.chordsAndNotes}
+                    {props.chordsAndNotes.map((notes, i) => {
+                        return (
+                            <Chord
+                                onMouseLeave={() => onMouseLeaveChord}
+                                onMouseEnter={() => onMouseEnterChord(i)}
+                                chordsAndNotes={notes}
+                                key={i}
+                                onContextMenu={handleRightClick}
+                                onClick={handleClick}
                             />
-                        </Grid>
-                        <Grid
-                            item
-                            xs={1}
-                            style={{
-                                borderRight: props.barLineAfter
-                                    ? "6px double black"
-                                    : "2px solid black",
-                            }}
-                            role="gridcell"
-                            aria-label="repetition sign after the tone"
-                        >
-                            <Box mt={`${((props.height || 120) - 56) / 2}px`}>
-                                <RepetitionSign display={props.repAfter} />
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
+                        )
+                    })}
+                </Box>
+                <RepetitionSign display={props.repAfter} />
+                <ChordMenu
+                    position={menuPosition}
+                    onSelect={handleMenuSelect}
+                />
+            </Box>
         </Box>
     )
 }

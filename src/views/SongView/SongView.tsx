@@ -1,5 +1,5 @@
-import React, { useContext } from "react"
-import { useHistory, useRouteMatch } from "react-router-dom"
+import React, { useContext, useState } from "react"
+import { useHistory, useParams, useRouteMatch } from "react-router-dom"
 import {
     Grid,
     makeStyles,
@@ -22,6 +22,10 @@ import { BottomBar } from "../../components/BottomBar/BottomBar.component"
 import animatedBird from "../../assets/images/sommerfugl-animert.svg"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { Loading } from "../../components/loading/Loading.component"
+import { IBar } from "../../models/IBar"
+import { BarLine } from "../../components/barLine/BarLine.component"
+import { BarMenu } from "../../components/BarMenu/BarMenu.component"
+import { Song } from "../../components/Song/Song.component"
 
 const useStyles = makeStyles({
     root: {
@@ -36,26 +40,50 @@ const useStyles = makeStyles({
     },
 })
 
-export const SongView = () => {
-    const classes = useStyles()
+const heightOfBar = 160
 
-    const {
-        song: { voices },
-        isLoading,
-        isSaving,
-        setIsSaving,
-    } = useContext(SongContext)
+const BarPrefix = (props: { index: number; timeSignature: string }) => {
+    const { index, timeSignature } = props
 
+    const getPrefixItem = () => {
+        if (index === 0) {
+            return <TimeSignature timeSignature={timeSignature} />
+        }
+        return <BarNumber barNumber={index + 1} />
+    }
+    const PrefixItem = getPrefixItem()
+
+    return <Box flexGrow={0}>{PrefixItem}</Box>
+}
+
+const Alert = (props: AlertProps) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />
+}
+
+const useBarsPerRow = () => {
     const xs = useMediaQuery("(max-width: 600px)")
     const xl = useMediaQuery("(min-width: 1920px)")
+    const getBarPerRow = () => {
+        if (xs) {
+            return 1
+        }
+        if (xl) {
+            return 4
+        }
+        return 2
+    }
+
+    return { barsPerRow: getBarPerRow() }
+}
+
+const useVoice = (numberOfVoices: number) => {
     const history = useHistory()
-    const match = useRouteMatch<{ id: string }>("/song/:id")
-    const id = match ? +match.params.id : 0
-    const voiceString = parse(window.location.search)
+    const { id } = useParams<{ id: string }>()
+    const voiceString = parse(history.location.search)
     let selectedVoice = 0
     if (typeof voiceString.voice === "string") {
         const voiceInt = parseInt(voiceString.voice, 10)
-        if (voiceInt > voices.length || voiceInt <= 0) {
+        if (voiceInt > numberOfVoices || voiceInt <= 0) {
             history.replace(`/song/${id}?voice=1`)
         } else {
             selectedVoice = voiceInt - 1
@@ -64,25 +92,21 @@ export const SongView = () => {
         history.replace(`/song/${id}?voice=1`)
     }
 
-    /**
-     * This method checks if the bar is on a new line, and therefore should have a barline before the bar
-     * @param index
-     */
-    const isBarLineBefore = (index: number) => {
-        return xl && index % 4 === 0
-            ? true
-            : !xs && !xl && index % 2 === 0
-            ? true
-            : !!xs
-    }
+    return selectedVoice
+}
 
-    /**
-     * This method checks if the bar is the last one, and therefore gets a double barline
-     * @param index
-     */
-    const isBarLineAfter = (index: number) => {
-        return index === voices[selectedVoice].bars.length - 1
-    }
+export const SongView = () => {
+    const classes = useStyles()
+
+    const {
+        song: { voices, timeSignature },
+        isLoading,
+        isSaving,
+        setIsSaving,
+    } = useContext(SongContext)
+
+    const { barsPerRow } = useBarsPerRow()
+    const selectedVoice = useVoice(voices.length)
 
     const handleClose = (
         event: React.SyntheticEvent | React.MouseEvent,
@@ -93,12 +117,6 @@ export const SongView = () => {
         }
         setIsSaving(false)
     }
-
-    const Alert = (props: AlertProps) => {
-        return <MuiAlert elevation={6} variant="filled" {...props} />
-    }
-
-    const heightOfBar = 160
     return (
         <>
             <Grid container className={classes.root}>
@@ -114,82 +132,13 @@ export const SongView = () => {
                     </Grid>
                 ) : (
                     <Grid item xs={12}>
-                        {" "}
-                        {/* Grid for main container, containing the bars, timeSignature and barnumber */}
-                        <Grid container>
-                            <Grid item xs={1}>
-                                {voices[selectedVoice].bars.map((bar, i) => {
-                                    if (i === 0) {
-                                        return (
-                                            <TimeSignature
-                                                key={bar.barNumber}
-                                                height={heightOfBar}
-                                            />
-                                        )
-                                    }
-                                    if (xl && i % 4 === 0) {
-                                        return (
-                                            <BarNumber
-                                                key={bar.barNumber}
-                                                barNumber={i + 1}
-                                                height={heightOfBar}
-                                            />
-                                        )
-                                    }
-                                    if (!xs && !xl && i % 2 === 0) {
-                                        return (
-                                            <BarNumber
-                                                key={bar.barNumber}
-                                                barNumber={i + 1}
-                                                height={heightOfBar}
-                                            />
-                                        )
-                                    }
-                                    if (xs) {
-                                        return (
-                                            <BarNumber
-                                                key={bar.barNumber}
-                                                barNumber={i + 1}
-                                                height={heightOfBar}
-                                            />
-                                        )
-                                    }
-                                    return <div key={bar.barNumber} />
-                                })}
-                            </Grid>
-
-                            <Grid item xs={10}>
-                                <Grid container>
-                                    {voices[selectedVoice].bars.map(
-                                        (bar, i) => (
-                                            <Grid
-                                                item
-                                                xs={12}
-                                                sm={6}
-                                                xl={3}
-                                                key={i}
-                                            >
-                                                <BarContainer
-                                                    voiceId={selectedVoice}
-                                                    masterSheet={
-                                                        selectedVoice === 0
-                                                    }
-                                                    barNumber={bar.barNumber}
-                                                    bar={bar}
-                                                    barLineBefore={isBarLineBefore(
-                                                        i
-                                                    )}
-                                                    barLineAfter={isBarLineAfter(
-                                                        i
-                                                    )}
-                                                    height={heightOfBar}
-                                                />
-                                            </Grid>
-                                        )
-                                    )}
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                        <Song
+                            barsPerRow={barsPerRow}
+                            selectedVoice={selectedVoice}
+                            bars={voices[selectedVoice].bars}
+                            timeSignature={timeSignature}
+                            heightOfBar={heightOfBar}
+                        />
                     </Grid>
                 )}
             </Grid>
