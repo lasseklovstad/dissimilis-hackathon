@@ -17,8 +17,7 @@ export const useGetSong = (id: number) => {
     const headers = getHeaders()
     const api = useApiService<ISong>(url, { headers })
     return {
-        getSong: api.getData,
-        songError: { error: api.state.error, isError: api.state.isError },
+        getSong: { run: api.getData, ...api.state },
     }
 }
 
@@ -37,13 +36,8 @@ export const useGetAllSongs = () => {
     })
 
     return {
-        getAllSongs: api.getData,
+        getAllSongs: { run: api.getData, ...api.state },
         allSongs: api.data,
-        allSongsError: {
-            isError: api.state.isError,
-            error: api.state.error,
-        },
-        isAllSongsLoading: api.state.loading,
     }
 }
 
@@ -62,13 +56,8 @@ export const useGetFilteredSongs = (title: string) => {
         params,
     })
     return {
-        getFilteredSongs: api.getData,
+        getFilteredSongs: {run: api.getData,...api.state },
         filteredSongs: api.data,
-        isFilteredSongsLoading: api.state.loading,
-        filteredSongsError: {
-            isError: api.state.isError,
-            error: api.state.error,
-        },
     }
 }
 
@@ -86,9 +75,8 @@ export const useGetRecentSongs = () => {
         headers,
     })
     return {
-        getRecentSongs: api.getData,
-        recentSongs: api.data,
-        isRecentSongsLoading: api.state.loading,
+        getRecentSongs: {run: api.getData,...api.state },
+        recentSongs: api.data
     }
 }
 
@@ -102,9 +90,7 @@ export const usePostSong = (title: string, timeSignature: string) => {
     const body = { title, timeSignature }
     const api = useApiService<ISong>(url, { headers, body })
     return {
-        postSong: api.postData,
-        postSongError: { error: api.state.error, isError: api.state.isError },
-        isPostSongLoading: api.state.loading,
+        postSong: {run: api.postData,...api.state }
     }
 }
 
@@ -117,8 +103,7 @@ export const usePutSong = (song: ISong) => {
     const headers = getHeaders()
     const api = useApiService<number>(url, { body, headers })
     return {
-        putSong: api.putData,
-        putSongError: { error: api.state.error, isError: api.state.isError },
+        putSong: {run: api.putData,...api.state }
     }
 }
 
@@ -131,8 +116,6 @@ export const useDeleteSong = (id: number) => {
     const headers = getHeaders()
     const api = useApiService<ISong>(url, { headers })
     return {
-        deleteSong: api.deleteData,
-        deleteSongError: { error: api.state.error, isError: api.state.isError },
-        deleteSongLoading: api.state.loading,
+        deleteSong: {run: api.deleteData,...api.state }
     }
 }

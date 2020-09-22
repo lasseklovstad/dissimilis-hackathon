@@ -28,10 +28,10 @@ export const MenuButton = () => {
     const { setShowPossiblePositions } = useContext(SongToolsContext)
     const { t } = useTranslation()
     const history = useHistory()
-    const { putSong, putSongError } = usePutSong(song)
+    const { putSong } = usePutSong(song)
     const match = useRouteMatch<{ id: string }>("/song/:id")
     const id = match ? +match.params.id : 0
-    const { deleteSong, deleteSongError, deleteSongLoading } = useDeleteSong(id)
+    const { deleteSong } = useDeleteSong(id)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -43,7 +43,7 @@ export const MenuButton = () => {
 
     const handleDeleteSong = async () => {
         setDeleteSongModalIsOpen(false)
-        const { isError } = await deleteSong()
+        const { isError } = await deleteSong.run()
         if (!isError) {
             history.replace("/dashboard")
         }
@@ -51,14 +51,14 @@ export const MenuButton = () => {
 
     const exportSong = async () => {
         setShowPossiblePositions(false)
-        const { isError } = await putSong()
+        const { isError } = await putSong.run()
         if (!isError) {
             history.push(`/song/${id}/export`)
         }
     }
 
     const saveSong = async () => {
-        const { result } = await putSong()
+        const { result } = await putSong.run()
         if (result && result.status >= 200 && result.status <= 299) {
             setIsSaving(true)
         } else {
@@ -134,18 +134,18 @@ export const MenuButton = () => {
                 />
             </div>
             <Loading
-                isLoading={deleteSongLoading}
+                isLoading={deleteSong.loading}
                 fullScreen
                 text={t("Modal:deleteSongLoading")}
             />
             <ErrorDialog
-                isError={deleteSongError.isError}
-                error={deleteSongError.error}
+                isError={deleteSong.isError}
+                error={deleteSong.error}
                 title={t("Modal:deleteSongError")}
             />
             <ErrorDialog
-                isError={putSongError.isError}
-                error={putSongError.error}
+                isError={putSong.isError}
+                error={putSong.error}
                 title={t("Modal:saveSongError")}
             />
         </>
