@@ -21,7 +21,7 @@ export const BarContainer = (props: {
     bar: IBar
     voiceId: number
     onMenuClick: (anchorEl: HTMLElement, barNumber: number) => void
-    exportMode?: boolean
+    exportMode: boolean
     rowsPerSheet?: number
     height?: number
     masterSheet?: boolean
@@ -39,7 +39,8 @@ export const BarContainer = (props: {
                     width="0px"
                     display="flex"
                     position="relative"
-                    bottom="-40px"
+                    bottom="-47px"
+                    left="-32px"
                     alignItems="flex-end"
                 >
                     <IconButton
@@ -53,8 +54,7 @@ export const BarContainer = (props: {
                 </Box>
             )}
             <Bar
-                exportMode={props.exportMode || false}
-                rowsPerSheet={props.rowsPerSheet || 0}
+                exportMode={props.exportMode}
                 voiceId={props.voiceId}
                 barNumber={bar.barNumber - 1}
                 height={props.height || 160}

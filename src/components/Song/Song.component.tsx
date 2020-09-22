@@ -8,6 +8,7 @@ import {
     BarNumber,
     TimeSignature,
 } from "../SongViewComponents/SongView.component"
+import { ChordMenu } from "../Bar/ChordMenu.component"
 
 type SongProps = {
     barsPerRow: number
@@ -47,7 +48,7 @@ export const Song = (props: SongProps) => {
     const getBarRows = (bars: IBar[]): IBar[][] => {
         // array of N elements, where N is the number of rows needed
         const rows = [...Array(Math.ceil(bars.length / barsPerRow))]
-        const updatedBars = bars.map((bar, i) => ({ ...bar, barNumber: i + 1 }))
+        const updatedBars = bars.map((bar, i) => bar)
         // chunk the bars into the array of rows
         return rows.map((row, idx) =>
             updatedBars.slice(idx * barsPerRow, idx * barsPerRow + barsPerRow)
@@ -67,14 +68,23 @@ export const Song = (props: SongProps) => {
     return (
         <>
             {getBarRows(bars).map((barsInRow, i) => (
-                <Box width="100%" display="flex" mt={10}>
-                    <BarPrefix index={i} timeSignature={timeSignature} />
+                <Box
+                    width="100%"
+                    display="flex"
+                    mt={exportMode ? 4 : 10}
+                    key={i}
+                >
+                    <BarPrefix
+                        index={barsInRow[0].barNumber - 1}
+                        timeSignature={timeSignature}
+                    />
                     <BarLine />
                     <Box display="flex" flexGrow={12}>
                         {barsInRow.map((bar) => {
                             return (
                                 <React.Fragment key={bar.barNumber}>
                                     <BarContainer
+                                        exportMode={!!exportMode}
                                         voiceId={selectedVoice}
                                         masterSheet={
                                             !exportMode && selectedVoice === 0

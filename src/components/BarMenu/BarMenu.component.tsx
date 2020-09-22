@@ -2,7 +2,6 @@ import React, { useContext } from "react"
 import { Menu, MenuItem } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
-import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component"
 
 type BarMenuProps = {
     voiceId: number
@@ -30,13 +29,12 @@ export const BarMenu = (props: BarMenuProps) => {
     }
 
     const handleClose = (method: string) => {
-        onClose()
         const index = barNumber - 1
         if (method === "delete") {
-            deleteBar(index, voiceId - 1)
+            deleteBar(index, voiceId)
         }
         if (method === "duplicate") {
-            duplicateBar(index, voiceId - 1)
+            duplicateBar(index, voiceId)
         }
         if (method === "toggleRepBefore") {
             toggleRepBefore(index)
@@ -50,6 +48,7 @@ export const BarMenu = (props: BarMenuProps) => {
         if (method === "removeHouse") {
             deleteHouse(index)
         }
+        onClose()
     }
 
     // checks if a bar has a house connected to it
@@ -61,7 +60,6 @@ export const BarMenu = (props: BarMenuProps) => {
         <Menu
             id="menuBar"
             anchorEl={anchorEl}
-            keepMounted
             open={!!anchorEl}
             onClose={handleClose}
             role="menu"

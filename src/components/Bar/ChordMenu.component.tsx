@@ -24,7 +24,6 @@ export const ChordMenu = (props: ChordMenuProps) => {
     return (
         <>
             <Menu
-                keepMounted
                 open={open}
                 onClose={() => setOpen(false)}
                 anchorReference="anchorPosition"

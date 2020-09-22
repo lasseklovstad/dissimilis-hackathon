@@ -88,7 +88,7 @@ export const SongToolsContextProvider: React.FC = (props) => {
         barIndex: number,
         noteIndex: number
     ) => {
-        const availablePosArray = availablePositions[voiceIndex][barIndex]
+        const availablePosArray = availablePositions[voiceIndex][barIndex] || []
         let selectedPosArray = availablePosArray.find((arr) =>
             arr.includes(noteIndex)
         )

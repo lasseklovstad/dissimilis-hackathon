@@ -1,8 +1,8 @@
 import React from "react"
 import { Box, ButtonBase, Paper, Typography } from "@material-ui/core"
-import { Chord as TonalChord } from "@tonaljs/tonal"
 import { IChordAndNotes } from "../../models/IBar"
 import { colors } from "../../utils/colors"
+import { getChord, getColor, tangentToNumber } from "../../utils/bar.util"
 
 type ChordProps = {
     chordsAndNotes: IChordAndNotes
@@ -10,78 +10,8 @@ type ChordProps = {
     onClick: () => void
     onMouseEnter: () => void
     onMouseLeave: () => void
-}
-
-/* Gets the chord based on notes. The package we use (tonaljs) uses the tone "B" instead of "H" so we need
-to replace H with B to get the right chord. 
-*/
-const getChord = (notes: string[]): string => {
-    const tempArray = notes.slice()
-    const index = tempArray.indexOf("H")
-    if (index !== -1) {
-        tempArray[index] = "B"
-    }
-
-    if (tempArray.length === 1) {
-        return notes[0]
-    }
-    const result = TonalChord.detect(tempArray.reverse())
-    if (result.length === 0) return notes[0]
-    return result[0].replace(/M/g, "").replace(/B/g, "H")
-}
-
-const getColor = (note: string): string => {
-    let newColor = "transparent"
-    switch (note) {
-        case "C":
-            newColor = colors.C
-            break
-        case "D":
-            newColor = colors.D
-            break
-        case "E":
-            newColor = colors.E
-            break
-        case "F":
-            newColor = colors.F
-            break
-        case "G":
-            newColor = colors.G
-            break
-        case "A":
-            newColor = colors.A
-            break
-        case "H":
-            newColor = colors.H
-            break
-        case "C#":
-        case "D#":
-        case "F#":
-        case "G#":
-        case "A#":
-            newColor = colors.gray_500
-            break
-        default:
-            newColor = "transparent"
-    }
-    return newColor
-}
-
-const tangentToNumber = (tangent: string): number | string => {
-    switch (tangent) {
-        case "C#":
-            return 4
-        case "D#":
-            return 5
-        case "F#":
-            return 1
-        case "G#":
-            return 2
-        case "A#":
-            return 3
-        default:
-            return tangent
-    }
+    highlight: boolean
+    disabled: boolean
 }
 
 const ChordText = (props: { notes: string[] }) => {
@@ -90,11 +20,10 @@ const ChordText = (props: { notes: string[] }) => {
             variant="body1"
             style={{
                 textOverflow: "ellipsis",
-                paddingLeft: "4px",
                 position: "relative",
                 top: "-20px",
                 height: "0",
-                zIndex: 100,
+                zIndex: 0,
                 color: "#555555",
                 width: 0,
             }}
@@ -111,14 +40,24 @@ export const Chord = (props: ChordProps) => {
         onContextMenu,
         onMouseEnter,
         onMouseLeave,
+        highlight,
+        disabled,
     } = props
     const isChord = chordsAndNotes.notes.length > 2
+
+    const getBackgroundColor = (note: string) => {
+        if (highlight && note === " ") {
+            return colors.focus
+        }
+        return getColor(note)
+    }
 
     return (
         <>
             {isChord && <ChordText notes={chordsAndNotes.notes} />}
             <Box
                 flexGrow={chordsAndNotes.length}
+                flexShrink={0}
                 display="flex"
                 flexDirection="column"
             >
@@ -131,27 +70,31 @@ export const Chord = (props: ChordProps) => {
                     mt={1}
                 >
                     <ButtonBase
+                        disabled={disabled}
                         focusRipple
                         onClick={onClick}
                         onContextMenu={onContextMenu}
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}
                     >
-                        {chordsAndNotes.notes.map((note) => {
+                        {chordsAndNotes.notes.map((note, i) => {
                             const text = tangentToNumber(note)
                             return (
                                 <Box
-                                    p={1}
-                                    bgcolor={getColor(note)}
+                                    key={note + i}
+                                    pl={1}
+                                    mt={i === 0 ? 0 : "1px"}
+                                    borderColor="divider"
+                                    border={disabled ? 0 : 1}
+                                    bgcolor={getBackgroundColor(note)}
                                     display="flex"
                                     alignItems="center"
                                     width="100%"
-                                    flex={1}
-                                    overflow="hidden"
+                                    flexGrow={1}
                                     clone
                                 >
                                     <Paper elevation={0} variant="outlined">
-                                        {text}
+                                        <Box width="0px">{text}</Box>
                                     </Paper>
                                 </Box>
                             )

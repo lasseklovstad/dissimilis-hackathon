@@ -74,10 +74,9 @@ export const ExportView = () => {
     const [lengthOfEachBar, setlengthOfEachBar] = useState<
         1 | 2 | 3 | 4 | 6 | 12
     >(3)
-    const [barsPerRow, setBarsPerRow] = useState(4)
-    const [height, setHeight] = useState(160)
     const [amountOfPages, setAmountOfPages] = useState<number>(1)
     const [dropDownMenuSelected, setDropDownMenuSelected] = useState<number>(0)
+    const [barsPerRow, setBarsPerRow] = useState(4)
 
     const {
         song: { title, voices, id, timeSignature },
@@ -106,6 +105,7 @@ export const ExportView = () => {
     const convertAmountOfBarsPerRowToLengthOfEachBar = (
         amount: number | number[]
     ) => {
+        setBarsPerRow(amount as number)
         if (amount === 1) {
             setlengthOfEachBar(12)
         } else if (amount === 2) {
@@ -255,14 +255,31 @@ export const ExportView = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12}>
-                                <Song
-                                    barsPerRow={barsPerRow}
-                                    exportMode
-                                    selectedVoice={selectedVoice}
-                                    bars={voices[selectedVoice].bars}
-                                    timeSignature={timeSignature}
-                                    heightOfBar={height}
-                                />
+                                <Grid container>
+                                    {voices[selectedVoice].bars.length === 0 ? (
+                                        <></>
+                                    ) : (
+                                        <>
+                                            <Song
+                                                barsPerRow={barsPerRow}
+                                                exportMode
+                                                selectedVoice={selectedVoice}
+                                                bars={voices[
+                                                    selectedVoice
+                                                ].bars.slice(
+                                                    pageIndex *
+                                                        (rowsPerSheet *
+                                                            convertFromLengthOfBarToAmountOfBarsPerRow()),
+                                                    (pageIndex + 1) *
+                                                        rowsPerSheet *
+                                                        convertFromLengthOfBarToAmountOfBarsPerRow()
+                                                )}
+                                                timeSignature={timeSignature}
+                                                heightOfBar={calculateHeightOfBar()}
+                                            />
+                                        </>
+                                    )}
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Box>
@@ -355,7 +372,9 @@ export const ExportView = () => {
                         </Typography>
                         <Slider
                             onChange={(event, value) =>
-                                setBarsPerRow(value as number)
+                                convertAmountOfBarsPerRowToLengthOfEachBar(
+                                    value
+                                )
                             }
                             defaultValue={4}
                             step={null}
@@ -380,13 +399,13 @@ export const ExportView = () => {
                         </Typography>
                         <Slider
                             onChange={(event, value) =>
-                                setHeight(value as number)
+                                changeRowsPerSheet(value)
                             }
-                            defaultValue={160}
+                            defaultValue={4}
                             step={1}
                             marks
-                            min={60}
-                            max={300}
+                            min={1}
+                            max={5}
                             valueLabelDisplay="auto"
                         />
                     </Grid>

@@ -9,8 +9,8 @@ export const TimeSignature = (props: { timeSignature: string }) => {
     const timeSignatureDenominator = timeSignatureString.split("/")[1]
 
     return (
-        <Typography variant="body1">
-            <Box mr={1} fontWeight="fontWeightBold">
+        <Typography variant="body1" component="div">
+            <Box mr={1} fontWeight="fontWeightBold" width="30px">
                 <Box>{timeSignatureNumerator}</Box>
                 <Box>{timeSignatureDenominator}</Box>
             </Box>
@@ -20,7 +20,7 @@ export const TimeSignature = (props: { timeSignature: string }) => {
 
 export const BarNumber = (props: { barNumber: number }) => {
     return (
-        <Box mr={1}>
+        <Box mr={1} width="30px" color={colors.gray_400}>
             <Typography variant="body1">{props.barNumber}</Typography>
         </Box>
     )

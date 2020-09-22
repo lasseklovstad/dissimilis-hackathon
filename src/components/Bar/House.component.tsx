@@ -1,10 +1,10 @@
 import React from "react"
-import { Box, Grid, Typography } from "@material-ui/core"
+import { Box, Typography } from "@material-ui/core"
 
 export const House = (props: { houseOrder: number | undefined }) => {
     return (
         <Box position="relative" top="-20px" height={0}>
-            <Typography variant="body1">
+            <Typography variant="body1" component="div">
                 {props.houseOrder === undefined ? null : (
                     <Box
                         ml={4}
