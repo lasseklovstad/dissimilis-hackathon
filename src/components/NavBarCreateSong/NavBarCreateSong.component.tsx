@@ -71,7 +71,7 @@ export const NavBarCreateSong = () => {
 
     const handleSaveSong = () => {
         setIsLoading(true)
-        putSong().then(({ result }) => {
+        putSong.run().then(({ result }) => {
             if (result && result.status >= 200 && result.status <= 299) {
                 setIsLoading(false)
                 setSaveSongModalIsOpen(false)

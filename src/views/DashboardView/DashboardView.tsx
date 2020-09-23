@@ -59,7 +59,7 @@ export const DashboardView = () => {
     const [timeSignature, setTimeSignature] = useState("")
     const [textFieldInput, setTextFieldInput] = useState<string>("")
 
-    const { postSong, isPostSongLoading, postSongError } = usePostSong(
+    const { postSong } = usePostSong(
         textFieldInput,
         timeSignature
     )
@@ -68,25 +68,23 @@ export const DashboardView = () => {
     const {
         getRecentSongs,
         recentSongs,
-        isRecentSongsLoading,
     } = useGetRecentSongs()
     const {
         getFilteredSongs,
         filteredSongs,
-        isFilteredSongsLoading,
     } = useGetFilteredSongs(searchTerm)
 
     useEffect(() => {
-        getRecentSongs()
+        getRecentSongs.run()
     }, [getRecentSongs])
 
     useEffect(() => {
-        getFilteredSongs()
+        getFilteredSongs.run()
     }, [getFilteredSongs, searchTerm])
 
     const handleAddSong = async () => {
         setAddSongModalIsOpen(false)
-        const { result } = await postSong()
+        const { result } = await postSong.run()
         if (result?.status === 201) {
             history.push(`/song/${result.data.id}`)
         }
@@ -141,7 +139,7 @@ export const DashboardView = () => {
                             <SongGrid
                                 title={t("DashboardView:recentSongLabel")}
                                 songs={recentSongs}
-                                isLoading={isRecentSongsLoading}
+                                isLoading={getRecentSongs.loading}
                             >
                                 <DashboardLibraryButton
                                     text={t("DashboardView:libraryButton")}
@@ -165,15 +163,15 @@ export const DashboardView = () => {
                         <SongGrid
                             title={t("DashboardView:searchSongLabel")}
                             songs={filteredSongs}
-                            isLoading={isFilteredSongsLoading}
+                            isLoading={getFilteredSongs.loading}
                         />
                     )}
                 </Grid>
             </Box>
-            <Loading isLoading={isPostSongLoading} fullScreen />
+            <Loading isLoading={postSong.loading} fullScreen />
             <ErrorDialog
-                isError={postSongError.isError}
-                error={postSongError.error}
+                isError={postSong.isError}
+                error={postSong.error}
             />
         </>
     )

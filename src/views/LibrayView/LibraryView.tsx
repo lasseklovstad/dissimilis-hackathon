@@ -25,24 +25,20 @@ export const LibraryView = () => {
 
     const {
         getAllSongs,
-        allSongs,
-        allSongsError,
-        isAllSongsLoading,
+        allSongs
     } = useGetAllSongs()
     const {
         getFilteredSongs,
-        filteredSongs,
-        filteredSongsError,
-        isFilteredSongsLoading,
+        filteredSongs
     } = useGetFilteredSongs(searchTerm)
     const marginBottom = 4
 
     useEffect(() => {
-        getAllSongs()
+        getAllSongs.run()
     }, [getAllSongs])
 
     useEffect(() => {
-        getFilteredSongs()
+        getFilteredSongs.run()
     }, [getFilteredSongs])
 
     const handleOnBlurSearch = () => {
@@ -59,12 +55,12 @@ export const LibraryView = () => {
     return (
         <>
             <ErrorDialog
-                isError={allSongsError.isError}
-                error={allSongsError.error}
+                isError={getAllSongs.isError}
+                error={getAllSongs.error}
             />
             <ErrorDialog
-                isError={filteredSongsError.isError}
-                error={filteredSongsError.error}
+                isError={getFilteredSongs.isError}
+                error={getFilteredSongs.error}
             />
             <Box mx={2}>
                 <Grid container justify="center" className={styles.container}>
@@ -81,13 +77,13 @@ export const LibraryView = () => {
                         <SongGrid
                             title={t("DashboardView:allSongLabel")}
                             songs={allSongs}
-                            isLoading={isAllSongsLoading}
+                            isLoading={getAllSongs.loading}
                         />
                     ) : (
                         <SongGrid
                             title={t("DashboardView:searchSongLabel")}
                             songs={filteredSongs}
-                            isLoading={isFilteredSongsLoading}
+                            isLoading={getFilteredSongs.loading}
                         />
                     )}
                 </Grid>
