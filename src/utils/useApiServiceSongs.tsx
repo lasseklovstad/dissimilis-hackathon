@@ -30,15 +30,19 @@ export const useGetAllSongs = () => {
     const params = { OrderByDateTime: "true" }
     const initialData: ISong[] = []
     const headers = getHeaders()
-    const api = useApiService<ISong[]>(url, {
+    const { getData, state, data } = useApiService<ISong[]>(url, {
         params,
         initialData,
         headers,
     })
 
+    useEffect(() => {
+        getData()
+    }, [getData])
+
     return {
-        getAllSongs: { run: api.getData, ...api.state },
-        allSongs: api.data,
+        getAllSongs: { run: getData, ...state },
+        allSongs: data,
     }
 }
 

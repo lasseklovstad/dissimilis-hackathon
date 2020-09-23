@@ -23,23 +23,9 @@ export const LibraryView = () => {
     const [libraryView, setLibraryView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
 
-    const {
-        getAllSongs,
-        allSongs
-    } = useGetAllSongs()
-    const {
-        getFilteredSongs,
-        filteredSongs
-    } = useGetFilteredSongs(searchTerm)
+    const { getAllSongs, allSongs } = useGetAllSongs()
+    const { getFilteredSongs, filteredSongs } = useGetFilteredSongs(searchTerm)
     const marginBottom = 4
-
-    useEffect(() => {
-        getAllSongs.run()
-    }, [getAllSongs])
-
-    useEffect(() => {
-        getFilteredSongs.run()
-    }, [getFilteredSongs])
 
     const handleOnBlurSearch = () => {
         setTimeout(() => {
