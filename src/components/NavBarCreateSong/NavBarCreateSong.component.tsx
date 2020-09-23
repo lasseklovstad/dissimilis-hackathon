@@ -71,7 +71,7 @@ export const NavBarCreateSong = () => {
 
     const handleSaveSong = () => {
         setIsLoading(true)
-        putSong().then(({ result }) => {
+        putSong.run().then(({ result }) => {
             if (result && result.status >= 200 && result.status <= 299) {
                 setIsLoading(false)
                 setSaveSongModalIsOpen(false)
@@ -89,7 +89,7 @@ export const NavBarCreateSong = () => {
                 <Grid container>
                     <Grid item xs={11} sm={1} className={classes.left}>
                         <DashboardTopBarIcon
-                            func={() => setSaveSongModalIsOpen(true)}
+                            onClick={() => setSaveSongModalIsOpen(true)}
                         />
                     </Grid>
                     <Grid item xs={12} sm={10} className={classes.center}>

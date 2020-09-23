@@ -12,6 +12,7 @@ import {
 
 import { colors } from "../../utils/colors"
 import animatedBird from "../../assets/images/sommerfugl-animert.svg"
+import { LoadingLogo } from "../loadingLogo/LoadingLogo.component"
 
 const useStyles = makeStyles({
     modal: {
@@ -81,12 +82,7 @@ export const ChoiceModal = (props: {
                     <Grid container>
                         {props.isLoading ? (
                             <Grid item xs={12}>
-                                <object
-                                    type="image/svg+xml"
-                                    data={animatedBird}
-                                    width="100%"
-                                    aria-label="bird moving"
-                                />
+                                <LoadingLogo />
                             </Grid>
                         ) : (
                             <Box>

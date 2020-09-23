@@ -16,7 +16,9 @@ export const useGetSong = (id: number) => {
     const url = `song/${id}`
     const headers = getHeaders()
     const api = useApiService<ISong>(url, { headers })
-    return { getSong: api.getData }
+    return {
+        getSong: { run: api.getData, ...api.state },
+    }
 }
 
 /**
@@ -33,7 +35,10 @@ export const useGetAllSongs = () => {
         headers,
     })
 
-    return { getAllSongs: api.getData, allSongs: api.data }
+    return {
+        getAllSongs: { run: api.getData, ...api.state },
+        allSongs: api.data,
+    }
 }
 
 /**
@@ -51,7 +56,7 @@ export const useGetFilteredSongs = (title: string) => {
         params,
     })
     return {
-        getFilteredSongs: api.getData,
+        getFilteredSongs: {run: api.getData,...api.state },
         filteredSongs: api.data,
     }
 }
@@ -69,7 +74,10 @@ export const useGetRecentSongs = () => {
         initialData,
         headers,
     })
-    return { getRecentSongs: api.getData, recentSongs: api.data }
+    return {
+        getRecentSongs: {run: api.getData,...api.state },
+        recentSongs: api.data
+    }
 }
 
 /**
@@ -81,7 +89,9 @@ export const usePostSong = (title: string, timeSignature: string) => {
     const headers = getHeaders()
     const body = { title, timeSignature }
     const api = useApiService<ISong>(url, { headers, body })
-    return { postSong: api.postData }
+    return {
+        postSong: {run: api.postData,...api.state }
+    }
 }
 
 /**
@@ -92,7 +102,9 @@ export const usePutSong = (song: ISong) => {
     const body = song
     const headers = getHeaders()
     const api = useApiService<number>(url, { body, headers })
-    return { putSong: api.putData }
+    return {
+        putSong: {run: api.putData,...api.state }
+    }
 }
 
 /**
@@ -103,5 +115,7 @@ export const useDeleteSong = (id: number) => {
     const url = `song/${id}`
     const headers = getHeaders()
     const api = useApiService<ISong>(url, { headers })
-    return { deleteSong: api.deleteData }
+    return {
+        deleteSong: {run: api.deleteData,...api.state }
+    }
 }

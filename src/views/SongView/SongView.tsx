@@ -20,6 +20,8 @@ import {
 import { BarContainer } from "../../components/BarContainer/BarContainer.component"
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
 import animatedBird from "../../assets/images/sommerfugl-animert.svg"
+import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
+import { Loading } from "../../components/loading/Loading.component"
 
 const useStyles = makeStyles({
     root: {
@@ -108,14 +110,7 @@ export const SongView = () => {
                 </Grid>
                 {isLoading ? (
                     <Grid item xs={12}>
-                        <Box width="30%" margin="auto">
-                            <object
-                                type="image/svg+xml"
-                                data={animatedBird}
-                                aria-label="bird moving"
-                                style={{ width: "100%", height: "20%" }}
-                            />
-                        </Box>
+                        <LoadingLogo />
                     </Grid>
                 ) : (
                     <Grid item xs={12}>
@@ -127,7 +122,7 @@ export const SongView = () => {
                                     if (i === 0) {
                                         return (
                                             <TimeSignature
-                                                key={i}
+                                                key={bar.barNumber}
                                                 height={heightOfBar}
                                             />
                                         )
@@ -135,7 +130,7 @@ export const SongView = () => {
                                     if (xl && i % 4 === 0) {
                                         return (
                                             <BarNumber
-                                                key={i}
+                                                key={bar.barNumber}
                                                 barNumber={i + 1}
                                                 height={heightOfBar}
                                             />
@@ -144,7 +139,7 @@ export const SongView = () => {
                                     if (!xs && !xl && i % 2 === 0) {
                                         return (
                                             <BarNumber
-                                                key={i}
+                                                key={bar.barNumber}
                                                 barNumber={i + 1}
                                                 height={heightOfBar}
                                             />
@@ -153,13 +148,13 @@ export const SongView = () => {
                                     if (xs) {
                                         return (
                                             <BarNumber
-                                                key={i}
+                                                key={bar.barNumber}
                                                 barNumber={i + 1}
                                                 height={heightOfBar}
                                             />
                                         )
                                     }
-                                    return <div key={i} />
+                                    return <div key={bar.barNumber} />
                                 })}
                             </Grid>
 

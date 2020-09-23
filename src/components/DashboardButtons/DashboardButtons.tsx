@@ -50,7 +50,7 @@ type ButtonNoLinkProps = {
 }
 
 type TopBarIconProps = {
-    func?: () => void
+    onClick?: () => void
 }
 
 export const DashboardButtonWithAddIcon: FC<ButtonProps> = (props) => {
@@ -165,7 +165,7 @@ export const DashboardTopBarIcon: FC<TopBarIconProps> = (props) => {
         <Box className={styles.butterflyButtonContainer}>
             <Card className={styles.butterflyButtonCard}>
                 <CardActionArea
-                    onClick={() => props.func && props.func()}
+                    onClick={() => props.onClick && props.onClick()}
                     className={styles.butterflyButtonCardIcon}
                 >
                     <img src={butterflyBlue} alt={altProp} />

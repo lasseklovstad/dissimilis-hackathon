@@ -8,6 +8,8 @@ import {
     useGetAllSongs,
 } from "../../utils/useApiServiceSongs"
 import { ISong } from "../../models/ISong"
+import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
+import { SongGrid } from "../../components/songGrid/SongGrid.component"
 
 const useStyles = makeStyles({
     container: {
@@ -21,16 +23,22 @@ export const LibraryView = () => {
     const [libraryView, setLibraryView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
 
-    const { getAllSongs, allSongs } = useGetAllSongs()
-    const { getFilteredSongs, filteredSongs } = useGetFilteredSongs(searchTerm)
+    const {
+        getAllSongs,
+        allSongs
+    } = useGetAllSongs()
+    const {
+        getFilteredSongs,
+        filteredSongs
+    } = useGetFilteredSongs(searchTerm)
     const marginBottom = 4
 
     useEffect(() => {
-        getAllSongs()
+        getAllSongs.run()
     }, [getAllSongs])
 
     useEffect(() => {
-        getFilteredSongs()
+        getFilteredSongs.run()
     }, [getFilteredSongs])
 
     const handleOnBlurSearch = () => {
@@ -45,71 +53,41 @@ export const LibraryView = () => {
     }
 
     return (
-        <Box mx={2}>
-            <Grid container justify="center" className={styles.container}>
-                <Grid item xs={12}>
-                    <Box mb={marginBottom}>
-                        <DashboardTopBar
-                            onBlur={handleOnBlurSearch}
-                            onChange={handleOnChangeSearch}
-                        />
-                    </Box>
-                </Grid>
+        <>
+            <ErrorDialog
+                isError={getAllSongs.isError}
+                error={getAllSongs.error}
+            />
+            <ErrorDialog
+                isError={getFilteredSongs.isError}
+                error={getFilteredSongs.error}
+            />
+            <Box mx={2}>
+                <Grid container justify="center" className={styles.container}>
+                    <Grid item xs={12}>
+                        <Box mb={marginBottom}>
+                            <DashboardTopBar
+                                onBlur={handleOnBlurSearch}
+                                onChange={handleOnChangeSearch}
+                            />
+                        </Box>
+                    </Grid>
 
-                {libraryView ? (
-                    <Grid item xs={12} sm={10} key="allSongsContainer">
-                        <Box mb={marginBottom}>
-                            <Box m={2}>
-                                <Typography variant="h1">
-                                    {t("DashboardView:allSongLabel")}
-                                </Typography>
-                            </Box>
-                            <Grid container spacing={3}>
-                                {allSongs?.map((song) => (
-                                    <Grid
-                                        item
-                                        xs={12}
-                                        sm={4}
-                                        lg={3}
-                                        key={song.id}
-                                    >
-                                        <DashboardButton
-                                            text={song.title}
-                                            link={`/song/${song.id.toString()}`}
-                                        />
-                                    </Grid>
-                                ))}
-                            </Grid>
-                        </Box>
-                    </Grid>
-                ) : (
-                    <Grid item xs={12} sm={10} key="searchSongsContainer">
-                        <Box mb={marginBottom}>
-                            <Box m={2}>
-                                <Typography variant="h1">
-                                    {t("DashboardView:searchSongLabel")}
-                                </Typography>
-                            </Box>
-                            <Grid container spacing={3}>
-                                {filteredSongs?.map((song) => (
-                                    <Grid
-                                        item
-                                        xs={12}
-                                        sm={4}
-                                        lg={3}
-                                        key={song.id}
-                                    >
-                                        <DashboardButton
-                                            text={song.title}
-                                            link={`/song/${song.id.toString()}`}
-                                        />
-                                    </Grid>
-                                ))}
-                            </Grid>
-                        </Box>
-                    </Grid>
-                )}
-            </Grid>
-        </Box>
+                    {libraryView ? (
+                        <SongGrid
+                            title={t("DashboardView:allSongLabel")}
+                            songs={allSongs}
+                            isLoading={getAllSongs.loading}
+                        />
+                    ) : (
+                        <SongGrid
+                            title={t("DashboardView:searchSongLabel")}
+                            songs={filteredSongs}
+                            isLoading={getFilteredSongs.loading}
+                        />
+                    )}
+                </Grid>
+            </Box>
+        </>
     )
 }

@@ -1,12 +1,13 @@
-import axios, { AxiosResponse } from "axios"
+import axios, { AxiosError, AxiosResponse } from "axios"
 import { useHistory } from "react-router-dom"
 import { DependencyList, useCallback, useEffect, useRef, useState } from "react"
+import { IServerError } from "../models/IServerError"
 
 type HTTPMethod = "get" | "put" | "delete" | "post"
 type FetchReturn<T> = {
     result: AxiosResponse<T> | undefined
     isError: boolean
-    errorMessage: any
+    error: AxiosError<IServerError> | undefined
 }
 const useDeepCompareMemoize = (value: DependencyList) => {
     const ref = useRef<DependencyList>()
@@ -38,7 +39,9 @@ export const useApiService = <T extends unknown>(
     const { body, headers, initialData, params } = options
     const { push } = useHistory()
     const source = axios.CancelToken.source()
-    const [error, setError] = useState<string | undefined>(undefined)
+    const [error, setError] = useState<AxiosError<IServerError> | undefined>(
+        undefined
+    )
     const [data, setData] = useState<T | undefined>(initialData)
     const [isError, setIsError] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -46,9 +49,9 @@ export const useApiService = <T extends unknown>(
     const updateStates = (
         result: AxiosResponse<T> | undefined,
         isError: boolean,
-        errorMessage: string | undefined
+        error: AxiosError<IServerError> | undefined
     ) => {
-        setError(errorMessage)
+        setError(error)
         if (result?.data) {
             setData(result?.data)
         } else {
@@ -67,9 +70,12 @@ export const useApiService = <T extends unknown>(
             }
 
             let result: AxiosResponse<T> | undefined
-            let errorMessage
+            let axiosError: AxiosError<IServerError> | undefined
             let isError = false
 
+            // reset states
+            setIsError(false)
+            setError(undefined)
             setLoading(true)
 
             try {
@@ -108,12 +114,12 @@ export const useApiService = <T extends unknown>(
                     sessionStorage.removeItem("userId")
                 }
                 isError = true
-                errorMessage = error
+                axiosError = error
             } finally {
                 setLoading(false)
-                updateStates(result, isError, errorMessage)
+                updateStates(result, isError, axiosError)
             }
-            return { result, isError, errorMessage }
+            return { result, isError, error: axiosError }
         },
         [url, body, params, source, headers]
     )

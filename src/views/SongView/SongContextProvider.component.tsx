@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react"
 import { useRouteMatch } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import { IVoice } from "../../models/IVoice"
 import { IBar, IChordAndNotes } from "../../models/IBar"
 import { useGetSong } from "../../utils/useApiServiceSongs"
 import { ISong } from "../../models/ISong"
+import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 
 interface ISongContext {
     song: ISong
@@ -69,6 +71,7 @@ export const SongContext = React.createContext<ISongContext>({
 })
 
 export const SongContextProvider: React.FC = (props) => {
+    const { t } = useTranslation()
     const [songId, setSongId] = useState<number>(1)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isSaving, setIsSaving] = useState<boolean>(false)
@@ -93,7 +96,7 @@ export const SongContextProvider: React.FC = (props) => {
     }
     useEffect(() => {
         setIsLoading(true)
-        getSong().then(({ result }) => {
+        getSong.run().then(({ result }) => {
             if (result?.data) {
                 setIsLoading(false)
                 setSong(result.data)
@@ -441,8 +444,15 @@ export const SongContextProvider: React.FC = (props) => {
     }
 
     return (
-        <SongContext.Provider value={value}>
-            {props.children}
-        </SongContext.Provider>
+        <>
+            <ErrorDialog
+                isError={getSong.isError}
+                error={getSong.error}
+                title={t("Modal:getSongError")}
+            />
+            <SongContext.Provider value={value}>
+                {props.children}
+            </SongContext.Provider>
+        </>
     )
 }
