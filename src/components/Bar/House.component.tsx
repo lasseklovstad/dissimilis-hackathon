@@ -1,7 +1,10 @@
 import React from "react"
 import { Box, Typography } from "@material-ui/core"
 
-export const House = (props: { houseOrder: number | undefined }) => {
+export const House = (props: { houseOrder: number | undefined | null }) => {
+    if (!props.houseOrder) {
+        return <></>
+    }
     return (
         <Box position="relative" top="-20px" height={0}>
             <Typography variant="body1" component="div">

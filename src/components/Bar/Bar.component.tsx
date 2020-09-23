@@ -2,23 +2,29 @@ import React, { useContext, useState } from "react"
 import { Box } from "@material-ui/core"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { House } from "./House.component"
-import { IChordAndNotes } from "../../models/IBar"
+import { IBar, IChordAndNotes } from "../../models/IBar"
 import { Chord } from "./Chord.component"
 import { ChordMenu } from "./ChordMenu.component"
 import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
+import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
 
 export const Bar = (props: {
-    barNumber: number
-    repBefore: boolean
-    repAfter: boolean
-    house?: number
-    chordsAndNotes: IChordAndNotes[]
+    bar: IBar
     height?: number
     voiceId: number
     exportMode: boolean
+    onMenuClick: (anchorEl: HTMLElement) => void
+    masterSheet: boolean
 }) => {
-    const { chordsAndNotes, exportMode } = props
+    const {
+        exportMode,
+        onMenuClick,
+        masterSheet,
+        bar: { barNumber, chordsAndNotes, repAfter, repBefore, house },
+        voiceId,
+        height = 160,
+    } = props
     const [menuPosition, setMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()
@@ -50,7 +56,7 @@ export const Bar = (props: {
                 ) {
                     tempChordsAndNotes.splice(i, 0, newNote)
                 }
-                deleteNote(props.voiceId, props.barNumber, tempChordsAndNotes)
+                deleteNote(props.voiceId, barNumber - 1, tempChordsAndNotes)
                 setPositionArray([])
             }
         }
@@ -58,19 +64,17 @@ export const Bar = (props: {
 
     const handleClick = (i: number) => {
         if (
-            availablePositions[props.voiceId][props.barNumber] !== undefined &&
-            availablePositions[props.voiceId][props.barNumber].find((arr) =>
+            availablePositions[voiceId][barNumber - 1] !== undefined &&
+            availablePositions[voiceId][barNumber - 1].find((arr) =>
                 arr.includes(i)
             ) != null
         ) {
-            insertNewNoteOrChord(i, props.barNumber, props.voiceId)
+            insertNewNoteOrChord(i, barNumber - 1, props.voiceId)
         }
     }
 
     const onMouseEnterChord = (index: number) => {
-        setPositionArray(
-            selectPositionArray(props.voiceId, props.barNumber, index)
-        )
+        setPositionArray(selectPositionArray(voiceId, barNumber - 1, index))
     }
 
     const onMouseLeaveChord = () => {
@@ -78,42 +82,41 @@ export const Bar = (props: {
     }
 
     return (
-        <Box
-            display="flex"
-            flexDirection="column"
-            justifyContent="flex-start"
-            width="100%"
-        >
-            <House houseOrder={props.house} />
+        <>
+            {masterSheet && <BarMenuButton onMenuClick={onMenuClick} />}
+            <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="flex-start"
+                width="100%"
+            >
+                <House houseOrder={house} />
 
-            <Box display="flex" flexBasis="100%">
-                <RepetitionSign display={props.repBefore} />
-                <Box
-                    height={props.height || "100%"}
-                    display="flex"
-                    width="100%"
-                >
-                    {props.chordsAndNotes.map((notes, i) => {
-                        return (
-                            <Chord
-                                disabled={exportMode}
-                                onMouseLeave={() => onMouseLeaveChord()}
-                                onMouseEnter={() => onMouseEnterChord(i)}
-                                chordsAndNotes={notes}
-                                highlight={positionArray.includes(i)}
-                                key={i}
-                                onContextMenu={handleRightClick(i)}
-                                onClick={() => handleClick(i)}
-                            />
-                        )
-                    })}
+                <Box display="flex" flexBasis="100%">
+                    <RepetitionSign display={repBefore} />
+                    <Box height={height || "100%"} display="flex" width="100%">
+                        {chordsAndNotes.map((notes, i) => {
+                            return (
+                                <Chord
+                                    disabled={exportMode}
+                                    onMouseLeave={() => onMouseLeaveChord()}
+                                    onMouseEnter={() => onMouseEnterChord(i)}
+                                    chordsAndNotes={notes}
+                                    highlight={positionArray.includes(i)}
+                                    key={i}
+                                    onContextMenu={handleRightClick(i)}
+                                    onClick={() => handleClick(i)}
+                                />
+                            )
+                        })}
+                    </Box>
+                    <RepetitionSign display={repAfter} />
+                    <ChordMenu
+                        position={menuPosition}
+                        onSelect={handleMenuSelect}
+                    />
                 </Box>
-                <RepetitionSign display={props.repAfter} />
-                <ChordMenu
-                    position={menuPosition}
-                    onSelect={handleMenuSelect}
-                />
             </Box>
-        </Box>
+        </>
     )
 }

@@ -1,14 +1,13 @@
 import React, { useState } from "react"
 import { Box } from "@material-ui/core"
 import { BarLine } from "../barLine/BarLine.component"
-import { BarContainer } from "../BarContainer/BarContainer.component"
 import { BarMenu } from "../BarMenu/BarMenu.component"
 import { IBar } from "../../models/IBar"
 import {
     BarNumber,
     TimeSignature,
 } from "../SongViewComponents/SongView.component"
-import { ChordMenu } from "../Bar/ChordMenu.component"
+import { Bar } from "../Bar/Bar.component"
 
 type SongProps = {
     barsPerRow: number
@@ -48,14 +47,16 @@ export const Song = (props: SongProps) => {
     const getBarRows = (bars: IBar[]): IBar[][] => {
         // array of N elements, where N is the number of rows needed
         const rows = [...Array(Math.ceil(bars.length / barsPerRow))]
-        const updatedBars = bars.map((bar, i) => bar)
+        const updatedBars = bars.map((bar, i) => {
+            return { ...bar, barNumber: i + 1 }
+        })
         // chunk the bars into the array of rows
         return rows.map((row, idx) =>
             updatedBars.slice(idx * barsPerRow, idx * barsPerRow + barsPerRow)
         )
     }
 
-    const openMenu = (anchorEl: HTMLElement, barNumber: number) => {
+    const openMenu = (barNumber: number) => (anchorEl: HTMLElement) => {
         setAnchorEl(anchorEl)
         setSelectedBar(barNumber)
     }
@@ -83,13 +84,13 @@ export const Song = (props: SongProps) => {
                         {barsInRow.map((bar) => {
                             return (
                                 <React.Fragment key={bar.barNumber}>
-                                    <BarContainer
+                                    <Bar
                                         exportMode={!!exportMode}
                                         voiceId={selectedVoice}
                                         masterSheet={
                                             !exportMode && selectedVoice === 0
                                         }
-                                        onMenuClick={openMenu}
+                                        onMenuClick={openMenu(bar.barNumber)}
                                         bar={bar}
                                         height={heightOfBar}
                                     />

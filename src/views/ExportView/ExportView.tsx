@@ -17,11 +17,6 @@ import { useTranslation } from "react-i18next"
 import { parse } from "query-string"
 import { SongContext } from "../SongView/SongContextProvider.component"
 import { colors } from "../../utils/colors"
-import { BarContainer } from "../../components/BarContainer/BarContainer.component"
-import {
-    BarNumber,
-    TimeSignature,
-} from "../../components/SongViewComponents/SongView.component"
 import { Song } from "../../components/Song/Song.component"
 
 const useStyles = makeStyles({
