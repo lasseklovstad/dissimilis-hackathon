@@ -89,11 +89,7 @@ export const DashboardView = () => {
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
                             <DashboardTopBar
-                                onBlur={() => {
-                                    setTimeout(() => {
-                                        setDashboardView(true)
-                                    }, 320)
-                                }}
+                                onGoHome={() => setDashboardView(true)}
                                 onChange={(txt) => {
                                     setSearchTerm(txt)
                                     setDashboardView(false)
