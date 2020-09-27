@@ -15,7 +15,7 @@ const useStyles = makeStyles({
         marginLeft: "16px",
         marginTop: "32px",
         marginRight: "16px",
-        marginBottom: "300x",
+        marginBottom: "200px",
         "@media (max-width: 1080px)": {
             marginBottom: "250px",
         },

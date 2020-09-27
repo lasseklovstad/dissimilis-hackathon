@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useRouteMatch } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { IVoice } from "../../models/IVoice"
@@ -10,7 +10,7 @@ import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 interface ISongContext {
     song: ISong
     setSong: (song: ISong) => void
-    addVoice: (voices: IVoice) => void
+    addVoice: (voices: Pick<IVoice, "title" | "bars" | "partNumber">) => void
     deleteBar: (index: number, voiceId: number) => void
     getBar: (id: number, voiceId: number) => IBar | undefined
     duplicateBar: (id: number, voiceId: number) => void

@@ -16,6 +16,7 @@ type SongProps = {
     timeSignature: string
     heightOfBar: number
     exportMode?: boolean
+    page?: number
 }
 
 const BarPrefix = (props: { index: number; timeSignature: string }) => {
@@ -47,12 +48,9 @@ export const Song = (props: SongProps) => {
     const getBarRows = (bars: IBar[]): IBar[][] => {
         // array of N elements, where N is the number of rows needed
         const rows = [...Array(Math.ceil(bars.length / barsPerRow))]
-        const updatedBars = bars.map((bar, i) => {
-            return { ...bar, barNumber: i + 1 }
-        })
         // chunk the bars into the array of rows
         return rows.map((row, idx) =>
-            updatedBars.slice(idx * barsPerRow, idx * barsPerRow + barsPerRow)
+            bars.slice(idx * barsPerRow, idx * barsPerRow + barsPerRow)
         )
     }
 
@@ -68,39 +66,49 @@ export const Song = (props: SongProps) => {
 
     return (
         <>
-            {getBarRows(bars).map((barsInRow, i) => (
-                <Box
-                    width="100%"
-                    display="flex"
-                    mt={exportMode ? 4 : 10}
-                    key={i}
-                >
-                    <BarPrefix
-                        index={barsInRow[0].barNumber - 1}
-                        timeSignature={timeSignature}
-                    />
-                    <BarLine />
-                    <Box display="flex" flexGrow={12}>
-                        {barsInRow.map((bar) => {
-                            return (
-                                <React.Fragment key={bar.barNumber}>
-                                    <Bar
-                                        exportMode={!!exportMode}
-                                        voiceId={selectedVoice}
-                                        masterSheet={
-                                            !exportMode && selectedVoice === 0
-                                        }
-                                        onMenuClick={openMenu(bar.barNumber)}
-                                        bar={bar}
-                                        height={heightOfBar}
-                                    />
-                                    <BarLine />
-                                </React.Fragment>
-                            )
-                        })}
+            <Box width="100%">
+                {getBarRows(bars).map((barsInRow, i, rows) => (
+                    <Box display="flex" mt={exportMode ? 7 : 10} key={i}>
+                        <BarPrefix
+                            index={barsInRow[0].barNumber - 1}
+                            timeSignature={timeSignature}
+                        />
+                        <BarLine />
+                        <Box
+                            display="flex"
+                            flexGrow={barsInRow.length}
+                            minWidth={0}
+                            flexBasis="0"
+                        >
+                            {barsInRow.map((bar, i) => {
+                                return (
+                                    <React.Fragment key={i}>
+                                        <Bar
+                                            exportMode={!!exportMode}
+                                            voiceId={selectedVoice}
+                                            masterSheet={
+                                                !exportMode &&
+                                                selectedVoice === 0
+                                            }
+                                            onMenuClick={openMenu(
+                                                bar.barNumber
+                                            )}
+                                            bar={bar}
+                                            height={heightOfBar}
+                                        />
+                                        <BarLine />
+                                    </React.Fragment>
+                                )
+                            })}
+                        </Box>
+                        <Box
+                            flexGrow={barsPerRow - barsInRow.length}
+                            flexBasis="0"
+                        />
                     </Box>
-                </Box>
-            ))}
+                ))}
+            </Box>
+
             <BarMenu
                 voiceId={selectedVoice}
                 barNumber={selectedBar}
