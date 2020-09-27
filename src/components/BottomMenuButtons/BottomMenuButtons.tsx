@@ -16,7 +16,7 @@ import Autocomplete, {
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component"
-import { getColor, tangentToNumber } from "../Bar/BarBody.component"
+import { getColor, tangentToNumber } from "../../utils/bar.util"
 
 const useStyles = makeStyles({
     button: {
@@ -54,20 +54,6 @@ export const MenuButtonWithAddIcon = (props: {
                     : colors.white,
             }}
             startIcon={<AddIcon />}
-            onClick={() => props.onClick && props.onClick()}
-        >
-            <Typography>{props.text}</Typography>
-        </Button>
-    )
-}
-
-export const MenuButton = (props: { text: string; onClick?: () => void }) => {
-    const styles = useStyles()
-    return (
-        <Button
-            variant="outlined"
-            size="large"
-            className={styles.addbutton}
             onClick={() => props.onClick && props.onClick()}
         >
             <Typography>{props.text}</Typography>

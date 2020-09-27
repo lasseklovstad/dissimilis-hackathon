@@ -23,29 +23,9 @@ export const LibraryView = () => {
     const [libraryView, setLibraryView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
 
-    const {
-        getAllSongs,
-        allSongs
-    } = useGetAllSongs()
-    const {
-        getFilteredSongs,
-        filteredSongs
-    } = useGetFilteredSongs(searchTerm)
+    const { getAllSongs, allSongs } = useGetAllSongs()
+    const { getFilteredSongs, filteredSongs } = useGetFilteredSongs(searchTerm)
     const marginBottom = 4
-
-    useEffect(() => {
-        getAllSongs.run()
-    }, [getAllSongs])
-
-    useEffect(() => {
-        getFilteredSongs.run()
-    }, [getFilteredSongs])
-
-    const handleOnBlurSearch = () => {
-        setTimeout(() => {
-            setLibraryView(true)
-        }, 320)
-    }
 
     const handleOnChangeSearch = (searchTermParam: string) => {
         setSearchTerm(searchTermParam)
@@ -66,10 +46,7 @@ export const LibraryView = () => {
                 <Grid container justify="center" className={styles.container}>
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
-                            <DashboardTopBar
-                                onBlur={handleOnBlurSearch}
-                                onChange={handleOnChangeSearch}
-                            />
+                            <DashboardTopBar onChange={handleOnChangeSearch} />
                         </Box>
                     </Grid>
 

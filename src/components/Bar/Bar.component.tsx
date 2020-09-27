@@ -1,130 +1,122 @@
-import React from "react"
-import { Box, Grid, makeStyles } from "@material-ui/core"
+import React, { useContext, useState } from "react"
+import { Box } from "@material-ui/core"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { House } from "./House.component"
-import { BarBody } from "./BarBody.component"
-import { IChordAndNotes } from "../../models/IBar"
-
-const useStyles = makeStyles({
-    root: {
-        width: "100%",
-        padding: "8px",
-    },
-    firstRow: {
-        height: "32px",
-    },
-    fullHeight: {
-        height: "100%",
-    },
-})
+import { IBar, IChordAndNotes } from "../../models/IBar"
+import { Chord } from "./Chord.component"
+import { ChordMenu } from "./ChordMenu.component"
+import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component"
+import { SongContext } from "../../views/SongView/SongContextProvider.component"
+import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
 
 export const Bar = (props: {
-    barNumber: number
-    repBefore: boolean
-    repAfter: boolean
-    house?: number
-    chordsAndNotes: IChordAndNotes[]
-    barLineAfter?: boolean
+    bar: IBar
     height?: number
     voiceId: number
-    exportMode?: boolean
-    rowsPerSheet?: number
+    exportMode: boolean
+    onMenuClick: (anchorEl: HTMLElement) => void
+    masterSheet: boolean
 }) => {
-    const classes = useStyles()
+    const {
+        exportMode,
+        onMenuClick,
+        masterSheet,
+        bar: { barNumber, chordsAndNotes, repAfter, repBefore, house },
+        voiceId,
+        height = 160,
+    } = props
+    const [menuPosition, setMenuPosition] = useState<
+        { top: number; left: number } | undefined
+    >()
+    const [rightClicked, setRightClicked] = useState(-1)
+    const [positionArray, setPositionArray] = useState<number[]>([])
+    const {
+        insertNewNoteOrChord,
+        availablePositions,
+        selectPositionArray,
+    } = useContext(SongToolsContext)
+    const { deleteNote } = useContext(SongContext)
 
-    let centerDivSize: 9 | 10 | 11 = 9
+    const handleRightClick = (i: number) => (event: React.MouseEvent) => {
+        event.preventDefault()
+        setMenuPosition({ top: event.clientY - 4, left: event.clientX - 2 })
+        setRightClicked(i)
+    }
 
-    if (
-        (props.repBefore && props.repAfter) ||
-        (props.repBefore && !props.repAfter)
-    ) {
-        centerDivSize = 10
-    } else if (
-        (!props.repBefore && props.repAfter) ||
-        (!props.repBefore && !props.repAfter)
-    ) {
-        centerDivSize = 11
-    } else {
-        centerDivSize = 9
+    const handleMenuSelect = (method: "delete") => {
+        if (method === "delete") {
+            if (rightClicked >= 0) {
+                const tempChordsAndNotes: IChordAndNotes[] = chordsAndNotes.slice()
+                const newNote: IChordAndNotes = { length: 1, notes: [" "] }
+                tempChordsAndNotes[rightClicked] = newNote
+                for (
+                    let i = rightClicked;
+                    i < chordsAndNotes[rightClicked].length + rightClicked - 1;
+                    i++
+                ) {
+                    tempChordsAndNotes.splice(i, 0, newNote)
+                }
+                deleteNote(props.voiceId, barNumber - 1, tempChordsAndNotes)
+                setPositionArray([])
+            }
+        }
+    }
+
+    const handleClick = (i: number) => {
+        if (
+            availablePositions[voiceId][barNumber - 1] !== undefined &&
+            availablePositions[voiceId][barNumber - 1].find((arr) =>
+                arr.includes(i)
+            ) != null
+        ) {
+            insertNewNoteOrChord(i, barNumber - 1, props.voiceId)
+        }
+    }
+
+    const onMouseEnterChord = (index: number) => {
+        setPositionArray(selectPositionArray(voiceId, barNumber - 1, index))
+    }
+
+    const onMouseLeaveChord = () => {
+        setPositionArray([])
     }
 
     return (
-        <Box className={classes.root} mx="auto" role="main">
-            <Grid container role="grid" className={classes.fullHeight}>
-                <Grid
-                    item
-                    xs={12}
-                    role="gridcell"
-                    className={classes.fullHeight}
-                >
-                    <Grid container className={classes.firstRow} role="grid">
-                        <Grid item xs={1} role="gridcell" />
-                        <Grid
-                            item
-                            xs={9}
-                            role="gridcell"
-                            aria-label={`${props.house}. ending`}
-                        >
-                            <House houseOrder={props.house} />
-                        </Grid>
-                        <Grid item xs={1} role="gridcell" />
-                    </Grid>
-                </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    style={{ height: props.height }}
-                    role="gridcell"
-                >
-                    <Grid
-                        container
-                        spacing={0}
-                        className={classes.fullHeight}
-                        role="grid"
-                    >
-                        <Grid
-                            item
-                            xs={props.repBefore ? 1 : "auto"}
-                            role="gridcell"
-                            aria-label="repetition sign before the tone"
-                        >
-                            <Box mt={`${((props.height || 120) - 56) / 2}px`}>
-                                <RepetitionSign display={props.repBefore} />
-                            </Box>
-                        </Grid>
-                        <Grid
-                            item
-                            xs={centerDivSize}
-                            role="gridcell"
-                            aria-label="Bar"
-                        >
-                            <BarBody
-                                exportMode={props.exportMode}
-                                rowsPerSheet={props.rowsPerSheet}
-                                voiceId={props.voiceId}
-                                barNumber={props.barNumber}
-                                height={props.height}
-                                chordsAndNotes={props.chordsAndNotes}
-                            />
-                        </Grid>
-                        <Grid
-                            item
-                            xs={1}
-                            style={{
-                                borderRight: props.barLineAfter
-                                    ? "6px double black"
-                                    : "2px solid black",
-                            }}
-                            role="gridcell"
-                            aria-label="repetition sign after the tone"
-                        >
-                            <Box mt={`${((props.height || 120) - 56) / 2}px`}>
-                                <RepetitionSign display={props.repAfter} />
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Box>
+        <>
+            {masterSheet && <BarMenuButton onMenuClick={onMenuClick} />}
+            <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="flex-start"
+                width="100%"
+            >
+                <House houseOrder={house} />
+
+                <Box display="flex" flexBasis="100%">
+                    <RepetitionSign display={repBefore} />
+                    <Box height={height || "100%"} display="flex" width="100%">
+                        {chordsAndNotes.map((notes, i) => {
+                            return (
+                                <Chord
+                                    disabled={exportMode}
+                                    onMouseLeave={() => onMouseLeaveChord()}
+                                    onMouseEnter={() => onMouseEnterChord(i)}
+                                    chordsAndNotes={notes}
+                                    highlight={positionArray.includes(i)}
+                                    key={i}
+                                    onContextMenu={handleRightClick(i)}
+                                    onClick={() => handleClick(i)}
+                                />
+                            )
+                        })}
+                    </Box>
+                    <RepetitionSign display={repAfter} />
+                    <ChordMenu
+                        position={menuPosition}
+                        onSelect={handleMenuSelect}
+                    />
+                </Box>
+            </Box>
+        </>
     )
 }

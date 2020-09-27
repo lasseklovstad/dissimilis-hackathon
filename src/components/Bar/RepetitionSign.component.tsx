@@ -3,18 +3,6 @@ import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord"
 import { makeStyles, Box } from "@material-ui/core"
 
 const useStyles = makeStyles({
-    root: {
-        height: "80px",
-        position: "relative",
-    },
-    box: {
-        margin: 0,
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        msTransform: "translate(-50%,-50%)",
-        transform: "translate(-50%,-50%)",
-    },
     dot: {
         width: "16px",
         height: "16px",
@@ -23,21 +11,21 @@ const useStyles = makeStyles({
 
 export const RepetitionSign = (props: { display: boolean }) => {
     const classes = useStyles()
+    if (!props.display) {
+        return <></>
+    }
     return (
         <Box
-            className={classes.root}
-            style={{
-                display: props.display ? "block" : "none",
-                marginRight: "2px",
-            }}
+            display="flex"
+            flexDirection="column"
+            height="100%"
+            justifyContent="center"
         >
-            <Box className={classes.box}>
-                <Box>
-                    <FiberManualRecordIcon className={classes.dot} />
-                </Box>
-                <Box>
-                    <FiberManualRecordIcon className={classes.dot} />
-                </Box>
+            <Box>
+                <FiberManualRecordIcon className={classes.dot} />
+            </Box>
+            <Box>
+                <FiberManualRecordIcon className={classes.dot} />
             </Box>
         </Box>
     )

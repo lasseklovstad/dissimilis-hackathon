@@ -170,7 +170,6 @@ export const BottomBar = () => {
 
     const [toggle, setToggle] = useState<boolean>(true)
     const {
-        showPossiblePositions,
         setShowPossiblePositions,
         calculateAvailableSpace,
         setNoteIsSelected,
@@ -220,16 +219,6 @@ export const BottomBar = () => {
                     </StyledToggleButtonGroup>
                 </div>
                 <div className={classes.container}>
-                    <MenuButtonWithAddIcon
-                        selected={showPossiblePositions}
-                        text={t("BottomBar:addTone")}
-                        onClick={() => {
-                            if (!showPossiblePositions) {
-                                calculateAvailableSpace()
-                            }
-                            setShowPossiblePositions(!showPossiblePositions)
-                        }}
-                    />
                     <MenuButtonWithAddIcon
                         text={t("BottomBar:addBar")}
                         onClick={() => {

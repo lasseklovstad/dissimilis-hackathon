@@ -17,11 +17,7 @@ import { useTranslation } from "react-i18next"
 import { parse } from "query-string"
 import { SongContext } from "../SongView/SongContextProvider.component"
 import { colors } from "../../utils/colors"
-import { BarContainer } from "../../components/BarContainer/BarContainer.component"
-import {
-    BarNumber,
-    TimeSignature,
-} from "../../components/SongViewComponents/SongView.component"
+import { Song } from "../../components/Song/Song.component"
 
 const useStyles = makeStyles({
     root: {
@@ -75,9 +71,10 @@ export const ExportView = () => {
     >(3)
     const [amountOfPages, setAmountOfPages] = useState<number>(1)
     const [dropDownMenuSelected, setDropDownMenuSelected] = useState<number>(0)
+    const [barsPerRow, setBarsPerRow] = useState(4)
 
     const {
-        song: { title, voices, id },
+        song: { title, voices, id, timeSignature },
     } = useContext(SongContext)
 
     const classes = useStyles()
@@ -103,6 +100,7 @@ export const ExportView = () => {
     const convertAmountOfBarsPerRowToLengthOfEachBar = (
         amount: number | number[]
     ) => {
+        setBarsPerRow(amount as number)
         if (amount === 1) {
             setlengthOfEachBar(12)
         } else if (amount === 2) {
@@ -251,111 +249,29 @@ export const ExportView = () => {
                                     {voices[selectedVoice].title}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={1}>
-                                {voices[selectedVoice].bars.map(
-                                    (bar, index) => {
-                                        const amountOfBarsPerRow = convertFromLengthOfBarToAmountOfBarsPerRow()
-                                        const indexToBeDisplayed =
-                                            index +
-                                            1 +
-                                            amountOfBarsPerRow *
-                                                rowsPerSheet *
-                                                pageIndex
-                                        if (
-                                            indexToBeDisplayed <=
-                                            (pageIndex + 1) *
-                                                amountOfBarsPerRow *
-                                                rowsPerSheet
-                                        ) {
-                                            if (
-                                                indexToBeDisplayed <=
-                                                voices[selectedVoice].bars
-                                                    .length
-                                            ) {
-                                                if (
-                                                    pageIndex === 0 &&
-                                                    index === 0
-                                                ) {
-                                                    return (
-                                                        <TimeSignature
-                                                            height={calculateHeightOfBar()}
-                                                        />
-                                                    )
-                                                }
-                                                if (
-                                                    index %
-                                                        amountOfBarsPerRow ===
-                                                    0
-                                                ) {
-                                                    return (
-                                                        <BarNumber
-                                                            height={calculateHeightOfBar()}
-                                                            key={index}
-                                                            barNumber={
-                                                                indexToBeDisplayed
-                                                            }
-                                                        />
-                                                    )
-                                                }
-                                                return <></>
-                                            }
-                                            return <></>
-                                        }
-                                        return <></>
-                                    }
-                                )}
-                            </Grid>
-
-                            <Grid item xs={11}>
+                            <Grid item xs={12}>
                                 <Grid container>
                                     {voices[selectedVoice].bars.length === 0 ? (
                                         <></>
                                     ) : (
                                         <>
-                                            {voices[selectedVoice].bars
-                                                .slice(
+                                            <Song
+                                                barsPerRow={barsPerRow}
+                                                exportMode
+                                                selectedVoice={selectedVoice}
+                                                bars={voices[
+                                                    selectedVoice
+                                                ].bars.slice(
                                                     pageIndex *
                                                         (rowsPerSheet *
                                                             convertFromLengthOfBarToAmountOfBarsPerRow()),
                                                     (pageIndex + 1) *
                                                         rowsPerSheet *
                                                         convertFromLengthOfBarToAmountOfBarsPerRow()
-                                                )
-                                                .map((bar, i) => {
-                                                    return (
-                                                        <>
-                                                            <Grid
-                                                                item
-                                                                xs={
-                                                                    lengthOfEachBar
-                                                                }
-                                                            >
-                                                                <BarContainer
-                                                                    exportMode
-                                                                    rowsPerSheet={convertFromLengthOfBarToAmountOfBarsPerRow()}
-                                                                    height={calculateHeightOfBar()}
-                                                                    voiceId={
-                                                                        selectedVoice
-                                                                    }
-                                                                    barNumber={
-                                                                        bar.barNumber as number
-                                                                    }
-                                                                    masterSheet={
-                                                                        false
-                                                                    }
-                                                                    barLineAfter={isBarLineAfter(
-                                                                        pageIndex,
-                                                                        bar.barNumber as number
-                                                                    )}
-                                                                    barLineBefore={isBarLineBefore(
-                                                                        i
-                                                                    )}
-                                                                    bar={bar}
-                                                                />
-                                                            </Grid>
-                                                        </>
-                                                    )
-                                                })}
+                                                )}
+                                                timeSignature={timeSignature}
+                                                heightOfBar={calculateHeightOfBar()}
+                                            />
                                         </>
                                     )}
                                 </Grid>

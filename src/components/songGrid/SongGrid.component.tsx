@@ -27,8 +27,8 @@ export const SongGrid = (props: SongGridProps) => {
             if (Array.isArray(children)) {
                 return (
                     <>
-                        {children.map((child) => {
-                            return <GridItem>{child}</GridItem>
+                        {children.map((child, i) => {
+                            return <GridItem key={i}>{child}</GridItem>
                         })}
                     </>
                 )

@@ -12,8 +12,8 @@ const useStyles = makeStyles(() => ({
 }))
 
 export const DashboardTopBar = (props: {
-    onBlur: () => void
     onChange: (txt: string) => void
+    onGoHome?: () => void
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
@@ -23,6 +23,9 @@ export const DashboardTopBar = (props: {
 
     const goHome = () => {
         history.push("/dashboard")
+        if (props.onGoHome) {
+            props.onGoHome()
+        }
     }
 
     return (
@@ -57,7 +60,6 @@ export const DashboardTopBar = (props: {
                                 }}
                                 onBlur={() => {
                                     setSearchBarFocus(false)
-                                    props.onBlur()
                                 }}
                                 onChange={(event) =>
                                     props.onChange(event.target.value)

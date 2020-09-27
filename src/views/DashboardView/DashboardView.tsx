@@ -59,28 +59,11 @@ export const DashboardView = () => {
     const [timeSignature, setTimeSignature] = useState("")
     const [textFieldInput, setTextFieldInput] = useState<string>("")
 
-    const { postSong } = usePostSong(
-        textFieldInput,
-        timeSignature
-    )
+    const { postSong } = usePostSong(textFieldInput, timeSignature)
     const history = useHistory()
     const measureText = t("DashboardView:measure")
-    const {
-        getRecentSongs,
-        recentSongs,
-    } = useGetRecentSongs()
-    const {
-        getFilteredSongs,
-        filteredSongs,
-    } = useGetFilteredSongs(searchTerm)
-
-    useEffect(() => {
-        getRecentSongs.run()
-    }, [getRecentSongs])
-
-    useEffect(() => {
-        getFilteredSongs.run()
-    }, [getFilteredSongs, searchTerm])
+    const { getRecentSongs, recentSongs } = useGetRecentSongs()
+    const { getFilteredSongs, filteredSongs } = useGetFilteredSongs(searchTerm)
 
     const handleAddSong = async () => {
         setAddSongModalIsOpen(false)
@@ -106,11 +89,7 @@ export const DashboardView = () => {
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
                             <DashboardTopBar
-                                onBlur={() => {
-                                    setTimeout(() => {
-                                        setDashboardView(true)
-                                    }, 320)
-                                }}
+                                onGoHome={() => setDashboardView(true)}
                                 onChange={(txt) => {
                                     setSearchTerm(txt)
                                     setDashboardView(false)
@@ -169,10 +148,7 @@ export const DashboardView = () => {
                 </Grid>
             </Box>
             <Loading isLoading={postSong.loading} fullScreen />
-            <ErrorDialog
-                isError={postSong.isError}
-                error={postSong.error}
-            />
+            <ErrorDialog isError={postSong.isError} error={postSong.error} />
         </>
     )
 }
