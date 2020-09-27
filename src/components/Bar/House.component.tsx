@@ -6,7 +6,7 @@ export const House = (props: { houseOrder: number | undefined | null }) => {
         return <></>
     }
     return (
-        <Box position="relative" top="-20px" height={0}>
+        <Box position="relative" top="-30px" height={0}>
             <Typography variant="body1" component="div">
                 {props.houseOrder === undefined ? null : (
                     <Box

@@ -89,12 +89,18 @@ export const Bar = (props: {
                 flexDirection="column"
                 justifyContent="flex-start"
                 width="100%"
+                minWidth={0}
             >
                 <House houseOrder={house} />
 
-                <Box display="flex" flexBasis="100%">
+                <Box display="flex" minWidth={0}>
                     <RepetitionSign display={repBefore} />
-                    <Box height={height || "100%"} display="flex" width="100%">
+                    <Box
+                        height={height || "100%"}
+                        display="flex"
+                        width="100%"
+                        minWidth={0}
+                    >
                         {chordsAndNotes.map((notes, i) => {
                             return (
                                 <Chord

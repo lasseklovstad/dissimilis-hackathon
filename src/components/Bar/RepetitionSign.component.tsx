@@ -1,11 +1,11 @@
 import React from "react"
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord"
-import { makeStyles, Box } from "@material-ui/core"
+import { Box, makeStyles } from "@material-ui/core"
 
 const useStyles = makeStyles({
     dot: {
-        width: "16px",
-        height: "16px",
+        width: "12px",
+        height: "12px",
     },
 })
 
@@ -16,6 +16,7 @@ export const RepetitionSign = (props: { display: boolean }) => {
     }
     return (
         <Box
+            pr={1}
             display="flex"
             flexDirection="column"
             height="100%"

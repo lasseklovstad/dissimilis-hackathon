@@ -1,15 +1,15 @@
-import React, { useContext, useState, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import {
-    Box,
-    makeStyles,
-    Typography,
-    Grid,
-    Slider,
-    Button,
     BottomNavigation,
+    Box,
+    Button,
     FormControl,
-    Select,
+    Grid,
+    makeStyles,
     MenuItem,
+    Select,
+    Slider,
+    Typography,
     useMediaQuery,
 } from "@material-ui/core"
 import { useHistory } from "react-router-dom"
@@ -233,7 +233,7 @@ export const ExportView = () => {
         <>
             {Array.from(Array(amountOfPages), (e, pageIndex) => {
                 return (
-                    <Box className={`${classes.root} page`}>
+                    <Box className={`${classes.root} page`} key={pageIndex}>
                         <Grid container>
                             <Grid item xs={12}>
                                 <Typography
@@ -328,6 +328,7 @@ export const ExportView = () => {
                                 {voices.map((voice, i) => {
                                     return (
                                         <Button
+                                            key={i}
                                             onClick={() =>
                                                 history.replace(
                                                     `/song/${id}/export?voice=${
@@ -426,7 +427,6 @@ export const ExportView = () => {
                             className={classes.confirmOrCancelButtons}
                             onClick={() => history.push(`/song/${id}/`)}
                         >
-                            {" "}
                             {t("ExportView:cancel")}
                         </Button>
                     </Grid>

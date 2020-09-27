@@ -51,7 +51,7 @@ export const getColor = (note: string): string => {
             newColor = colors.gray_500
             break
         default:
-            newColor = "transparent"
+            newColor = ""
     }
     return newColor
 }
