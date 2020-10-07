@@ -1,18 +1,14 @@
-import React, { FC, useContext } from "react"
-import { makeStyles, Box, Typography } from "@material-ui/core"
+import React from "react"
+import { Box, Typography } from "@material-ui/core"
 import { colors } from "../../utils/colors"
-import { SongContext } from "../../views/SongView/SongContextProvider.component"
+import { ITimeSignature } from "../../models/ITimeSignature"
 
-export const TimeSignature = (props: { timeSignature: string }) => {
-    const timeSignatureString = props.timeSignature
-    const timeSignatureNumerator = timeSignatureString.split("/")[0]
-    const timeSignatureDenominator = timeSignatureString.split("/")[1]
-
+export const TimeSignature = (props: { timeSignature: ITimeSignature }) => {
     return (
         <Typography variant="body1" component="div">
             <Box mr={1} fontWeight="fontWeightBold" width="30px">
-                <Box>{timeSignatureNumerator}</Box>
-                <Box>{timeSignatureDenominator}</Box>
+                <Box>{props.timeSignature.numerator}</Box>
+                <Box>{props.timeSignature.denominator}</Box>
             </Box>
         </Typography>
     )

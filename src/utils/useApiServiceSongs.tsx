@@ -1,6 +1,11 @@
 import { useEffect } from "react"
 import { useApiService } from "./useApiService"
 import { ISong } from "../models/ISong"
+import { ITimeSignature } from "../models/ITimeSignature"
+
+const getArrangerId = () => {
+    return sessionStorage.getItem("userId") || ""
+}
 
 const getHeaders = () => {
     const apiKey = sessionStorage.getItem("apiKey") || ""
@@ -27,21 +32,23 @@ export const useGetSong = (id: number) => {
  * */
 export const useGetAllSongs = () => {
     const url = "song/search"
-    const params = { OrderByDateTime: "true" }
+    const body = {
+        orderByDateTime: "true",
+    }
     const initialData: ISong[] = []
     const headers = getHeaders()
-    const { getData, state, data } = useApiService<ISong[]>(url, {
-        params,
+    const { postData, state, data } = useApiService<ISong[]>(url, {
+        body,
         initialData,
         headers,
     })
 
     useEffect(() => {
-        getData()
-    }, [getData])
+        postData()
+    }, [postData])
 
     return {
-        getAllSongs: { run: getData, ...state },
+        getAllSongs: { run: postData, ...state },
         allSongs: data,
     }
 }
@@ -54,19 +61,21 @@ export const useGetFilteredSongs = (title: string) => {
     const url = "song/search"
     const initialData: ISong[] = []
     const headers = getHeaders()
-    const params = { title }
-    const { getData, state, data } = useApiService<ISong[]>(url, {
+    const body = {
+        title,
+    }
+    const { postData, state, data } = useApiService<ISong[]>(url, {
         initialData,
         headers,
-        params,
+        body,
     })
 
     useEffect(() => {
-        getData()
-    }, [getData])
+        postData()
+    }, [postData])
 
     return {
-        getFilteredSongs: { run: getData, ...state },
+        getFilteredSongs: { run: postData, ...state },
         filteredSongs: data,
     }
 }
@@ -76,21 +85,25 @@ export const useGetFilteredSongs = (title: string) => {
  * */
 export const useGetRecentSongs = () => {
     const url = "song/search"
-    const params = { Num: "5", OrderByDateTime: "true" }
+    const body = {
+        num: "5",
+        orderByDateTime: "true",
+        arrangerId: getArrangerId(),
+    }
     const initialData: ISong[] = []
     const headers = getHeaders()
-    const { getData, state, data } = useApiService<ISong[]>(url, {
-        params,
+    const { postData, state, data } = useApiService<ISong[]>(url, {
+        body,
         initialData,
         headers,
     })
 
     useEffect(() => {
-        getData()
-    }, [getData])
+        postData()
+    }, [postData])
 
     return {
-        getRecentSongs: { run: getData, ...state },
+        getRecentSongs: { run: postData, ...state },
         recentSongs: data,
     }
 }
@@ -99,10 +112,13 @@ export const useGetRecentSongs = () => {
  * Add a new song
  * @param Title and time signature of new song, id of new song is returned from backend
  */
-export const usePostSong = (title: string, timeSignature: string) => {
+export const usePostSong = (
+    title: string,
+    timeSignature: ITimeSignature | undefined
+) => {
     const url = "song"
     const headers = getHeaders()
-    const body = { title, timeSignature }
+    const body = { title, ...timeSignature }
     const api = useApiService<ISong>(url, { headers, body })
     return {
         postSong: { run: api.postData, ...api.state },
@@ -113,7 +129,7 @@ export const usePostSong = (title: string, timeSignature: string) => {
  * Post exisitng song
  */
 export const usePutSong = (song: ISong) => {
-    const url = `song/${song.id}`
+    const url = `song/${song.songId}`
     const body = song
     const headers = getHeaders()
     const api = useApiService<number>(url, { body, headers })

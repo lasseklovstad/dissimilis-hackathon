@@ -10,7 +10,7 @@ import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 interface ISongContext {
     song: ISong
     setSong: (song: ISong) => void
-    addVoice: (voices: Pick<IVoice, "title" | "bars" | "partNumber">) => void
+    addVoice: (voices: IVoice) => void
     deleteBar: (index: number, voiceId: number) => void
     getBar: (id: number, voiceId: number) => IBar | undefined
     duplicateBar: (id: number, voiceId: number) => void
@@ -20,7 +20,6 @@ interface ISongContext {
         barId: number,
         newNotes: IChordAndNotes[]
     ) => void
-    getTimeSignature: () => number[]
     toggleRepBefore: (barId: number) => void
     toggleRepAfter: (barId: number) => void
     changeTitle: (newTitle: string) => void
@@ -40,9 +39,10 @@ interface ISongContext {
 
 export const SongContext = React.createContext<ISongContext>({
     song: {
-        id: 0,
+        songId: 0,
         title: "",
-        timeSignature: "4/4",
+        denominator: 4,
+        numerator: 4,
         voices: [],
     },
     setSong: () => {},
@@ -56,7 +56,6 @@ export const SongContext = React.createContext<ISongContext>({
     },
     addEmptyBar: () => {},
     editNote: () => {},
-    getTimeSignature: () => [],
     toggleRepBefore: () => {},
     toggleRepAfter: () => {},
     changeTitle: () => {},
@@ -78,13 +77,15 @@ export const SongContextProvider: React.FC = (props) => {
     const { getSong } = useGetSong(songId)
     let [song, setSong] = useState<ISong>({
         title: "",
-        id: 0,
-        timeSignature: "",
+        songId: 0,
+        denominator: 4,
+        numerator: 4,
         voices: [
             {
                 partNumber: 1,
                 title: "",
                 bars: [],
+                isMain: true,
             },
         ],
     })
@@ -105,27 +106,21 @@ export const SongContextProvider: React.FC = (props) => {
         })
     }, [])
 
-    // Method to get timeSignature from localstorage
-    const getTimeSignature = () => {
-        return [
-            parseInt(song.timeSignature.split("/")[0], 10),
-            parseInt(song.timeSignature.split("/")[1], 10),
-        ]
-    }
-
     // Method to simplify change of state
     const addVoice = (newVoice: IVoice) => {
         for (let i = 0; i < song.voices[0].bars.length; i++) {
             // I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
             const newChordsAndNotes = []
             const newEmptyNote = { length: 1, notes: [" "] }
-            let timeSignatureNumerator = getTimeSignature()[0]
-            if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2
+            let timeSignatureNumerator = song.numerator
+            if (song.denominator === 4) timeSignatureNumerator *= 2
             for (let i = 0; i < timeSignatureNumerator; i++) {
                 newChordsAndNotes.push(newEmptyNote)
             }
             const barInfo = song.voices[0].bars[i]
             const tempBar: IBar = {
+                songId: song.songId,
+                songVoiceId: newVoice.songVoiceId,
                 barNumber: i + 1,
                 repBefore: barInfo.repBefore,
                 repAfter: barInfo.repAfter,
@@ -287,12 +282,13 @@ export const SongContextProvider: React.FC = (props) => {
         // I have to add as many empty notes as the timesignatureNumerator-value is if the denominator is 8
         const newChordsAndNotes = []
         const newEmptyNote = { length: 1, notes: [" "] }
-        let timeSignatureNumerator = getTimeSignature()[0]
-        if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2
+        let timeSignatureNumerator = song.numerator
+        if (song.denominator === 4) timeSignatureNumerator *= 2
         for (let i = 0; i < timeSignatureNumerator; i++) {
             newChordsAndNotes.push(newEmptyNote)
         }
         const newBar: IBar = {
+            songId: song.songId,
             barNumber: index,
             repBefore: false,
             repAfter: false,
@@ -429,7 +425,6 @@ export const SongContextProvider: React.FC = (props) => {
         duplicateBar,
         addEmptyBar,
         editNote,
-        getTimeSignature,
         toggleRepBefore,
         toggleRepAfter,
         changeTitle,

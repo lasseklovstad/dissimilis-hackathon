@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from "react"
-import { Grid, Typography, Box, makeStyles } from "@material-ui/core"
+import React, { useState } from "react"
+import { Box, Grid, makeStyles } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import {
-    DashboardButton,
-    DashboardLibraryButton,
     DashboardButtonWithAddIconNoLink,
+    DashboardLibraryButton,
 } from "../../components/DashboardButtons/DashboardButtons"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import {
-    useGetRecentSongs,
     useGetFilteredSongs,
+    useGetRecentSongs,
     usePostSong,
 } from "../../utils/useApiServiceSongs"
-import { ISong } from "../../models/ISong"
 import { InputModal } from "../../components/CustomModal/InputModal.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
 import { Loading } from "../../components/loading/Loading.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
+import { ITimeSignature } from "../../models/ITimeSignature"
+import { getTimeSignatureText } from "../../utils/bar.util"
 
 const useStyles = makeStyles({
     container: {
@@ -27,25 +27,40 @@ const useStyles = makeStyles({
 
 type MusicTacts = {
     id: number
-    text: string
+    timeSignature: {
+        numerator: number
+        denominator: number
+    }
 }
 const marginBottom = 10
 const musicTacts: MusicTacts[] = [
     {
         id: 1,
-        text: "2/4",
+        timeSignature: {
+            numerator: 2,
+            denominator: 4,
+        },
     },
     {
         id: 2,
-        text: "3/4",
+        timeSignature: {
+            numerator: 3,
+            denominator: 4,
+        },
     },
     {
         id: 3,
-        text: "4/4",
+        timeSignature: {
+            numerator: 4,
+            denominator: 4,
+        },
     },
     {
         id: 4,
-        text: "6/8",
+        timeSignature: {
+            numerator: 6,
+            denominator: 8,
+        },
     },
 ]
 
@@ -56,7 +71,9 @@ export const DashboardView = () => {
     const [dashboardView, setDashboardView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
     const [addSongModalIsOpen, setAddSongModalIsOpen] = useState(false)
-    const [timeSignature, setTimeSignature] = useState("")
+    const [timeSignature, setTimeSignature] = useState<
+        ITimeSignature | undefined
+    >()
     const [textFieldInput, setTextFieldInput] = useState<string>("")
 
     const { postSong } = usePostSong(textFieldInput, timeSignature)
@@ -69,12 +86,12 @@ export const DashboardView = () => {
         setAddSongModalIsOpen(false)
         const { result } = await postSong.run()
         if (result?.status === 201) {
-            history.push(`/song/${result.data.id}`)
+            history.push(`/song/${result.data.songId}`)
         }
     }
 
     const handleOpenAddSongModal = (song: MusicTacts) => {
-        setTimeSignature(song.text)
+        setTimeSignature(song.timeSignature)
         setAddSongModalIsOpen(true)
     }
 
@@ -111,7 +128,9 @@ export const DashboardView = () => {
                                         func={() =>
                                             handleOpenAddSongModal(song)
                                         }
-                                        text={`${song.text}-${measureText}`}
+                                        text={`${getTimeSignatureText(
+                                            song.timeSignature
+                                        )}-${measureText}`}
                                     />
                                 ))}
                             </SongGrid>

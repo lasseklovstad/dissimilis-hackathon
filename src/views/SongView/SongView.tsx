@@ -33,7 +33,7 @@ export const SongView = () => {
     const classes = useStyles()
 
     const {
-        song: { voices, timeSignature },
+        song: { voices, denominator, numerator },
         isLoading,
         isSaving,
         setIsSaving,
@@ -70,7 +70,7 @@ export const SongView = () => {
                             barsPerRow={barsPerRow}
                             selectedVoice={selectedVoice}
                             bars={voices[selectedVoice].bars}
-                            timeSignature={timeSignature}
+                            timeSignature={{ denominator, numerator }}
                             heightOfBar={heightOfBar}
                             exportMode={false}
                         />

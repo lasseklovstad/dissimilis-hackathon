@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom"
 import { DependencyList, useCallback, useEffect, useRef, useState } from "react"
 import { IServerError } from "../models/IServerError"
 
-type HTTPMethod = "get" | "put" | "delete" | "post"
+type HTTPMethod = "get" | "patch" | "delete" | "post"
 type FetchReturn<T> = {
     result: AxiosResponse<T> | undefined
     isError: boolean
@@ -86,8 +86,8 @@ export const useApiService = <T extends unknown>(
                             cancelToken: source.token,
                         })
                         break
-                    case "put":
-                        result = await axios.put<T>(finalUrl, body, {
+                    case "patch":
+                        result = await axios.patch<T>(finalUrl, body, {
                             headers,
                             cancelToken: source.token,
                         })
@@ -133,7 +133,7 @@ export const useApiService = <T extends unknown>(
     }, [fetchData])
 
     const putData = useCallback(async () => {
-        return fetchData("put")
+        return fetchData("patch")
     }, [fetchData])
 
     const deleteData = useCallback(async () => {

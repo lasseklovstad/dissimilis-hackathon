@@ -1,13 +1,13 @@
-import React, { useState, useContext } from "react"
-import { Grid, Menu, MenuItem, makeStyles } from "@material-ui/core"
+import React, { useContext, useState } from "react"
+import { Grid, makeStyles, Menu, MenuItem } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { parse } from "query-string"
 
 import {
-    DashboardButtonWithAddIconNoLink,
-    DashboardButtonNoLink,
     DashboardButton,
+    DashboardButtonNoLink,
+    DashboardButtonWithAddIconNoLink,
 } from "../DashboardButtons/DashboardButtons"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
 import { IVoice } from "../../models/IVoice"
@@ -29,7 +29,7 @@ export const CreateSongTab = () => {
     const history = useHistory()
 
     const {
-        song: { voices, id },
+        song: { voices, songId },
         addVoice,
         changeVoiceTitle,
     } = useContext(SongContext)
@@ -37,7 +37,12 @@ export const CreateSongTab = () => {
 
     const handleAddInstrument = () => {
         setShowPossiblePositions(false)
-        addVoice({ title: textFieldInput, partNumber: voices.length, bars: [] })
+        addVoice({
+            title: textFieldInput,
+            partNumber: voices.length,
+            bars: [],
+            isMain: false,
+        })
         setModalIsOpen(false)
         setTextFieldInput("")
         const newIndex = voices.length + 1
@@ -85,7 +90,7 @@ export const CreateSongTab = () => {
                             selected={selectedVoice === 1}
                             text={t("CreateSongTab:song")}
                             func={() => {
-                                history.replace(`/song/${id}?voice=1`)
+                                history.replace(`/song/${songId}?voice=1`)
                             }}
                         />
                     </Grid>
@@ -103,7 +108,7 @@ export const CreateSongTab = () => {
                                     }}
                                     selected={selectedVoice === index + 2}
                                     text={voices.title}
-                                    link={`/song/${id}?voice=${index + 2}`}
+                                    link={`/song/${songId}?voice=${index + 2}`}
                                 />
                                 <Menu
                                     keepMounted

@@ -74,7 +74,7 @@ export const ExportView = () => {
     const [barsPerRow, setBarsPerRow] = useState(4)
 
     const {
-        song: { title, voices, id, timeSignature },
+        song: { title, voices, songId, denominator, numerator },
     } = useContext(SongContext)
 
     const classes = useStyles()
@@ -269,7 +269,10 @@ export const ExportView = () => {
                                                         rowsPerSheet *
                                                         convertFromLengthOfBarToAmountOfBarsPerRow()
                                                 )}
-                                                timeSignature={timeSignature}
+                                                timeSignature={{
+                                                    denominator,
+                                                    numerator,
+                                                }}
                                                 heightOfBar={calculateHeightOfBar()}
                                             />
                                         </>
@@ -309,7 +312,7 @@ export const ExportView = () => {
                                             <MenuItem
                                                 onClick={() =>
                                                     history.replace(
-                                                        `/song/${id}/export?voice=${
+                                                        `/song/${songId}/export?voice=${
                                                             i + 1
                                                         }`
                                                     )
@@ -331,7 +334,7 @@ export const ExportView = () => {
                                             key={i}
                                             onClick={() =>
                                                 history.replace(
-                                                    `/song/${id}/export?voice=${
+                                                    `/song/${songId}/export?voice=${
                                                         i + 1
                                                     }`
                                                 )
@@ -425,7 +428,7 @@ export const ExportView = () => {
                         </Button>
                         <Button
                             className={classes.confirmOrCancelButtons}
-                            onClick={() => history.push(`/song/${id}/`)}
+                            onClick={() => history.push(`/song/${songId}/`)}
                         >
                             {t("ExportView:cancel")}
                         </Button>

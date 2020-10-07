@@ -2,10 +2,12 @@ import { IVoice } from "./IVoice"
 
 export interface ISong {
     title: string
-    id: number
+    songId: number
     // arranger: User;
     voices: IVoice[]
     arrangerId?: number
-    composer?: string
-    timeSignature: string
+    denominator: number
+    numerator: number
+    updatedOn?: string
+    arrangerName?: string
 }

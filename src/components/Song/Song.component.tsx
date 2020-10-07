@@ -8,18 +8,19 @@ import {
     TimeSignature,
 } from "../SongViewComponents/SongView.component"
 import { Bar } from "../Bar/Bar.component"
+import { ITimeSignature } from "../../models/ITimeSignature"
 
 type SongProps = {
     barsPerRow: number
     selectedVoice: number
     bars: IBar[]
-    timeSignature: string
+    timeSignature: ITimeSignature
     heightOfBar: number
     exportMode?: boolean
     page?: number
 }
 
-const BarPrefix = (props: { index: number; timeSignature: string }) => {
+const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
     const { index, timeSignature } = props
 
     const getPrefixItem = () => {

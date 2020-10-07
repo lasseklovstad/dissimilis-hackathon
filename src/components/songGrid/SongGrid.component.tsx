@@ -43,10 +43,10 @@ export const SongGrid = (props: SongGridProps) => {
             return (
                 <>
                     {songs?.map((song) => (
-                        <GridItem key={song.id}>
+                        <GridItem key={song.songId}>
                             <DashboardButton
                                 text={song.title}
-                                link={`/song/${song.id.toString()}`}
+                                link={`/song/${song.songId.toString()}`}
                             />
                         </GridItem>
                     ))}

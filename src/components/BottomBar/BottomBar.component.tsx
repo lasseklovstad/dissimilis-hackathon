@@ -1,12 +1,12 @@
-import React, { useState, useContext } from "react"
+import React, { useContext, useState } from "react"
 import {
-    makeStyles,
     FormControl,
+    Grid,
+    makeStyles,
     MenuItem,
     Select,
     Typography,
     withStyles,
-    Grid,
 } from "@material-ui/core"
 import MusicNoteIcon from "@material-ui/icons/MusicNote"
 import { useTranslation } from "react-i18next"
@@ -97,12 +97,15 @@ export const BottomBar = () => {
     const { selectedNoteLength, setSelectedNoteLength } = useContext(
         SongToolsContext
     )
-    const { addEmptyBar, getTimeSignature } = useContext(SongContext)
+    const {
+        addEmptyBar,
+        song: { denominator, numerator },
+    } = useContext(SongContext)
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedNoteLength(event.target.value as 1 | 2 | 4 | 8)
     }
-    let timeSignatureNumerator = getTimeSignature()[0]
-    if (getTimeSignature()[1] === 4) timeSignatureNumerator *= 2
+    let timeSignatureNumerator = numerator
+    if (denominator === 4) timeSignatureNumerator *= 2
     // When adding new notes to this list of MenuItems with a given value, remember to add the case to the method calculateFlexBasis in BarBody.component.tsx.
     const Menu = (
         <FormControl

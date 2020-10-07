@@ -5,9 +5,12 @@ export interface IChordAndNotes {
 }
 
 export interface IBar {
+    barId?: number
+    songId: number
+    songVoiceId?: number
     barNumber: number
-    house?: number | undefined
+    house?: number | undefined | null
     repBefore: boolean
     repAfter: boolean
-    chordsAndNotes: Array<IChordAndNotes>
+    chordsAndNotes: IChordAndNotes[]
 }
