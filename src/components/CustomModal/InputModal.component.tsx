@@ -119,7 +119,10 @@ export const InputModal = (props: {
                                 className={classes.button}
                                 size="large"
                                 variant="outlined"
-                                onClick={() => props.handleOnCancelClick()}
+                                onClick={() => {
+                                    props.handleOnCancelClick()
+                                    setTextFieldInput("")
+                                }}
                             >
                                 {props.cancelText}
                             </Button>

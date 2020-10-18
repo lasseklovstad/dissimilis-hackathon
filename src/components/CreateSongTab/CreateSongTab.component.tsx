@@ -93,11 +93,13 @@ export const CreateSongTab = (props: {
 
     return (
         <>
-            <Box display="flex">
+            <Box display="flex" flexWrap="wrap">
                 <Tabs
                     value={selectedVoice}
                     indicatorColor="secondary"
                     textColor="secondary"
+                    variant="scrollable"
+                    scrollButtons="auto"
                 >
                     {voices.map((voice) => {
                         const label = voice.isMain

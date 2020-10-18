@@ -74,23 +74,16 @@ export const ExportView = () => {
     const [barsPerRow, setBarsPerRow] = useState(4)
     const { songId } = useParams<{ songId: string }>()
     const { songInit } = useGetSong(songId)
-    const selectedVoice = useVoice(songInit?.voices)
+    const selectedVoiceId = useVoice(songInit?.voices)
+    const selectedVoice = songInit?.voices.find(
+        (voice) => voice.songVoiceId === selectedVoiceId
+    )
 
     const classes = useStyles()
     const history = useHistory()
     const { t } = useTranslation()
 
     const matches = useMediaQuery("(min-width:960px)")
-
-    useEffect(() => {
-        calculatePage()
-    }, [rowsPerSheet, lengthOfEachBar])
-
-    if (!songInit || !selectedVoice) {
-        return <></>
-    }
-
-    const { voices, title, denominator, numerator } = songInit
 
     // Converts amount of bars per row to the length according to the Material UI-grid (12 columns)
     const convertAmountOfBarsPerRowToLengthOfEachBar = (
@@ -169,11 +162,7 @@ export const ExportView = () => {
     }
 
     const isBarLineAfter = (page: number, index: number) => {
-        if (
-            selectedVoice &&
-            index === songInit?.voices[selectedVoice].bars.length
-        )
-            return true
+        if (selectedVoice && index === selectedVoice?.bars.length) return true
         return false
     }
 
@@ -205,7 +194,11 @@ export const ExportView = () => {
     }
 
     const calculatePage = () => {
-        const amountOfBars = voices[selectedVoice].bars.length
+        if (!selectedVoice) {
+            setAmountOfPages(1)
+            return
+        }
+        const amountOfBars = selectedVoice.bars.length || 0
         const lengthOfEachBarCalculated = convertFromLengthOfBarToAmountOfBarsPerRow()
 
         const totalRowsUsed = Math.ceil(
@@ -221,59 +214,69 @@ export const ExportView = () => {
         }
     }
 
+    useEffect(() => {
+        calculatePage()
+    }, [rowsPerSheet, lengthOfEachBar])
+
     return (
         <>
             {Array.from(Array(amountOfPages), (e, pageIndex) => {
                 return (
                     <Box className={`${classes.root} page`} key={pageIndex}>
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <Typography
-                                    style={{ textAlign: "center" }}
-                                    variant="h1"
-                                >
-                                    {title}
-                                </Typography>
-                                <Typography
-                                    style={{ textAlign: "center" }}
-                                    variant="body1"
-                                >
-                                    {voices[selectedVoice].title}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Grid container>
-                                    {voices[selectedVoice].bars.length === 0 ? (
-                                        <></>
-                                    ) : (
-                                        <>
-                                            <Song
-                                                barsPerRow={barsPerRow}
-                                                exportMode
-                                                voice={{
-                                                    ...voices[selectedVoice],
-                                                    bars: voices[
-                                                        selectedVoice
-                                                    ].bars.slice(
-                                                        pageIndex *
-                                                            (rowsPerSheet *
-                                                                convertFromLengthOfBarToAmountOfBarsPerRow()),
-                                                        (pageIndex + 1) *
-                                                            rowsPerSheet *
-                                                            convertFromLengthOfBarToAmountOfBarsPerRow()
-                                                    ),
-                                                }}
-                                                timeSignature={{
-                                                    denominator,
-                                                    numerator,
-                                                }}
-                                                heightOfBar={calculateHeightOfBar()}
-                                            />
-                                        </>
-                                    )}
+                        {selectedVoice && songInit && (
+                            <Grid container>
+                                <Grid item xs={12}>
+                                    <Typography
+                                        style={{ textAlign: "center" }}
+                                        variant="h1"
+                                    >
+                                        {songInit?.title}
+                                    </Typography>
+                                    <Typography
+                                        style={{ textAlign: "center" }}
+                                        variant="body1"
+                                    >
+                                        {selectedVoice?.title}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Grid container>
+                                        {selectedVoice?.bars.length === 0 ? (
+                                            <></>
+                                        ) : (
+                                            <>
+                                                <Song
+                                                    barsPerRow={barsPerRow}
+                                                    exportMode
+                                                    voice={{
+                                                        ...selectedVoice,
+                                                        bars:
+                                                            selectedVoice.bars.slice(
+                                                                pageIndex *
+                                                                    (rowsPerSheet *
+                                                                        convertFromLengthOfBarToAmountOfBarsPerRow()),
+                                                                (pageIndex +
+                                                                    1) *
+                                                                    rowsPerSheet *
+                                                                    convertFromLengthOfBarToAmountOfBarsPerRow()
+                                                            ) || [],
+                                                    }}
+                                                    timeSignature={{
+                                                        denominator:
+                                                            songInit?.denominator ||
+                                                            4,
+                                                        numerator:
+                                                            songInit?.numerator ||
+                                                            4,
+                                                    }}
+                                                    heightOfBar={calculateHeightOfBar()}
+                                                />
+                                            </>
+                                        )}
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
+                        )}
                     </Box>
                 )
             })}
@@ -296,15 +299,17 @@ export const ExportView = () => {
                         }}
                     >
                         <FormControl className={classes.formControl}>
-                            <Select value={selectedVoice}>
-                                {voices.map((voice) => {
+                            <Select
+                                value={selectedVoiceId}
+                                onChange={(ev) => {
+                                    history.push(
+                                        `/song/${songId}/export?voice=${ev.target.value}`
+                                    )
+                                }}
+                            >
+                                {songInit?.voices.map((voice) => {
                                     return (
                                         <MenuItem
-                                            onClick={() =>
-                                                history.push(
-                                                    `/song/${songId}/export?voice=${voice.songVoiceId}`
-                                                )
-                                            }
                                             key={voice.songVoiceId}
                                             value={voice.songVoiceId}
                                         >
