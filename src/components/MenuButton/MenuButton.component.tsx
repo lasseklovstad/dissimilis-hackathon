@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { IconButton, makeStyles, Menu, MenuItem } from "@material-ui/core"
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 import { useTranslation } from "react-i18next"
-import { useHistory, useRouteMatch } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import { colors } from "../../utils/colors"
 import { useDeleteSong } from "../../utils/useApiServiceSongs"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
@@ -24,9 +24,8 @@ export const MenuButton = () => {
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
-    const match = useRouteMatch<{ id: string }>("/song/:id")
-    const id = match ? +match.params.id : 0
-    const { deleteSong } = useDeleteSong(id)
+    const { songId } = useParams<{ songId: string }>()
+    const { deleteSong } = useDeleteSong(songId)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -45,7 +44,7 @@ export const MenuButton = () => {
     }
 
     const exportSong = async () => {
-        history.push(`/song/${id}/export`)
+        history.push(`/song/${songId}/export`)
     }
 
     const handleClose = async (method?: "export" | "delete") => {

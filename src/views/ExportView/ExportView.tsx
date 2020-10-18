@@ -300,7 +300,7 @@ export const ExportView = () => {
                     >
                         <FormControl className={classes.formControl}>
                             <Select
-                                value={selectedVoiceId}
+                                value={selectedVoiceId || ""}
                                 onChange={(ev) => {
                                     history.push(
                                         `/song/${songId}/export?voice=${ev.target.value}`

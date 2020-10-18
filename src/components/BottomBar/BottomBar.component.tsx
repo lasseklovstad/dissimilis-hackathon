@@ -176,6 +176,7 @@ export const BottomBar = (props: {
                     return (
                         <MenuItem
                             value={length}
+                            key={length}
                             style={{
                                 display:
                                     timeSignatureNumerator < length

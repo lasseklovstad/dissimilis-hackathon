@@ -73,12 +73,12 @@ export const Bar = (props: {
         }
     }
 
-    const handleClick = async (i: number) => {
+    const handleClick = async (position: number) => {
         const notes = isNoteSelected
             ? [selectedChord]
             : getNotesFromChord(selectedChord)
         const { error, result } = await postChord.run({
-            position: i,
+            position,
             length: selectedNoteLength,
             notes,
         } as IChordAndNotes)
@@ -147,7 +147,9 @@ export const Bar = (props: {
                                         onContextMenu={handleRightClick(
                                             notes.noteId
                                         )}
-                                        onClick={() => handleClick(i)}
+                                        onClick={() =>
+                                            handleClick(notes.position)
+                                        }
                                     />
                                 )
                             })}

@@ -142,7 +142,7 @@ export const useUpdateSong = (songId: string) => {
  * Delete one song
  * @param id songs id
  */
-export const useDeleteSong = (id: number) => {
+export const useDeleteSong = (id: string) => {
     const url = `song/${id}`
     const headers = getHeaders()
     const api = useApiService<ISong>(url, { headers })
