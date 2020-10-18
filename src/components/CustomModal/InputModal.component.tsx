@@ -94,6 +94,7 @@ export const InputModal = (props: {
                                 inputProps={{ maxLength: CHARACTER_LIMIT }}
                                 helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`}
                                 autoFocus
+                                value={textFieldInput}
                                 variant="filled"
                                 onChange={(e) => {
                                     setTextFieldInput(e.target.value)

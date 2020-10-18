@@ -172,7 +172,7 @@ export const useUpdateVoice = (songId: string, voiceId: number | undefined) => {
 export const useDeleteVoice = (songId: string, voiceId: number | undefined) => {
     const url = `song/${songId}/voice/${voiceId}`
     const headers = getHeaders()
-    const api = useApiService<IVoice>(url, { headers })
+    const api = useApiService<void>(url, { headers })
     return {
         deleteVoice: { run: api.deleteData, ...api.state },
     }

@@ -31,6 +31,9 @@ export const CreateSongTab = (props: {
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false)
     const { t } = useTranslation()
     const [rightClicked, setRightClicked] = useState<undefined | number>()
+    const rightClickedVoice = voices.find(
+        (voice) => voice.songVoiceId === rightClicked
+    )
     const [position, setPosition] = useState<
         { top: number; left: number } | undefined
     >()
@@ -42,7 +45,7 @@ export const CreateSongTab = (props: {
 
     const handleAddInstrument = async (title: string) => {
         const { error, result } = await postVoice.run({
-            insturment: title,
+            instrument: title,
             voiceNumber: voices.length + 1,
         })
 
@@ -62,17 +65,17 @@ export const CreateSongTab = (props: {
             setRenameModalIsOpen(true)
         }
         if (method === "deleteVoice") {
-            const { error, result } = await deleteVoice.run()
+            const { error } = await deleteVoice.run()
 
-            if (!error && result) {
-                onDeleteVoice(result.data)
+            if (!error && rightClickedVoice) {
+                onDeleteVoice(rightClickedVoice)
             }
         }
         setPosition(undefined)
     }
     const handleChangeVoiceTitle = async (voiceTitle: string) => {
         const { error, result } = await putVoice.run({
-            insturment: voiceTitle,
+            instrument: voiceTitle,
             voiceNumber: voices.length + 1,
         })
 
@@ -105,9 +108,11 @@ export const CreateSongTab = (props: {
                                 key={voice.songVoiceId}
                                 value={voice.songVoiceId}
                                 label={label}
-                                onContextMenu={handleRightClick(
-                                    voice.songVoiceId
-                                )}
+                                onContextMenu={
+                                    !voice.isMain
+                                        ? handleRightClick(voice.songVoiceId)
+                                        : undefined
+                                }
                                 onClick={() =>
                                     history.push(`?voice=${voice.songVoiceId}`)
                                 }
@@ -134,7 +139,7 @@ export const CreateSongTab = (props: {
                 labelText={t("Modal:nameOfInstrument")}
             />
             <InputModal
-                defaultValue={rightClicked ? voices[rightClicked].title : ""}
+                defaultValue={rightClickedVoice?.title || ""}
                 handleOnCancelClick={handleClose}
                 handleOnSaveClick={handleChangeVoiceTitle}
                 handleClosed={handleClose}

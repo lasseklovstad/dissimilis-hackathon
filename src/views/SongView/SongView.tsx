@@ -90,7 +90,7 @@ export const SongView = () => {
     }
 
     const handleDeleteVoice = (voice: IVoice) => {
-        dispatchSong({ type: "ADD_VOICE", voice })
+        dispatchSong({ type: "DELETE_VOICE", voice })
     }
 
     const handleUpdateVoice = (voice: IVoice) => {
