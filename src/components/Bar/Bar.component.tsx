@@ -133,17 +133,19 @@ export const Bar = (props: {
                                 }
                                 return [...noter, note]
                             }, [])
-                            .map((notes, i) => {
+                            .map((notes) => {
                                 return (
                                     <Chord
                                         disabled={exportMode}
                                         onMouseLeave={() => onMouseLeaveChord()}
                                         onMouseEnter={() =>
-                                            onMouseEnterChord(i)
+                                            onMouseEnterChord(notes.position)
                                         }
                                         chordsAndNotes={notes}
-                                        highlight={positionArray.includes(i)}
-                                        key={i}
+                                        highlight={positionArray.includes(
+                                            notes.position
+                                        )}
+                                        key={notes.position}
                                         onContextMenu={handleRightClick(
                                             notes.noteId
                                         )}
