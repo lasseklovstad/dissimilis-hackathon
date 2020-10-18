@@ -74,17 +74,16 @@ export const DashboardView = () => {
     const [timeSignature, setTimeSignature] = useState<
         ITimeSignature | undefined
     >()
-    const [textFieldInput, setTextFieldInput] = useState<string>("")
 
-    const { postSong } = usePostSong(textFieldInput, timeSignature)
+    const { postSong } = usePostSong()
     const history = useHistory()
     const measureText = t("DashboardView:measure")
     const { getRecentSongs, recentSongs } = useGetRecentSongs()
     const { getFilteredSongs, filteredSongs } = useGetFilteredSongs(searchTerm)
 
-    const handleAddSong = async () => {
+    const handleAddSong = async (title: string) => {
         setAddSongModalIsOpen(false)
-        const { result } = await postSong.run()
+        const { result } = await postSong.run({ ...timeSignature, title })
         if (result?.status === 201) {
             history.push(`/song/${result.data.songId}`)
         }
@@ -146,15 +145,14 @@ export const DashboardView = () => {
                             </SongGrid>
 
                             <InputModal
-                                handleOnCancelClick={() => handleClose()}
-                                handleOnSaveClick={() => handleAddSong()}
-                                handleClosed={() => handleClose()}
+                                handleOnCancelClick={handleClose}
+                                handleOnSaveClick={handleAddSong}
+                                handleClosed={handleClose}
                                 modalOpen={addSongModalIsOpen}
                                 saveText={t("Modal:create")}
                                 cancelText={t("Modal:cancel")}
                                 headerText={t("Modal:addSong")}
                                 labelText={t("Modal:nameOfSong")}
-                                handleChange={(txt) => setTextFieldInput(txt)}
                             />
                         </>
                     ) : (

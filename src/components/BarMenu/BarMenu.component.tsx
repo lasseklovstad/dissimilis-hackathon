@@ -1,60 +1,76 @@
 import React, { useContext } from "react"
 import { Menu, MenuItem } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
+import { IBar } from "../../models/IBar"
+import { useDeleteBar, useUpdateBar } from "../../utils/useApiServiceSongs"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
 
 type BarMenuProps = {
-    voiceId: number
-    barNumber: number | undefined
+    bar: IBar
     anchorEl: HTMLElement | null
     onClose: () => void
 }
 
 export const BarMenu = (props: BarMenuProps) => {
-    const { barNumber, voiceId, anchorEl, onClose } = props
-    const {
-        deleteBar,
-        duplicateBar,
-        toggleRepBefore,
-        toggleRepAfter,
-        addHouse,
-        deleteHouse,
-        song: { voices },
-    } = useContext(SongContext)
+    const { bar, anchorEl, onClose } = props
+    const { deleteBar } = useDeleteBar(bar.songId, bar.songVoiceId, bar.barId)
+    const { putBar } = useUpdateBar(bar.songId, bar.songVoiceId, bar.barId)
+    const { dispatchSong } = useContext(SongContext)
 
     const { t } = useTranslation()
 
-    if (!barNumber) {
-        return <></>
-    }
-
-    const handleClose = (method: string) => {
-        const index = barNumber - 1
+    const handleClose = async (method: string) => {
         if (method === "delete") {
-            deleteBar(index, voiceId)
+            const { error, result } = await deleteBar.run()
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
+            }
         }
-        if (method === "duplicate") {
-            duplicateBar(index, voiceId)
-        }
+        // if (method === "duplicate") {
+        //     duplicateBar(index, voiceId)
+        // }
         if (method === "toggleRepBefore") {
-            toggleRepBefore(index)
+            const { error, result } = await putBar.run({
+                repBefore: !bar.repBefore,
+                repAfter: bar.repAfter,
+                house: bar.house,
+            })
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
+            }
         }
         if (method === "toggleRepAfter") {
-            toggleRepAfter(index)
+            const { error, result } = await putBar.run({
+                repBefore: bar.repBefore,
+                repAfter: !bar.repAfter,
+                house: bar.house,
+            })
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
+            }
         }
         if (method === "addHouse") {
-            addHouse(index)
+            const { error, result } = await putBar.run({
+                repBefore: bar.repBefore,
+                repAfter: bar.repAfter,
+                house: 1,
+            })
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
+            }
         }
         if (method === "removeHouse") {
-            deleteHouse(index)
+            const { error, result } = await putBar.run({
+                repBefore: bar.repBefore,
+                repAfter: bar.repAfter,
+                house: 0,
+            })
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
+            }
         }
         onClose()
     }
-
-    // checks if a bar has a house connected to it
-    const barConst =
-        voices[0].bars[barNumber - 1].house !== undefined &&
-        voices[0].bars[barNumber - 1].house !== null
 
     return (
         <Menu
@@ -71,22 +87,21 @@ export const BarMenu = (props: BarMenuProps) => {
                 {t("BarContainer:duplicateBar")}{" "}
             </MenuItem>
             <MenuItem onClick={() => handleClose("toggleRepBefore")}>
-                {voices[0].bars[barNumber - 1].repBefore
+                {bar.repBefore
                     ? t("BarContainer:removeRepBefore")
                     : t("BarContainer:addRepBefore")}{" "}
             </MenuItem>
             <MenuItem onClick={() => handleClose("toggleRepAfter")}>
-                {voices[0].bars[barNumber - 1].repAfter
+                {bar.repAfter
                     ? t("BarContainer:removeRepAfter")
                     : t("BarContainer:addRepAfter")}{" "}
             </MenuItem>
             <MenuItem
-                disabled={barNumber - 1 === 0 && voices[0].bars.length === 1}
                 onClick={() =>
-                    handleClose(barConst ? "removeHouse" : "addHouse")
+                    handleClose(bar.house ? "removeHouse" : "addHouse")
                 }
             >
-                {barConst
+                {bar.house
                     ? t("BarContainer:removeHouse")
                     : t("BarContainer:addHouse")}
             </MenuItem>

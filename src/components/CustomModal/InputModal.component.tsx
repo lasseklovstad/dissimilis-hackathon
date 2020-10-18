@@ -1,13 +1,13 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
-    Modal,
-    makeStyles,
-    Grid,
-    Typography,
-    TextField,
+    Backdrop,
     Button,
     Fade,
-    Backdrop,
+    Grid,
+    makeStyles,
+    Modal,
+    TextField,
+    Typography,
 } from "@material-ui/core"
 
 import { colors } from "../../utils/colors"
@@ -45,10 +45,12 @@ const useStyles = makeStyles({
     },
 })
 
+const CHARACTER_LIMIT = 250
+
 export const InputModal = (props: {
-    handleOnSaveClick: () => void
+    defaultValue?: string
+    handleOnSaveClick: (value: string) => void
     handleOnCancelClick: () => void
-    handleChange: (txt: string) => void
     modalOpen: boolean
     handleClosed: () => void
     saveText: string
@@ -59,7 +61,11 @@ export const InputModal = (props: {
     const classes = useStyles()
     const [textFieldInput, setTextFieldInput] = useState("")
 
-    const CHARACTER_LIMIT = 250
+    useEffect(() => {
+        if (props.defaultValue) {
+            setTextFieldInput(props.defaultValue)
+        }
+    }, [props.defaultValue])
 
     return (
         <Modal
@@ -91,7 +97,6 @@ export const InputModal = (props: {
                                 variant="filled"
                                 onChange={(e) => {
                                     setTextFieldInput(e.target.value)
-                                    props.handleChange(e.target.value)
                                 }}
                                 label={props.labelText}
                                 style={{ width: "100%" }}
@@ -103,7 +108,9 @@ export const InputModal = (props: {
                                 size="large"
                                 variant="contained"
                                 disabled={!textFieldInput}
-                                onClick={() => props.handleOnSaveClick()}
+                                onClick={() =>
+                                    props.handleOnSaveClick(textFieldInput)
+                                }
                             >
                                 {props.saveText}
                             </Button>

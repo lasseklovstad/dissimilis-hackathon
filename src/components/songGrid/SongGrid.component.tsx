@@ -46,7 +46,7 @@ export const SongGrid = (props: SongGridProps) => {
                         <GridItem key={song.songId}>
                             <DashboardButton
                                 text={song.title}
-                                link={`/song/${song.songId.toString()}`}
+                                link={`/song/${song.songId}`}
                             />
                         </GridItem>
                     ))}

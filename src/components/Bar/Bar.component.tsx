@@ -5,80 +5,95 @@ import { House } from "./House.component"
 import { IBar, IChordAndNotes } from "../../models/IBar"
 import { Chord } from "./Chord.component"
 import { ChordMenu } from "./ChordMenu.component"
-import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component"
-import { SongContext } from "../../views/SongView/SongContextProvider.component"
 import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
+import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
+import { SongContext } from "../../views/SongView/SongContextProvider.component"
+import { getNotesFromChord } from "../../models/chords"
 
 export const Bar = (props: {
     bar: IBar
     height?: number
-    voiceId: number
     exportMode: boolean
     onMenuClick: (anchorEl: HTMLElement) => void
     masterSheet: boolean
+    showHouseNumber: boolean
 }) => {
     const {
         exportMode,
         onMenuClick,
         masterSheet,
-        bar: { barNumber, chordsAndNotes, repAfter, repBefore, house },
-        voiceId,
+        showHouseNumber,
+        bar: {
+            position,
+            chordsAndNotes,
+            repAfter,
+            repBefore,
+            house,
+            barId,
+            songId,
+            songVoiceId,
+        },
         height = 160,
     } = props
     const [menuPosition, setMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()
-    const [rightClicked, setRightClicked] = useState(-1)
+    const [rightClicked, setRightClicked] = useState<number | null>(null)
     const [positionArray, setPositionArray] = useState<number[]>([])
     const {
-        insertNewNoteOrChord,
-        availablePositions,
-        selectPositionArray,
-    } = useContext(SongToolsContext)
-    const { deleteNote } = useContext(SongContext)
+        dispatchSong,
+        selectedChord,
+        selectedNoteLength,
+        isNoteSelected,
+    } = useContext(SongContext)
+    const { postChord } = useCreateChord(songId, songVoiceId, barId)
+    const { deleteChord } = useDeleteChord(
+        songId,
+        songVoiceId,
+        barId,
+        rightClicked
+    )
 
-    const handleRightClick = (i: number) => (event: React.MouseEvent) => {
+    const handleRightClick = (noteId: number | null) => (
+        event: React.MouseEvent
+    ) => {
         event.preventDefault()
         setMenuPosition({ top: event.clientY - 4, left: event.clientX - 2 })
-        setRightClicked(i)
+        setRightClicked(noteId)
     }
 
-    const handleMenuSelect = (method: "delete") => {
+    const handleMenuSelect = async (method: "delete") => {
         if (method === "delete") {
-            if (rightClicked >= 0) {
-                const tempChordsAndNotes: IChordAndNotes[] = chordsAndNotes.slice()
-                const newNote: IChordAndNotes = { length: 1, notes: [" "] }
-                tempChordsAndNotes[rightClicked] = newNote
-                for (
-                    let i = rightClicked;
-                    i < chordsAndNotes[rightClicked].length + rightClicked - 1;
-                    i++
-                ) {
-                    tempChordsAndNotes.splice(i, 0, newNote)
+            if (rightClicked) {
+                const { error, result } = await deleteChord.run()
+                if (!error && result) {
+                    dispatchSong({ type: "UPDATE_BAR", bar: result.data })
                 }
-                deleteNote(props.voiceId, barNumber - 1, tempChordsAndNotes)
-                setPositionArray([])
             }
         }
     }
 
-    const handleClick = (i: number) => {
-        if (
-            availablePositions[voiceId][barNumber - 1] !== undefined &&
-            availablePositions[voiceId][barNumber - 1].find((arr) =>
-                arr.includes(i)
-            ) != null
-        ) {
-            insertNewNoteOrChord(i, barNumber - 1, props.voiceId)
+    const handleClick = async (i: number) => {
+        const notes = isNoteSelected
+            ? [selectedChord]
+            : getNotesFromChord(selectedChord)
+        const { error, result } = await postChord.run({
+            position: i,
+            length: selectedNoteLength,
+            notes,
+        } as IChordAndNotes)
+
+        if (!error && result) {
+            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
 
     const onMouseEnterChord = (index: number) => {
-        setPositionArray(selectPositionArray(voiceId, barNumber - 1, index))
+        // setPositionArray(selectPositionArray(voiceId, position, index))
     }
 
     const onMouseLeaveChord = () => {
-        setPositionArray([])
+        // setPositionArray([])
     }
 
     return (
@@ -91,7 +106,7 @@ export const Bar = (props: {
                 width="100%"
                 minWidth={0}
             >
-                <House houseOrder={house} />
+                <House houseOrder={house} showHouseNumber={showHouseNumber} />
 
                 <Box display="flex" minWidth={0}>
                     <RepetitionSign display={repBefore} />
@@ -101,20 +116,41 @@ export const Bar = (props: {
                         width="100%"
                         minWidth={0}
                     >
-                        {chordsAndNotes.map((notes, i) => {
-                            return (
-                                <Chord
-                                    disabled={exportMode}
-                                    onMouseLeave={() => onMouseLeaveChord()}
-                                    onMouseEnter={() => onMouseEnterChord(i)}
-                                    chordsAndNotes={notes}
-                                    highlight={positionArray.includes(i)}
-                                    key={i}
-                                    onContextMenu={handleRightClick(i)}
-                                    onClick={() => handleClick(i)}
-                                />
-                            )
-                        })}
+                        {chordsAndNotes
+                            .reduce((noter: IChordAndNotes[], note) => {
+                                if (note.notes[0] === "Z") {
+                                    const numberOfRests = note.length
+                                    const rests = []
+                                    for (let i = 0; i < numberOfRests; i++) {
+                                        rests.push({
+                                            length: 1,
+                                            notes: ["Z"],
+                                            position: note.position + i,
+                                            noteId: null,
+                                        })
+                                    }
+                                    return [...noter, ...rests]
+                                }
+                                return [...noter, note]
+                            }, [])
+                            .map((notes, i) => {
+                                return (
+                                    <Chord
+                                        disabled={exportMode}
+                                        onMouseLeave={() => onMouseLeaveChord()}
+                                        onMouseEnter={() =>
+                                            onMouseEnterChord(i)
+                                        }
+                                        chordsAndNotes={notes}
+                                        highlight={positionArray.includes(i)}
+                                        key={i}
+                                        onContextMenu={handleRightClick(
+                                            notes.noteId
+                                        )}
+                                        onClick={() => handleClick(i)}
+                                    />
+                                )
+                            })}
                     </Box>
                     <RepetitionSign display={repAfter} />
                     <ChordMenu

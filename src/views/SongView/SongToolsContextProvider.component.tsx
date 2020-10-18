@@ -1,8 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react"
-import { SongContext } from "./SongContextProvider.component"
-import { IChordAndNotes } from "../../models/IBar"
-import { visibleNotes as notes } from "../../models/notes"
-import { chords } from "../../models/chords"
+import React, { useEffect, useRef, useState } from "react"
 
 interface ISongToolsContext {
     selectedNoteLength: 1 | 2 | 4 | 8
@@ -53,7 +49,6 @@ export const SongToolsContext = React.createContext<ISongToolsContext>({
 })
 
 export const SongToolsContextProvider: React.FC = (props) => {
-    const { song, editNote } = useContext(SongContext)
     const [selectedNoteLength, setSelectedNoteLength] = useState<1 | 2 | 4 | 8>(
         1
     )
@@ -73,7 +68,7 @@ export const SongToolsContextProvider: React.FC = (props) => {
         } else {
             calculateAvailableSpace()
         }
-    }, [selectedNoteLength, song])
+    }, [selectedNoteLength])
 
     /**
      * This method selects the right positions to replace based on the empty space clicked on.
@@ -120,52 +115,53 @@ export const SongToolsContextProvider: React.FC = (props) => {
         barIndex: number,
         voiceIndex: number
     ) => {
-        let newNoteArray: string[] = ["C"]
-        if (noteIsSelected) {
-            newNoteArray = [
-                Object.values(notes)[
-                    Object.keys(notes).indexOf(selectedNoteKey)
-                ],
-            ]
-        } else {
-            const newNoteObject = chords.find(
-                (obj) => obj.name === selectedNoteKey
-            )
-            if (newNoteObject !== undefined) {
-                newNoteArray = newNoteObject.notes
-            } else newNoteArray = []
-        }
-        const newNote: IChordAndNotes = {
-            length: selectedNoteLength,
-            notes: newNoteArray,
-        }
-
-        const tempChordsAndNotes = []
-        for (
-            let i = 0;
-            i < song.voices[voiceIndex].bars[barIndex].chordsAndNotes.length;
-            i++
-        ) {
-            tempChordsAndNotes.push(
-                song.voices[voiceIndex].bars[barIndex].chordsAndNotes[i]
-            )
-        }
-
-        const selectedPosArray = selectPositionArray(
-            voiceIndex,
-            barIndex,
-            noteIndex
-        )
-        if (selectedPosArray !== undefined) {
-            for (let j = selectedPosArray.length - 1; j >= 0; j--) {
-                if (selectedPosArray[j] === noteIndex) {
-                    tempChordsAndNotes.splice(selectedPosArray[j], 1, newNote)
-                } else {
-                    tempChordsAndNotes.splice(selectedPosArray[j], 1)
-                }
-            }
-        }
-        editNote(voiceIndex, barIndex, tempChordsAndNotes)
+        // let newNoteArray: string[] = ["C"]
+        // if (noteIsSelected) {
+        //     newNoteArray = [
+        //         Object.values(notes)[
+        //             Object.keys(notes).indexOf(selectedNoteKey)
+        //         ],
+        //     ]
+        // } else {
+        //     const newNoteObject = chords.find(
+        //         (obj) => obj.name === selectedNoteKey
+        //     )
+        //     if (newNoteObject !== undefined) {
+        //         newNoteArray = newNoteObject.notes
+        //     } else newNoteArray = []
+        // }
+        // const newNote: IChordAndNotes = {
+        //     length: selectedNoteLength,
+        //     notes: newNoteArray,
+        //     position: noteIndex,
+        // }
+        //
+        // const tempChordsAndNotes = []
+        // for (
+        //     let i = 0;
+        //     i < song.voices[voiceIndex].bars[barIndex].chordsAndNotes.length;
+        //     i++
+        // ) {
+        //     tempChordsAndNotes.push(
+        //         song.voices[voiceIndex].bars[barIndex].chordsAndNotes[i]
+        //     )
+        // }
+        //
+        // const selectedPosArray = selectPositionArray(
+        //     voiceIndex,
+        //     barIndex,
+        //     noteIndex
+        // )
+        // if (selectedPosArray !== undefined) {
+        //     for (let j = selectedPosArray.length - 1; j >= 0; j--) {
+        //         if (selectedPosArray[j] === noteIndex) {
+        //             tempChordsAndNotes.splice(selectedPosArray[j], 1, newNote)
+        //         } else {
+        //             tempChordsAndNotes.splice(selectedPosArray[j], 1)
+        //         }
+        //     }
+        // }
+        // // editNote(voiceIndex, barIndex, tempChordsAndNotes)
     }
 
     /**
@@ -176,54 +172,54 @@ export const SongToolsContextProvider: React.FC = (props) => {
      * We have decided to use 8 as the denominator for each time signature as this makes it simpler for us, therefore allways 8 empty spaces in the bar.
      */
     const calculateAvailableSpace = () => {
-        const returnArray = []
-        for (
-            let voiceIndex = 0;
-            voiceIndex < song.voices.length;
-            voiceIndex++
-        ) {
-            const voiceArray = []
-            for (
-                let barIndex = 0;
-                barIndex < song.voices[voiceIndex].bars.length;
-                barIndex++
-            ) {
-                const barArray = []
-                let availableConsistentLength = 0
-                for (
-                    let noteIndex = 0;
-                    noteIndex <
-                    song.voices[voiceIndex].bars[barIndex].chordsAndNotes
-                        .length;
-                    noteIndex++
-                ) {
-                    if (
-                        song.voices[voiceIndex].bars[barIndex].chordsAndNotes[
-                            noteIndex
-                        ].notes[0] === " "
-                    ) {
-                        availableConsistentLength += 1
-                    } else {
-                        availableConsistentLength = 0
-                    }
-                    if (availableConsistentLength === selectedNoteLength) {
-                        const possibleposition = []
-                        for (
-                            let i = noteIndex - selectedNoteLength;
-                            i < noteIndex;
-                            i++
-                        ) {
-                            possibleposition.push(i + 1)
-                        }
-                        barArray.push(possibleposition)
-                        availableConsistentLength -= 1
-                    }
-                }
-                voiceArray.push(barArray)
-            }
-            returnArray.push(voiceArray)
-        }
-        setAvailablePositions(returnArray)
+        // const returnArray = []
+        // for (
+        //     let voiceIndex = 0;
+        //     voiceIndex < song.voices.length;
+        //     voiceIndex++
+        // ) {
+        //     const voiceArray = []
+        //     for (
+        //         let barIndex = 0;
+        //         barIndex < song.voices[voiceIndex].bars.length;
+        //         barIndex++
+        //     ) {
+        //         const barArray = []
+        //         let availableConsistentLength = 0
+        //         for (
+        //             let noteIndex = 0;
+        //             noteIndex <
+        //             song.voices[voiceIndex].bars[barIndex].chordsAndNotes
+        //                 .length;
+        //             noteIndex++
+        //         ) {
+        //             if (
+        //                 song.voices[voiceIndex].bars[barIndex].chordsAndNotes[
+        //                     noteIndex
+        //                 ].notes[0] === " "
+        //             ) {
+        //                 availableConsistentLength += 1
+        //             } else {
+        //                 availableConsistentLength = 0
+        //             }
+        //             if (availableConsistentLength === selectedNoteLength) {
+        //                 const possibleposition = []
+        //                 for (
+        //                     let i = noteIndex - selectedNoteLength;
+        //                     i < noteIndex;
+        //                     i++
+        //                 ) {
+        //                     possibleposition.push(i + 1)
+        //                 }
+        //                 barArray.push(possibleposition)
+        //                 availableConsistentLength -= 1
+        //             }
+        //         }
+        //         voiceArray.push(barArray)
+        //     }
+        //     returnArray.push(voiceArray)
+        // }
+        // setAvailablePositions(returnArray)
     }
 
     /**

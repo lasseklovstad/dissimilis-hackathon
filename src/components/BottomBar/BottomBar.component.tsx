@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React from "react"
 import {
     FormControl,
     Grid,
@@ -23,10 +23,9 @@ import { ReactComponent as QuarternoteIcon } from "../../assets/images/icon_quar
 import { ReactComponent as EighthnoteIcon } from "../../assets/images/icon_eighth-note.svg"
 import { ReactComponent as HalfnoteDottedIcon } from "../../assets/images/icon_half-note-dotted.svg"
 import { ReactComponent as QuarternoteDottedIcon } from "../../assets/images/icon_quarter-note-dotted.svg"
-import { SongContext } from "../../views/SongView/SongContextProvider.component"
-import { visibleNotes as notes } from "../../models/notes"
-import { chords } from "../../models/chords"
-import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component"
+import { IBar } from "../../models/IBar"
+import { useAddBar } from "../../utils/useApiServiceSongs"
+import { chords, notes } from "../../models/chords"
 
 const useStyles = makeStyles({
     outercontainer: {
@@ -88,21 +87,76 @@ const StyledToggleButtonGroup = withStyles((theme) => ({
     },
 }))(ToggleButtonGroup)
 
-export const BottomBar = () => {
+const noteLengths = [
+    {
+        length: 8,
+        Icon: <WholenoteIcon />,
+    },
+    {
+        length: 6,
+        Icon: <HalfnoteDottedIcon />,
+    },
+    {
+        length: 4,
+        Icon: <HalfnoteIcon />,
+    },
+    {
+        length: 3,
+        Icon: <QuarternoteDottedIcon />,
+    },
+    {
+        length: 2,
+        Icon: <QuarternoteIcon />,
+    },
+    {
+        length: 1,
+        Icon: <EighthnoteIcon />,
+    },
+]
+
+export const BottomBar = (props: {
+    timeSignature: { numerator: number; denominator: number }
+    addBar: (bars: IBar[]) => void
+    songId: string
+    voiceId: number
+    selectedChord: string
+    onChordChange: (chord: string) => void
+    selectedNoteLength: number
+    onNoteLengthChange: (length: number) => void
+    noteIsSelected: boolean
+    onNoteSelectedChange: (selected: boolean) => void
+}) => {
+    const {
+        timeSignature: { numerator, denominator },
+        addBar,
+        voiceId,
+        songId,
+        selectedChord,
+        onChordChange,
+        selectedNoteLength,
+        onNoteLengthChange,
+        noteIsSelected,
+        onNoteSelectedChange,
+    } = props
     const { t } = useTranslation()
     const classes = useStyles()
-    const noteArray: string[] = Object.keys(notes)
-    const chordArray: string[] = []
-    chords.map((chord) => chordArray.push(chord.name))
-    const { selectedNoteLength, setSelectedNoteLength } = useContext(
-        SongToolsContext
-    )
-    const {
-        addEmptyBar,
-        song: { denominator, numerator },
-    } = useContext(SongContext)
+
+    const { postBar } = useAddBar(songId, voiceId)
+
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setSelectedNoteLength(event.target.value as 1 | 2 | 4 | 8)
+        onNoteLengthChange(event.target.value as number)
+    }
+
+    const scrollToBottom = () => {
+        window.scrollTo(0, document.body.scrollHeight)
+    }
+
+    const handleAddBar = async () => {
+        const { error, result } = await postBar.run()
+        if (!error && result) {
+            addBar(result.data.bars)
+            scrollToBottom()
+        }
     }
     let timeSignatureNumerator = numerator
     if (denominator === 4) timeSignatureNumerator *= 2
@@ -118,78 +172,32 @@ export const BottomBar = () => {
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
             >
-                <MenuItem
-                    value={8}
-                    style={{
-                        display: timeSignatureNumerator < 8 ? "none" : "block",
-                    }}
-                >
-                    {" "}
-                    <WholenoteIcon />
-                </MenuItem>
-                <MenuItem
-                    value={6}
-                    style={{
-                        display: timeSignatureNumerator < 6 ? "none" : "block",
-                    }}
-                >
-                    {" "}
-                    <HalfnoteDottedIcon />
-                </MenuItem>
-                <MenuItem
-                    value={4}
-                    style={{
-                        display: timeSignatureNumerator < 4 ? "none" : "block",
-                    }}
-                >
-                    {" "}
-                    <HalfnoteIcon />
-                </MenuItem>
-                <MenuItem
-                    value={3}
-                    style={{
-                        display: timeSignatureNumerator < 3 ? "none" : "block",
-                    }}
-                >
-                    {" "}
-                    <QuarternoteDottedIcon />{" "}
-                </MenuItem>
-                <MenuItem
-                    value={2}
-                    style={{
-                        display: timeSignatureNumerator < 2 ? "none" : "block",
-                    }}
-                >
-                    {" "}
-                    <QuarternoteIcon />{" "}
-                </MenuItem>
-                <MenuItem value={1}>
-                    {" "}
-                    <EighthnoteIcon />{" "}
-                </MenuItem>
+                {noteLengths.map(({ length, Icon }) => {
+                    return (
+                        <MenuItem
+                            value={length}
+                            style={{
+                                display:
+                                    timeSignatureNumerator < length
+                                        ? "none"
+                                        : "block",
+                            }}
+                        >
+                            {Icon}
+                        </MenuItem>
+                    )
+                })}
             </Select>
         </FormControl>
     )
 
-    const [toggle, setToggle] = useState<boolean>(true)
-    const {
-        setShowPossiblePositions,
-        calculateAvailableSpace,
-        setNoteIsSelected,
-        noteIsSelected,
-    } = useContext(SongToolsContext)
     const handleToggle = (
         event: React.MouseEvent<HTMLElement>,
         newToggle: boolean
     ) => {
         if (newToggle !== null) {
-            setToggle(newToggle)
-            setNoteIsSelected(!noteIsSelected)
+            onNoteSelectedChange(!noteIsSelected)
         }
-    }
-
-    const scrollToBottom = () => {
-        window.scrollTo(0, document.body.scrollHeight)
     }
 
     return (
@@ -199,24 +207,25 @@ export const BottomBar = () => {
                     <div className={classes.flexelement}>{Menu}</div>
                     <div className={classes.flexelement}>
                         <DropdownAutocomplete
+                            noteIsSelected={noteIsSelected}
+                            selectedChord={selectedChord}
+                            onChordChange={onChordChange}
                             icon={<MusicNoteIcon fontSize="small" />}
-                            notesOrChords={
-                                toggle === true ? chordArray : noteArray
-                            }
+                            notesOrChords={!noteIsSelected ? chords : notes}
                             noOptionsText={t("BottomBar:noOptions")}
                         />
                     </div>
                     <StyledToggleButtonGroup
-                        value={toggle}
+                        value={noteIsSelected}
                         exclusive
                         onChange={handleToggle}
                         className={classes.flexelement}
                         size="small"
                     >
-                        <ToggleButton value>
+                        <ToggleButton value={false}>
                             <Typography>{t("BottomBar:chord")}</Typography>
                         </ToggleButton>
-                        <ToggleButton value={false}>
+                        <ToggleButton value>
                             <Typography>{t("BottomBar:note")}</Typography>
                         </ToggleButton>
                     </StyledToggleButtonGroup>
@@ -224,12 +233,7 @@ export const BottomBar = () => {
                 <div className={classes.container}>
                     <MenuButtonWithAddIcon
                         text={t("BottomBar:addBar")}
-                        onClick={() => {
-                            addEmptyBar()
-                            scrollToBottom()
-                            calculateAvailableSpace()
-                            setShowPossiblePositions(true)
-                        }}
+                        onClick={handleAddBar}
                     />
                 </div>
             </Grid>

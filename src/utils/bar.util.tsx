@@ -69,6 +69,8 @@ export const tangentToNumber = (tangent: string): number | string => {
             return 2
         case "A#":
             return 3
+        case "Z":
+            return ""
         default:
             return tangent
     }

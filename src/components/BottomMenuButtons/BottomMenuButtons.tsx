@@ -1,21 +1,20 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useEffect, useState } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
 import {
-    TextField,
-    Button,
-    Popper,
     Box,
+    Button,
     Grid,
+    Popper,
     PopperProps,
+    TextField,
 } from "@material-ui/core"
 import Autocomplete, {
     createFilterOptions,
 } from "@material-ui/lab/Autocomplete"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
-import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component"
 import { getColor, tangentToNumber } from "../../utils/bar.util"
 
 const useStyles = makeStyles({
@@ -70,18 +69,25 @@ export const DropdownAutocomplete = (props: {
     icon: React.ReactNode
     notesOrChords: string[]
     noOptionsText: string
+    noteIsSelected: boolean
+    selectedChord: string
+    onChordChange: (chord: string) => void
 }) => {
+    const {
+        noteIsSelected,
+        selectedChord,
+        onChordChange,
+        notesOrChords,
+    } = props
     const styles = useStyles()
     const [options, setOptions] = useState(props.notesOrChords)
-    const { selectedNoteKey, setSelectedNoteKey, noteIsSelected } = useContext(
-        SongToolsContext
-    )
+
     useEffect(() => {
-        setOptions(props.notesOrChords)
-    }, [props.notesOrChords])
-    const showValue = selectedNoteKey
-    if (!options.includes(selectedNoteKey)) {
-        setSelectedNoteKey(options[0])
+        setOptions(notesOrChords)
+    }, [notesOrChords])
+    const showValue = selectedChord
+    if (!options.includes(selectedChord)) {
+        onChordChange(options[0])
     }
     const { t } = useTranslation()
 
@@ -92,7 +98,7 @@ export const DropdownAutocomplete = (props: {
             filterOptions={filterOptions}
             onChange={(event, value) => {
                 if (typeof value === "string") {
-                    setSelectedNoteKey(value)
+                    onChordChange(value)
                 }
             }}
             openText={t("BottomBar:open")}

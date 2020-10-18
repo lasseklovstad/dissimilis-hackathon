@@ -1,12 +1,9 @@
 import React from "react"
-import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom"
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom"
 
 import { DashboardView } from "./views/DashboardView/DashboardView"
 import { LoginView } from "./views/LoginView/LoginView"
 import { SongView } from "./views/SongView/SongView"
-
-import { SongContextProvider } from "./views/SongView/SongContextProvider.component"
-import { SongToolsContextProvider } from "./views/SongView/SongToolsContextProvider.component"
 import { PrivateRoute } from "./PrivateRoute"
 import { ExportView } from "./views/ExportView/ExportView"
 import { LibraryView } from "./views/LibrayView/LibraryView"
@@ -14,37 +11,30 @@ import { LibraryView } from "./views/LibrayView/LibraryView"
 export const SongRouting = () => {
     return (
         <Switch>
-            <SongContextProvider>
-                <SongToolsContextProvider>
-                    <Route
-                        exact
-                        path="/song/:id/export"
-                        render={() => (
-                            <PrivateRoute
-                                path="/song/:id/export"
-                                component={ExportView}
-                            />
-                        )}
+            <Route
+                exact
+                path="/song/:songId/export"
+                render={() => (
+                    <PrivateRoute
+                        path="/song/:songId/export"
+                        component={ExportView}
                     />
-                    <Route
-                        exact
-                        path="/song/:id"
-                        render={() => (
-                            <PrivateRoute
-                                path="/song/:id"
-                                component={SongView}
-                            />
-                        )}
-                    />
-                    <Route
-                        exact
-                        path="/song"
-                        render={() => (
-                            <PrivateRoute path="/song" component={SongView} />
-                        )}
-                    />
-                </SongToolsContextProvider>
-            </SongContextProvider>
+                )}
+            />
+            <Route
+                exact
+                path="/song/:songId"
+                render={() => (
+                    <PrivateRoute path="/song/:songId" component={SongView} />
+                )}
+            />
+            <Route
+                exact
+                path="/song"
+                render={() => (
+                    <PrivateRoute path="/song" component={SongView} />
+                )}
+            />
         </Switch>
     )
 }

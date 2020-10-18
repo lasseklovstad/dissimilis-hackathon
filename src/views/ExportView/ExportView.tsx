@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     BottomNavigation,
     Box,
@@ -12,12 +12,12 @@ import {
     Typography,
     useMediaQuery,
 } from "@material-ui/core"
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { parse } from "query-string"
-import { SongContext } from "../SongView/SongContextProvider.component"
 import { colors } from "../../utils/colors"
 import { Song } from "../../components/Song/Song.component"
+import { useGetSong } from "../../utils/useApiServiceSongs"
+import { useVoice } from "../../utils/useVoice"
 
 const useStyles = makeStyles({
     root: {
@@ -72,10 +72,9 @@ export const ExportView = () => {
     const [amountOfPages, setAmountOfPages] = useState<number>(1)
     const [dropDownMenuSelected, setDropDownMenuSelected] = useState<number>(0)
     const [barsPerRow, setBarsPerRow] = useState(4)
-
-    const {
-        song: { title, voices, songId, denominator, numerator },
-    } = useContext(SongContext)
+    const { songId } = useParams<{ songId: string }>()
+    const { songInit } = useGetSong(songId)
+    const selectedVoice = useVoice(songInit?.voices)
 
     const classes = useStyles()
     const history = useHistory()
@@ -83,18 +82,15 @@ export const ExportView = () => {
 
     const matches = useMediaQuery("(min-width:960px)")
 
-    const voiceString = parse(window.location.search)
-    let selectedVoice = 0
-    if (typeof voiceString.voice === "string") {
-        const voiceInt = parseInt(voiceString.voice, 10)
-        if (voiceInt > voices.length || voiceInt <= 0) {
-            history.replace("./export?voice=1")
-        } else {
-            selectedVoice = voiceInt - 1
-        }
-    } else {
-        history.replace("./export?voice=1")
+    useEffect(() => {
+        calculatePage()
+    }, [rowsPerSheet, lengthOfEachBar])
+
+    if (!songInit || !selectedVoice) {
+        return <></>
     }
+
+    const { voices, title, denominator, numerator } = songInit
 
     // Converts amount of bars per row to the length according to the Material UI-grid (12 columns)
     const convertAmountOfBarsPerRowToLengthOfEachBar = (
@@ -173,7 +169,11 @@ export const ExportView = () => {
     }
 
     const isBarLineAfter = (page: number, index: number) => {
-        if (index === voices[selectedVoice].bars.length) return true
+        if (
+            selectedVoice &&
+            index === songInit?.voices[selectedVoice].bars.length
+        )
+            return true
         return false
     }
 
@@ -221,10 +221,6 @@ export const ExportView = () => {
         }
     }
 
-    useEffect(() => {
-        calculatePage()
-    }, [rowsPerSheet, lengthOfEachBar])
-
     const handleChange = (event: any) => {
         setDropDownMenuSelected(event.target.value)
     }
@@ -258,17 +254,19 @@ export const ExportView = () => {
                                             <Song
                                                 barsPerRow={barsPerRow}
                                                 exportMode
-                                                selectedVoice={selectedVoice}
-                                                bars={voices[
-                                                    selectedVoice
-                                                ].bars.slice(
-                                                    pageIndex *
-                                                        (rowsPerSheet *
-                                                            convertFromLengthOfBarToAmountOfBarsPerRow()),
-                                                    (pageIndex + 1) *
-                                                        rowsPerSheet *
-                                                        convertFromLengthOfBarToAmountOfBarsPerRow()
-                                                )}
+                                                voice={{
+                                                    ...voices[selectedVoice],
+                                                    bars: voices[
+                                                        selectedVoice
+                                                    ].bars.slice(
+                                                        pageIndex *
+                                                            (rowsPerSheet *
+                                                                convertFromLengthOfBarToAmountOfBarsPerRow()),
+                                                        (pageIndex + 1) *
+                                                            rowsPerSheet *
+                                                            convertFromLengthOfBarToAmountOfBarsPerRow()
+                                                    ),
+                                                }}
                                                 timeSignature={{
                                                     denominator,
                                                     numerator,

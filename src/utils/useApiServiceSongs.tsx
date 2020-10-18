@@ -1,7 +1,8 @@
 import { useEffect } from "react"
 import { useApiService } from "./useApiService"
 import { ISong } from "../models/ISong"
-import { ITimeSignature } from "../models/ITimeSignature"
+import { IBar } from "../models/IBar"
+import { IVoice } from "../models/IVoice"
 
 const getArrangerId = () => {
     return sessionStorage.getItem("userId") || ""
@@ -18,12 +19,16 @@ const getHeaders = () => {
  * Get one song
  * @param id songs id
  */
-export const useGetSong = (id: number) => {
+export const useGetSong = (id: string) => {
     const url = `song/${id}`
     const headers = getHeaders()
-    const api = useApiService<ISong>(url, { headers })
+    const { getData, state, data } = useApiService<ISong>(url, { headers })
+    useEffect(() => {
+        getData()
+    }, [getData])
     return {
-        getSong: { run: api.getData, ...api.state },
+        getSong: { run: getData, ...state },
+        songInit: data,
     }
 }
 
@@ -112,14 +117,10 @@ export const useGetRecentSongs = () => {
  * Add a new song
  * @param Title and time signature of new song, id of new song is returned from backend
  */
-export const usePostSong = (
-    title: string,
-    timeSignature: ITimeSignature | undefined
-) => {
+export const usePostSong = () => {
     const url = "song"
     const headers = getHeaders()
-    const body = { title, ...timeSignature }
-    const api = useApiService<ISong>(url, { headers, body })
+    const api = useApiService<ISong>(url, { headers })
     return {
         postSong: { run: api.postData, ...api.state },
     }
@@ -128,11 +129,10 @@ export const usePostSong = (
 /**
  * Post exisitng song
  */
-export const usePutSong = (song: ISong) => {
-    const url = `song/${song.songId}`
-    const body = song
+export const useUpdateSong = (songId: string) => {
+    const url = `song/${songId}`
     const headers = getHeaders()
-    const api = useApiService<number>(url, { body, headers })
+    const api = useApiService<ISong>(url, { headers })
     return {
         putSong: { run: api.putData, ...api.state },
     }
@@ -148,5 +148,104 @@ export const useDeleteSong = (id: number) => {
     const api = useApiService<ISong>(url, { headers })
     return {
         deleteSong: { run: api.deleteData, ...api.state },
+    }
+}
+
+export const useCreateVoice = (songId: string) => {
+    const url = `song/${songId}/voice`
+    const headers = getHeaders()
+    const api = useApiService<IVoice>(url, { headers })
+    return {
+        postVoice: { run: api.postData, ...api.state },
+    }
+}
+
+export const useUpdateVoice = (songId: string, voiceId: number | undefined) => {
+    const url = `song/${songId}/voice/${voiceId}`
+    const headers = getHeaders()
+    const api = useApiService<IVoice>(url, { headers })
+    return {
+        putVoice: { run: api.putData, ...api.state },
+    }
+}
+
+export const useDeleteVoice = (songId: string, voiceId: number | undefined) => {
+    const url = `song/${songId}/voice/${voiceId}`
+    const headers = getHeaders()
+    const api = useApiService<IVoice>(url, { headers })
+    return {
+        deleteVoice: { run: api.deleteData, ...api.state },
+    }
+}
+
+export const useCreateChord = (
+    songId: number,
+    voiceId: number,
+    barId: number
+) => {
+    const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note`
+    const headers = getHeaders()
+    const api = useApiService<IBar>(url, { headers })
+
+    return {
+        postChord: { run: api.postData, ...api.state },
+    }
+}
+
+export const useDeleteChord = (
+    songId: number,
+    voiceId: number,
+    barId: number,
+    noteId: number | null
+) => {
+    const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${noteId}`
+    const headers = getHeaders()
+    const api = useApiService<IBar>(url, { headers })
+
+    return {
+        deleteChord: { run: api.deleteData, ...api.state },
+    }
+}
+
+export const useAddBar = (songId: string, voiceId: number) => {
+    const url = `song/${songId}/voice/${voiceId}/bar`
+    const headers = getHeaders()
+    const body = {
+        repBefore: false,
+        repAfter: false,
+        house: 0,
+    } as IBar
+    const api = useApiService<IVoice>(url, { headers, body })
+
+    return {
+        postBar: { run: api.postData, ...api.state },
+    }
+}
+
+export const useDeleteBar = (
+    songId: number,
+    voiceId: number,
+    barId: number
+) => {
+    const url = `song/${songId}/voice/${voiceId}/bar/${barId}`
+    const headers = getHeaders()
+    const api = useApiService<IVoice>(url, { headers })
+
+    return {
+        deleteBar: { run: api.deleteData, ...api.state },
+    }
+}
+
+export const useUpdateBar = (
+    songId: number,
+    voiceId: number,
+    barId: number
+) => {
+    const url = `song/${songId}/voice/${voiceId}/bar/${barId}`
+    const headers = getHeaders()
+    const api = useApiService<IVoice>(url, { headers })
+
+    return {
+        putBar: { run: api.putData, ...api.state },
     }
 }
