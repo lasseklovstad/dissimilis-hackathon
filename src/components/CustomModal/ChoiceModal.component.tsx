@@ -49,10 +49,12 @@ const useStyles = makeStyles({
 
 export const ChoiceModal = (props: {
     handleOnCancelClick: () => void
+    handleOnSaveClick: () => void
     modalOpen: boolean
     handleClosed: () => void
     cancelText: string
     headerText: string
+    ackText: string
     descriptionText: string
     isLoading?: boolean
 }) => {
@@ -95,6 +97,16 @@ export const ChoiceModal = (props: {
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12}>
+                                    <Button
+                                        className={classes.button}
+                                        size="large"
+                                        variant="contained"
+                                        onClick={() =>
+                                            props.handleOnSaveClick()
+                                        }
+                                    >
+                                        {props.ackText}
+                                    </Button>
                                     <Button
                                         className={classes.button}
                                         size="large"

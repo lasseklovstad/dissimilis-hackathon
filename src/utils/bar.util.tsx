@@ -6,16 +6,14 @@ import { ITimeSignature } from "../models/ITimeSignature"
 to replace H with B to get the right chord.
 */
 export const getChord = (notes: string[]): string => {
-    const tempArray = notes.slice()
-    const index = tempArray.indexOf("H")
-    if (index !== -1) {
-        tempArray[index] = "B"
-    }
-
-    if (tempArray.length === 1) {
+    if (notes.length === 1) {
         return notes[0]
     }
-    const result = TonalChord.detect(tempArray.reverse())
+    const result = TonalChord.detect(
+        notes.map((note) => {
+            return note === "H" ? "B" : note
+        })
+    )
     if (result.length === 0) return notes[0]
     return result[0].replace(/M/g, "").replace(/B/g, "H")
 }

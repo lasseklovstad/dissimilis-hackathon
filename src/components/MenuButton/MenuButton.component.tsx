@@ -1,11 +1,10 @@
-import React, { useContext, useState } from "react"
+import React, { useState } from "react"
 import { IconButton, makeStyles, Menu, MenuItem } from "@material-ui/core"
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 import { useTranslation } from "react-i18next"
 import { useHistory, useRouteMatch } from "react-router-dom"
 import { colors } from "../../utils/colors"
 import { useDeleteSong } from "../../utils/useApiServiceSongs"
-import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
@@ -23,7 +22,6 @@ export const MenuButton = () => {
     const classes = useStyles()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
-    const { setShowPossiblePositions } = useContext(SongToolsContext)
     const { t } = useTranslation()
     const history = useHistory()
     const match = useRouteMatch<{ id: string }>("/song/:id")
@@ -47,11 +45,7 @@ export const MenuButton = () => {
     }
 
     const exportSong = async () => {
-        setShowPossiblePositions(false)
-        // const { isError } = await putSong.run()
-        // if (!isError) {
-        //     history.push(`/song/${id}/export`)
-        // }
+        history.push(`/song/${id}/export`)
     }
 
     const handleClose = async (method?: "export" | "delete") => {
@@ -107,6 +101,8 @@ export const MenuButton = () => {
                 <ChoiceModal
                     handleOnCancelClick={() => handleClose()}
                     handleClosed={() => handleClose()}
+                    handleOnSaveClick={handleDeleteSong}
+                    ackText={t("Modal:deleteSong")}
                     modalOpen={deleteSongModalIsOpen}
                     cancelText={t("Modal:cancel")}
                     headerText={t("Modal:deleteSong")}

@@ -300,7 +300,7 @@ const simplifyNote = (note: string) => {
 }
 
 export const getNotesFromChord = (chord: string) => {
-    return Chord.get(chord).notes.map((note) => {
+    return Chord.get(chord.replace("H", "B")).notes.map((note) => {
         return simplifyNote(note)
     })
 }

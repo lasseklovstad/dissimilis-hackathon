@@ -78,9 +78,11 @@ export const SongView = () => {
     }
 
     const handleTitleBlur = async (title: string) => {
-        const { error, result } = await putSong.run({ title })
-        if (!error && result) {
-            dispatchSong({ type: "UPDATE_SONG", song: result.data })
+        if (title !== song.title) {
+            const { error, result } = await putSong.run({ title })
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_SONG", song: result.data })
+            }
         }
     }
 
