@@ -99,6 +99,10 @@ export const SongView = () => {
         dispatchSong({ type: "UPDATE_VOICE", voice })
     }
 
+    if (getSong.loading) {
+        return <LoadingLogo />
+    }
+
     return (
         <>
             <ErrorDialog
@@ -107,7 +111,6 @@ export const SongView = () => {
                 title={t("Modal:getSongError")}
             />
 
-            {getSong.loading && <LoadingLogo />}
             {selectedVoiceId && (
                 <Grid container className={classes.root}>
                     <Grid item xs={12}>

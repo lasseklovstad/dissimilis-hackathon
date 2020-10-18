@@ -221,10 +221,6 @@ export const ExportView = () => {
         }
     }
 
-    const handleChange = (event: any) => {
-        setDropDownMenuSelected(event.target.value)
-    }
-
     return (
         <>
             {Array.from(Array(amountOfPages), (e, pageIndex) => {
@@ -299,59 +295,25 @@ export const ExportView = () => {
                             marginBottom: matches ? "0px" : "12px",
                         }}
                     >
-                        {voices.length > 3 ? (
-                            <FormControl className={classes.formControl}>
-                                <Select
-                                    value={dropDownMenuSelected}
-                                    onChange={(e) => handleChange(e)}
-                                >
-                                    {voices.map((voice, i) => {
-                                        return (
-                                            <MenuItem
-                                                onClick={() =>
-                                                    history.replace(
-                                                        `/song/${songId}/export?voice=${
-                                                            i + 1
-                                                        }`
-                                                    )
-                                                }
-                                                key={i}
-                                                value={i}
-                                            >
-                                                {voice.title}
-                                            </MenuItem>
-                                        )
-                                    })}
-                                </Select>
-                            </FormControl>
-                        ) : (
-                            <Box style={{ padding: "8px" }}>
-                                {voices.map((voice, i) => {
+                        <FormControl className={classes.formControl}>
+                            <Select value={selectedVoice}>
+                                {voices.map((voice) => {
                                     return (
-                                        <Button
-                                            key={i}
+                                        <MenuItem
                                             onClick={() =>
-                                                history.replace(
-                                                    `/song/${songId}/export?voice=${
-                                                        i + 1
-                                                    }`
+                                                history.push(
+                                                    `/song/${songId}/export?voice=${voice.songVoiceId}`
                                                 )
                                             }
-                                            style={{
-                                                backgroundColor:
-                                                    selectedVoice === i
-                                                        ? colors.gray_200
-                                                        : "white",
-                                            }}
-                                            className={classes.button}
-                                            variant="outlined"
+                                            key={voice.songVoiceId}
+                                            value={voice.songVoiceId}
                                         >
                                             {voice.title}
-                                        </Button>
+                                        </MenuItem>
                                     )
                                 })}
-                            </Box>
-                        )}
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item xs="auto" md={1} style={{ order: 2 }} />
                     <Grid
