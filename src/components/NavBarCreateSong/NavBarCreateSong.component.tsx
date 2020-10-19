@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react"
 import {
     AppBar,
     Box,
-    Grid,
     makeStyles,
     TextField,
     useMediaQuery,
 } from "@material-ui/core"
 import { useHistory } from "react-router"
+import { useTranslation } from "react-i18next"
 import { MenuButton } from "../MenuButton/MenuButton.component"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 
@@ -35,10 +35,6 @@ const useStyles = makeStyles({
         backgroundColor: "transparent",
         marginBottom: "24px",
     },
-    textField: {
-        width: "100%",
-        height: "36px",
-    },
     textFieldInput: {
         fontSize: "30",
     },
@@ -52,35 +48,33 @@ export const NavBarCreateSong = (props: {
     const matches = useMediaQuery("(max-width:600px)")
     const [title, setTitle] = useState(props.title)
     const history = useHistory()
+    const { t } = useTranslation()
 
     useEffect(() => {
         setTitle(props.title)
     }, [props.title])
 
-    const goHome = () => {
-        history.push("/dashboard")
-    }
-
     return (
         <Box className={classes.root} mb={matches ? 2 : 4}>
             <AppBar position="static" elevation={0} className={classes.appbar}>
-                <Grid container>
-                    <Grid item xs={11} sm={1} className={classes.left}>
-                        <DashboardTopBarIcon onClick={goHome} />
-                    </Grid>
-                    <Grid item xs={12} sm={10} className={classes.center}>
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                >
+                    <DashboardTopBarIcon />
+                    <Box ml={1} mr={1} width="100%">
                         <TextField
                             inputProps={{ style: { fontSize: 24 } }}
                             value={title}
+                            label={t("General:title")}
                             onBlur={(ev) => props.onTitleBlur(ev.target.value)}
                             onChange={(ev) => setTitle(ev.target.value)}
-                            className={classes.textField}
+                            fullWidth
                         />
-                    </Grid>
-                    <Grid item xs={1} sm={1} className={classes.right}>
-                        <MenuButton />
-                    </Grid>
-                </Grid>
+                    </Box>
+                    <MenuButton />
+                </Box>
             </AppBar>
         </Box>
     )

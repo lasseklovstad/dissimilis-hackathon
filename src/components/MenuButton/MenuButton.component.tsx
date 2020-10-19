@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { IconButton, makeStyles, Menu, MenuItem } from "@material-ui/core"
+import { IconButton, Menu, MenuItem } from "@material-ui/core"
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 import { useTranslation } from "react-i18next"
 import { useHistory, useParams } from "react-router-dom"
@@ -9,17 +9,7 @@ import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
-const useStyles = makeStyles({
-    root: {
-        backgroundColor: colors.gray_200,
-        borderRadius: "50%",
-        height: "48px",
-        width: "48px",
-        float: "right",
-    },
-})
 export const MenuButton = () => {
-    const classes = useStyles()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const { t } = useTranslation()
@@ -66,7 +56,7 @@ export const MenuButton = () => {
         <>
             <div>
                 <IconButton
-                    className={classes.root}
+                    style={{ backgroundColor: colors.gray_200 }}
                     aria-haspopup="true"
                     onClick={handleClick}
                     aria-label="Bar menu"

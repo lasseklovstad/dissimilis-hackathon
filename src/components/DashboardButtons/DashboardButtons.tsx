@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
-import { Box, Card, CardActionArea } from "@material-ui/core"
+import { Box, Card, CardActionArea, Icon, IconButton } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
@@ -157,20 +157,14 @@ export const DashboardLibraryButton: FC<ButtonProps> = ({ text, link }) => {
     )
 }
 
-export const DashboardTopBarIcon: FC<TopBarIconProps> = (props) => {
-    const styles = useStyles()
+export const DashboardTopBarIcon = () => {
     const { t } = useTranslation()
     const altProp = t("DashboardView:altButterflyButtonProp")
     return (
-        <Box className={styles.butterflyButtonContainer}>
-            <Card className={styles.butterflyButtonCard}>
-                <CardActionArea
-                    onClick={() => props.onClick && props.onClick()}
-                    className={styles.butterflyButtonCardIcon}
-                >
-                    <img src={butterflyBlue} alt={altProp} />
-                </CardActionArea>
-            </Card>
-        </Box>
+        <IconButton component={Link} to="/dashboard">
+            <Icon fontSize="large">
+                <img src={butterflyBlue} alt={altProp} />
+            </Icon>
+        </IconButton>
     )
 }

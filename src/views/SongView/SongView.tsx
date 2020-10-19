@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react"
-import { Grid, makeStyles, Snackbar, Typography } from "@material-ui/core"
-import MuiAlert, { AlertProps } from "@material-ui/lab/Alert"
+import { Grid, makeStyles } from "@material-ui/core"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { NavBarCreateSong } from "../../components/NavBarCreateSong/NavBarCreateSong.component"
@@ -30,10 +29,6 @@ const useStyles = makeStyles({
 })
 
 const heightOfBar = 160
-
-const Alert = (props: AlertProps) => {
-    return <MuiAlert elevation={6} variant="filled" {...props} />
-}
 
 export const SongView = () => {
     const classes = useStyles()
@@ -66,16 +61,6 @@ export const SongView = () => {
             dispatchSong({ type: "UPDATE_SONG", song: songInit })
         }
     }, [songInit])
-
-    const handleClose = (
-        event: React.SyntheticEvent | React.MouseEvent,
-        reason?: string
-    ) => {
-        if (reason === "clickaway") {
-            // return
-        }
-        // setIsSaving(false)
-    }
 
     const handleTitleBlur = async (title: string) => {
         if (title !== song.title) {
@@ -111,7 +96,7 @@ export const SongView = () => {
                 title={t("Modal:getSongError")}
             />
 
-            {selectedVoiceId && (
+            {selectedVoiceId !== undefined && selectedVoice && (
                 <Grid container className={classes.root}>
                     <Grid item xs={12}>
                         <NavBarCreateSong
@@ -138,28 +123,18 @@ export const SongView = () => {
                                 isNoteSelected,
                             }}
                         >
-                            {selectedVoice && (
-                                <Song
-                                    barsPerRow={barsPerRow}
-                                    voice={selectedVoice}
-                                    timeSignature={{ denominator, numerator }}
-                                    heightOfBar={heightOfBar}
-                                    exportMode={false}
-                                />
-                            )}
+                            <Song
+                                barsPerRow={barsPerRow}
+                                voice={selectedVoice}
+                                timeSignature={{ denominator, numerator }}
+                                heightOfBar={heightOfBar}
+                                exportMode={false}
+                            />
                         </SongContext.Provider>
                     </Grid>
                 </Grid>
             )}
-            <Snackbar
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                autoHideDuration={4000}
-                onClose={handleClose}
-            >
-                <Alert onClose={handleClose} severity="success">
-                    <Typography variant="caption">Lagring vellykket</Typography>
-                </Alert>
-            </Snackbar>
+
             {selectedVoiceId && (
                 <BottomBar
                     noteIsSelected={isNoteSelected}

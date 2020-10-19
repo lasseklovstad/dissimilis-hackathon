@@ -25,16 +25,16 @@ const useDeepCallback = <T extends unknown>(
  * Params are added to the finalUrl
  * Body is sent as body to api
  */
-export type ApiServiceOptions<T> = {
-    body?: any
+export type ApiServiceOptions<T, R> = {
+    body?: R
     initialData?: T
     params?: Record<string, string>
     headers?: Record<string, string>
 }
 
-export const useApiService = <T extends unknown>(
+export const useApiService = <T extends unknown, R = Record<string, unknown>>(
     url: string,
-    options: ApiServiceOptions<T>
+    options: ApiServiceOptions<T, R>
 ) => {
     const { body: bodyInit, headers, initialData, params } = options
     const { push } = useHistory()

@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Box, Grid, TextField, AppBar, makeStyles } from "@material-ui/core"
+import { AppBar, Box, Grid, makeStyles, TextField } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
@@ -21,13 +21,6 @@ export const DashboardTopBar = (props: {
     const searchPlaceholder = t("DashboardView:search")
     const [searchBarFocus, setSearchBarFocus] = useState(false)
 
-    const goHome = () => {
-        history.push("/dashboard")
-        if (props.onGoHome) {
-            props.onGoHome()
-        }
-    }
-
     return (
         <div>
             <AppBar position="static" className={classes.background}>
@@ -35,7 +28,7 @@ export const DashboardTopBar = (props: {
                     <Grid container spacing={2}>
                         <Grid item sm={1} />
                         <Grid item xs={2}>
-                            <DashboardTopBarIcon onClick={goHome} />
+                            <DashboardTopBarIcon />
                         </Grid>
                         <Grid
                             item

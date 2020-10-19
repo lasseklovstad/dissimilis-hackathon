@@ -3,4 +3,5 @@ export const createSongTabNo = {
     instrument: "Instrument",
     newInstrument: "Nytt instrument",
     changeVoiceName: "Endre navn",
+    deleteVoice: "Slett",
 }

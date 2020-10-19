@@ -5,4 +5,5 @@ export const createSongTabEn = {
     changeVoiceName: "Change name",
     newVoiceName: "New name",
     saveNewName: "Save",
+    deleteVoice: "Delete",
 }
