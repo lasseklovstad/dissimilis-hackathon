@@ -24,7 +24,6 @@ export const Bar = (props: {
         masterSheet,
         showHouseNumber,
         bar: {
-            position,
             chordsAndNotes,
             repAfter,
             repBefore,
@@ -78,7 +77,7 @@ export const Bar = (props: {
             ? [selectedChord]
             : getNotesFromChord(selectedChord)
         const { error, result } = await postChord.run({
-            position,
+            position: positionArray.length > 0 ? positionArray[0] : position,
             length: selectedNoteLength,
             notes,
         } as IChordAndNotes)
@@ -88,12 +87,33 @@ export const Bar = (props: {
         }
     }
 
-    const onMouseEnterChord = (index: number) => {
-        // setPositionArray(selectPositionArray(voiceId, position, index))
+    const onMouseEnterChord = (
+        chord: IChordAndNotes,
+        allChords: IChordAndNotes[]
+    ) => {
+        if (chord.notes[0] === "Z") {
+            let i = 0
+            while (i <= selectedNoteLength) {
+                const start = chord.position - i
+                const end = start + selectedNoteLength
+                const interval = allChords.slice(start, end)
+                const isOnlyRests =
+                    interval.findIndex(
+                        (currentChord) => currentChord.notes[0] !== "Z"
+                    ) === -1
+                if (isOnlyRests && interval.length === selectedNoteLength) {
+                    setPositionArray(
+                        interval.map((currentChord) => currentChord.position)
+                    )
+                    break
+                }
+                i++
+            }
+        }
     }
 
     const onMouseLeaveChord = () => {
-        // setPositionArray([])
+        setPositionArray([])
     }
 
     return (
@@ -133,24 +153,25 @@ export const Bar = (props: {
                                 }
                                 return [...noter, note]
                             }, [])
-                            .map((notes) => {
+                            .map((chord, i, allChords) => {
+                                const highlight = positionArray.includes(
+                                    chord.position
+                                )
                                 return (
                                     <Chord
                                         disabled={exportMode}
-                                        onMouseLeave={() => onMouseLeaveChord()}
+                                        onMouseLeave={onMouseLeaveChord}
                                         onMouseEnter={() =>
-                                            onMouseEnterChord(notes.position)
+                                            onMouseEnterChord(chord, allChords)
                                         }
-                                        chordsAndNotes={notes}
-                                        highlight={positionArray.includes(
-                                            notes.position
-                                        )}
-                                        key={notes.position}
+                                        chordsAndNotes={chord}
+                                        highlight={highlight}
+                                        key={chord.position}
                                         onContextMenu={handleRightClick(
-                                            notes.noteId
+                                            chord.noteId
                                         )}
                                         onClick={() =>
-                                            handleClick(notes.position)
+                                            handleClick(chord.position)
                                         }
                                     />
                                 )

@@ -36,7 +36,7 @@ const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
 export const Song = (props: SongProps) => {
     const {
         barsPerRow,
-        voice: { bars, isMain, songVoiceId },
+        voice: { bars, isMain },
         timeSignature,
         heightOfBar,
         exportMode,
@@ -66,7 +66,7 @@ export const Song = (props: SongProps) => {
     return (
         <>
             <Box width="100%">
-                {getBarRows(bars).map((barsInRow, i, rows) => (
+                {getBarRows(bars).map((barsInRow, i) => (
                     <Box display="flex" mt={exportMode ? 7 : 10} key={i}>
                         <BarPrefix
                             index={barsInRow[0].position - 1}

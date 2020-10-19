@@ -70,7 +70,6 @@ export const ExportView = () => {
         1 | 2 | 3 | 4 | 6 | 12
     >(3)
     const [amountOfPages, setAmountOfPages] = useState<number>(1)
-    const [dropDownMenuSelected, setDropDownMenuSelected] = useState<number>(0)
     const [barsPerRow, setBarsPerRow] = useState(4)
     const { songId } = useParams<{ songId: string }>()
     const { songInit } = useGetSong(songId)
@@ -148,23 +147,6 @@ export const ExportView = () => {
             value: 12,
         },
     ]
-
-    const isBarLineBefore = (index: number) => {
-        if (lengthOfEachBar === 12) {
-            return true
-        }
-        if (index === 0) return true
-        if (lengthOfEachBar === 6 && index % 2 === 0) return true
-        if (lengthOfEachBar === 3 && index % 4 === 0) return true
-        if (lengthOfEachBar === 2 && index % 6 === 0) return true
-        if (lengthOfEachBar === 1 && index % 12 === 0) return true
-        return false
-    }
-
-    const isBarLineAfter = (page: number, index: number) => {
-        if (selectedVoice && index === selectedVoice?.bars.length) return true
-        return false
-    }
 
     const convertFromLengthOfBarToAmountOfBarsPerRow = (): number => {
         let lengthOfEachBarCalculated = 1

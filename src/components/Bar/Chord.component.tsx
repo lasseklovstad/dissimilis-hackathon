@@ -48,7 +48,7 @@ export const Chord = (props: ChordProps) => {
     } = useTheme()
 
     const getBackgroundColor = (note: string) => {
-        if (highlight && note === " ") {
+        if (highlight && note === "Z") {
             return colors.focus
         }
         return getColor(note)
