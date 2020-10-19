@@ -23,7 +23,7 @@ export const BarMenu = (props: BarMenuProps) => {
         if (method === "delete") {
             const { error, result } = await deleteBar.run()
             if (!error && result) {
-                dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
+                dispatchSong({ type: "DELETE_BAR", barPosition: bar.position })
             }
         }
         // if (method === "duplicate") {

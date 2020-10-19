@@ -4,10 +4,11 @@ import { IBar } from "../../models/IBar"
 import { IVoice } from "../../models/IVoice"
 
 type SongAction =
-    | { type: "ADD_BAR"; bars: IBar[] }
+    | { type: "ADD_BAR"; bar: IBar }
+    | { type: "DELETE_BAR"; barPosition: number }
     | { type: "UPDATE_BAR"; bar: IBar }
     | { type: "UPDATE_VOICE"; voice: IVoice }
-    | { type: "DELETE_VOICE"; voice: IVoice }
+    | { type: "DELETE_VOICE"; songVoiceId: number }
     | { type: "ADD_VOICE"; voice: IVoice }
     | { type: "UPDATE_SONG"; song: ISong }
 
@@ -19,7 +20,22 @@ export const songReducer = (song: ISong, action: SongAction) => {
             return {
                 ...song,
                 voices: song.voices.map((voice) => {
-                    return { ...voice, bars: action.bars }
+                    return {
+                        ...voice,
+                        bars: [...voice.bars, action.bar],
+                    }
+                }),
+            }
+        case "DELETE_BAR":
+            return {
+                ...song,
+                voices: song.voices.map((voice) => {
+                    return {
+                        ...voice,
+                        bars: voice.bars.filter(
+                            (bar) => bar.position !== action.barPosition
+                        ),
+                    }
                 }),
             }
         case "UPDATE_BAR":
@@ -56,7 +72,7 @@ export const songReducer = (song: ISong, action: SongAction) => {
             return {
                 ...song,
                 voices: song.voices.filter(
-                    (voice) => voice.songVoiceId !== action.voice.songVoiceId
+                    (voice) => voice.songVoiceId !== action.songVoiceId
                 ),
             }
         default:

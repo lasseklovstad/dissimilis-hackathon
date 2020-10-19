@@ -92,7 +92,7 @@ export const SongView = () => {
     }
 
     const handleDeleteVoice = (voice: IVoice) => {
-        dispatchSong({ type: "DELETE_VOICE", voice })
+        dispatchSong({ type: "DELETE_VOICE", songVoiceId: voice.songVoiceId })
     }
 
     const handleUpdateVoice = (voice: IVoice) => {
@@ -173,7 +173,7 @@ export const SongView = () => {
                         setSelectedNoteLength(length)
                     }
                     timeSignature={{ denominator, numerator }}
-                    addBar={(bars) => dispatchSong({ type: "ADD_BAR", bars })}
+                    addBar={(bar) => dispatchSong({ type: "ADD_BAR", bar })}
                     songId={songId}
                     voiceId={selectedVoiceId}
                 />

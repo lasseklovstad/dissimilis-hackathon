@@ -116,7 +116,7 @@ const noteLengths = [
 
 export const BottomBar = (props: {
     timeSignature: { numerator: number; denominator: number }
-    addBar: (bars: IBar[]) => void
+    addBar: (bar: IBar) => void
     songId: string
     voiceId: number
     selectedChord: string
@@ -154,7 +154,7 @@ export const BottomBar = (props: {
     const handleAddBar = async () => {
         const { error, result } = await postBar.run()
         if (!error && result) {
-            addBar(result.data.bars)
+            addBar(result.data.bars[result.data.bars.length - 1])
             scrollToBottom()
         }
     }

@@ -109,6 +109,8 @@ export const Bar = (props: {
                 }
                 i++
             }
+        } else {
+            setPositionArray([])
         }
     }
 
