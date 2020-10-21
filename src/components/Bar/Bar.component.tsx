@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react"
-import { Box } from "@material-ui/core"
+import { Box, useMediaQuery } from "@material-ui/core"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { House } from "./House.component"
 import { IBar, IChordAndNotes } from "../../models/IBar"
@@ -37,6 +37,7 @@ export const Bar = (props: {
     const [menuPosition, setMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()
+    const xl = useMediaQuery("(min-width: 1920px)")
     const [rightClicked, setRightClicked] = useState<number | null>(null)
     const [positionArray, setPositionArray] = useState<number[]>([])
     const {
@@ -92,7 +93,7 @@ export const Bar = (props: {
         indexOfChord: number,
         allChords: IChordAndNotes[]
     ) => {
-        if (chord.notes[0] === "Z") {
+        if (xl && chord.notes[0] === "Z") {
             let i = 0
             while (i <= selectedNoteLength) {
                 const start = indexOfChord - i
