@@ -19,7 +19,6 @@ export const RepetitionSign = (props: { display: boolean }) => {
             pr={1}
             display="flex"
             flexDirection="column"
-            height="100%"
             justifyContent="center"
         >
             <Box>

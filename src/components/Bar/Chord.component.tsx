@@ -82,7 +82,7 @@ export const Chord = (props: ChordProps) => {
                         height: "calc(100% - 25px)",
                         width: "100%",
                         minWidth: 0,
-                        alignItems: "flex-start",
+                        alignItems: "stretch",
                     }}
                 >
                     {chordsAndNotes.notes
@@ -105,7 +105,6 @@ export const Chord = (props: ChordProps) => {
                                     flex={1}
                                     justifyContent="center"
                                     alignItems="center"
-                                    width="100%"
                                 >
                                     {text}
                                 </Box>

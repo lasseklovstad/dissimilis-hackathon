@@ -89,12 +89,13 @@ export const Bar = (props: {
 
     const onMouseEnterChord = (
         chord: IChordAndNotes,
+        indexOfChord: number,
         allChords: IChordAndNotes[]
     ) => {
         if (chord.notes[0] === "Z") {
             let i = 0
             while (i <= selectedNoteLength) {
-                const start = chord.position - i
+                const start = indexOfChord - i
                 const end = start + selectedNoteLength
                 const interval = allChords.slice(start, end)
                 const isOnlyRests =
@@ -164,7 +165,11 @@ export const Bar = (props: {
                                         disabled={exportMode}
                                         onMouseLeave={onMouseLeaveChord}
                                         onMouseEnter={() =>
-                                            onMouseEnterChord(chord, allChords)
+                                            onMouseEnterChord(
+                                                chord,
+                                                i,
+                                                allChords
+                                            )
                                         }
                                         chordsAndNotes={chord}
                                         highlight={highlight}
