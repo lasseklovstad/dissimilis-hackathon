@@ -26,7 +26,7 @@ const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
         if (index === 0) {
             return <TimeSignature timeSignature={timeSignature} />
         }
-        return <BarNumber barNumber={index} />
+        return <BarNumber barNumber={index + 1} />
     }
     const PrefixItem = getPrefixItem()
 
