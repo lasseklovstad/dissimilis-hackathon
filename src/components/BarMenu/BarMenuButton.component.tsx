@@ -16,7 +16,7 @@ export const BarMenuButton = (props: BarMenuButtonProps) => {
             display="flex"
             position="relative"
             bottom="-47px"
-            left="-32px"
+            left="-26px"
             alignItems="flex-end"
         >
             <IconButton

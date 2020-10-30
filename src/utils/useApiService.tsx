@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom"
 import { DependencyList, useCallback, useEffect, useRef, useState } from "react"
 import { IServerError } from "../models/IServerError"
 
-type HTTPMethod = "get" | "put" | "delete" | "post"
+type HTTPMethod = "get" | "patch" | "delete" | "post"
 type FetchReturn<T> = {
     result: AxiosResponse<T> | undefined
     isError: boolean
@@ -17,7 +17,7 @@ const useDeepCompareMemoize = (value: DependencyList) => {
 }
 
 const useDeepCallback = <T extends unknown>(
-    cb: (method: HTTPMethod) => Promise<FetchReturn<T>>,
+    cb: (method: HTTPMethod, body?: unknown) => Promise<FetchReturn<T>>,
     deps: DependencyList
 ) => useCallback(cb, useDeepCompareMemoize(deps))
 
@@ -25,18 +25,18 @@ const useDeepCallback = <T extends unknown>(
  * Params are added to the finalUrl
  * Body is sent as body to api
  */
-export type ApiServiceOptions<T> = {
-    body?: any
+export type ApiServiceOptions<T, R> = {
+    body?: R
     initialData?: T
     params?: Record<string, string>
     headers?: Record<string, string>
 }
 
-export const useApiService = <T extends unknown>(
+export const useApiService = <T extends unknown, R = Record<string, unknown>>(
     url: string,
-    options: ApiServiceOptions<T>
+    options: ApiServiceOptions<T, R>
 ) => {
-    const { body, headers, initialData, params } = options
+    const { body: bodyInit, headers, initialData, params } = options
     const { push } = useHistory()
     const source = axios.CancelToken.source()
     const [error, setError] = useState<AxiosError<IServerError> | undefined>(
@@ -61,7 +61,7 @@ export const useApiService = <T extends unknown>(
     }
 
     const fetchData = useDeepCallback<T>(
-        async (method) => {
+        async (method, body?: unknown) => {
             // Add params to the url
             const baseUrl = process.env.REACT_APP_API_URL as string
             let finalUrl = baseUrl + url
@@ -86,11 +86,15 @@ export const useApiService = <T extends unknown>(
                             cancelToken: source.token,
                         })
                         break
-                    case "put":
-                        result = await axios.put<T>(finalUrl, body, {
-                            headers,
-                            cancelToken: source.token,
-                        })
+                    case "patch":
+                        result = await axios.patch<T>(
+                            finalUrl,
+                            body || bodyInit,
+                            {
+                                headers,
+                                cancelToken: source.token,
+                            }
+                        )
                         break
                     case "delete":
                         result = await axios.delete<T>(finalUrl, {
@@ -99,10 +103,14 @@ export const useApiService = <T extends unknown>(
                         })
                         break
                     case "post":
-                        result = await axios.post<T>(finalUrl, body, {
-                            headers,
-                            cancelToken: source.token,
-                        })
+                        result = await axios.post<T>(
+                            finalUrl,
+                            body || bodyInit,
+                            {
+                                headers,
+                                cancelToken: source.token,
+                            }
+                        )
                         break
                     default:
                         break
@@ -121,20 +129,26 @@ export const useApiService = <T extends unknown>(
             }
             return { result, isError, error: axiosError }
         },
-        [url, body, params, source, headers]
+        [url, bodyInit, params, source, headers]
     )
 
     const getData = useCallback(async () => {
         return fetchData("get")
     }, [fetchData])
 
-    const postData = useCallback(async () => {
-        return fetchData("post")
-    }, [fetchData])
+    const postData = useCallback(
+        async (body?: unknown) => {
+            return fetchData("post", body)
+        },
+        [fetchData]
+    )
 
-    const putData = useCallback(async () => {
-        return fetchData("put")
-    }, [fetchData])
+    const putData = useCallback(
+        async (body?: unknown) => {
+            return fetchData("patch", body)
+        },
+        [fetchData]
+    )
 
     const deleteData = useCallback(async () => {
         return fetchData("delete")

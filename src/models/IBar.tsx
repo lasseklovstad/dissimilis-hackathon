@@ -1,13 +1,17 @@
 export interface IChordAndNotes {
-    noteNumber?: number
+    position: number
     notes: string[]
     length: number
+    noteId: number | null
 }
 
 export interface IBar {
-    barNumber: number
-    house?: number | undefined
+    barId: number
+    songId: number
+    songVoiceId: number
+    position: number
+    house?: number | undefined | null
     repBefore: boolean
     repAfter: boolean
-    chordsAndNotes: Array<IChordAndNotes>
+    chordsAndNotes: IChordAndNotes[]
 }

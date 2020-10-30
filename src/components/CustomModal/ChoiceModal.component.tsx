@@ -1,17 +1,16 @@
 import React from "react"
 import {
-    Modal,
-    makeStyles,
-    Grid,
-    Typography,
-    Button,
-    Fade,
     Backdrop,
     Box,
+    Button,
+    Fade,
+    Grid,
+    makeStyles,
+    Modal,
+    Typography,
 } from "@material-ui/core"
 
 import { colors } from "../../utils/colors"
-import animatedBird from "../../assets/images/sommerfugl-animert.svg"
 import { LoadingLogo } from "../loadingLogo/LoadingLogo.component"
 
 const useStyles = makeStyles({
@@ -49,13 +48,13 @@ const useStyles = makeStyles({
 })
 
 export const ChoiceModal = (props: {
-    handleOnSaveClick: () => void
     handleOnCancelClick: () => void
+    handleOnSaveClick: () => void
     modalOpen: boolean
     handleClosed: () => void
-    ackText: string
     cancelText: string
     headerText: string
+    ackText: string
     descriptionText: string
     isLoading?: boolean
 }) => {

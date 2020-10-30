@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     BottomNavigation,
     Box,
@@ -12,12 +12,12 @@ import {
     Typography,
     useMediaQuery,
 } from "@material-ui/core"
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { parse } from "query-string"
-import { SongContext } from "../SongView/SongContextProvider.component"
 import { colors } from "../../utils/colors"
 import { Song } from "../../components/Song/Song.component"
+import { useGetSong } from "../../utils/useApiServiceSongs"
+import { useVoice } from "../../utils/useVoice"
 
 const useStyles = makeStyles({
     root: {
@@ -70,31 +70,19 @@ export const ExportView = () => {
         1 | 2 | 3 | 4 | 6 | 12
     >(3)
     const [amountOfPages, setAmountOfPages] = useState<number>(1)
-    const [dropDownMenuSelected, setDropDownMenuSelected] = useState<number>(0)
     const [barsPerRow, setBarsPerRow] = useState(4)
-
-    const {
-        song: { title, voices, id, timeSignature },
-    } = useContext(SongContext)
+    const { songId } = useParams<{ songId: string }>()
+    const { songInit } = useGetSong(songId)
+    const selectedVoiceId = useVoice(songInit?.voices)
+    const selectedVoice = songInit?.voices.find(
+        (voice) => voice.songVoiceId === selectedVoiceId
+    )
 
     const classes = useStyles()
     const history = useHistory()
     const { t } = useTranslation()
 
     const matches = useMediaQuery("(min-width:960px)")
-
-    const voiceString = parse(window.location.search)
-    let selectedVoice = 0
-    if (typeof voiceString.voice === "string") {
-        const voiceInt = parseInt(voiceString.voice, 10)
-        if (voiceInt > voices.length || voiceInt <= 0) {
-            history.replace("./export?voice=1")
-        } else {
-            selectedVoice = voiceInt - 1
-        }
-    } else {
-        history.replace("./export?voice=1")
-    }
 
     // Converts amount of bars per row to the length according to the Material UI-grid (12 columns)
     const convertAmountOfBarsPerRowToLengthOfEachBar = (
@@ -160,23 +148,6 @@ export const ExportView = () => {
         },
     ]
 
-    const isBarLineBefore = (index: number) => {
-        if (lengthOfEachBar === 12) {
-            return true
-        }
-        if (index === 0) return true
-        if (lengthOfEachBar === 6 && index % 2 === 0) return true
-        if (lengthOfEachBar === 3 && index % 4 === 0) return true
-        if (lengthOfEachBar === 2 && index % 6 === 0) return true
-        if (lengthOfEachBar === 1 && index % 12 === 0) return true
-        return false
-    }
-
-    const isBarLineAfter = (page: number, index: number) => {
-        if (index === voices[selectedVoice].bars.length) return true
-        return false
-    }
-
     const convertFromLengthOfBarToAmountOfBarsPerRow = (): number => {
         let lengthOfEachBarCalculated = 1
         switch (lengthOfEachBar) {
@@ -205,7 +176,11 @@ export const ExportView = () => {
     }
 
     const calculatePage = () => {
-        const amountOfBars = voices[selectedVoice].bars.length
+        if (!selectedVoice) {
+            setAmountOfPages(1)
+            return
+        }
+        const amountOfBars = selectedVoice.bars.length || 0
         const lengthOfEachBarCalculated = convertFromLengthOfBarToAmountOfBarsPerRow()
 
         const totalRowsUsed = Math.ceil(
@@ -225,58 +200,65 @@ export const ExportView = () => {
         calculatePage()
     }, [rowsPerSheet, lengthOfEachBar])
 
-    const handleChange = (event: any) => {
-        setDropDownMenuSelected(event.target.value)
-    }
-
     return (
         <>
             {Array.from(Array(amountOfPages), (e, pageIndex) => {
                 return (
                     <Box className={`${classes.root} page`} key={pageIndex}>
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <Typography
-                                    style={{ textAlign: "center" }}
-                                    variant="h1"
-                                >
-                                    {title}
-                                </Typography>
-                                <Typography
-                                    style={{ textAlign: "center" }}
-                                    variant="body1"
-                                >
-                                    {voices[selectedVoice].title}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Grid container>
-                                    {voices[selectedVoice].bars.length === 0 ? (
-                                        <></>
-                                    ) : (
-                                        <>
-                                            <Song
-                                                barsPerRow={barsPerRow}
-                                                exportMode
-                                                selectedVoice={selectedVoice}
-                                                bars={voices[
-                                                    selectedVoice
-                                                ].bars.slice(
-                                                    pageIndex *
-                                                        (rowsPerSheet *
-                                                            convertFromLengthOfBarToAmountOfBarsPerRow()),
-                                                    (pageIndex + 1) *
-                                                        rowsPerSheet *
-                                                        convertFromLengthOfBarToAmountOfBarsPerRow()
-                                                )}
-                                                timeSignature={timeSignature}
-                                                heightOfBar={calculateHeightOfBar()}
-                                            />
-                                        </>
-                                    )}
+                        {selectedVoice && songInit && (
+                            <Grid container>
+                                <Grid item xs={12}>
+                                    <Typography
+                                        style={{ textAlign: "center" }}
+                                        variant="h1"
+                                    >
+                                        {songInit?.title}
+                                    </Typography>
+                                    <Typography
+                                        style={{ textAlign: "center" }}
+                                        variant="body1"
+                                    >
+                                        {selectedVoice?.title}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Grid container>
+                                        {selectedVoice?.bars.length === 0 ? (
+                                            <></>
+                                        ) : (
+                                            <>
+                                                <Song
+                                                    barsPerRow={barsPerRow}
+                                                    exportMode
+                                                    voice={{
+                                                        ...selectedVoice,
+                                                        bars:
+                                                            selectedVoice.bars.slice(
+                                                                pageIndex *
+                                                                    (rowsPerSheet *
+                                                                        convertFromLengthOfBarToAmountOfBarsPerRow()),
+                                                                (pageIndex +
+                                                                    1) *
+                                                                    rowsPerSheet *
+                                                                    convertFromLengthOfBarToAmountOfBarsPerRow()
+                                                            ) || [],
+                                                    }}
+                                                    timeSignature={{
+                                                        denominator:
+                                                            songInit?.denominator ||
+                                                            4,
+                                                        numerator:
+                                                            songInit?.numerator ||
+                                                            4,
+                                                    }}
+                                                    heightOfBar={calculateHeightOfBar()}
+                                                />
+                                            </>
+                                        )}
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
+                        )}
                     </Box>
                 )
             })}
@@ -298,59 +280,27 @@ export const ExportView = () => {
                             marginBottom: matches ? "0px" : "12px",
                         }}
                     >
-                        {voices.length > 3 ? (
-                            <FormControl className={classes.formControl}>
-                                <Select
-                                    value={dropDownMenuSelected}
-                                    onChange={(e) => handleChange(e)}
-                                >
-                                    {voices.map((voice, i) => {
-                                        return (
-                                            <MenuItem
-                                                onClick={() =>
-                                                    history.replace(
-                                                        `/song/${id}/export?voice=${
-                                                            i + 1
-                                                        }`
-                                                    )
-                                                }
-                                                key={i}
-                                                value={i}
-                                            >
-                                                {voice.title}
-                                            </MenuItem>
-                                        )
-                                    })}
-                                </Select>
-                            </FormControl>
-                        ) : (
-                            <Box style={{ padding: "8px" }}>
-                                {voices.map((voice, i) => {
+                        <FormControl className={classes.formControl}>
+                            <Select
+                                value={selectedVoiceId || ""}
+                                onChange={(ev) => {
+                                    history.push(
+                                        `/song/${songId}/export?voice=${ev.target.value}`
+                                    )
+                                }}
+                            >
+                                {songInit?.voices.map((voice) => {
                                     return (
-                                        <Button
-                                            key={i}
-                                            onClick={() =>
-                                                history.replace(
-                                                    `/song/${id}/export?voice=${
-                                                        i + 1
-                                                    }`
-                                                )
-                                            }
-                                            style={{
-                                                backgroundColor:
-                                                    selectedVoice === i
-                                                        ? colors.gray_200
-                                                        : "white",
-                                            }}
-                                            className={classes.button}
-                                            variant="outlined"
+                                        <MenuItem
+                                            key={voice.songVoiceId}
+                                            value={voice.songVoiceId}
                                         >
                                             {voice.title}
-                                        </Button>
+                                        </MenuItem>
                                     )
                                 })}
-                            </Box>
-                        )}
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item xs="auto" md={1} style={{ order: 2 }} />
                     <Grid
@@ -425,7 +375,7 @@ export const ExportView = () => {
                         </Button>
                         <Button
                             className={classes.confirmOrCancelButtons}
-                            onClick={() => history.push(`/song/${id}/`)}
+                            onClick={() => history.push(`/song/${songId}/`)}
                         >
                             {t("ExportView:cancel")}
                         </Button>

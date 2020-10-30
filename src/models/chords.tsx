@@ -1,7 +1,6 @@
-import { Chord } from "@tonaljs/tonal"
-import { allNotes as noteArray } from "./notes"
+import { Chord, Note } from "@tonaljs/tonal"
 
-const chordNames = [
+export const chords = [
     "C",
     "Cm",
     "C7",
@@ -280,26 +279,28 @@ const chordNames = [
     "Haug7",
 ]
 
-const fillChords = (): { name: string; notes: string[] }[] => {
-    const chords = []
-    for (let i = 0; i < chordNames.length; i++) {
-        let name: string = chordNames[i]
-        name = name.replace(/H/g, "B") // Have to change H to B for tonaljs
-        const { notes } = Chord.get(name)
-        for (let j = 0; j < notes.length; j++) {
-            notes[j] = notes[j].replace(/[0-9]/g, "")
-            const keyIndex = Object.keys(noteArray).indexOf(notes[j])
-            notes[j] = Object.values(noteArray)[keyIndex]
-        }
-        const obj = {
-            name: chordNames[i],
-            notes: notes.reverse(),
-        }
-        chords.push(obj)
-    }
-    return chords
+export const notes = [
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "H",
+]
+
+const simplifyNote = (note: string) => {
+    const chroma = Note.chroma(note)
+    return chroma !== undefined && notes[chroma]
 }
 
-// Chords is an array consisting of objects of chords
-// [{name: "C", notes: ["C"]}]
-export const chords = fillChords()
+export const getNotesFromChord = (chord: string) => {
+    return Chord.get(chord.replace("H", "B")).notes.map((note) => {
+        return simplifyNote(note)
+    })
+}

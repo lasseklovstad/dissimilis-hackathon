@@ -48,7 +48,7 @@ export const Chord = (props: ChordProps) => {
     } = useTheme()
 
     const getBackgroundColor = (note: string) => {
-        if (highlight && note === " ") {
+        if (highlight && note === "Z") {
             return colors.focus
         }
         return getColor(note)
@@ -82,34 +82,35 @@ export const Chord = (props: ChordProps) => {
                         height: "calc(100% - 25px)",
                         width: "100%",
                         minWidth: 0,
-                        alignItems: "flex-start",
+                        alignItems: "stretch",
                     }}
                 >
-                    {chordsAndNotes.notes.map((note, i) => {
-                        const text = tangentToNumber(note)
-                        const bgcolor = getBackgroundColor(note)
-                        const color = bgcolor
-                            ? getContrastText(bgcolor)
-                            : "#000000"
-                        return (
-                            <Box
-                                key={note + i}
-                                bgcolor={bgcolor}
-                                color={color}
-                                mt={i === 0 ? 0 : "1px"}
-                                borderColor="divider"
-                                borderRadius={3}
-                                border={disabled ? 0 : 1}
-                                display="flex"
-                                flex={1}
-                                justifyContent="center"
-                                alignItems="center"
-                                width="100%"
-                            >
-                                {text}
-                            </Box>
-                        )
-                    })}
+                    {chordsAndNotes.notes
+                        .map((note, i) => {
+                            const text = tangentToNumber(note)
+                            const bgcolor = getBackgroundColor(note)
+                            const color = bgcolor
+                                ? getContrastText(bgcolor)
+                                : "#000000"
+                            return (
+                                <Box
+                                    key={note + i}
+                                    bgcolor={bgcolor}
+                                    color={color}
+                                    mt="1px"
+                                    borderColor="divider"
+                                    borderRadius={3}
+                                    border={disabled ? 0 : 1}
+                                    display="flex"
+                                    flex={1}
+                                    justifyContent="center"
+                                    alignItems="center"
+                                >
+                                    {text}
+                                </Box>
+                            )
+                        })
+                        .reverse()}
                 </ButtonBase>
             </Box>
         </>

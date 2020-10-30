@@ -1,20 +1,19 @@
 import { Chord as TonalChord } from "@tonaljs/tonal"
 import { colors } from "./colors"
+import { ITimeSignature } from "../models/ITimeSignature"
 
 /* Gets the chord based on notes. The package we use (tonaljs) uses the tone "B" instead of "H" so we need
 to replace H with B to get the right chord.
 */
 export const getChord = (notes: string[]): string => {
-    const tempArray = notes.slice()
-    const index = tempArray.indexOf("H")
-    if (index !== -1) {
-        tempArray[index] = "B"
-    }
-
-    if (tempArray.length === 1) {
+    if (notes.length === 1) {
         return notes[0]
     }
-    const result = TonalChord.detect(tempArray.reverse())
+    const result = TonalChord.detect(
+        notes.map((note) => {
+            return note === "H" ? "B" : note
+        })
+    )
     if (result.length === 0) return notes[0]
     return result[0].replace(/M/g, "").replace(/B/g, "H")
 }
@@ -68,7 +67,13 @@ export const tangentToNumber = (tangent: string): number | string => {
             return 2
         case "A#":
             return 3
+        case "Z":
+            return ""
         default:
             return tangent
     }
+}
+
+export const getTimeSignatureText = (timeSignature: ITimeSignature) => {
+    return `${timeSignature.numerator}/${timeSignature.denominator}`
 }

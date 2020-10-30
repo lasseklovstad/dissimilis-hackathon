@@ -1,4 +1,5 @@
 import React from "react"
+import "react-app-polyfill/stable"
 import ReactDOM from "react-dom"
 import * as serviceWorker from "./serviceWorker"
 import "./index.css"
@@ -8,9 +9,9 @@ import "./i18n"
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <App/>
     </React.StrictMode>,
-    document.getElementById("root")
+    document.getElementById("root"),
 )
 
 // If you want your app to work offline and load faster, you can change

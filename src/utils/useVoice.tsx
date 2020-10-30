@@ -1,21 +1,36 @@
-import { useHistory, useParams } from "react-router-dom"
-import { parse } from "query-string"
+import { useHistory } from "react-router-dom"
+import { useEffect } from "react"
+import { IVoice } from "../models/IVoice"
 
-export const useVoice = (numberOfVoices: number) => {
+export const useVoice = (voices: IVoice[] | undefined) => {
     const history = useHistory()
-    const { id } = useParams<{ id: string }>()
-    const voiceString = parse(history.location.search)
-    let selectedVoice = 0
-    if (typeof voiceString.voice === "string") {
-        const voiceInt = parseInt(voiceString.voice, 10)
-        if (voiceInt > numberOfVoices || voiceInt <= 0) {
-            history.replace(`/song/${id}?voice=1`)
-        } else {
-            selectedVoice = voiceInt - 1
-        }
-    } else {
-        history.replace(`/song/${id}?voice=1`)
-    }
+    const voiceIdString = new URLSearchParams(history.location.search).get(
+        "voice"
+    )
+    const voiceId = voiceIdString ? parseInt(voiceIdString, 10) : undefined
 
-    return selectedVoice
+    useEffect(() => {
+        if (voices && voices.length > 0) {
+            const resetVoice = () => {
+                history.push({
+                    ...history.location,
+                    search: `voice=${voices[0].songVoiceId}`,
+                })
+            }
+
+            if (voiceId === undefined) {
+                resetVoice()
+            } else {
+                const valid =
+                    voices.findIndex((voice) => voice.songVoiceId === voiceId) >
+                    -1
+
+                if (!valid) {
+                    resetVoice()
+                }
+            }
+        }
+    }, [history, voiceId, voices])
+
+    return voiceId
 }

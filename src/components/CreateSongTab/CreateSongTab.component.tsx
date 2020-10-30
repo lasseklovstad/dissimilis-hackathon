@@ -1,47 +1,58 @@
-import React, { useState, useContext } from "react"
-import { Grid, Menu, MenuItem, makeStyles } from "@material-ui/core"
+import React, { useState } from "react"
+import { Box, Button, Menu, MenuItem, Tab, Tabs } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
-import { parse } from "query-string"
-
-import {
-    DashboardButtonWithAddIconNoLink,
-    DashboardButtonNoLink,
-    DashboardButton,
-} from "../DashboardButtons/DashboardButtons"
-import { SongContext } from "../../views/SongView/SongContextProvider.component"
+import { Add } from "@material-ui/icons"
 import { IVoice } from "../../models/IVoice"
 import { InputModal } from "../CustomModal/InputModal.component"
-import { SongToolsContext } from "../../views/SongView/SongToolsContextProvider.component"
+import {
+    useCreateVoice,
+    useDeleteVoice,
+    useUpdateVoice,
+} from "../../utils/useApiServiceSongs"
 
-const useStyles = makeStyles({
-    createSongTab: {
-        marginBottom: "24px",
-    },
-})
-
-export const CreateSongTab = () => {
-    const classes = useStyles()
+export const CreateSongTab = (props: {
+    voices: IVoice[]
+    selectedVoice: number
+    songId: string
+    onAddVoice: (voice: IVoice) => void
+    onUpdateVoice: (voice: IVoice) => void
+    onDeleteVoice: (voice: IVoice) => void
+}) => {
+    const {
+        voices,
+        selectedVoice,
+        songId,
+        onAddVoice,
+        onUpdateVoice,
+        onDeleteVoice,
+    } = props
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false)
-    const [textFieldInput, setTextFieldInput] = useState<string>("")
+    const { t } = useTranslation()
+    const [rightClicked, setRightClicked] = useState<undefined | number>()
+    const rightClickedVoice = voices.find(
+        (voice) => voice.songVoiceId === rightClicked
+    )
+    const [position, setPosition] = useState<
+        { top: number; left: number } | undefined
+    >()
+    const { postVoice } = useCreateVoice(songId)
+    const { putVoice } = useUpdateVoice(songId, rightClicked)
+    const { deleteVoice } = useDeleteVoice(songId, rightClicked)
 
     const history = useHistory()
 
-    const {
-        song: { voices, id },
-        addVoice,
-        changeVoiceTitle,
-    } = useContext(SongContext)
-    const { setShowPossiblePositions } = useContext(SongToolsContext)
+    const handleAddInstrument = async (title: string) => {
+        const { error, result } = await postVoice.run({
+            instrument: title,
+            voiceNumber: voices.length + 1,
+        })
 
-    const handleAddInstrument = () => {
-        setShowPossiblePositions(false)
-        addVoice({ title: textFieldInput, partNumber: voices.length, bars: [] })
-        setModalIsOpen(false)
-        setTextFieldInput("")
-        const newIndex = voices.length + 1
-        history.replace(`?voice=${newIndex.toString()}`)
+        if (!error && result) {
+            onAddVoice(result.data)
+            setModalIsOpen(false)
+        }
     }
 
     const handleClose = () => {
@@ -49,123 +60,120 @@ export const CreateSongTab = () => {
         setRenameModalIsOpen(false)
     }
 
-    const { t } = useTranslation()
-    const voiceString = parse(window.location.search)
-    const selectedVoice = parseInt(voiceString.voice as string, 10)
-    const [rightClicked, setRightClicked] = useState(-1)
-
-    const initialState = {
-        mouseX: null,
-        mouseY: null,
-    }
-
-    const [rightClickCoordinates, setRightClickCoordinates] = React.useState<{
-        mouseX: null | number
-        mouseY: null | number
-    }>(initialState)
-
-    const handleCloseMenu = (method?: string) => {
+    const handleCloseMenu = async (method: "deleteVoice" | "renameVoice") => {
         if (method === "renameVoice") {
             setRenameModalIsOpen(true)
         }
-        setRightClickCoordinates(initialState)
+        if (method === "deleteVoice") {
+            const { error } = await deleteVoice.run()
+
+            if (!error && rightClickedVoice) {
+                onDeleteVoice(rightClickedVoice)
+            }
+        }
+        setPosition(undefined)
     }
-    const handleChangeVoiceTitle = () => {
-        setRenameModalIsOpen(false)
-        changeVoiceTitle(rightClicked + 1, textFieldInput)
+    const handleChangeVoiceTitle = async (voiceTitle: string) => {
+        const { error, result } = await putVoice.run({
+            instrument: voiceTitle,
+            voiceNumber: voices.length + 1,
+        })
+
+        if (!error && result) {
+            onUpdateVoice(result.data)
+            setRenameModalIsOpen(false)
+        }
+    }
+
+    const handleRightClick = (voiceId: number) => (event: React.MouseEvent) => {
+        event.preventDefault()
+        setPosition({ top: event.clientY - 4, left: event.clientX - 2 })
+        setRightClicked(voiceId)
     }
 
     return (
-        <Grid container>
-            <Grid item xs="auto" sm={1} />
-            <Grid item xs={12} sm={10}>
-                <Grid container spacing={2} className={classes.createSongTab}>
-                    <Grid item>
-                        <DashboardButtonNoLink
-                            selected={selectedVoice === 1}
-                            text={t("CreateSongTab:song")}
-                            func={() => {
-                                history.replace(`/song/${id}?voice=1`)
-                            }}
-                        />
-                    </Grid>
-                    {voices.slice(1).map((voices: IVoice, index: number) => {
+        <>
+            <Box display="flex" flexWrap="wrap">
+                <Tabs
+                    value={selectedVoice}
+                    indicatorColor="secondary"
+                    textColor="secondary"
+                    variant="scrollable"
+                    scrollButtons="auto"
+                >
+                    {voices.map((voice) => {
+                        const label = voice.isMain
+                            ? t("CreateSongTab:song")
+                            : voice.title
                         return (
-                            <Grid item key={index}>
-                                <DashboardButton
-                                    onContextMenu={(event) => {
-                                        setRightClicked(index)
-                                        event.preventDefault()
-                                        setRightClickCoordinates({
-                                            mouseX: event.clientX - 2,
-                                            mouseY: event.clientY - 4,
-                                        })
-                                    }}
-                                    selected={selectedVoice === index + 2}
-                                    text={voices.title}
-                                    link={`/song/${id}?voice=${index + 2}`}
-                                />
-                                <Menu
-                                    keepMounted
-                                    open={rightClickCoordinates.mouseY !== null}
-                                    onClose={() => {
-                                        handleCloseMenu("")
-                                    }}
-                                    anchorReference="anchorPosition"
-                                    anchorPosition={
-                                        rightClickCoordinates.mouseY !== null &&
-                                        rightClickCoordinates.mouseX !== null
-                                            ? {
-                                                  top:
-                                                      rightClickCoordinates.mouseY,
-                                                  left:
-                                                      rightClickCoordinates.mouseX,
-                                              }
-                                            : undefined
-                                    }
-                                >
-                                    <MenuItem
-                                        onClick={() => {
-                                            handleCloseMenu("renameVoice")
-                                        }}
-                                    >
-                                        {t("CreateSongTab:changeVoiceName")}
-                                    </MenuItem>
-                                </Menu>
-                            </Grid>
+                            <Tab
+                                key={voice.songVoiceId}
+                                value={voice.songVoiceId}
+                                label={label}
+                                onContextMenu={
+                                    !voice.isMain
+                                        ? handleRightClick(voice.songVoiceId)
+                                        : undefined
+                                }
+                                onClick={() =>
+                                    history.push(`?voice=${voice.songVoiceId}`)
+                                }
+                            />
                         )
                     })}
-                    <Grid item>
-                        <DashboardButtonWithAddIconNoLink
-                            text={t("CreateSongTab:newInstrument")}
-                            func={() => setModalIsOpen(true)}
-                        />
-                    </Grid>
-                </Grid>
-            </Grid>
+                </Tabs>
+                <Button
+                    onClick={() => setModalIsOpen(true)}
+                    startIcon={<Add />}
+                >
+                    {t("CreateSongTab:newInstrument")}
+                </Button>
+            </Box>
+
             <InputModal
                 handleOnCancelClick={() => handleClose()}
-                handleOnSaveClick={() => handleAddInstrument()}
+                handleOnSaveClick={handleAddInstrument}
                 handleClosed={() => handleClose()}
                 modalOpen={modalIsOpen}
                 saveText={t("Modal:create")}
                 cancelText={t("Modal:cancel")}
                 headerText={t("Modal:addInstrument")}
                 labelText={t("Modal:nameOfInstrument")}
-                handleChange={(txt) => setTextFieldInput(txt)}
             />
             <InputModal
-                handleOnCancelClick={() => handleClose()}
-                handleOnSaveClick={() => handleChangeVoiceTitle()}
-                handleClosed={() => handleClose()}
+                defaultValue={rightClickedVoice?.title || ""}
+                handleOnCancelClick={handleClose}
+                handleOnSaveClick={handleChangeVoiceTitle}
+                handleClosed={handleClose}
                 modalOpen={renameModalIsOpen}
                 saveText={t("Modal:save")}
                 cancelText={t("Modal:cancel")}
                 headerText={t("Modal:changeVoiceName")}
                 labelText={t("Modal:newVoiceName")}
-                handleChange={(txt) => setTextFieldInput(txt)}
             />
-            <Grid item xs="auto" sm={1} />
-        </Grid>
+            <Menu
+                open={!!position}
+                onClose={() => {
+                    setPosition(undefined)
+                }}
+                anchorReference="anchorPosition"
+                anchorPosition={position}
+            >
+                <MenuItem
+                    onClick={() => {
+                        handleCloseMenu("renameVoice")
+                    }}
+                >
+                    {t("CreateSongTab:changeVoiceName")}
+                </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        handleCloseMenu("deleteVoice")
+                    }}
+                >
+                    {t("CreateSongTab:deleteVoice")}
+                </MenuItem>
+            </Menu>
+        </>
     )
 }

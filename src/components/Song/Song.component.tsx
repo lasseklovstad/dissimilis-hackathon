@@ -8,18 +8,18 @@ import {
     TimeSignature,
 } from "../SongViewComponents/SongView.component"
 import { Bar } from "../Bar/Bar.component"
+import { ITimeSignature } from "../../models/ITimeSignature"
+import { IVoice } from "../../models/IVoice"
 
 type SongProps = {
     barsPerRow: number
-    selectedVoice: number
-    bars: IBar[]
-    timeSignature: string
+    voice: IVoice
+    timeSignature: ITimeSignature
     heightOfBar: number
     exportMode?: boolean
-    page?: number
 }
 
-const BarPrefix = (props: { index: number; timeSignature: string }) => {
+const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
     const { index, timeSignature } = props
 
     const getPrefixItem = () => {
@@ -36,14 +36,13 @@ const BarPrefix = (props: { index: number; timeSignature: string }) => {
 export const Song = (props: SongProps) => {
     const {
         barsPerRow,
-        bars,
-        selectedVoice,
+        voice: { bars, isMain },
         timeSignature,
         heightOfBar,
         exportMode,
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-    const [selectedBar, setSelectedBar] = useState<number | undefined>()
+    const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
 
     const getBarRows = (bars: IBar[]): IBar[][] => {
         // array of N elements, where N is the number of rows needed
@@ -54,9 +53,9 @@ export const Song = (props: SongProps) => {
         )
     }
 
-    const openMenu = (barNumber: number) => (anchorEl: HTMLElement) => {
+    const openMenu = (bar: IBar) => (anchorEl: HTMLElement) => {
         setAnchorEl(anchorEl)
-        setSelectedBar(barNumber)
+        setSelectedBar(bar)
     }
 
     const closeMenu = () => {
@@ -67,10 +66,10 @@ export const Song = (props: SongProps) => {
     return (
         <>
             <Box width="100%">
-                {getBarRows(bars).map((barsInRow, i, rows) => (
+                {getBarRows(bars).map((barsInRow, i) => (
                     <Box display="flex" mt={exportMode ? 7 : 10} key={i}>
                         <BarPrefix
-                            index={barsInRow[0].barNumber - 1}
+                            index={barsInRow[0].position - 1}
                             timeSignature={timeSignature}
                         />
                         <BarLine />
@@ -80,19 +79,16 @@ export const Song = (props: SongProps) => {
                             minWidth={0}
                             flexBasis="0"
                         >
-                            {barsInRow.map((bar, i) => {
+                            {barsInRow.map((bar, i, bars) => {
+                                const showHouseNumber =
+                                    i === 0 || bars[i - 1].house !== bar.house
                                 return (
                                     <React.Fragment key={i}>
                                         <Bar
+                                            showHouseNumber={showHouseNumber}
                                             exportMode={!!exportMode}
-                                            voiceId={selectedVoice}
-                                            masterSheet={
-                                                !exportMode &&
-                                                selectedVoice === 0
-                                            }
-                                            onMenuClick={openMenu(
-                                                bar.barNumber
-                                            )}
+                                            masterSheet={!exportMode && isMain}
+                                            onMenuClick={openMenu(bar)}
                                             bar={bar}
                                             height={heightOfBar}
                                         />
@@ -109,12 +105,13 @@ export const Song = (props: SongProps) => {
                 ))}
             </Box>
 
-            <BarMenu
-                voiceId={selectedVoice}
-                barNumber={selectedBar}
-                anchorEl={anchorEl}
-                onClose={closeMenu}
-            />
+            {selectedBar && (
+                <BarMenu
+                    bar={selectedBar}
+                    anchorEl={anchorEl}
+                    onClose={closeMenu}
+                />
+            )}
         </>
     )
 }

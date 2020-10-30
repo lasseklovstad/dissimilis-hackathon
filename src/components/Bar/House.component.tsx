@@ -1,10 +1,20 @@
 import React from "react"
 import { Box, Typography } from "@material-ui/core"
 
-export const House = (props: { houseOrder: number | undefined | null }) => {
+export const House = (props: {
+    houseOrder: number | undefined | null
+    showHouseNumber: boolean
+}) => {
     if (!props.houseOrder) {
         return <></>
     }
+    const getHouseNumber = () => {
+        if (props.showHouseNumber) {
+            return `${props.houseOrder}.`
+        }
+        return ""
+    }
+
     return (
         <Box position="relative" top="-30px" height={0}>
             <Typography variant="body1" component="div">
@@ -26,7 +36,9 @@ export const House = (props: { houseOrder: number | undefined | null }) => {
                         >
                             <span
                                 style={{ position: "relative", top: "-10px" }}
-                            >{`${props.houseOrder}.`}</span>
+                            >
+                                {getHouseNumber()}
+                            </span>
                         </Box>
                     </Box>
                 )}
