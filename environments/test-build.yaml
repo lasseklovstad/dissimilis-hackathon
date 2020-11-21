@@ -14,7 +14,7 @@ steps:
   inputs:
     command: custom
     verbose: false
-    customCommand: 'run build:development'
+    customCommand: 'run build:test'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
