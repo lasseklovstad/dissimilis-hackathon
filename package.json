@@ -1,17 +1,27 @@
 {
-  "name": "my-app",
+  "name": "DCN",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.10.2",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
-    "@types/jest": "^24.9.1",
-    "@types/node": "^12.12.39",
-    "@types/react": "^16.9.35",
+    "@tonaljs/tonal": "^4.0.2",
+    "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
+    "@types/react-router-dom": "^5.1.5",
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "env-cmd": "^10.1.0",
+    "i18next": "^19.5.3",
     "react": "^16.13.1",
+    "react-app-polyfill": "1.0.6",
     "react-dom": "^16.13.1",
+    "react-i18next": "^11.7.0",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "typescript": "^3.7.5"
   },
@@ -20,10 +30,14 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test-final": "react-scripts test --watchAll=false",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "eject": "react-scripts eject",
+    "format": "prettier --write src/**/*.ts{,x}",
+    "lint": "tsc --noEmit && eslint --fix src/**/*.ts{,x}",
+    "build:testing": "env-cmd -f .env.testing react-scripts build",
+    "build:staging": "env-cmd -f .env.staging react-scripts build",
+    "build:test": "env-cmd -f ./environments/.env.test react-scripts build",
+    "build:development": "env-cmd -f ./environments/.env.development react-scripts build",
+    "build:production": "env-cmd -f ./environments/.env.production react-scripts build"
   },
   "browserslist": {
     "production": [
@@ -36,5 +50,26 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/react": "^10.4.9",
+    "@types/jest": "^26.0.10",
+    "@types/query-string": "^6.3.0",
+    "@typescript-eslint/eslint-plugin": "3.10.1",
+    "@typescript-eslint/parser": "3.10.1",
+    "eslint-config-airbnb-typescript": "9.0.0",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-import-resolver-typescript": "2.2.1",
+    "eslint-plugin-flowtype": "5.2.0",
+    "eslint-plugin-import": "2.22.0",
+    "eslint-plugin-jest": "^23.20.0",
+    "eslint-plugin-jsx-a11y": "6.3.1",
+    "eslint-plugin-prettier": "3.1.4",
+    "eslint-plugin-react": "7.20.6",
+    "eslint-plugin-react-hooks": "4.1.0",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
+    "prettier": "2.1.1",
+    "prettier-eslint": "11.0.0",
+    "react-app-env": "^1.2.3"
   }
 }

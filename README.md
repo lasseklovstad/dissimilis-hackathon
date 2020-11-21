@@ -1,28 +1,17 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Setup 
 
-### Programmer
-- NodeJS og npm https://nodejs.org/en/
+To setup the project run `npm install` 
 
-### Deploy
-To build the app for production run: 
-````
-npm install
-npm run test-final
-npm run build
-````
+# Development
 
-This will build all the neccesary files to the /build folder.
+To start the frontend run `npm start`
 
-### Develpment
-##### Code
-To build the app for development run: 
-````
-npm install
-npm run start
-````
-This will run a react-dev-server on localhost:3000
-##### Tests
-All test files kan be run with (test-final runs tests only through one time):
-````
-npm run test
-````
+The frontend will serve with https, so you need to ignore any http warnings in your browser.
+
+At the moment you need a Ciber account to be able to login.
+
+# Build
+
+To make a production build run `npm build`
+
+The output will appear in "build/"

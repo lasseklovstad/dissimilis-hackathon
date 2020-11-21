@@ -1,0 +1,23 @@
+export const modalNo = {
+    nameOfSong: "Navn på sang",
+    addSong: "Legg til ny sang",
+    nameOfInstrument: "Navn på instrument",
+    addInstrument: "Legg til et instrument",
+    newVoiceName: "Nytt navn",
+    changeVoiceName: "Endre navn",
+    saveChangesPrompt: "Vil du lagre endringer?",
+    saveChangesPromptDescription:
+        "Trykk 'ikke lagre' for å gå tilbake til dashboard uten å lagre",
+    dontSaveChanges: "Ikke lagre endringer",
+    saveChanges: "Lagre endringer",
+    saveSongError: "Det oppstod en feil ved lagring av sang",
+    deleteSong: "Slett sang",
+    deleteSongLoading: "Sletter sang",
+    deleteSongError: "Det oppstod en feil ved sletting av sang",
+    deleteDescription: "Er du sikker du vil slette sangen?",
+    cancel: "Avbryt",
+    create: "Opprett",
+    save: "Lagre",
+    errorTitle: "Det oppstod en feil",
+    getSongError: "Det oppstod en feil ved henting av sang",
+}
