@@ -1,16 +1,20 @@
-import React from 'react';
-import './App.css';
+import React from "react"
+import "./App.css"
+import { MuiThemeProvider } from "@material-ui/core/styles"
+import CssBaseline from "@material-ui/core/CssBaseline"
+import * as dotenv from "dotenv"
+import { Routing } from "./Routing"
+import { theme } from "./theme"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header" id={'app-tittle'}>
-        <p>
-          Hello Dissimilis!
-        </p>
-      </header>
-    </div>
-  );
+export const App = () => {
+    dotenv.config()
+
+    return (
+        <div>
+            <MuiThemeProvider theme={theme}>
+                <CssBaseline />
+                <Routing />
+            </MuiThemeProvider>
+        </div>
+    )
 }
-
-export default App;
