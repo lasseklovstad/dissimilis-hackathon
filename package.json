@@ -14,9 +14,10 @@
     "@types/react-router-dom": "^5.1.5",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
+    "env-cmd": "^10.1.0",
     "i18next": "^19.5.3",
-    "react-app-polyfill": "1.0.6",
     "react": "^16.13.1",
+    "react-app-polyfill": "1.0.6",
     "react-dom": "^16.13.1",
     "react-i18next": "^11.7.0",
     "react-router": "^5.2.0",
@@ -31,7 +32,12 @@
     "test-final": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject",
     "format": "prettier --write src/**/*.ts{,x}",
-    "lint": "tsc --noEmit && eslint --fix src/**/*.ts{,x}"
+    "lint": "tsc --noEmit && eslint --fix src/**/*.ts{,x}",
+    "build:testing": "env-cmd -f .env.testing react-scripts build",
+    "build:staging": "env-cmd -f .env.staging react-scripts build",
+    "build:test": "env-cmd -f ./environments/.env.test react-scripts build",
+    "build:development": "env-cmd -f ./environments/.env.development react-scripts build",
+    "build:production": "env-cmd -f ./environments/.env.production react-scripts build"
   },
   "browserslist": {
     "production": [
@@ -63,6 +69,7 @@
     "eslint-plugin-react-hooks": "4.1.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "prettier": "2.1.1",
-    "prettier-eslint": "11.0.0"
+    "prettier-eslint": "11.0.0",
+    "react-app-env": "^1.2.3"
   }
 }
