@@ -49,7 +49,7 @@ export const BarMenu = (props: BarMenuProps) => {
                 dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
             }
         }
-        if (method === "addHouse") {
+        if (method === "addHouseOne") {
             const { error, result } = await putBar.run({
                 repBefore: bar.repBefore,
                 repAfter: bar.repAfter,
@@ -59,7 +59,17 @@ export const BarMenu = (props: BarMenuProps) => {
                 dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
             }
         }
-        if (method === "removeHouse") {
+        if (method === "addHouseTwo") {
+            const { error, result } = await putBar.run({
+                repBefore: bar.repBefore,
+                repAfter: bar.repAfter,
+                house: 2,
+            })
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
+            }
+        }
+        if (method === "removeHouseOne" || method === "removeHouseTwo") {
             const { error, result } = await putBar.run({
                 repBefore: bar.repBefore,
                 repAfter: bar.repAfter,
@@ -98,12 +108,23 @@ export const BarMenu = (props: BarMenuProps) => {
             </MenuItem>
             <MenuItem
                 onClick={() =>
-                    handleClose(bar.house ? "removeHouse" : "addHouse")
+                    handleClose(bar.house === 1 ? "removeHouseOne" : "addHouseOne")
                 }
             >
-                {bar.house
-                    ? t("BarContainer:removeHouse")
-                    : t("BarContainer:addHouse")}
+
+                {bar.house === 1
+                    ? t("BarContainer:removeHouseOne")
+                    : t("BarContainer:addHouseOne")}
+            </MenuItem>
+            <MenuItem
+                onClick={() =>
+                    handleClose(bar.house === 2 ? "removeHouseTwo" : "addHouseTwo")
+                }
+            >
+
+                {bar.house === 2
+                    ? t("BarContainer:removeHouseTwo")
+                    : t("BarContainer:addHouseTwo")}
             </MenuItem>
         </Menu>
     )
