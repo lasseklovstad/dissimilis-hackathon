@@ -33,6 +33,37 @@ export const useGetSong = (id: string) => {
 }
 
 /**
+ * Transpose song
+ * @param id songs id
+ * @param title new song title
+ * @param transpose number of semi-tones to transpose
+ */
+export const useTransposeSong = (
+    id: string,
+    title: string,
+    transpose: string
+) => {
+    const url = `song/${id}/transpose`
+    const body = {
+        tranpose: transpose,
+    }
+    const headers = getHeaders()
+    const { postData, state, data } = useApiService<ISong>(url, {
+        body,
+        headers,
+    })
+
+    useEffect(() => {
+        postData()
+    }, [postData])
+
+    return {
+        transposeSong: { run: postData, ...state },
+        songTransposedInit: data,
+    }
+}
+
+/**
  * Get all songs
  * */
 export const useGetAllSongs = () => {
