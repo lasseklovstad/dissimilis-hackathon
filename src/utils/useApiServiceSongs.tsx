@@ -45,17 +45,14 @@ export const useTransposeSong = (
 ) => {
     const url = `song/${id}/transpose`
     const body = {
-        tranpose: transpose,
+        title,
+        transpose,
     }
     const headers = getHeaders()
     const { postData, state, data } = useApiService<ISong>(url, {
         body,
         headers,
     })
-
-    useEffect(() => {
-        postData()
-    }, [postData])
 
     return {
         transposeSong: { run: postData, ...state },

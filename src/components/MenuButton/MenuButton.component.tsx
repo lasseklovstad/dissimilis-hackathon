@@ -62,7 +62,7 @@ export const MenuButton = () => {
     }
 
     const handleTransposeSong = async (title: string, transpose: string) => {
-        const { isError } = await transposeSong.run({ transpose })
+        const { isError } = await transposeSong.run({ title, transpose })
         if (!isError) {
             history.push(`/song/${songTransposedInit?.songId}`)
         }
@@ -158,6 +158,11 @@ export const MenuButton = () => {
                 isError={deleteSong.isError}
                 error={deleteSong.error}
                 title={t("Modal:deleteSongError")}
+            />
+            <ErrorDialog
+                isError={transposeSong.isError}
+                error={transposeSong.error}
+                title="Feil ved transponering av sang"
             />
         </>
     )
