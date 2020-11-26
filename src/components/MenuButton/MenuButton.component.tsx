@@ -29,11 +29,7 @@ export const MenuButton = () => {
     const [transposeSongModalIsOpen, setTransposeSongModalIsOpen] = useState(
         false
     )
-    const { transposeSong, songTransposedInit } = useTransposeSong(
-        songId,
-        title,
-        transpose
-    )
+    const { transposeSong } = useTransposeSong(songId, title, transpose)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -62,9 +58,12 @@ export const MenuButton = () => {
     }
 
     const handleTransposeSong = async (title: string, transpose: string) => {
-        const { isError } = await transposeSong.run({ title, transpose })
+        const { isError, result } = await transposeSong.run({
+            title,
+            transpose,
+        })
         if (!isError) {
-            history.push(`/song/${songTransposedInit?.songId}`)
+            history.push(`/song/${result?.data?.songId}`)
         }
     }
 
@@ -133,7 +132,9 @@ export const MenuButton = () => {
                     descriptionText={t("Modal:deleteDescription")}
                 />
                 <TransposeModal
-                    defaultValue={`${songInit?.title} 2` ?? "No song found"}
+                    defaultValue={`${songInit?.title} (${t(
+                        "Modal:transposed"
+                    )})`}
                     modalOpen={transposeSongModalIsOpen}
                     handleClosed={() => handleClose()}
                     handleOnCancelClick={() => handleClose()}
@@ -142,6 +143,8 @@ export const MenuButton = () => {
                     }
                     headerText={t("Modal:transposeSong")}
                     labelText={t("Modal:nameOfSong")}
+                    cancelText={t("Modal:cancel")}
+                    saveText={t("Modal:save")}
                 />
             </div>
             <Loading
@@ -152,7 +155,7 @@ export const MenuButton = () => {
             <Loading
                 isLoading={transposeSong.loading}
                 fullScreen
-                text="Transponerer sang"
+                text={t("Modal:transposingSong")}
             />
             <ErrorDialog
                 isError={deleteSong.isError}
@@ -162,7 +165,7 @@ export const MenuButton = () => {
             <ErrorDialog
                 isError={transposeSong.isError}
                 error={transposeSong.error}
-                title="Feil ved transponering av sang"
+                title={t("Modal:transposeSongError")}
             />
         </>
     )

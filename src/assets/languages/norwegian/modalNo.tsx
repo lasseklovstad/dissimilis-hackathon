@@ -20,6 +20,9 @@ export const modalNo = {
     save: "Lagre",
     errorTitle: "Det oppstod en feil",
     getSongError: "Det oppstod en feil ved henting av sang",
-    transposeSong: "Transponér sang",
+    transposeSong: "Transponer sang",
+    transposed: "transponert",
+    transposingSong: "Transponerer sang",
+    transposeSongError: "Det oppstod en feil ved transponering av sang",
     semiNotes: "Halvtoner",
 }

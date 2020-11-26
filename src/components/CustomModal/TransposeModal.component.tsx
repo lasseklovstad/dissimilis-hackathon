@@ -65,6 +65,8 @@ export const TransposeModal = (props: {
     handleOnSaveClick: (title: string, transpose: string) => void
     headerText: string
     labelText: string
+    saveText: string
+    cancelText: string
 }) => {
     const classes = useStyles()
     const [titleInput, setTitleInput] = useState("")
@@ -162,7 +164,7 @@ export const TransposeModal = (props: {
                                     )
                                 }
                             >
-                                Lagre{/* {props.saveText} */}
+                                {props.saveText}
                             </Button>
                             <Button
                                 className={classes.button}
@@ -173,7 +175,7 @@ export const TransposeModal = (props: {
                                     setTitleInput("")
                                 }}
                             >
-                                Avbryt{/* {props.cancelText} */}
+                                {props.cancelText}
                             </Button>
                         </Grid>
                     </Grid>
