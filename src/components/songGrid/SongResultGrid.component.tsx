@@ -13,13 +13,13 @@ type SongGridProps = {
 
 const GridItem = (props: { children: ReactNode }) => {
     return (
-        <Grid item xs={12} sm={4} lg={3}>
+        <Grid item xs={12} sm={11} lg={11}>
             {props.children}
         </Grid>
     )
 }
 
-export const SongGrid = (props: SongGridProps) => {
+export const SongResultGrid = (props: SongGridProps) => {
     const { songs, title, isLoading, children } = props
 
     const getChildren = () => {
@@ -42,6 +42,16 @@ export const SongGrid = (props: SongGridProps) => {
         if (!isLoading) {
             return (
                 <>
+                    {songs?.map((song) => (
+                        <GridItem key={song.songId}>
+                            <DashboardButton
+                                title={song.title}
+                                arrangerName={song.arrangerName}
+                                updatedOn={song.updatedOn}
+                                link={`/song/${song.songId}`}
+                            />
+                        </GridItem>
+                    ))}
                     {getChildren()}
                 </>
             )
@@ -55,7 +65,7 @@ export const SongGrid = (props: SongGridProps) => {
                 <Box m={2}>
                     <Typography variant="h1">{title}</Typography>
                 </Box>
-                <Grid container spacing={3}>
+                <Grid container direction="column">
                     {getItems()}
                     <GridItem>
                         <Loading isLoading={isLoading} />

@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
 import { Box, Card, CardActionArea, Icon, IconButton } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
+import { format } from 'date-fns'
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
 
@@ -37,6 +38,16 @@ const useStyles = makeStyles({
 export type ButtonProps = {
     text: string
     link: string
+    func?: () => void
+    selected?: boolean
+    onContextMenu?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
+}
+
+type ButtonSongProps = {
+    title: string,
+    arrangerName?: string, 
+    updatedOn?: string,
+    link: string,
     func?: () => void
     selected?: boolean
     onContextMenu?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
@@ -114,12 +125,19 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
     )
 }
 
-export const DashboardButton: FC<ButtonProps> = (props) => {
+const convertToDate = (time : number) => {
+    let date: Date = new Date()
+    date.setTime(time)
+    return date.toDateString()
+} 
+
+export const DashboardButton: FC<ButtonSongProps> = (props) => {
     const styles = useStyles()
+    const { t } = useTranslation()
     return (
         <Card className={styles.button}>
             <CardActionArea to={props.link} component={Link}>
-                <Box
+                <Box 
                     onContextMenu={(e) =>
                         props.onContextMenu && props.onContextMenu(e)
                     }
@@ -131,8 +149,14 @@ export const DashboardButton: FC<ButtonProps> = (props) => {
                                 : colors.white,
                     }}
                 >
-                    <Box p={2}>
-                        <Typography>{props.text}</Typography>
+                    <Box width="100%" p={2}>
+                        <Typography>{props.title}</Typography>
+                    </Box>
+                    <Box width="100%" p={2}>
+                        <Typography>{props.arrangerName}</Typography>
+                    </Box>
+                    <Box width="100%" p={2}>
+                        <Typography>{t("DashboardView:updatedOn")} {props.updatedOn? convertToDate(Date.parse(props.updatedOn)) : new Date()}</Typography>
                     </Box>
                 </Box>
             </CardActionArea>

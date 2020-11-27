@@ -13,6 +13,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
     "axios": "^0.19.2",
+    "date-fns": "^2.16.1",
     "dotenv": "^8.2.0",
     "env-cmd": "^10.1.0",
     "i18next": "^19.5.3",
