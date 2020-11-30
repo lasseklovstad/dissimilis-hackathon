@@ -4,10 +4,7 @@ import { ISong } from "../../models/ISong"
 import { DashboardButton } from "../DashboardButtons/DashboardButtons"
 import { Loading } from "../loading/Loading.component"
 
-type SongGridProps = {
-    title: string
-    songs: ISong[] | undefined
-    isLoading: boolean
+type LibraryGridProps = {
     children?: ReactNode
 }
 
@@ -19,8 +16,8 @@ const GridItem = (props: { children: ReactNode }) => {
     )
 }
 
-export const SongGrid = (props: SongGridProps) => {
-    const { songs, title, isLoading, children } = props
+export const LibraryGrid = (props: LibraryGridProps) => {
+    const {children } = props
 
     const getChildren = () => {
         if (children) {
@@ -40,15 +37,9 @@ export const SongGrid = (props: SongGridProps) => {
 
     return (
         <Grid item xs={12} sm={10}>
-            <Box mb={4}>
-                <Box m={2}>
-                    <Typography variant="h1">{title}</Typography>
-                </Box>
-                <Grid container spacing={3}>
+            <Box>
+                <Grid container >
                     {getChildren()}
-                    <GridItem>
-                        <Loading isLoading={isLoading} />
-                    </GridItem>
                 </Grid>
             </Box>
         </Grid>

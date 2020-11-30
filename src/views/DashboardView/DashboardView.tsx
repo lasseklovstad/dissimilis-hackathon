@@ -15,6 +15,7 @@ import {
 import { InputModal } from "../../components/CustomModal/InputModal.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
 import { SongResultGrid } from "../../components/songGrid/SongResultGrid.component"
+import { LibraryGrid } from "../../components/songGrid/LibraryGrid.component"
 import { Loading } from "../../components/loading/Loading.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
@@ -134,16 +135,19 @@ export const DashboardView = () => {
                                     />
                                 ))}
                             </SongGrid>
+
                             <SongResultGrid
                                 title={t("DashboardView:recentSongLabel")}
                                 songs={recentSongs}
                                 isLoading={getRecentSongs.loading}
-                            >
+                            />
+
+                            <LibraryGrid>
                                 <DashboardLibraryButton
                                     text={t("DashboardView:libraryButton")}
                                     link="/library"
                                 />
-                            </SongResultGrid>
+                            </LibraryGrid>
 
                             <InputModal
                                 handleOnCancelClick={handleClose}

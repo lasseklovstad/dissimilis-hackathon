@@ -61,7 +61,7 @@ export const SongResultGrid = (props: SongGridProps) => {
 
     return (
         <Grid item xs={12} sm={10}>
-            <Box mb={4}>
+            <Box mb={0}>
                 <Box m={2}>
                     <Typography variant="h1">{title}</Typography>
                 </Box>

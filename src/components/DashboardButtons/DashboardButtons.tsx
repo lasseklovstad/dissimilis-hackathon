@@ -149,14 +149,14 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                                 : colors.white,
                     }}
                 >
-                    <Box width="100%" p={2}>
+                    <Box width="33%" p={2}>
                         <Typography>{props.title}</Typography>
                     </Box>
-                    <Box width="100%" p={2}>
-                        <Typography>{props.arrangerName}</Typography>
+                    <Box width="33%" p={2}>
+                        <Typography >{props.arrangerName}</Typography>
                     </Box>
-                    <Box width="100%" p={2}>
-                        <Typography>{t("DashboardView:updatedOn")} {props.updatedOn? convertToDate(Date.parse(props.updatedOn)) : new Date()}</Typography>
+                    <Box width="33%" p={2}>
+                        <Typography >{t("DashboardView:updatedOn")} {props.updatedOn? convertToDate(Date.parse(props.updatedOn)) : ''}</Typography>
                     </Box>
                 </Box>
             </CardActionArea>
