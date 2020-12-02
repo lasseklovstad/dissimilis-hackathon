@@ -65,7 +65,7 @@ export const SongResultGrid = (props: SongGridProps) => {
                 <Box m={2}>
                     <Typography variant="h1">{title}</Typography>
                 </Box>
-                <Grid container direction="column">
+                <Grid container spacing={3}>
                     {getItems()}
                     <GridItem>
                         <Loading isLoading={isLoading} />

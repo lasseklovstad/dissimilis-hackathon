@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
 import { Box, Card, CardActionArea, Icon, IconButton } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
-import { format } from 'date-fns'
+import Moment from "moment"
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
 
@@ -128,7 +128,7 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
 const convertToDate = (time : number) => {
     let date: Date = new Date()
     date.setTime(time)
-    return date.toDateString()
+    return Moment(date).format('dd MMM YYYY, h:mm:ss a')
 } 
 
 export const DashboardButton: FC<ButtonSongProps> = (props) => {
@@ -149,14 +149,14 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                                 : colors.white,
                     }}
                 >
-                    <Box width="33%" p={2}>
-                        <Typography>{props.title}</Typography>
+                    <Box width="34%" p={2}>
+                        <Typography >{props.title}</Typography>
                     </Box>
                     <Box width="33%" p={2}>
-                        <Typography >{props.arrangerName}</Typography>
+                        <Typography align="center">{props.arrangerName}</Typography>
                     </Box>
                     <Box width="33%" p={2}>
-                        <Typography >{t("DashboardView:updatedOn")} {props.updatedOn? convertToDate(Date.parse(props.updatedOn)) : ''}</Typography>
+                        <Typography align="right">{t("DashboardView:updatedOn")} {props.updatedOn? convertToDate(Date.parse(props.updatedOn)) : ''}</Typography>
                     </Box>
                 </Box>
             </CardActionArea>
