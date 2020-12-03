@@ -222,6 +222,17 @@ export const useAddBar = (songId: string, voiceId: number) => {
     }
 }
 
+export const useDuplicateBar = (
+    songId: number
+) => {
+    const url = `song/${songId}/copyBars`
+    const headers = getHeaders()
+    const api = useApiService<ISong>(url, { headers })
+    return {
+        duplicateBar: { run: api.postData, ...api.state },
+    }
+}
+
 export const useDeleteBar = (
     songId: number,
     voiceId: number,
