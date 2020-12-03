@@ -138,12 +138,6 @@ export const DashboardView = () => {
                                 title={t("DashboardView:recentSongLabel")}
                                 songs={recentSongs}
                                 isLoading={getRecentSongs.loading}
-                            />
-
-                            <SongGrid
-                                title={undefined}
-                                songs={undefined}
-                                isLoading={false}
                             >
                                 <DashboardLibraryButton
                                     text={t("DashboardView:libraryButton")}
