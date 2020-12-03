@@ -136,18 +136,22 @@ export const DashboardView = () => {
                                 ))}
                             </SongGrid>
 
-                            <SongResultGrid
+                            <SongGrid
                                 title={t("DashboardView:recentSongLabel")}
                                 songs={recentSongs}
                                 isLoading={getRecentSongs.loading}
                             />
 
-                            <LibraryGrid>
+                            <SongGrid
+                                title={undefined}
+                                songs={undefined}
+                                isLoading={false}
+                            >
                                 <DashboardLibraryButton
                                     text={t("DashboardView:libraryButton")}
                                     link="/library"
                                 />
-                            </LibraryGrid>
+                            </SongGrid>
 
                             <InputModal
                                 handleOnCancelClick={handleClose}
@@ -161,7 +165,7 @@ export const DashboardView = () => {
                             />
                         </>
                     ) : (
-                        <SongResultGrid
+                        <SongGrid
                             title={t("DashboardView:searchSongLabel")}
                             songs={filteredSongs}
                             isLoading={getFilteredSongs.loading}

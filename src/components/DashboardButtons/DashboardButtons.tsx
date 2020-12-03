@@ -128,12 +128,13 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
 const convertToDate = (time : number) => {
     let date: Date = new Date()
     date.setTime(time)
-    return Moment(date).format('dd MMM YYYY, h:mm:ss a')
+    return Moment(date).format('DD.MM.YY, kk:mm')
 } 
 
 export const DashboardButton: FC<ButtonSongProps> = (props) => {
     const styles = useStyles()
     const { t } = useTranslation()
+
     return (
         <Card className={styles.button}>
             <CardActionArea to={props.link} component={Link}>
