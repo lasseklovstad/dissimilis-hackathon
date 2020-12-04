@@ -11,8 +11,8 @@ type SongGridProps = {
     children?: ReactNode
 }
 
-const GridItem = (props: { children: ReactNode, isSong: boolean}) => {
-    if(props.isSong) {
+const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
+    if (props.isSong) {
         return (
             <Grid item xs={12} sm={11} lg={11}>
                 {props.children}
@@ -35,7 +35,11 @@ export const SongGrid = (props: SongGridProps) => {
                 return (
                     <>
                         {children.map((child, i) => {
-                            return <GridItem key={i} isSong={false}>{child}</GridItem>
+                            return (
+                                <GridItem key={i} isSong={false}>
+                                    {child}
+                                </GridItem>
+                            )
                         })}
                     </>
                 )
@@ -67,7 +71,7 @@ export const SongGrid = (props: SongGridProps) => {
     }
 
     const getHeader = () => {
-        if ( title !== undefined) {
+        if (title !== undefined) {
             return (
                 <Box m={2}>
                     <Typography variant="h1">{title}</Typography>

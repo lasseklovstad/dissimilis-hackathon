@@ -44,10 +44,10 @@ export type ButtonProps = {
 }
 
 type ButtonSongProps = {
-    title: string,
-    arrangerName?: string, 
-    updatedOn?: string,
-    link: string,
+    title: string
+    arrangerName?: string
+    updatedOn?: string
+    link: string
     func?: () => void
     selected?: boolean
     onContextMenu?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
@@ -125,11 +125,11 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
     )
 }
 
-const convertToDate = (time : number) => {
-    let date: Date = new Date()
+const convertToDate = (time: number) => {
+    const date: Date = new Date()
     date.setTime(time)
-    return Moment(date).format('DD.MM.YY, kk:mm')
-} 
+    return Moment(date).format("DD.MM.YY, kk:mm")
+}
 
 export const DashboardButton: FC<ButtonSongProps> = (props) => {
     const styles = useStyles()
@@ -138,7 +138,7 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
     return (
         <Card className={styles.button}>
             <CardActionArea to={props.link} component={Link}>
-                <Box 
+                <Box
                     onContextMenu={(e) =>
                         props.onContextMenu && props.onContextMenu(e)
                     }
@@ -151,13 +151,13 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                     }}
                 >
                     <Box width="40%" p={2}>
-                        <Typography >{props.title}</Typography>
+                        <Typography>{props.title}</Typography>
                     </Box>
                     <Box width="30%" p={2}>
-                        <Typography >{props.arrangerName}</Typography>
+                        <Typography>{props.arrangerName}</Typography>
                     </Box>
                     <Box width="30%" p={2}>
-                        <Typography align="right">{t("DashboardView:updatedOn")} {props.updatedOn? convertToDate(Date.parse(props.updatedOn)) : ''}</Typography>
+                        <Typography align="right">{t("DashboardView:updatedOn")} {props.updatedOn? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
                     </Box>
                 </Box>
             </CardActionArea>

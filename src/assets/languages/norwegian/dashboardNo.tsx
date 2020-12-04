@@ -7,5 +7,5 @@ export const dashboardNo = {
     measure: "takt",
     search: "Søk",
     altButterflyButtonProp: "Bilde av Dissimilis' sommerfugl",
-    updatedOn: "Sist redigert"
+    updatedOn: "Sist redigert",
 }
