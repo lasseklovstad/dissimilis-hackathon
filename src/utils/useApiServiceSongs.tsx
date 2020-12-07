@@ -249,3 +249,16 @@ export const useUpdateBar = (
         putBar: { run: api.putData, ...api.state },
     }
 }
+
+export const useDuplicateSong = (
+    songId: number, 
+    title: string
+) => {
+    const url = `song/${songId}/duplicateSong`
+    const headers = getHeaders()
+    const api = useApiService<ISong>(url, { headers })
+
+    return {
+        duplicateSong: { run: api.postData, ...api.state}
+    }
+}
