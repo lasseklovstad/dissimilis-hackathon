@@ -176,7 +176,7 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                     <CardActionArea>
                         <Box>
                             <SongMenu 
-                            songId={props.songId.toString()}
+                            songId={props.songId}
                             link={props.link}
                             />
                         </Box>

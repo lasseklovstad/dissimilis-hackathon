@@ -4,18 +4,22 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 import { useTranslation } from "react-i18next"
 import { useHistory, useParams } from "react-router-dom"
 import { colors } from "../../utils/colors"
-import { useDeleteSong } from "../../utils/useApiServiceSongs"
+import { useDeleteSong, useDuplicateSong } from "../../utils/useApiServiceSongs"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
+import { InputModal } from "../CustomModal/InputModal.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
-export const SongMenu = (props: {songId: string; link: string}) => {
+export const SongMenu = (props: { songId: number; link: string }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const [duplicateSongTitle, setDuplicateSongTitle] = useState("")
+    const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(false)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
     const { songId } = props
-    const { deleteSong } = useDeleteSong(songId)
+    const { deleteSong } = useDeleteSong(songId.toString())
+    const { duplicateSong } = useDuplicateSong(songId, duplicateSongTitle)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -37,7 +41,7 @@ export const SongMenu = (props: {songId: string; link: string}) => {
     }
 
     const handleClose = async (method?: "delete" | "copy" | "open") => {
-        console.log(songId, typeof(songId))
+        console.log(songId, typeof (songId))
         setAnchorEl(null)
         setDeleteSongModalIsOpen(false)
         switch (method) {
@@ -45,6 +49,7 @@ export const SongMenu = (props: {songId: string; link: string}) => {
                 handleOpenDeleteSongModal()
                 break
             case "copy":
+                handleOpenDuplicateDialog()
                 break
             case "open":
                 handleOpenSong()
@@ -53,6 +58,18 @@ export const SongMenu = (props: {songId: string; link: string}) => {
                 break
         }
     }
+
+    const handleDuplicateSong = () => {
+        handleOpenDuplicateDialog()
+    }
+
+    const handleOpenDuplicateDialog = () => {
+        setDuplicateSongModalIsOpen(true);
+    };
+
+    const handleCloseDuplicateDialog = () => {
+        setDuplicateSongModalIsOpen(false);
+    };
 
     return (
         <>
@@ -92,6 +109,16 @@ export const SongMenu = (props: {songId: string; link: string}) => {
                     cancelText={t("Modal:cancel")}
                     headerText={t("Modal:deleteSong")}
                     descriptionText={t("Modal:deleteDescription")}
+                />
+                <InputModal
+                    handleOnCancelClick={() => handleCloseDuplicateDialog()}
+                    handleOnSaveClick={handleDuplicateSong}
+                    handleClosed={() => handleCloseDuplicateDialog()}
+                    modalOpen={duplicateSongModalIsOpen}
+                    saveText={t("Modal:create")}
+                    cancelText={t("Modal:cancel")}
+                    headerText={t("DashboardView:duplicateText")}
+                    labelText={t("DashboardView:duplicateText")}
                 />
             </div>
         </>

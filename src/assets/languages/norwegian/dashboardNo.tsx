@@ -10,5 +10,6 @@ export const dashboardNo = {
     updatedOn: "Sist redigert",
     open: "Åpne",
     duplicate: "Dupliser",
+    duplicateText: "Dupliser sang",
     delete: "Slett",
 }
