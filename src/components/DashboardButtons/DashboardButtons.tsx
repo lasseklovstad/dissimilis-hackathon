@@ -1,11 +1,13 @@
-import React, { FC } from "react"
+import React, { FC, useState } from "react"
 import { Link } from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
-import { Box, Card, CardActionArea, Icon, IconButton } from "@material-ui/core"
+import { Box, Card, Grid, CardActionArea, Icon, IconButton } from "@material-ui/core"
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 import { useTranslation } from "react-i18next"
 import Moment from "moment"
+import { SongMenu } from "../songGrid/SongMenu.component"
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
 
@@ -47,6 +49,7 @@ type ButtonSongProps = {
     title: string
     arrangerName?: string
     updatedOn?: string
+    songId: number
     link: string
     func?: () => void
     selected?: boolean
@@ -137,30 +140,49 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
 
     return (
         <Card className={styles.button}>
-            <CardActionArea to={props.link} component={Link}>
-                <Box
-                    onContextMenu={(e) =>
-                        props.onContextMenu && props.onContextMenu(e)
-                    }
-                    className={styles.container}
-                    style={{
-                        backgroundColor:
-                            props.selected === true
-                                ? colors.gray_400
-                                : colors.white,
-                    }}
-                >
-                    <Box width="40%" p={2}>
-                        <Typography>{props.title}</Typography>
-                    </Box>
-                    <Box width="30%" p={2}>
-                        <Typography>{props.arrangerName}</Typography>
-                    </Box>
-                    <Box width="30%" p={2}>
-                        <Typography align="right">{t("DashboardView:updatedOn")} {props.updatedOn? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
-                    </Box>
+            <Grid
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="stretch"
+            >
+                <Box flexGrow={1}>
+                    <CardActionArea to={props.link} component={Link}>
+                        <Box
+                            onContextMenu={(e) =>
+                                props.onContextMenu && props.onContextMenu(e)
+                            }
+                            className={styles.container}
+                            style={{
+                                backgroundColor:
+                                    props.selected === true
+                                        ? colors.gray_400
+                                        : colors.white,
+                            }}
+                        >
+                            <Box width="35%" p={2}>
+                                <Typography>{props.title}</Typography>
+                            </Box>
+                            <Box width="30%" p={2}>
+                                <Typography>{props.arrangerName}</Typography>
+                            </Box>
+                            <Box width="30%" p={2}>
+                                <Typography align="right">{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
+                            </Box>
+                        </Box>
+                    </CardActionArea>
                 </Box>
-            </CardActionArea>
+                <Box>
+                    <CardActionArea>
+                        <Box>
+                            <SongMenu 
+                            songId={props.songId.toString()}
+                            link={props.link}
+                            />
+                        </Box>
+                    </CardActionArea>
+                </Box>
+            </Grid>
         </Card>
     )
 }

@@ -11,22 +11,15 @@ type SongGridProps = {
     children?: ReactNode
 }
 
-const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
-    if (props.isSong) {
-        return (
-            <Grid item xs={12} sm={11} lg={11}>
-                {props.children}
-            </Grid>
-        )
-    }
+const GridItem = (props: { children: ReactNode}) => {
     return (
-        <Grid item xs={12} sm={4} lg={3}>
+        <Grid item xs={12} sm={11} lg={11}>
             {props.children}
         </Grid>
     )
 }
 
-export const SongGrid = (props: SongGridProps) => {
+export const SongResultGrid = (props: SongGridProps) => {
     const { songs, title, isLoading, children } = props
 
     const getChildren = () => {
@@ -36,7 +29,7 @@ export const SongGrid = (props: SongGridProps) => {
                     <>
                         {children.map((child, i) => {
                             return (
-                                <GridItem key={i} isSong={false}>
+                                <GridItem key={i}>
                                     {child}
                                 </GridItem>
                             )
@@ -44,7 +37,7 @@ export const SongGrid = (props: SongGridProps) => {
                     </>
                 )
             }
-            return <GridItem isSong={false}>{children}</GridItem>
+            return <GridItem>{children}</GridItem>
         }
         return undefined
     }
@@ -54,7 +47,7 @@ export const SongGrid = (props: SongGridProps) => {
             return (
                 <>
                     {songs?.map((song) => (
-                        <GridItem key={song.songId} isSong>
+                        <GridItem key={song.songId}>
                             <DashboardButton
                                 title={song.title}
                                 arrangerName={song.arrangerName}
@@ -68,7 +61,7 @@ export const SongGrid = (props: SongGridProps) => {
                 </>
             )
         }
-        return undefined
+        return undefined 
     }
 
     const getHeader = () => {
@@ -88,7 +81,7 @@ export const SongGrid = (props: SongGridProps) => {
                 {getHeader()}
                 <Grid container spacing={3}>
                     {getItems()}
-                    <GridItem isSong={false}>
+                    <GridItem>
                         <Loading isLoading={isLoading} />
                     </GridItem>
                 </Grid>
