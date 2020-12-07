@@ -1,6 +1,6 @@
 import React, { useState } from "react"
-import { IconButton, Menu, MenuItem } from "@material-ui/core"
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
+import { IconButton, Menu, MenuItem, Box } from "@material-ui/core"
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useTranslation } from "react-i18next"
 import { useHistory, useParams } from "react-router-dom"
 import { colors } from "../../utils/colors"
@@ -12,14 +12,13 @@ import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
 export const SongMenu = (props: { songId: number; link: string }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const [duplicateSongTitle, setDuplicateSongTitle] = useState("")
     const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(false)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
     const { songId } = props
     const { deleteSong } = useDeleteSong(songId.toString())
-    const { duplicateSong } = useDuplicateSong(songId, duplicateSongTitle)
+    const { duplicateSong } = useDuplicateSong(songId)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -33,7 +32,7 @@ export const SongMenu = (props: { songId: number; link: string }) => {
         setDeleteSongModalIsOpen(false)
         const { isError } = await deleteSong.run()
         if (!isError) {
-            history.replace("/dashboard")
+            window.location.reload()
         }
     }
     const handleOpenSong = () => {
@@ -41,7 +40,6 @@ export const SongMenu = (props: { songId: number; link: string }) => {
     }
 
     const handleClose = async (method?: "delete" | "copy" | "open") => {
-        console.log(songId, typeof (songId))
         setAnchorEl(null)
         setDeleteSongModalIsOpen(false)
         switch (method) {
@@ -59,8 +57,15 @@ export const SongMenu = (props: { songId: number; link: string }) => {
         }
     }
 
-    const handleDuplicateSong = () => {
-        handleOpenDuplicateDialog()
+    const handleDuplicateSong = async (title: string) => {
+        const { error, result } = await duplicateSong.run({
+            title,
+        })
+        
+        if(!error && result) {
+            setDuplicateSongModalIsOpen(false)
+            history.push(result.data.songId.toString())
+        }
     }
 
     const handleOpenDuplicateDialog = () => {
@@ -73,14 +78,14 @@ export const SongMenu = (props: { songId: number; link: string }) => {
 
     return (
         <>
-            <div>
+            <Box>
                 <IconButton
                     aria-controls="menuBar"
                     aria-haspopup="true"
                     aria-label="Bar options"
                     onClick={handleClick}
                 >
-                    <MoreHorizIcon />
+                    <MoreVertIcon />
                 </IconButton>
                 <Menu
                     id="menuBar"
@@ -118,9 +123,19 @@ export const SongMenu = (props: { songId: number; link: string }) => {
                     saveText={t("Modal:create")}
                     cancelText={t("Modal:cancel")}
                     headerText={t("DashboardView:duplicateText")}
-                    labelText={t("DashboardView:duplicateText")}
+                    labelText={t("Modal:newVoiceName")}
                 />
-            </div>
+            </Box>
+            <Loading
+                isLoading={deleteSong.loading}
+                fullScreen
+                text={t("Modal:deleteSongLoading")}
+            />
+            <ErrorDialog
+                isError={deleteSong.isError}
+                error={deleteSong.error}
+                title={t("Modal:deleteSongError")}
+            />
         </>
     )
 }

@@ -174,12 +174,10 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                 </Box>
                 <Box>
                     <CardActionArea>
-                        <Box>
-                            <SongMenu 
-                            songId={props.songId}
-                            link={props.link}
-                            />
-                        </Box>
+                        <SongMenu 
+                        songId={props.songId}
+                        link={props.link}
+                        />
                     </CardActionArea>
                 </Box>
             </Grid>
