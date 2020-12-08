@@ -1,8 +1,9 @@
 import React from "react"
-import { Box, ButtonBase, Typography, useTheme } from "@material-ui/core"
+import { Box, ButtonBase, Typography, useTheme, withStyles } from "@material-ui/core"
 import { IChordAndNotes } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { getChord, getColor, tangentToNumber } from "../../utils/bar.util"
+
 
 type ChordProps = {
     chordsAndNotes: IChordAndNotes
@@ -12,6 +13,7 @@ type ChordProps = {
     onMouseLeave: () => void
     highlight: boolean
     disabled: boolean
+    classes: Record<string, any>
 }
 
 const ChordText = (props: { notes: string[] }) => {
@@ -32,7 +34,21 @@ const ChordText = (props: { notes: string[] }) => {
     )
 }
 
-export const Chord = (props: ChordProps) => {
+const styles = () => ({
+    chord: {
+        border: "4px solid transparent",
+        borderRadius: "4px",
+            
+        '&:hover': {
+            border: `4px solid ${colors.focus}`,
+        },
+        '&:focus': {
+             outline: `4px solid ${colors.focus}`,
+        },
+    },
+});
+
+const ChordWithoutStyles = (props: ChordProps) => {
     const {
         chordsAndNotes,
         onClick,
@@ -67,6 +83,7 @@ export const Chord = (props: ChordProps) => {
                 flexBasis="0"
                 mr={1}
                 minWidth={0}
+                className={props.classes.chord}
             >
                 {isChord && <ChordText notes={chordsAndNotes.notes} />}
                 <ButtonBase
@@ -83,6 +100,7 @@ export const Chord = (props: ChordProps) => {
                         width: "100%",
                         minWidth: 0,
                         alignItems: "stretch",
+
                     }}
                 >
                     {chordsAndNotes.notes
@@ -116,3 +134,5 @@ export const Chord = (props: ChordProps) => {
         </>
     )
 }
+
+export const Chord =  withStyles(styles)(ChordWithoutStyles);
