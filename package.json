@@ -17,7 +17,6 @@
     "dotenv": "^8.2.0",
     "env-cmd": "^10.1.0",
     "i18next": "^19.5.3",
-    "moment": "^2.29.1",
     "react": "^16.13.1",
     "react-app-polyfill": "1.0.6",
     "react-dom": "^16.13.1",

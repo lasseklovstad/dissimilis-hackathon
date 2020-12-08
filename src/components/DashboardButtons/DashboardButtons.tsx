@@ -6,7 +6,6 @@ import AddIcon from "@material-ui/icons/Add"
 import { Box, Card, Grid, CardActionArea, Icon, IconButton } from "@material-ui/core"
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 import { useTranslation } from "react-i18next"
-import Moment from "moment"
 import { SongMenu } from "../songGrid/SongMenu.component"
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
@@ -129,9 +128,11 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
 }
 
 const convertToDate = (time: number) => {
+    const timeOptions = { hour: "2-digit", minute: "2-digit" }
     const date: Date = new Date()
     date.setTime(time)
-    return Moment(date).format("DD.MM.YY, kk:mm")
+    
+    return `${date.toLocaleDateString('en-GB')}, ${date.toLocaleTimeString('en-GB', timeOptions)}`
 }
 
 export const DashboardButton: FC<ButtonSongProps> = (props) => {
