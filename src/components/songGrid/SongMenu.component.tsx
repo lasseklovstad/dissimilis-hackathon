@@ -78,14 +78,14 @@ export const SongMenu = (props: { songId: number; link: string }) => {
 
     return (
         <>
-            <Box>
+            <div>
                 <IconButton
                     aria-controls="menuBar"
                     aria-haspopup="true"
                     aria-label="Bar options"
-                    onClick={handleClick}
+                    onClick={handleClick} 
                 >
-                    <MoreVertIcon />
+                    <MoreVertIcon/>
                 </IconButton>
                 <Menu
                     id="menuBar"
@@ -115,7 +115,8 @@ export const SongMenu = (props: { songId: number; link: string }) => {
                     headerText={t("Modal:deleteSong")}
                     descriptionText={t("Modal:deleteDescription")}
                 />
-                <InputModal
+            </div>
+            <InputModal
                     handleOnCancelClick={() => handleCloseDuplicateDialog()}
                     handleOnSaveClick={handleDuplicateSong}
                     handleClosed={() => handleCloseDuplicateDialog()}
@@ -125,7 +126,6 @@ export const SongMenu = (props: { songId: number; link: string }) => {
                     headerText={t("DashboardView:duplicateText")}
                     labelText={t("Modal:newVoiceName")}
                 />
-            </Box>
             <Loading
                 isLoading={deleteSong.loading}
                 fullScreen

@@ -131,7 +131,7 @@ const convertToDate = (time: number) => {
     const timeOptions = { hour: "2-digit", minute: "2-digit" }
     const date: Date = new Date()
     date.setTime(time)
-    
+
     return `${date.toLocaleDateString('en-GB')}, ${date.toLocaleTimeString('en-GB', timeOptions)}`
 }
 
@@ -145,11 +145,10 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                 container
                 direction="row"
                 justify="flex-start"
-                alignItems="stretch"
             >
                 <Box flexGrow={1}>
                     <CardActionArea to={props.link} component={Link}>
-                        <Box
+                        <Box 
                             onContextMenu={(e) =>
                                 props.onContextMenu && props.onContextMenu(e)
                             }
@@ -161,25 +160,23 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                                         : colors.white,
                             }}
                         >
-                            <Box width="35%" p={2}>
+                            <Box width= "35%" p={2}> 
                                 <Typography>{props.title}</Typography>
                             </Box>
-                            <Box width="30%" p={2}>
+                            <Box width= "30%" p={2}>
                                 <Typography>{props.arrangerName}</Typography>
                             </Box>
-                            <Box width="30%" p={2}>
+                            <Box width= "30%" p={2}>
                                 <Typography align="right">{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
                             </Box>
                         </Box>
                     </CardActionArea>
                 </Box>
-                <Box>
-                    <CardActionArea>
-                        <SongMenu 
+                <Box py>
+                    <SongMenu
                         songId={props.songId}
                         link={props.link}
-                        />
-                    </CardActionArea>
+                    />
                 </Box>
             </Grid>
         </Card>
