@@ -63,32 +63,36 @@ export const TransposeModal = (props: {
     handleClosed: () => void
     handleOnCancelClick: () => void
     handleOnSaveClick: (title: string, transpose: string) => void
-    headerText: string
-    labelText: string
-    saveText: string
-    cancelText: string
 }) => {
     const classes = useStyles()
     const [titleInput, setTitleInput] = useState("")
     const [transposeInput, setTransposeInput] = useState("")
     const { t } = useTranslation()
 
+    const {
+        defaultValue,
+        modalOpen,
+        handleClosed,
+        handleOnCancelClick,
+        handleOnSaveClick,
+    } = props
+
     useEffect(() => {
-        if (props.defaultValue) {
-            setTitleInput(props.defaultValue)
+        if (defaultValue) {
+            setTitleInput(defaultValue)
         }
-    }, [props.defaultValue])
+    }, [defaultValue])
 
     return (
         <Modal
-            open={props.modalOpen}
-            onClose={() => props.handleClosed()}
+            open={modalOpen}
+            onClose={handleClosed}
             BackdropComponent={Backdrop}
             BackdropProps={{
                 timeout: 240,
             }}
         >
-            <Fade in={props.modalOpen}>
+            <Fade in={modalOpen}>
                 <div
                     className={classes.modal}
                     style={{
@@ -99,20 +103,20 @@ export const TransposeModal = (props: {
                 >
                     <Grid container>
                         <Typography className={classes.title} variant="h2">
-                            {props.headerText}
+                            {t("Modal:transposeSong")}
                         </Typography>
                         <Grid item className={classes.insertName} xs={12}>
                             <TextField
                                 inputProps={{ maxLength: CHARACTER_LIMIT }}
                                 helperText={`${titleInput.length}/${CHARACTER_LIMIT}`}
-                                defaultValue={props.defaultValue}
+                                defaultValue={defaultValue}
                                 autoFocus
                                 value={titleInput}
                                 variant="filled"
                                 onChange={(e) => {
                                     setTitleInput(e.target.value)
                                 }}
-                                label={props.labelText}
+                                label={t("Modal:nameOfSong")}
                                 style={{ width: "100%" }}
                             />
                         </Grid>
@@ -121,12 +125,8 @@ export const TransposeModal = (props: {
                                 variant="outlined"
                                 className={classes.formControl}
                             >
-                                <InputLabel id="demo-simple-select-outlined-label">
-                                    {t("Modal:semiNotes")}
-                                </InputLabel>
+                                <InputLabel>{t("Modal:semiNotes")}</InputLabel>
                                 <Select
-                                    labelId="demo-simple-select-outlined-label"
-                                    id="demo-simple-select-outlined"
                                     value={transposeInput}
                                     onChange={(
                                         e: React.ChangeEvent<{ value: any }>
@@ -158,24 +158,24 @@ export const TransposeModal = (props: {
                                 variant="contained"
                                 disabled={!titleInput}
                                 onClick={() =>
-                                    props.handleOnSaveClick(
+                                    handleOnSaveClick(
                                         titleInput,
                                         transposeInput
                                     )
                                 }
                             >
-                                {props.saveText}
+                                {t("Modal:save")}
                             </Button>
                             <Button
                                 className={classes.button}
                                 size="large"
                                 variant="outlined"
                                 onClick={() => {
-                                    props.handleOnCancelClick()
+                                    handleOnCancelClick()
                                     setTitleInput("")
                                 }}
                             >
-                                {props.cancelText}
+                                {t("Modal:cancel")}
                             </Button>
                         </Grid>
                     </Grid>

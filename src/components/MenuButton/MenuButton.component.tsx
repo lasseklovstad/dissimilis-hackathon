@@ -122,8 +122,8 @@ export const MenuButton = () => {
                     </MenuItem>
                 </Menu>
                 <ChoiceModal
-                    handleOnCancelClick={() => handleClose()}
-                    handleClosed={() => handleClose()}
+                    handleOnCancelClick={handleClose}
+                    handleClosed={handleClose}
                     handleOnSaveClick={handleDeleteSong}
                     ackText={t("Modal:deleteSong")}
                     modalOpen={deleteSongModalIsOpen}
@@ -136,15 +136,9 @@ export const MenuButton = () => {
                         "Modal:transposed"
                     )})`}
                     modalOpen={transposeSongModalIsOpen}
-                    handleClosed={() => handleClose()}
-                    handleOnCancelClick={() => handleClose()}
-                    handleOnSaveClick={(title: string, transpose: string) =>
-                        handleTransposeSong(title, transpose)
-                    }
-                    headerText={t("Modal:transposeSong")}
-                    labelText={t("Modal:nameOfSong")}
-                    cancelText={t("Modal:cancel")}
-                    saveText={t("Modal:save")}
+                    handleClosed={handleClose}
+                    handleOnCancelClick={handleClose}
+                    handleOnSaveClick={handleTransposeSong}
                 />
             </div>
             <Loading
