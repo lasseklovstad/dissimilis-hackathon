@@ -5,7 +5,6 @@ import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
 import { Box, Card, CardActionArea, Icon, IconButton } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
-import Moment from "moment"
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
 
@@ -126,9 +125,11 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
 }
 
 const convertToDate = (time: number) => {
+    const timeOptions = { hour: "2-digit", minute: "2-digit" }
     const date: Date = new Date()
     date.setTime(time)
-    return Moment(date).format("DD.MM.YY, kk:mm")
+    
+    return `${date.toLocaleDateString('en-GB')}, ${date.toLocaleTimeString('en-GB', timeOptions)}`
 }
 
 export const DashboardButton: FC<ButtonSongProps> = (props) => {
@@ -157,7 +158,7 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                         <Typography>{props.arrangerName}</Typography>
                     </Box>
                     <Box width="30%" p={2}>
-                        <Typography align="right">{t("DashboardView:updatedOn")} {props.updatedOn? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
+                        <Typography align="right">{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
                     </Box>
                 </Box>
             </CardActionArea>
