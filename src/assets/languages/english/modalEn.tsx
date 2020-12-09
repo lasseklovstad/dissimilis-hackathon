@@ -20,4 +20,9 @@ export const modalEn = {
     save: "Save",
     errorTitle: "Error",
     getSongError: "Error fetching song",
+    transposeSong: "Transpose song",
+    transposed: "transposed",
+    transposingSong: "Transposing song",
+    transposeSongError: "Error transposing song",
+    semiNotes: "Semi notes",
 }
