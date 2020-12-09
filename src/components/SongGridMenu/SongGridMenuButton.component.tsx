@@ -10,7 +10,7 @@ import { InputModal } from "../CustomModal/InputModal.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
-export const SongMenu = (props: { songId: number; link: string }) => {
+export const SongGridMenuButton = (props: { songId: number; link: string }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(false)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
@@ -35,8 +35,28 @@ export const SongMenu = (props: { songId: number; link: string }) => {
             window.location.reload()
         }
     }
+
     const handleOpenSong = () => {
         history.push(props.link)
+    }
+
+    const handleDuplicateSong = async (title: string) => {
+        const { error, result } = await duplicateSong.run({
+            title,
+        })
+
+        if (!error && result) {
+            setDuplicateSongModalIsOpen(false)
+            history.push(`song/${result.data.songId.toString()}`)
+        }
+    }
+
+    const handleOpenDuplicateDialog = () => {
+        setDuplicateSongModalIsOpen(true);
+    }
+
+    const handleCloseDuplicateDialog = () => {
+        setDuplicateSongModalIsOpen(false);
     }
 
     const handleClose = async (method?: "delete" | "copy" | "open") => {
@@ -57,25 +77,6 @@ export const SongMenu = (props: { songId: number; link: string }) => {
         }
     }
 
-    const handleDuplicateSong = async (title: string) => {
-        const { error, result } = await duplicateSong.run({
-            title,
-        })
-        
-        if(!error && result) {
-            setDuplicateSongModalIsOpen(false)
-            history.push(result.data.songId.toString())
-        }
-    }
-
-    const handleOpenDuplicateDialog = () => {
-        setDuplicateSongModalIsOpen(true);
-    };
-
-    const handleCloseDuplicateDialog = () => {
-        setDuplicateSongModalIsOpen(false);
-    };
-
     return (
         <>
             <div>
@@ -83,9 +84,9 @@ export const SongMenu = (props: { songId: number; link: string }) => {
                     aria-controls="menuBar"
                     aria-haspopup="true"
                     aria-label="Bar options"
-                    onClick={handleClick} 
+                    onClick={handleClick}
                 >
-                    <MoreVertIcon/>
+                    <MoreVertIcon />
                 </IconButton>
                 <Menu
                     id="menuBar"
@@ -117,15 +118,15 @@ export const SongMenu = (props: { songId: number; link: string }) => {
                 />
             </div>
             <InputModal
-                    handleOnCancelClick={() => handleCloseDuplicateDialog()}
-                    handleOnSaveClick={handleDuplicateSong}
-                    handleClosed={() => handleCloseDuplicateDialog()}
-                    modalOpen={duplicateSongModalIsOpen}
-                    saveText={t("Modal:create")}
-                    cancelText={t("Modal:cancel")}
-                    headerText={t("DashboardView:duplicateText")}
-                    labelText={t("Modal:newVoiceName")}
-                />
+                handleOnCancelClick={() => handleCloseDuplicateDialog()}
+                handleOnSaveClick={handleDuplicateSong}
+                handleClosed={() => handleCloseDuplicateDialog()}
+                modalOpen={duplicateSongModalIsOpen}
+                saveText={t("Modal:create")}
+                cancelText={t("Modal:cancel")}
+                headerText={t("DashboardView:duplicateText")}
+                labelText={t("Modal:newVoiceName")}
+            />
             <Loading
                 isLoading={deleteSong.loading}
                 fullScreen

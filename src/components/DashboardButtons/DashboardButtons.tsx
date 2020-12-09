@@ -4,11 +4,10 @@ import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
 import { Box, Card, Grid, CardActionArea, Icon, IconButton } from "@material-ui/core"
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 import { useTranslation } from "react-i18next"
-import { SongMenu } from "../songGrid/SongMenu.component"
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
+import { SongGridMenuButton } from "../SongGridMenu/SongGridMenuButton.component"
 
 const useStyles = makeStyles({
     container: {
@@ -33,6 +32,10 @@ const useStyles = makeStyles({
     butterflyButtonCardIcon: {
         padding: "8px",
         borderRadius: "1px",
+    },
+    songContainer: {
+        flexDirection: "row",
+        flexWrap: "nowrap"
     },
 })
 
@@ -141,14 +144,12 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
 
     return (
         <Card className={styles.button}>
-            <Grid
-                container
-                direction="row"
-                justify="flex-start"
-            >
-                <Box flexGrow={1}>
-                    <CardActionArea to={props.link} component={Link}>
-                        <Box 
+            <Grid container className={styles.songContainer} >
+                <Box flexGrow={1} >
+                    <CardActionArea to={props.link} component={Link} style={{ height: "100%" }}>
+                        <Grid
+                            container
+                            alignItems="center"
                             onContextMenu={(e) =>
                                 props.onContextMenu && props.onContextMenu(e)
                             }
@@ -158,22 +159,24 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                                     props.selected === true
                                         ? colors.gray_400
                                         : colors.white,
+                                height: "100%",
+                                padding: 16,
                             }}
                         >
-                            <Box width= "35%" p={2}> 
-                                <Typography>{props.title}</Typography>
-                            </Box>
-                            <Box width= "30%" p={2}>
+                            <Grid item xs={12} sm={4} >
+                                <Typography >{props.title}</Typography>
+                            </Grid>
+                            <Grid item xs={12} sm={4} >
                                 <Typography>{props.arrangerName}</Typography>
-                            </Box>
-                            <Box width= "30%" p={2}>
-                                <Typography align="right">{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
-                            </Box>
-                        </Box>
+                            </Grid>
+                            <Grid item xs={12} sm={4} >
+                                <Typography>{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
+                            </Grid>
+                        </Grid>
                     </CardActionArea>
                 </Box>
-                <Box py>
-                    <SongMenu
+                <Box p={1}>
+                    <SongGridMenuButton
                         songId={props.songId}
                         link={props.link}
                     />

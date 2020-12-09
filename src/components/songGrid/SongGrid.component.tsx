@@ -14,7 +14,7 @@ type SongGridProps = {
 const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
     if (props.isSong) {
         return (
-            <Grid item xs={12} sm={11} lg={11}>
+            <Grid item xs={12}>
                 {props.children}
             </Grid>
         )
