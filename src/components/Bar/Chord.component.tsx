@@ -35,17 +35,14 @@ const ChordText = (props: { notes: string[] }) => {
 }
 
 const styles = () => ({
-    chord: {
-        border: "4px solid transparent",
-        borderRadius: "4px",
-            
+    buttonBase: {
         '&:hover': {
-            border: `4px solid ${colors.focus}`,
+            outline: `4px solid ${colors.focus}`,
         },
         '&:focus': {
-             outline: `4px solid ${colors.focus}`,
-        },
-    },
+            outline: `4px solid ${colors.focus}`, 
+        }
+    }
 });
 
 const ChordWithoutStyles = (props: ChordProps) => {
@@ -83,16 +80,16 @@ const ChordWithoutStyles = (props: ChordProps) => {
                 flexBasis="0"
                 mr={1}
                 minWidth={0}
-                className={props.classes.chord}
             >
                 {isChord && <ChordText notes={chordsAndNotes.notes} />}
                 <ButtonBase
                     disabled={disabled}
-                    focusRipple
                     onClick={onClick}
                     onContextMenu={onContextMenu}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
+                    className={props.classes.buttonBase}
+                    focusVisibleClassName={props.classes.buttonBase}
                     style={{
                         display: "flex",
                         flexDirection: "column",
@@ -100,7 +97,6 @@ const ChordWithoutStyles = (props: ChordProps) => {
                         width: "100%",
                         minWidth: 0,
                         alignItems: "stretch",
-
                     }}
                 >
                     {chordsAndNotes.notes
