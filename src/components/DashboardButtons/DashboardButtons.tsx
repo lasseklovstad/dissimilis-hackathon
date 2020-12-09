@@ -7,7 +7,7 @@ import { Box, Card, Grid, CardActionArea, Icon, IconButton } from "@material-ui/
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
-import { SongGridMenuButton } from "../SongGridMenu/SongGridMenuButton.component"
+import { SongGridMenuButton } from "../SongGridMenuButton/SongGridMenuButton.component"
 
 const useStyles = makeStyles({
     container: {
@@ -167,10 +167,10 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                                 <Typography >{props.title}</Typography>
                             </Grid>
                             <Grid item xs={12} sm={4} >
-                                <Typography>{props.arrangerName}</Typography>
+                                <Typography >{props.arrangerName}</Typography>
                             </Grid>
                             <Grid item xs={12} sm={4} >
-                                <Typography>{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
+                                <Typography >{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
                             </Grid>
                         </Grid>
                     </CardActionArea>
