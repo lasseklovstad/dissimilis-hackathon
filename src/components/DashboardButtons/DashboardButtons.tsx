@@ -42,6 +42,16 @@ export type ButtonProps = {
     onContextMenu?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
 }
 
+type ButtonSongProps = {
+    title: string
+    arrangerName?: string
+    updatedOn?: string
+    link: string
+    func?: () => void
+    selected?: boolean
+    onContextMenu?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
+}
+
 type ButtonNoLinkProps = {
     text: string
     func: () => void
@@ -114,8 +124,18 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
     )
 }
 
-export const DashboardButton: FC<ButtonProps> = (props) => {
+const convertToDate = (time: number) => {
+    const timeOptions = { hour: "2-digit", minute: "2-digit" }
+    const date: Date = new Date()
+    date.setTime(time)
+    
+    return `${date.toLocaleDateString('en-GB')}, ${date.toLocaleTimeString('en-GB', timeOptions)}`
+}
+
+export const DashboardButton: FC<ButtonSongProps> = (props) => {
     const styles = useStyles()
+    const { t } = useTranslation()
+
     return (
         <Card className={styles.button}>
             <CardActionArea to={props.link} component={Link}>
@@ -131,8 +151,14 @@ export const DashboardButton: FC<ButtonProps> = (props) => {
                                 : colors.white,
                     }}
                 >
-                    <Box p={2}>
-                        <Typography>{props.text}</Typography>
+                    <Box width="40%" p={2}>
+                        <Typography>{props.title}</Typography>
+                    </Box>
+                    <Box width="30%" p={2}>
+                        <Typography>{props.arrangerName}</Typography>
+                    </Box>
+                    <Box width="30%" p={2}>
+                        <Typography align="right">{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
                     </Box>
                 </Box>
             </CardActionArea>
