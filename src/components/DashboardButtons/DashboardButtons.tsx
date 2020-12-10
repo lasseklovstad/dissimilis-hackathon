@@ -40,6 +40,7 @@ const useStyles = makeStyles(theme => ({
     songScalableText: {
         [theme.breakpoints.up('xs')]: {
             fontSize: "0.725rem",
+            paddingTop: 8,
         },
         [theme.breakpoints.up('sm')]: {
             fontSize: "1rem",
