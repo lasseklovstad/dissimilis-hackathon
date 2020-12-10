@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react"
 import { Link } from "react-router-dom"
-import { makeStyles, createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles"
+import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
 import { Box, Card, Grid, CardActionArea, Icon, IconButton } from "@material-ui/core"
@@ -37,9 +37,9 @@ const useStyles = makeStyles(theme => ({
         flexDirection: "row",
         flexWrap: "nowrap"
     },
-    songText: {
+    songScalableText: {
         [theme.breakpoints.up('xs')]: {
-            fontSize: "0.75rem",
+            fontSize: "0.725rem",
         },
         [theme.breakpoints.up('sm')]: {
             fontSize: "1rem",
@@ -158,7 +158,6 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                         <Grid
                             container
                             alignItems="center"
-
                             onContextMenu={(e) =>
                                 props.onContextMenu && props.onContextMenu(e)
                             }
@@ -176,10 +175,10 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                                 <Typography >{props.title}</Typography>
                             </Grid>
                             <Grid item xs={12} sm={4} >
-                                <Typography className={styles.songText}>{props.arrangerName}</Typography>
+                                <Typography className={styles.songScalableText}>{props.arrangerName}</Typography>
                             </Grid>
                             <Grid item xs={12} sm={4} >
-                                <Typography className={styles.songText}>{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
+                                <Typography className={styles.songScalableText}>{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
                             </Grid>
                         </Grid>
                     </CardActionArea>
