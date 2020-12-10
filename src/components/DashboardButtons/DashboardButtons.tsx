@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react"
 import { Link } from "react-router-dom"
-import { makeStyles } from "@material-ui/core/styles"
+import { makeStyles, createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
 import { Box, Card, Grid, CardActionArea, Icon, IconButton } from "@material-ui/core"
@@ -9,7 +9,7 @@ import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
 import { SongGridMenuButton } from "../SongGridMenuButton/SongGridMenuButton.component"
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     container: {
         display: "flex",
     },
@@ -37,7 +37,15 @@ const useStyles = makeStyles({
         flexDirection: "row",
         flexWrap: "nowrap"
     },
-})
+    songText: {
+        [theme.breakpoints.up('xs')]: {
+            fontSize: "0.75rem",
+        },
+        [theme.breakpoints.up('sm')]: {
+            fontSize: "1rem",
+        },
+    },
+}))
 
 export type ButtonProps = {
     text: string
@@ -150,6 +158,7 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                         <Grid
                             container
                             alignItems="center"
+
                             onContextMenu={(e) =>
                                 props.onContextMenu && props.onContextMenu(e)
                             }
@@ -167,10 +176,10 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                                 <Typography >{props.title}</Typography>
                             </Grid>
                             <Grid item xs={12} sm={4} >
-                                <Typography >{props.arrangerName}</Typography>
+                                <Typography className={styles.songText}>{props.arrangerName}</Typography>
                             </Grid>
                             <Grid item xs={12} sm={4} >
-                                <Typography >{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
+                                <Typography className={styles.songText}>{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
                             </Grid>
                         </Grid>
                     </CardActionArea>
