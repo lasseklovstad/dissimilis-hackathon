@@ -133,6 +133,7 @@ export const DashboardView = () => {
                                     />
                                 ))}
                             </SongGrid>
+
                             <SongGrid
                                 title={t("DashboardView:recentSongLabel")}
                                 songs={recentSongs}
