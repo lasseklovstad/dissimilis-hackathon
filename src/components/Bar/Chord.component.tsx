@@ -1,9 +1,9 @@
 import React from "react"
-import { Box, ButtonBase, Typography, useTheme, withStyles } from "@material-ui/core"
+import { Box, ButtonBase, Typography, useTheme } from "@material-ui/core"
+import { makeStyles } from "@material-ui/core/styles"
 import { IChordAndNotes } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { getChord, getColor, tangentToNumber } from "../../utils/bar.util"
-
 
 type ChordProps = {
     chordsAndNotes: IChordAndNotes
@@ -13,7 +13,6 @@ type ChordProps = {
     onMouseLeave: () => void
     highlight: boolean
     disabled: boolean
-    classes: Record<string, any>
 }
 
 const ChordText = (props: { notes: string[] }) => {
@@ -34,18 +33,18 @@ const ChordText = (props: { notes: string[] }) => {
     )
 }
 
-const styles = () => ({
+const useStyle = makeStyles(() => ({
     buttonBase: {
-        '&:hover': {
+        "&:hover": {
             outline: `4px solid ${colors.focus}`,
         },
-        '&:focus': {
-            outline: `4px solid ${colors.focus}`, 
-        }
-    }
-});
+        "&:focus": {
+            outline: `4px solid ${colors.focus}`,
+        },
+    },
+}))
 
-const ChordWithoutStyles = (props: ChordProps) => {
+export const Chord = (props: ChordProps) => {
     const {
         chordsAndNotes,
         onClick,
@@ -55,6 +54,7 @@ const ChordWithoutStyles = (props: ChordProps) => {
         highlight,
         disabled,
     } = props
+    const classes = useStyle()
     const isChord = chordsAndNotes.notes.length > 2
     const {
         palette: { getContrastText },
@@ -88,8 +88,8 @@ const ChordWithoutStyles = (props: ChordProps) => {
                     onContextMenu={onContextMenu}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    className={props.classes.buttonBase}
-                    focusVisibleClassName={props.classes.buttonBase}
+                    className={classes.buttonBase}
+                    focusVisibleClassName={classes.buttonBase}
                     style={{
                         display: "flex",
                         flexDirection: "column",
@@ -130,5 +130,3 @@ const ChordWithoutStyles = (props: ChordProps) => {
         </>
     )
 }
-
-export const Chord =  withStyles(styles)(ChordWithoutStyles);
