@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, Grid, makeStyles } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
@@ -18,6 +18,7 @@ import { Loading } from "../../components/loading/Loading.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
 import { getTimeSignatureText } from "../../utils/bar.util"
+import { ISong } from "../../models/ISong"
 
 const useStyles = makeStyles({
     container: {
@@ -78,8 +79,32 @@ export const DashboardView = () => {
     const { postSong } = usePostSong()
     const history = useHistory()
     const measureText = t("DashboardView:measure")
-    const { getRecentSongs, recentSongs } = useGetRecentSongs()
-    const { getFilteredSongs, filteredSongs } = useGetFilteredSongs(searchTerm)
+    const { getRecentSongs, recentSongsFetched } = useGetRecentSongs()
+    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>()
+
+    const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(searchTerm)
+    const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
+
+    useEffect(() => {
+        if (recentSongsFetched) {
+            setRecentSongs(recentSongsFetched)
+        }
+        if (filteredSongsFetched) {
+            setFilteredSongs(filteredSongsFetched)
+        }
+    }, [recentSongsFetched, filteredSongsFetched])
+
+    const removeSongFromRecentSongs = (songId: number) => {
+        setRecentSongs(recentSongs?.filter(song => {
+            return song.songId !== songId
+        }))
+    }
+
+    const removeSongFromFilteredSongs = (songId: number) => {
+        setFilteredSongs(filteredSongs?.filter(song => {
+            return song.songId !== songId
+        }))
+    }
 
     const handleAddSong = async (title: string) => {
         setAddSongModalIsOpen(false)
@@ -119,6 +144,7 @@ export const DashboardView = () => {
                             <SongGrid
                                 title={t("DashboardView:newSongLabel")}
                                 songs={undefined}
+                                removeSong={() => undefined}
                                 isLoading={false}
                             >
                                 {musicTacts.map((song) => (
@@ -137,6 +163,7 @@ export const DashboardView = () => {
                             <SongGrid
                                 title={t("DashboardView:recentSongLabel")}
                                 songs={recentSongs}
+                                removeSong={removeSongFromRecentSongs}
                                 isLoading={getRecentSongs.loading}
                             >
                                 <DashboardLibraryButton
@@ -157,12 +184,13 @@ export const DashboardView = () => {
                             />
                         </>
                     ) : (
-                        <SongGrid
-                            title={t("DashboardView:searchSongLabel")}
-                            songs={filteredSongs}
-                            isLoading={getFilteredSongs.loading}
-                        />
-                    )}
+                            <SongGrid
+                                title={t("DashboardView:searchSongLabel")}
+                                songs={filteredSongs}
+                                removeSong={removeSongFromFilteredSongs}
+                                isLoading={getFilteredSongs.loading}
+                            />
+                        )}
                 </Grid>
             </Box>
             <Loading isLoading={postSong.loading} fullScreen />

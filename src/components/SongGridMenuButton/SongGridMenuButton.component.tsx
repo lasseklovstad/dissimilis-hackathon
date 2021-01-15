@@ -10,7 +10,7 @@ import { InputModal } from "../CustomModal/InputModal.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
-export const SongGridMenuButton = (props: { songId: number; link: string }) => {
+export const SongGridMenuButton = (props: { songId: number; link: string, removeSong: (songId: number) => void }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(false)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
@@ -32,7 +32,7 @@ export const SongGridMenuButton = (props: { songId: number; link: string }) => {
         setDeleteSongModalIsOpen(false)
         const { isError } = await deleteSong.run()
         if (!isError) {
-            window.location.reload()
+            props.removeSong(songId)
         }
     }
 

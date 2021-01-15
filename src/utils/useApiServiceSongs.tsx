@@ -54,7 +54,7 @@ export const useGetAllSongs = () => {
 
     return {
         getAllSongs: { run: postData, ...state },
-        allSongs: data,
+        allSongsFetched: data,
     }
 }
 
@@ -81,7 +81,7 @@ export const useGetFilteredSongs = (title: string) => {
 
     return {
         getFilteredSongs: { run: postData, ...state },
-        filteredSongs: data,
+        filteredSongsFetched: data,
     }
 }
 
@@ -109,7 +109,7 @@ export const useGetRecentSongs = () => {
 
     return {
         getRecentSongs: { run: postData, ...state },
-        recentSongs: data,
+        recentSongsFetched: data,
     }
 }
 

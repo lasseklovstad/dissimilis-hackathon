@@ -40,7 +40,6 @@ const useStyles = makeStyles(theme => ({
     songScalableText: {
         [theme.breakpoints.up('xs')]: {
             fontSize: "0.725rem",
-            paddingTop: 8,
         },
         [theme.breakpoints.up('sm')]: {
             fontSize: "1rem",
@@ -61,6 +60,7 @@ type ButtonSongProps = {
     arrangerName?: string
     updatedOn?: string
     songId: number
+    removeSong: (songId: number) => void
     link: string
     func?: () => void
     selected?: boolean
@@ -188,6 +188,7 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                     <SongGridMenuButton
                         songId={props.songId}
                         link={props.link}
+                        removeSong={props.removeSong}
                     />
                 </Box>
             </Grid>
