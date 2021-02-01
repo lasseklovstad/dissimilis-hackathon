@@ -256,16 +256,13 @@ export const useUpdateBar = (
  * @param title new song title
  */
 
-export const useDuplicateSong = (
-    songId: number
-) => {
+export const useDuplicateSong = (songId: number) => {
     const url = `song/${songId}/duplicateSong`
     const headers = getHeaders()
 
     const api = useApiService<ISong>(url, { headers })
 
     return {
-        duplicateSong: { run: api.postData, ...api.state }
+        duplicateSong: { run: api.postData, ...api.state },
     }
 }
-

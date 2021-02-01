@@ -3,13 +3,20 @@ import { Link } from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
-import { Box, Card, Grid, CardActionArea, Icon, IconButton } from "@material-ui/core"
+import {
+    Box,
+    Card,
+    Grid,
+    CardActionArea,
+    Icon,
+    IconButton,
+} from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
 import { SongGridMenuButton } from "../SongGridMenuButton/SongGridMenuButton.component"
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     container: {
         display: "flex",
     },
@@ -35,13 +42,13 @@ const useStyles = makeStyles(theme => ({
     },
     songContainer: {
         flexDirection: "row",
-        flexWrap: "nowrap"
+        flexWrap: "nowrap",
     },
     songScalableText: {
-        [theme.breakpoints.up('xs')]: {
+        [theme.breakpoints.up("xs")]: {
             fontSize: "0.725rem",
         },
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up("sm")]: {
             fontSize: "1rem",
         },
     },
@@ -144,7 +151,10 @@ const convertToDate = (time: number) => {
     const date: Date = new Date()
     date.setTime(time)
 
-    return `${date.toLocaleDateString('en-GB')}, ${date.toLocaleTimeString('en-GB', timeOptions)}`
+    return `${date.toLocaleDateString("en-GB")}, ${date.toLocaleTimeString(
+        "en-GB",
+        timeOptions
+    )}`
 }
 
 export const DashboardButton: FC<ButtonSongProps> = (props) => {
@@ -153,9 +163,13 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
 
     return (
         <Card className={styles.button}>
-            <Grid container className={styles.songContainer} >
-                <Box flexGrow={1} >
-                    <CardActionArea to={props.link} component={Link} style={{ height: "100%" }}>
+            <Grid container className={styles.songContainer}>
+                <Box flexGrow={1}>
+                    <CardActionArea
+                        to={props.link}
+                        component={Link}
+                        style={{ height: "100%" }}
+                    >
                         <Grid
                             container
                             alignItems="center"
@@ -172,14 +186,23 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                                 padding: 16,
                             }}
                         >
-                            <Grid item xs={12} sm={4} >
-                                <Typography >{props.title}</Typography>
+                            <Grid item xs={12} sm={4}>
+                                <Typography>{props.title}</Typography>
                             </Grid>
-                            <Grid item xs={12} sm={4} >
-                                <Typography className={styles.songScalableText}>{props.arrangerName}</Typography>
+                            <Grid item xs={12} sm={4}>
+                                <Typography className={styles.songScalableText}>
+                                    {props.arrangerName}
+                                </Typography>
                             </Grid>
-                            <Grid item xs={12} sm={4} >
-                                <Typography className={styles.songScalableText}>{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
+                            <Grid item xs={12} sm={4}>
+                                <Typography className={styles.songScalableText}>
+                                    {t("DashboardView:updatedOn")}{" "}
+                                    {props.updatedOn
+                                        ? convertToDate(
+                                              Date.parse(props.updatedOn)
+                                          )
+                                        : ""}
+                                </Typography>
                             </Grid>
                         </Grid>
                     </CardActionArea>

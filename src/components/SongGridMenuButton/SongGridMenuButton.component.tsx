@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { IconButton, Menu, MenuItem, Box } from "@material-ui/core"
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory, useParams } from "react-router-dom"
 import { colors } from "../../utils/colors"
@@ -10,9 +10,15 @@ import { InputModal } from "../CustomModal/InputModal.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
-export const SongGridMenuButton = (props: { songId: number; link: string, removeSong: (songId: number) => void }) => {
+export const SongGridMenuButton = (props: {
+    songId: number
+    link: string
+    removeSong: (songId: number) => void
+}) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(false)
+    const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(
+        false
+    )
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
@@ -52,11 +58,11 @@ export const SongGridMenuButton = (props: { songId: number; link: string, remove
     }
 
     const handleOpenDuplicateDialog = () => {
-        setDuplicateSongModalIsOpen(true);
+        setDuplicateSongModalIsOpen(true)
     }
 
     const handleCloseDuplicateDialog = () => {
-        setDuplicateSongModalIsOpen(false);
+        setDuplicateSongModalIsOpen(false)
     }
 
     const handleClose = async (method?: "delete" | "copy" | "open") => {

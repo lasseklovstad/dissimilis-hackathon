@@ -26,7 +26,9 @@ export const LibraryView = () => {
     const { getAllSongs, allSongsFetched } = useGetAllSongs()
     const [allSongs, setAllSongs] = useState<ISong[] | undefined>()
 
-    const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(searchTerm)
+    const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
+        searchTerm
+    )
     const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
 
     useEffect(() => {
@@ -39,15 +41,19 @@ export const LibraryView = () => {
     }, [filteredSongsFetched, allSongsFetched])
 
     const removeSongFromFilteredSongs = (songId: number) => {
-        setFilteredSongs(filteredSongs?.filter(song => {
-            return song.songId !== songId;
-        }))
+        setFilteredSongs(
+            filteredSongs?.filter((song) => {
+                return song.songId !== songId
+            })
+        )
     }
 
     const removeSongFromAllSongs = (songId: number) => {
-        setFilteredSongs(filteredSongs?.filter(song => {
-            return song.songId !== songId
-        }))
+        setAllSongs(
+            allSongs?.filter((song) => {
+                return song.songId !== songId
+            })
+        )
     }
 
     const marginBottom = 4
@@ -83,13 +89,13 @@ export const LibraryView = () => {
                             isLoading={getAllSongs.loading}
                         />
                     ) : (
-                            <SongGrid
-                                title={t("DashboardView:searchSongLabel")}
-                                songs={filteredSongs}
-                                removeSong={removeSongFromFilteredSongs}
-                                isLoading={getFilteredSongs.loading}
-                            />
-                        )}
+                        <SongGrid
+                            title={t("DashboardView:searchSongLabel")}
+                            songs={filteredSongs}
+                            removeSong={removeSongFromFilteredSongs}
+                            isLoading={getFilteredSongs.loading}
+                        />
+                    )}
                 </Grid>
             </Box>
         </>

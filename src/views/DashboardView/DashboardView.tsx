@@ -82,7 +82,9 @@ export const DashboardView = () => {
     const { getRecentSongs, recentSongsFetched } = useGetRecentSongs()
     const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>()
 
-    const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(searchTerm)
+    const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
+        searchTerm
+    )
     const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
 
     useEffect(() => {
@@ -95,15 +97,19 @@ export const DashboardView = () => {
     }, [recentSongsFetched, filteredSongsFetched])
 
     const removeSongFromRecentSongs = (songId: number) => {
-        setRecentSongs(recentSongs?.filter(song => {
-            return song.songId !== songId
-        }))
+        setRecentSongs(
+            recentSongs?.filter((song) => {
+                return song.songId !== songId
+            })
+        )
     }
 
     const removeSongFromFilteredSongs = (songId: number) => {
-        setFilteredSongs(filteredSongs?.filter(song => {
-            return song.songId !== songId
-        }))
+        setFilteredSongs(
+            filteredSongs?.filter((song) => {
+                return song.songId !== songId
+            })
+        )
     }
 
     const handleAddSong = async (title: string) => {
@@ -184,13 +190,13 @@ export const DashboardView = () => {
                             />
                         </>
                     ) : (
-                            <SongGrid
-                                title={t("DashboardView:searchSongLabel")}
-                                songs={filteredSongs}
-                                removeSong={removeSongFromFilteredSongs}
-                                isLoading={getFilteredSongs.loading}
-                            />
-                        )}
+                        <SongGrid
+                            title={t("DashboardView:searchSongLabel")}
+                            songs={filteredSongs}
+                            removeSong={removeSongFromFilteredSongs}
+                            isLoading={getFilteredSongs.loading}
+                        />
+                    )}
                 </Grid>
             </Box>
             <Loading isLoading={postSong.loading} fullScreen />
