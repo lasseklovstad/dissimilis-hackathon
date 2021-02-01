@@ -74,7 +74,7 @@ export const NavBarCreateSong = (props: {
                             fullWidth
                         />
                     </Box>
-                    <MenuButton 
+                    <MenuButton
                         voiceId={props.voiceId}
                     />
                 </Box>

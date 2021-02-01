@@ -50,7 +50,6 @@ export const MenuButton = (props: {
     }
 
     const exportSong = async () => {
-        // alert(`this is the voice id you try to push ${props.voiceId}`)
         history.push(`/song/${songId}/export?voice=${props.voiceId}`)
     }
 
