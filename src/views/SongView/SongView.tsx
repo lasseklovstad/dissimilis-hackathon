@@ -101,6 +101,7 @@ export const SongView = () => {
                     <Grid item xs={12}>
                         <NavBarCreateSong
                             title={song.title}
+                            voiceId={selectedVoiceId}
                             onTitleBlur={handleTitleBlur}
                         />
                     </Grid>

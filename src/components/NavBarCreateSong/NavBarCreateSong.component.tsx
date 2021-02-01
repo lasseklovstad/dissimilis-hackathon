@@ -41,7 +41,8 @@ const useStyles = makeStyles({
 })
 
 export const NavBarCreateSong = (props: {
-    title: string
+    title: string,
+    voiceId: number,
     onTitleBlur: (title: string) => void
 }) => {
     const classes = useStyles()
@@ -73,7 +74,9 @@ export const NavBarCreateSong = (props: {
                             fullWidth
                         />
                     </Box>
-                    <MenuButton />
+                    <MenuButton 
+                        voiceId={props.voiceId}
+                    />
                 </Box>
             </AppBar>
         </Box>
