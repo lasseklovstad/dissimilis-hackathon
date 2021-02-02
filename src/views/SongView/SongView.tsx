@@ -30,12 +30,12 @@ const useStyles = makeStyles({
         zIndex: 100,
         top: "0",
         paddingTop: "32px",
-        paddingLeft: "16px",
-        paddingRight: "16px",
+        paddingLeft: "3.5vw",
+        paddingRight: "3.5vw",
     },
     body: {
-        marginLeft: "16px",
-        marginRight: "16px",
+        marginLeft: "3.5vw",
+        marginRight: "3.5vw",
     },
 })
 
