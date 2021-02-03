@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react"
-import { Grid, makeStyles } from "@material-ui/core"
+import { Grid, makeStyles, Slide, useScrollTrigger } from "@material-ui/core"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { NavBarCreateSong } from "../../components/NavBarCreateSong/NavBarCreateSong.component"
@@ -14,17 +14,28 @@ import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { SongContext, songReducer } from "./SongContextProvider.component"
 import { IVoice } from "../../models/IVoice"
+import { colors } from "../../utils/colors"
 
 const useStyles = makeStyles({
     root: {
-        marginLeft: "16px",
-        marginTop: "32px",
-        marginRight: "16px",
         marginBottom: "200px",
         "@media (max-width: 1080px)": {
             marginBottom: "250px",
         },
         width: "auto",
+    },
+    header: {
+        backgroundColor: colors.gray_100,
+        position: "sticky", // For Safari: -webkit-sticky
+        zIndex: 100,
+        top: "0",
+        paddingTop: "32px",
+        paddingLeft: "3.5vw",
+        paddingRight: "3.5vw",
+    },
+    body: {
+        marginLeft: "3.5vw",
+        marginRight: "3.5vw",
     },
 })
 
@@ -41,6 +52,7 @@ export const SongView = () => {
     const [selectedNoteLength, setSelectedNoteLength] = useState(1)
     const [isNoteSelected, setNoteIsSelected] = useState(true)
     const { putSong } = useUpdateSong(songId)
+    const trigger = useScrollTrigger()
 
     const [song, dispatchSong] = useReducer(songReducer, {
         title: "",
@@ -102,24 +114,28 @@ export const SongView = () => {
 
             {selectedVoiceId !== undefined && selectedVoice && (
                 <Grid container className={classes.root}>
-                    <Grid item xs={12}>
-                        <NavBarCreateSong
-                            title={song.title}
-                            voiceId={selectedVoiceId}
-                            onTitleBlur={handleTitleBlur}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <CreateSongTab
-                            onDeleteVoice={handleDeleteVoice}
-                            onUpdateVoice={handleUpdateVoice}
-                            onAddVoice={handleAddVoice}
-                            songId={songId}
-                            voices={song.voices}
-                            selectedVoice={selectedVoiceId}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
+                    <Slide appear={false} direction="down" in={!trigger}>
+                        <Grid container className={classes.header}>
+                            <Grid item xs={12}>
+                                <NavBarCreateSong
+                                    title={song.title}
+                                    onTitleBlur={handleTitleBlur}
+                                    voiceId={selectedVoiceId}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <CreateSongTab
+                                    onDeleteVoice={handleDeleteVoice}
+                                    onUpdateVoice={handleUpdateVoice}
+                                    onAddVoice={handleAddVoice}
+                                    songId={songId}
+                                    voices={song.voices}
+                                    selectedVoice={selectedVoiceId}
+                                />
+                            </Grid>
+                        </Grid>
+                    </Slide>
+                    <Grid item xs={12} className={classes.body}>
                         <SongContext.Provider
                             value={{
                                 dispatchSong,
