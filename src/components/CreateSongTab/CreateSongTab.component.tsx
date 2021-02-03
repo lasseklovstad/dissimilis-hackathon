@@ -46,7 +46,7 @@ export const CreateSongTab = (props: {
     const handleAddInstrument = async (title: string) => {
         const { error, result } = await postVoice.run({
             instrument: title,
-            voiceNumber: voices.length + 1,
+            voiceNumber: voices[voices.length - 1].partNumber + 1,
         })
 
         if (!error && result) {
