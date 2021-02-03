@@ -252,6 +252,10 @@ export const ExportView = () => {
                                                             4,
                                                     }}
                                                     heightOfBar={calculateHeightOfBar()}
+                                                    setSelectedNoteId={() =>
+                                                        undefined
+                                                    }
+                                                    selectedNoteId={undefined}
                                                 />
                                             </>
                                         )}

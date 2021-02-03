@@ -235,6 +235,21 @@ export const useDeleteChord = (
     }
 }
 
+export const useUpdateNote = (
+    songId: string,
+    voiceId: number,
+    barId: number, 
+    noteId: number
+) => {
+    const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${noteId}`
+    const headers = getHeaders()
+    const api = useApiService<IBar>(url, {headers})
+
+    return {
+        updateNote: {run: api.putData, ...api.state},
+    }
+}
+
 export const useAddBar = (songId: string, voiceId: number) => {
     const url = `song/${songId}/voice/${voiceId}/bar`
     const headers = getHeaders()

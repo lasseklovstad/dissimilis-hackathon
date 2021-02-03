@@ -17,6 +17,8 @@ type SongProps = {
     timeSignature: ITimeSignature
     heightOfBar: number
     exportMode?: boolean
+    setSelectedNoteId: (id: number | undefined) => void
+    selectedNoteId: number | undefined
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
@@ -40,6 +42,8 @@ export const Song = (props: SongProps) => {
         timeSignature,
         heightOfBar,
         exportMode,
+        setSelectedNoteId,
+        selectedNoteId
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
@@ -91,6 +95,8 @@ export const Song = (props: SongProps) => {
                                             onMenuClick={openMenu(bar)}
                                             bar={bar}
                                             height={heightOfBar}
+                                            setSelectedNoteId={setSelectedNoteId}
+                                            selectedNoteId={selectedNoteId}
                                         />
                                         <BarLine />
                                     </React.Fragment>

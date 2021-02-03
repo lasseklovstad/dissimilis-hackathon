@@ -9,7 +9,7 @@ import { Song } from "../../components/Song/Song.component"
 import { useBarsPerRow } from "../../utils/useBarsPerRow"
 import { useVoice } from "../../utils/useVoice"
 import { ISong } from "../../models/ISong"
-import { useGetSong, useUpdateSong } from "../../utils/useApiServiceSongs"
+import { useGetSong, useUpdateNote, useUpdateSong } from "../../utils/useApiServiceSongs"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { SongContext, songReducer } from "./SongContextProvider.component"
@@ -41,6 +41,15 @@ export const SongView = () => {
     const [selectedNoteLength, setSelectedNoteLength] = useState(1)
     const [isNoteSelected, setNoteIsSelected] = useState(true)
     const { putSong } = useUpdateSong(songId)
+    const [selectedNoteId, setSelectedNoteId] = useState<number | undefined>(
+        undefined
+    )
+    // Må legge til rette så jeg kan bruke valgt voice og valgt bar til dette api kallet
+    // const {updateNote} = useUpdateNote(songId, songVoiceId, barId, selectedNoteId)
+
+    const updateSelectedNoteId = (id: number | undefined) => {
+        setSelectedNoteId(id)
+    }
 
     const [song, dispatchSong] = useReducer(songReducer, {
         title: "",
@@ -55,6 +64,29 @@ export const SongView = () => {
     const selectedVoice = voices.find(
         (voice) => voice.songVoiceId === selectedVoiceId
     )
+
+    const handleChangeChord = () => {
+        if(selectedNoteId) {
+            
+        // const { error, result } = await postChord.run({
+        //     position:
+        //         positionArray.length > 0 ? positionArray[0] : position,
+        //     length: selectedNoteLength,
+        //     notes,
+        // } as IChordAndNotes)
+
+        // if (!error && result) {
+        //     dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+        // } 
+        }
+        // selectedChord holder informasjon om hvilken chord som er valgt
+        // selectedNoteId holder informasjon om hvilken note som er valgt
+    }
+
+    // Denne skal oppdatere sangen
+    useEffect(() => {
+        
+    }, [selectedChord])
 
     useEffect(() => {
         if (songInit) {
@@ -129,6 +161,8 @@ export const SongView = () => {
                                 timeSignature={{ denominator, numerator }}
                                 heightOfBar={heightOfBar}
                                 exportMode={false}
+                                setSelectedNoteId={updateSelectedNoteId}
+                                selectedNoteId={selectedNoteId}
                             />
                         </SongContext.Provider>
                     </Grid>
@@ -151,6 +185,7 @@ export const SongView = () => {
                     addBar={(bar) => dispatchSong({ type: "ADD_BAR", bar })}
                     songId={songId}
                     voiceId={selectedVoiceId}
+                    selectedNoteId={selectedNoteId}
                 />
             )}
         </>
