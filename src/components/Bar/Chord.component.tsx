@@ -8,7 +8,7 @@ import { getChord, getColor, tangentToNumber } from "../../utils/bar.util"
 type ChordProps = {
     chordsAndNotes: IChordAndNotes
     onContextMenu: (event: React.MouseEvent) => void
-    onClick: () => void
+    onClick: (event: React.MouseEvent) => void
     onMouseEnter: () => void
     onMouseLeave: () => void
     highlight: boolean
@@ -106,9 +106,10 @@ export const Chord = (props: ChordProps) => {
                             const color = bgcolor
                                 ? getContrastText(bgcolor)
                                 : "#000000"
+                            const key = note + i
                             return (
                                 <Box
-                                    key={note + i}
+                                    key={key}
                                     bgcolor={bgcolor}
                                     color={color}
                                     mt="1px"

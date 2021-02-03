@@ -54,12 +54,8 @@ export const Bar = (props: {
         rightClicked
     )
 
-    const handleRightClick = (noteId: number | null) => (
-        event: React.MouseEvent
-    ) => {
+    const handleRightClick = () => (event: React.MouseEvent) => {
         event.preventDefault()
-        setMenuPosition({ top: event.clientY - 4, left: event.clientX - 2 })
-        setRightClicked(noteId)
     }
 
     const handleMenuSelect = async (method: "delete") => {
@@ -73,18 +69,29 @@ export const Bar = (props: {
         }
     }
 
-    const handleClick = async (position: number) => {
-        const notes = isNoteSelected
-            ? [selectedChord]
-            : getNotesFromChord(selectedChord)
-        const { error, result } = await postChord.run({
-            position: positionArray.length > 0 ? positionArray[0] : position,
-            length: selectedNoteLength,
-            notes,
-        } as IChordAndNotes)
+    const handleClick = (chord: IChordAndNotes) => async (
+        event: React.MouseEvent
+    ) => {
+        if (chord.noteId === null) {
+            const notes = isNoteSelected
+                ? [selectedChord]
+                : getNotesFromChord(selectedChord)
+            const { error, result } = await postChord.run({
+                position:
+                    positionArray.length > 0
+                        ? positionArray[0]
+                        : chord.position,
+                length: selectedNoteLength,
+                notes,
+            } as IChordAndNotes)
 
-        if (!error && result) {
-            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+            }
+        } else {
+            event.preventDefault()
+            setMenuPosition({ top: event.clientY - 4, left: event.clientX - 2 })
+            setRightClicked(chord.noteId)
         }
     }
 
@@ -175,12 +182,8 @@ export const Bar = (props: {
                                         chordsAndNotes={chord}
                                         highlight={highlight}
                                         key={chord.position}
-                                        onContextMenu={handleRightClick(
-                                            chord.noteId
-                                        )}
-                                        onClick={() =>
-                                            handleClick(chord.position)
-                                        }
+                                        onContextMenu={handleRightClick}
+                                        onClick={handleClick(chord)}
                                     />
                                 )
                             })}
