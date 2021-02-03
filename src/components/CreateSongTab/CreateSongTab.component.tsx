@@ -139,6 +139,7 @@ export const CreateSongTab = (props: {
                 cancelText={t("Modal:cancel")}
                 headerText={t("Modal:addInstrument")}
                 labelText={t("Modal:nameOfInstrument")}
+                characterLimit={100}
             />
             <InputModal
                 defaultValue={rightClickedVoice?.title || ""}
