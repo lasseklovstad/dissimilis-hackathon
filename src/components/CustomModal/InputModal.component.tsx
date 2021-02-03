@@ -45,8 +45,6 @@ const useStyles = makeStyles({
     },
 })
 
-const CHARACTER_LIMIT = 250
-
 export const InputModal = (props: {
     defaultValue?: string
     handleOnSaveClick: (value: string) => void
@@ -57,9 +55,13 @@ export const InputModal = (props: {
     cancelText: string
     headerText: string
     labelText: string
+    characterLimit?: number
 }) => {
     const classes = useStyles()
     const [textFieldInput, setTextFieldInput] = useState("")
+
+    const CHARACTER_LIMIT =
+        props.characterLimit === undefined ? 250 : props.characterLimit
 
     useEffect(() => {
         if (props.defaultValue) {
