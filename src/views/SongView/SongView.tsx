@@ -78,6 +78,10 @@ export const SongView = () => {
 
     const handleDeleteVoice = (voice: IVoice) => {
         dispatchSong({ type: "DELETE_VOICE", songVoiceId: voice.songVoiceId })
+
+        if(voice.songVoiceId === selectedVoiceId) {
+            history.push(`/song/${songId}`)
+        }
     }
 
     const handleUpdateVoice = (voice: IVoice) => {
