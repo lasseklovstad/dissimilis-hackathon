@@ -54,8 +54,14 @@ export const Bar = (props: {
         rightClicked
     )
 
-    const handleRightClick = () => (event: React.MouseEvent) => {
+    const handleRightClick = (noteId: number | null) => (
+        event: React.MouseEvent
+    ) => {
         event.preventDefault()
+        if (noteId !== null) {
+            setMenuPosition({ top: event.clientY - 4, left: event.clientX - 2 })
+            setRightClicked(noteId)
+        }
     }
 
     const handleMenuSelect = async (method: "delete") => {
@@ -182,7 +188,9 @@ export const Bar = (props: {
                                         chordsAndNotes={chord}
                                         highlight={highlight}
                                         key={chord.position}
-                                        onContextMenu={handleRightClick}
+                                        onContextMenu={handleRightClick(
+                                            chord.noteId
+                                        )}
                                         onClick={handleClick(chord)}
                                     />
                                 )
