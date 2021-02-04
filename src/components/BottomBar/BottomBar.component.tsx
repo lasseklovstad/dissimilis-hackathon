@@ -236,44 +236,6 @@ export const BottomBar = (props: {
                         </ToggleButton>
                     </StyledToggleButtonGroup>
                 </div>
-                {selectedNoteId && <div className={classes.container} style={{ height: "100%" }}>
-                    <div className={classes.flexelement} style={{ margin: "8px"}}>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    color="primary"
-                                    checked
-                                    onChange={undefined}
-                                />
-                            }
-                            label="Grunntone"
-                            labelPlacement="end"
-                        />
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    color="primary"
-                                    checked
-                                    onChange={undefined}
-                                />
-                            }
-                            label="Kvint"
-                            labelPlacement="end"
-                        />
-                        {/* need to add a translation */}
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    color="primary"
-                                    checked
-                                    onChange={undefined}
-                                />
-                            }
-                            label="End"
-                            labelPlacement="end"
-                        />
-                    </div>
-                </div>}
                 <div className={classes.container}>
                     <MenuButtonWithAddIcon
                         text={t("BottomBar:addBar")}

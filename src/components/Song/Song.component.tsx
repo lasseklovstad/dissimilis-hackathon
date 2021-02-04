@@ -17,7 +17,13 @@ type SongProps = {
     timeSignature: ITimeSignature
     heightOfBar: number
     exportMode?: boolean
-    setSelectedNoteId: (id: number | undefined) => void
+    setSelectedNoteId: (
+        noteId: number | undefined,
+        barId: number | undefined,
+        chord: string,
+        noteLength: number,
+        isNote: boolean
+    ) => void
     selectedNoteId: number | undefined
 }
 
@@ -43,7 +49,7 @@ export const Song = (props: SongProps) => {
         heightOfBar,
         exportMode,
         setSelectedNoteId,
-        selectedNoteId
+        selectedNoteId,
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
@@ -95,7 +101,9 @@ export const Song = (props: SongProps) => {
                                             onMenuClick={openMenu(bar)}
                                             bar={bar}
                                             height={heightOfBar}
-                                            setSelectedNoteId={setSelectedNoteId}
+                                            setSelectedNoteId={
+                                                setSelectedNoteId
+                                            }
                                             selectedNoteId={selectedNoteId}
                                         />
                                         <BarLine />

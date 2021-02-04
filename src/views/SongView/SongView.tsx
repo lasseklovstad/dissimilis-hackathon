@@ -9,7 +9,11 @@ import { Song } from "../../components/Song/Song.component"
 import { useBarsPerRow } from "../../utils/useBarsPerRow"
 import { useVoice } from "../../utils/useVoice"
 import { ISong } from "../../models/ISong"
-import { useGetSong, useUpdateNote, useUpdateSong } from "../../utils/useApiServiceSongs"
+import {
+    useGetSong,
+    useUpdateNote,
+    useUpdateSong,
+} from "../../utils/useApiServiceSongs"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { SongContext, songReducer } from "./SongContextProvider.component"
@@ -44,11 +48,22 @@ export const SongView = () => {
     const [selectedNoteId, setSelectedNoteId] = useState<number | undefined>(
         undefined
     )
-    // Må legge til rette så jeg kan bruke valgt voice og valgt bar til dette api kallet
-    // const {updateNote} = useUpdateNote(songId, songVoiceId, barId, selectedNoteId)
+    const [selectedBarId, setSelectedBarId] = useState<number | undefined>(
+        undefined
+    )
 
-    const updateSelectedNoteId = (id: number | undefined) => {
-        setSelectedNoteId(id)
+    const updateSelectedNoteId = (
+        noteId: number | undefined,
+        barId: number | undefined,
+        chord: string,
+        noteLength: number,
+        isNote: boolean
+    ) => {
+        setSelectedNoteId(noteId)
+        setSelectedBarId(barId)
+        setSelectedChord(chord),
+        setSelectedNoteLength(noteLength),
+        setNoteIsSelected(isNote)
     }
 
     const [song, dispatchSong] = useReducer(songReducer, {
@@ -65,28 +80,19 @@ export const SongView = () => {
         (voice) => voice.songVoiceId === selectedVoiceId
     )
 
+    const { updateNote } = useUpdateNote(
+        songId,
+        selectedVoiceId,
+        selectedBarId,
+        selectedNoteId
+    )
     const handleChangeChord = () => {
-        if(selectedNoteId) {
-            
-        // const { error, result } = await postChord.run({
-        //     position:
-        //         positionArray.length > 0 ? positionArray[0] : position,
-        //     length: selectedNoteLength,
-        //     notes,
-        // } as IChordAndNotes)
-
-        // if (!error && result) {
-        //     dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-        // } 
+        if (selectedNoteId && selectedVoiceId && selectedBarId) {
+            updateNote.run()
         }
         // selectedChord holder informasjon om hvilken chord som er valgt
         // selectedNoteId holder informasjon om hvilken note som er valgt
     }
-
-    // Denne skal oppdatere sangen
-    useEffect(() => {
-        
-    }, [selectedChord])
 
     useEffect(() => {
         if (songInit) {

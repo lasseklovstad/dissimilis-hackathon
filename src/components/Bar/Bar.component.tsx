@@ -16,8 +16,14 @@ export const Bar = (props: {
     exportMode: boolean
     onMenuClick: (anchorEl: HTMLElement) => void
     masterSheet: boolean
-    showHouseNumber: boolean,
-    setSelectedNoteId: (id: number | undefined) => void
+    showHouseNumber: boolean
+    setSelectedNoteId: (
+        noteId: number | undefined,
+        barId: number | undefined,
+        chord: string,
+        noteLength: number,
+        isNote: boolean
+    ) => void
     selectedNoteId: number | undefined
 }) => {
     const {
@@ -36,7 +42,7 @@ export const Bar = (props: {
         },
         height = 160,
         setSelectedNoteId,
-        selectedNoteId
+        selectedNoteId,
     } = props
     const [menuPosition, setMenuPosition] = useState<
         { top: number; left: number } | undefined
@@ -77,9 +83,13 @@ export const Bar = (props: {
         }
     }
 
-    const handleClick = async (position: number, noteId: number | null) => {
+    const handleClick = async (
+        position: number,
+        noteId: number | null,
+        chord: IChordAndNotes
+    ) => {
         if (!noteId) {
-            setSelectedNoteId(undefined)
+            setSelectedNoteId(undefined, undefined, "C", 1, true)
             const notes = isNoteSelected
                 ? [selectedChord]
                 : getNotesFromChord(selectedChord)
@@ -94,8 +104,17 @@ export const Bar = (props: {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
             }
         } else {
-            setSelectedNoteId(noteId)
-            console.log(noteId, selectedNoteId)
+            if (chord.notes.length === 1) {
+                setSelectedNoteId(
+                    noteId,
+                    barId,
+                    chord.notes[0],
+                    chord.length,
+                    true
+                )
+                return
+            }
+            setSelectedNoteId(noteId, barId, "C", 1, true)
         }
     }
 
@@ -169,9 +188,9 @@ export const Bar = (props: {
                                 return [...noter, note]
                             }, [])
                             .map((chord, i, allChords) => {
-                                const highlight = positionArray.includes(
-                                    chord.position
-                                ) || (chord.noteId === selectedNoteId)
+                                const highlight =
+                                    positionArray.includes(chord.position) ||
+                                    chord.noteId === selectedNoteId
                                 return (
                                     <Chord
                                         disabled={exportMode}
@@ -192,7 +211,8 @@ export const Bar = (props: {
                                         onClick={() =>
                                             handleClick(
                                                 chord.position,
-                                                chord.noteId
+                                                chord.noteId,
+                                                chord
                                             )
                                         }
                                     />

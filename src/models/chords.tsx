@@ -304,3 +304,7 @@ export const getNotesFromChord = (chord: string) => {
         return simplifyNote(note)
     })
 }
+
+export const getChordFromNotes = (notes: string[]) => {
+    return 1;
+}

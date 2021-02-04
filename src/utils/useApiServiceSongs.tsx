@@ -237,9 +237,9 @@ export const useDeleteChord = (
 
 export const useUpdateNote = (
     songId: string,
-    voiceId: number,
-    barId: number, 
-    noteId: number
+    voiceId: number | undefined,
+    barId: number | undefined, 
+    noteId: number | undefined
 ) => {
     const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${noteId}`
     const headers = getHeaders()
