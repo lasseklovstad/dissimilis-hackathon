@@ -19,7 +19,7 @@ type SongProps = {
     exportMode?: boolean
     setSelectedNoteId: (
         noteId: number | undefined,
-        barId: number | undefined,
+        bar: IBar | undefined,
         chord: string,
         noteLength: number,
         isNote: boolean,

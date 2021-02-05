@@ -19,6 +19,7 @@ import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { SongContext, songReducer } from "./SongContextProvider.component"
 import { IVoice } from "../../models/IVoice"
 import { chords, getNotesFromChord, notes } from "../../models/chords"
+import { IBar, IChordAndNotes } from "../../models/IBar"
 
 const useStyles = makeStyles({
     root: {
@@ -49,14 +50,14 @@ export const SongView = () => {
     const [selectedNoteId, setSelectedNoteId] = useState<number | undefined>(
         undefined
     )
-    const [selectedBarId, setSelectedBarId] = useState<number | undefined>(
+    const [selectedBar, setSelectedBar] = useState<IBar | undefined>(
         undefined
     )
     const [selectedPosition, setSelectedPosition] = useState<number>(0)
 
     const updateSelectedNoteId = (
         noteId: number | undefined,
-        barId: number | undefined,
+        bar: IBar | undefined,
         chord: string,
         noteLength: number,
         isNote: boolean,
@@ -64,7 +65,7 @@ export const SongView = () => {
     ) => {
         setNoteIsSelected(isNote)
         setSelectedNoteId(noteId)
-        setSelectedBarId(barId)
+        setSelectedBar(bar)
         setSelectedNoteLength(noteLength)
         setSelectedChord(chord)
         setSelectedPosition(position)
@@ -87,14 +88,14 @@ export const SongView = () => {
     const { updateNote } = useUpdateNote(
         songId,
         selectedVoiceId,
-        selectedBarId,
+        selectedBar?.barId,
         selectedNoteId
     )
     const handleChangeChord = async (chord: string) => {
-        if (selectedNoteId && selectedVoiceId && selectedBarId) {
+        if (selectedNoteId && selectedVoiceId && selectedBar) {
             const notes = isNoteSelected ? [chord] : getNotesFromChord(chord)
-            console.log(notes)
 
+            console.log(selectedPosition)
             const {error, result} = await updateNote.run({
                 position: selectedPosition,
                 length: selectedNoteLength,
@@ -106,6 +107,69 @@ export const SongView = () => {
             }
         }
         setSelectedChord(chord)
+    }
+
+    const handleChangeNoteLength = (noteLength: number) => {
+        if(selectedNoteId && selectedVoiceId && selectedBar) {
+            for(let i = 0; i < selectedBar.chordsAndNotes.length; i++) {
+                if(selectedBar.chordsAndNotes[i].noteId === selectedNoteId) {
+                    if(noteLength < selectedBar.chordsAndNotes[i].length) {
+                        makeUpdates(noteLength, selectedBar.chordsAndNotes[i].position)
+                        return
+                    }
+                    checkBeforeUpdate(selectedBar.chordsAndNotes[i], noteLength, i)
+                }
+            }
+        }        
+    }
+
+    const checkBeforeUpdate = (note: IChordAndNotes, noteLength: number, index: number) => {
+        if(selectedBar) {
+            if(note.position === 0){
+                if(selectedBar.chordsAndNotes[index + 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index + 1].length < noteLength )
+                {
+                    makeUpdates(noteLength, note.position)
+                }
+            }
+            else if ( note.position === 3) {
+                if(selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].length < noteLength)
+                {
+                    makeUpdates(noteLength, selectedBar.chordsAndNotes[index - 1].position)
+                }
+            }
+            else {
+                if(selectedBar.chordsAndNotes[index + 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index + 1].length < noteLength){
+                    makeUpdates(noteLength, note.position)
+                    return
+                }
+                if (selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].length < noteLength) {
+                    makeUpdates(noteLength, selectedBar.chordsAndNotes[index - 1].position)
+                    return
+                }
+                if(selectedBar.chordsAndNotes[index + 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && 
+                (selectedBar.chordsAndNotes[index + 1].length + selectedBar.chordsAndNotes[index - 1].length) < noteLength )
+                {
+                    makeUpdates(noteLength, selectedBar.chordsAndNotes[index - 1].position)
+                    
+                }
+            }
+        }
+    }
+
+
+    const makeUpdates = async (noteLength: number, position: number) => {
+        const notes = isNoteSelected ? [selectedChord] : getNotesFromChord(selectedChord)
+
+            const {error, result} = await updateNote.run({
+                position,
+                length: noteLength,
+                notes
+            })
+
+            if (!error && result) {
+                dispatchSong({type: "UPDATE_BAR", bar: result.data})
+            }
+            setSelectedNoteLength(noteLength)
     }
 
     useEffect(() => {
@@ -199,7 +263,7 @@ export const SongView = () => {
                     onChordChange={(chord) => handleChangeChord(chord)}
                     selectedNoteLength={selectedNoteLength}
                     onNoteLengthChange={(length) =>
-                        setSelectedNoteLength(length)
+                        handleChangeNoteLength(length)
                     }
                     timeSignature={{ denominator, numerator }}
                     addBar={(bar) => dispatchSong({ type: "ADD_BAR", bar })}

@@ -19,7 +19,7 @@ export const Bar = (props: {
     showHouseNumber: boolean
     setSelectedNoteId: (
         noteId: number | undefined,
-        barId: number | undefined,
+        bar: IBar | undefined,
         chord: string,
         noteLength: number,
         isNote: boolean,
@@ -106,11 +106,10 @@ export const Bar = (props: {
             }
         } else {
             const highlightedChord = getChordFromNotes(chord.notes)
-            console.log(highlightedChord)
             if (chord.notes.length === 1) {
                 setSelectedNoteId(
                     noteId,
-                    barId,
+                    props.bar,
                     chord.notes[0],
                     chord.length,
                     true,
@@ -121,7 +120,7 @@ export const Bar = (props: {
             
                 setSelectedNoteId(
                     noteId,
-                    barId,
+                    props.bar,
                     highlightedChord,
                     chord.length,
                     false,
