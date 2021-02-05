@@ -126,28 +126,28 @@ export const SongView = () => {
     const checkBeforeUpdate = (note: IChordAndNotes, noteLength: number, index: number) => {
         if(selectedBar) {
             if(note.position === 0){
-                if(selectedBar.chordsAndNotes[index + 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index + 1].length < noteLength )
+                if(selectedBar.chordsAndNotes[index + 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index + 1].length + note.length >= noteLength )
                 {
                     makeUpdates(noteLength, note.position)
                 }
             }
             else if ( note.position === 3) {
-                if(selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].length < noteLength)
+                if(selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].length + note.length >= noteLength)
                 {
                     makeUpdates(noteLength, selectedBar.chordsAndNotes[index - 1].position)
                 }
             }
             else {
-                if(selectedBar.chordsAndNotes[index + 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index + 1].length < noteLength){
+                if(selectedBar.chordsAndNotes[index + 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index + 1].length + note.length >= noteLength ){
                     makeUpdates(noteLength, note.position)
                     return
                 }
-                if (selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].length < noteLength) {
+                if (selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].length +note.length >= noteLength) {
                     makeUpdates(noteLength, selectedBar.chordsAndNotes[index - 1].position)
                     return
                 }
                 if(selectedBar.chordsAndNotes[index + 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && 
-                (selectedBar.chordsAndNotes[index + 1].length + selectedBar.chordsAndNotes[index - 1].length) < noteLength )
+                (selectedBar.chordsAndNotes[index + 1].length + selectedBar.chordsAndNotes[index - 1].length + note.length) >= noteLength )
                 {
                     makeUpdates(noteLength, selectedBar.chordsAndNotes[index - 1].position)
                     
