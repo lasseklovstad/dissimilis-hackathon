@@ -91,11 +91,11 @@ export const SongView = () => {
         selectedBar?.barId,
         selectedNoteId
     )
+
     const handleChangeChord = async (chord: string) => {
         if (selectedNoteId && selectedVoiceId && selectedBar) {
             const notes = isNoteSelected ? [chord] : getNotesFromChord(chord)
 
-            console.log(selectedPosition)
             const {error, result} = await updateNote.run({
                 position: selectedPosition,
                 length: selectedNoteLength,
@@ -117,13 +117,14 @@ export const SongView = () => {
                         makeUpdates(noteLength, selectedBar.chordsAndNotes[i].position)
                         return
                     }
-                    checkBeforeUpdate(selectedBar.chordsAndNotes[i], noteLength, i)
+                    checkBeforeUpdate(selectedBar.chordsAndNotes[i], noteLength, i, selectedBar.chordsAndNotes.length)
                 }
             }
         }        
     }
 
-    const checkBeforeUpdate = (note: IChordAndNotes, noteLength: number, index: number) => {
+    const checkBeforeUpdate = (note: IChordAndNotes, noteLength: number, index: number, notesLength: number) => {
+        console.log(selectedBar)
         if(selectedBar) {
             if(note.position === 0){
                 if(selectedBar.chordsAndNotes[index + 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index + 1].length + note.length >= noteLength )
@@ -131,18 +132,20 @@ export const SongView = () => {
                     makeUpdates(noteLength, note.position)
                 }
             }
-            else if ( note.position === 3) {
+            else if ( note.position === 3 || index === notesLength - 1) {
                 if(selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].length + note.length >= noteLength)
                 {
                     makeUpdates(noteLength, selectedBar.chordsAndNotes[index - 1].position)
                 }
             }
+            // Må selvfølgelig sjekke om det er en neste før man leser av den
             else {
                 if(selectedBar.chordsAndNotes[index + 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index + 1].length + note.length >= noteLength ){
+                    console.log("We here")
                     makeUpdates(noteLength, note.position)
                     return
                 }
-                if (selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].length +note.length >= noteLength) {
+                if (selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].length + note.length >= noteLength) {
                     makeUpdates(noteLength, selectedBar.chordsAndNotes[index - 1].position)
                     return
                 }
@@ -155,8 +158,7 @@ export const SongView = () => {
             }
         }
     }
-
-
+    
     const makeUpdates = async (noteLength: number, position: number) => {
         const notes = isNoteSelected ? [selectedChord] : getNotesFromChord(selectedChord)
 
@@ -168,8 +170,10 @@ export const SongView = () => {
 
             if (!error && result) {
                 dispatchSong({type: "UPDATE_BAR", bar: result.data})
+                setSelectedNoteLength(noteLength)
+                setSelectedPosition(position)
+                setSelectedBar(result.data)
             }
-            setSelectedNoteLength(noteLength)
     }
 
     useEffect(() => {

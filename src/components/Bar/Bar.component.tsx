@@ -106,6 +106,7 @@ export const Bar = (props: {
             }
         } else {
             const highlightedChord = getChordFromNotes(chord.notes)
+        
             if (chord.notes.length === 1) {
                 setSelectedNoteId(
                     noteId,
