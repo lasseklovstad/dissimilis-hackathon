@@ -306,5 +306,5 @@ export const getNotesFromChord = (chord: string) => {
 }
 
 export const getChordFromNotes = (notes: string[]) => {
-    return 1;
+    return Chord.detect(notes)[0]
 }

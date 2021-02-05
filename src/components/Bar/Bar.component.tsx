@@ -8,7 +8,7 @@ import { ChordMenu } from "./ChordMenu.component"
 import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
 import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
-import { getNotesFromChord } from "../../models/chords"
+import { getChordFromNotes, getNotesFromChord } from "../../models/chords"
 
 export const Bar = (props: {
     bar: IBar
@@ -22,7 +22,8 @@ export const Bar = (props: {
         barId: number | undefined,
         chord: string,
         noteLength: number,
-        isNote: boolean
+        isNote: boolean,
+        position: number
     ) => void
     selectedNoteId: number | undefined
 }) => {
@@ -89,7 +90,7 @@ export const Bar = (props: {
         chord: IChordAndNotes
     ) => {
         if (!noteId) {
-            setSelectedNoteId(undefined, undefined, "C", 1, true)
+            setSelectedNoteId(undefined, undefined, "C", 1, true, 0)
             const notes = isNoteSelected
                 ? [selectedChord]
                 : getNotesFromChord(selectedChord)
@@ -104,17 +105,29 @@ export const Bar = (props: {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
             }
         } else {
+            const highlightedChord = getChordFromNotes(chord.notes)
+            console.log(highlightedChord)
             if (chord.notes.length === 1) {
                 setSelectedNoteId(
                     noteId,
                     barId,
                     chord.notes[0],
                     chord.length,
-                    true
+                    true,
+                    chord.position,
                 )
                 return
             }
-            setSelectedNoteId(noteId, barId, "C", 1, true)
+            
+                setSelectedNoteId(
+                    noteId,
+                    barId,
+                    highlightedChord,
+                    chord.length,
+                    false,
+                    chord.position,
+                )
+                
         }
     }
 

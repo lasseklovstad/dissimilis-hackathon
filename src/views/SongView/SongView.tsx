@@ -18,6 +18,7 @@ import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { SongContext, songReducer } from "./SongContextProvider.component"
 import { IVoice } from "../../models/IVoice"
+import { chords, getNotesFromChord, notes } from "../../models/chords"
 
 const useStyles = makeStyles({
     root: {
@@ -51,19 +52,22 @@ export const SongView = () => {
     const [selectedBarId, setSelectedBarId] = useState<number | undefined>(
         undefined
     )
+    const [selectedPosition, setSelectedPosition] = useState<number>(0)
 
     const updateSelectedNoteId = (
         noteId: number | undefined,
         barId: number | undefined,
         chord: string,
         noteLength: number,
-        isNote: boolean
+        isNote: boolean,
+        position: number
     ) => {
+        setNoteIsSelected(isNote)
         setSelectedNoteId(noteId)
         setSelectedBarId(barId)
-        setSelectedChord(chord),
-        setSelectedNoteLength(noteLength),
-        setNoteIsSelected(isNote)
+        setSelectedNoteLength(noteLength)
+        setSelectedChord(chord)
+        setSelectedPosition(position)
     }
 
     const [song, dispatchSong] = useReducer(songReducer, {
@@ -86,12 +90,22 @@ export const SongView = () => {
         selectedBarId,
         selectedNoteId
     )
-    const handleChangeChord = () => {
+    const handleChangeChord = async (chord: string) => {
         if (selectedNoteId && selectedVoiceId && selectedBarId) {
-            updateNote.run()
+            const notes = isNoteSelected ? [chord] : getNotesFromChord(chord)
+            console.log(notes)
+
+            const {error, result} = await updateNote.run({
+                position: selectedPosition,
+                length: selectedNoteLength,
+                notes,
+            })
+            
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+            }
         }
-        // selectedChord holder informasjon om hvilken chord som er valgt
-        // selectedNoteId holder informasjon om hvilken note som er valgt
+        setSelectedChord(chord)
     }
 
     useEffect(() => {
@@ -182,7 +196,7 @@ export const SongView = () => {
                         setNoteIsSelected(selected)
                     }
                     selectedChord={selectedChord}
-                    onChordChange={(chord) => setSelectedChord(chord)}
+                    onChordChange={(chord) => handleChangeChord(chord)}
                     selectedNoteLength={selectedNoteLength}
                     onNoteLengthChange={(length) =>
                         setSelectedNoteLength(length)
@@ -191,7 +205,7 @@ export const SongView = () => {
                     addBar={(bar) => dispatchSong({ type: "ADD_BAR", bar })}
                     songId={songId}
                     voiceId={selectedVoiceId}
-                    selectedNoteId={selectedNoteId}
+                    notesOrChords={isNoteSelected ? notes : chords}
                 />
             )}
         </>

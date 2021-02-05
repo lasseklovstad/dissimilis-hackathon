@@ -22,7 +22,8 @@ type SongProps = {
         barId: number | undefined,
         chord: string,
         noteLength: number,
-        isNote: boolean
+        isNote: boolean,
+        position: number
     ) => void
     selectedNoteId: number | undefined
 }
