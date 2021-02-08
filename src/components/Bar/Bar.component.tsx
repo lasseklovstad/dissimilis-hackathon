@@ -8,7 +8,8 @@ import { ChordMenu } from "./ChordMenu.component"
 import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
 import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
-import { getChordFromNotes, getNotesFromChord } from "../../models/chords"
+import { getNotesFromChord } from "../../models/chords"
+import { getChord } from "../../utils/bar.util"
 
 export const Bar = (props: {
     bar: IBar
@@ -17,15 +18,15 @@ export const Bar = (props: {
     onMenuClick: (anchorEl: HTMLElement) => void
     masterSheet: boolean
     showHouseNumber: boolean
-    setSelectedNoteId: (
-        noteId: number | undefined,
+    setValuesForSelectedNote: (
+        noteId: number | undefined | null,
         bar: IBar | undefined,
         chord: string,
         noteLength: number,
         isNote: boolean,
         position: number
     ) => void
-    selectedNoteId: number | undefined
+    selectedNoteId: number | undefined | null
 }) => {
     const {
         exportMode,
@@ -42,7 +43,7 @@ export const Bar = (props: {
             songVoiceId,
         },
         height = 160,
-        setSelectedNoteId,
+        setValuesForSelectedNote,
         selectedNoteId,
     } = props
     const [menuPosition, setMenuPosition] = useState<
@@ -85,49 +86,36 @@ export const Bar = (props: {
     }
 
     const handleClick = async (
-        position: number,
-        noteId: number | null,
         chord: IChordAndNotes
     ) => {
-        if (!noteId) {
-            setSelectedNoteId(undefined, undefined, "C", 1, true, 0)
+        if (!chord.noteId) {
             const notes = isNoteSelected
                 ? [selectedChord]
                 : getNotesFromChord(selectedChord)
+
+            const position = positionArray.length > 0 ? positionArray[0] : chord.position
             const { error, result } = await postChord.run({
-                position:
-                    positionArray.length > 0 ? positionArray[0] : position,
+                position,
                 length: selectedNoteLength,
                 notes,
             } as IChordAndNotes)
 
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+                const newNote = result.data.chordsAndNotes.find(n => n.position === position)
+                setValuesForSelectedNote(newNote?.noteId, result.data, selectedChord, selectedNoteLength, isNoteSelected, position)
             }
-        } else {
-            const highlightedChord = getChordFromNotes(chord.notes)
-        
-            if (chord.notes.length === 1) {
-                setSelectedNoteId(
-                    noteId,
-                    props.bar,
-                    chord.notes[0],
-                    chord.length,
-                    true,
-                    chord.position,
-                )
-                return
-            }
-            
-                setSelectedNoteId(
-                    noteId,
-                    props.bar,
-                    highlightedChord,
-                    chord.length,
-                    false,
-                    chord.position,
-                )
-                
+        } else { 
+            const isNote = chord.notes.length === 1    
+
+            setValuesForSelectedNote(
+                chord.noteId,
+                props.bar,
+                isNote? chord.notes[0] : getChord(chord.notes),
+                chord.length,
+                isNote,
+                chord.position
+            )
         }
     }
 
@@ -223,8 +211,6 @@ export const Bar = (props: {
                                         )}
                                         onClick={() =>
                                             handleClick(
-                                                chord.position,
-                                                chord.noteId,
                                                 chord
                                             )
                                         }

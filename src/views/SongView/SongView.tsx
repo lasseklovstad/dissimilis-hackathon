@@ -47,16 +47,16 @@ export const SongView = () => {
     const [selectedNoteLength, setSelectedNoteLength] = useState(1)
     const [isNoteSelected, setNoteIsSelected] = useState(true)
     const { putSong } = useUpdateSong(songId)
-    const [selectedNoteId, setSelectedNoteId] = useState<number | undefined>(
-        undefined
-    )
-    const [selectedBar, setSelectedBar] = useState<IBar | undefined>(
-        undefined
-    )
-    const [selectedPosition, setSelectedPosition] = useState<number>(0)
 
-    const updateSelectedNoteId = (
-        noteId: number | undefined,
+    // added values
+    const [selectedNoteId, setSelectedNoteId] = useState<number | undefined | null>(
+        undefined
+    )
+    const [selectedBar, setSelectedBar] = useState<IBar | undefined>(undefined)
+    const [selectedNotePosition, setSelectedNotePosition] = useState<number>(0)
+
+    const setValuesForSelectedNote = (
+        noteId: number | undefined | null,
         bar: IBar | undefined,
         chord: string,
         noteLength: number,
@@ -64,11 +64,12 @@ export const SongView = () => {
         position: number
     ) => {
         setNoteIsSelected(isNote)
-        setSelectedNoteId(noteId)
-        setSelectedBar(bar)
         setSelectedNoteLength(noteLength)
         setSelectedChord(chord)
-        setSelectedPosition(position)
+
+        setSelectedNoteId(noteId)
+        setSelectedBar(bar)
+        setSelectedNotePosition(position)
     }
 
     const [song, dispatchSong] = useReducer(songReducer, {
@@ -92,16 +93,18 @@ export const SongView = () => {
         selectedNoteId
     )
 
+    // Should only run if there is something selected
     const handleChangeChord = async (chord: string) => {
+        // need to check the if statement
         if (selectedNoteId && selectedVoiceId && selectedBar) {
             const notes = isNoteSelected ? [chord] : getNotesFromChord(chord)
 
-            const {error, result} = await updateNote.run({
-                position: selectedPosition,
+            const { error, result } = await updateNote.run({
+                position: selectedNotePosition,
                 length: selectedNoteLength,
                 notes,
             })
-            
+
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
             }
@@ -109,71 +112,116 @@ export const SongView = () => {
         setSelectedChord(chord)
     }
 
+    // need to find out where the setselectednotelength should be placed
     const handleChangeNoteLength = (noteLength: number) => {
-        if(selectedNoteId && selectedVoiceId && selectedBar) {
-            for(let i = 0; i < selectedBar.chordsAndNotes.length; i++) {
-                if(selectedBar.chordsAndNotes[i].noteId === selectedNoteId) {
-                    if(noteLength < selectedBar.chordsAndNotes[i].length) {
-                        makeUpdates(noteLength, selectedBar.chordsAndNotes[i].position)
-                        return
-                    }
-                    checkBeforeUpdate(selectedBar.chordsAndNotes[i], noteLength, i, selectedBar.chordsAndNotes.length)
+        if (selectedNoteId && selectedVoiceId && selectedBar) {
+            const note = selectedBar.chordsAndNotes.find(
+                (b) => b.noteId === selectedNoteId
+            )
+
+            if (note) {
+                if (note.length > noteLength) {
+                    updateNoteLength(noteLength, note.position)
+                    return
                 }
+
+                const isPossible = checkIfUpdateLengthIsPossible(
+                    note,
+                    noteLength,
+                    selectedBar.chordsAndNotes.findIndex(
+                        (b) => b.noteId === selectedNoteId
+                    )
+                )
+
+                if(isPossible) {
+                    return
+                }
+
+                setValuesForSelectedNote(undefined, undefined, "C", noteLength, false, 0)
+                return
             }
-        }        
+
+        }
+        setSelectedNoteLength(noteLength)
     }
 
-    const checkBeforeUpdate = (note: IChordAndNotes, noteLength: number, index: number, notesLength: number) => {
-        console.log(selectedBar)
-        if(selectedBar) {
-            if(note.position === 0){
-                if(selectedBar.chordsAndNotes[index + 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index + 1].length + note.length >= noteLength )
-                {
-                    makeUpdates(noteLength, note.position)
-                }
-            }
-            else if ( note.position === 3 || index === notesLength - 1) {
-                if(selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].length + note.length >= noteLength)
-                {
-                    makeUpdates(noteLength, selectedBar.chordsAndNotes[index - 1].position)
-                }
-            }
-            // Må selvfølgelig sjekke om det er en neste før man leser av den
-            else {
-                if(selectedBar.chordsAndNotes[index + 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index + 1].length + note.length >= noteLength ){
-                    console.log("We here")
-                    makeUpdates(noteLength, note.position)
-                    return
-                }
-                if (selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].length + note.length >= noteLength) {
-                    makeUpdates(noteLength, selectedBar.chordsAndNotes[index - 1].position)
-                    return
-                }
-                if(selectedBar.chordsAndNotes[index + 1].notes[0] === "Z" && selectedBar.chordsAndNotes[index - 1].notes[0] === "Z" && 
-                (selectedBar.chordsAndNotes[index + 1].length + selectedBar.chordsAndNotes[index - 1].length + note.length) >= noteLength )
-                {
-                    makeUpdates(noteLength, selectedBar.chordsAndNotes[index - 1].position)
-                    
-                }
+    const checkIfUpdateLengthIsPossible = (
+        note: IChordAndNotes,
+        noteLength: number,
+        index: number
+    ) => {
+        const nextNote = selectedBar?.chordsAndNotes[index + 1]
+        const previousNote = selectedBar?.chordsAndNotes[index - 1]
+
+        if (note.position === 0 && nextNote) {
+            let spaceAvailable = note.length + nextNote.length
+            if (nextNote.notes[0] === "Z" && spaceAvailable >= noteLength) {
+                updateNoteLength(noteLength, note.position)
+                return true
             }
         }
-    }
-    
-    const makeUpdates = async (noteLength: number, position: number) => {
-        const notes = isNoteSelected ? [selectedChord] : getNotesFromChord(selectedChord)
 
-            const {error, result} = await updateNote.run({
-                position,
-                length: noteLength,
-                notes
-            })
-
-            if (!error && result) {
-                dispatchSong({type: "UPDATE_BAR", bar: result.data})
-                setSelectedNoteLength(noteLength)
-                setSelectedPosition(position)
-                setSelectedBar(result.data)
+        if ((note.position === 3 || !nextNote) && previousNote) {
+            let spaceAvailable = note.length + previousNote.length
+            if (previousNote.notes[0] === "Z" && spaceAvailable >= noteLength) {
+                updateNoteLength(
+                    noteLength,
+                    note.position - noteLength + note.length
+                )
+                return true
             }
+        }
+
+        if (nextNote && previousNote) {
+            let spaceAvailableToRigth = nextNote.length + note.length
+            let spaceAvailableToLeft = previousNote.length + note.length
+
+            if (
+                nextNote.notes[0] === "Z" &&
+                spaceAvailableToRigth >= noteLength
+            ) {
+                updateNoteLength(noteLength, note.position)
+                return true
+            }
+
+            if (
+                previousNote.notes[0] === "Z" &&
+                spaceAvailableToLeft >= noteLength
+            ) {
+                updateNoteLength(noteLength, previousNote.position)
+                return true
+            }
+
+            if (
+                nextNote.notes[0] === "Z" &&
+                previousNote.notes[0] === "Z" &&
+                spaceAvailableToLeft + nextNote.length >= noteLength
+            ) {
+                updateNoteLength(noteLength, previousNote.position)
+                return true
+            }
+        }
+        return false
+    }
+
+    const updateNoteLength = async (noteLength: number, position: number) => {
+        const notes = isNoteSelected
+            ? [selectedChord]
+            : getNotesFromChord(selectedChord)
+
+        const { error, result } = await updateNote.run({
+            position,
+            length: noteLength,
+            notes,
+        })
+
+        if (!error && result) {
+            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+
+            // MÅ oppdatere verdiene til valgte bar og posisjon ut ifra det som har blitt oppdatert
+            setSelectedNotePosition(position)
+            setSelectedBar(result.data)
+        }
     }
 
     useEffect(() => {
@@ -249,7 +297,9 @@ export const SongView = () => {
                                 timeSignature={{ denominator, numerator }}
                                 heightOfBar={heightOfBar}
                                 exportMode={false}
-                                setSelectedNoteId={updateSelectedNoteId}
+                                setValuesForSelectedNote={
+                                    setValuesForSelectedNote
+                                }
                                 selectedNoteId={selectedNoteId}
                             />
                         </SongContext.Provider>

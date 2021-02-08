@@ -239,7 +239,7 @@ export const useUpdateNote = (
     songId: string,
     voiceId: number | undefined,
     barId: number | undefined, 
-    noteId: number | undefined
+    noteId: number | undefined | null
 ) => {
     const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${noteId}`
     const headers = getHeaders()
