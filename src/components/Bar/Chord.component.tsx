@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useRef } from "react"
 import { Box, ButtonBase, Typography, useTheme } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { IChordAndNotes } from "../../models/IBar"
