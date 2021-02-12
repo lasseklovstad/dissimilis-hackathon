@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, useState } from "react"
+import React, { useEffect, useReducer, useState } from "react"
 import { Grid, makeStyles } from "@material-ui/core"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -48,7 +48,6 @@ export const SongView = () => {
     const [isNoteSelected, setNoteIsSelected] = useState(true)
     const { putSong } = useUpdateSong(songId)
 
-    // added values
     const [selectedNoteId, setSelectedNoteId] = useState<
         number | undefined | null
     >(undefined)
@@ -92,7 +91,6 @@ export const SongView = () => {
         selectedNoteId
     )
 
-    // Should only run if there is something selected
     const handleChangeChord = (chord: string) => {
         if (selectedNoteId && selectedVoiceId && selectedBar) {
             makeNoteUpdate(
@@ -113,10 +111,6 @@ export const SongView = () => {
         isNote: boolean
     ) => {
         const notes = isNote ? [chord] : getNotesFromChord(chord)
-
-        console.log(`chord: ${chord}, length: ${length}, position: ${position}, isNote: ${isNote}, notes: ${notes}`)
-
-
         const { error, result } = await updateNote.run({
             position,
             length,
@@ -136,7 +130,6 @@ export const SongView = () => {
         }
     }
 
-    // need to find out where the setselectednotelength should be placed
     const handleChangeNoteLength = (noteLength: number) => {
         if (selectedNoteId && selectedVoiceId && selectedBar) {
             const note = selectedBar.chordsAndNotes.find(
@@ -246,8 +239,7 @@ export const SongView = () => {
         }
     }
 
-    const handleNoteSelectedChange = (selected: boolean) => {
-        
+    const handleNoteSelectedChange = (selected: boolean) => { 
         let chord
         if (isNoteSelected) {
             chord = selectedChord
