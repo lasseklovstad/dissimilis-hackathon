@@ -76,7 +76,7 @@ export const CreateSongTab = (props: {
     const handleChangeVoiceTitle = async (voiceTitle: string) => {
         const { error, result } = await putVoice.run({
             instrument: voiceTitle,
-            voiceNumber: voices.length + 1,
+            voiceNumber: voices.length,
         })
 
         if (!error && result) {
@@ -139,6 +139,7 @@ export const CreateSongTab = (props: {
                 cancelText={t("Modal:cancel")}
                 headerText={t("Modal:addInstrument")}
                 labelText={t("Modal:nameOfInstrument")}
+                characterLimit={100}
             />
             <InputModal
                 defaultValue={rightClickedVoice?.title || ""}

@@ -80,20 +80,16 @@ export const DropdownAutocomplete = (props: {
         notesOrChords,
     } = props
     const styles = useStyles()
-    const [options, setOptions] = useState(props.notesOrChords)
 
-    useEffect(() => {
-        setOptions(notesOrChords)
-    }, [notesOrChords])
     const showValue = selectedChord
-    if (!options.includes(selectedChord)) {
-        onChordChange(options[0])
+    if (!notesOrChords.includes(selectedChord)) {
+        onChordChange(notesOrChords[0])
     }
     const { t } = useTranslation()
 
     return (
         <Autocomplete<string>
-            options={options}
+            options={notesOrChords}
             value={showValue}
             filterOptions={filterOptions}
             onChange={(event, value) => {

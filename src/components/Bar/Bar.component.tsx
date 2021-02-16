@@ -9,6 +9,7 @@ import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
 import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
 import { getNotesFromChord } from "../../models/chords"
+import { getChord } from "../../utils/bar.util"
 
 export const Bar = (props: {
     bar: IBar
@@ -17,6 +18,15 @@ export const Bar = (props: {
     onMenuClick: (anchorEl: HTMLElement) => void
     masterSheet: boolean
     showHouseNumber: boolean
+    setValuesForSelectedNote: (
+        noteId: number | undefined | null,
+        bar: IBar | undefined,
+        chord: string,
+        noteLength: number,
+        isNote: boolean,
+        position: number
+    ) => void
+    selectedNoteId: number | undefined | null
 }) => {
     const {
         exportMode,
@@ -33,6 +43,8 @@ export const Bar = (props: {
             songVoiceId,
         },
         height = 160,
+        setValuesForSelectedNote,
+        selectedNoteId,
     } = props
     const [menuPosition, setMenuPosition] = useState<
         { top: number; left: number } | undefined
@@ -75,18 +87,44 @@ export const Bar = (props: {
         }
     }
 
-    const handleClick = async (position: number) => {
-        const notes = isNoteSelected
-            ? [selectedChord]
-            : getNotesFromChord(selectedChord)
-        const { error, result } = await postChord.run({
-            position: positionArray.length > 0 ? positionArray[0] : position,
-            length: selectedNoteLength,
-            notes,
-        } as IChordAndNotes)
+    const handleClick = async (chord: IChordAndNotes) => {
+        if (!chord.noteId) {
+            const notes = isNoteSelected
+                ? [selectedChord]
+                : getNotesFromChord(selectedChord)
 
-        if (!error && result) {
-            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+            const position =
+                positionArray.length > 0 ? positionArray[0] : chord.position
+            const { error, result } = await postChord.run({
+                position,
+                length: selectedNoteLength,
+                notes,
+            } as IChordAndNotes)
+
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+            }
+        } else {
+            if (chord.noteId === selectedNoteId) {
+                setValuesForSelectedNote(
+                    undefined,
+                    undefined,
+                    selectedChord,
+                    selectedNoteLength,
+                    isNoteSelected,
+                    0
+                )
+                return
+            }
+            const isNote = chord.notes.length === 1
+            setValuesForSelectedNote(
+                chord.noteId,
+                props.bar,
+                isNote ? chord.notes[0] : getChord(chord.notes),
+                chord.length,
+                isNote,
+                chord.position
+            )
         }
     }
 
@@ -160,9 +198,9 @@ export const Bar = (props: {
                                 return [...noter, note]
                             }, [])
                             .map((chord, i, allChords) => {
-                                const highlight = positionArray.includes(
-                                    chord.position
-                                )
+                                const highlight =
+                                    positionArray.includes(chord.position) ||
+                                    selectedNoteId === chord.noteId
                                 return (
                                     <Chord
                                         disabled={exportMode}
@@ -180,9 +218,7 @@ export const Bar = (props: {
                                         onContextMenu={handleRightClick(
                                             chord.noteId
                                         )}
-                                        onClick={() =>
-                                            handleClick(chord.position)
-                                        }
+                                        onClick={() => handleClick(chord)}
                                     />
                                 )
                             })}

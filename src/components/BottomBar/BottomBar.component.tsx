@@ -125,6 +125,7 @@ export const BottomBar = (props: {
     onNoteLengthChange: (length: number) => void
     noteIsSelected: boolean
     onNoteSelectedChange: (selected: boolean) => void
+    notesOrChords: string[]
 }) => {
     const {
         timeSignature: { numerator, denominator },
@@ -137,6 +138,7 @@ export const BottomBar = (props: {
         onNoteLengthChange,
         noteIsSelected,
         onNoteSelectedChange,
+        notesOrChords
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
@@ -212,7 +214,7 @@ export const BottomBar = (props: {
                             selectedChord={selectedChord}
                             onChordChange={onChordChange}
                             icon={<MusicNoteIcon fontSize="small" />}
-                            notesOrChords={!noteIsSelected ? chords : notes}
+                            notesOrChords={notesOrChords}
                             noOptionsText={t("BottomBar:noOptions")}
                         />
                     </div>

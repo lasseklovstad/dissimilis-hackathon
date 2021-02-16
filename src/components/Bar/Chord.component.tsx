@@ -38,10 +38,10 @@ const useStyle = makeStyles(() => ({
         "&:hover": {
             outline: `4px solid ${colors.focus}`,
         },
-        "&:focus": {
-            outline: `4px solid ${colors.focus}`,
-        },
     },
+    focusedButton: {
+        outline: `4px solid ${colors.focus}`,
+    }
 }))
 
 export const Chord = (props: ChordProps) => {
@@ -88,8 +88,8 @@ export const Chord = (props: ChordProps) => {
                     onContextMenu={onContextMenu}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    className={classes.buttonBase}
-                    focusVisibleClassName={classes.buttonBase}
+                    className={highlight? classes.focusedButton : classes.buttonBase}
+                    focusVisibleClassName={highlight? classes.focusedButton : classes.buttonBase}
                     style={{
                         display: "flex",
                         flexDirection: "column",
