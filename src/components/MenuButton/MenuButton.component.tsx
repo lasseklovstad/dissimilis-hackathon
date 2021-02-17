@@ -4,18 +4,32 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 import { useTranslation } from "react-i18next"
 import { useHistory, useParams } from "react-router-dom"
 import { colors } from "../../utils/colors"
-import { useDeleteSong } from "../../utils/useApiServiceSongs"
+import {
+    useDeleteSong,
+    useGetSong,
+    useTransposeSong,
+} from "../../utils/useApiServiceSongs"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
+import { TransposeModal } from "../CustomModal/TransposeModal.component"
 
 export const MenuButton = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
-    const { songId } = useParams<{ songId: string }>()
+    const { songId, title, transpose } = useParams<{
+        songId: string
+        title: string
+        transpose: string
+    }>()
     const { deleteSong } = useDeleteSong(songId)
+    const { getSong, songInit } = useGetSong(songId)
+    const [transposeSongModalIsOpen, setTransposeSongModalIsOpen] = useState(
+        false
+    )
+    const { transposeSong } = useTransposeSong(songId, title, transpose)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -37,10 +51,30 @@ export const MenuButton = () => {
         history.push(`/song/${songId}/export`)
     }
 
-    const handleClose = async (method?: "export" | "delete") => {
+    const handleOpenTransposeSongModal = async () => {
+        if (songInit !== undefined) {
+            setTransposeSongModalIsOpen(true)
+        }
+    }
+
+    const handleTransposeSong = async (title: string, transpose: string) => {
+        const { isError, result } = await transposeSong.run({
+            title,
+            transpose,
+        })
+        if (!isError) {
+            history.push(`/song/${result?.data?.songId}`)
+        }
+    }
+
+    const handleClose = async (method?: "transpose" | "export" | "delete") => {
         setAnchorEl(null)
         setDeleteSongModalIsOpen(false)
+        setTransposeSongModalIsOpen(false)
         switch (method) {
+            case "transpose":
+                handleOpenTransposeSongModal()
+                break
             case "export":
                 await exportSong()
                 break
@@ -74,7 +108,7 @@ export const MenuButton = () => {
                     <MenuItem disabled onClick={() => handleClose()}>
                         {t("MenuButton:duplicate")}
                     </MenuItem>
-                    <MenuItem disabled onClick={() => handleClose()}>
+                    <MenuItem onClick={() => handleClose("transpose")}>
                         {t("MenuButton:transpose")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("export")}>
@@ -88,8 +122,8 @@ export const MenuButton = () => {
                     </MenuItem>
                 </Menu>
                 <ChoiceModal
-                    handleOnCancelClick={() => handleClose()}
-                    handleClosed={() => handleClose()}
+                    handleOnCancelClick={handleClose}
+                    handleClosed={handleClose}
                     handleOnSaveClick={handleDeleteSong}
                     ackText={t("Modal:deleteSong")}
                     modalOpen={deleteSongModalIsOpen}
@@ -97,16 +131,35 @@ export const MenuButton = () => {
                     headerText={t("Modal:deleteSong")}
                     descriptionText={t("Modal:deleteDescription")}
                 />
+                <TransposeModal
+                    defaultValue={`${songInit?.title} (${t(
+                        "Modal:transposed"
+                    )})`}
+                    modalOpen={transposeSongModalIsOpen}
+                    handleClosed={handleClose}
+                    handleOnCancelClick={handleClose}
+                    handleOnSaveClick={handleTransposeSong}
+                />
             </div>
             <Loading
                 isLoading={deleteSong.loading}
                 fullScreen
                 text={t("Modal:deleteSongLoading")}
             />
+            <Loading
+                isLoading={transposeSong.loading}
+                fullScreen
+                text={t("Modal:transposingSong")}
+            />
             <ErrorDialog
                 isError={deleteSong.isError}
                 error={deleteSong.error}
                 title={t("Modal:deleteSongError")}
+            />
+            <ErrorDialog
+                isError={transposeSong.isError}
+                error={transposeSong.error}
+                title={t("Modal:transposeSongError")}
             />
         </>
     )

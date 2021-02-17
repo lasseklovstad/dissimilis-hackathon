@@ -33,6 +33,34 @@ export const useGetSong = (id: string) => {
 }
 
 /**
+ * Transpose song
+ * @param id songs id
+ * @param title new song title
+ * @param transpose number of semi-tones to transpose
+ */
+export const useTransposeSong = (
+    id: string,
+    title: string,
+    transpose: string
+) => {
+    const url = `song/${id}/transpose`
+    const body = {
+        title,
+        transpose,
+    }
+    const headers = getHeaders()
+    const { postData, state, data } = useApiService<ISong>(url, {
+        body,
+        headers,
+    })
+
+    return {
+        transposeSong: { run: postData, ...state },
+        songTransposedInit: data,
+    }
+}
+
+/**
  * Get all songs
  * */
 export const useGetAllSongs = () => {
@@ -219,6 +247,17 @@ export const useAddBar = (songId: string, voiceId: number) => {
 
     return {
         postBar: { run: api.postData, ...api.state },
+    }
+}
+
+export const useDuplicateBar = (
+    songId: number
+) => {
+    const url = `song/${songId}/copyBars`
+    const headers = getHeaders()
+    const api = useApiService<ISong>(url, { headers })
+    return {
+        duplicateBar: { run: api.postData, ...api.state },
     }
 }
 

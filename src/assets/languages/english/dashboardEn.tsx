@@ -9,4 +9,5 @@ export const dashboardEn = {
     altButterflyButtonProp: "Image of Dissimilis' butterfly-logo",
     deleteSong: "Delete song",
     deleteDescription: "Are you sure you want to delete the song?",
+    updatedOn: "Last edited",
 }
