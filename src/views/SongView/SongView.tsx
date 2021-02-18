@@ -10,6 +10,7 @@ import { useBarsPerRow } from "../../utils/useBarsPerRow"
 import { useVoice } from "../../utils/useVoice"
 import { ISong } from "../../models/ISong"
 import {
+    useDeleteChord,
     useGetSong,
     useUpdateNote,
     useUpdateSong,
@@ -101,6 +102,13 @@ export const SongView = () => {
         selectedVoiceId,
         selectedBar?.barId,
         selectedNoteId
+    )
+
+    const { deleteChord } = useDeleteChord(
+        Number(songId),
+        selectedVoiceId === undefined ? 0 : selectedVoiceId,
+        selectedBar?.barId === undefined ? 0 : selectedBar.barId,
+        selectedNoteId === undefined ? 0 : selectedNoteId
     )
 
     const handleChangeChord = (chord: string) => {
@@ -273,6 +281,15 @@ export const SongView = () => {
         setSelectedChord(chord)
     }
 
+    const handleDeleteSelectedChord = async () => {
+        if (selectedNoteId && selectedVoiceId && selectedBar) {
+            const { error, result } = await deleteChord.run()
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+            }
+        }
+    }
+
     useEffect(() => {
         if (songInit) {
             dispatchSong({ type: "UPDATE_SONG", song: songInit })
@@ -376,6 +393,7 @@ export const SongView = () => {
                     songId={songId}
                     voiceId={selectedVoiceId}
                     notesOrChords={isNoteSelected ? notes : chords}
+                    deleteSelectedChord={handleDeleteSelectedChord}
                 />
             )}
         </>

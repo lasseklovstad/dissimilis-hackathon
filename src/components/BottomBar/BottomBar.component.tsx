@@ -1,5 +1,6 @@
 import React from "react"
 import {
+    Button,
     FormControl,
     Grid,
     makeStyles,
@@ -9,6 +10,7 @@ import {
     withStyles,
 } from "@material-ui/core"
 import MusicNoteIcon from "@material-ui/icons/MusicNote"
+import { Delete } from "@material-ui/icons"
 import { useTranslation } from "react-i18next"
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup"
 import ToggleButton from "@material-ui/lab/ToggleButton"
@@ -126,6 +128,7 @@ export const BottomBar = (props: {
     noteIsSelected: boolean
     onNoteSelectedChange: (selected: boolean) => void
     notesOrChords: string[]
+    deleteSelectedChord: () => void
 }) => {
     const {
         timeSignature: { numerator, denominator },
@@ -138,7 +141,8 @@ export const BottomBar = (props: {
         onNoteLengthChange,
         noteIsSelected,
         onNoteSelectedChange,
-        notesOrChords
+        notesOrChords,
+        deleteSelectedChord,
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
@@ -238,6 +242,9 @@ export const BottomBar = (props: {
                         text={t("BottomBar:addBar")}
                         onClick={handleAddBar}
                     />
+                    <Button onClick={deleteSelectedChord}>
+                        <Delete />
+                    </Button>
                 </div>
             </Grid>
         </Grid>
