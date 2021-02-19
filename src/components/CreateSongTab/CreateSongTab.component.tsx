@@ -152,7 +152,6 @@ export const CreateSongTab = (props: {
                                 key={voice.songVoiceId}
                                 value={voice.songVoiceId}
                                 label={label}
-                                disableRipple
                                 onClick={() =>
                                     history.push(`?voice=${voice.songVoiceId}`)
                                 }
