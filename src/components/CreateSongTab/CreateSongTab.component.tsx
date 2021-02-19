@@ -1,5 +1,13 @@
 import React, { useState } from "react"
-import { Box, Button, Menu, MenuItem, Tab, Tabs } from "@material-ui/core"
+import {
+    Box,
+    Button,
+    makeStyles,
+    Menu,
+    MenuItem,
+    Tab,
+    Tabs,
+} from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { Add } from "@material-ui/icons"
@@ -10,6 +18,37 @@ import {
     useDeleteVoice,
     useUpdateVoice,
 } from "../../utils/useApiServiceSongs"
+import { colors } from "../../utils/colors";
+
+const useStyles = makeStyles({
+    root: {
+        minWidth: 50,
+        margin: 4,
+        padding: "8px 16px",
+        border: `1px solid ${colors.gray_200}`,
+        borderRadius: 4,
+        opacity: 1,
+        "&:hover": {
+            backgroundColor: colors.gray_200
+        },
+    },
+
+    selected: {
+        backgroundColor: colors.gray_200
+    },
+
+    buttonsstyle: {
+        border: `1px solid ${colors.gray_200}`,
+        padding: "8px 16px",
+        margin: 4,
+        "&:hover": {
+            backgroundColor: colors.gray_200
+        },
+        "&:focus": {
+            backgroundColor: colors.gray_200
+        },
+    },
+})
 
 export const CreateSongTab = (props: {
     voices: IVoice[]
@@ -40,7 +79,7 @@ export const CreateSongTab = (props: {
     const { postVoice } = useCreateVoice(songId)
     const { putVoice } = useUpdateVoice(songId, rightClicked)
     const { deleteVoice } = useDeleteVoice(songId, rightClicked)
-
+    const classes = useStyles()
     const history = useHistory()
 
     const handleAddInstrument = async (title: string) => {
@@ -96,10 +135,13 @@ export const CreateSongTab = (props: {
             <Box display="flex" flexWrap="wrap">
                 <Tabs
                     value={selectedVoice}
-                    indicatorColor="secondary"
-                    textColor="secondary"
                     variant="scrollable"
                     scrollButtons="auto"
+                    TabIndicatorProps={{
+                        style: {
+                            display: "none",
+                        },
+                    }}
                 >
                     {voices.map((voice) => {
                         const label = voice.isMain
@@ -110,21 +152,25 @@ export const CreateSongTab = (props: {
                                 key={voice.songVoiceId}
                                 value={voice.songVoiceId}
                                 label={label}
+                                disableRipple
+                                onClick={() =>
+                                    history.push(`?voice=${voice.songVoiceId}`)
+                                }
                                 onContextMenu={
                                     !voice.isMain
                                         ? handleRightClick(voice.songVoiceId)
                                         : undefined
                                 }
-                                onClick={() =>
-                                    history.push(`?voice=${voice.songVoiceId}`)
-                                }
+                                classes={{ root: classes.root, selected: classes.selected }}
                             />
                         )
                     })}
                 </Tabs>
+
                 <Button
                     onClick={() => setModalIsOpen(true)}
                     startIcon={<Add />}
+                    className={classes.buttonsstyle}
                 >
                     {t("CreateSongTab:newInstrument")}
                 </Button>
