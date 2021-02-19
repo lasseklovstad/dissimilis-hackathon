@@ -10,6 +10,7 @@ import { useHistory } from "react-router"
 import { useTranslation } from "react-i18next"
 import { MenuButton } from "../MenuButton/MenuButton.component"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
+import { colors } from "../../utils/colors"
 
 const useStyles = makeStyles({
     root: {
@@ -38,6 +39,21 @@ const useStyles = makeStyles({
     textFieldInput: {
         fontSize: "30",
     },
+
+    underline:{
+        "&:before": {
+            borderBottom: "none",
+        },
+    },
+
+    focused: {
+        border: `4px solid ${colors.focus}`,
+        borderRadius: 8
+    },
+
+    titleRoot: {
+        paddingLeft: 4
+    }
 })
 
 export const NavBarCreateSong = (props: {
@@ -65,9 +81,11 @@ export const NavBarCreateSong = (props: {
                     <DashboardTopBarIcon />
                     <Box ml={1} mr={1} width="100%">
                         <TextField
-                            inputProps={{ style: { fontSize: 24 } }}
+                            InputProps={{
+                                style: { fontSize: 24 },
+                                classes: {underline: classes.underline, focused: classes.focused, root: classes.titleRoot}
+                            }}
                             value={title}
-                            label={t("General:title")}
                             onBlur={(ev) => props.onTitleBlur(ev.target.value)}
                             onChange={(ev) => setTitle(ev.target.value)}
                             fullWidth
