@@ -1,13 +1,15 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     Box,
     Button,
+    IconButton,
     makeStyles,
     Menu,
     MenuItem,
     Tab,
     Tabs,
 } from "@material-ui/core"
+import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { Add } from "@material-ui/icons"
@@ -18,7 +20,7 @@ import {
     useDeleteVoice,
     useUpdateVoice,
 } from "../../utils/useApiServiceSongs"
-import { colors } from "../../utils/colors";
+import { colors } from "../../utils/colors"
 
 const useStyles = makeStyles({
     root: {
@@ -29,12 +31,12 @@ const useStyles = makeStyles({
         borderRadius: 4,
         opacity: 1,
         "&:hover": {
-            backgroundColor: colors.gray_200
+            backgroundColor: colors.gray_200,
         },
     },
 
     selected: {
-        backgroundColor: colors.gray_200
+        backgroundColor: colors.gray_200,
     },
 
     buttonsstyle: {
@@ -42,17 +44,17 @@ const useStyles = makeStyles({
         padding: "8px 16px",
         margin: 4,
         "&:hover": {
-            backgroundColor: colors.gray_200
+            backgroundColor: colors.gray_200,
         },
         "&:focus": {
-            backgroundColor: colors.gray_200
+            backgroundColor: colors.gray_200,
         },
     },
 })
 
 export const CreateSongTab = (props: {
     voices: IVoice[]
-    selectedVoice: number
+    selectedVoiceId: number
     songId: string
     onAddVoice: (voice: IVoice) => void
     onUpdateVoice: (voice: IVoice) => void
@@ -60,7 +62,7 @@ export const CreateSongTab = (props: {
 }) => {
     const {
         voices,
-        selectedVoice,
+        selectedVoiceId,
         songId,
         onAddVoice,
         onUpdateVoice,
@@ -69,18 +71,22 @@ export const CreateSongTab = (props: {
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false)
     const { t } = useTranslation()
-    const [rightClicked, setRightClicked] = useState<undefined | number>()
-    const rightClickedVoice = voices.find(
-        (voice) => voice.songVoiceId === rightClicked
+    // const [rightClicked, setRightClicked] = useState<undefined | number>()
+    // const rightClickedVoice = voices.find(
+    //     (voice) => voice.songVoiceId === rightClicked
+    // )
+    const selectedVoice = voices.find(
+        (voice) => voice.songVoiceId === selectedVoiceId
     )
     const [position, setPosition] = useState<
         { top: number; left: number } | undefined
     >()
     const { postVoice } = useCreateVoice(songId)
-    const { putVoice } = useUpdateVoice(songId, rightClicked)
-    const { deleteVoice } = useDeleteVoice(songId, rightClicked)
+    const { putVoice } = useUpdateVoice(songId, selectedVoiceId)
+    const { deleteVoice } = useDeleteVoice(songId, selectedVoiceId)
     const classes = useStyles()
     const history = useHistory()
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
     const handleAddInstrument = async (title: string) => {
         const { error, result } = await postVoice.run({
@@ -91,31 +97,62 @@ export const CreateSongTab = (props: {
         if (!error && result) {
             onAddVoice(result.data)
             setModalIsOpen(false)
+            setAnchorEl(null)
+        }
+    }
+
+    const handleDeleteInstrument = async () => {
+        const { error } = await deleteVoice.run()
+
+        if (!error && selectedVoice) {
+            onDeleteVoice(selectedVoice)
+        }
+    }
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget)
+    }
+
+    const handleCloseVoiceMenu = (method?: "add" | "delete" | "updateTitle") => {
+        switch (method) {
+            case "add":
+                setModalIsOpen(true)
+                break
+            case "delete":
+                handleDeleteInstrument()
+                break
+            case "updateTitle":
+                setRenameModalIsOpen(true)
+                break
+            default:
+                break
         }
     }
 
     const handleClose = () => {
+        setAnchorEl(null)
         setModalIsOpen(false)
         setRenameModalIsOpen(false)
     }
 
-    const handleCloseMenu = async (method: "deleteVoice" | "renameVoice") => {
-        if (method === "renameVoice") {
-            setRenameModalIsOpen(true)
-        }
-        if (method === "deleteVoice") {
-            const { error } = await deleteVoice.run()
+    // const handleCloseMenu = async (method: "deleteVoice" | "renameVoice") => {
+    //     if (method === "renameVoice") {
+    //         setRenameModalIsOpen(true)
+    //     }
+    //     if (method === "deleteVoice") {
+    //         const { error } = await deleteVoice.run()
 
-            if (!error && rightClickedVoice) {
-                onDeleteVoice(rightClickedVoice)
-            }
-        }
-        setPosition(undefined)
-    }
+    //         if (!error && selectedVoice) {
+    //             onDeleteVoice(selectedVoice)
+    //         }
+    //     }
+    //     setPosition(undefined)
+    // }
+
     const handleChangeVoiceTitle = async (voiceTitle: string) => {
         const { error, result } = await putVoice.run({
             instrument: voiceTitle,
-            voiceNumber: voices.length,
+            voiceNumber: selectedVoice?.partNumber,
         })
 
         if (!error && result) {
@@ -124,17 +161,17 @@ export const CreateSongTab = (props: {
         }
     }
 
-    const handleRightClick = (voiceId: number) => (event: React.MouseEvent) => {
-        event.preventDefault()
-        setPosition({ top: event.clientY - 4, left: event.clientX - 2 })
-        setRightClicked(voiceId)
-    }
+    // const handleRightClick = (voiceId: number) => (event: React.MouseEvent) => {
+    //     event.preventDefault()
+    //     setPosition({ top: event.clientY - 4, left: event.clientX - 2 })
+    //     setRightClicked(voiceId)
+    // }
 
     return (
         <>
             <Box display="flex" flexWrap="wrap">
                 <Tabs
-                    value={selectedVoice}
+                    value={selectedVoiceId}
                     variant="scrollable"
                     scrollButtons="auto"
                     TabIndicatorProps={{
@@ -155,25 +192,47 @@ export const CreateSongTab = (props: {
                                 onClick={() =>
                                     history.push(`?voice=${voice.songVoiceId}`)
                                 }
-                                onContextMenu={
-                                    !voice.isMain
-                                        ? handleRightClick(voice.songVoiceId)
-                                        : undefined
-                                }
-                                classes={{ root: classes.root, selected: classes.selected }}
+                                // onContextMenu={
+                                //     !voice.isMain
+                                //         ? handleRightClick(voice.songVoiceId)
+                                //         : undefined
+                                // }
+                                classes={{
+                                    root: classes.root,
+                                    selected: classes.selected,
+                                }}
                             />
                         )
                     })}
                 </Tabs>
 
-                <Button
-                    onClick={() => setModalIsOpen(true)}
-                    startIcon={<Add />}
-                    className={classes.buttonsstyle}
+                <IconButton
+                    aria-haspopup="true"
+                    aria-label="tab options"
+                    onClick={handleClick}
                 >
-                    {t("CreateSongTab:newInstrument")}
-                </Button>
+                    <MoreVertIcon />
+                </IconButton>
             </Box>
+
+            <Menu
+                id="menuBar"
+                anchorEl={anchorEl}
+                keepMounted
+                open={!!anchorEl}
+                onClose={() => handleClose()}
+                role="menu"
+            >
+                <MenuItem onClick={() => handleCloseVoiceMenu("add")}>
+                    {t("CreateSongTab:newInstrument")}
+                </MenuItem>
+                <MenuItem disabled={selectedVoice?.isMain} onClick={() => handleCloseVoiceMenu("updateTitle")}>
+                    {t("CreateSongTab:changeVoiceName")}
+                </MenuItem>
+                <MenuItem disabled={selectedVoice?.isMain} onClick={() => handleCloseVoiceMenu("delete")}>
+                    {t("CreateSongTab:deleteVoice")}
+                </MenuItem>
+            </Menu>
 
             <InputModal
                 handleOnCancelClick={() => handleClose()}
@@ -187,7 +246,7 @@ export const CreateSongTab = (props: {
                 characterLimit={100}
             />
             <InputModal
-                defaultValue={rightClickedVoice?.title || ""}
+                defaultValue={selectedVoice?.title || ""}
                 handleOnCancelClick={handleClose}
                 handleOnSaveClick={handleChangeVoiceTitle}
                 handleClosed={handleClose}
@@ -197,7 +256,7 @@ export const CreateSongTab = (props: {
                 headerText={t("Modal:changeVoiceName")}
                 labelText={t("Modal:newVoiceName")}
             />
-            <Menu
+            {/* <Menu
                 open={!!position}
                 onClose={() => {
                     setPosition(undefined)
@@ -219,7 +278,7 @@ export const CreateSongTab = (props: {
                 >
                     {t("CreateSongTab:deleteVoice")}
                 </MenuItem>
-            </Menu>
+            </Menu> */}
         </>
     )
 }
