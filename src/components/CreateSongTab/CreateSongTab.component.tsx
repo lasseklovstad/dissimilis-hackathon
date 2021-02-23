@@ -71,10 +71,10 @@ export const CreateSongTab = (props: {
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false)
     const { t } = useTranslation()
-    // const [rightClicked, setRightClicked] = useState<undefined | number>()
-    // const rightClickedVoice = voices.find(
-    //     (voice) => voice.songVoiceId === rightClicked
-    // )
+    const [clickedId, setClickedId] = useState<undefined | number>()
+    const clickedVoice = voices.find(
+        (voice) => voice.songVoiceId === clickedId
+    )
     const selectedVoice = voices.find(
         (voice) => voice.songVoiceId === selectedVoiceId
     )
@@ -82,16 +82,17 @@ export const CreateSongTab = (props: {
         { top: number; left: number } | undefined
     >()
     const { postVoice } = useCreateVoice(songId)
-    const { putVoice } = useUpdateVoice(songId, selectedVoiceId)
-    const { deleteVoice } = useDeleteVoice(songId, selectedVoiceId)
+    const { putVoice } = useUpdateVoice(songId, clickedId)
+    const { deleteVoice } = useDeleteVoice(songId, clickedId)
     const classes = useStyles()
     const history = useHistory()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
     const handleAddInstrument = async (title: string) => {
+        const voiceNumber = Math.max(...voices.map(voice => voice.partNumber), 0)
         const { error, result } = await postVoice.run({
             instrument: title,
-            voiceNumber: voices.length + 1,
+            voiceNumber: voiceNumber + 1,
         })
 
         if (!error && result) {
@@ -104,12 +105,13 @@ export const CreateSongTab = (props: {
     const handleDeleteInstrument = async () => {
         const { error } = await deleteVoice.run()
 
-        if (!error && selectedVoice) {
-            onDeleteVoice(selectedVoice)
+        if (!error && clickedVoice) {
+            onDeleteVoice(clickedVoice)
         }
     }
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setClickedId(selectedVoiceId)
         setAnchorEl(event.currentTarget)
     }
 
@@ -135,24 +137,24 @@ export const CreateSongTab = (props: {
         setRenameModalIsOpen(false)
     }
 
-    // const handleCloseMenu = async (method: "deleteVoice" | "renameVoice") => {
-    //     if (method === "renameVoice") {
-    //         setRenameModalIsOpen(true)
-    //     }
-    //     if (method === "deleteVoice") {
-    //         const { error } = await deleteVoice.run()
+    const handleCloseMenu = async (method: "deleteVoice" | "renameVoice") => {
+        if (method === "renameVoice") {
+            setRenameModalIsOpen(true)
+        }
+        if (method === "deleteVoice") {
+            const { error } = await deleteVoice.run()
 
-    //         if (!error && selectedVoice) {
-    //             onDeleteVoice(selectedVoice)
-    //         }
-    //     }
-    //     setPosition(undefined)
-    // }
+            if (!error && clickedVoice) {
+                onDeleteVoice(clickedVoice)
+            }
+        }
+        setPosition(undefined)
+    }
 
     const handleChangeVoiceTitle = async (voiceTitle: string) => {
         const { error, result } = await putVoice.run({
             instrument: voiceTitle,
-            voiceNumber: selectedVoice?.partNumber,
+            voiceNumber: clickedVoice?.partNumber,
         })
 
         if (!error && result) {
@@ -161,11 +163,11 @@ export const CreateSongTab = (props: {
         }
     }
 
-    // const handleRightClick = (voiceId: number) => (event: React.MouseEvent) => {
-    //     event.preventDefault()
-    //     setPosition({ top: event.clientY - 4, left: event.clientX - 2 })
-    //     setRightClicked(voiceId)
-    // }
+    const handleRightClick = (voiceId: number) => (event: React.MouseEvent) => {
+        event.preventDefault()
+        setClickedId(voiceId)
+        setPosition({ top: event.clientY - 4, left: event.clientX - 2 })
+    }
 
     return (
         <>
@@ -192,11 +194,11 @@ export const CreateSongTab = (props: {
                                 onClick={() =>
                                     history.push(`?voice=${voice.songVoiceId}`)
                                 }
-                                // onContextMenu={
-                                //     !voice.isMain
-                                //         ? handleRightClick(voice.songVoiceId)
-                                //         : undefined
-                                // }
+                                onContextMenu={
+                                    !voice.isMain
+                                        ? handleRightClick(voice.songVoiceId)
+                                        : undefined
+                                }
                                 classes={{
                                     root: classes.root,
                                     selected: classes.selected,
@@ -246,7 +248,7 @@ export const CreateSongTab = (props: {
                 characterLimit={100}
             />
             <InputModal
-                defaultValue={selectedVoice?.title || ""}
+                defaultValue={clickedVoice?.title || ""}
                 handleOnCancelClick={handleClose}
                 handleOnSaveClick={handleChangeVoiceTitle}
                 handleClosed={handleClose}
@@ -256,7 +258,7 @@ export const CreateSongTab = (props: {
                 headerText={t("Modal:changeVoiceName")}
                 labelText={t("Modal:newVoiceName")}
             />
-            {/* <Menu
+            <Menu
                 open={!!position}
                 onClose={() => {
                     setPosition(undefined)
@@ -278,7 +280,7 @@ export const CreateSongTab = (props: {
                 >
                     {t("CreateSongTab:deleteVoice")}
                 </MenuItem>
-            </Menu> */}
+            </Menu>
         </>
     )
 }
