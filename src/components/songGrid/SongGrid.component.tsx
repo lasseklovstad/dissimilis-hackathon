@@ -7,6 +7,7 @@ import { Loading } from "../loading/Loading.component"
 type SongGridProps = {
     title: string | undefined
     songs: ISong[] | undefined
+    removeSong: (songId: number) => void
     isLoading: boolean
     children?: ReactNode
 }
@@ -14,7 +15,7 @@ type SongGridProps = {
 const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
     if (props.isSong) {
         return (
-            <Grid item xs={12} sm={11} lg={11}>
+            <Grid item xs={12}>
                 {props.children}
             </Grid>
         )
@@ -59,6 +60,8 @@ export const SongGrid = (props: SongGridProps) => {
                                 title={song.title}
                                 arrangerName={song.arrangerName}
                                 updatedOn={song.updatedOn}
+                                songId={song.songId}
+                                removeSong={props.removeSong}
                                 link={`/song/${song.songId}`}
                             />
                         </GridItem>

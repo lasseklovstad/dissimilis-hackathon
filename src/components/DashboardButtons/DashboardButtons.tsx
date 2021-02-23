@@ -1,14 +1,22 @@
-import React, { FC } from "react"
+import React, { FC, useState } from "react"
 import { Link } from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
-import { Box, Card, CardActionArea, Icon, IconButton } from "@material-ui/core"
+import {
+    Box,
+    Card,
+    Grid,
+    CardActionArea,
+    Icon,
+    IconButton,
+} from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
+import { SongGridMenuButton } from "../SongGridMenuButton/SongGridMenuButton.component"
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     container: {
         display: "flex",
     },
@@ -32,7 +40,19 @@ const useStyles = makeStyles({
         padding: "8px",
         borderRadius: "1px",
     },
-})
+    songContainer: {
+        flexDirection: "row",
+        flexWrap: "nowrap",
+    },
+    songScalableText: {
+        [theme.breakpoints.up("xs")]: {
+            fontSize: "0.725rem",
+        },
+        [theme.breakpoints.up("sm")]: {
+            fontSize: "1rem",
+        },
+    },
+}))
 
 export type ButtonProps = {
     text: string
@@ -46,6 +66,8 @@ type ButtonSongProps = {
     title: string
     arrangerName?: string
     updatedOn?: string
+    songId: number
+    removeSong: (songId: number) => void
     link: string
     func?: () => void
     selected?: boolean
@@ -128,8 +150,11 @@ const convertToDate = (time: number) => {
     const timeOptions = { hour: "2-digit", minute: "2-digit" }
     const date: Date = new Date()
     date.setTime(time)
-    
-    return `${date.toLocaleDateString('en-GB')}, ${date.toLocaleTimeString('en-GB', timeOptions)}`
+
+    return `${date.toLocaleDateString("en-GB")}, ${date.toLocaleTimeString(
+        "en-GB",
+        timeOptions
+    )}`
 }
 
 export const DashboardButton: FC<ButtonSongProps> = (props) => {
@@ -138,30 +163,58 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
 
     return (
         <Card className={styles.button}>
-            <CardActionArea to={props.link} component={Link}>
-                <Box
-                    onContextMenu={(e) =>
-                        props.onContextMenu && props.onContextMenu(e)
-                    }
-                    className={styles.container}
-                    style={{
-                        backgroundColor:
-                            props.selected === true
-                                ? colors.gray_400
-                                : colors.white,
-                    }}
-                >
-                    <Box width="40%" p={2}>
-                        <Typography>{props.title}</Typography>
-                    </Box>
-                    <Box width="30%" p={2}>
-                        <Typography>{props.arrangerName}</Typography>
-                    </Box>
-                    <Box width="30%" p={2}>
-                        <Typography align="right">{t("DashboardView:updatedOn")} {props.updatedOn ? convertToDate(Date.parse(props.updatedOn)) : ""}</Typography>
-                    </Box>
+            <Grid container className={styles.songContainer}>
+                <Box flexGrow={1}>
+                    <CardActionArea
+                        to={props.link}
+                        component={Link}
+                        style={{ height: "100%" }}
+                    >
+                        <Grid
+                            container
+                            alignItems="center"
+                            onContextMenu={(e) =>
+                                props.onContextMenu && props.onContextMenu(e)
+                            }
+                            className={styles.container}
+                            style={{
+                                backgroundColor:
+                                    props.selected === true
+                                        ? colors.gray_400
+                                        : colors.white,
+                                height: "100%",
+                                padding: 16,
+                            }}
+                        >
+                            <Grid item xs={12} sm={4}>
+                                <Typography>{props.title}</Typography>
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <Typography className={styles.songScalableText}>
+                                    {props.arrangerName}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <Typography className={styles.songScalableText}>
+                                    {t("DashboardView:updatedOn")}{" "}
+                                    {props.updatedOn
+                                        ? convertToDate(
+                                              Date.parse(props.updatedOn)
+                                          )
+                                        : ""}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </CardActionArea>
                 </Box>
-            </CardActionArea>
+                <Box p={1}>
+                    <SongGridMenuButton
+                        songId={props.songId}
+                        link={props.link}
+                        removeSong={props.removeSong}
+                    />
+                </Box>
+            </Grid>
         </Card>
     )
 }

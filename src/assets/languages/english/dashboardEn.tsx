@@ -10,4 +10,8 @@ export const dashboardEn = {
     deleteSong: "Delete song",
     deleteDescription: "Are you sure you want to delete the song?",
     updatedOn: "Last edited",
+    open: "Open",
+    duplicate: "Duplicate",
+    duplicateText: "Duplicate song",
+    delete: "Delete",
 }
