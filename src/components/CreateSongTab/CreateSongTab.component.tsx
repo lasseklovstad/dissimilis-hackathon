@@ -110,7 +110,7 @@ export const CreateSongTab = (props: {
         }
     }
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setClickedId(selectedVoiceId)
         setAnchorEl(event.currentTarget)
     }
@@ -137,16 +137,12 @@ export const CreateSongTab = (props: {
         setRenameModalIsOpen(false)
     }
 
-    const handleCloseMenu = async (method: "deleteVoice" | "renameVoice") => {
+    const handleCloseRightClickMenu = async (method: "deleteVoice" | "renameVoice") => {
         if (method === "renameVoice") {
             setRenameModalIsOpen(true)
         }
         if (method === "deleteVoice") {
-            const { error } = await deleteVoice.run()
-
-            if (!error && clickedVoice) {
-                onDeleteVoice(clickedVoice)
-            }
+            handleDeleteInstrument()
         }
         setPosition(undefined)
     }
@@ -160,6 +156,7 @@ export const CreateSongTab = (props: {
         if (!error && result) {
             onUpdateVoice(result.data)
             setRenameModalIsOpen(false)
+            setAnchorEl(null)
         }
     }
 
@@ -211,7 +208,7 @@ export const CreateSongTab = (props: {
                 <IconButton
                     aria-haspopup="true"
                     aria-label="tab options"
-                    onClick={handleClick}
+                    onClick={handleMenuClick}
                 >
                     <MoreVertIcon />
                 </IconButton>
@@ -268,14 +265,14 @@ export const CreateSongTab = (props: {
             >
                 <MenuItem
                     onClick={() => {
-                        handleCloseMenu("renameVoice")
+                        handleCloseRightClickMenu("renameVoice")
                     }}
                 >
                     {t("CreateSongTab:changeVoiceName")}
                 </MenuItem>
                 <MenuItem
                     onClick={() => {
-                        handleCloseMenu("deleteVoice")
+                        handleCloseRightClickMenu("deleteVoice")
                     }}
                 >
                     {t("CreateSongTab:deleteVoice")}
