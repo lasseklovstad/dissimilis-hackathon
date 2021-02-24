@@ -23,8 +23,39 @@ export const LibraryView = () => {
     const [libraryView, setLibraryView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
 
-    const { getAllSongs, allSongs } = useGetAllSongs()
-    const { getFilteredSongs, filteredSongs } = useGetFilteredSongs(searchTerm)
+    const { getAllSongs, allSongsFetched } = useGetAllSongs()
+    const [allSongs, setAllSongs] = useState<ISong[] | undefined>()
+
+    const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
+        searchTerm
+    )
+    const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
+
+    useEffect(() => {
+        if (filteredSongsFetched) {
+            setFilteredSongs(filteredSongsFetched)
+        }
+        if (allSongsFetched) {
+            setAllSongs(allSongsFetched)
+        }
+    }, [filteredSongsFetched, allSongsFetched])
+
+    const removeSongFromFilteredSongs = (songId: number) => {
+        setFilteredSongs(
+            filteredSongs?.filter((song) => {
+                return song.songId !== songId
+            })
+        )
+    }
+
+    const removeSongFromAllSongs = (songId: number) => {
+        setAllSongs(
+            allSongs?.filter((song) => {
+                return song.songId !== songId
+            })
+        )
+    }
+
     const marginBottom = 4
 
     const handleOnChangeSearch = (searchTermParam: string) => {
@@ -54,12 +85,14 @@ export const LibraryView = () => {
                         <SongGrid
                             title={t("DashboardView:allSongLabel")}
                             songs={allSongs}
+                            removeSong={removeSongFromAllSongs}
                             isLoading={getAllSongs.loading}
                         />
                     ) : (
                         <SongGrid
                             title={t("DashboardView:searchSongLabel")}
                             songs={filteredSongs}
+                            removeSong={removeSongFromFilteredSongs}
                             isLoading={getFilteredSongs.loading}
                         />
                     )}
