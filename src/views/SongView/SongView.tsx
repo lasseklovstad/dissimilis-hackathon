@@ -125,7 +125,7 @@ export const SongView = () => {
                                     onAddVoice={handleAddVoice}
                                     songId={songId}
                                     voices={song.voices}
-                                    selectedVoice={selectedVoiceId}
+                                    selectedVoiceId={selectedVoiceId}
                                 />
                             </Grid>
                         </Grid>
