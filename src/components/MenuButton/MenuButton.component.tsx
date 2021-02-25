@@ -14,7 +14,9 @@ import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { TransposeModal } from "../CustomModal/TransposeModal.component"
 
-export const MenuButton = () => {
+export const MenuButton = (props: {
+    voiceId: number
+}) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const { t } = useTranslation()
@@ -48,7 +50,7 @@ export const MenuButton = () => {
     }
 
     const exportSong = async () => {
-        history.push(`/song/${songId}/export`)
+        history.push(`/song/${songId}/export?voice=${props.voiceId}`)
     }
 
     const handleOpenTransposeSongModal = async () => {
