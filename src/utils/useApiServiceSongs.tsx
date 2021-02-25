@@ -82,7 +82,7 @@ export const useGetAllSongs = () => {
 
     return {
         getAllSongs: { run: postData, ...state },
-        allSongs: data,
+        allSongsFetched: data,
     }
 }
 
@@ -109,7 +109,7 @@ export const useGetFilteredSongs = (title: string) => {
 
     return {
         getFilteredSongs: { run: postData, ...state },
-        filteredSongs: data,
+        filteredSongsFetched: data,
     }
 }
 
@@ -137,7 +137,7 @@ export const useGetRecentSongs = () => {
 
     return {
         getRecentSongs: { run: postData, ...state },
-        recentSongs: data,
+        recentSongsFetched: data,
     }
 }
 
@@ -286,5 +286,22 @@ export const useUpdateBar = (
 
     return {
         putBar: { run: api.putData, ...api.state },
+    }
+}
+
+/**
+ * Duplicate song
+ * @param songId songs id
+ * @param title new song title
+ */
+
+export const useDuplicateSong = (songId: number) => {
+    const url = `song/${songId}/duplicateSong`
+    const headers = getHeaders()
+
+    const api = useApiService<ISong>(url, { headers })
+
+    return {
+        duplicateSong: { run: api.postData, ...api.state },
     }
 }

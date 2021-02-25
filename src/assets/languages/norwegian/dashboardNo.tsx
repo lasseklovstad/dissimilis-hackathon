@@ -8,4 +8,8 @@ export const dashboardNo = {
     search: "Søk",
     altButterflyButtonProp: "Bilde av Dissimilis' sommerfugl",
     updatedOn: "Sist redigert",
+    open: "Åpne",
+    duplicate: "Dupliser",
+    duplicateText: "Dupliser sang",
+    delete: "Slett",
 }
