@@ -52,7 +52,7 @@ const useStyles = makeStyles({
     },
 
     titleRoot: {
-        paddingLeft: 4
+        paddingLeft: 4,
     }
 })
 
@@ -84,7 +84,8 @@ export const NavBarCreateSong = (props: {
                         <TextField
                             InputProps={{
                                 style: { fontSize: 24 },
-                                classes: {underline: classes.underline, focused: classes.focused, root: classes.titleRoot}
+                                classes: {underline: classes.underline, focused: classes.focused, root: classes.titleRoot},
+                                inputProps: {maxLength: 250}
                             }}
                             value={title}
                             onBlur={(ev) => props.onTitleBlur(ev.target.value)}
