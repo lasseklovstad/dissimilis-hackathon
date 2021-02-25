@@ -250,9 +250,7 @@ export const useAddBar = (songId: string, voiceId: number) => {
     }
 }
 
-export const useDuplicateBar = (
-    songId: number
-) => {
+export const useDuplicateBar = (songId: number) => {
     const url = `song/${songId}/copyBars`
     const headers = getHeaders()
     const api = useApiService<ISong>(url, { headers })
@@ -292,9 +290,7 @@ export const useUpdateBar = (
 /**
  * Duplicate song
  * @param songId songs id
- * @param title new song title
  */
-
 export const useDuplicateSong = (songId: number) => {
     const url = `song/${songId}/duplicateSong`
     const headers = getHeaders()

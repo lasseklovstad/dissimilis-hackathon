@@ -6,8 +6,6 @@ import {
     TextField,
     useMediaQuery,
 } from "@material-ui/core"
-import { useHistory } from "react-router"
-import { useTranslation } from "react-i18next"
 import { MenuButton } from "../MenuButton/MenuButton.component"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 import { colors } from "../../utils/colors"
@@ -40,7 +38,7 @@ const useStyles = makeStyles({
         fontSize: "30",
     },
 
-    underline:{
+    underline: {
         "&:before": {
             borderBottom: "none",
         },
@@ -48,24 +46,22 @@ const useStyles = makeStyles({
 
     focused: {
         border: `4px solid ${colors.focus}`,
-        borderRadius: 8
+        borderRadius: 8,
     },
 
     titleRoot: {
         paddingLeft: 4,
-    }
+    },
 })
 
 export const NavBarCreateSong = (props: {
-    title: string,
-    voiceId: number,
+    title: string
+    voiceId: number
     onTitleBlur: (title: string) => void
 }) => {
     const classes = useStyles()
     const matches = useMediaQuery("(max-width:600px)")
     const [title, setTitle] = useState(props.title)
-    const history = useHistory()
-    const { t } = useTranslation()
 
     useEffect(() => {
         setTitle(props.title)
@@ -84,8 +80,12 @@ export const NavBarCreateSong = (props: {
                         <TextField
                             InputProps={{
                                 style: { fontSize: 24 },
-                                classes: {underline: classes.underline, focused: classes.focused, root: classes.titleRoot},
-                                inputProps: {maxLength: 250}
+                                classes: {
+                                    underline: classes.underline,
+                                    focused: classes.focused,
+                                    root: classes.titleRoot,
+                                },
+                                inputProps: { maxLength: 250 },
                             }}
                             value={title}
                             onBlur={(ev) => props.onTitleBlur(ev.target.value)}
@@ -93,9 +93,7 @@ export const NavBarCreateSong = (props: {
                             fullWidth
                         />
                     </Box>
-                    <MenuButton
-                        voiceId={props.voiceId}
-                    />
+                    <MenuButton voiceId={props.voiceId} />
                 </Box>
             </AppBar>
         </Box>
