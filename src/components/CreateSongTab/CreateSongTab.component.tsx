@@ -28,6 +28,10 @@ const useStyles = makeStyles({
         border: `1px solid ${colors.gray_200}`,
         borderRadius: 4,
         opacity: 1,
+        height: "56px",
+        fontWeight: 400,
+        fontSize: "1rem",
+        lineHeight: 1.5,
         "&:hover": {
             backgroundColor: colors.gray_200
         },
