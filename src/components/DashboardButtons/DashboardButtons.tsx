@@ -11,6 +11,8 @@ import {
     Icon,
     IconButton,
 } from "@material-ui/core"
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
@@ -143,6 +145,36 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
                 </Box>
             </CardActionArea>
         </Card>
+    )
+}
+
+export const SortingButtons = () => {
+    const styles = useStyles()
+    return (
+        <Box style={{width: "100%"}}>
+            <Grid container style={{paddingLeft: 16}} alignItems="center" className={styles.songContainer}>
+                <Grid item className={styles.container} xs={4}>
+                    <UnfoldMoreIcon />
+                    <Box>
+                        <Typography>Sang</Typography>
+                    </Box>
+                </Grid>
+
+                <Grid item className={styles.container} xs={4}>
+                    <ExpandMoreIcon />
+                    <Box>
+                        <Typography>Bruker</Typography>
+                    </Box>
+                </Grid>
+
+                <Grid item className={styles.container} xs={4}>
+                    <UnfoldMoreIcon />
+                    <Box>
+                        <Typography>Dato</Typography>
+                    </Box>
+                </Grid>
+            </Grid>
+        </Box>
     )
 }
 

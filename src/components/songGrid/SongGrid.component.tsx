@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react"
 import { Box, Grid, Typography } from "@material-ui/core"
 import { ISong } from "../../models/ISong"
-import { DashboardButton } from "../DashboardButtons/DashboardButtons"
+import { DashboardButton, SortingButtons } from "../DashboardButtons/DashboardButtons"
 import { Loading } from "../loading/Loading.component"
 
 type SongGridProps = {
@@ -10,6 +10,7 @@ type SongGridProps = {
     removeSong: (songId: number) => void
     isLoading: boolean
     children?: ReactNode
+    sorting: boolean
 }
 
 const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
@@ -28,7 +29,7 @@ const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
 }
 
 export const SongGrid = (props: SongGridProps) => {
-    const { songs, title, isLoading, children } = props
+    const { songs, title, isLoading, children, sorting } = props
 
     const getChildren = () => {
         if (children) {
@@ -54,6 +55,7 @@ export const SongGrid = (props: SongGridProps) => {
         if (!isLoading) {
             return (
                 <>
+                    {getSorting()}
                     {songs?.map((song) => (
                         <GridItem key={song.songId} isSong>
                             <DashboardButton
@@ -79,6 +81,19 @@ export const SongGrid = (props: SongGridProps) => {
                 <Box m={2}>
                     <Typography variant="h1">{title}</Typography>
                 </Box>
+            )
+        }
+        return undefined
+    }
+
+    const getSorting = () => {
+        if(sorting) {
+            return (
+                <>
+                    <Grid item xs={11}>
+                        <SortingButtons/>
+                    </Grid>
+                </>
             )
         }
         return undefined

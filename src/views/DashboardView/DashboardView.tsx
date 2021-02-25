@@ -152,6 +152,7 @@ export const DashboardView = () => {
                                 songs={undefined}
                                 removeSong={() => undefined}
                                 isLoading={false}
+                                sorting={false}
                             >
                                 {musicTacts.map((song) => (
                                     <DashboardButtonWithAddIconNoLink
@@ -171,6 +172,7 @@ export const DashboardView = () => {
                                 songs={recentSongs}
                                 removeSong={removeSongFromRecentSongs}
                                 isLoading={getRecentSongs.loading}
+                                sorting
                             >
                                 <DashboardLibraryButton
                                     text={t("DashboardView:libraryButton")}
@@ -195,6 +197,7 @@ export const DashboardView = () => {
                             songs={filteredSongs}
                             removeSong={removeSongFromFilteredSongs}
                             isLoading={getFilteredSongs.loading}
+                            sorting
                         />
                     )}
                 </Grid>

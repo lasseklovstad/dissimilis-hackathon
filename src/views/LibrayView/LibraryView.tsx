@@ -87,6 +87,7 @@ export const LibraryView = () => {
                             songs={allSongs}
                             removeSong={removeSongFromAllSongs}
                             isLoading={getAllSongs.loading}
+                            sorting
                         />
                     ) : (
                         <SongGrid
@@ -94,6 +95,7 @@ export const LibraryView = () => {
                             songs={filteredSongs}
                             removeSong={removeSongFromFilteredSongs}
                             isLoading={getFilteredSongs.loading}
+                            sorting
                         />
                     )}
                 </Grid>
