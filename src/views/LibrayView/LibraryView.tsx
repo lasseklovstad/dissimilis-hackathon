@@ -22,12 +22,14 @@ export const LibraryView = () => {
     const { t } = useTranslation()
     const [libraryView, setLibraryView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
+    const [sortingTerm, setSortingTerm] = useState<"date" | "song" | "user">("date")
 
     const { getAllSongs, allSongsFetched } = useGetAllSongs()
     const [allSongs, setAllSongs] = useState<ISong[] | undefined>()
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
-        searchTerm
+        searchTerm,
+        sortingTerm
     )
     const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
 
@@ -63,6 +65,18 @@ export const LibraryView = () => {
         setLibraryView(false)
     }
 
+    const handleChangeSortingTerm = (term: "date" | "song" | "user") => {
+        setSortingTerm(term)
+        if(allSongsFetched) 
+        {
+            getAllSongs.run({orderBy: term})
+        }
+        if(filteredSongsFetched) 
+        {
+            getFilteredSongs.run({orderBy: term})
+        }
+    }
+
     return (
         <>
             <ErrorDialog
@@ -88,6 +102,8 @@ export const LibraryView = () => {
                             removeSong={removeSongFromAllSongs}
                             isLoading={getAllSongs.loading}
                             sorting
+                            sortTerm={sortingTerm}
+                            changeSortTerm={handleChangeSortingTerm}
                         />
                     ) : (
                         <SongGrid
@@ -96,6 +112,8 @@ export const LibraryView = () => {
                             removeSong={removeSongFromFilteredSongs}
                             isLoading={getFilteredSongs.loading}
                             sorting
+                            sortTerm={sortingTerm}
+                            changeSortTerm={handleChangeSortingTerm}
                         />
                     )}
                 </Grid>

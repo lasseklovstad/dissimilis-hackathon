@@ -11,6 +11,8 @@ type SongGridProps = {
     isLoading: boolean
     children?: ReactNode
     sorting: boolean
+    sortTerm: string
+    changeSortTerm: (term: "date" | "song" | "user") => void
 }
 
 const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
@@ -29,7 +31,7 @@ const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
 }
 
 export const SongGrid = (props: SongGridProps) => {
-    const { songs, title, isLoading, children, sorting } = props
+    const { songs, title, isLoading, children, sorting, sortTerm, changeSortTerm } = props
 
     const getChildren = () => {
         if (children) {
@@ -91,7 +93,10 @@ export const SongGrid = (props: SongGridProps) => {
             return (
                 <>
                     <Grid item xs={11}>
-                        <SortingButtons/>
+                        <SortingButtons 
+                            term={sortTerm} 
+                            changeSortTerm={changeSortTerm} 
+                            />
                     </Grid>
                 </>
             )

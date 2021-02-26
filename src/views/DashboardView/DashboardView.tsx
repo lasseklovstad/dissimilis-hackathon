@@ -10,6 +10,7 @@ import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBa
 import {
     useGetFilteredSongs,
     useGetRecentSongs,
+    useGetSortedSongs,
     usePostSong,
 } from "../../utils/useApiServiceSongs"
 import { InputModal } from "../../components/CustomModal/InputModal.component"
@@ -72,6 +73,9 @@ export const DashboardView = () => {
     const [dashboardView, setDashboardView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
     const [addSongModalIsOpen, setAddSongModalIsOpen] = useState(false)
+    const [sortingTerm, setSortingTerm] = useState<"date" | "song" | "user">(
+        "date"
+    )
     const [timeSignature, setTimeSignature] = useState<
         ITimeSignature | undefined
     >()
@@ -79,14 +83,16 @@ export const DashboardView = () => {
     const { postSong } = usePostSong()
     const history = useHistory()
     const measureText = t("DashboardView:measure")
-    const { getRecentSongs, recentSongsFetched } = useGetRecentSongs()
+    const { getRecentSongs, recentSongsFetched } = useGetRecentSongs(
+        sortingTerm
+    )
     const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>()
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
-        searchTerm
+        searchTerm,
+        sortingTerm
     )
     const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
-
     useEffect(() => {
         if (recentSongsFetched) {
             setRecentSongs(recentSongsFetched)
@@ -94,7 +100,10 @@ export const DashboardView = () => {
         if (filteredSongsFetched) {
             setFilteredSongs(filteredSongsFetched)
         }
-    }, [recentSongsFetched, filteredSongsFetched])
+        if (sortingTerm) {
+            setSortingTerm(sortingTerm)
+        }
+    }, [recentSongsFetched, filteredSongsFetched, sortingTerm])
 
     const removeSongFromRecentSongs = (songId: number) => {
         setRecentSongs(
@@ -129,6 +138,18 @@ export const DashboardView = () => {
         setAddSongModalIsOpen(false)
     }
 
+    const handleChangeSortingTerm = (term: "date" | "song" | "user") => {
+        setSortingTerm(term)
+        if(recentSongsFetched) 
+        {
+            getRecentSongs.run({num: "5", orderBy: term, arrangerId:""})
+        }
+        if(filteredSongsFetched) 
+        {
+            getFilteredSongs.run({orderBy: term})
+        }
+    }
+
     return (
         <>
             <Box mx={2}>
@@ -153,6 +174,8 @@ export const DashboardView = () => {
                                 removeSong={() => undefined}
                                 isLoading={false}
                                 sorting={false}
+                                sortTerm=""
+                                changeSortTerm={() => undefined}
                             >
                                 {musicTacts.map((song) => (
                                     <DashboardButtonWithAddIconNoLink
@@ -173,6 +196,8 @@ export const DashboardView = () => {
                                 removeSong={removeSongFromRecentSongs}
                                 isLoading={getRecentSongs.loading}
                                 sorting
+                                sortTerm={sortingTerm}
+                                changeSortTerm={handleChangeSortingTerm}
                             >
                                 <DashboardLibraryButton
                                     text={t("DashboardView:libraryButton")}
@@ -198,6 +223,8 @@ export const DashboardView = () => {
                             removeSong={removeSongFromFilteredSongs}
                             isLoading={getFilteredSongs.loading}
                             sorting
+                            sortTerm={sortingTerm}
+                            changeSortTerm={handleChangeSortingTerm}
                         />
                     )}
                 </Grid>

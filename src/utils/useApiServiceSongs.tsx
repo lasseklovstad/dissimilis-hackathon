@@ -66,7 +66,7 @@ export const useTransposeSong = (
 export const useGetAllSongs = () => {
     const url = "song/search"
     const body = {
-        orderByDateTime: "true",
+        orderBy: "date",
     }
     const initialData: ISong[] = []
     const headers = getHeaders()
@@ -90,12 +90,13 @@ export const useGetAllSongs = () => {
  * Get songs from database based on title or part of title
  * @param query title or part of title
  */
-export const useGetFilteredSongs = (title: string) => {
+export const useGetFilteredSongs = (title: string, sortingTerm: string) => {
     const url = "song/search"
     const initialData: ISong[] = []
     const headers = getHeaders()
     const body = {
         title,
+        orderBy: sortingTerm
     }
     const { postData, state, data } = useApiService<ISong[]>(url, {
         initialData,
@@ -116,12 +117,38 @@ export const useGetFilteredSongs = (title: string) => {
 /**
  * Get songs based on recent songs
  * */
-export const useGetRecentSongs = () => {
+export const useGetRecentSongs = (sortBy: string) => {
     const url = "song/search"
     const body = {
         num: "5",
-        orderByDateTime: "true",
+        orderBy: sortBy,
         arrangerId: getArrangerId(),
+    }
+    const initialData: ISong[] = []
+    const headers = getHeaders()
+    const { postDataWithArrangerId, state, data } = useApiService<ISong[]>(url, {
+        body,
+        initialData,
+        headers,
+    })
+
+    useEffect(() => {
+        postDataWithArrangerId(body)
+    }, [postDataWithArrangerId])
+
+    return {
+        getRecentSongs: { run: postDataWithArrangerId, ...state },
+        recentSongsFetched: data,
+    }
+}
+
+/**
+ * Get sorted songs
+ */
+export const useGetSortedSongs = (sortBy: string) => {
+    const url = "song/search"
+    const body = {
+        orderBy: sortBy,
     }
     const initialData: ISong[] = []
     const headers = getHeaders()
@@ -136,10 +163,11 @@ export const useGetRecentSongs = () => {
     }, [postData])
 
     return {
-        getRecentSongs: { run: postData, ...state },
-        recentSongsFetched: data,
+        getAllSortedSongs: { run: postData, ...state },
+        allSortedSongsFetched: data,
     }
 }
+
 
 /**
  * Add a new song

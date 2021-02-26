@@ -10,6 +10,7 @@ import {
     CardActionArea,
     Icon,
     IconButton,
+    Button,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore"
@@ -87,6 +88,11 @@ type TopBarIconProps = {
     onClick?: () => void
 }
 
+type SortingButtonsProps = {
+    term: string
+    changeSortTerm: (term: "date" | "song" | "user") => void
+}
+
 export const DashboardButtonWithAddIcon: FC<ButtonProps> = (props) => {
     const styles = useStyles()
     return (
@@ -148,30 +154,43 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
     )
 }
 
-export const SortingButtons = () => {
+export const SortingButtons: FC<SortingButtonsProps> = (props) => {
+    const {term, changeSortTerm} = props
     const styles = useStyles()
+
     return (
-        <Box style={{width: "100%"}}>
-            <Grid container style={{paddingLeft: 16}} alignItems="center" className={styles.songContainer}>
+        <Box style={{ width: "100%" }}>
+            <Grid
+                container
+                style={{ paddingLeft: 8 }}
+                alignItems="center"
+                className={styles.songContainer}
+            >
                 <Grid item className={styles.container} xs={4}>
-                    <UnfoldMoreIcon />
-                    <Box>
-                        <Typography>Sang</Typography>
-                    </Box>
+                    <Button 
+                        startIcon={term === "song"? <ExpandMoreIcon/> : <UnfoldMoreIcon/>}
+                        onClick={() => changeSortTerm("song")}
+                    >
+                        Song
+                    </Button>
                 </Grid>
 
                 <Grid item className={styles.container} xs={4}>
-                    <ExpandMoreIcon />
-                    <Box>
-                        <Typography>Bruker</Typography>
-                    </Box>
+                    <Button 
+                        startIcon={term === "user"? <ExpandMoreIcon/> : <UnfoldMoreIcon/>}
+                        onClick={() => changeSortTerm("user")}
+                    >
+                        User
+                    </Button>
                 </Grid>
 
                 <Grid item className={styles.container} xs={4}>
-                    <UnfoldMoreIcon />
-                    <Box>
-                        <Typography>Dato</Typography>
-                    </Box>
+                    <Button 
+                        startIcon={term === "date"? <ExpandMoreIcon/> : <UnfoldMoreIcon/>}
+                        onClick={() => changeSortTerm("date")}
+                    >
+                        Date
+                    </Button>
                 </Grid>
             </Grid>
         </Box>
