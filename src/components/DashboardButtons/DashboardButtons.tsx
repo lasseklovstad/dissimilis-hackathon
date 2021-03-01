@@ -155,41 +155,60 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
 }
 
 export const SortingButtons: FC<SortingButtonsProps> = (props) => {
-    const {term, changeSortTerm} = props
+    const { term, changeSortTerm } = props
     const styles = useStyles()
+    const { t } = useTranslation()
 
     return (
         <Box style={{ width: "100%" }}>
             <Grid
                 container
-                style={{ paddingLeft: 8 }}
                 alignItems="center"
                 className={styles.songContainer}
+                style={{ paddingRight: 80, paddingLeft: 12 }}
             >
-                <Grid item className={styles.container} xs={4}>
-                    <Button 
-                        startIcon={term === "song"? <ExpandMoreIcon/> : <UnfoldMoreIcon/>}
+                <Grid item xs={4}>
+                    <Button
+                        endIcon={
+                            term === "song" ? (
+                                <ExpandMoreIcon />
+                            ) : (
+                                <UnfoldMoreIcon />
+                            )
+                        }
                         onClick={() => changeSortTerm("song")}
                     >
-                        Song
+                        {t("DashboardView:song")}
                     </Button>
                 </Grid>
 
-                <Grid item className={styles.container} xs={4}>
-                    <Button 
-                        startIcon={term === "user"? <ExpandMoreIcon/> : <UnfoldMoreIcon/>}
+                <Grid item xs={4}>
+                    <Button
+                        endIcon={
+                            term === "user" ? (
+                                <ExpandMoreIcon />
+                            ) : (
+                                <UnfoldMoreIcon />
+                            )
+                        }
                         onClick={() => changeSortTerm("user")}
                     >
-                        User
+                        {t("DashboardView:user")}
                     </Button>
                 </Grid>
 
-                <Grid item className={styles.container} xs={4}>
-                    <Button 
-                        startIcon={term === "date"? <ExpandMoreIcon/> : <UnfoldMoreIcon/>}
+                <Grid item xs={4}>
+                    <Button
+                        endIcon={
+                            term === "date" ? (
+                                <ExpandMoreIcon />
+                            ) : (
+                                <UnfoldMoreIcon />
+                            )
+                        }
                         onClick={() => changeSortTerm("date")}
                     >
-                        Date
+                        {t("DashboardView:date")}
                     </Button>
                 </Grid>
             </Grid>

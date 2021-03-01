@@ -12,4 +12,7 @@ export const dashboardNo = {
     duplicate: "Dupliser",
     duplicateText: "Dupliser sang",
     delete: "Slett",
+    date: "Dato endret",
+    user: "Bruker", 
+    song: "Sang",
 }

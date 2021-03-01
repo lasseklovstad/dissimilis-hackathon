@@ -63,10 +63,10 @@ export const useTransposeSong = (
 /**
  * Get all songs
  * */
-export const useGetAllSongs = () => {
+export const useGetAllSongs = (sortingTerm: string) => {
     const url = "song/search"
     const body = {
-        orderBy: "date",
+        orderBy: sortingTerm,
     }
     const initialData: ISong[] = []
     const headers = getHeaders()
@@ -141,33 +141,6 @@ export const useGetRecentSongs = (sortBy: string) => {
         recentSongsFetched: data,
     }
 }
-
-/**
- * Get sorted songs
- */
-export const useGetSortedSongs = (sortBy: string) => {
-    const url = "song/search"
-    const body = {
-        orderBy: sortBy,
-    }
-    const initialData: ISong[] = []
-    const headers = getHeaders()
-    const { postData, state, data } = useApiService<ISong[]>(url, {
-        body,
-        initialData,
-        headers,
-    })
-
-    useEffect(() => {
-        postData()
-    }, [postData])
-
-    return {
-        getAllSortedSongs: { run: postData, ...state },
-        allSortedSongsFetched: data,
-    }
-}
-
 
 /**
  * Add a new song

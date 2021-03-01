@@ -22,14 +22,14 @@ export const LibraryView = () => {
     const { t } = useTranslation()
     const [libraryView, setLibraryView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
-    const [sortingTerm, setSortingTerm] = useState<"date" | "song" | "user">("date")
+    const [sortTerm, setSortTerm] = useState<"date" | "song" | "user">("date")
 
-    const { getAllSongs, allSongsFetched } = useGetAllSongs()
+    const { getAllSongs, allSongsFetched } = useGetAllSongs("date")
     const [allSongs, setAllSongs] = useState<ISong[] | undefined>()
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
-        sortingTerm
+        sortTerm
     )
     const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
 
@@ -66,14 +66,15 @@ export const LibraryView = () => {
     }
 
     const handleChangeSortingTerm = (term: "date" | "song" | "user") => {
-        setSortingTerm(term)
-        if(allSongsFetched) 
-        {
-            getAllSongs.run({orderBy: term})
+        if (term === sortTerm) {
+            return
         }
-        if(filteredSongsFetched) 
-        {
-            getFilteredSongs.run({orderBy: term})
+
+        setSortTerm(term)
+        if (libraryView) {
+            getAllSongs.run({ orderBy: term })
+        } else {
+            getFilteredSongs.run({ orderBy: term, title: searchTerm })
         }
     }
 
@@ -101,8 +102,7 @@ export const LibraryView = () => {
                             songs={allSongs}
                             removeSong={removeSongFromAllSongs}
                             isLoading={getAllSongs.loading}
-                            sorting
-                            sortTerm={sortingTerm}
+                            sortTerm={sortTerm}
                             changeSortTerm={handleChangeSortingTerm}
                         />
                     ) : (
@@ -111,8 +111,7 @@ export const LibraryView = () => {
                             songs={filteredSongs}
                             removeSong={removeSongFromFilteredSongs}
                             isLoading={getFilteredSongs.loading}
-                            sorting
-                            sortTerm={sortingTerm}
+                            sortTerm={sortTerm}
                             changeSortTerm={handleChangeSortingTerm}
                         />
                     )}

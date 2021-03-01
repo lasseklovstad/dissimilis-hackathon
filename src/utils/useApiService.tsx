@@ -144,7 +144,11 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
     )
 
     const postDataWithArrangerId = useCallback(
-        async (body: {num: string, orderBy: string, arrangerId: string}) => {
+        async (body: {
+            num?: string
+            orderBy: string
+            arrangerId?: string
+        }) => {
             let bodyToPost = body
             bodyToPost.arrangerId = sessionStorage.getItem("userId") || ""
             return fetchData("post", bodyToPost)
