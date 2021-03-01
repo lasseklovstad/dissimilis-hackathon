@@ -143,7 +143,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
         [fetchData]
     )
 
-    const postDataWithArrangerId = useCallback(
+    const postSearchWithArrangerId = useCallback(
         async (body: {
             num?: string
             orderBy: string
@@ -177,7 +177,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
     return {
         getData,
         postData,
-        postDataWithArrangerId,
+        postSearchWithArrangerId,
         putData,
         deleteData,
         data,

@@ -145,7 +145,7 @@ export const DashboardView = () => {
         }
         else
         {
-            getFilteredSongs.run({orderBy: term})
+            getFilteredSongs.run({orderBy: term, title: searchTerm})
         }
     }
 

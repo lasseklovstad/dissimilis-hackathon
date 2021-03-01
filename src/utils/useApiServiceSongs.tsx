@@ -63,10 +63,10 @@ export const useTransposeSong = (
 /**
  * Get all songs
  * */
-export const useGetAllSongs = (sortingTerm: string) => {
+export const useGetAllSongs = (sortTerm: string) => {
     const url = "song/search"
     const body = {
-        orderBy: sortingTerm,
+        orderBy: sortTerm,
     }
     const initialData: ISong[] = []
     const headers = getHeaders()
@@ -90,13 +90,13 @@ export const useGetAllSongs = (sortingTerm: string) => {
  * Get songs from database based on title or part of title
  * @param query title or part of title
  */
-export const useGetFilteredSongs = (title: string, sortingTerm: string) => {
+export const useGetFilteredSongs = (title: string, sortTerm: string) => {
     const url = "song/search"
     const initialData: ISong[] = []
     const headers = getHeaders()
     const body = {
         title,
-        orderBy: sortingTerm
+        orderBy: sortTerm
     }
     const { postData, state, data } = useApiService<ISong[]>(url, {
         initialData,
@@ -117,27 +117,27 @@ export const useGetFilteredSongs = (title: string, sortingTerm: string) => {
 /**
  * Get songs based on recent songs
  * */
-export const useGetRecentSongs = (sortBy: string) => {
+export const useGetRecentSongs = (sortTerm: string) => {
     const url = "song/search"
     const body = {
         num: "5",
-        orderBy: sortBy,
+        orderBy: sortTerm,
         arrangerId: getArrangerId(),
     }
     const initialData: ISong[] = []
     const headers = getHeaders()
-    const { postDataWithArrangerId, state, data } = useApiService<ISong[]>(url, {
+    const { postSearchWithArrangerId, state, data } = useApiService<ISong[]>(url, {
         body,
         initialData,
         headers,
     })
 
     useEffect(() => {
-        postDataWithArrangerId(body)
-    }, [postDataWithArrangerId])
+        postSearchWithArrangerId(body)
+    }, [postSearchWithArrangerId])
 
     return {
-        getRecentSongs: { run: postDataWithArrangerId, ...state },
+        getRecentSongs: { run: postSearchWithArrangerId, ...state },
         recentSongsFetched: data,
     }
 }
