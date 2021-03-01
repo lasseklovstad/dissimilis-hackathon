@@ -1,7 +1,10 @@
 import React, { ReactNode } from "react"
 import { Box, Grid, Typography } from "@material-ui/core"
 import { ISong } from "../../models/ISong"
-import { DashboardButton, SortingButtons } from "../DashboardButtons/DashboardButtons"
+import {
+    DashboardButton,
+    SortingButtons,
+} from "../DashboardButtons/DashboardButtons"
 import { Loading } from "../loading/Loading.component"
 
 type SongGridProps = {
@@ -30,7 +33,14 @@ const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
 }
 
 export const SongGrid = (props: SongGridProps) => {
-    const { songs, title, isLoading, children, sortTerm, changeSortTerm } = props
+    const {
+        songs,
+        title,
+        isLoading,
+        children,
+        sortTerm,
+        changeSortTerm,
+    } = props
 
     const getChildren = () => {
         if (children) {
@@ -88,14 +98,14 @@ export const SongGrid = (props: SongGridProps) => {
     }
 
     const getSorting = () => {
-        if(sortTerm !== "") {
+        if (sortTerm !== "") {
             return (
                 <>
                     <Grid item xs={12}>
-                        <SortingButtons 
-                            term={sortTerm} 
-                            changeSortTerm={changeSortTerm} 
-                            />
+                        <SortingButtons
+                            term={sortTerm}
+                            changeSortTerm={changeSortTerm}
+                        />
                     </Grid>
                 </>
             )
