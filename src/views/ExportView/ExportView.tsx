@@ -65,6 +65,8 @@ const useStyles = makeStyles({
 })
 
 export const ExportView = () => {
+    const hideChordLetters = false
+
     const [rowsPerSheet, setRowsPerSheet] = useState<number>(4)
     const [lengthOfEachBar, setlengthOfEachBar] = useState<
         1 | 2 | 3 | 4 | 6 | 12
@@ -149,7 +151,7 @@ export const ExportView = () => {
     ]
 
     const convertFromLengthOfBarToAmountOfBarsPerRow = (): number => {
-        let lengthOfEachBarCalculated = 1
+        let lengthOfEachBarCalculated
         switch (lengthOfEachBar) {
             case 1:
                 lengthOfEachBarCalculated = 12
@@ -226,34 +228,32 @@ export const ExportView = () => {
                                         {selectedVoice?.bars.length === 0 ? (
                                             <></>
                                         ) : (
-                                            <>
-                                                <Song
-                                                    barsPerRow={barsPerRow}
-                                                    exportMode
-                                                    voice={{
-                                                        ...selectedVoice,
-                                                        bars:
-                                                            selectedVoice.bars.slice(
-                                                                pageIndex *
-                                                                    (rowsPerSheet *
-                                                                        convertFromLengthOfBarToAmountOfBarsPerRow()),
-                                                                (pageIndex +
-                                                                    1) *
-                                                                    rowsPerSheet *
-                                                                    convertFromLengthOfBarToAmountOfBarsPerRow()
-                                                            ) || [],
-                                                    }}
-                                                    timeSignature={{
-                                                        denominator:
-                                                            songInit?.denominator ||
-                                                            4,
-                                                        numerator:
-                                                            songInit?.numerator ||
-                                                            4,
-                                                    }}
-                                                    heightOfBar={calculateHeightOfBar()}
-                                                />
-                                            </>
+                                            <Song
+                                                barsPerRow={barsPerRow}
+                                                exportMode
+                                                hideChordLetters={hideChordLetters}
+                                                voice={{
+                                                    ...selectedVoice,
+                                                    bars:
+                                                        selectedVoice.bars.slice(
+                                                            pageIndex *
+                                                                (rowsPerSheet *
+                                                                    convertFromLengthOfBarToAmountOfBarsPerRow()),
+                                                            (pageIndex + 1) *
+                                                                rowsPerSheet *
+                                                                convertFromLengthOfBarToAmountOfBarsPerRow()
+                                                        ) || [],
+                                                }}
+                                                timeSignature={{
+                                                    denominator:
+                                                        songInit?.denominator ||
+                                                        4,
+                                                    numerator:
+                                                        songInit?.numerator ||
+                                                        4,
+                                                }}
+                                                heightOfBar={calculateHeightOfBar()}
+                                            />
                                         )}
                                     </Grid>
                                 </Grid>
