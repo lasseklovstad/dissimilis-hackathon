@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import {
     BottomNavigation,
     Box,
@@ -77,6 +77,7 @@ export const ExportView = () => {
     const selectedVoice = songInit?.voices.find(
         (voice) => voice.songVoiceId === selectedVoiceId
     )
+    const refHighlightedNote = useRef<HTMLAnchorElement>(null)
 
     const classes = useStyles()
     const history = useHistory()
@@ -256,6 +257,7 @@ export const ExportView = () => {
                                                         undefined
                                                     }
                                                     selectedNoteId={undefined}
+                                                    refHighlightedNote={refHighlightedNote}
                                                 />
                                             </>
                                         )}

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { MutableRefObject, RefObject, useContext, useState } from "react"
 import { Box, useMediaQuery } from "@material-ui/core"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { House } from "./House.component"
@@ -20,13 +20,14 @@ export const Bar = (props: {
     showHouseNumber: boolean
     setValuesForSelectedNote: (
         noteId: number | undefined | null,
-        bar: IBar | undefined,
+        bar: number | undefined,
         chord: string,
         noteLength: number,
         isNote: boolean,
         position: number
     ) => void
     selectedNoteId: number | undefined | null
+    refHighlightedNote: RefObject<HTMLAnchorElement>
 }) => {
     const {
         exportMode,
@@ -45,11 +46,12 @@ export const Bar = (props: {
         height = 160,
         setValuesForSelectedNote,
         selectedNoteId,
+        refHighlightedNote
     } = props
     const [menuPosition, setMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()
-    const xl = useMediaQuery("(min-width: 1920px)")
+    const xl = useMediaQuery("(min-width: 1080px)")
     const [rightClicked, setRightClicked] = useState<number | null>(null)
     const [positionArray, setPositionArray] = useState<number[]>([])
     const {
@@ -101,6 +103,14 @@ export const Bar = (props: {
 
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+                setValuesForSelectedNote(
+                    result.data.chordsAndNotes[position].noteId,
+                    result.data.barId,
+                    selectedChord,
+                    selectedNoteLength,
+                    isNoteSelected,
+                    position
+                )
             }
         } else {
             if (chord.noteId === selectedNoteId) {
@@ -117,7 +127,7 @@ export const Bar = (props: {
             const isNote = chord.notes.length === 1
             setValuesForSelectedNote(
                 chord.noteId,
-                props.bar,
+                props.bar.barId,
                 isNote ? chord.notes[0] : getChord(chord.notes),
                 chord.length,
                 isNote,
@@ -199,6 +209,7 @@ export const Bar = (props: {
                                 const highlight =
                                     positionArray.includes(chord.position) ||
                                     selectedNoteId === chord.noteId
+                                const selected = selectedNoteId === chord.noteId
                                 return (
                                     <Chord
                                         disabled={exportMode}
@@ -217,6 +228,8 @@ export const Bar = (props: {
                                             chord.noteId
                                         )}
                                         onClick={() => handleClick(chord)}
+                                        refHighlightedNote={refHighlightedNote}
+                                        isSelected={selected}
                                     />
                                 )
                             })}

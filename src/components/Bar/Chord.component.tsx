@@ -1,4 +1,4 @@
-import React from "react"
+import React, { MutableRefObject, RefObject, useEffect } from "react"
 import { Box, ButtonBase, Typography, useTheme } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { IChordAndNotes } from "../../models/IBar"
@@ -13,6 +13,8 @@ type ChordProps = {
     onMouseLeave: () => void
     highlight: boolean
     disabled: boolean
+    refHighlightedNote: RefObject<HTMLAnchorElement>
+    isSelected: boolean
 }
 
 const ChordText = (props: { notes: string[] }) => {
@@ -38,10 +40,13 @@ const useStyle = makeStyles(() => ({
         "&:hover": {
             outline: `4px solid ${colors.focus}`,
         },
+        "&:focus": {
+            outline: `4px solid ${colors.focus}`,
+        },
     },
     focusedButton: {
         outline: `4px solid ${colors.focus}`,
-    }
+    },
 }))
 
 export const Chord = (props: ChordProps) => {
@@ -53,6 +58,8 @@ export const Chord = (props: ChordProps) => {
         onMouseLeave,
         highlight,
         disabled,
+        refHighlightedNote,
+        isSelected,
     } = props
     const classes = useStyle()
     const isChord = chordsAndNotes.notes.length > 2
@@ -66,6 +73,7 @@ export const Chord = (props: ChordProps) => {
         }
         return getColor(note)
     }
+
 
     return (
         <>
@@ -90,6 +98,7 @@ export const Chord = (props: ChordProps) => {
                     onMouseLeave={onMouseLeave}
                     className={highlight? classes.focusedButton : classes.buttonBase}
                     focusVisibleClassName={highlight? classes.focusedButton : classes.buttonBase}
+                    innerRef={isSelected ? refHighlightedNote : undefined}
                     style={{
                         display: "flex",
                         flexDirection: "column",
