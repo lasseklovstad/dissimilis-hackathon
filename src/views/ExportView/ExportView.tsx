@@ -77,7 +77,6 @@ export const ExportView = () => {
     const selectedVoice = songInit?.voices.find(
         (voice) => voice.songVoiceId === selectedVoiceId
     )
-    const refHighlightedNote = useRef<HTMLAnchorElement>(null)
 
     const classes = useStyles()
     const history = useHistory()
@@ -257,7 +256,7 @@ export const ExportView = () => {
                                                         undefined
                                                     }
                                                     selectedNoteId={undefined}
-                                                    refHighlightedNote={refHighlightedNote}
+                                                    refHighlightedNote={undefined}
                                                 />
                                             </>
                                         )}

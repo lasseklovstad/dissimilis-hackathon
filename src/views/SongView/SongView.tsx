@@ -19,7 +19,7 @@ import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { SongContext, songReducer } from "./SongContextProvider.component"
 import { IVoice } from "../../models/IVoice"
 import { chords, getNotesFromChord, notes } from "../../models/chords"
-import { IBar, IChordAndNotes } from "../../models/IBar"
+import { IChordAndNotes } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 
 const useStyles = makeStyles({
@@ -108,8 +108,13 @@ export const SongView = () => {
         selectedNoteId
     )
 
+    const setFocusOnHighlightedButton = () => {
+        if (selectedNoteId  && refHighlightedNote && refHighlightedNote.current) {
+            refHighlightedNote.current.focus()
+        }
+    }
+
     const handleChangeChord = (chord: string) => {
-        console.log(refHighlightedNote.current)
         if (selectedNoteId && selectedVoiceId && selectedBarId) {
             makeNoteUpdate(
                 chord,
@@ -117,15 +122,11 @@ export const SongView = () => {
                 selectedNotePosition,
                 isNoteSelected
             )
-            if (refHighlightedNote && refHighlightedNote.current) {
-                refHighlightedNote.current.focus()
-            }
+            setFocusOnHighlightedButton()
             return
         }
         setSelectedChord(chord)
-        if (refHighlightedNote && refHighlightedNote.current) {
-            refHighlightedNote.current.focus()
-        }
+        setFocusOnHighlightedButton()
     }
 
     const makeNoteUpdate = async (
@@ -170,31 +171,21 @@ export const SongView = () => {
                         note.position,
                         isNoteSelected
                     )
-                    if (refHighlightedNote && refHighlightedNote.current) {
-                        refHighlightedNote.current.focus()
-                    }
                     return
                 }
-
-                checkIfUpdateNoteLengthIsPossible(noteLength)
             }
-            if (refHighlightedNote && refHighlightedNote.current) {
-                refHighlightedNote.current.focus()
-            }
+            reduceChordsAndNotes(noteLength)
             return
         }
         setSelectedNoteLength(noteLength)
-        if (refHighlightedNote && refHighlightedNote.current) {
-            refHighlightedNote.current.focus()
-        }
     }
 
-    const checkIfUpdateNoteLengthIsPossible = (noteLength: number) => {
+    const reduceChordsAndNotes = (noteLength: number) => {
         const selectedBar = selectedVoice?.bars.find(
             (b) => b.barId === selectedBarId
         )
         if (selectedBar) {
-            const reduced = selectedBar.chordsAndNotes.reduce(
+            const reducedChords = selectedBar.chordsAndNotes.reduce(
                 (noter: IChordAndNotes[], note) => {
                     if (note.notes[0] === "Z") {
                         const numberOfRests = note.length
@@ -218,11 +209,11 @@ export const SongView = () => {
                 },
                 []
             )
-            check(reduced, noteLength)
+            checkIfUpdateNoteLengthIsPossible(reducedChords, noteLength)
         }
     }
 
-    const check = (allChords: IChordAndNotes[], noteLength: number) => {
+    const checkIfUpdateNoteLengthIsPossible = (allChords: IChordAndNotes[], noteLength: number) => {
         let indexOfChord = allChords.findIndex(
             (c) => c.noteId === selectedNoteId
         )
@@ -237,9 +228,6 @@ export const SongView = () => {
                         currentChord.noteId !== selectedNoteId &&
                         currentChord.notes[0] !== "Z"
                 ) === -1
-            console.log(allChords)
-            //     console.log(interval)
-            // console.log(`start: ${start}, end: ${end}, isOnlyRests: ${isOnlyRests}`)
             if (isOnlyRests && interval.length === noteLength) {
                 makeNoteUpdate(selectedChord, noteLength, start, isNoteSelected)
                 break
@@ -264,16 +252,12 @@ export const SongView = () => {
                 selectedNotePosition,
                 selected
             )
-            if (refHighlightedNote && refHighlightedNote.current) {
-                refHighlightedNote.current.focus()
-            }
+            setFocusOnHighlightedButton()
             return
         }
         setNoteIsSelected(selected)
         setSelectedChord(chord)
-        if (refHighlightedNote && refHighlightedNote.current) {
-            refHighlightedNote.current.focus()
-        }
+        setFocusOnHighlightedButton()
     }
 
     useEffect(() => {
@@ -380,6 +364,7 @@ export const SongView = () => {
                     songId={songId}
                     voiceId={selectedVoiceId}
                     notesOrChords={isNoteSelected ? notes : chords}
+                    onExitedNoteLengthSelect={setFocusOnHighlightedButton}
                 />
             )}
         </>

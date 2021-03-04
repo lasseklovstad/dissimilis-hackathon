@@ -1,4 +1,4 @@
-import React, { MutableRefObject, RefObject, useContext, useState } from "react"
+import React, { RefObject, useContext, useState } from "react"
 import { Box, useMediaQuery } from "@material-ui/core"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { House } from "./House.component"
@@ -20,14 +20,14 @@ export const Bar = (props: {
     showHouseNumber: boolean
     setValuesForSelectedNote: (
         noteId: number | undefined | null,
-        bar: number | undefined,
+        barId: number | undefined,
         chord: string,
         noteLength: number,
         isNote: boolean,
         position: number
     ) => void
     selectedNoteId: number | undefined | null
-    refHighlightedNote: RefObject<HTMLAnchorElement>
+    refHighlightedNote: RefObject<HTMLAnchorElement> | undefined
 }) => {
     const {
         exportMode,
@@ -46,7 +46,7 @@ export const Bar = (props: {
         height = 160,
         setValuesForSelectedNote,
         selectedNoteId,
-        refHighlightedNote
+        refHighlightedNote,
     } = props
     const [menuPosition, setMenuPosition] = useState<
         { top: number; left: number } | undefined
@@ -104,7 +104,9 @@ export const Bar = (props: {
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
                 setValuesForSelectedNote(
-                    result.data.chordsAndNotes[position].noteId,
+                    result.data.chordsAndNotes.find(
+                        (c) => c.position === position
+                    )?.noteId,
                     result.data.barId,
                     selectedChord,
                     selectedNoteLength,
@@ -122,6 +124,9 @@ export const Bar = (props: {
                     isNoteSelected,
                     0
                 )
+                if (refHighlightedNote && refHighlightedNote.current) {
+                    refHighlightedNote.current.blur()
+                }
                 return
             }
             const isNote = chord.notes.length === 1

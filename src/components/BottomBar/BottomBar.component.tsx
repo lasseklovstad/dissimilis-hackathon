@@ -25,7 +25,6 @@ import { ReactComponent as HalfnoteDottedIcon } from "../../assets/images/icon_h
 import { ReactComponent as QuarternoteDottedIcon } from "../../assets/images/icon_quarter-note-dotted.svg"
 import { IBar } from "../../models/IBar"
 import { useAddBar } from "../../utils/useApiServiceSongs"
-import { chords, notes } from "../../models/chords"
 
 const useStyles = makeStyles({
     outercontainer: {
@@ -126,6 +125,7 @@ export const BottomBar = (props: {
     noteIsSelected: boolean
     onNoteSelectedChange: (selected: boolean) => void
     notesOrChords: string[]
+    onExitedNoteLengthSelect: () => void
 }) => {
     const {
         timeSignature: { numerator, denominator },
@@ -138,7 +138,8 @@ export const BottomBar = (props: {
         onNoteLengthChange,
         noteIsSelected,
         onNoteSelectedChange,
-        notesOrChords
+        notesOrChords,
+        onExitedNoteLengthSelect,
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
@@ -173,6 +174,7 @@ export const BottomBar = (props: {
                 value={selectedNoteLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
+                MenuProps={{ onExited: onExitedNoteLengthSelect }}
             >
                 {noteLengths.map(({ length, Icon }) => {
                     return (
