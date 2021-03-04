@@ -5,10 +5,10 @@ import {
     Button,
     FormControl,
     Grid,
+    InputLabel,
     makeStyles,
     MenuItem,
     Select,
-    Slider,
     Typography,
     useMediaQuery,
 } from "@material-ui/core"
@@ -27,12 +27,13 @@ const useStyles = makeStyles({
         },
     },
     box: {
+        padding: "8px",
+        margin: "4px",
         backgroundColor: "white",
         boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
     },
     formControl: {
-        width: "90%",
-        marginBottom: "8px",
+        width: "100%",
     },
     button: {
         backgroundColor: colors.gray_100,
@@ -63,16 +64,30 @@ const useStyles = makeStyles({
         boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
     },
 })
+const heightAvailableToBars = 770
+const barsConfig = [
+    { barsPerRow: 1, lengthOfBar: 12 },
+    { barsPerRow: 2, lengthOfBar: 6 },
+    { barsPerRow: 4, lengthOfBar: 3 },
+    { barsPerRow: 6, lengthOfBar: 2 },
+]
+
+const rowsPerSheetConfig = [
+    { rowsPerSheet: 1, heightAvailableToBars: heightAvailableToBars },
+    { rowsPerSheet: 2, heightAvailableToBars: heightAvailableToBars / 2 - 20 },
+    { rowsPerSheet: 3, heightAvailableToBars: heightAvailableToBars / 3 - 30 },
+    { rowsPerSheet: 4, heightAvailableToBars: heightAvailableToBars / 4 - 50 },
+    { rowsPerSheet: 5, heightAvailableToBars: heightAvailableToBars / 5 - 30 },
+]
 
 export const ExportView = () => {
     const hideChordLetters = false
-
-    const [rowsPerSheet, setRowsPerSheet] = useState<number>(4)
-    const [lengthOfEachBar, setlengthOfEachBar] = useState<
-        1 | 2 | 3 | 4 | 6 | 12
-    >(3)
+    const [selectedBarConfig, setSelectedBarConfig] = useState(barsConfig[2])
+    const [
+        selectedRowsPerSheetConfig,
+        setSelectedRowsPerSheetConfig,
+    ] = useState(rowsPerSheetConfig[3])
     const [amountOfPages, setAmountOfPages] = useState<number>(1)
-    const [barsPerRow, setBarsPerRow] = useState(4)
     const { songId } = useParams<{ songId: string }>()
     const { songInit } = useGetSong(songId)
     const selectedVoiceId = useVoice(songInit?.voices)
@@ -86,109 +101,18 @@ export const ExportView = () => {
 
     const matches = useMediaQuery("(min-width:960px)")
 
-    // Converts amount of bars per row to the length according to the Material UI-grid (12 columns)
-    const convertAmountOfBarsPerRowToLengthOfEachBar = (
-        amount: number | number[]
-    ) => {
-        setBarsPerRow(amount as number)
-        if (amount === 1) {
-            setlengthOfEachBar(12)
-        } else if (amount === 2) {
-            setlengthOfEachBar(6)
-        } else if (amount === 4) {
-            setlengthOfEachBar(3)
-        } else if (amount === 6) {
-            setlengthOfEachBar(2)
-        } else {
-            setlengthOfEachBar(1)
-        }
-    }
-
-    // The slider returns a value which is either a number or number[]. Therefore we need to convert it to number
-    const changeRowsPerSheet = (amount: number | number[]) => {
-        if (amount === 1) {
-            setRowsPerSheet(1)
-        } else if (amount === 2) {
-            setRowsPerSheet(2)
-        } else if (amount === 3) {
-            setRowsPerSheet(3)
-        } else if (amount === 4) {
-            setRowsPerSheet(4)
-        } else if (amount === 5) {
-            setRowsPerSheet(5)
-        } else {
-            setRowsPerSheet(1)
-        }
-    }
-
-    const heightAvailableToBars = 770
-
-    const calculateHeightOfBar = () => {
-        if (rowsPerSheet === 1) return heightAvailableToBars
-        if (rowsPerSheet === 2) return heightAvailableToBars / 2 - 20
-        if (rowsPerSheet === 3) return heightAvailableToBars / 3 - 30
-        if (rowsPerSheet === 4) return heightAvailableToBars / 4 - 50
-        if (rowsPerSheet === 5) return heightAvailableToBars / 5 - 30
-        return 120
-    }
-
-    const marks = [
-        {
-            value: 1,
-        },
-        {
-            value: 2,
-        },
-        {
-            value: 4,
-        },
-        {
-            value: 6,
-        },
-        {
-            value: 12,
-        },
-    ]
-
-    const convertFromLengthOfBarToAmountOfBarsPerRow = (): number => {
-        let lengthOfEachBarCalculated
-        switch (lengthOfEachBar) {
-            case 1:
-                lengthOfEachBarCalculated = 12
-                break
-            case 2:
-                lengthOfEachBarCalculated = 6
-                break
-            case 3:
-                lengthOfEachBarCalculated = 4
-                break
-            case 4:
-                lengthOfEachBarCalculated = 3
-                break
-            case 6:
-                lengthOfEachBarCalculated = 2
-                break
-            case 12:
-                lengthOfEachBarCalculated = 1
-                break
-            default:
-                lengthOfEachBarCalculated = 1
-        }
-        return lengthOfEachBarCalculated
-    }
-
     const calculatePage = () => {
         if (!selectedVoice) {
             setAmountOfPages(1)
             return
         }
         const amountOfBars = selectedVoice.bars.length || 0
-        const lengthOfEachBarCalculated = convertFromLengthOfBarToAmountOfBarsPerRow()
 
         const totalRowsUsed = Math.ceil(
-            amountOfBars / lengthOfEachBarCalculated
+            amountOfBars / selectedBarConfig.barsPerRow
         )
-        const heightOfDiv = totalRowsUsed * calculateHeightOfBar()
+        const heightOfDiv =
+            totalRowsUsed * selectedRowsPerSheetConfig.heightAvailableToBars
 
         const amountOfPagesCalculated = Math.ceil(heightOfDiv / 770)
         if (amountOfPagesCalculated === 0) {
@@ -200,7 +124,7 @@ export const ExportView = () => {
 
     useEffect(() => {
         calculatePage()
-    }, [rowsPerSheet, lengthOfEachBar])
+    }, [selectedRowsPerSheetConfig, selectedBarConfig])
 
     return (
         <>
@@ -229,19 +153,23 @@ export const ExportView = () => {
                                             <></>
                                         ) : (
                                             <Song
-                                                barsPerRow={barsPerRow}
+                                                barsPerRow={
+                                                    selectedBarConfig.barsPerRow
+                                                }
                                                 exportMode
-                                                hideChordLetters={hideChordLetters}
+                                                hideChordLetters={
+                                                    hideChordLetters
+                                                }
                                                 voice={{
                                                     ...selectedVoice,
                                                     bars:
                                                         selectedVoice.bars.slice(
                                                             pageIndex *
-                                                                (rowsPerSheet *
-                                                                    convertFromLengthOfBarToAmountOfBarsPerRow()),
+                                                                (selectedRowsPerSheetConfig.rowsPerSheet *
+                                                                    selectedBarConfig.barsPerRow),
                                                             (pageIndex + 1) *
-                                                                rowsPerSheet *
-                                                                convertFromLengthOfBarToAmountOfBarsPerRow()
+                                                                selectedRowsPerSheetConfig.rowsPerSheet *
+                                                                selectedBarConfig.barsPerRow
                                                         ) || [],
                                                 }}
                                                 timeSignature={{
@@ -252,7 +180,9 @@ export const ExportView = () => {
                                                         songInit?.numerator ||
                                                         4,
                                                 }}
-                                                heightOfBar={calculateHeightOfBar()}
+                                                heightOfBar={
+                                                    selectedRowsPerSheetConfig.heightAvailableToBars
+                                                }
                                             />
                                         )}
                                     </Grid>
@@ -274,14 +204,15 @@ export const ExportView = () => {
                         md={2}
                         className={classes.box}
                         style={{
-                            padding: "8px",
                             order: 1,
-                            marginRight: matches ? "0px" : "8px",
-                            marginBottom: matches ? "0px" : "12px",
                         }}
                     >
                         <FormControl className={classes.formControl}>
+                            <InputLabel id="voice">
+                                {t("ExportView:voice")}
+                            </InputLabel>
                             <Select
+                                labelId="voice"
                                 value={songInit ? selectedVoiceId : ""}
                                 onChange={(ev) => {
                                     history.push(
@@ -302,74 +233,103 @@ export const ExportView = () => {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item xs="auto" md={1} style={{ order: 2 }} />
-                    <Grid
-                        item
-                        xs={5}
-                        md={3}
-                        className={classes.slider}
-                        style={{
-                            order: matches ? 3 : 3,
-                            marginRight: matches ? "0px" : "8px",
-                        }}
-                    >
-                        <Typography variant="body1">
-                            {t("ExportView:barPerRow")}
-                        </Typography>
-                        <Slider
-                            onChange={(event, value) =>
-                                convertAmountOfBarsPerRowToLengthOfEachBar(
-                                    value
-                                )
-                            }
-                            defaultValue={4}
-                            step={null}
-                            marks={marks}
-                            min={1}
-                            max={6}
-                            valueLabelDisplay="auto"
-                        />
-                    </Grid>
-                    <Grid
-                        item
-                        xs={5}
-                        md={3}
-                        className={classes.slider}
-                        style={{
-                            marginRight: matches ? "0px" : "0px",
-                            order: matches ? 4 : 4,
-                        }}
-                    >
-                        <Typography variant="body1">
-                            {t("ExportView:rowsPerSheet")}
-                        </Typography>
-                        <Slider
-                            onChange={(event, value) =>
-                                changeRowsPerSheet(value)
-                            }
-                            defaultValue={4}
-                            step={1}
-                            marks
-                            min={1}
-                            max={5}
-                            valueLabelDisplay="auto"
-                        />
-                    </Grid>
-                    <Grid item xs="auto" md={1} style={{ order: 5 }} />
                     <Grid
                         item
                         xs={5}
                         md={2}
+                        className={classes.box}
                         style={{
+                            order: 3,
+                        }}
+                    >
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="barPerRow">
+                                {t("ExportView:barPerRow")}
+                            </InputLabel>
+                            <Select
+                                labelId="barPerRow"
+                                value={selectedBarConfig.barsPerRow}
+                                onChange={(ev) => {
+                                    setSelectedBarConfig(
+                                        barsConfig.find(
+                                            (config) =>
+                                                config.barsPerRow ===
+                                                ev.target.value
+                                        ) || barsConfig[0]
+                                    )
+                                }}
+                            >
+                                {barsConfig.map((barConfig) => {
+                                    return (
+                                        <MenuItem
+                                            key={barConfig.barsPerRow}
+                                            value={barConfig.barsPerRow}
+                                        >
+                                            {barConfig.barsPerRow}
+                                        </MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={5}
+                        md={2}
+                        className={classes.box}
+                        style={{
+                            order: 4,
+                        }}
+                    >
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="rowsPerSheet">
+                                {t("ExportView:rowsPerSheet")}
+                            </InputLabel>
+                            <Select
+                                labelId="rowsPerSheet"
+                                value={selectedRowsPerSheetConfig.rowsPerSheet}
+                                onChange={(ev) =>
+                                    setSelectedRowsPerSheetConfig(
+                                        rowsPerSheetConfig.find(
+                                            (config) =>
+                                                config.rowsPerSheet ===
+                                                ev.target.value
+                                        ) || rowsPerSheetConfig[0]
+                                    )
+                                }
+                            >
+                                {rowsPerSheetConfig.map((rowsPerSheet) => {
+                                    return (
+                                        <MenuItem
+                                            key={rowsPerSheet.rowsPerSheet}
+                                            value={rowsPerSheet.rowsPerSheet}
+                                        >
+                                            {rowsPerSheet.rowsPerSheet}
+                                        </MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs="auto" md={2} style={{ order: 5 }} />
+                    <Grid
+                        item
+                        xs={5}
+                        md={3}
+                        style={{
+                            padding: "8px",
+                            margin: "8px",
                             backgroundColor: "transparent",
                             order: matches ? 5 : 2,
-                            marginBottom: matches ? "0px" : "12px",
                         }}
                     >
                         <Button
                             className={classes.confirmOrCancelButtons}
                             onClick={() => window.print()}
-                            style={{ backgroundColor: colors.teal_100 }}
+                            style={{
+                                backgroundColor: colors.teal_100,
+                                marginRight: 8,
+                            }}
                         >
                             {t("ExportView:createPDF")}
                         </Button>
