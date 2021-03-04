@@ -14,14 +14,14 @@ export const Bar = (props: {
     bar: IBar
     height?: number
     exportMode: boolean
-    hideChordLetters: boolean
+    showChordLetters: boolean
     onMenuClick: (anchorEl: HTMLElement) => void
     masterSheet: boolean
     showHouseNumber: boolean
 }) => {
     const {
         exportMode,
-        hideChordLetters,
+        showChordLetters,
         onMenuClick,
         masterSheet,
         showHouseNumber,
@@ -165,7 +165,7 @@ export const Bar = (props: {
                                 )
                                 return (
                                     <Chord
-                                        hideChordLetters={hideChordLetters}
+                                        showChordLetters={showChordLetters}
                                         disabled={exportMode}
                                         onMouseLeave={onMouseLeaveChord}
                                         onMouseEnter={() =>

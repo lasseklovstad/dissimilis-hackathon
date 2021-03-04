@@ -13,7 +13,7 @@ type ChordProps = {
     onMouseLeave: () => void
     highlight: boolean
     disabled: boolean
-    hideChordLetters: boolean
+    showChordLetters: boolean
 }
 
 const ChordText = (props: { notes: string[] }) => {
@@ -54,7 +54,7 @@ export const Chord = (props: ChordProps) => {
         onMouseLeave,
         highlight,
         disabled,
-        hideChordLetters,
+        showChordLetters,
     } = props
     const classes = useStyle()
     const isChord = chordsAndNotes.notes.length > 2
@@ -82,7 +82,7 @@ export const Chord = (props: ChordProps) => {
             mr={1}
             minWidth={0}
         >
-            {isChord && !hideChordLetters && (
+            {isChord && showChordLetters && (
                 <ChordText notes={chordsAndNotes.notes} />
             )}
             <ButtonBase

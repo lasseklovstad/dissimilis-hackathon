@@ -4,13 +4,15 @@ import {
     Box,
     Button,
     FormControl,
+    FormControlLabel,
+    FormGroup,
     Grid,
     InputLabel,
     makeStyles,
     MenuItem,
     Select,
+    Switch,
     Typography,
-    useMediaQuery,
 } from "@material-ui/core"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -81,7 +83,7 @@ const rowsPerSheetConfig = [
 ]
 
 export const ExportView = () => {
-    const hideChordLetters = false
+    const [showChordLetters, setShowChordLetters] = useState(true)
     const [selectedBarConfig, setSelectedBarConfig] = useState(barsConfig[2])
     const [
         selectedRowsPerSheetConfig,
@@ -99,9 +101,7 @@ export const ExportView = () => {
     const history = useHistory()
     const { t } = useTranslation()
 
-    const matches = useMediaQuery("(min-width:960px)")
-
-    const calculatePage = () => {
+    useEffect(() => {
         if (!selectedVoice) {
             setAmountOfPages(1)
             return
@@ -120,10 +120,6 @@ export const ExportView = () => {
         } else {
             setAmountOfPages(amountOfPagesCalculated)
         }
-    }
-
-    useEffect(() => {
-        calculatePage()
     }, [selectedRowsPerSheetConfig, selectedBarConfig])
 
     return (
@@ -157,8 +153,8 @@ export const ExportView = () => {
                                                     selectedBarConfig.barsPerRow
                                                 }
                                                 exportMode
-                                                hideChordLetters={
-                                                    hideChordLetters
+                                                showChordLetters={
+                                                    showChordLetters
                                                 }
                                                 voice={{
                                                     ...selectedVoice,
@@ -193,15 +189,10 @@ export const ExportView = () => {
                 )
             })}
             <BottomNavigation className={`${classes.stickToBottom} no-print`}>
-                <Grid
-                    container
-                    style={{ width: "90%", margin: "auto" }}
-                    justify="center"
-                >
+                <Grid container style={{ margin: "auto" }} justify="center">
                     <Grid
                         item
-                        xs={5}
-                        md={2}
+                        xs={2}
                         className={classes.box}
                         style={{
                             order: 1,
@@ -235,11 +226,10 @@ export const ExportView = () => {
                     </Grid>
                     <Grid
                         item
-                        xs={5}
-                        md={2}
+                        xs={2}
                         className={classes.box}
                         style={{
-                            order: 3,
+                            order: 2,
                         }}
                     >
                         <FormControl className={classes.formControl}>
@@ -274,11 +264,10 @@ export const ExportView = () => {
                     </Grid>
                     <Grid
                         item
-                        xs={5}
-                        md={2}
+                        xs={2}
                         className={classes.box}
                         style={{
-                            order: 4,
+                            order: 3,
                         }}
                     >
                         <FormControl className={classes.formControl}>
@@ -311,16 +300,45 @@ export const ExportView = () => {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item xs="auto" md={2} style={{ order: 5 }} />
                     <Grid
                         item
-                        xs={5}
-                        md={3}
+                        xs={2}
+                        className={classes.box}
                         style={{
-                            padding: "8px",
-                            margin: "8px",
+                            order: 4,
+                            display: "flex",
+                            alignItems: "center",
+                        }}
+                    >
+                        <FormGroup
+                            className={classes.formControl}
+                            style={{ alignItems: "center" }}
+                        >
+                            <FormControlLabel
+                                label={t("ExportView:chortLetters")}
+                                control={
+                                    <Switch
+                                        size="small"
+                                        checked={showChordLetters}
+                                        onChange={() =>
+                                            setShowChordLetters(
+                                                !showChordLetters
+                                            )
+                                        }
+                                    />
+                                }
+                            />
+                        </FormGroup>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={3}
+                        style={{
+                            margin: "4px",
                             backgroundColor: "transparent",
-                            order: matches ? 5 : 2,
+                            order: 5,
+                            display: "flex",
+                            justifyContent: "flex-end",
                         }}
                     >
                         <Button

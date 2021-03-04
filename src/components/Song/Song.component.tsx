@@ -17,7 +17,7 @@ type SongProps = {
     timeSignature: ITimeSignature
     heightOfBar: number
     exportMode?: boolean
-    hideChordLetters?: boolean
+    showChordLetters?: boolean
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
@@ -41,7 +41,7 @@ export const Song = (props: SongProps) => {
         timeSignature,
         heightOfBar,
         exportMode,
-        hideChordLetters,
+        showChordLetters,
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
@@ -89,8 +89,10 @@ export const Song = (props: SongProps) => {
                                         <Bar
                                             showHouseNumber={showHouseNumber}
                                             exportMode={!!exportMode}
-                                            hideChordLetters={
-                                                !!hideChordLetters
+                                            showChordLetters={
+                                                showChordLetters === undefined
+                                                    ? true
+                                                    : showChordLetters
                                             }
                                             masterSheet={!exportMode && isMain}
                                             onMenuClick={openMenu(bar)}
