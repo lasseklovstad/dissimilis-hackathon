@@ -13,6 +13,7 @@ import {
     Select,
     Switch,
     Typography,
+    withStyles,
 } from "@material-ui/core"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -81,6 +82,20 @@ const rowsPerSheetConfig = [
     { rowsPerSheet: 4, heightAvailableToBars: heightAvailableToBars / 4 - 50 },
     { rowsPerSheet: 5, heightAvailableToBars: heightAvailableToBars / 5 - 30 },
 ]
+
+const CustomSwitch = withStyles({
+    switchBase: {
+        color: colors.teal_100,
+        "&$checked": {
+            color: colors.teal_100,
+        },
+        "&$checked + $track": {
+            backgroundColor: colors.teal_100,
+        },
+    },
+    checked: {},
+    track: {},
+})(Switch)
 
 export const ExportView = () => {
     const [showChordLetters, setShowChordLetters] = useState(true)
@@ -317,7 +332,7 @@ export const ExportView = () => {
                             <FormControlLabel
                                 label={t("ExportView:chortLetters")}
                                 control={
-                                    <Switch
+                                    <CustomSwitch
                                         size="small"
                                         checked={showChordLetters}
                                         onChange={() =>
