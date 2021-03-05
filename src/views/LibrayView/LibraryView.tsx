@@ -23,22 +23,24 @@ export const LibraryView = () => {
     const [libraryView, setLibraryView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
     const [sortTerm, setSortTerm] = useState<"date" | "song" | "user">("date")
+    const [sortDescending, setSortDescending] = useState<boolean>(true)
 
-    const { getAllSongs, allSongsFetched } = useGetAllSongs("date")
+    const { getAllSongs, allSongsFetched } = useGetAllSongs(sortTerm, sortDescending)
     const [allSongs, setAllSongs] = useState<ISong[] | undefined>()
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
-        sortTerm
+        sortTerm,
+        sortDescending,
     )
     const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
 
     useEffect(() => {
-        if (filteredSongsFetched) {
-            setFilteredSongs(filteredSongsFetched)
-        }
-        if (allSongsFetched) {
+        if (libraryView) {
             setAllSongs(allSongsFetched)
+        }
+        else {
+            setFilteredSongs(filteredSongsFetched)
         }
     }, [filteredSongsFetched, allSongsFetched])
 
@@ -66,15 +68,15 @@ export const LibraryView = () => {
     }
 
     const handleChangeSortingTerm = (term: "date" | "song" | "user") => {
-        if (term === sortTerm) {
-            return
+        if (term === sortTerm || (term !== sortTerm && !sortDescending)) {
+            setSortDescending(!sortDescending)
         }
 
         setSortTerm(term)
         if (libraryView) {
-            getAllSongs.run({ orderBy: term })
+            getAllSongs.run({ orderBy: term, orderDescending: sortDescending })
         } else {
-            getFilteredSongs.run({ orderBy: term, title: searchTerm })
+            getFilteredSongs.run({ orderBy: term, title: searchTerm, orderDescending: sortDescending })
         }
     }
 
@@ -104,6 +106,7 @@ export const LibraryView = () => {
                             isLoading={getAllSongs.loading}
                             sortTerm={sortTerm}
                             changeSortTerm={handleChangeSortingTerm}
+                            orderDescending={sortDescending}
                         />
                     ) : (
                         <SongGrid
@@ -113,6 +116,7 @@ export const LibraryView = () => {
                             isLoading={getFilteredSongs.loading}
                             sortTerm={sortTerm}
                             changeSortTerm={handleChangeSortingTerm}
+                            orderDescending={sortDescending}
                         />
                     )}
                 </Grid>

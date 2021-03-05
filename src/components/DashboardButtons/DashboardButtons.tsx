@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore"
+import ExpandLess from "@material-ui/icons/ExpandLess"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
@@ -91,6 +92,7 @@ type TopBarIconProps = {
 type SortingButtonsProps = {
     term: string
     changeSortTerm: (term: "date" | "song" | "user") => void
+    orderDescending: boolean
 }
 
 export const DashboardButtonWithAddIcon: FC<ButtonProps> = (props) => {
@@ -155,7 +157,7 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
 }
 
 export const SortingButtons: FC<SortingButtonsProps> = (props) => {
-    const { term, changeSortTerm } = props
+    const { term, changeSortTerm, orderDescending } = props
     const styles = useStyles()
     const { t } = useTranslation()
 
@@ -171,7 +173,9 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                     <Button
                         endIcon={
                             term === "song" ? (
-                                <ExpandMoreIcon />
+                                orderDescending ?
+                                <ExpandMoreIcon /> :
+                                <ExpandLess />
                             ) : (
                                 <UnfoldMoreIcon />
                             )
@@ -186,7 +190,9 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                     <Button
                         endIcon={
                             term === "user" ? (
-                                <ExpandMoreIcon />
+                                orderDescending ?
+                                <ExpandMoreIcon /> :
+                                <ExpandLess />
                             ) : (
                                 <UnfoldMoreIcon />
                             )
@@ -201,7 +207,9 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                     <Button
                         endIcon={
                             term === "date" ? (
-                                <ExpandMoreIcon />
+                                orderDescending ?
+                                <ExpandMoreIcon /> :
+                                <ExpandLess />
                             ) : (
                                 <UnfoldMoreIcon />
                             )

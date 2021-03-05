@@ -73,6 +73,7 @@ export const DashboardView = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const [addSongModalIsOpen, setAddSongModalIsOpen] = useState(false)
     const [sortTerm, setSortTerm] = useState<"date" | "song" | "user">("date")
+    const [orderDescending, setOrderDescending] = useState<boolean>(true)
     const [timeSignature, setTimeSignature] = useState<
         ITimeSignature | undefined
     >()
@@ -80,14 +81,16 @@ export const DashboardView = () => {
     const { postSong } = usePostSong()
     const history = useHistory()
     const measureText = t("DashboardView:measure")
-    const { getRecentSongs, recentSongsFetched } = useGetRecentSongs(sortTerm)
+    const { getRecentSongs, recentSongsFetched } = useGetRecentSongs(sortTerm, orderDescending)
     const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>()
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
-        sortTerm
+        sortTerm, 
+        orderDescending,
     )
     const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
+
     useEffect(() => {
         if (recentSongsFetched) {
             setRecentSongs(recentSongsFetched)
@@ -132,14 +135,18 @@ export const DashboardView = () => {
 
     const handleChangeSortingTerm = (term: "date" | "song" | "user") => {
         if (term === sortTerm) {
-            return
+            setOrderDescending(!orderDescending)
         }
-
-        setSortTerm(term)
+        if(term !== sortTerm && !orderDescending)
+        {
+            setOrderDescending(!orderDescending)
+        }
+        
+        setSortTerm(term) 
         if (dashboardView) {
-            getRecentSongs.run({ num: "5", orderBy: term })
+            getRecentSongs.run({ num: "5", orderBy: term, orderDescending })
         } else {
-            getFilteredSongs.run({ orderBy: term, title: searchTerm })
+            getFilteredSongs.run({ orderBy: term, title: searchTerm, orderDescending })
         }
     }
 
@@ -168,6 +175,7 @@ export const DashboardView = () => {
                                 isLoading={false}
                                 sortTerm=""
                                 changeSortTerm={() => undefined}
+                                orderDescending
                             >
                                 {musicTacts.map((song) => (
                                     <DashboardButtonWithAddIconNoLink
@@ -189,6 +197,7 @@ export const DashboardView = () => {
                                 isLoading={getRecentSongs.loading}
                                 sortTerm={sortTerm}
                                 changeSortTerm={handleChangeSortingTerm}
+                                orderDescending={orderDescending}
                             >
                                 <DashboardLibraryButton
                                     text={t("DashboardView:libraryButton")}
@@ -215,6 +224,7 @@ export const DashboardView = () => {
                             isLoading={getFilteredSongs.loading}
                             sortTerm={sortTerm}
                             changeSortTerm={handleChangeSortingTerm}
+                            orderDescending={orderDescending}
                         />
                     )}
                 </Grid>

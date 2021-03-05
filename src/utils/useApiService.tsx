@@ -148,6 +148,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
             num?: string
             orderBy: string
             arrangerId?: string
+            orderDescending: boolean
         }) => {
             let bodyToPost = body
             bodyToPost.arrangerId = sessionStorage.getItem("userId") || ""
