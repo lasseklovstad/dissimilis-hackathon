@@ -13,6 +13,7 @@ type ChordProps = {
     onMouseLeave: () => void
     highlight: boolean
     disabled: boolean
+    showChordLetters: boolean
 }
 
 const ChordText = (props: { notes: string[] }) => {
@@ -53,6 +54,7 @@ export const Chord = (props: ChordProps) => {
         onMouseLeave,
         highlight,
         disabled,
+        showChordLetters,
     } = props
     const classes = useStyle()
     const isChord = chordsAndNotes.notes.length > 2
@@ -68,65 +70,65 @@ export const Chord = (props: ChordProps) => {
     }
 
     return (
-        <>
-            <Box
-                flexGrow={chordsAndNotes.length}
-                display="flex"
-                flexDirection="column"
-                position="relative"
-                height="calc(100% + 25px)"
-                justifyContent="flex-end"
-                top="-25px"
-                flexBasis="0"
-                mr={1}
-                minWidth={0}
+        <Box
+            flexGrow={chordsAndNotes.length}
+            display="flex"
+            flexDirection="column"
+            position="relative"
+            height="calc(100% + 25px)"
+            justifyContent="flex-end"
+            top="-25px"
+            flexBasis="0"
+            mr={1}
+            minWidth={0}
+        >
+            {isChord && showChordLetters && (
+                <ChordText notes={chordsAndNotes.notes} />
+            )}
+            <ButtonBase
+                disabled={disabled}
+                onClick={onClick}
+                onContextMenu={onContextMenu}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                className={classes.buttonBase}
+                focusVisibleClassName={classes.buttonBase}
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "calc(100% - 25px)",
+                    width: "100%",
+                    minWidth: 0,
+                    alignItems: "stretch",
+                }}
             >
-                {isChord && <ChordText notes={chordsAndNotes.notes} />}
-                <ButtonBase
-                    disabled={disabled}
-                    onClick={onClick}
-                    onContextMenu={onContextMenu}
-                    onMouseEnter={onMouseEnter}
-                    onMouseLeave={onMouseLeave}
-                    className={classes.buttonBase}
-                    focusVisibleClassName={classes.buttonBase}
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        height: "calc(100% - 25px)",
-                        width: "100%",
-                        minWidth: 0,
-                        alignItems: "stretch",
-                    }}
-                >
-                    {chordsAndNotes.notes
-                        .map((note, i) => {
-                            const text = tangentToNumber(note)
-                            const bgcolor = getBackgroundColor(note)
-                            const color = bgcolor
-                                ? getContrastText(bgcolor)
-                                : "#000000"
-                            return (
-                                <Box
-                                    key={note + i}
-                                    bgcolor={bgcolor}
-                                    color={color}
-                                    mt="1px"
-                                    borderColor="divider"
-                                    borderRadius={3}
-                                    border={disabled ? 0 : 1}
-                                    display="flex"
-                                    flex={1}
-                                    justifyContent="center"
-                                    alignItems="center"
-                                >
-                                    {text}
-                                </Box>
-                            )
-                        })
-                        .reverse()}
-                </ButtonBase>
-            </Box>
-        </>
+                {chordsAndNotes.notes
+                    .map((note, i) => {
+                        const text = tangentToNumber(note)
+                        const bgcolor = getBackgroundColor(note)
+                        const color = bgcolor
+                            ? getContrastText(bgcolor)
+                            : "#000000"
+                        return (
+                            <Box
+                                key={note + i}
+                                bgcolor={bgcolor}
+                                color={color}
+                                mt="1px"
+                                borderColor="divider"
+                                borderRadius={3}
+                                border={disabled ? 0 : 1}
+                                display="flex"
+                                flex={1}
+                                justifyContent="center"
+                                alignItems="center"
+                            >
+                                {text}
+                            </Box>
+                        )
+                    })
+                    .reverse()}
+            </ButtonBase>
+        </Box>
     )
 }
