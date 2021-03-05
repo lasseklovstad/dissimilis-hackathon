@@ -29,6 +29,11 @@ const useStyles = makeStyles({
             border: "none",
         },
     },
+    flexCenter: {
+        display: "flex",
+        alignItems: "center",
+    },
+    alignCenter: { alignItems: "center" },
     box: {
         padding: "8px",
         margin: "4px",
@@ -65,6 +70,17 @@ const useStyles = makeStyles({
         backgroundColor: " ",
         height: "100%",
         boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
+    },
+    confirmButton: {
+        backgroundColor: colors.teal_100,
+        marginRight: 8,
+    },
+    exportButtons: {
+        margin: "4px",
+        backgroundColor: "transparent",
+        order: 5,
+        display: "flex",
+        justifyContent: "flex-end",
     },
 })
 const heightAvailableToBars = 770
@@ -318,16 +334,13 @@ export const ExportView = () => {
                     <Grid
                         item
                         xs={2}
-                        className={classes.box}
+                        className={`${classes.box} ${classes.flexCenter}`}
                         style={{
                             order: 4,
-                            display: "flex",
-                            alignItems: "center",
                         }}
                     >
                         <FormGroup
-                            className={classes.formControl}
-                            style={{ alignItems: "center" }}
+                            className={`${classes.formControl} ${classes.alignCenter}`}
                         >
                             <FormControlLabel
                                 label={t("ExportView:chortLetters")}
@@ -345,24 +358,10 @@ export const ExportView = () => {
                             />
                         </FormGroup>
                     </Grid>
-                    <Grid
-                        item
-                        xs={3}
-                        style={{
-                            margin: "4px",
-                            backgroundColor: "transparent",
-                            order: 5,
-                            display: "flex",
-                            justifyContent: "flex-end",
-                        }}
-                    >
+                    <Grid item xs={3} className={classes.exportButtons}>
                         <Button
-                            className={classes.confirmOrCancelButtons}
+                            className={`${classes.confirmOrCancelButtons} ${classes.confirmButton}`}
                             onClick={() => window.print()}
-                            style={{
-                                backgroundColor: colors.teal_100,
-                                marginRight: 8,
-                            }}
                         >
                             {t("ExportView:createPDF")}
                         </Button>
