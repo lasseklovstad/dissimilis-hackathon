@@ -79,7 +79,7 @@ const rowsPerSheetConfig = [
     { rowsPerSheet: 1, heightAvailableToBars: heightAvailableToBars },
     { rowsPerSheet: 2, heightAvailableToBars: heightAvailableToBars / 2 - 20 },
     { rowsPerSheet: 3, heightAvailableToBars: heightAvailableToBars / 3 - 30 },
-    { rowsPerSheet: 4, heightAvailableToBars: heightAvailableToBars / 4 - 50 },
+    { rowsPerSheet: 4, heightAvailableToBars: heightAvailableToBars / 4 - 30 },
     { rowsPerSheet: 5, heightAvailableToBars: heightAvailableToBars / 5 - 30 },
 ]
 
