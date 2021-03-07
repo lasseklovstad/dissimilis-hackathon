@@ -90,8 +90,8 @@ type TopBarIconProps = {
 }
 
 type SortingButtonsProps = {
-    term: string
-    changeSortTerm: (term: "date" | "song" | "user") => void
+    orderTerm: string
+    changeOrderTerm: (term: "date" | "song" | "user") => void
     orderDescending: boolean
 }
 
@@ -157,7 +157,7 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
 }
 
 export const SortingButtons: FC<SortingButtonsProps> = (props) => {
-    const { term, changeSortTerm, orderDescending } = props
+    const { orderTerm, changeOrderTerm, orderDescending } = props
     const styles = useStyles()
     const { t } = useTranslation()
 
@@ -172,7 +172,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                 <Grid item xs={4}>
                     <Button
                         endIcon={
-                            term === "song" ? (
+                            orderTerm === "song" ? (
                                 orderDescending ?
                                 <ExpandMoreIcon /> :
                                 <ExpandLess />
@@ -180,7 +180,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                                 <UnfoldMoreIcon />
                             )
                         }
-                        onClick={() => changeSortTerm("song")}
+                        onClick={() => changeOrderTerm("song")}
                     >
                         {t("DashboardView:song")}
                     </Button>
@@ -189,7 +189,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                 <Grid item xs={4}>
                     <Button
                         endIcon={
-                            term === "user" ? (
+                            orderTerm === "user" ? (
                                 orderDescending ?
                                 <ExpandMoreIcon /> :
                                 <ExpandLess />
@@ -197,7 +197,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                                 <UnfoldMoreIcon />
                             )
                         }
-                        onClick={() => changeSortTerm("user")}
+                        onClick={() => changeOrderTerm("user")}
                     >
                         {t("DashboardView:user")}
                     </Button>
@@ -206,7 +206,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                 <Grid item xs={4}>
                     <Button
                         endIcon={
-                            term === "date" ? (
+                            orderTerm === "date" ? (
                                 orderDescending ?
                                 <ExpandMoreIcon /> :
                                 <ExpandLess />
@@ -214,7 +214,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                                 <UnfoldMoreIcon />
                             )
                         }
-                        onClick={() => changeSortTerm("date")}
+                        onClick={() => changeOrderTerm("date")}
                     >
                         {t("DashboardView:date")}
                     </Button>

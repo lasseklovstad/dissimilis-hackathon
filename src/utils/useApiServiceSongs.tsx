@@ -63,10 +63,10 @@ export const useTransposeSong = (
 /**
  * Get all songs
  * */
-export const useGetAllSongs = (sortTerm: string, orderDescending: boolean) => {
+export const useGetAllSongs = (orderTerm: string, orderDescending: boolean) => {
     const url = "song/search"
     const body = {
-        orderBy: sortTerm,
+        orderBy: orderTerm,
         orderDescending,
     }
     const initialData: ISong[] = []
@@ -91,13 +91,13 @@ export const useGetAllSongs = (sortTerm: string, orderDescending: boolean) => {
  * Get songs from database based on title or part of title
  * @param query title or part of title
  */
-export const useGetFilteredSongs = (title: string, sortTerm: string, orderDescending: boolean) => {
+export const useGetFilteredSongs = (title: string, orderTerm: string, orderDescending: boolean) => {
     const url = "song/search"
     const initialData: ISong[] = []
     const headers = getHeaders()
     const body = {
         title,
-        orderBy: sortTerm,
+        orderBy: orderTerm,
         orderDescending,
     }
     const { postData, state, data } = useApiService<ISong[]>(url, {
@@ -119,11 +119,11 @@ export const useGetFilteredSongs = (title: string, sortTerm: string, orderDescen
 /**
  * Get songs based on recent songs
  * */
-export const useGetRecentSongs = (sortTerm: string, orderDescending: boolean) => {
+export const useGetRecentSongs = (orderTerm: string, orderDescending: boolean) => {
     const url = "song/search"
     const body = {
         num: "5",
-        orderBy: sortTerm,
+        orderBy: orderTerm,
         orderDescending,
         arrangerId: getArrangerId(),
     }

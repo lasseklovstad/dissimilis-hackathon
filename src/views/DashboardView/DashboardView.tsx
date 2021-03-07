@@ -72,7 +72,7 @@ export const DashboardView = () => {
     const [dashboardView, setDashboardView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
     const [addSongModalIsOpen, setAddSongModalIsOpen] = useState(false)
-    const [sortTerm, setSortTerm] = useState<"date" | "song" | "user">("date")
+    const [orderTerm, setOrderTerm] = useState<"date" | "song" | "user">("date")
     const [orderDescending, setOrderDescending] = useState<boolean>(true)
     const [timeSignature, setTimeSignature] = useState<
         ITimeSignature | undefined
@@ -81,13 +81,16 @@ export const DashboardView = () => {
     const { postSong } = usePostSong()
     const history = useHistory()
     const measureText = t("DashboardView:measure")
-    const { getRecentSongs, recentSongsFetched } = useGetRecentSongs(sortTerm, orderDescending)
+    const { getRecentSongs, recentSongsFetched } = useGetRecentSongs(
+        orderTerm,
+        orderDescending
+    )
     const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>()
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
-        sortTerm, 
-        orderDescending,
+        orderTerm,
+        orderDescending
     )
     const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
 
@@ -133,20 +136,12 @@ export const DashboardView = () => {
         setAddSongModalIsOpen(false)
     }
 
-    const handleChangeSortingTerm = (term: "date" | "song" | "user") => {
-        if (term === sortTerm) {
+    const handleChangeOrderTerm = (term: "date" | "song" | "user") => {
+        if (term === orderTerm || (term !== orderTerm && !orderDescending)) {
             setOrderDescending(!orderDescending)
         }
-        if(term !== sortTerm && !orderDescending)
-        {
-            setOrderDescending(!orderDescending)
-        }
-        
-        setSortTerm(term) 
-        if (dashboardView) {
-            getRecentSongs.run({ num: "5", orderBy: term, orderDescending })
-        } else {
-            getFilteredSongs.run({ orderBy: term, title: searchTerm, orderDescending })
+        if (term !== orderTerm) {
+            setOrderTerm(term)
         }
     }
 
@@ -173,8 +168,8 @@ export const DashboardView = () => {
                                 songs={undefined}
                                 removeSong={() => undefined}
                                 isLoading={false}
-                                sortTerm=""
-                                changeSortTerm={() => undefined}
+                                orderTerm=""
+                                changeOrderTerm={() => undefined}
                                 orderDescending
                             >
                                 {musicTacts.map((song) => (
@@ -195,8 +190,8 @@ export const DashboardView = () => {
                                 songs={recentSongs}
                                 removeSong={removeSongFromRecentSongs}
                                 isLoading={getRecentSongs.loading}
-                                sortTerm={sortTerm}
-                                changeSortTerm={handleChangeSortingTerm}
+                                orderTerm={orderTerm}
+                                changeOrderTerm={handleChangeOrderTerm}
                                 orderDescending={orderDescending}
                             >
                                 <DashboardLibraryButton
@@ -222,8 +217,8 @@ export const DashboardView = () => {
                             songs={filteredSongs}
                             removeSong={removeSongFromFilteredSongs}
                             isLoading={getFilteredSongs.loading}
-                            sortTerm={sortTerm}
-                            changeSortTerm={handleChangeSortingTerm}
+                            orderTerm={orderTerm}
+                            changeOrderTerm={handleChangeOrderTerm}
                             orderDescending={orderDescending}
                         />
                     )}
