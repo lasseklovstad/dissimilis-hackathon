@@ -1,20 +1,27 @@
 import React, { ReactNode } from "react"
 import { Box, Grid, Typography } from "@material-ui/core"
 import { ISong } from "../../models/ISong"
-import { DashboardButton } from "../DashboardButtons/DashboardButtons"
+import {
+    DashboardButton,
+    SortingButtons,
+} from "../DashboardButtons/DashboardButtons"
 import { Loading } from "../loading/Loading.component"
 
 type SongGridProps = {
     title: string | undefined
     songs: ISong[] | undefined
+    removeSong: (songId: number) => void
     isLoading: boolean
     children?: ReactNode
+    orderTerm: string
+    changeOrderTerm: (term: "date" | "song" | "user") => void
+    orderDescending: boolean
 }
 
 const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
     if (props.isSong) {
         return (
-            <Grid item xs={12} sm={11} lg={11}>
+            <Grid item xs={12}>
                 {props.children}
             </Grid>
         )
@@ -27,7 +34,15 @@ const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
 }
 
 export const SongGrid = (props: SongGridProps) => {
-    const { songs, title, isLoading, children } = props
+    const {
+        songs,
+        title,
+        isLoading,
+        children,
+        orderTerm,
+        changeOrderTerm,
+        orderDescending,
+    } = props
 
     const getChildren = () => {
         if (children) {
@@ -53,12 +68,15 @@ export const SongGrid = (props: SongGridProps) => {
         if (!isLoading) {
             return (
                 <>
+                    {getSorting()}
                     {songs?.map((song) => (
                         <GridItem key={song.songId} isSong>
                             <DashboardButton
                                 title={song.title}
                                 arrangerName={song.arrangerName}
                                 updatedOn={song.updatedOn}
+                                songId={song.songId}
+                                removeSong={props.removeSong}
                                 link={`/song/${song.songId}`}
                             />
                         </GridItem>
@@ -76,6 +94,21 @@ export const SongGrid = (props: SongGridProps) => {
                 <Box m={2}>
                     <Typography variant="h1">{title}</Typography>
                 </Box>
+            )
+        }
+        return undefined
+    }
+
+    const getSorting = () => {
+        if (orderTerm !== "") {
+            return (
+                <Grid item xs={12}>
+                    <SortingButtons
+                        orderTerm={orderTerm}
+                        changeOrderTerm={changeOrderTerm}
+                        orderDescending={orderDescending}
+                    />
+                </Grid>
             )
         }
         return undefined
