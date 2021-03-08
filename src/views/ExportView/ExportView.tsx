@@ -151,7 +151,7 @@ export const ExportView = () => {
         } else {
             setAmountOfPages(amountOfPagesCalculated)
         }
-    }, [selectedRowsPerSheetConfig, selectedBarConfig])
+    }, [selectedRowsPerSheetConfig, selectedBarConfig, selectedVoice])
 
     return (
         <>

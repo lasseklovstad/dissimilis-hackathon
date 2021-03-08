@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react"
-import { Grid, Typography, Box, makeStyles } from "@material-ui/core"
+import React, { useEffect, useState } from "react"
+import { Box, Grid, makeStyles } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
-import { DashboardButton } from "../../components/DashboardButtons/DashboardButtons"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import {
-    useGetFilteredSongs,
     useGetAllSongs,
+    useGetFilteredSongs,
 } from "../../utils/useApiServiceSongs"
 import { ISong } from "../../models/ISong"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"

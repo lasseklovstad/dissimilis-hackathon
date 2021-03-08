@@ -283,7 +283,8 @@ export const CreateSongTab = (props: {
                     }}
                 >
                     {t("CreateSongTab:deleteVoice")}
-                </MenuItem><MenuItem
+                </MenuItem>
+                <MenuItem
                     onClick={() => {
                         handleDuplicateInstrument()
                         setRightClickMenuPosition(undefined)

@@ -30,7 +30,7 @@ export const MenuButton = (props: { voiceId: number }) => {
         transpose: string
     }>()
     const { deleteSong } = useDeleteSong(songId)
-    const { getSong, songInit } = useGetSong(songId)
+    const { songInit } = useGetSong(songId)
     const [transposeSongModalIsOpen, setTransposeSongModalIsOpen] = useState(
         false
     )
