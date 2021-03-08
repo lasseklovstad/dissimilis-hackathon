@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { AppBar, Box, Grid, makeStyles, TextField } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
-import { useHistory } from "react-router"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 
 const useStyles = makeStyles(() => ({
@@ -17,7 +16,6 @@ export const DashboardTopBar = (props: {
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const history = useHistory()
     const searchPlaceholder = t("DashboardView:search")
     const [searchBarFocus, setSearchBarFocus] = useState(false)
 

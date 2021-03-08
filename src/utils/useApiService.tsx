@@ -19,6 +19,7 @@ const useDeepCompareMemoize = (value: DependencyList) => {
 const useDeepCallback = <T extends unknown>(
     cb: (method: HTTPMethod, body?: unknown) => Promise<FetchReturn<T>>,
     deps: DependencyList
+    // eslint-disable-next-line react-hooks/exhaustive-deps
 ) => useCallback(cb, useDeepCompareMemoize(deps))
 
 /**

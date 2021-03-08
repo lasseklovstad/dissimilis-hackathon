@@ -4,5 +4,5 @@ export const exportViewNo = {
     rowsPerSheet: "Rader per ark",
     createPDF: "Opprett PDF",
     cancel: "Avbryt",
-    chortLetters: "Besifring"
+    chortLetters: "Besifring",
 }
