@@ -10,7 +10,11 @@ import {
     CardActionArea,
     Icon,
     IconButton,
+    Button,
 } from "@material-ui/core"
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore"
+import ExpandLess from "@material-ui/icons/ExpandLess"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
@@ -85,6 +89,12 @@ type TopBarIconProps = {
     onClick?: () => void
 }
 
+type SortingButtonsProps = {
+    orderTerm: string
+    changeOrderTerm: (term: "date" | "song" | "user") => void
+    orderDescending: boolean
+}
+
 export const DashboardButtonWithAddIcon: FC<ButtonProps> = (props) => {
     const styles = useStyles()
     return (
@@ -143,6 +153,74 @@ export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
                 </Box>
             </CardActionArea>
         </Card>
+    )
+}
+
+export const SortingButtons: FC<SortingButtonsProps> = (props) => {
+    const { orderTerm, changeOrderTerm, orderDescending } = props
+    const styles = useStyles()
+    const { t } = useTranslation()
+
+    return (
+        <Box style={{ width: "100%" }}>
+            <Grid
+                container
+                alignItems="center"
+                className={styles.songContainer}
+                style={{ paddingRight: 80, paddingLeft: 12 }}
+            >
+                <Grid item xs={4}>
+                    <Button
+                        endIcon={
+                            orderTerm === "song" ? (
+                                orderDescending ?
+                                <ExpandMoreIcon /> :
+                                <ExpandLess />
+                            ) : (
+                                <UnfoldMoreIcon />
+                            )
+                        }
+                        onClick={() => changeOrderTerm("song")}
+                    >
+                        {t("DashboardView:song")}
+                    </Button>
+                </Grid>
+
+                <Grid item xs={4}>
+                    <Button
+                        endIcon={
+                            orderTerm === "user" ? (
+                                orderDescending ?
+                                <ExpandMoreIcon /> :
+                                <ExpandLess />
+                            ) : (
+                                <UnfoldMoreIcon />
+                            )
+                        }
+                        onClick={() => changeOrderTerm("user")}
+                    >
+                        {t("DashboardView:user")}
+                    </Button>
+                </Grid>
+
+                <Grid item xs={4}>
+                    <Button
+                        endIcon={
+                            orderTerm === "date" ? (
+                                orderDescending ?
+                                <ExpandMoreIcon /> :
+                                <ExpandLess />
+                            ) : (
+                                <UnfoldMoreIcon />
+                            )
+                        }
+                        onClick={() => changeOrderTerm("date")}
+                    >
+                        {t("DashboardView:date")}
+                    </Button>
+                </Grid>
+            </Grid>
+        </Box>
     )
 }
 
