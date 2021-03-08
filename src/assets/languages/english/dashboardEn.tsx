@@ -14,4 +14,7 @@ export const dashboardEn = {
     duplicate: "Duplicate",
     duplicateText: "Duplicate song",
     delete: "Delete",
+    date: "Date changed",
+    user: "User", 
+    song: "Song",
 }

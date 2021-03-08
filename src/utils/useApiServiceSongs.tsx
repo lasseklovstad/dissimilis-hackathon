@@ -63,10 +63,11 @@ export const useTransposeSong = (
 /**
  * Get all songs
  * */
-export const useGetAllSongs = () => {
+export const useGetAllSongs = (orderTerm: string, orderDescending: boolean) => {
     const url = "song/search"
     const body = {
-        orderByDateTime: "true",
+        orderBy: orderTerm,
+        orderDescending,
     }
     const initialData: ISong[] = []
     const headers = getHeaders()
@@ -90,12 +91,14 @@ export const useGetAllSongs = () => {
  * Get songs from database based on title or part of title
  * @param query title or part of title
  */
-export const useGetFilteredSongs = (title: string) => {
+export const useGetFilteredSongs = (title: string, orderTerm: string, orderDescending: boolean) => {
     const url = "song/search"
     const initialData: ISong[] = []
     const headers = getHeaders()
     const body = {
         title,
+        orderBy: orderTerm,
+        orderDescending,
     }
     const { postData, state, data } = useApiService<ISong[]>(url, {
         initialData,
@@ -116,27 +119,28 @@ export const useGetFilteredSongs = (title: string) => {
 /**
  * Get songs based on recent songs
  * */
-export const useGetRecentSongs = () => {
+export const useGetRecentSongs = (orderTerm: string, orderDescending: boolean) => {
     const url = "song/search"
     const body = {
         num: "5",
-        orderByDateTime: "true",
+        orderBy: orderTerm,
+        orderDescending,
         arrangerId: getArrangerId(),
     }
     const initialData: ISong[] = []
     const headers = getHeaders()
-    const { postData, state, data } = useApiService<ISong[]>(url, {
+    const { postSearchWithArrangerId, state, data } = useApiService<ISong[]>(url, {
         body,
         initialData,
         headers,
     })
 
     useEffect(() => {
-        postData()
-    }, [postData])
+        postSearchWithArrangerId(body)
+    }, [postSearchWithArrangerId])
 
     return {
-        getRecentSongs: { run: postData, ...state },
+        getRecentSongs: { run: postSearchWithArrangerId, ...state },
         recentSongsFetched: data,
     }
 }
