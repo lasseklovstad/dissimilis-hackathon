@@ -41,7 +41,7 @@ export const SongGrid = (props: SongGridProps) => {
         children,
         orderTerm,
         changeOrderTerm,
-        orderDescending
+        orderDescending,
     } = props
 
     const getChildren = () => {
@@ -102,15 +102,13 @@ export const SongGrid = (props: SongGridProps) => {
     const getSorting = () => {
         if (orderTerm !== "") {
             return (
-                <>
-                    <Grid item xs={12}>
-                        <SortingButtons
-                            orderTerm={orderTerm}
-                            changeOrderTerm={changeOrderTerm}
-                            orderDescending={orderDescending}
-                        />
-                    </Grid>
-                </>
+                <Grid item xs={12}>
+                    <SortingButtons
+                        orderTerm={orderTerm}
+                        changeOrderTerm={changeOrderTerm}
+                        orderDescending={orderDescending}
+                    />
+                </Grid>
             )
         }
         return undefined
