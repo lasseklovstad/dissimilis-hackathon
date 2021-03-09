@@ -44,7 +44,9 @@ export const Bar = (props: {
             songVoiceId,
         },
         height = 160,
+        // Should be setActiveChord
         setValuesForSelectedNote,
+        // selectedChordId
         selectedNoteId,
         refHighlightedNote,
     } = props
@@ -67,6 +69,7 @@ export const Bar = (props: {
         barId,
         rightClicked
     )
+    const [hasFocus, setHasFocus] = useState(false)
 
     const handleRightClick = (noteId: number | null) => (
         event: React.MouseEvent
@@ -124,9 +127,6 @@ export const Bar = (props: {
                     isNoteSelected,
                     0
                 )
-                if (refHighlightedNote && refHighlightedNote.current) {
-                    refHighlightedNote.current.blur()
-                }
                 return
             }
             const isNote = chord.notes.length === 1
@@ -136,6 +136,30 @@ export const Bar = (props: {
                 isNote ? chord.notes[0] : getChord(chord.notes),
                 chord.length,
                 isNote,
+                chord.position
+            )
+        }
+    }
+
+    const onChordFocus = (chord: IChordAndNotes) => {
+        if(chord.notes[0] !== "Z") {
+            const isNote = chord.notes.length === 1
+            setValuesForSelectedNote(
+                chord.noteId,
+                barId,
+                isNote ? chord.notes[0] : getChord(chord.notes),
+                chord.length,
+                isNote,
+                chord.position
+            )
+        } 
+        else {
+            setValuesForSelectedNote(
+                undefined,
+                undefined,
+                selectedChord,
+                selectedNoteLength,
+                isNoteSelected,
                 chord.position
             )
         }
@@ -165,7 +189,7 @@ export const Bar = (props: {
                 i++
             }
         } else {
-            setPositionArray([])
+            setPositionArray([chord.position])
         }
     }
 
@@ -212,9 +236,8 @@ export const Bar = (props: {
                             }, [])
                             .map((chord, i, allChords) => {
                                 const highlight =
-                                    positionArray.includes(chord.position) ||
-                                    selectedNoteId === chord.noteId
-                                const selected = selectedNoteId === chord.noteId
+                                    positionArray.includes(chord.position)
+                                const activeChord = selectedNoteId === chord.noteId
                                 return (
                                     <Chord
                                         disabled={exportMode}
@@ -226,6 +249,7 @@ export const Bar = (props: {
                                                 allChords
                                             )
                                         }
+                                        onChordFocus={() => onChordFocus(chord)}
                                         chordsAndNotes={chord}
                                         highlight={highlight}
                                         key={chord.position}
@@ -234,7 +258,7 @@ export const Bar = (props: {
                                         )}
                                         onClick={() => handleClick(chord)}
                                         refHighlightedNote={refHighlightedNote}
-                                        isSelected={selected}
+                                        isSelected={activeChord}
                                     />
                                 )
                             })}

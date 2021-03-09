@@ -124,7 +124,7 @@ export const DropdownAutocomplete = (props: {
                                     style={{
                                         height: "24px",
                                         width: "24px",
-                                        backgroundColor: getColor(options),
+                                        backgroundColor: getColor(options, false),
                                         borderRadius: "5px",
                                         verticalAlign: "center",
                                     }}

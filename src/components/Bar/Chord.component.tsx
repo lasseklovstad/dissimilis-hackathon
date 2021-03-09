@@ -1,5 +1,5 @@
 import React, { RefObject } from "react"
-import { Box, ButtonBase, Typography, useTheme } from "@material-ui/core"
+import { Box, ButtonBase, createMuiTheme, Typography, useTheme } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { IChordAndNotes } from "../../models/IBar"
 import { colors } from "../../utils/colors"
@@ -15,6 +15,7 @@ type ChordProps = {
     disabled: boolean
     refHighlightedNote: RefObject<HTMLAnchorElement> | undefined
     isSelected: boolean
+    onChordFocus: () => void
 }
 
 const ChordText = (props: { notes: string[] }) => {
@@ -37,16 +38,10 @@ const ChordText = (props: { notes: string[] }) => {
 
 const useStyle = makeStyles(() => ({
     buttonBase: {
-        "&:hover": {
-            outline: `4px solid ${colors.focus}`,
-        },
         "&:focus": {
             outline: `4px solid ${colors.focus}`,
         },
-    },
-    focusedButton: {
-        outline: `4px solid ${colors.focus}`,
-    },
+    }
 }))
 
 export const Chord = (props: ChordProps) => {
@@ -56,22 +51,27 @@ export const Chord = (props: ChordProps) => {
         onContextMenu,
         onMouseEnter,
         onMouseLeave,
+        // Active chord
         highlight,
         disabled,
         refHighlightedNote,
         isSelected,
+        onChordFocus,
     } = props
     const classes = useStyle()
     const isChord = chordsAndNotes.notes.length > 2
+
     const {
-        palette: { getContrastText },
+        palette: {
+            getContrastText,
+        }
     } = useTheme()
 
     const getBackgroundColor = (note: string) => {
         if (highlight && note === "Z") {
             return colors.focus
         }
-        return getColor(note)
+        return getColor(note, highlight)
     }
 
     return (
@@ -92,15 +92,12 @@ export const Chord = (props: ChordProps) => {
                 <ButtonBase
                     disabled={disabled}
                     onClick={onClick}
+                    onFocus={onChordFocus}
                     onContextMenu={onContextMenu}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    className={
-                        highlight ? classes.focusedButton : classes.buttonBase
-                    }
-                    focusVisibleClassName={
-                        highlight ? classes.focusedButton : classes.buttonBase
-                    }
+                    className={classes.buttonBase}
+                    focusVisibleClassName={classes.buttonBase}
                     innerRef={isSelected ? refHighlightedNote : undefined}
                     style={{
                         display: "flex",

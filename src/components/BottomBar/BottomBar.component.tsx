@@ -1,9 +1,10 @@
-import React from "react"
+import React, { RefObject } from "react"
 import {
     FormControl,
     Grid,
     makeStyles,
     MenuItem,
+    RootRef,
     Select,
     Typography,
     withStyles,
@@ -25,6 +26,7 @@ import { ReactComponent as HalfnoteDottedIcon } from "../../assets/images/icon_h
 import { ReactComponent as QuarternoteDottedIcon } from "../../assets/images/icon_quarter-note-dotted.svg"
 import { IBar } from "../../models/IBar"
 import { useAddBar } from "../../utils/useApiServiceSongs"
+import useOutsideClick from "../../views/SongView/clickOutside"
 
 const useStyles = makeStyles({
     outercontainer: {
@@ -126,6 +128,7 @@ export const BottomBar = (props: {
     onNoteSelectedChange: (selected: boolean) => void
     notesOrChords: string[]
     onExitedNoteLengthSelect: () => void
+    refBottomBar: RefObject<any>
 }) => {
     const {
         timeSignature: { numerator, denominator },
@@ -140,6 +143,7 @@ export const BottomBar = (props: {
         onNoteSelectedChange,
         notesOrChords,
         onExitedNoteLengthSelect,
+        refBottomBar
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
@@ -153,6 +157,10 @@ export const BottomBar = (props: {
     const scrollToBottom = () => {
         window.scrollTo(0, document.body.scrollHeight)
     }
+    
+    // useOutsideClick(refBottomBar, () => {
+    //     alert("you clicked outside")
+    // })
 
     const handleAddBar = async () => {
         const { error, result } = await postBar.run()
@@ -206,8 +214,9 @@ export const BottomBar = (props: {
     }
 
     return (
-        <Grid container justify="center">
+        <Grid container justify="center" >
             <Grid item xs={12} sm={10} className={classes.outercontainer}>
+            <RootRef rootRef={refBottomBar}>
                 <div className={classes.container}>
                     <div className={classes.flexelement}>{Menu}</div>
                     <div className={classes.flexelement}>
@@ -241,6 +250,7 @@ export const BottomBar = (props: {
                         onClick={handleAddBar}
                     />
                 </div>
+            </RootRef>
             </Grid>
         </Grid>
     )

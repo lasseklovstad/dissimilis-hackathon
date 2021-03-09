@@ -1,5 +1,11 @@
 import React, { useEffect, useReducer, useRef, useState } from "react"
-import { Grid, makeStyles, Slide, useScrollTrigger } from "@material-ui/core"
+import {
+    Grid,
+    makeStyles,
+    RootRef,
+    Slide,
+    useScrollTrigger,
+} from "@material-ui/core"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { NavBarCreateSong } from "../../components/NavBarCreateSong/NavBarCreateSong.component"
@@ -21,6 +27,8 @@ import { IVoice } from "../../models/IVoice"
 import { chords, getNotesFromChord, notes } from "../../models/chords"
 import { IChordAndNotes } from "../../models/IBar"
 import { colors } from "../../utils/colors"
+import useOutsideClick from "./clickOutside"
+
 
 const useStyles = makeStyles({
     root: {
@@ -61,6 +69,7 @@ export const SongView = () => {
     const trigger = useScrollTrigger()
 
     const refHighlightedNote = useRef<HTMLAnchorElement>(null)
+    const refBottomBar = useRef<HTMLAnchorElement>(null)
 
     const [selectedNoteId, setSelectedNoteId] = useState<
         number | undefined | null
@@ -109,7 +118,11 @@ export const SongView = () => {
     )
 
     const setFocusOnHighlightedButton = () => {
-        if (selectedNoteId  && refHighlightedNote && refHighlightedNote.current) {
+        if (
+            selectedNoteId &&
+            refHighlightedNote &&
+            refHighlightedNote.current
+        ) {
             refHighlightedNote.current.focus()
         }
     }
@@ -213,7 +226,10 @@ export const SongView = () => {
         }
     }
 
-    const checkIfUpdateNoteLengthIsPossible = (allChords: IChordAndNotes[], noteLength: number) => {
+    const checkIfUpdateNoteLengthIsPossible = (
+        allChords: IChordAndNotes[],
+        noteLength: number
+    ) => {
         let indexOfChord = allChords.findIndex(
             (c) => c.noteId === selectedNoteId
         )
@@ -348,7 +364,9 @@ export const SongView = () => {
                 </Grid>
             )}
             {selectedVoiceId && (
+                
                 <BottomBar
+                    
                     noteIsSelected={isNoteSelected}
                     onNoteSelectedChange={(selected) =>
                         handleNoteSelectedChange(selected)
@@ -365,6 +383,7 @@ export const SongView = () => {
                     voiceId={selectedVoiceId}
                     notesOrChords={isNoteSelected ? notes : chords}
                     onExitedNoteLengthSelect={setFocusOnHighlightedButton}
+                    refBottomBar={refBottomBar}
                 />
             )}
         </>
