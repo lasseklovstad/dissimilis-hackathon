@@ -8,5 +8,5 @@ export const barContainerNo = {
     addHouseOne: "Legg til 1.hus",
     addHouseTwo: "Legg til 2.hus",
     removeHouseOne: "Fjern 1.hus",
-    removeHouseTwo: "Fjern 2.hus"
+    removeHouseTwo: "Fjern 2.hus",
 }

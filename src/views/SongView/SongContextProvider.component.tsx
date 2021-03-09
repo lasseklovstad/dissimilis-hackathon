@@ -12,7 +12,6 @@ type SongAction =
     | { type: "ADD_VOICE"; voice: IVoice }
     | { type: "UPDATE_SONG"; song: ISong }
 
-
 export const songReducer = (song: ISong, action: SongAction) => {
     switch (action.type) {
         case "UPDATE_SONG":

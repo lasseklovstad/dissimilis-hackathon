@@ -15,6 +15,7 @@ export const Bar = (props: {
     bar: IBar
     height?: number
     exportMode: boolean
+    showChordLetters: boolean
     onMenuClick: (anchorEl: HTMLElement) => void
     masterSheet: boolean
     showHouseNumber: boolean
@@ -31,6 +32,7 @@ export const Bar = (props: {
 }) => {
     const {
         exportMode,
+        showChordLetters,
         onMenuClick,
         masterSheet,
         showHouseNumber,
@@ -240,6 +242,7 @@ export const Bar = (props: {
                                 const activeChord = selectedNoteId === chord.noteId
                                 return (
                                     <Chord
+                                        showChordLetters={showChordLetters}
                                         disabled={exportMode}
                                         onMouseLeave={onMouseLeaveChord}
                                         onMouseEnter={() =>

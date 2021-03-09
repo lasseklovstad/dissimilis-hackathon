@@ -17,6 +17,7 @@ type SongProps = {
     timeSignature: ITimeSignature
     heightOfBar: number
     exportMode?: boolean
+    showChordLetters?: boolean
     setValuesForSelectedNote: (
         noteId: number | undefined | null,
         barId: number | undefined,
@@ -50,6 +51,7 @@ export const Song = (props: SongProps) => {
         timeSignature,
         heightOfBar,
         exportMode,
+        showChordLetters,
         setValuesForSelectedNote,
         selectedNoteId,
         refHighlightedNote,
@@ -100,6 +102,11 @@ export const Song = (props: SongProps) => {
                                         <Bar
                                             showHouseNumber={showHouseNumber}
                                             exportMode={!!exportMode}
+                                            showChordLetters={
+                                                showChordLetters === undefined
+                                                    ? true
+                                                    : showChordLetters
+                                            }
                                             masterSheet={!exportMode && isMain}
                                             onMenuClick={openMenu(bar)}
                                             bar={bar}
