@@ -152,11 +152,15 @@ export const DashboardView = () => {
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
                             <DashboardTopBar
-                                onGoHome={() => setDashboardView(true)}
+                                onGoHome={() => {
+                                    setSearchTerm("")
+                                    setDashboardView(true)
+                                }}
                                 onChange={(txt) => {
                                     setSearchTerm(txt)
                                     setDashboardView(false)
                                 }}
+                                searchTerm={searchTerm}
                             />
                         </Box>
                     </Grid>

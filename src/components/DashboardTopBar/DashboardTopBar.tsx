@@ -13,11 +13,13 @@ const useStyles = makeStyles(() => ({
 export const DashboardTopBar = (props: {
     onChange: (txt: string) => void
     onGoHome?: () => void
+    searchTerm?: string
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
     const searchPlaceholder = t("DashboardView:search")
     const [searchBarFocus, setSearchBarFocus] = useState(false)
+    const { onGoHome, searchTerm } = props
 
     return (
         <div>
@@ -26,7 +28,7 @@ export const DashboardTopBar = (props: {
                     <Grid container spacing={2}>
                         <Grid item sm={1} />
                         <Grid item xs={2}>
-                            <DashboardTopBarIcon />
+                            <DashboardTopBarIcon onGoHome={onGoHome} />
                         </Grid>
                         <Grid
                             item
@@ -55,6 +57,7 @@ export const DashboardTopBar = (props: {
                                 onChange={(event) =>
                                     props.onChange(event.target.value)
                                 }
+                                value={searchTerm}
                             />
                         </Grid>
                     </Grid>
