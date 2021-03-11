@@ -209,6 +209,7 @@ export const DashboardView = () => {
                                 cancelText={t("Modal:cancel")}
                                 headerText={t("Modal:addSong")}
                                 labelText={t("Modal:nameOfSong")}
+                                isLoading={postSong.loading}
                             />
                         </>
                     ) : (

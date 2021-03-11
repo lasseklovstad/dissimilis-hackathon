@@ -170,6 +170,7 @@ export const MenuButton = (props: { voiceId: number }) => {
                     cancelText={t("Modal:cancel")}
                     headerText={t("DashboardView:duplicateText")}
                     labelText={t("Modal:newVoiceName")}
+                    isLoading={duplicateSong.loading}
                 />
             </div>
             <Loading
