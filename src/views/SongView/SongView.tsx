@@ -106,9 +106,10 @@ export const SongView = () => {
 
     const { denominator, numerator, voices } = song
     const selectedVoiceId = useVoice(voices)
-    const selectedVoice = voices.find(
-        (voice) => voice.songVoiceId === selectedVoiceId
-    )
+
+    const [selectedVoice, setSelectedVoice] = useState<IVoice | undefined>(voices.find(
+            (voice) => voice.songVoiceId === selectedVoiceId
+        ))
 
     const { updateNote } = useUpdateNote(
         songId,
@@ -282,6 +283,10 @@ export const SongView = () => {
         }
     }, [songInit])
 
+    useEffect(() => {
+        setSelectedVoice(song.voices.find((voice) => voice.songVoiceId === selectedVoiceId))
+    }, [song, selectedVoiceId])
+
     const handleTitleBlur = async (title: string) => {
         if (title !== song.title) {
             const { error, result } = await putSong.run({ title })
@@ -305,7 +310,7 @@ export const SongView = () => {
     }
 
     const handleUpdateVoice = (voice: IVoice) => {
-        dispatchSong({ type: "UPDATE_VOICE", voice })
+        dispatchSong({ type: "UPDATE_VOICE_NAME", voice })
     }
 
     if (getSong.loading) {

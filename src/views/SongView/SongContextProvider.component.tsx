@@ -11,6 +11,7 @@ type SongAction =
     | { type: "DELETE_VOICE"; songVoiceId: number }
     | { type: "ADD_VOICE"; voice: IVoice }
     | { type: "UPDATE_SONG"; song: ISong }
+    | { type: "UPDATE_VOICE_NAME"; voice: IVoice }
 
 export const songReducer = (song: ISong, action: SongAction) => {
     switch (action.type) {
@@ -55,6 +56,24 @@ export const songReducer = (song: ISong, action: SongAction) => {
                 }),
             }
         case "UPDATE_VOICE":
+            return {
+                ...song,
+                voices: song.voices.map((voice) => {
+                    return {
+                        ...voice,
+                        bars: voice.bars.map((bar, index) => {
+                            const actionBar = action.voice.bars[index]
+                            return {
+                                ...bar,
+                                house: actionBar.house,
+                                repAfter: actionBar.repAfter,
+                                repBefore: actionBar.repBefore
+                            }
+                        })
+                    }
+                }),
+            }
+        case "UPDATE_VOICE_NAME":
             return {
                 ...song,
                 voices: song.voices.map((voice) => {

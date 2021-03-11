@@ -37,10 +37,12 @@ export const LibraryView = () => {
     )
     const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
 
+    const marginBottom = 4
+
     useEffect(() => {
         if (allSongsFetched) {
             setAllSongs(allSongsFetched)
-        } 
+        }
         if (filteredSongsFetched) {
             setFilteredSongs(filteredSongsFetched)
         }
@@ -61,8 +63,6 @@ export const LibraryView = () => {
             })
         )
     }
-
-    const marginBottom = 4
 
     const handleOnChangeSearch = (searchTermParam: string) => {
         setSearchTerm(searchTermParam)
@@ -90,7 +90,10 @@ export const LibraryView = () => {
                 <Grid container justify="center" className={styles.container}>
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
-                            <DashboardTopBar onChange={handleOnChangeSearch} />
+                            <DashboardTopBar
+                                onChange={handleOnChangeSearch}
+                                searchTerm={searchTerm}
+                            />
                         </Box>
                     </Grid>
 

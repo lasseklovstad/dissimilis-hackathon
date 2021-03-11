@@ -5,6 +5,8 @@ export const modalNo = {
     addInstrument: "Legg til et instrument",
     newVoiceName: "Nytt navn",
     changeVoiceName: "Endre navn",
+    deleteVoice: "Slett instrument",
+    deleteVoiceDescription: "Er du sikker du vil slette dette instrumentet?",
     saveChangesPrompt: "Vil du lagre endringer?",
     saveChangesPromptDescription:
         "Trykk 'ikke lagre' for å gå tilbake til dashboard uten å lagre",
