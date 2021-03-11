@@ -5,6 +5,8 @@ export const modalEn = {
     addInstrument: "Add a new instrument",
     newVoiceName: "New name",
     changeVoiceName: "Change name",
+    deleteVoice: "Delete instrument",
+    deleteVoiceDescription: "Are you sure you want to delete the instrument?",
     saveChangesPrompt: "Do you want to save changes?",
     saveChangesPromptDescription:
         "Click 'don't save' to go to dashboard without saving",
