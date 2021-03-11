@@ -5,12 +5,12 @@ import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
 import {
     Box,
+    Button,
     Card,
     CardActionArea,
     Grid,
     Icon,
     IconButton,
-    Button,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore"
@@ -169,9 +169,11 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                     <Button
                         endIcon={
                             orderTerm === "song" ? (
-                                orderDescending ?
-                                <ExpandMoreIcon /> :
-                                <ExpandLess />
+                                orderDescending ? (
+                                    <ExpandMoreIcon />
+                                ) : (
+                                    <ExpandLess />
+                                )
                             ) : (
                                 <UnfoldMoreIcon />
                             )
@@ -186,9 +188,11 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                     <Button
                         endIcon={
                             orderTerm === "user" ? (
-                                orderDescending ?
-                                <ExpandMoreIcon /> :
-                                <ExpandLess />
+                                orderDescending ? (
+                                    <ExpandMoreIcon />
+                                ) : (
+                                    <ExpandLess />
+                                )
                             ) : (
                                 <UnfoldMoreIcon />
                             )
@@ -203,9 +207,11 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                     <Button
                         endIcon={
                             orderTerm === "date" ? (
-                                orderDescending ?
-                                <ExpandMoreIcon /> :
-                                <ExpandLess />
+                                orderDescending ? (
+                                    <ExpandMoreIcon />
+                                ) : (
+                                    <ExpandLess />
+                                )
                             ) : (
                                 <UnfoldMoreIcon />
                             )
@@ -310,7 +316,7 @@ export const DashboardLibraryButton: FC<ButtonProps> = ({ text, link }) => {
     )
 }
 
-export const DashboardTopBarIcon = (props: {onGoHome?: () => void}) => {
+export const DashboardTopBarIcon = (props: { onGoHome?: () => void }) => {
     const { t } = useTranslation()
     const altProp = t("DashboardView:altButterflyButtonProp")
     const { onGoHome } = props
