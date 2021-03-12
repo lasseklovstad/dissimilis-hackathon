@@ -44,6 +44,14 @@ const useStyles = makeStyles({
     container: {
         width: "100%",
     },
+    loading: {
+        margin: "8px",
+        marginRight: "16px",
+        justifyContent: "center",
+        alignContent: "center", 
+        minWidth: "64px",
+        maxWidth: "64px",
+    }
 })
 
 export const InputModal = (props: {
@@ -116,11 +124,11 @@ export const InputModal = (props: {
                             </Grid>
                             <Grid container xs={12} >
                                 {props.isLoading ? (
-                                    <Grid item xs={2} >
-                                        <CircularProgress style={{margin: 4}} size={24} />
+                                    <Grid container className={classes.loading}>
+                                        <CircularProgress size={24} />
                                     </Grid>
                                 ) : (
-                                    <Grid item>
+                                    <Grid item >
                                         <Button
                                             className={classes.button}
                                             size="large"
