@@ -21,6 +21,7 @@ import { colors } from "../../utils/colors"
 import { Song } from "../../components/Song/Song.component"
 import { useGetSong } from "../../utils/useApiServiceSongs"
 import { useVoice } from "../../utils/useVoice"
+import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 
 const useStyles = makeStyles({
     root: {
@@ -83,7 +84,7 @@ const useStyles = makeStyles({
         justifyContent: "flex-end",
     },
 })
-const heightAvailableToBars = 770
+const heightAvailableToBars = 725
 const barsConfig = [
     { barsPerRow: 1, lengthOfBar: 12 },
     { barsPerRow: 2, lengthOfBar: 6 },
@@ -93,10 +94,10 @@ const barsConfig = [
 
 const rowsPerSheetConfig = [
     { rowsPerSheet: 1, heightAvailableToBars },
-    { rowsPerSheet: 2, heightAvailableToBars: heightAvailableToBars / 2 - 20 },
-    { rowsPerSheet: 3, heightAvailableToBars: heightAvailableToBars / 3 - 30 },
-    { rowsPerSheet: 4, heightAvailableToBars: heightAvailableToBars / 4 - 30 },
-    { rowsPerSheet: 5, heightAvailableToBars: heightAvailableToBars / 5 - 30 },
+    { rowsPerSheet: 2, heightAvailableToBars: heightAvailableToBars / 2 },
+    { rowsPerSheet: 3, heightAvailableToBars: heightAvailableToBars / 3 },
+    { rowsPerSheet: 4, heightAvailableToBars: heightAvailableToBars / 4 },
+    { rowsPerSheet: 5, heightAvailableToBars: heightAvailableToBars / 5 },
 ]
 
 const CustomSwitch = withStyles({
@@ -122,7 +123,7 @@ export const ExportView = () => {
     ] = useState(rowsPerSheetConfig[3])
     const [amountOfPages, setAmountOfPages] = useState<number>(1)
     const { songId } = useParams<{ songId: string }>()
-    const { songInit } = useGetSong(songId)
+    const { songInit, getSong } = useGetSong(songId)
     const selectedVoiceId = useVoice(songInit?.voices)
     const selectedVoice = songInit?.voices.find(
         (voice) => voice.songVoiceId === selectedVoiceId
@@ -133,25 +134,28 @@ export const ExportView = () => {
     const { t } = useTranslation()
 
     useEffect(() => {
-        if (!selectedVoice) {
-            setAmountOfPages(1)
-            return
-        }
-        const amountOfBars = selectedVoice.bars.length || 0
+        if (selectedVoice) {
+            const amountOfBars = selectedVoice.bars.length || 0
 
-        const totalRowsUsed = Math.ceil(
+            const totalRowsUsed = Math.ceil(
             amountOfBars / selectedBarConfig.barsPerRow
-        )
-        const heightOfDiv =
+            )
+            const heightOfDiv =
             totalRowsUsed * selectedRowsPerSheetConfig.heightAvailableToBars
+            
+            const amountOfPagesCalculated = Math.ceil(heightOfDiv / 725)
 
-        const amountOfPagesCalculated = Math.ceil(heightOfDiv / 770)
-        if (amountOfPagesCalculated === 0) {
-            setAmountOfPages(1)
-        } else {
-            setAmountOfPages(amountOfPagesCalculated)
+            if (amountOfPagesCalculated === 0) {
+                setAmountOfPages(1)
+            } else {
+                setAmountOfPages(amountOfPagesCalculated)
+            }
         }
     }, [selectedRowsPerSheetConfig, selectedBarConfig, selectedVoice])
+
+    if (getSong.loading) {
+        return <LoadingLogo />
+    }
 
     return (
         <>
@@ -248,7 +252,9 @@ export const ExportView = () => {
                                             key={voice.songVoiceId}
                                             value={voice.songVoiceId}
                                         >
-                                            {voice.title}
+                                            {voice.isMain
+                                                ? t("CreateSongTab:song")
+                                                : voice.title}
                                         </MenuItem>
                                     )
                                 })}
