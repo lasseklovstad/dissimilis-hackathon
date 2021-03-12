@@ -229,7 +229,6 @@ export const DashboardView = () => {
                     )}
                 </Grid>
             </Box>
-            <Loading isLoading={postSong.loading} fullScreen />
             <ErrorDialog isError={postSong.isError} error={postSong.error} />
         </>
     )
