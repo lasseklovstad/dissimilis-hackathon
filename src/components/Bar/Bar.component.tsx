@@ -71,7 +71,7 @@ export const Bar = (props: {
         barId,
         rightClicked
     )
-    const [hasFocus, setHasFocus] = useState(false)
+    // const [hasFocus, setHasFocus] = useState(false)
 
     const handleRightClick = (noteId: number | null) => (
         event: React.MouseEvent
@@ -93,7 +93,7 @@ export const Bar = (props: {
     }
 
     const handleClick = async (chord: IChordAndNotes) => {
-        if (!chord.noteId) {
+        if (chord.notes[0] === "Z") {
             const notes = isNoteSelected
                 ? [selectedChord]
                 : getNotesFromChord(selectedChord)
@@ -120,17 +120,17 @@ export const Bar = (props: {
                 )
             }
         } else {
-            if (chord.noteId === selectedNoteId) {
-                setValuesForSelectedNote(
-                    undefined,
-                    undefined,
-                    selectedChord,
-                    selectedNoteLength,
-                    isNoteSelected,
-                    0
-                )
-                return
-            }
+            // if (chord.noteId === selectedNoteId) {
+            //     setValuesForSelectedNote(
+            //         undefined,
+            //         undefined,
+            //         selectedChord,
+            //         selectedNoteLength,
+            //         isNoteSelected,
+            //         0
+            //     )
+            //     return
+            // }
             const isNote = chord.notes.length === 1
             setValuesForSelectedNote(
                 chord.noteId,
@@ -143,29 +143,28 @@ export const Bar = (props: {
         }
     }
 
-    const onChordFocus = (chord: IChordAndNotes) => {
-        if(chord.notes[0] !== "Z") {
-            const isNote = chord.notes.length === 1
-            setValuesForSelectedNote(
-                chord.noteId,
-                barId,
-                isNote ? chord.notes[0] : getChord(chord.notes),
-                chord.length,
-                isNote,
-                chord.position
-            )
-        } 
-        else {
-            setValuesForSelectedNote(
-                undefined,
-                undefined,
-                selectedChord,
-                selectedNoteLength,
-                isNoteSelected,
-                chord.position
-            )
-        }
-    }
+    // const onChordFocus = (chord: IChordAndNotes) => {
+    //     if (chord.notes[0] !== "Z") {
+    //         const isNote = chord.notes.length === 1
+    //         setValuesForSelectedNote(
+    //             chord.noteId,
+    //             barId,
+    //             isNote ? chord.notes[0] : getChord(chord.notes),
+    //             chord.length,
+    //             isNote,
+    //             chord.position
+    //         )
+    //     } else {
+    //         setValuesForSelectedNote(
+    //             undefined,
+    //             undefined,
+    //             selectedChord,
+    //             selectedNoteLength,
+    //             isNoteSelected,
+    //             chord.position
+    //         )
+    //     }
+    // }
 
     const onMouseEnterChord = (
         chord: IChordAndNotes,
@@ -237,9 +236,9 @@ export const Bar = (props: {
                                 return [...noter, note]
                             }, [])
                             .map((chord, i, allChords) => {
-                                const highlight =
-                                    positionArray.includes(chord.position)
-                                const activeChord = selectedNoteId === chord.noteId
+                                const highlight = positionArray.includes(
+                                    chord.position
+                                )
                                 return (
                                     <Chord
                                         showChordLetters={showChordLetters}
@@ -252,7 +251,7 @@ export const Bar = (props: {
                                                 allChords
                                             )
                                         }
-                                        onChordFocus={() => onChordFocus(chord)}
+                                        // onChordFocus={() => onChordFocus(chord)}
                                         chordsAndNotes={chord}
                                         highlight={highlight}
                                         key={chord.position}
@@ -261,7 +260,9 @@ export const Bar = (props: {
                                         )}
                                         onClick={() => handleClick(chord)}
                                         refHighlightedNote={refHighlightedNote}
-                                        isSelected={activeChord}
+                                        isSelected={
+                                            selectedNoteId === chord.noteId
+                                        }
                                     />
                                 )
                             })}

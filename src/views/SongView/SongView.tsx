@@ -1,11 +1,5 @@
 import React, { useEffect, useReducer, useRef, useState } from "react"
-import {
-    Grid,
-    makeStyles,
-    RootRef,
-    Slide,
-    useScrollTrigger,
-} from "@material-ui/core"
+import { Grid, makeStyles, Slide, useScrollTrigger } from "@material-ui/core"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { NavBarCreateSong } from "../../components/NavBarCreateSong/NavBarCreateSong.component"
@@ -27,8 +21,6 @@ import { IVoice } from "../../models/IVoice"
 import { chords, getNotesFromChord, notes } from "../../models/chords"
 import { IChordAndNotes } from "../../models/IBar"
 import { colors } from "../../utils/colors"
-import useOutsideClick from "./clickOutside"
-
 
 const useStyles = makeStyles({
     root: {
@@ -107,9 +99,9 @@ export const SongView = () => {
     const { denominator, numerator, voices } = song
     const selectedVoiceId = useVoice(voices)
 
-    const [selectedVoice, setSelectedVoice] = useState<IVoice | undefined>(voices.find(
-            (voice) => voice.songVoiceId === selectedVoiceId
-        ))
+    const [selectedVoice, setSelectedVoice] = useState<IVoice | undefined>(
+        voices.find((voice) => voice.songVoiceId === selectedVoiceId)
+    )
 
     const { updateNote } = useUpdateNote(
         songId,
@@ -284,7 +276,9 @@ export const SongView = () => {
     }, [songInit])
 
     useEffect(() => {
-        setSelectedVoice(song.voices.find((voice) => voice.songVoiceId === selectedVoiceId))
+        setSelectedVoice(
+            song.voices.find((voice) => voice.songVoiceId === selectedVoiceId)
+        )
     }, [song, selectedVoiceId])
 
     const handleTitleBlur = async (title: string) => {
@@ -374,9 +368,7 @@ export const SongView = () => {
                 </Grid>
             )}
             {selectedVoiceId && (
-                
                 <BottomBar
-                    
                     noteIsSelected={isNoteSelected}
                     onNoteSelectedChange={(selected) =>
                         handleNoteSelectedChange(selected)

@@ -18,36 +18,36 @@ export const getChord = (notes: string[]): string => {
     return result[0].replace(/M/g, "").replace(/B/g, "H")
 }
 
-export const getColor = (note: string, highlight: boolean): string => {
+export const getColor = (note: string): string => {
     let newColor = "transparent"
     switch (note) {
         case "C":
-            newColor = highlight? colors.C.dark : colors.C.main
+            newColor = colors.C.main
             break
         case "D":
-            newColor = highlight? colors.D.dark : colors.D.main
+            newColor = colors.D.main
             break
         case "E":
-            newColor = highlight? colors.E.dark : colors.E.main
+            newColor = colors.E.main
             break
         case "F":
-            newColor = highlight? colors.F.dark : colors.F.main
+            newColor = colors.F.main
             break
         case "G":
-            newColor = highlight? colors.G.dark : colors.G.main
+            newColor = colors.G.main
             break
         case "A":
-            newColor = highlight? colors.A.dark : colors.A.main
+            newColor = colors.A.main
             break
         case "H":
-            newColor = highlight? colors.H.dark : colors.H.main
+            newColor = colors.H.main
             break
         case "C#":
         case "D#":
         case "F#":
         case "G#":
         case "A#":
-            newColor = highlight? colors.gray_500_dark : colors.gray_500
+            newColor = colors.gray_500
             break
         default:
             newColor = ""
