@@ -101,6 +101,7 @@ export const DropdownAutocomplete = (props: {
                     onChordChange(value)
                 }
             }}
+            blurOnSelect="touch"
             openText={t("BottomBar:open")}
             PopperComponent={customPopperPlacement}
             closeIcon={false}
