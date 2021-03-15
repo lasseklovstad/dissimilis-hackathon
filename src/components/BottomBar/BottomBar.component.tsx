@@ -41,6 +41,7 @@ const useStyles = makeStyles({
         alignItems: "flex-end",
         "@media (max-width: 960px)": {
             flexDirection: "column",
+            marginBottom: "16px",
         },
     },
     container: {
