@@ -214,7 +214,7 @@ export const ExportView = () => {
                                                   undefined
                                                 }
                                                 selectedNoteId={undefined}
-                                                refHighlightedNote={undefined}
+                                                // refHighlightedNote={undefined}
                                             />
                                         )}
                                     </Grid>

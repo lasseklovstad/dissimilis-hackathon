@@ -1,4 +1,4 @@
-import React, { RefObject } from "react"
+import React from "react"
 import { Box, ButtonBase, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { IChordAndNotes } from "../../models/IBar"
@@ -14,9 +14,7 @@ type ChordProps = {
     highlight: boolean
     disabled: boolean
     showChordLetters: boolean
-    refHighlightedNote: RefObject<HTMLAnchorElement> | undefined
     isSelected: boolean
-    // onChordFocus: () => void
 }
 
 const useStyle = makeStyles(() => ({
@@ -120,27 +118,13 @@ export const Chord = (props: ChordProps) => {
         onContextMenu,
         onMouseEnter,
         onMouseLeave,
-        // Active chord
         highlight,
         disabled,
         showChordLetters,
-        refHighlightedNote,
         isSelected,
-        // onChordFocus,
     } = props
     const classes = useStyle()
     const isChord = chordsAndNotes.notes.length > 2
-
-    // const {
-    //     palette: { getContrastText },
-    // } = useTheme()
-
-    // const getBackgroundColor = (note: string) => {
-    //     if (highlight && note === "Z") {
-    //         return colors.focus
-    //     }
-    //     return getColor(note)
-    // }
 
     return (
         <Box
@@ -159,9 +143,9 @@ export const Chord = (props: ChordProps) => {
                 <ChordText notes={chordsAndNotes.notes} />
             )}
             <ButtonBase
+                id="chordButton"
                 disabled={disabled}
                 onClick={onClick}
-                // onFocus={onChordFocus}
                 onContextMenu={onContextMenu}
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
@@ -171,7 +155,6 @@ export const Chord = (props: ChordProps) => {
                         : classes.buttonBase
                 } ${isSelected ? classes.selected : ""}`}
                 focusVisibleClassName={classes.buttonBase}
-                innerRef={isSelected ? refHighlightedNote : undefined}
                 style={{
                     display: "flex",
                     flexDirection: "column",
@@ -183,13 +166,9 @@ export const Chord = (props: ChordProps) => {
             >
                 {chordsAndNotes.notes
                     .map((note, i) => {
-                        // const text = tangentToNumber(note)
-                        // const bgcolor = getBackgroundColor(note)
-                        // const color = bgcolor
-                        //     ? getContrastText(bgcolor)
-                        //     : "#000000"
                         return (
                             <div
+                                id="singleChord"
                                 className={`${classes.noteContainer} ${
                                     (classes as any)[note]
                                 } ${disabled ? "disabled" : ""} ${
@@ -201,21 +180,6 @@ export const Chord = (props: ChordProps) => {
                             >
                                 {tangentToNumber(note)}
                             </div>
-                            // <Box
-                            //     key={note + i}
-                            //     bgcolor={bgcolor}
-                            //     color={color}
-                            //     mt="1px"
-                            //     borderColor="divider"
-                            //     borderRadius={3}
-                            //     border={disabled ? 0 : 1}
-                            //     display="flex"
-                            //     flex={1}
-                            //     justifyContent="center"
-                            //     alignItems="center"
-                            // >
-                            //     {text}
-                            // </Box>
                         )
                     })
                     .reverse()}

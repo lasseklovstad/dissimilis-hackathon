@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, useState } from "react"
+import React, { useEffect, useReducer, useState } from "react"
 import { Grid, makeStyles, Slide, useScrollTrigger } from "@material-ui/core"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -59,19 +59,13 @@ export const SongView = () => {
     const [isNoteSelected, setNoteIsSelected] = useState(true)
     const { putSong } = useUpdateSong(songId)
     const trigger = useScrollTrigger()
-
-    const refHighlightedNote = useRef<HTMLAnchorElement>(null)
-    const refBottomBar = useRef<HTMLAnchorElement>(null)
-
     const [selectedNoteId, setSelectedNoteId] = useState<
         number | undefined | null
     >(undefined)
-
     const [selectedBarId, setSelectedBarId] = useState<number | undefined>(
         undefined
     )
     const [selectedNotePosition, setSelectedNotePosition] = useState<number>(0)
-
     const setValuesForSelectedNote = (
         noteId: number | undefined | null,
         barId: number | undefined,
@@ -87,7 +81,6 @@ export const SongView = () => {
         setSelectedNotePosition(position)
         setNoteIsSelected(isNote)
     }
-
     const [song, dispatchSong] = useReducer(songReducer, {
         title: "",
         songId: 0,
@@ -95,14 +88,11 @@ export const SongView = () => {
         numerator: 4,
         voices: [],
     } as ISong)
-
     const { denominator, numerator, voices } = song
     const selectedVoiceId = useVoice(voices)
-
     const [selectedVoice, setSelectedVoice] = useState<IVoice | undefined>(
         voices.find((voice) => voice.songVoiceId === selectedVoiceId)
     )
-
     const { updateNote } = useUpdateNote(
         songId,
         selectedVoiceId,
@@ -110,13 +100,16 @@ export const SongView = () => {
         selectedNoteId
     )
 
-    const setFocusOnHighlightedButton = () => {
-        if (
-            selectedNoteId &&
-            refHighlightedNote &&
-            refHighlightedNote.current
-        ) {
-            refHighlightedNote.current.focus()
+    const clickOutsideOfBottomBarListener = (e: any) => {
+        if (e.target.id !== "chordButton" && e.target.id !== "singleChord") {
+            setValuesForSelectedNote(
+                undefined,
+                undefined,
+                selectedChord,
+                selectedNoteLength,
+                isNoteSelected,
+                0
+            )
         }
     }
 
@@ -128,11 +121,9 @@ export const SongView = () => {
                 selectedNotePosition,
                 isNoteSelected
             )
-            setFocusOnHighlightedButton()
             return
         }
         setSelectedChord(chord)
-        setFocusOnHighlightedButton()
     }
 
     const makeNoteUpdate = async (
@@ -261,12 +252,10 @@ export const SongView = () => {
                 selectedNotePosition,
                 selected
             )
-            setFocusOnHighlightedButton()
             return
         }
         setNoteIsSelected(selected)
         setSelectedChord(chord)
-        setFocusOnHighlightedButton()
     }
 
     useEffect(() => {
@@ -361,7 +350,6 @@ export const SongView = () => {
                                     setValuesForSelectedNote
                                 }
                                 selectedNoteId={selectedNoteId}
-                                refHighlightedNote={refHighlightedNote}
                             />
                         </SongContext.Provider>
                     </Grid>
@@ -384,8 +372,7 @@ export const SongView = () => {
                     songId={songId}
                     voiceId={selectedVoiceId}
                     notesOrChords={isNoteSelected ? notes : chords}
-                    onExitedNoteLengthSelect={setFocusOnHighlightedButton}
-                    refBottomBar={refBottomBar}
+                    clickOutsideListener={clickOutsideOfBottomBarListener}
                 />
             )}
         </>

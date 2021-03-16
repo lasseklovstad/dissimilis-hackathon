@@ -1,4 +1,4 @@
-import React, { RefObject, useState } from "react"
+import React, { useState } from "react"
 import { Box } from "@material-ui/core"
 import { BarLine } from "../barLine/BarLine.component"
 import { BarMenu } from "../BarMenu/BarMenu.component"
@@ -27,7 +27,6 @@ type SongProps = {
         position: number
     ) => void
     selectedNoteId: number | undefined | null
-    refHighlightedNote: RefObject<HTMLAnchorElement> | undefined
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
@@ -54,7 +53,6 @@ export const Song = (props: SongProps) => {
         showChordLetters,
         setValuesForSelectedNote,
         selectedNoteId,
-        refHighlightedNote,
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
@@ -115,7 +113,6 @@ export const Song = (props: SongProps) => {
                                                 setValuesForSelectedNote
                                             }
                                             selectedNoteId={selectedNoteId}
-                                            refHighlightedNote={refHighlightedNote}
                                         />
                                         <BarLine />
                                     </React.Fragment>

@@ -1,4 +1,4 @@
-import React, { RefObject, useContext, useState } from "react"
+import React, { useContext, useState } from "react"
 import { Box, useMediaQuery } from "@material-ui/core"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { House } from "./House.component"
@@ -28,7 +28,6 @@ export const Bar = (props: {
         position: number
     ) => void
     selectedNoteId: number | undefined | null
-    refHighlightedNote: RefObject<HTMLAnchorElement> | undefined
 }) => {
     const {
         exportMode,
@@ -46,11 +45,8 @@ export const Bar = (props: {
             songVoiceId,
         },
         height = 160,
-        // Should be setActiveChord
         setValuesForSelectedNote,
-        // selectedChordId
         selectedNoteId,
-        refHighlightedNote,
     } = props
     const [menuPosition, setMenuPosition] = useState<
         { top: number; left: number } | undefined
@@ -71,7 +67,6 @@ export const Bar = (props: {
         barId,
         rightClicked
     )
-    // const [hasFocus, setHasFocus] = useState(false)
 
     const handleRightClick = (noteId: number | null) => (
         event: React.MouseEvent
@@ -120,17 +115,6 @@ export const Bar = (props: {
                 )
             }
         } else {
-            // if (chord.noteId === selectedNoteId) {
-            //     setValuesForSelectedNote(
-            //         undefined,
-            //         undefined,
-            //         selectedChord,
-            //         selectedNoteLength,
-            //         isNoteSelected,
-            //         0
-            //     )
-            //     return
-            // }
             const isNote = chord.notes.length === 1
             setValuesForSelectedNote(
                 chord.noteId,
@@ -142,29 +126,6 @@ export const Bar = (props: {
             )
         }
     }
-
-    // const onChordFocus = (chord: IChordAndNotes) => {
-    //     if (chord.notes[0] !== "Z") {
-    //         const isNote = chord.notes.length === 1
-    //         setValuesForSelectedNote(
-    //             chord.noteId,
-    //             barId,
-    //             isNote ? chord.notes[0] : getChord(chord.notes),
-    //             chord.length,
-    //             isNote,
-    //             chord.position
-    //         )
-    //     } else {
-    //         setValuesForSelectedNote(
-    //             undefined,
-    //             undefined,
-    //             selectedChord,
-    //             selectedNoteLength,
-    //             isNoteSelected,
-    //             chord.position
-    //         )
-    //     }
-    // }
 
     const onMouseEnterChord = (
         chord: IChordAndNotes,
@@ -251,7 +212,6 @@ export const Bar = (props: {
                                                 allChords
                                             )
                                         }
-                                        // onChordFocus={() => onChordFocus(chord)}
                                         chordsAndNotes={chord}
                                         highlight={highlight}
                                         key={chord.position}
@@ -259,7 +219,6 @@ export const Bar = (props: {
                                             chord.noteId
                                         )}
                                         onClick={() => handleClick(chord)}
-                                        refHighlightedNote={refHighlightedNote}
                                         isSelected={
                                             selectedNoteId === chord.noteId
                                         }
