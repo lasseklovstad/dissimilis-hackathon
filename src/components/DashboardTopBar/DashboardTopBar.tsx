@@ -1,7 +1,6 @@
 import React, { useState } from "react"
-import { AppBar, Box, Grid, makeStyles, TextField } from "@material-ui/core"
+import { AppBar, Box, Grid, Hidden, makeStyles, TextField } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
-import { useHistory } from "react-router"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 
 const useStyles = makeStyles(() => ({
@@ -14,21 +13,24 @@ const useStyles = makeStyles(() => ({
 export const DashboardTopBar = (props: {
     onChange: (txt: string) => void
     onGoHome?: () => void
+    searchTerm?: string
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const history = useHistory()
     const searchPlaceholder = t("DashboardView:search")
     const [searchBarFocus, setSearchBarFocus] = useState(false)
+    const { onGoHome, searchTerm } = props
 
     return (
         <div>
             <AppBar position="static" className={classes.background}>
                 <Box py={3}>
                     <Grid container spacing={2}>
-                        <Grid item sm={1} />
-                        <Grid item xs={2}>
-                            <DashboardTopBarIcon />
+                        <Hidden xsDown>
+                            <Grid item sm={1} />
+                        </Hidden>
+                        <Grid item xs={2} >
+                            <DashboardTopBarIcon onGoHome={onGoHome} />
                         </Grid>
                         <Grid
                             item
@@ -57,6 +59,7 @@ export const DashboardTopBar = (props: {
                                 onChange={(event) =>
                                     props.onChange(event.target.value)
                                 }
+                                value={searchTerm}
                             />
                         </Grid>
                     </Grid>

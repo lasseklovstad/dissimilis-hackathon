@@ -1,9 +1,8 @@
 import React, { useState } from "react"
-import { IconButton, Menu, MenuItem, Box } from "@material-ui/core"
+import { IconButton, Menu, MenuItem } from "@material-ui/core"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { useTranslation } from "react-i18next"
-import { useHistory, useParams } from "react-router-dom"
-import { colors } from "../../utils/colors"
+import { useHistory } from "react-router-dom"
 import { useDeleteSong, useDuplicateSong } from "../../utils/useApiServiceSongs"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
 import { InputModal } from "../CustomModal/InputModal.component"
@@ -132,6 +131,7 @@ export const SongGridMenuButton = (props: {
                 cancelText={t("Modal:cancel")}
                 headerText={t("DashboardView:duplicateText")}
                 labelText={t("Modal:newVoiceName")}
+                isLoading={duplicateSong.loading}
             />
             <Loading
                 isLoading={deleteSong.loading}

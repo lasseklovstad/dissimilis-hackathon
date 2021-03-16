@@ -1,5 +1,4 @@
 import { useHistory } from "react-router-dom"
-import { useEffect } from "react"
 import { IVoice } from "../models/IVoice"
 
 export const useVoice = (voices: IVoice[] | undefined) => {
@@ -9,9 +8,9 @@ export const useVoice = (voices: IVoice[] | undefined) => {
     )
     const voiceId = voiceIdString ? parseInt(voiceIdString, 10) : undefined
 
-    const voiceExists = voices?.find(voice => voice.songVoiceId === voiceId)
+    const voiceExists = voices?.find((voice) => voice.songVoiceId === voiceId)
 
-    if (!voiceExists && voices && voices?.length>0) {
+    if (!voiceExists && voices && voices?.length > 0) {
         return voices[0].songVoiceId
     }
 

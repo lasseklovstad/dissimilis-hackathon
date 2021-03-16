@@ -5,7 +5,7 @@ export const dashboardEn = {
     allSongLabel: "All songs",
     libraryButton: "Library",
     measure: "measure",
-    search: "Search",
+    search: "Search for songs or arrangers",
     altButterflyButtonProp: "Image of Dissimilis' butterfly-logo",
     deleteSong: "Delete song",
     deleteDescription: "Are you sure you want to delete the song?",
@@ -14,4 +14,7 @@ export const dashboardEn = {
     duplicate: "Duplicate",
     duplicateText: "Duplicate song",
     delete: "Delete",
+    date: "Date changed",
+    user: "User", 
+    song: "Song",
 }

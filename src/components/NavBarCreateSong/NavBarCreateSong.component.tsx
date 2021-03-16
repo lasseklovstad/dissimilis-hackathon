@@ -13,6 +13,7 @@ import { colors } from "../../utils/colors"
 const useStyles = makeStyles({
     root: {
         flexGrow: 1,
+        marginBottom: "16px",
     },
     left: {
         order: 1,
@@ -32,7 +33,7 @@ const useStyles = makeStyles({
     },
     appbar: {
         backgroundColor: "transparent",
-        marginBottom: "24px",
+        marginBottom: "16px",
     },
     textFieldInput: {
         fontSize: "30",

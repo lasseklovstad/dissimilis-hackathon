@@ -29,7 +29,7 @@ const useStyles = makeStyles({
         position: "sticky", // For Safari: -webkit-sticky
         zIndex: 100,
         top: "0",
-        paddingTop: "32px",
+        paddingTop: "24px",
         paddingLeft: "3.5vw",
         paddingRight: "3.5vw",
     },
@@ -64,15 +64,20 @@ export const SongView = () => {
 
     const { denominator, numerator, voices } = song
     const selectedVoiceId = useVoice(voices)
-    const selectedVoice = voices.find(
-        (voice) => voice.songVoiceId === selectedVoiceId
-    )
+
+    const [selectedVoice, setSelectedVoice] = useState<IVoice | undefined>(voices.find(
+            (voice) => voice.songVoiceId === selectedVoiceId
+        ))
 
     useEffect(() => {
         if (songInit) {
             dispatchSong({ type: "UPDATE_SONG", song: songInit })
         }
     }, [songInit])
+
+    useEffect(() => {
+        setSelectedVoice(song.voices.find((voice) => voice.songVoiceId === selectedVoiceId))
+    }, [song, selectedVoiceId])
 
     const handleTitleBlur = async (title: string) => {
         if (title !== song.title) {
@@ -91,13 +96,13 @@ export const SongView = () => {
     const handleDeleteVoice = (voice: IVoice) => {
         dispatchSong({ type: "DELETE_VOICE", songVoiceId: voice.songVoiceId })
 
-        if(voice.songVoiceId === selectedVoiceId) {
+        if (voice.songVoiceId === selectedVoiceId) {
             history.push(`/song/${songId}`)
         }
     }
 
     const handleUpdateVoice = (voice: IVoice) => {
-        dispatchSong({ type: "UPDATE_VOICE", voice })
+        dispatchSong({ type: "UPDATE_VOICE_NAME", voice })
     }
 
     if (getSong.loading) {
