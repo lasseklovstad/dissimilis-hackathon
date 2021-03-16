@@ -1,5 +1,13 @@
 import React, { useState } from "react"
-import { IconButton, Menu, MenuItem } from "@material-ui/core"
+import {
+    Box,
+    Divider,
+    IconButton,
+    makeStyles,
+    Menu,
+    MenuItem,
+    Typography,
+} from "@material-ui/core"
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 import { useTranslation } from "react-i18next"
 import { useHistory, useParams } from "react-router-dom"
@@ -16,12 +24,19 @@ import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { TransposeModal } from "../CustomModal/TransposeModal.component"
 import { InputModal } from "../CustomModal/InputModal.component"
 
-export const MenuButton = (props: { voiceId: number }) => {
+const useStyles = makeStyles({
+    user: {
+        borderTop: `1px solid ${colors.black}`,
+    },
+})
+
+export const MenuButton = (props: { voiceId: number; showName: boolean }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(
         false
     )
+    const classes = useStyles()
     const { t } = useTranslation()
     const history = useHistory()
     const { songId, title, transpose } = useParams<{
@@ -138,6 +153,14 @@ export const MenuButton = (props: { voiceId: number }) => {
                     <MenuItem onClick={() => handleClose("delete")}>
                         {t("MenuButton:delete")}
                     </MenuItem>
+                    {props.showName ? (
+                        <>
+                            <Divider variant="middle" />
+                            <MenuItem disabled>
+                                <Typography>Jacob.Johnsen@ciber.no</Typography>
+                            </MenuItem>
+                        </>
+                    ) : undefined}
                 </Menu>
                 <ChoiceModal
                     handleOnCancelClick={handleClose}

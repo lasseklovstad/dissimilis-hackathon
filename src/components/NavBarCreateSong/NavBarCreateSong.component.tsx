@@ -4,6 +4,7 @@ import {
     Box,
     makeStyles,
     TextField,
+    Typography,
     useMediaQuery,
 } from "@material-ui/core"
 import { MenuButton } from "../MenuButton/MenuButton.component"
@@ -94,7 +95,16 @@ export const NavBarCreateSong = (props: {
                             fullWidth
                         />
                     </Box>
-                    <MenuButton voiceId={props.voiceId} />
+                    {
+                        !matches ? (
+                    <Box ml={4} mr={4}>
+                        <Typography>
+                            Jacob.Johnsen@ciber.no
+                        </Typography>
+                    </Box> 
+                        ) :
+                        undefined}
+                    <MenuButton voiceId={props.voiceId} showName={matches}/>
                 </Box>
             </AppBar>
         </Box>
