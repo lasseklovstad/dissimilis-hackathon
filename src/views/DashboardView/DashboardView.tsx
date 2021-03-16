@@ -33,7 +33,7 @@ type MusicTacts = {
         denominator: number
     }
 }
-const marginBottom = 10
+const marginBottom = 4
 const musicTacts: MusicTacts[] = [
     {
         id: 1,

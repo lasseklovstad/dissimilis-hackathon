@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { AppBar, Box, Grid, makeStyles, TextField } from "@material-ui/core"
+import { AppBar, Box, Grid, Hidden, makeStyles, TextField } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 
@@ -26,8 +26,10 @@ export const DashboardTopBar = (props: {
             <AppBar position="static" className={classes.background}>
                 <Box py={3}>
                     <Grid container spacing={2}>
-                        <Grid item sm={1} />
-                        <Grid item xs={2}>
+                        <Hidden xsDown>
+                            <Grid item sm={1} />
+                        </Hidden>
+                        <Grid item xs={2} >
                             <DashboardTopBarIcon onGoHome={onGoHome} />
                         </Grid>
                         <Grid
