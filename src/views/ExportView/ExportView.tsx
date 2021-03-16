@@ -34,6 +34,10 @@ const useStyles = makeStyles({
         display: "flex",
         alignItems: "center",
     },
+    flexStart: {
+        display: "flex",
+        alignItems: "flex-start",
+    },
     alignCenter: { alignItems: "center" },
     box: {
         padding: "8px",
@@ -82,6 +86,11 @@ const useStyles = makeStyles({
         order: 5,
         display: "flex",
         justifyContent: "flex-end",
+    },
+    chordLetters: {
+        fontSize: "0.78rem",
+        color: "rgba(0, 0, 0, 0.54)",
+        paddingBottom: "6px",
     },
 })
 const heightAvailableToBars = 725
@@ -138,11 +147,11 @@ export const ExportView = () => {
             const amountOfBars = selectedVoice.bars.length || 0
 
             const totalRowsUsed = Math.ceil(
-            amountOfBars / selectedBarConfig.barsPerRow
+                amountOfBars / selectedBarConfig.barsPerRow
             )
             const heightOfDiv =
-            totalRowsUsed * selectedRowsPerSheetConfig.heightAvailableToBars
-            
+                totalRowsUsed * selectedRowsPerSheetConfig.heightAvailableToBars
+
             const amountOfPagesCalculated = Math.ceil(heightOfDiv / 725)
 
             if (amountOfPagesCalculated === 0) {
@@ -339,17 +348,29 @@ export const ExportView = () => {
                     </Grid>
                     <Grid
                         item
-                        xs={2}
+                        xs={1}
                         className={`${classes.box} ${classes.flexCenter}`}
                         style={{
                             order: 4,
                         }}
                     >
                         <FormGroup
-                            className={`${classes.formControl} ${classes.alignCenter}`}
+                            className={`${classes.formControl} ${classes.flexStart}`}
                         >
+                            <Typography className={classes.chordLetters}>
+                                {t("ExportView:chordLetters")}
+                            </Typography>
                             <FormControlLabel
-                                label={t("ExportView:chortLetters")}
+                                label={
+                                    showChordLetters
+                                        ? t("ExportView:showChordLetters")
+                                        : t("ExportView:hideChordLetters")
+                                }
+                                className={classes.flexStart}
+                                style={{
+                                    margin: 0,
+                                    fontSize: "10px",
+                                }}
                                 control={
                                     <CustomSwitch
                                         size="small"
