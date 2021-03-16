@@ -127,6 +127,29 @@ export const Bar = (props: {
         }
     }
 
+    const handleChordFocus = (chord: IChordAndNotes) => {
+        if (chord.notes[0] !== "Z") {
+            const isNote = chord.notes.length === 1
+            setValuesForSelectedNote(
+                chord.noteId,
+                barId,
+                isNote ? chord.notes[0] : getChord(chord.notes),
+                chord.length,
+                isNote,
+                chord.position
+            )
+        } else {
+            setValuesForSelectedNote(
+                undefined,
+                undefined,
+                selectedChord,
+                selectedNoteLength,
+                isNoteSelected,
+                chord.position
+            )
+        }
+    }
+
     const onMouseEnterChord = (
         chord: IChordAndNotes,
         indexOfChord: number,
@@ -221,6 +244,9 @@ export const Bar = (props: {
                                         onClick={() => handleClick(chord)}
                                         isSelected={
                                             selectedNoteId === chord.noteId
+                                        }
+                                        handleChordFocus={() =>
+                                            handleChordFocus(chord)
                                         }
                                     />
                                 )

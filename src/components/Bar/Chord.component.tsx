@@ -15,6 +15,7 @@ type ChordProps = {
     disabled: boolean
     showChordLetters: boolean
     isSelected: boolean
+    handleChordFocus: () => void
 }
 
 const useStyle = makeStyles(() => ({
@@ -122,6 +123,7 @@ export const Chord = (props: ChordProps) => {
         disabled,
         showChordLetters,
         isSelected,
+        handleChordFocus,
     } = props
     const classes = useStyle()
     const isChord = chordsAndNotes.notes.length > 2
@@ -163,6 +165,7 @@ export const Chord = (props: ChordProps) => {
                     minWidth: 0,
                     alignItems: "stretch",
                 }}
+                onFocus={handleChordFocus}
             >
                 {chordsAndNotes.notes
                     .map((note, i) => {
