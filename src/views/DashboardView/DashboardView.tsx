@@ -213,6 +213,7 @@ export const DashboardView = () => {
                                 cancelText={t("Modal:cancel")}
                                 headerText={t("Modal:addSong")}
                                 labelText={t("Modal:nameOfSong")}
+                                isLoading={postSong.loading}
                             />
                         </>
                     ) : (
@@ -228,7 +229,6 @@ export const DashboardView = () => {
                     )}
                 </Grid>
             </Box>
-            <Loading isLoading={postSong.loading} fullScreen />
             <ErrorDialog isError={postSong.isError} error={postSong.error} />
         </>
     )
