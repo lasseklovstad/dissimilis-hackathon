@@ -211,10 +211,9 @@ export const ExportView = () => {
                                                     selectedRowsPerSheetConfig.heightAvailableToBars
                                                 }
                                                 setValuesForSelectedNote={() =>
-                                                  undefined
+                                                    undefined
                                                 }
                                                 selectedNoteId={undefined}
-                                                // refHighlightedNote={undefined}
                                             />
                                         )}
                                     </Grid>
