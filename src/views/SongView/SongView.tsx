@@ -93,6 +93,13 @@ export const SongView = () => {
     const [selectedVoice, setSelectedVoice] = useState<IVoice | undefined>(
         voices.find((voice) => voice.songVoiceId === selectedVoiceId)
     )
+
+    useEffect(() => {
+        setSelectedVoice(
+            song.voices.find((voice) => voice.songVoiceId === selectedVoiceId)
+        )
+    }, [song, selectedVoiceId])
+
     const { updateNote } = useUpdateNote(
         songId,
         selectedVoiceId,
@@ -266,12 +273,6 @@ export const SongView = () => {
             dispatchSong({ type: "UPDATE_SONG", song: songInit })
         }
     }, [songInit])
-
-    useEffect(() => {
-        setSelectedVoice(
-            song.voices.find((voice) => voice.songVoiceId === selectedVoiceId)
-        )
-    }, [song, selectedVoiceId])
 
     const handleTitleBlur = async (title: string) => {
         if (title !== song.title) {

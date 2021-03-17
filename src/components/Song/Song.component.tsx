@@ -18,7 +18,7 @@ type SongProps = {
     heightOfBar: number
     exportMode?: boolean
     showChordLetters?: boolean
-    setValuesForSelectedNote: (
+    setValuesForSelectedNote?: (
         noteId: number | undefined | null,
         barId: number | undefined,
         chord: string,
@@ -26,7 +26,7 @@ type SongProps = {
         isNote: boolean,
         position: number
     ) => void
-    selectedNoteId: number | undefined | null
+    selectedNoteId?: number | undefined | null
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {

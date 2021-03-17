@@ -19,7 +19,7 @@ export const Bar = (props: {
     onMenuClick: (anchorEl: HTMLElement) => void
     masterSheet: boolean
     showHouseNumber: boolean
-    setValuesForSelectedNote: (
+    setValuesForSelectedNote?: (
         noteId: number | undefined | null,
         barId: number | undefined,
         chord: string,
@@ -27,7 +27,7 @@ export const Bar = (props: {
         isNote: boolean,
         position: number
     ) => void
-    selectedNoteId: number | undefined | null
+    selectedNoteId?: number | undefined | null
 }) => {
     const {
         exportMode,
@@ -103,50 +103,54 @@ export const Bar = (props: {
 
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-                setValuesForSelectedNote(
-                    result.data.chordsAndNotes.find(
-                        (c) => c.position === position
-                    )?.noteId,
-                    result.data.barId,
-                    selectedChord,
-                    selectedNoteLength,
-                    isNoteSelected,
-                    position
-                )
+                setValuesForSelectedNote &&
+                    setValuesForSelectedNote(
+                        result.data.chordsAndNotes.find(
+                            (c) => c.position === position
+                        )?.noteId,
+                        result.data.barId,
+                        selectedChord,
+                        selectedNoteLength,
+                        isNoteSelected,
+                        position
+                    )
             }
         } else {
             const isNote = chord.notes.length === 1
-            setValuesForSelectedNote(
-                chord.noteId,
-                props.bar.barId,
-                isNote ? chord.notes[0] : getChord(chord.notes),
-                chord.length,
-                isNote,
-                chord.position
-            )
+            setValuesForSelectedNote &&
+                setValuesForSelectedNote(
+                    chord.noteId,
+                    props.bar.barId,
+                    isNote ? chord.notes[0] : getChord(chord.notes),
+                    chord.length,
+                    isNote,
+                    chord.position
+                )
         }
     }
 
     const handleChordFocus = (chord: IChordAndNotes) => {
         if (chord.notes[0] !== "Z") {
             const isNote = chord.notes.length === 1
-            setValuesForSelectedNote(
-                chord.noteId,
-                barId,
-                isNote ? chord.notes[0] : getChord(chord.notes),
-                chord.length,
-                isNote,
-                chord.position
-            )
+            setValuesForSelectedNote &&
+                setValuesForSelectedNote(
+                    chord.noteId,
+                    barId,
+                    isNote ? chord.notes[0] : getChord(chord.notes),
+                    chord.length,
+                    isNote,
+                    chord.position
+                )
         } else {
-            setValuesForSelectedNote(
-                undefined,
-                undefined,
-                selectedChord,
-                selectedNoteLength,
-                isNoteSelected,
-                chord.position
-            )
+            setValuesForSelectedNote &&
+                setValuesForSelectedNote(
+                    undefined,
+                    undefined,
+                    selectedChord,
+                    selectedNoteLength,
+                    isNoteSelected,
+                    chord.position
+                )
         }
     }
 
