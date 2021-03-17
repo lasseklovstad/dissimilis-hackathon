@@ -4,7 +4,7 @@ export const exportViewEn = {
     rowsPerSheet: "Rows per sheet",
     createPDF: "Create PDF",
     cancel: "Cancel",
-    chordLetters: "Chort letters",
+    chordLetters: "Chord letters",
     showChordLetters: "Yes",
     hideChordLetters: "No",
 }

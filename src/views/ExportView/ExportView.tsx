@@ -348,7 +348,8 @@ export const ExportView = () => {
                     </Grid>
                     <Grid
                         item
-                        xs={1}
+                        xs={2}
+                        md={1}
                         className={`${classes.box} ${classes.flexCenter}`}
                         style={{
                             order: 4,
