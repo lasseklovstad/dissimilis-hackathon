@@ -19,6 +19,7 @@ import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
 import { getTimeSignatureText } from "../../utils/bar.util"
 import { ISong } from "../../models/ISong"
+import { useGetUser } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles({
     container: {
@@ -81,12 +82,14 @@ export const DashboardView = () => {
     const { postSong } = usePostSong()
     const history = useHistory()
     const measureText = t("DashboardView:measure")
+    const { userInit } = useGetUser()
+
     const { getRecentSongs, recentSongsFetched } = useGetRecentSongs(
         orderTerm,
         orderDescending
     )
-    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>()
-
+    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>() 
+    
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
         orderTerm,
@@ -161,6 +164,7 @@ export const DashboardView = () => {
                                     setDashboardView(false)
                                 }}
                                 searchTerm={searchTerm}
+                                user={userInit?.email}
                             />
                         </Box>
                     </Grid>

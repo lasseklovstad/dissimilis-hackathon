@@ -23,6 +23,7 @@ export const DashboardTopBar = (props: {
     onChange: (txt: string) => void
     onGoHome?: () => void
     searchTerm?: string
+    user?: string
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
@@ -57,7 +58,7 @@ export const DashboardTopBar = (props: {
                             alignItems="center"
                             style={{ paddingRight: sm ? 32 : 8 }}
                         >
-                            <Typography>jacob.johnsen@ciber.no</Typography>
+                            <Typography>{props.user}</Typography>
                         </Grid>
                         <Grid
                             item
