@@ -72,8 +72,10 @@ export const Bar = (props: {
         event: React.MouseEvent
     ) => {
         event.preventDefault()
-        setMenuPosition({ top: event.clientY - 4, left: event.clientX - 2 })
-        setRightClicked(chordId)
+        if (chordId !== null) {
+            setMenuPosition({ top: event.clientY - 4, left: event.clientX - 2 })
+            setRightClicked(chordId)
+        }
     }
 
     const handleMenuSelect = async (method: "delete") => {

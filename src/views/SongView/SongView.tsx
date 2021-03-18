@@ -10,6 +10,7 @@ import { Song } from "../../components/Song/Song.component"
 import { useVoice } from "../../utils/useVoice"
 import { ISong } from "../../models/ISong"
 import {
+    useDeleteChord,
     useGetSong,
     useUpdateNote,
     useUpdateSong,
@@ -121,6 +122,13 @@ export const SongView = () => {
             )
         }
     }
+
+    const { deleteChord } = useDeleteChord(
+        Number(songId),
+        selectedVoiceId === undefined ? 0 : selectedVoiceId,
+        selectedBarId === undefined ? 0 : selectedBarId,
+        selectedNoteId === undefined ? 0 : selectedNoteId
+    )
 
     const handleChangeChord = (chord: string) => {
         if (selectedChordId && selectedVoiceId && selectedBarId) {
@@ -267,6 +275,15 @@ export const SongView = () => {
         }
     }
 
+    const handleDeleteSelectedChord = async () => {
+        if (selectedNoteId && selectedVoiceId && selectedBarId) {
+            const { error, result } = await deleteChord.run()
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+            }
+        }
+    }
+
     useEffect(() => {
         if (songInit) {
             dispatchSong({ type: "UPDATE_SONG", song: songInit })
@@ -372,6 +389,7 @@ export const SongView = () => {
                     voiceId={selectedVoiceId}
                     chordDropdownContent={isNoteSelected ? notes : chords}
                     clickOutsideListener={clickOutsideOfBottomBarListener}
+                    deleteSelectedChord={handleDeleteSelectedChord}
                 />
             )}
         </SongContext.Provider>
