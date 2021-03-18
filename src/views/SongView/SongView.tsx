@@ -19,7 +19,7 @@ import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { SongContext, songReducer } from "./SongContextProvider.component"
 import { IVoice } from "../../models/IVoice"
 import { chords, getNotesFromChord, notes } from "../../models/chords"
-import { IBar, IChordAndNotes } from "../../models/IBar"
+import { IBar, IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 
 const useStyles = makeStyles({
@@ -164,8 +164,8 @@ export const SongView = () => {
             const selectedBar = selectedVoice?.bars.find(
                 (b) => b.barId === selectedBarId
             )
-            const note = selectedBar?.chordsAndNotes.find(
-                (b) => b.noteId === selectedNoteId
+            const note = selectedBar?.chords.find(
+                (b) => b.chordId === selectedNoteId
             )
             if (selectedBar && note && note.length > updatedNoteLength) {
                 makeNoteUpdate(
@@ -189,8 +189,8 @@ export const SongView = () => {
         updatedNoteLength: number,
         selectedBar: IBar
     ) => {
-        return selectedBar.chordsAndNotes.reduce(
-            (noter: IChordAndNotes[], note) => {
+        return selectedBar.chords.reduce(
+            (noter: IChord[], note) => {
                 if (note.notes[0] === "Z") {
                     const numberOfRests = note.length
                     const rests = []
@@ -199,7 +199,7 @@ export const SongView = () => {
                             length: 1,
                             notes: ["Z"],
                             position: note.position + i,
-                            noteId: null,
+                            chordId: null,
                         })
                     }
                     return [...noter, ...rests]
@@ -216,11 +216,11 @@ export const SongView = () => {
     }
 
     const updateNoteLengthIfPossible = (
-        allChords: IChordAndNotes[],
+        allChords: IChord[],
         updatedNoteLength: number
     ) => {
         let indexOfChord = allChords.findIndex(
-            (c) => c.noteId === selectedNoteId
+            (c) => c.chordId === selectedNoteId
         )
         let i = 0
         while (i <= updatedNoteLength) {
@@ -230,7 +230,7 @@ export const SongView = () => {
             const isOnlyRests =
                 interval.findIndex(
                     (currentChord) =>
-                        currentChord.noteId !== selectedNoteId &&
+                        currentChord.chordId !== selectedNoteId &&
                         currentChord.notes[0] !== "Z"
                 ) === -1
             if (isOnlyRests && interval.length === updatedNoteLength) {
