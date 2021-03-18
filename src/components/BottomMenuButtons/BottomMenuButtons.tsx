@@ -97,6 +97,7 @@ export const DropdownAutocomplete = (props: {
                     onChordChange(value)
                 }
             }}
+            blurOnSelect="touch"
             openText={t("BottomBar:open")}
             PopperComponent={customPopperPlacement}
             closeIcon={false}
@@ -113,41 +114,39 @@ export const DropdownAutocomplete = (props: {
                 />
             )}
             renderOption={(options) => (
-                <>
-                    <Grid container>
-                        <Grid item xs={9}>
-                            <Typography>{options}</Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                            {noteIsSelected ? (
-                                <Box
-                                    style={{
-                                        height: "24px",
-                                        width: "24px",
-                                        backgroundColor: getColor(options),
-                                        borderRadius: "5px",
-                                        verticalAlign: "center",
-                                    }}
-                                >
-                                    {tangentToNumber(options) !== 0 ? (
-                                        <Typography
-                                            style={{
-                                                color: colors.white,
-                                                textAlign: "center",
-                                            }}
-                                        >
-                                            {tangentToNumber(options)}
-                                        </Typography>
-                                    ) : (
-                                        <></>
-                                    )}
-                                </Box>
-                            ) : (
-                                <></>
-                            )}
-                        </Grid>
+                <Grid container>
+                    <Grid item xs={9}>
+                        <Typography>{options}</Typography>
                     </Grid>
-                </>
+                    <Grid item xs={3}>
+                        {noteIsSelected ? (
+                            <Box
+                                style={{
+                                    height: "24px",
+                                    width: "24px",
+                                    backgroundColor: getColor(options),
+                                    borderRadius: "5px",
+                                    verticalAlign: "center",
+                                }}
+                            >
+                                {tangentToNumber(options) !== 0 ? (
+                                    <Typography
+                                        style={{
+                                            color: colors.white,
+                                            textAlign: "center",
+                                        }}
+                                    >
+                                        {tangentToNumber(options)}
+                                    </Typography>
+                                ) : (
+                                    <></>
+                                )}
+                            </Box>
+                        ) : (
+                            <></>
+                        )}
+                    </Grid>
+                </Grid>
             )}
         />
     )

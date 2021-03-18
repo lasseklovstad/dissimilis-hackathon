@@ -63,10 +63,11 @@ export const useTransposeSong = (
 /**
  * Get all songs
  * */
-export const useGetAllSongs = () => {
+export const useGetAllSongs = (orderTerm: string, orderDescending: boolean) => {
     const url = "song/search"
     const body = {
-        orderByDateTime: "true",
+        orderBy: orderTerm,
+        orderDescending,
     }
     const initialData: ISong[] = []
     const headers = getHeaders()
@@ -82,7 +83,7 @@ export const useGetAllSongs = () => {
 
     return {
         getAllSongs: { run: postData, ...state },
-        allSongs: data,
+        allSongsFetched: data,
     }
 }
 
@@ -90,12 +91,14 @@ export const useGetAllSongs = () => {
  * Get songs from database based on title or part of title
  * @param query title or part of title
  */
-export const useGetFilteredSongs = (title: string) => {
+export const useGetFilteredSongs = (title: string, orderTerm: string, orderDescending: boolean) => {
     const url = "song/search"
     const initialData: ISong[] = []
     const headers = getHeaders()
     const body = {
         title,
+        orderBy: orderTerm,
+        orderDescending,
     }
     const { postData, state, data } = useApiService<ISong[]>(url, {
         initialData,
@@ -109,35 +112,36 @@ export const useGetFilteredSongs = (title: string) => {
 
     return {
         getFilteredSongs: { run: postData, ...state },
-        filteredSongs: data,
+        filteredSongsFetched: data,
     }
 }
 
 /**
  * Get songs based on recent songs
  * */
-export const useGetRecentSongs = () => {
+export const useGetRecentSongs = (orderTerm: string, orderDescending: boolean) => {
     const url = "song/search"
     const body = {
         num: "5",
-        orderByDateTime: "true",
+        orderBy: orderTerm,
+        orderDescending,
         arrangerId: getArrangerId(),
     }
     const initialData: ISong[] = []
     const headers = getHeaders()
-    const { postData, state, data } = useApiService<ISong[]>(url, {
+    const { postSearchWithArrangerId, state, data } = useApiService<ISong[]>(url, {
         body,
         initialData,
         headers,
     })
 
     useEffect(() => {
-        postData()
-    }, [postData])
+        postSearchWithArrangerId(body)
+    }, [postSearchWithArrangerId])
 
     return {
-        getRecentSongs: { run: postData, ...state },
-        recentSongs: data,
+        getRecentSongs: { run: postSearchWithArrangerId, ...state },
+        recentSongsFetched: data,
     }
 }
 
@@ -188,6 +192,18 @@ export const useCreateVoice = (songId: string) => {
     }
 }
 
+export const useDuplicateVoice = (
+    songId: string,
+    voiceId: number | undefined
+) => {
+    const url = `song/${songId}/voice/${voiceId}/duplicate`
+    const headers = getHeaders()
+    const api = useApiService<IVoice>(url, { headers })
+    return {
+        duplicateVoice: { run: api.postData, ...api.state },
+    }
+}
+
 export const useUpdateVoice = (songId: string, voiceId: number | undefined) => {
     const url = `song/${songId}/voice/${voiceId}`
     const headers = getHeaders()
@@ -224,9 +240,9 @@ export const useDeleteChord = (
     songId: number,
     voiceId: number,
     barId: number,
-    noteId: number | null
+    chordId: number | null
 ) => {
-    const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${noteId}`
+    const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${chordId}`
     const headers = getHeaders()
     const api = useApiService<IBar>(url, { headers })
 
@@ -265,9 +281,7 @@ export const useAddBar = (songId: string, voiceId: number) => {
     }
 }
 
-export const useDuplicateBar = (
-    songId: number
-) => {
+export const useDuplicateBar = (songId: number) => {
     const url = `song/${songId}/copyBars`
     const headers = getHeaders()
     const api = useApiService<ISong>(url, { headers })
@@ -301,5 +315,20 @@ export const useUpdateBar = (
 
     return {
         putBar: { run: api.putData, ...api.state },
+    }
+}
+
+/**
+ * Duplicate song
+ * @param songId songs id
+ */
+export const useDuplicateSong = (songId: number) => {
+    const url = `song/${songId}/duplicateSong`
+    const headers = getHeaders()
+
+    const api = useApiService<ISong>(url, { headers })
+
+    return {
+        duplicateSong: { run: api.postData, ...api.state },
     }
 }

@@ -17,15 +17,16 @@ type SongProps = {
     timeSignature: ITimeSignature
     heightOfBar: number
     exportMode?: boolean
-    setValuesForSelectedNote: (
+    showChordLetters?: boolean
+    setValuesForSelectedNote?: (
         noteId: number | undefined | null,
-        bar: IBar | undefined,
+        barId: number | undefined,
         chord: string,
         noteLength: number,
         isNote: boolean,
         position: number
     ) => void
-    selectedNoteId: number | undefined | null
+    selectedNoteId?: number | undefined | null
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
@@ -49,6 +50,7 @@ export const Song = (props: SongProps) => {
         timeSignature,
         heightOfBar,
         exportMode,
+        showChordLetters,
         setValuesForSelectedNote,
         selectedNoteId,
     } = props
@@ -78,7 +80,11 @@ export const Song = (props: SongProps) => {
         <>
             <Box width="100%">
                 {getBarRows(bars).map((barsInRow, i) => (
-                    <Box display="flex" mt={exportMode ? 7 : 10} key={i}>
+                    <Box
+                        display="flex"
+                        mt={exportMode ? 7 : i === 0 ? 7 : 10}
+                        key={i}
+                    >
                         <BarPrefix
                             index={barsInRow[0].position - 1}
                             timeSignature={timeSignature}
@@ -98,6 +104,11 @@ export const Song = (props: SongProps) => {
                                         <Bar
                                             showHouseNumber={showHouseNumber}
                                             exportMode={!!exportMode}
+                                            showChordLetters={
+                                                showChordLetters === undefined
+                                                    ? true
+                                                    : showChordLetters
+                                            }
                                             masterSheet={!exportMode && isMain}
                                             onMenuClick={openMenu(bar)}
                                             bar={bar}

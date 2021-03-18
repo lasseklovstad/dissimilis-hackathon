@@ -6,6 +6,7 @@ import { useHistory, useParams } from "react-router-dom"
 import { colors } from "../../utils/colors"
 import {
     useDeleteSong,
+    useDuplicateSong,
     useGetSong,
     useTransposeSong,
 } from "../../utils/useApiServiceSongs"
@@ -13,10 +14,14 @@ import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { TransposeModal } from "../CustomModal/TransposeModal.component"
+import { InputModal } from "../CustomModal/InputModal.component"
 
-export const MenuButton = () => {
+export const MenuButton = (props: { voiceId: number }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
+    const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(
+        false
+    )
     const { t } = useTranslation()
     const history = useHistory()
     const { songId, title, transpose } = useParams<{
@@ -25,18 +30,15 @@ export const MenuButton = () => {
         transpose: string
     }>()
     const { deleteSong } = useDeleteSong(songId)
-    const { getSong, songInit } = useGetSong(songId)
+    const { songInit } = useGetSong(songId)
     const [transposeSongModalIsOpen, setTransposeSongModalIsOpen] = useState(
         false
     )
     const { transposeSong } = useTransposeSong(songId, title, transpose)
+    const { duplicateSong } = useDuplicateSong(Number(songId))
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
-    }
-
-    const handleOpenDeleteSongModal = () => {
-        setDeleteSongModalIsOpen(true)
     }
 
     const handleDeleteSong = async () => {
@@ -48,7 +50,7 @@ export const MenuButton = () => {
     }
 
     const exportSong = async () => {
-        history.push(`/song/${songId}/export`)
+        history.push(`/song/${songId}/export?voice=${props.voiceId}`)
     }
 
     const handleOpenTransposeSongModal = async () => {
@@ -67,7 +69,9 @@ export const MenuButton = () => {
         }
     }
 
-    const handleClose = async (method?: "transpose" | "export" | "delete") => {
+    const handleClose = async (
+        method?: "transpose" | "export" | "delete" | "duplicate"
+    ) => {
         setAnchorEl(null)
         setDeleteSongModalIsOpen(false)
         setTransposeSongModalIsOpen(false)
@@ -79,10 +83,24 @@ export const MenuButton = () => {
                 await exportSong()
                 break
             case "delete":
-                handleOpenDeleteSongModal()
+                setDeleteSongModalIsOpen(true)
+                break
+            case "duplicate":
+                setDuplicateSongModalIsOpen(true)
                 break
             default:
                 break
+        }
+    }
+
+    const handleDuplicateSong = async (title: string) => {
+        const { error, result } = await duplicateSong.run({
+            title,
+        })
+
+        if (!error && result) {
+            setDuplicateSongModalIsOpen(false)
+            history.push(`/song/${result.data.songId.toString()}`)
         }
     }
 
@@ -105,7 +123,7 @@ export const MenuButton = () => {
                     onClose={() => handleClose()}
                     role="menu"
                 >
-                    <MenuItem disabled onClick={() => handleClose()}>
+                    <MenuItem onClick={() => handleClose("duplicate")}>
                         {t("MenuButton:duplicate")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("transpose")}>
@@ -139,6 +157,20 @@ export const MenuButton = () => {
                     handleClosed={handleClose}
                     handleOnCancelClick={handleClose}
                     handleOnSaveClick={handleTransposeSong}
+                />
+                <InputModal
+                    handleOnCancelClick={() =>
+                        setDuplicateSongModalIsOpen(false)
+                    }
+                    handleOnSaveClick={handleDuplicateSong}
+                    handleClosed={() => setDuplicateSongModalIsOpen(false)}
+                    modalOpen={duplicateSongModalIsOpen}
+                    defaultValue={`${songInit?.title} (2)`}
+                    saveText={t("Modal:create")}
+                    cancelText={t("Modal:cancel")}
+                    headerText={t("DashboardView:duplicateText")}
+                    labelText={t("Modal:newVoiceName")}
+                    isLoading={duplicateSong.loading}
                 />
             </div>
             <Loading
