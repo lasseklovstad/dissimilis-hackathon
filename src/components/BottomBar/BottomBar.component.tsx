@@ -1,5 +1,6 @@
 import React from "react"
 import {
+    ClickAwayListener,
     FormControl,
     Grid,
     makeStyles,
@@ -25,7 +26,6 @@ import { ReactComponent as HalfnoteDottedIcon } from "../../assets/images/icon_h
 import { ReactComponent as QuarternoteDottedIcon } from "../../assets/images/icon_quarter-note-dotted.svg"
 import { IBar } from "../../models/IBar"
 import { useAddBar } from "../../utils/useApiServiceSongs"
-import { chords, notes } from "../../models/chords"
 
 const useStyles = makeStyles({
     outercontainer: {
@@ -126,6 +126,8 @@ export const BottomBar = (props: {
     onNoteLengthChange: (length: number) => void
     noteIsSelected: boolean
     onNoteSelectedChange: (selected: boolean) => void
+    notesOrChords: string[]
+    clickOutsideListener: (e: any) => void
 }) => {
     const {
         timeSignature: { numerator, denominator },
@@ -138,6 +140,8 @@ export const BottomBar = (props: {
         onNoteLengthChange,
         noteIsSelected,
         onNoteSelectedChange,
+        notesOrChords,
+        clickOutsideListener,
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
@@ -161,7 +165,7 @@ export const BottomBar = (props: {
     }
     let timeSignatureNumerator = numerator
     if (denominator === 4) timeSignatureNumerator *= 2
-    // When adding new notes to this list of MenuItems with a given value, remember to add the case to the method calculateFlexBasis in BarBody.component.tsx.
+
     const Menu = (
         <FormControl
             variant="outlined"
@@ -172,6 +176,7 @@ export const BottomBar = (props: {
                 value={selectedNoteLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
+                MenuProps={{ disablePortal: true }}
             >
                 {noteLengths.map(({ length, Icon }) => {
                     return (
@@ -205,33 +210,35 @@ export const BottomBar = (props: {
     return (
         <Grid container justify="center">
             <Grid item xs={12} sm={10} className={classes.outercontainer}>
-                <div className={classes.container}>
-                    <div className={classes.flexelement}>{Menu}</div>
-                    <div className={classes.flexelement}>
-                        <DropdownAutocomplete
-                            noteIsSelected={noteIsSelected}
-                            selectedChord={selectedChord}
-                            onChordChange={onChordChange}
-                            icon={<MusicNoteIcon fontSize="small" />}
-                            notesOrChords={!noteIsSelected ? chords : notes}
-                            noOptionsText={t("BottomBar:noOptions")}
-                        />
+                <ClickAwayListener onClickAway={clickOutsideListener}>
+                    <div className={classes.container}>
+                        <div className={classes.flexelement}>{Menu}</div>
+                        <div className={classes.flexelement}>
+                            <DropdownAutocomplete
+                                noteIsSelected={noteIsSelected}
+                                selectedChord={selectedChord}
+                                onChordChange={onChordChange}
+                                icon={<MusicNoteIcon fontSize="small" />}
+                                notesOrChords={notesOrChords}
+                                noOptionsText={t("BottomBar:noOptions")}
+                            />
+                        </div>
+                        <StyledToggleButtonGroup
+                            value={noteIsSelected}
+                            exclusive
+                            onChange={handleToggle}
+                            className={classes.flexelement}
+                            size="small"
+                        >
+                            <ToggleButton value={false}>
+                                <Typography>{t("BottomBar:chord")}</Typography>
+                            </ToggleButton>
+                            <ToggleButton value>
+                                <Typography>{t("BottomBar:note")}</Typography>
+                            </ToggleButton>
+                        </StyledToggleButtonGroup>
                     </div>
-                    <StyledToggleButtonGroup
-                        value={noteIsSelected}
-                        exclusive
-                        onChange={handleToggle}
-                        className={classes.flexelement}
-                        size="small"
-                    >
-                        <ToggleButton value={false}>
-                            <Typography>{t("BottomBar:chord")}</Typography>
-                        </ToggleButton>
-                        <ToggleButton value>
-                            <Typography>{t("BottomBar:note")}</Typography>
-                        </ToggleButton>
-                    </StyledToggleButtonGroup>
-                </div>
+                </ClickAwayListener>
                 <div className={classes.container}>
                     <MenuButtonWithAddIcon
                         text={t("BottomBar:addBar")}
