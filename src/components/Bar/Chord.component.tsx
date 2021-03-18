@@ -1,12 +1,12 @@
 import React from "react"
 import { Box, ButtonBase, Typography, useTheme } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
-import { IChordAndNotes } from "../../models/IBar"
+import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { getChord, getColor, tangentToNumber } from "../../utils/bar.util"
 
 type ChordProps = {
-    chordsAndNotes: IChordAndNotes
+    chords: IChord
     onContextMenu: (event: React.MouseEvent) => void
     onClick: () => void
     onMouseEnter: () => void
@@ -47,7 +47,7 @@ const useStyle = makeStyles(() => ({
 
 export const Chord = (props: ChordProps) => {
     const {
-        chordsAndNotes,
+        chords,
         onClick,
         onContextMenu,
         onMouseEnter,
@@ -57,7 +57,7 @@ export const Chord = (props: ChordProps) => {
         showChordLetters,
     } = props
     const classes = useStyle()
-    const isChord = chordsAndNotes.notes.length > 2
+    const isChord = chords.notes.length > 2
     const {
         palette: { getContrastText },
     } = useTheme()
@@ -71,7 +71,7 @@ export const Chord = (props: ChordProps) => {
 
     return (
         <Box
-            flexGrow={chordsAndNotes.length}
+            flexGrow={chords.length}
             display="flex"
             flexDirection="column"
             position="relative"
@@ -83,7 +83,7 @@ export const Chord = (props: ChordProps) => {
             minWidth={0}
         >
             {isChord && showChordLetters && (
-                <ChordText notes={chordsAndNotes.notes} />
+                <ChordText notes={chords.notes} />
             )}
             <ButtonBase
                 disabled={disabled}
@@ -102,7 +102,7 @@ export const Chord = (props: ChordProps) => {
                     alignItems: "stretch",
                 }}
             >
-                {chordsAndNotes.notes
+                {chords.notes
                     .map((note, i) => {
                         const text = tangentToNumber(note)
                         const bgcolor = getBackgroundColor(note)
