@@ -55,18 +55,20 @@ export const SongView = () => {
     const { getSong, songInit } = useGetSong(songId)
     const barsPerRow = useBarsPerRow()
     const [selectedChord, setSelectedChord] = useState("C")
-    const [selectedNoteLength, setSelectedNoteLength] = useState(1)
+    const [selectedChordLength, setSelectedChordLength] = useState(1)
     const [isNoteSelected, setNoteIsSelected] = useState(true)
     const { putSong } = useUpdateSong(songId)
     const trigger = useScrollTrigger()
-    const [selectedNoteId, setSelectedNoteId] = useState<
+    const [selectedChordId, setSelectedChordId] = useState<
         number | undefined | null
     >(undefined)
     const [selectedBarId, setSelectedBarId] = useState<number | undefined>(
         undefined
     )
-    const [selectedNotePosition, setSelectedNotePosition] = useState<number>(0)
-    const setValuesForSelectedNote = (
+    const [selectedChordPosition, setSelectedChordPosition] = useState<number>(
+        0
+    )
+    const setValuesForSelectedChord = (
         noteId: number | undefined | null,
         barId: number | undefined,
         chord: string,
@@ -75,10 +77,10 @@ export const SongView = () => {
         position: number
     ) => {
         setSelectedChord(chord)
-        setSelectedNoteLength(noteLength)
-        setSelectedNoteId(noteId)
+        setSelectedChordLength(noteLength)
+        setSelectedChordId(noteId)
         setSelectedBarId(barId)
-        setSelectedNotePosition(position)
+        setSelectedChordPosition(position)
         setNoteIsSelected(isNote)
     }
     const [song, dispatchSong] = useReducer(songReducer, {
@@ -104,16 +106,16 @@ export const SongView = () => {
         songId,
         selectedVoiceId,
         selectedBarId,
-        selectedNoteId
+        selectedChordId
     )
 
     const clickOutsideOfBottomBarListener = (e: any) => {
         if (e.target.id !== "chordButton" && e.target.id !== "singleChord") {
-            setValuesForSelectedNote(
+            setValuesForSelectedChord(
                 undefined,
                 undefined,
                 selectedChord,
-                selectedNoteLength,
+                selectedChordLength,
                 isNoteSelected,
                 0
             )
@@ -121,11 +123,11 @@ export const SongView = () => {
     }
 
     const handleChangeChord = (chord: string) => {
-        if (selectedNoteId && selectedVoiceId && selectedBarId) {
-            makeNoteUpdate(
+        if (selectedChordId && selectedVoiceId && selectedBarId) {
+            makeChordUpdate(
                 chord,
-                selectedNoteLength,
-                selectedNotePosition,
+                selectedChordLength,
+                selectedChordPosition,
                 isNoteSelected
             )
         } else {
@@ -133,7 +135,7 @@ export const SongView = () => {
         }
     }
 
-    const makeNoteUpdate = async (
+    const makeChordUpdate = async (
         chord: string,
         length: number,
         position: number,
@@ -148,8 +150,8 @@ export const SongView = () => {
 
         if (!error && result) {
             dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-            setValuesForSelectedNote(
-                selectedNoteId,
+            setValuesForSelectedChord(
+                selectedChordId,
                 result.data.barId,
                 chord,
                 length,
@@ -160,15 +162,15 @@ export const SongView = () => {
     }
 
     const handleChangeNoteLength = (updatedNoteLength: number) => {
-        if (selectedNoteId && selectedVoiceId && selectedBarId) {
+        if (selectedChordId && selectedVoiceId && selectedBarId) {
             const selectedBar = selectedVoice?.bars.find(
                 (b) => b.barId === selectedBarId
             )
             const note = selectedBar?.chords.find(
-                (b) => b.chordId === selectedNoteId
+                (b) => b.chordId === selectedChordId
             )
             if (selectedBar && note && note.length > updatedNoteLength) {
-                makeNoteUpdate(
+                makeChordUpdate(
                     selectedChord,
                     updatedNoteLength,
                     note.position,
@@ -181,7 +183,7 @@ export const SongView = () => {
                 )
             }
         } else {
-            setSelectedNoteLength(updatedNoteLength)
+            setSelectedChordLength(updatedNoteLength)
         }
     }
 
@@ -189,30 +191,27 @@ export const SongView = () => {
         updatedNoteLength: number,
         selectedBar: IBar
     ) => {
-        return selectedBar.chords.reduce(
-            (noter: IChord[], note) => {
-                if (note.notes[0] === "Z") {
-                    const numberOfRests = note.length
-                    const rests = []
-                    for (let i = 0; i < numberOfRests; i++) {
-                        rests.push({
-                            length: 1,
-                            notes: ["Z"],
-                            position: note.position + i,
-                            chordId: null,
-                        })
-                    }
-                    return [...noter, ...rests]
+        return selectedBar.chords.reduce((noter: IChord[], note) => {
+            if (note.notes[0] === "Z") {
+                const numberOfRests = note.length
+                const rests = []
+                for (let i = 0; i < numberOfRests; i++) {
+                    rests.push({
+                        length: 1,
+                        notes: ["Z"],
+                        position: note.position + i,
+                        chordId: null,
+                    })
                 }
-                const numberOfChords = note.length
-                const notes = []
-                for (let i = 0; i < numberOfChords; i++) {
-                    notes.push(note)
-                }
-                return [...noter, ...notes]
-            },
-            []
-        )
+                return [...noter, ...rests]
+            }
+            const numberOfChords = note.length
+            const notes = []
+            for (let i = 0; i < numberOfChords; i++) {
+                notes.push(note)
+            }
+            return [...noter, ...notes]
+        }, [])
     }
 
     const updateNoteLengthIfPossible = (
@@ -220,7 +219,7 @@ export const SongView = () => {
         updatedNoteLength: number
     ) => {
         let indexOfChord = allChords.findIndex(
-            (c) => c.chordId === selectedNoteId
+            (c) => c.chordId === selectedChordId
         )
         let i = 0
         while (i <= updatedNoteLength) {
@@ -230,11 +229,11 @@ export const SongView = () => {
             const isOnlyRests =
                 interval.findIndex(
                     (currentChord) =>
-                        currentChord.chordId !== selectedNoteId &&
+                        currentChord.chordId !== selectedChordId &&
                         currentChord.notes[0] !== "Z"
                 ) === -1
             if (isOnlyRests && interval.length === updatedNoteLength) {
-                makeNoteUpdate(
+                makeChordUpdate(
                     selectedChord,
                     updatedNoteLength,
                     start,
@@ -255,11 +254,11 @@ export const SongView = () => {
                 ? selectedChord.substring(0, 2)
                 : selectedChord.charAt(0)
         }
-        if (selectedNoteId && selectedVoiceId) {
-            makeNoteUpdate(
+        if (selectedChordId && selectedVoiceId) {
+            makeChordUpdate(
                 chord,
-                selectedNoteLength,
-                selectedNotePosition,
+                selectedChordLength,
+                selectedChordPosition,
                 updatedNoteIsSelected
             )
         } else {
@@ -305,7 +304,14 @@ export const SongView = () => {
     }
 
     return (
-        <>
+        <SongContext.Provider
+            value={{
+                dispatchSong,
+                selectedChord,
+                selectedChordLength,
+                isNoteSelected,
+            }}
+        >
             <ErrorDialog
                 isError={getSong.isError}
                 error={getSong.error}
@@ -336,26 +342,17 @@ export const SongView = () => {
                         </Grid>
                     </Slide>
                     <Grid item xs={12} className={classes.body}>
-                        <SongContext.Provider
-                            value={{
-                                dispatchSong,
-                                selectedChord,
-                                selectedNoteLength,
-                                isNoteSelected,
-                            }}
-                        >
-                            <Song
-                                barsPerRow={barsPerRow}
-                                voice={selectedVoice}
-                                timeSignature={{ denominator, numerator }}
-                                heightOfBar={heightOfBar}
-                                exportMode={false}
-                                setValuesForSelectedNote={
-                                    setValuesForSelectedNote
-                                }
-                                selectedNoteId={selectedNoteId}
-                            />
-                        </SongContext.Provider>
+                        <Song
+                            barsPerRow={barsPerRow}
+                            voice={selectedVoice}
+                            timeSignature={{ denominator, numerator }}
+                            heightOfBar={heightOfBar}
+                            exportMode={false}
+                            setValuesForSelectedChord={
+                                setValuesForSelectedChord
+                            }
+                            selectedNoteId={selectedChordId}
+                        />
                     </Grid>
                 </Grid>
             )}
@@ -365,20 +362,18 @@ export const SongView = () => {
                     onNoteSelectedChange={(selected) =>
                         handleNoteSelectedChange(selected)
                     }
-                    selectedChord={selectedChord}
                     onChordChange={(chord) => handleChangeChord(chord)}
-                    selectedNoteLength={selectedNoteLength}
-                    onNoteLengthChange={(length) =>
+                    onChordLengthChange={(length) =>
                         handleChangeNoteLength(length)
                     }
                     timeSignature={{ denominator, numerator }}
                     addBar={(bar) => dispatchSong({ type: "ADD_BAR", bar })}
                     songId={songId}
                     voiceId={selectedVoiceId}
-                    notesOrChords={isNoteSelected ? notes : chords}
+                    chordDropdownContent={isNoteSelected ? notes : chords}
                     clickOutsideListener={clickOutsideOfBottomBarListener}
                 />
             )}
-        </>
+        </SongContext.Provider>
     )
 }

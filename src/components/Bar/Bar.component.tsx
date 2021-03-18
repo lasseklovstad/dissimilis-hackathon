@@ -19,7 +19,7 @@ export const Bar = (props: {
     onMenuClick: (anchorEl: HTMLElement) => void
     masterSheet: boolean
     showHouseNumber: boolean
-    setValuesForSelectedNote?: (
+    setValuesForSelectedChord?: (
         noteId: number | undefined | null,
         barId: number | undefined,
         chord: string,
@@ -45,7 +45,7 @@ export const Bar = (props: {
             songVoiceId,
         },
         height = 160,
-        setValuesForSelectedNote,
+        setValuesForSelectedChord,
         selectedNoteId,
     } = props
     const [menuPosition, setMenuPosition] = useState<
@@ -57,7 +57,7 @@ export const Bar = (props: {
     const {
         dispatchSong,
         selectedChord,
-        selectedNoteLength,
+        selectedChordLength,
         isNoteSelected,
     } = useContext(SongContext)
     const { postChord } = useCreateChord(songId, songVoiceId, barId)
@@ -97,28 +97,28 @@ export const Bar = (props: {
                 positionArray.length > 0 ? positionArray[0] : chord.position
             const { error, result } = await postChord.run({
                 position,
-                length: selectedNoteLength,
+                length: selectedChordLength,
                 notes,
             } as IChord)
 
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-                setValuesForSelectedNote &&
-                    setValuesForSelectedNote(
+                setValuesForSelectedChord &&
+                    setValuesForSelectedChord(
                         result.data.chords.find(
                             (c) => c.position === position
                         )?.chordId,
                         result.data.barId,
                         selectedChord,
-                        selectedNoteLength,
+                        selectedChordLength,
                         isNoteSelected,
                         position
                     )
             }
         } else {
             const isNote = chord.notes.length === 1
-            setValuesForSelectedNote &&
-                setValuesForSelectedNote(
+            setValuesForSelectedChord &&
+                setValuesForSelectedChord(
                     chord.chordId,
                     props.bar.barId,
                     isNote ? chord.notes[0] : getChord(chord.notes),
@@ -132,8 +132,8 @@ export const Bar = (props: {
     const handleChordFocus = (chord: IChord) => {
         if (chord.notes[0] !== "Z") {
             const isNote = chord.notes.length === 1
-            setValuesForSelectedNote &&
-                setValuesForSelectedNote(
+            setValuesForSelectedChord &&
+                setValuesForSelectedChord(
                     chord.chordId,
                     barId,
                     isNote ? chord.notes[0] : getChord(chord.notes),
@@ -142,12 +142,12 @@ export const Bar = (props: {
                     chord.position
                 )
         } else {
-            setValuesForSelectedNote &&
-                setValuesForSelectedNote(
+            setValuesForSelectedChord &&
+                setValuesForSelectedChord(
                     undefined,
                     undefined,
                     selectedChord,
-                    selectedNoteLength,
+                    selectedChordLength,
                     isNoteSelected,
                     chord.position
                 )
@@ -161,15 +161,15 @@ export const Bar = (props: {
     ) => {
         if (xl && chord.notes[0] === "Z") {
             let i = 0
-            while (i <= selectedNoteLength) {
+            while (i <= selectedChordLength) {
                 const start = indexOfChord - i
-                const end = start + selectedNoteLength
+                const end = start + selectedChordLength
                 const interval = allChords.slice(start, end)
                 const isOnlyRests =
                     interval.findIndex(
                         (currentChord) => currentChord.notes[0] !== "Z"
                     ) === -1
-                if (isOnlyRests && interval.length === selectedNoteLength) {
+                if (isOnlyRests && interval.length === selectedChordLength) {
                     setPositionArray(
                         interval.map((currentChord) => currentChord.position)
                     )

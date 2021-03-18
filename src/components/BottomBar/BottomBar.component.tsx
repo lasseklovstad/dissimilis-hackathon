@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import {
     ClickAwayListener,
     FormControl,
@@ -26,6 +26,7 @@ import { ReactComponent as HalfnoteDottedIcon } from "../../assets/images/icon_h
 import { ReactComponent as QuarternoteDottedIcon } from "../../assets/images/icon_quarter-note-dotted.svg"
 import { IBar } from "../../models/IBar"
 import { useAddBar } from "../../utils/useApiServiceSongs"
+import { SongContext } from "../../views/SongView/SongContextProvider.component"
 
 const useStyles = makeStyles({
     outercontainer: {
@@ -120,13 +121,11 @@ export const BottomBar = (props: {
     addBar: (bar: IBar) => void
     songId: string
     voiceId: number
-    selectedChord: string
     onChordChange: (chord: string) => void
-    selectedNoteLength: number
-    onNoteLengthChange: (length: number) => void
+    onChordLengthChange: (length: number) => void
     noteIsSelected: boolean
     onNoteSelectedChange: (selected: boolean) => void
-    notesOrChords: string[]
+    chordDropdownContent: string[]
     clickOutsideListener: (e: any) => void
 }) => {
     const {
@@ -134,22 +133,21 @@ export const BottomBar = (props: {
         addBar,
         voiceId,
         songId,
-        selectedChord,
         onChordChange,
-        selectedNoteLength,
-        onNoteLengthChange,
+        onChordLengthChange,
         noteIsSelected,
         onNoteSelectedChange,
-        notesOrChords,
+        chordDropdownContent,
         clickOutsideListener,
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
+    const { selectedChord, selectedChordLength } = useContext(SongContext)
 
     const { postBar } = useAddBar(songId, voiceId)
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        onNoteLengthChange(event.target.value as number)
+        onChordLengthChange(event.target.value as number)
     }
 
     const scrollToBottom = () => {
@@ -173,7 +171,7 @@ export const BottomBar = (props: {
             classes={{ root: classes.removeDefaultStyling }}
         >
             <Select
-                value={selectedNoteLength}
+                value={selectedChordLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
                 MenuProps={{ disablePortal: true }}
@@ -219,7 +217,7 @@ export const BottomBar = (props: {
                                 selectedChord={selectedChord}
                                 onChordChange={onChordChange}
                                 icon={<MusicNoteIcon fontSize="small" />}
-                                notesOrChords={notesOrChords}
+                                chordDropdownContent={chordDropdownContent}
                                 noOptionsText={t("BottomBar:noOptions")}
                             />
                         </div>

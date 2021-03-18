@@ -67,9 +67,9 @@ export const songReducer = (song: ISong, action: SongAction) => {
                                 ...bar,
                                 house: actionBar.house,
                                 repAfter: actionBar.repAfter,
-                                repBefore: actionBar.repBefore
+                                repBefore: actionBar.repBefore,
                             }
-                        })
+                        }),
                     }
                 }),
             }
@@ -102,7 +102,7 @@ export const songReducer = (song: ISong, action: SongAction) => {
 interface ISongContext {
     dispatchSong: React.Dispatch<SongAction>
     selectedChord: string
-    selectedNoteLength: number
+    selectedChordLength: number
     isNoteSelected: boolean
 }
 
@@ -111,6 +111,6 @@ export const SongContext = React.createContext<ISongContext>({
         throw new Error("dispatchSong is not implemented")
     },
     selectedChord: "C",
-    selectedNoteLength: 1,
+    selectedChordLength: 1,
     isNoteSelected: true,
 })

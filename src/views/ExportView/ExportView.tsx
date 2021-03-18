@@ -223,7 +223,7 @@ export const ExportView = () => {
                                                 heightOfBar={
                                                     selectedRowsPerSheetConfig.heightAvailableToBars
                                                 }
-                                                setValuesForSelectedNote={() =>
+                                                setValuesForSelectedChord={() =>
                                                     undefined
                                                 }
                                                 selectedNoteId={undefined}

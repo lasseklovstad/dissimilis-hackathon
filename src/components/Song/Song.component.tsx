@@ -18,7 +18,7 @@ type SongProps = {
     heightOfBar: number
     exportMode?: boolean
     showChordLetters?: boolean
-    setValuesForSelectedNote?: (
+    setValuesForSelectedChord?: (
         noteId: number | undefined | null,
         barId: number | undefined,
         chord: string,
@@ -51,7 +51,7 @@ export const Song = (props: SongProps) => {
         heightOfBar,
         exportMode,
         showChordLetters,
-        setValuesForSelectedNote,
+        setValuesForSelectedChord,
         selectedNoteId,
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -113,8 +113,8 @@ export const Song = (props: SongProps) => {
                                             onMenuClick={openMenu(bar)}
                                             bar={bar}
                                             height={heightOfBar}
-                                            setValuesForSelectedNote={
-                                                setValuesForSelectedNote
+                                            setValuesForSelectedChord={
+                                                setValuesForSelectedChord
                                             }
                                             selectedNoteId={selectedNoteId}
                                         />
