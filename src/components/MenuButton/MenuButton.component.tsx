@@ -1,9 +1,7 @@
 import React, { useState } from "react"
 import {
-    Box,
     Divider,
     IconButton,
-    makeStyles,
     Menu,
     MenuItem,
     Typography,
@@ -24,19 +22,12 @@ import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { TransposeModal } from "../CustomModal/TransposeModal.component"
 import { InputModal } from "../CustomModal/InputModal.component"
 
-const useStyles = makeStyles({
-    user: {
-        borderTop: `1px solid ${colors.black}`,
-    },
-})
-
-export const MenuButton = (props: { voiceId: number; showName: boolean }) => {
+export const MenuButton = (props: { voiceId: number; showName: boolean, user?: string }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(
         false
     )
-    const classes = useStyles()
     const { t } = useTranslation()
     const history = useHistory()
     const { songId, title, transpose } = useParams<{
@@ -157,7 +148,7 @@ export const MenuButton = (props: { voiceId: number; showName: boolean }) => {
                         <>
                             <Divider variant="middle" />
                             <MenuItem disabled>
-                                <Typography>Jacob.Johnsen@ciber.no</Typography>
+                                <Typography>{props.user}</Typography>
                             </MenuItem>
                         </>
                     ) : undefined}

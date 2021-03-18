@@ -14,6 +14,7 @@ import {
     useUpdateNote,
     useUpdateSong,
 } from "../../utils/useApiServiceSongs"
+import { useGetUser } from "../../utils/useApiServiceUsers"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { SongContext, songReducer } from "./SongContextProvider.component"
@@ -58,6 +59,7 @@ export const SongView = () => {
     const [selectedNoteLength, setSelectedNoteLength] = useState(1)
     const [isNoteSelected, setNoteIsSelected] = useState(true)
     const { putSong } = useUpdateSong(songId)
+    const { userInit } = useGetUser()
     const trigger = useScrollTrigger()
     const [selectedNoteId, setSelectedNoteId] = useState<
         number | undefined | null
@@ -321,6 +323,7 @@ export const SongView = () => {
                                     title={song.title}
                                     onTitleBlur={handleTitleBlur}
                                     voiceId={selectedVoiceId}
+                                    user={userInit?.email}
                                 />
                             </Grid>
                             <Grid item xs={12}>
