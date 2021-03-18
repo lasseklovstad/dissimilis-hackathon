@@ -10,6 +10,7 @@ import { Song } from "../../components/Song/Song.component"
 import { useVoice } from "../../utils/useVoice"
 import { ISong } from "../../models/ISong"
 import {
+    useDeleteChord,
     useGetSong,
     useUpdateNote,
     useUpdateSong,
@@ -120,6 +121,13 @@ export const SongView = () => {
         }
     }
 
+    const { deleteChord } = useDeleteChord(
+        Number(songId),
+        selectedVoiceId === undefined ? 0 : selectedVoiceId,
+        selectedBarId === undefined ? 0 : selectedBarId,
+        selectedNoteId === undefined ? 0 : selectedNoteId
+    )
+
     const handleChangeChord = (chord: string) => {
         if (selectedNoteId && selectedVoiceId && selectedBarId) {
             makeNoteUpdate(
@@ -189,30 +197,27 @@ export const SongView = () => {
         updatedNoteLength: number,
         selectedBar: IBar
     ) => {
-        return selectedBar.chords.reduce(
-            (noter: IChord[], note) => {
-                if (note.notes[0] === "Z") {
-                    const numberOfRests = note.length
-                    const rests = []
-                    for (let i = 0; i < numberOfRests; i++) {
-                        rests.push({
-                            length: 1,
-                            notes: ["Z"],
-                            position: note.position + i,
-                            chordId: null,
-                        })
-                    }
-                    return [...noter, ...rests]
+        return selectedBar.chords.reduce((noter: IChord[], note) => {
+            if (note.notes[0] === "Z") {
+                const numberOfRests = note.length
+                const rests = []
+                for (let i = 0; i < numberOfRests; i++) {
+                    rests.push({
+                        length: 1,
+                        notes: ["Z"],
+                        position: note.position + i,
+                        chordId: null,
+                    })
                 }
-                const numberOfChords = note.length
-                const notes = []
-                for (let i = 0; i < numberOfChords; i++) {
-                    notes.push(note)
-                }
-                return [...noter, ...notes]
-            },
-            []
-        )
+                return [...noter, ...rests]
+            }
+            const numberOfChords = note.length
+            const notes = []
+            for (let i = 0; i < numberOfChords; i++) {
+                notes.push(note)
+            }
+            return [...noter, ...notes]
+        }, [])
     }
 
     const updateNoteLengthIfPossible = (
@@ -265,6 +270,15 @@ export const SongView = () => {
         } else {
             setNoteIsSelected(updatedNoteIsSelected)
             setSelectedChord(chord)
+        }
+    }
+
+    const handleDeleteSelectedChord = async () => {
+        if (selectedNoteId && selectedVoiceId && selectedBarId) {
+            const { error, result } = await deleteChord.run()
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+            }
         }
     }
 
@@ -377,6 +391,7 @@ export const SongView = () => {
                     voiceId={selectedVoiceId}
                     notesOrChords={isNoteSelected ? notes : chords}
                     clickOutsideListener={clickOutsideOfBottomBarListener}
+                    deleteSelectedChord={handleDeleteSelectedChord}
                 />
             )}
         </>

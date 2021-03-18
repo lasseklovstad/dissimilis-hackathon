@@ -8,7 +8,7 @@ import { getChord, tangentToNumber } from "../../utils/bar.util"
 type ChordProps = {
     chords: IChord
     onContextMenu: (event: React.MouseEvent) => void
-    onClick: () => void
+    onClick: (event: React.MouseEvent) => void
     onMouseEnter: () => void
     onMouseLeave: () => void
     highlight: boolean
