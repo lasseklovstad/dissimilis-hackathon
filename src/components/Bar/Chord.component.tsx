@@ -1,12 +1,12 @@
 import React from "react"
 import { Box, ButtonBase, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
-import { IChordAndNotes } from "../../models/IBar"
+import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { getChord, tangentToNumber } from "../../utils/bar.util"
 
 type ChordProps = {
-    chordsAndNotes: IChordAndNotes
+    chords: IChord
     onContextMenu: (event: React.MouseEvent) => void
     onClick: () => void
     onMouseEnter: () => void
@@ -114,7 +114,7 @@ const ChordText = (props: { notes: string[] }) => {
 
 export const Chord = (props: ChordProps) => {
     const {
-        chordsAndNotes,
+        chords,
         onClick,
         onContextMenu,
         onMouseEnter,
@@ -126,11 +126,11 @@ export const Chord = (props: ChordProps) => {
         handleChordFocus,
     } = props
     const classes = useStyle()
-    const isChord = chordsAndNotes.notes.length > 2
+    const isChord = chords.notes.length > 2
 
     return (
         <Box
-            flexGrow={chordsAndNotes.length}
+            flexGrow={chords.length}
             display="flex"
             flexDirection="column"
             position="relative"
@@ -142,7 +142,7 @@ export const Chord = (props: ChordProps) => {
             minWidth={0}
         >
             {isChord && showChordLetters && (
-                <ChordText notes={chordsAndNotes.notes} />
+                <ChordText notes={chords.notes} />
             )}
             <ButtonBase
                 id="chordButton"
@@ -152,7 +152,7 @@ export const Chord = (props: ChordProps) => {
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
                 className={`${
-                    chordsAndNotes.notes[0] === "Z"
+                    chords.notes[0] === "Z"
                         ? classes.emptyChordContainer
                         : classes.buttonBase
                 } ${isSelected ? classes.selected : ""}`}
@@ -167,7 +167,7 @@ export const Chord = (props: ChordProps) => {
                 }}
                 onFocus={handleChordFocus}
             >
-                {chordsAndNotes.notes
+                {chords.notes
                     .map((note, i) => {
                         return (
                             <div

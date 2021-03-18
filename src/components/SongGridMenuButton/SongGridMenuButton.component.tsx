@@ -131,6 +131,7 @@ export const SongGridMenuButton = (props: {
                 cancelText={t("Modal:cancel")}
                 headerText={t("DashboardView:duplicateText")}
                 labelText={t("Modal:newVoiceName")}
+                isLoading={duplicateSong.loading}
             />
             <Loading
                 isLoading={deleteSong.loading}

@@ -240,9 +240,9 @@ export const useDeleteChord = (
     songId: number,
     voiceId: number,
     barId: number,
-    noteId: number | null
+    chordId: number | null
 ) => {
-    const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${noteId}`
+    const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${chordId}`
     const headers = getHeaders()
     const api = useApiService<IBar>(url, { headers })
 

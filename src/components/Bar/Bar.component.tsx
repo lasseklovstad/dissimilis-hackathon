@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react"
 import { Box, useMediaQuery } from "@material-ui/core"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { House } from "./House.component"
-import { IBar, IChordAndNotes } from "../../models/IBar"
+import { IBar, IChord } from "../../models/IBar"
 import { Chord } from "./Chord.component"
 import { ChordMenu } from "./ChordMenu.component"
 import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
@@ -36,7 +36,7 @@ export const Bar = (props: {
         masterSheet,
         showHouseNumber,
         bar: {
-            chordsAndNotes,
+            chords,
             repAfter,
             repBefore,
             house,
@@ -68,12 +68,12 @@ export const Bar = (props: {
         rightClicked
     )
 
-    const handleRightClick = (noteId: number | null) => (
+    const handleRightClick = (chordId: number | null) => (
         event: React.MouseEvent
     ) => {
         event.preventDefault()
         setMenuPosition({ top: event.clientY - 4, left: event.clientX - 2 })
-        setRightClicked(noteId)
+        setRightClicked(chordId)
     }
 
     const handleMenuSelect = async (method: "delete") => {
@@ -87,7 +87,7 @@ export const Bar = (props: {
         }
     }
 
-    const handleClick = async (chord: IChordAndNotes) => {
+    const handleClick = async (chord: IChord) => {
         if (chord.notes[0] === "Z") {
             const notes = isNoteSelected
                 ? [selectedChord]
@@ -99,15 +99,15 @@ export const Bar = (props: {
                 position,
                 length: selectedNoteLength,
                 notes,
-            } as IChordAndNotes)
+            } as IChord)
 
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
                 setValuesForSelectedNote &&
                     setValuesForSelectedNote(
-                        result.data.chordsAndNotes.find(
+                        result.data.chords.find(
                             (c) => c.position === position
-                        )?.noteId,
+                        )?.chordId,
                         result.data.barId,
                         selectedChord,
                         selectedNoteLength,
@@ -119,7 +119,7 @@ export const Bar = (props: {
             const isNote = chord.notes.length === 1
             setValuesForSelectedNote &&
                 setValuesForSelectedNote(
-                    chord.noteId,
+                    chord.chordId,
                     props.bar.barId,
                     isNote ? chord.notes[0] : getChord(chord.notes),
                     chord.length,
@@ -129,12 +129,12 @@ export const Bar = (props: {
         }
     }
 
-    const handleChordFocus = (chord: IChordAndNotes) => {
+    const handleChordFocus = (chord: IChord) => {
         if (chord.notes[0] !== "Z") {
             const isNote = chord.notes.length === 1
             setValuesForSelectedNote &&
                 setValuesForSelectedNote(
-                    chord.noteId,
+                    chord.chordId,
                     barId,
                     isNote ? chord.notes[0] : getChord(chord.notes),
                     chord.length,
@@ -155,9 +155,9 @@ export const Bar = (props: {
     }
 
     const onMouseEnterChord = (
-        chord: IChordAndNotes,
+        chord: IChord,
         indexOfChord: number,
-        allChords: IChordAndNotes[]
+        allChords: IChord[]
     ) => {
         if (xl && chord.notes[0] === "Z") {
             let i = 0
@@ -206,8 +206,8 @@ export const Bar = (props: {
                         width="100%"
                         minWidth={0}
                     >
-                        {chordsAndNotes
-                            .reduce((noter: IChordAndNotes[], note) => {
+                        {chords
+                            .reduce((noter: IChord[], note) => {
                                 if (note.notes[0] === "Z") {
                                     const numberOfRests = note.length
                                     const rests = []
@@ -216,7 +216,7 @@ export const Bar = (props: {
                                             length: 1,
                                             notes: ["Z"],
                                             position: note.position + i,
-                                            noteId: null,
+                                            chordId: null,
                                         })
                                     }
                                     return [...noter, ...rests]
@@ -239,15 +239,15 @@ export const Bar = (props: {
                                                 allChords
                                             )
                                         }
-                                        chordsAndNotes={chord}
+                                        chords={chord}
                                         highlight={highlight}
                                         key={chord.position}
                                         onContextMenu={handleRightClick(
-                                            chord.noteId
+                                            chord.chordId
                                         )}
                                         onClick={() => handleClick(chord)}
                                         isSelected={
-                                            selectedNoteId === chord.noteId
+                                            selectedNoteId === chord.chordId
                                         }
                                         handleChordFocus={() =>
                                             handleChordFocus(chord)

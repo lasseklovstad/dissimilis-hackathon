@@ -35,7 +35,7 @@ const useStyles = makeStyles({
         position: "sticky", // For Safari: -webkit-sticky
         zIndex: 100,
         top: "0",
-        paddingTop: "32px",
+        paddingTop: "24px",
         paddingLeft: "3.5vw",
         paddingRight: "3.5vw",
     },

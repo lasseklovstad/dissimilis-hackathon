@@ -261,6 +261,7 @@ export const CreateSongTab = (props: {
                 headerText={t("Modal:addInstrument")}
                 labelText={t("Modal:nameOfInstrument")}
                 characterLimit={100}
+                isLoading={postVoice.loading}
             />
             <InputModal
                 defaultValue={clickedVoice?.title || ""}
@@ -272,6 +273,7 @@ export const CreateSongTab = (props: {
                 cancelText={t("Modal:cancel")}
                 headerText={t("Modal:changeVoiceName")}
                 labelText={t("Modal:newVoiceName")}
+                isLoading={putVoice.loading}
                 characterLimit={100}
             />
             <ChoiceModal

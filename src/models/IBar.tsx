@@ -1,8 +1,8 @@
-export interface IChordAndNotes {
+export interface IChord {
     position: number
     notes: string[]
     length: number
-    noteId: number | null
+    chordId: number | null
 }
 
 export interface IBar {
@@ -13,5 +13,5 @@ export interface IBar {
     house?: number | undefined | null
     repBefore: boolean
     repAfter: boolean
-    chordsAndNotes: IChordAndNotes[]
+    chords: IChord[]
 }
