@@ -22,25 +22,25 @@ export const getColor = (note: string): string => {
     let newColor = "transparent"
     switch (note) {
         case "C":
-            newColor = colors.C
+            newColor = colors.C.main
             break
         case "D":
-            newColor = colors.D
+            newColor = colors.D.main
             break
         case "E":
-            newColor = colors.E
+            newColor = colors.E.main
             break
         case "F":
-            newColor = colors.F
+            newColor = colors.F.main
             break
         case "G":
-            newColor = colors.G
+            newColor = colors.G.main
             break
         case "A":
-            newColor = colors.A
+            newColor = colors.A.main
             break
         case "H":
-            newColor = colors.H
+            newColor = colors.H.main
             break
         case "C#":
         case "D#":

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import {
     BottomNavigation,
     Box,
@@ -223,6 +223,10 @@ export const ExportView = () => {
                                                 heightOfBar={
                                                     selectedRowsPerSheetConfig.heightAvailableToBars
                                                 }
+                                                setValuesForSelectedNote={() =>
+                                                    undefined
+                                                }
+                                                selectedNoteId={undefined}
                                             />
                                         )}
                                     </Grid>
