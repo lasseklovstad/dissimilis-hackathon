@@ -197,30 +197,27 @@ export const SongView = () => {
         updatedNoteLength: number,
         selectedBar: IBar
     ) => {
-        return selectedBar.chords.reduce(
-            (noter: IChord[], note) => {
-                if (note.notes[0] === "Z") {
-                    const numberOfRests = note.length
-                    const rests = []
-                    for (let i = 0; i < numberOfRests; i++) {
-                        rests.push({
-                            length: 1,
-                            notes: ["Z"],
-                            position: note.position + i,
-                            chordId: null,
-                        })
-                    }
-                    return [...noter, ...rests]
+        return selectedBar.chords.reduce((noter: IChord[], note) => {
+            if (note.notes[0] === "Z") {
+                const numberOfRests = note.length
+                const rests = []
+                for (let i = 0; i < numberOfRests; i++) {
+                    rests.push({
+                        length: 1,
+                        notes: ["Z"],
+                        position: note.position + i,
+                        chordId: null,
+                    })
                 }
-                const numberOfChords = note.length
-                const notes = []
-                for (let i = 0; i < numberOfChords; i++) {
-                    notes.push(note)
-                }
-                return [...noter, ...notes]
-            },
-            []
-        )
+                return [...noter, ...rests]
+            }
+            const numberOfChords = note.length
+            const notes = []
+            for (let i = 0; i < numberOfChords; i++) {
+                notes.push(note)
+            }
+            return [...noter, ...notes]
+        }, [])
     }
 
     const updateNoteLengthIfPossible = (
@@ -277,7 +274,7 @@ export const SongView = () => {
     }
 
     const handleDeleteSelectedChord = async () => {
-        if (selectedNoteId && selectedVoiceId && selectedBar) {
+        if (selectedNoteId && selectedVoiceId && selectedBarId) {
             const { error, result } = await deleteChord.run()
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
