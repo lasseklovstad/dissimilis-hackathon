@@ -251,7 +251,7 @@ export const useDeleteChord = (
     }
 }
 
-export const useUpdateNote = (
+export const useUpdateChord = (
     songId: string,
     voiceId: number | undefined,
     barId: number | undefined, 
@@ -262,7 +262,7 @@ export const useUpdateNote = (
     const api = useApiService<IBar>(url, {headers})
 
     return {
-        updateNote: {run: api.putData, ...api.state},
+        updateChord: {run: api.putData, ...api.state},
     }
 }
 

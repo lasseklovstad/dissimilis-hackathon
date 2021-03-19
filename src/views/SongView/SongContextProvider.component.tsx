@@ -2,6 +2,8 @@ import React from "react"
 import { ISong } from "../../models/ISong"
 import { IBar } from "../../models/IBar"
 import { IVoice } from "../../models/IVoice"
+import { ChordType, IChordMenuOptions } from "../../models/IChordMenuOptions"
+import { ChordMenuAction } from "./ChordMenuOptions.component"
 
 type SongAction =
     | { type: "ADD_BAR"; bar: IBar }
@@ -101,16 +103,30 @@ export const songReducer = (song: ISong, action: SongAction) => {
 
 interface ISongContext {
     dispatchSong: React.Dispatch<SongAction>
-    selectedChord: string
-    selectedChordLength: number
-    isNoteSelected: boolean
+    dispatchChordMenuOptions: React.Dispatch<ChordMenuAction>
+    chordMenuOptions: IChordMenuOptions
+    setValuesForSelectedChord: (
+        chordId: number | undefined | null,
+        barId: number | undefined,
+        position: number
+    ) => void
+    selectedChordId: number | undefined | null
 }
 
 export const SongContext = React.createContext<ISongContext>({
     dispatchSong: () => {
         throw new Error("dispatchSong is not implemented")
     },
-    selectedChord: "C",
-    selectedChordLength: 1,
-    isNoteSelected: true,
+    chordMenuOptions: {
+        chordLength: 1,
+        chord: "C",
+        chordType: ChordType.NOTE,
+    },
+    setValuesForSelectedChord: () => {
+        throw new Error("setValuesForSelectedChord is not implemented")
+    },
+    dispatchChordMenuOptions: () => {
+        throw new Error("dispatchChordMenuOptions is not implemented")
+    },
+    selectedChordId: undefined,
 })
