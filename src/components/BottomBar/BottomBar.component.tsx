@@ -33,14 +33,11 @@ import { ChordType } from "../../models/IChordMenuOptions"
 
 const useStyles = makeStyles({
     outercontainer: {
-        position: "fixed",
-        bottom: 0,
         width: "100%",
         display: "flex",
         flexDirection: "row",
         flexBasis: "auto",
         flexWrap: "wrap",
-        marginBottom: "24px",
         justifyContent: "space-between",
         alignItems: "flex-end",
         "@media (max-width: 960px)": {
@@ -57,6 +54,13 @@ const useStyles = makeStyles({
         marginBottom: "8px",
         marginLeft: "24px",
         marginRight: "24px",
+    },
+    positioningContainer: {
+        width: "100%",
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        marginBottom: "24px",
     },
     flexelement: {
         flexDirection: "row",
@@ -207,46 +211,53 @@ export const BottomBar = (props: {
     }
 
     return (
-        <Grid container justify="center">
-            <Grid item xs={12} sm={10} className={classes.outercontainer}>
-                <ClickAwayListener onClickAway={clickOutsideListener}>
-                    <div className={classes.container}>
-                        <div className={classes.flexelement}>{Menu}</div>
-                        <div className={classes.flexelement}>
-                            <DropdownAutocomplete
-                                selectedChordType={chordMenuOptions.chordType}
-                                selectedChord={chordMenuOptions.chord}
-                                onChordChange={onChordChange}
-                                icon={<MusicNoteIcon fontSize="small" />}
-                                chordDropdownContent={chordDropdownContent}
-                                noOptionsText={t("BottomBar:noOptions")}
-                            />
+        <Grid container className={`mui-fixed ${classes.positioningContainer}`}>
+            <Grid container justify="center">
+                <Grid item xs={12} sm={10} className={classes.outercontainer}>
+                    <ClickAwayListener onClickAway={clickOutsideListener}>
+                        <div className={classes.container}>
+                            <div className={classes.flexelement}>{Menu}</div>
+                            <div className={classes.flexelement}>
+                                <DropdownAutocomplete
+                                    selectedChordType={chordMenuOptions.chordType}
+                                    selectedChord={chordMenuOptions.chord}
+                                    onChordChange={onChordChange}
+                                    icon={<MusicNoteIcon fontSize="small" />}
+                                    chordDropdownContent={chordDropdownContent}
+                                    noOptionsText={t("BottomBar:noOptions")}
+                                />
+                            </div>
+                            <StyledToggleButtonGroup
+                                value={chordMenuOptions.chordType}
+                                exclusive
+                                onChange={handleToggle}
+                                className={classes.flexelement}
+                                size="small"
+                            >
+                                <ToggleButton value={ChordType.CHORD}>
+                                    <Typography>
+                                        {t("BottomBar:chord")}
+                                    </Typography>
+                                </ToggleButton>
+                                <ToggleButton value={ChordType.NOTE}>
+                                    <Typography>
+                                        {t("BottomBar:note")}
+                                    </Typography>
+                                </ToggleButton>
+                            </StyledToggleButtonGroup>
                         </div>
-                        <StyledToggleButtonGroup
-                            value={chordMenuOptions.chordType}
-                            exclusive
-                            onChange={handleToggle}
-                            className={classes.flexelement}
-                            size="small"
-                        >
-                            <ToggleButton value={ChordType.CHORD}>
-                                <Typography>{t("BottomBar:chord")}</Typography>
-                            </ToggleButton>
-                            <ToggleButton value={ChordType.NOTE}>
-                                <Typography>{t("BottomBar:note")}</Typography>
-                            </ToggleButton>
-                        </StyledToggleButtonGroup>
+                    </ClickAwayListener>
+
+                    <div className={classes.container}>
+                        <MenuButtonWithAddIcon
+                            text={t("BottomBar:addBar")}
+                            onClick={handleAddBar}
+                        />
+                        <Button onClick={deleteSelectedChord}>
+                            <Delete />
+                        </Button>
                     </div>
-                </ClickAwayListener>
-                <div className={classes.container}>
-                    <MenuButtonWithAddIcon
-                        text={t("BottomBar:addBar")}
-                        onClick={handleAddBar}
-                    />
-                    <Button onClick={deleteSelectedChord}>
-                        <Delete />
-                    </Button>
-                </div>
+                </Grid>
             </Grid>
         </Grid>
     )
