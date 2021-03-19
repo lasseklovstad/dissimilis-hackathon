@@ -6,5 +6,6 @@ export const exportViewNo = {
     cancel: "Avbryt",
     chordLetters: "Besifring",
     showChordLetters: 'Ja',
-    hideChordLetters: 'Nei'
+    hideChordLetters: 'Nei',
+    noteLetters: "Toner",
 }
