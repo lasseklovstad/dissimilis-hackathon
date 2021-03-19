@@ -10,6 +10,7 @@ import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
 import { getNotesFromChord } from "../../models/chords"
 import { getChord } from "../../utils/bar.util"
+import { ChordType } from "../../models/IChordMenuOptions"
 
 export const Bar = (props: {
     bar: IBar
@@ -19,15 +20,6 @@ export const Bar = (props: {
     onMenuClick: (anchorEl: HTMLElement) => void
     masterSheet: boolean
     showHouseNumber: boolean
-    setValuesForSelectedNote?: (
-        noteId: number | undefined | null,
-        barId: number | undefined,
-        chord: string,
-        noteLength: number,
-        isNote: boolean,
-        position: number
-    ) => void
-    selectedNoteId?: number | undefined | null
 }) => {
     const {
         exportMode,
@@ -35,18 +27,8 @@ export const Bar = (props: {
         onMenuClick,
         masterSheet,
         showHouseNumber,
-        bar: {
-            chords,
-            repAfter,
-            repBefore,
-            house,
-            barId,
-            songId,
-            songVoiceId,
-        },
+        bar: { chords, repAfter, repBefore, house, barId, songId, songVoiceId },
         height = 160,
-        setValuesForSelectedNote,
-        selectedNoteId,
     } = props
     const [menuPosition, setMenuPosition] = useState<
         { top: number; left: number } | undefined
@@ -56,9 +38,10 @@ export const Bar = (props: {
     const [positionArray, setPositionArray] = useState<number[]>([])
     const {
         dispatchSong,
-        selectedChord,
-        selectedNoteLength,
-        isNoteSelected,
+        chordMenuOptions,
+        setValuesForSelectedChord,
+        dispatchChordMenuOptions,
+        selectedChordId,
     } = useContext(SongContext)
     const { postChord } = useCreateChord(songId, songVoiceId, barId)
     const { deleteChord } = useDeleteChord(
@@ -89,70 +72,62 @@ export const Bar = (props: {
         }
     }
 
+    const updateMenuOptions = (chord: IChord) => {
+        const chordType =
+            chord.notes.length === 1 ? ChordType.NOTE : ChordType.CHORD
+        dispatchChordMenuOptions({
+            type: "UPDATE_OPTIONS",
+            menuOptions: {
+                chordLength: chord.length,
+                chord:
+                    chordType === ChordType.NOTE
+                        ? chord.notes[0]
+                        : getChord(chord.notes),
+                chordType: chordType,
+            },
+        })
+    }
+
     const handleClick = async (chord: IChord) => {
         if (chord.notes[0] === "Z") {
-            const notes = isNoteSelected
-                ? [selectedChord]
-                : getNotesFromChord(selectedChord)
+            const notes =
+                chordMenuOptions.chordType === ChordType.NOTE
+                    ? [chordMenuOptions.chord]
+                    : getNotesFromChord(chordMenuOptions.chord)
 
             const position =
                 positionArray.length > 0 ? positionArray[0] : chord.position
             const { error, result } = await postChord.run({
                 position,
-                length: selectedNoteLength,
+                length: chordMenuOptions.chordLength,
                 notes,
             } as IChord)
 
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-                setValuesForSelectedNote &&
-                    setValuesForSelectedNote(
-                        result.data.chords.find(
-                            (c) => c.position === position
-                        )?.chordId,
-                        result.data.barId,
-                        selectedChord,
-                        selectedNoteLength,
-                        isNoteSelected,
-                        position
-                    )
+                setValuesForSelectedChord(
+                    result.data.chords.find((c) => c.position === position)
+                        ?.chordId,
+                    result.data.barId,
+                    position
+                )
             }
         } else {
-            const isNote = chord.notes.length === 1
-            setValuesForSelectedNote &&
-                setValuesForSelectedNote(
-                    chord.chordId,
-                    props.bar.barId,
-                    isNote ? chord.notes[0] : getChord(chord.notes),
-                    chord.length,
-                    isNote,
-                    chord.position
-                )
+            updateMenuOptions(chord)
+            setValuesForSelectedChord(
+                chord.chordId,
+                props.bar.barId,
+                chord.position
+            )
         }
     }
 
     const handleChordFocus = (chord: IChord) => {
         if (chord.notes[0] !== "Z") {
-            const isNote = chord.notes.length === 1
-            setValuesForSelectedNote &&
-                setValuesForSelectedNote(
-                    chord.chordId,
-                    barId,
-                    isNote ? chord.notes[0] : getChord(chord.notes),
-                    chord.length,
-                    isNote,
-                    chord.position
-                )
+            setValuesForSelectedChord(chord.chordId, barId, chord.position)
+            updateMenuOptions(chord)
         } else {
-            setValuesForSelectedNote &&
-                setValuesForSelectedNote(
-                    undefined,
-                    undefined,
-                    selectedChord,
-                    selectedNoteLength,
-                    isNoteSelected,
-                    chord.position
-                )
+            setValuesForSelectedChord(undefined, undefined, chord.position)
         }
     }
 
@@ -163,15 +138,18 @@ export const Bar = (props: {
     ) => {
         if (xl && chord.notes[0] === "Z") {
             let i = 0
-            while (i <= selectedNoteLength) {
+            while (i <= chordMenuOptions.chordLength) {
                 const start = indexOfChord - i
-                const end = start + selectedNoteLength
+                const end = start + chordMenuOptions.chordLength
                 const interval = allChords.slice(start, end)
                 const isOnlyRests =
                     interval.findIndex(
                         (currentChord) => currentChord.notes[0] !== "Z"
                     ) === -1
-                if (isOnlyRests && interval.length === selectedNoteLength) {
+                if (
+                    isOnlyRests &&
+                    interval.length === chordMenuOptions.chordLength
+                ) {
                     setPositionArray(
                         interval.map((currentChord) => currentChord.position)
                     )
@@ -249,7 +227,7 @@ export const Bar = (props: {
                                         )}
                                         onClick={() => handleClick(chord)}
                                         isSelected={
-                                            selectedNoteId === chord.chordId
+                                            selectedChordId === chord.chordId
                                         }
                                         handleChordFocus={() =>
                                             handleChordFocus(chord)

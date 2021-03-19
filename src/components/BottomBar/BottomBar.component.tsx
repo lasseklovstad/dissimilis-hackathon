@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import {
     Button,
     ClickAwayListener,
@@ -28,6 +28,8 @@ import { ReactComponent as HalfnoteDottedIcon } from "../../assets/images/icon_h
 import { ReactComponent as QuarternoteDottedIcon } from "../../assets/images/icon_quarter-note-dotted.svg"
 import { IBar } from "../../models/IBar"
 import { useAddBar } from "../../utils/useApiServiceSongs"
+import { SongContext } from "../../views/SongView/SongContextProvider.component"
+import { ChordType } from "../../models/IChordMenuOptions"
 
 const useStyles = makeStyles({
     outercontainer: {
@@ -122,13 +124,10 @@ export const BottomBar = (props: {
     addBar: (bar: IBar) => void
     songId: string
     voiceId: number
-    selectedChord: string
     onChordChange: (chord: string) => void
-    selectedNoteLength: number
-    onNoteLengthChange: (length: number) => void
-    noteIsSelected: boolean
-    onNoteSelectedChange: (selected: boolean) => void
-    notesOrChords: string[]
+    onChordLengthChange: (length: number) => void
+    onNoteSelectedChange: (chordType: ChordType) => void
+    chordDropdownContent: string[]
     deleteSelectedChord: () => void
     clickOutsideListener: (e: any) => void
 }) => {
@@ -137,23 +136,21 @@ export const BottomBar = (props: {
         addBar,
         voiceId,
         songId,
-        selectedChord,
         onChordChange,
-        selectedNoteLength,
-        onNoteLengthChange,
-        noteIsSelected,
+        onChordLengthChange,
         onNoteSelectedChange,
-        notesOrChords,
+        chordDropdownContent,
         clickOutsideListener,
         deleteSelectedChord,
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
+    const { chordMenuOptions } = useContext(SongContext)
 
     const { postBar } = useAddBar(songId, voiceId)
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        onNoteLengthChange(event.target.value as number)
+        onChordLengthChange(event.target.value as number)
     }
 
     const scrollToBottom = () => {
@@ -177,7 +174,7 @@ export const BottomBar = (props: {
             classes={{ root: classes.removeDefaultStyling }}
         >
             <Select
-                value={selectedNoteLength}
+                value={chordMenuOptions.chordLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
                 MenuProps={{ disablePortal: true }}
@@ -204,11 +201,9 @@ export const BottomBar = (props: {
 
     const handleToggle = (
         event: React.MouseEvent<HTMLElement>,
-        newToggle: boolean
+        chordType: ChordType
     ) => {
-        if (newToggle !== null) {
-            onNoteSelectedChange(!noteIsSelected)
-        }
+        onNoteSelectedChange(chordType)
     }
 
     return (
@@ -219,25 +214,25 @@ export const BottomBar = (props: {
                         <div className={classes.flexelement}>{Menu}</div>
                         <div className={classes.flexelement}>
                             <DropdownAutocomplete
-                                noteIsSelected={noteIsSelected}
-                                selectedChord={selectedChord}
+                                selectedChordType={chordMenuOptions.chordType}
+                                selectedChord={chordMenuOptions.chord}
                                 onChordChange={onChordChange}
                                 icon={<MusicNoteIcon fontSize="small" />}
-                                notesOrChords={notesOrChords}
+                                chordDropdownContent={chordDropdownContent}
                                 noOptionsText={t("BottomBar:noOptions")}
                             />
                         </div>
                         <StyledToggleButtonGroup
-                            value={noteIsSelected}
+                            value={chordMenuOptions.chordType}
                             exclusive
                             onChange={handleToggle}
                             className={classes.flexelement}
                             size="small"
                         >
-                            <ToggleButton value={false}>
+                            <ToggleButton value={ChordType.CHORD}>
                                 <Typography>{t("BottomBar:chord")}</Typography>
                             </ToggleButton>
-                            <ToggleButton value>
+                            <ToggleButton value={ChordType.NOTE}>
                                 <Typography>{t("BottomBar:note")}</Typography>
                             </ToggleButton>
                         </StyledToggleButtonGroup>

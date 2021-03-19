@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
@@ -16,6 +16,7 @@ import Autocomplete, {
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import { getColor, tangentToNumber } from "../../utils/bar.util"
+import { ChordType } from "../../models/IChordMenuOptions"
 
 const useStyles = makeStyles({
     button: {
@@ -67,29 +68,29 @@ const filterOptions = createFilterOptions<string>({ matchFrom: "start" })
 
 export const DropdownAutocomplete = (props: {
     icon: React.ReactNode
-    notesOrChords: string[]
+    chordDropdownContent: string[]
     noOptionsText: string
-    noteIsSelected: boolean
+    selectedChordType: ChordType
     selectedChord: string
     onChordChange: (chord: string) => void
 }) => {
     const {
-        noteIsSelected,
+        selectedChordType,
         selectedChord,
         onChordChange,
-        notesOrChords,
+        chordDropdownContent,
     } = props
     const styles = useStyles()
 
     const showValue = selectedChord
-    if (!notesOrChords.includes(selectedChord)) {
-        onChordChange(notesOrChords[0])
+    if (!chordDropdownContent.includes(selectedChord)) {
+        onChordChange(chordDropdownContent[0])
     }
     const { t } = useTranslation()
 
     return (
         <Autocomplete<string>
-            options={notesOrChords}
+            options={chordDropdownContent}
             value={showValue}
             filterOptions={filterOptions}
             onChange={(event, value) => {
@@ -119,7 +120,7 @@ export const DropdownAutocomplete = (props: {
                         <Typography>{options}</Typography>
                     </Grid>
                     <Grid item xs={3}>
-                        {noteIsSelected ? (
+                        {selectedChordType === ChordType.NOTE ? (
                             <Box
                                 style={{
                                     height: "24px",
