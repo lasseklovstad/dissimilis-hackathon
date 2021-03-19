@@ -186,7 +186,7 @@ export const SongView = () => {
                 )
             } else if (selectedBar) {
                 updateChordLengthIfPossible(
-                    reduceChordsAndNotes(updatedChordLength, selectedBar),
+                    reduceChordsAndNotes(selectedBar),
                     updatedChordLength
                 )
             }
@@ -198,10 +198,7 @@ export const SongView = () => {
         }
     }
 
-    const reduceChordsAndNotes = (
-        updatedNoteLength: number,
-        selectedBar: IBar
-    ) => {
+    const reduceChordsAndNotes = (selectedBar: IBar) => {
         return selectedBar.chords.reduce((noter: IChord[], note) => {
             if (note.notes[0] === "Z") {
                 const numberOfRests = note.length
