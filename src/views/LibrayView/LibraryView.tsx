@@ -9,6 +9,7 @@ import {
 import { ISong } from "../../models/ISong"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
+import { useGetUser } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles({
     container: {
@@ -23,6 +24,7 @@ export const LibraryView = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const [orderTerm, setOrderTerm] = useState<"date" | "song" | "user">("date")
     const [orderDescending, setOrderDescending] = useState<boolean>(true)
+    const { userInit } = useGetUser()
 
     const { getAllSongs, allSongsFetched } = useGetAllSongs(
         orderTerm,
@@ -93,6 +95,7 @@ export const LibraryView = () => {
                             <DashboardTopBar
                                 onChange={handleOnChangeSearch}
                                 searchTerm={searchTerm}
+                                user={userInit?.email}
                             />
                         </Box>
                     </Grid>
