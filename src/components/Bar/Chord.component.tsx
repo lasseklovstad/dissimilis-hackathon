@@ -138,12 +138,11 @@ export const Chord = (props: ChordProps) => {
             justifyContent="flex-end"
             top="-25px"
             flexBasis="0"
-            mr={1}
+            mr={0.5}
+            ml={0.5}
             minWidth={0}
         >
-            {isChord && showChordLetters && (
-                <ChordText notes={chords.notes} />
-            )}
+            {isChord && showChordLetters && <ChordText notes={chords.notes} />}
             <ButtonBase
                 id="chordButton"
                 disabled={disabled}

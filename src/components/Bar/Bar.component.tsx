@@ -11,6 +11,20 @@ import { SongContext } from "../../views/SongView/SongContextProvider.component"
 import { getNotesFromChord } from "../../models/chords"
 import { getChord } from "../../utils/bar.util"
 import { ChordType } from "../../models/IChordMenuOptions"
+import { makeStyles } from "@material-ui/core/styles"
+import { colors } from "../../utils/colors"
+
+const useStyle = makeStyles(() => ({
+    barContainer: {
+        display: "flex",
+        minWidth: 0,
+        borderRadius: "5px",
+        padding: "3px 0px 3px 0px",
+        "&.editMode": {
+            boxShadow: `0 0 0px 1.5px ${colors.gray_400}`,
+        },
+    },
+}))
 
 export const Bar = (props: {
     bar: IBar
@@ -20,6 +34,7 @@ export const Bar = (props: {
     onMenuClick: (anchorEl: HTMLElement) => void
     masterSheet: boolean
     showHouseNumber: boolean
+    barEditMode: boolean
 }) => {
     const {
         exportMode,
@@ -29,6 +44,7 @@ export const Bar = (props: {
         showHouseNumber,
         bar: { chords, repAfter, repBefore, house, barId, songId, songVoiceId },
         height = 160,
+        barEditMode,
     } = props
     const [menuPosition, setMenuPosition] = useState<
         { top: number; left: number } | undefined
@@ -50,6 +66,7 @@ export const Bar = (props: {
         barId,
         rightClicked
     )
+    const classes = useStyle()
 
     const handleRightClick = (chordId: number | null) => (
         event: React.MouseEvent
@@ -178,7 +195,12 @@ export const Bar = (props: {
             >
                 <House houseOrder={house} showHouseNumber={showHouseNumber} />
 
-                <Box display="flex" minWidth={0}>
+                <div
+                    id="barContainer"
+                    className={`${classes.barContainer} ${
+                        barEditMode ? "editMode" : ""
+                    }`}
+                >
                     <RepetitionSign display={repBefore} />
                     <Box
                         height={height || "100%"}
@@ -241,7 +263,7 @@ export const Bar = (props: {
                         position={menuPosition}
                         onSelect={handleMenuSelect}
                     />
-                </Box>
+                </div>
             </Box>
         </>
     )

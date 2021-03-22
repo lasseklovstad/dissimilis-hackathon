@@ -2,7 +2,6 @@ import React, { useEffect, useReducer, useState } from "react"
 import { Grid, makeStyles, Slide, useScrollTrigger } from "@material-ui/core"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { NavBarCreateSong } from "../../components/NavBarCreateSong/NavBarCreateSong.component"
 import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.component"
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
 import { useBarsPerRow } from "../../utils/useBarsPerRow"
@@ -25,6 +24,7 @@ import { IBar, IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { chordMenuReducer } from "./ChordMenuOptions.component"
+import { SongNavBar } from "../../components/SongNavBar/SongNavBar.component"
 
 const useStyles = makeStyles({
     root: {
@@ -70,6 +70,7 @@ export const SongView = () => {
     const [selectedChordPosition, setSelectedChordPosition] = useState<number>(
         0
     )
+    const [barEditMode, setBarEditMode] = useState(false)
     const setValuesForSelectedChord = (
         chordId: number | undefined | null,
         barId: number | undefined,
@@ -328,6 +329,10 @@ export const SongView = () => {
         return <LoadingLogo />
     }
 
+    const updateBarEditMode = () => {
+        setBarEditMode(!barEditMode)
+    }
+
     return (
         <SongContext.Provider
             value={{
@@ -349,11 +354,13 @@ export const SongView = () => {
                     <Slide appear={false} direction="down" in={!trigger}>
                         <Grid container className={classes.header}>
                             <Grid item xs={12}>
-                                <NavBarCreateSong
+                                <SongNavBar
                                     title={song.title}
                                     onTitleBlur={handleTitleBlur}
                                     voiceId={selectedVoiceId}
                                     user={userInit?.email}
+                                    setBarEditMode={updateBarEditMode}
+                                    barEditMode={barEditMode}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -375,6 +382,7 @@ export const SongView = () => {
                             timeSignature={{ denominator, numerator }}
                             heightOfBar={heightOfBar}
                             exportMode={false}
+                            barEditMode={barEditMode}
                         />
                     </Grid>
                 </Grid>

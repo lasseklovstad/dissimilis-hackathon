@@ -22,7 +22,13 @@ import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { TransposeModal } from "../CustomModal/TransposeModal.component"
 import { InputModal } from "../CustomModal/InputModal.component"
 
-export const MenuButton = (props: { voiceId: number; showName: boolean, user?: string }) => {
+export const MenuButton = (props: {
+    voiceId: number
+    showName: boolean
+    user?: string
+    setBarEditMode: () => void
+    barEditMode: boolean
+}) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(
@@ -76,7 +82,7 @@ export const MenuButton = (props: { voiceId: number; showName: boolean, user?: s
     }
 
     const handleClose = async (
-        method?: "transpose" | "export" | "delete" | "duplicate"
+        method?: "transpose" | "export" | "delete" | "duplicate" | "editBars"
     ) => {
         setAnchorEl(null)
         setDeleteSongModalIsOpen(false)
@@ -93,6 +99,9 @@ export const MenuButton = (props: { voiceId: number; showName: boolean, user?: s
                 break
             case "duplicate":
                 setDuplicateSongModalIsOpen(true)
+                break
+            case "editBars":
+                props.setBarEditMode()
                 break
             default:
                 break
@@ -143,6 +152,11 @@ export const MenuButton = (props: { voiceId: number; showName: boolean, user?: s
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("delete")}>
                         {t("MenuButton:delete")}
+                    </MenuItem>
+                    <MenuItem onClick={() => handleClose("editBars")}>
+                        {props.barEditMode
+                            ? t("MenuButton:cancelEditBars")
+                            : t("MenuButton:editBars")}
                     </MenuItem>
                     {props.showName ? (
                         <>
