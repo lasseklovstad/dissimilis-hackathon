@@ -21,7 +21,8 @@ const useStyle = makeStyles(() => ({
         borderRadius: "5px",
         padding: "3px 0px 3px 0px",
         "&.editMode": {
-            boxShadow: `0 0 0px 1.5px ${colors.gray_400}`,
+            boxShadow: `0 0 0px 2px ${colors.gray_400}`,
+            backgroundColor: colors.gray_200
         },
     },
 }))
@@ -43,7 +44,7 @@ export const Bar = (props: {
         masterSheet,
         showHouseNumber,
         bar: { chords, repAfter, repBefore, house, barId, songId, songVoiceId },
-        height = 160,
+        height,
         barEditMode,
     } = props
     const [menuPosition, setMenuPosition] = useState<

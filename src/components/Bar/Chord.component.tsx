@@ -134,9 +134,8 @@ export const Chord = (props: ChordProps) => {
             display="flex"
             flexDirection="column"
             position="relative"
-            height="calc(100% + 25px)"
+            height="100%"
             justifyContent="flex-end"
-            top="-25px"
             flexBasis="0"
             mr={0.5}
             ml={0.5}

@@ -49,7 +49,7 @@ const useStyles = makeStyles({
     },
 })
 
-const heightOfBar = 160
+const heightOfBar = 185
 
 export const SongView = () => {
     const classes = useStyles()

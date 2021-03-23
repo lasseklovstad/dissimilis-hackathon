@@ -21,6 +21,8 @@ export const RepetitionSign = (props: { display: boolean }) => {
             display="flex"
             flexDirection="column"
             justifyContent="center"
+            height="160px"
+            alignSelf="flex-end"
         >
             <Box>
                 <FiberManualRecordIcon className={classes.dot} />
