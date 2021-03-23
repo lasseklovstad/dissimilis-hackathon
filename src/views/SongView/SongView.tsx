@@ -70,6 +70,7 @@ export const SongView = () => {
     const [selectedChordPosition, setSelectedChordPosition] = useState<number>(
         0
     )
+
     const setValuesForSelectedChord = (
         chordId: number | undefined | null,
         barId: number | undefined,
@@ -92,6 +93,7 @@ export const SongView = () => {
             chordLength: 1,
             chord: "C",
             chordType: ChordType.NOTE,
+            chordNotes: ["C"],
         }
     )
     const { denominator, numerator, voices } = song
@@ -135,7 +137,8 @@ export const SongView = () => {
                 chordMenuOptions.chordType
             )
         } else {
-            dispatchChordMenuOptions({ type: "UPDATE_CHORD", chord })
+            const notes = getNotesFromChord(chord)
+            dispatchChordMenuOptions({ type: "UPDATE_CHORD", chord, chordNotes: notes as string[] })
         }
     }
 
@@ -147,10 +150,10 @@ export const SongView = () => {
     ) => {
         const notes =
             chordType === ChordType.NOTE ? [chord] : getNotesFromChord(chord)
-        const activeChord = 
+        const activeChord =
             chord === ChordType.CHORD
-            ? chordMenuOptions.chord 
-            : ""
+                ? chordMenuOptions.chord
+                : ""
         const { error, result } = await updateChord.run({
             position,
             length,
@@ -166,6 +169,7 @@ export const SongView = () => {
                     chordLength: length,
                     chord: chord,
                     chordType: chordType,
+                    chordNotes: notes as string[],
                 },
             })
             setValuesForSelectedChord(
@@ -284,9 +288,34 @@ export const SongView = () => {
                     chordLength: chordMenuOptions.chordLength,
                     chord: chord,
                     chordType: chordType,
+                    chordNotes: []
                 },
             })
         }
+    }
+
+    const handleChordTonesChange = async (clickedNote: string, checked: boolean) => {
+        if (checked && chordMenuOptions.chordNotes.length > 1)
+        {
+            const updatedChordNotes = chordMenuOptions.chordNotes.filter(note => note !== clickedNote)
+
+            const { error, result } = await updateChord.run({
+                position: selectedChordPosition,
+                length: chordMenuOptions.chordLength,
+                notes: updatedChordNotes,
+                activeChord: chordMenuOptions.chord
+            })
+
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+                dispatchChordMenuOptions({
+                    type: "UPDATE_CHORD_NOTES", 
+                    chordNotes: updatedChordNotes as string[],
+                })
+            }
+        }
+
+        
     }
 
     const handleDeleteSelectedChord = async () => {
@@ -404,6 +433,7 @@ export const SongView = () => {
                             : chords
                     }
                     clickOutsideListener={clickOutsideOfBottomBarListener}
+                    onChordTonesChange={handleChordTonesChange}
                     deleteSelectedChord={handleDeleteSelectedChord}
                 />
             )}

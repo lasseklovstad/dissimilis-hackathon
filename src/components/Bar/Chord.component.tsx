@@ -94,7 +94,7 @@ const useStyle = makeStyles(() => ({
     },
 }))
 
-const ChordText = (props: { notes: string[] }) => {
+const ChordText = (props: { activeChord: string }) => {
     return (
         <Typography
             variant="body1"
@@ -107,7 +107,7 @@ const ChordText = (props: { notes: string[] }) => {
                 color: "#555555",
             }}
         >
-            {`${getChord(props.notes)} `}
+            {`${props.activeChord} `}
         </Typography>
     )
 }
@@ -142,7 +142,7 @@ export const Chord = (props: ChordProps) => {
             minWidth={0}
         >
             {isChord && showChordLetters && (
-                <ChordText notes={chords.notes} />
+                <ChordText activeChord={chords.activeChord} />
             )}
             <ButtonBase
                 id="chordButton"

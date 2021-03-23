@@ -1,10 +1,13 @@
-import React from "react"
+import React, { useContext } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
 import {
     Box,
     Button,
+    Checkbox,
+    FormControlLabel,
+    FormGroup,
     Grid,
     Popper,
     PopperProps,
@@ -17,6 +20,8 @@ import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import { getColor, tangentToNumber } from "../../utils/bar.util"
 import { ChordType } from "../../models/IChordMenuOptions"
+import { getNotesFromChord } from "../../models/chords"
+import { SongContext } from "../../views/SongView/SongContextProvider.component"
 
 const useStyles = makeStyles({
     button: {
@@ -35,7 +40,53 @@ const useStyles = makeStyles({
             border: "0px",
         },
     },
+    root: {
+        display: "flex",
+        height: "56px",
+        justifyContent: "space-between",
+        paddingLeft: "8px",
+        paddingRight: "8px"
+    }
 })
+
+const skalaToner = [
+    "Grunntone",
+    "Ters",
+    "Kvint",
+    "Septim",
+    "non",
+    "undesim",
+]
+
+export const ChordOptionsMenu = (props: {
+    chord: string,
+    onChordTonesChange: (clickedNote: string, checked: boolean) => void
+}) => {
+    const styles = useStyles()
+    const {
+        chordMenuOptions,
+    } = useContext(SongContext)
+
+    const notes = getNotesFromChord(props.chord)
+    return (
+
+        <Box className={styles.root}>
+            <FormGroup aria-label="position" row >
+                {
+                    notes.map((note, i) => {
+                        const chordContainsNote = chordMenuOptions.chordNotes.includes(note as string)
+                        return (
+                            <FormControlLabel
+                                control={<Checkbox checked={chordContainsNote} onChange={() => props.onChordTonesChange(note as string, chordContainsNote)} />}
+                                label={skalaToner[i]}
+                            />
+                        )
+                    })
+                }
+            </FormGroup>
+        </Box>
+    )
+}
 
 export const MenuButtonWithAddIcon = (props: {
     text: string

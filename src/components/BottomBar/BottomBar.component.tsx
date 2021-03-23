@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next"
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup"
 import ToggleButton from "@material-ui/lab/ToggleButton"
 import {
+    ChordOptionsMenu,
     DropdownAutocomplete,
     MenuButtonWithAddIcon,
 } from "../BottomMenuButtons/BottomMenuButtons"
@@ -134,6 +135,7 @@ export const BottomBar = (props: {
     chordDropdownContent: string[]
     deleteSelectedChord: () => void
     clickOutsideListener: (e: any) => void
+    onChordTonesChange: (clickedNote: string, checked: boolean) => void
 }) => {
     const {
         timeSignature: { numerator, denominator },
@@ -146,10 +148,11 @@ export const BottomBar = (props: {
         chordDropdownContent,
         clickOutsideListener,
         deleteSelectedChord,
+        onChordTonesChange
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
-    const { chordMenuOptions } = useContext(SongContext)
+    const { chordMenuOptions, selectedChordId } = useContext(SongContext)
 
     const { postBar } = useAddBar(songId, voiceId)
 
@@ -214,7 +217,7 @@ export const BottomBar = (props: {
         <Grid container className={`mui-fixed ${classes.positioningContainer}`}>
             <Grid container justify="center">
                 <Grid item xs={12} sm={10} className={classes.outercontainer}>
-                    <ClickAwayListener onClickAway={clickOutsideListener}>
+                    
                         <div className={classes.container}>
                             <div className={classes.flexelement}>{Menu}</div>
                             <div className={classes.flexelement}>
@@ -246,7 +249,17 @@ export const BottomBar = (props: {
                                 </ToggleButton>
                             </StyledToggleButtonGroup>
                         </div>
-                    </ClickAwayListener>
+                    
+
+                    {
+                        chordMenuOptions.chordType === ChordType.CHORD && selectedChordId ?
+                        <ClickAwayListener onClickAway={clickOutsideListener}>
+                            <div className={classes.container}>
+                                <ChordOptionsMenu chord={chordMenuOptions.chord} onChordTonesChange={onChordTonesChange} />
+                            </div>
+                            </ClickAwayListener>
+                            : undefined
+                    }
 
                     <div className={classes.container}>
                         <MenuButtonWithAddIcon
