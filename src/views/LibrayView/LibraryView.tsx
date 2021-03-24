@@ -9,6 +9,7 @@ import {
 import { ISong } from "../../models/ISong"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
+import { useGetUser } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles({
     container: {
@@ -23,6 +24,7 @@ export const LibraryView = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const [orderTerm, setOrderTerm] = useState<"date" | "song" | "user">("date")
     const [orderDescending, setOrderDescending] = useState<boolean>(true)
+    const { userInit } = useGetUser()
 
     const { getAllSongs, allSongsFetched } = useGetAllSongs(
         orderTerm,
@@ -37,10 +39,12 @@ export const LibraryView = () => {
     )
     const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
 
+    const marginBottom = 4
+
     useEffect(() => {
         if (allSongsFetched) {
             setAllSongs(allSongsFetched)
-        } 
+        }
         if (filteredSongsFetched) {
             setFilteredSongs(filteredSongsFetched)
         }
@@ -61,8 +65,6 @@ export const LibraryView = () => {
             })
         )
     }
-
-    const marginBottom = 4
 
     const handleOnChangeSearch = (searchTermParam: string) => {
         setSearchTerm(searchTermParam)
@@ -90,7 +92,11 @@ export const LibraryView = () => {
                 <Grid container justify="center" className={styles.container}>
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
-                            <DashboardTopBar onChange={handleOnChangeSearch} />
+                            <DashboardTopBar
+                                onChange={handleOnChangeSearch}
+                                searchTerm={searchTerm}
+                                user={userInit?.email}
+                            />
                         </Box>
                     </Grid>
 

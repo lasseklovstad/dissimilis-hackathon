@@ -14,11 +14,11 @@ import {
 } from "../../utils/useApiServiceSongs"
 import { InputModal } from "../../components/CustomModal/InputModal.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
-import { Loading } from "../../components/loading/Loading.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
 import { getTimeSignatureText } from "../../utils/bar.util"
 import { ISong } from "../../models/ISong"
+import { useGetUser } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles({
     container: {
@@ -33,7 +33,7 @@ type MusicTacts = {
         denominator: number
     }
 }
-const marginBottom = 10
+const marginBottom = 4
 const musicTacts: MusicTacts[] = [
     {
         id: 1,
@@ -81,12 +81,14 @@ export const DashboardView = () => {
     const { postSong } = usePostSong()
     const history = useHistory()
     const measureText = t("DashboardView:measure")
+    const { userInit } = useGetUser()
+
     const { getRecentSongs, recentSongsFetched } = useGetRecentSongs(
         orderTerm,
         orderDescending
     )
-    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>()
-
+    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>() 
+    
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
         orderTerm,
@@ -152,11 +154,16 @@ export const DashboardView = () => {
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
                             <DashboardTopBar
-                                onGoHome={() => setDashboardView(true)}
+                                onGoHome={() => {
+                                    setSearchTerm("")
+                                    setDashboardView(true)
+                                }}
                                 onChange={(txt) => {
                                     setSearchTerm(txt)
                                     setDashboardView(false)
                                 }}
+                                searchTerm={searchTerm}
+                                user={userInit?.email}
                             />
                         </Box>
                     </Grid>
@@ -209,6 +216,7 @@ export const DashboardView = () => {
                                 cancelText={t("Modal:cancel")}
                                 headerText={t("Modal:addSong")}
                                 labelText={t("Modal:nameOfSong")}
+                                isLoading={postSong.loading}
                             />
                         </>
                     ) : (
@@ -224,7 +232,6 @@ export const DashboardView = () => {
                     )}
                 </Grid>
             </Box>
-            <Loading isLoading={postSong.loading} fullScreen />
             <ErrorDialog isError={postSong.isError} error={postSong.error} />
         </>
     )

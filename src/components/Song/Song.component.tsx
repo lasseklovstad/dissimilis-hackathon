@@ -69,7 +69,11 @@ export const Song = (props: SongProps) => {
         <>
             <Box width="100%">
                 {getBarRows(bars).map((barsInRow, i) => (
-                    <Box display="flex" mt={exportMode ? 7 : 10} key={i}>
+                    <Box
+                        display="flex"
+                        mt={exportMode ? 7 : i === 0 ? 7 : 10}
+                        key={i}
+                    >
                         <BarPrefix
                             index={barsInRow[0].position - 1}
                             timeSignature={timeSignature}

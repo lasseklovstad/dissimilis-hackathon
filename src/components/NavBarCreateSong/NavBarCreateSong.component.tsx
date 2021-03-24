@@ -4,6 +4,7 @@ import {
     Box,
     makeStyles,
     TextField,
+    Typography,
     useMediaQuery,
 } from "@material-ui/core"
 import { MenuButton } from "../MenuButton/MenuButton.component"
@@ -13,6 +14,7 @@ import { colors } from "../../utils/colors"
 const useStyles = makeStyles({
     root: {
         flexGrow: 1,
+        marginBottom: "16px",
     },
     left: {
         order: 1,
@@ -32,7 +34,7 @@ const useStyles = makeStyles({
     },
     appbar: {
         backgroundColor: "transparent",
-        marginBottom: "24px",
+        marginBottom: "16px",
     },
     textFieldInput: {
         fontSize: "30",
@@ -58,6 +60,7 @@ export const NavBarCreateSong = (props: {
     title: string
     voiceId: number
     onTitleBlur: (title: string) => void
+    user?: string
 }) => {
     const classes = useStyles()
     const matches = useMediaQuery("(max-width:600px)")
@@ -93,7 +96,12 @@ export const NavBarCreateSong = (props: {
                             fullWidth
                         />
                     </Box>
-                    <MenuButton voiceId={props.voiceId} />
+                    {!matches ? (
+                        <Box ml={4} mr={4}>
+                            <Typography>{props.user}</Typography>
+                        </Box>
+                    ) : undefined}
+                    <MenuButton voiceId={props.voiceId} showName={matches} user={props.user} />
                 </Box>
             </AppBar>
         </Box>

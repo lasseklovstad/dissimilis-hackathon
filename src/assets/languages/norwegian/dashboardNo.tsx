@@ -5,7 +5,7 @@ export const dashboardNo = {
     allSongLabel: "Alle sanger",
     libraryButton: "Bibliotek",
     measure: "takt",
-    search: "Søk",
+    search: "Søk etter sanger eller brukere",
     altButterflyButtonProp: "Bilde av Dissimilis' sommerfugl",
     updatedOn: "Sist redigert",
     open: "Åpne",

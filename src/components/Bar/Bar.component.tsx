@@ -2,13 +2,15 @@ import React, { useContext, useState } from "react"
 import { Box, useMediaQuery } from "@material-ui/core"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { House } from "./House.component"
-import { IBar, IChordAndNotes } from "../../models/IBar"
+import { IBar, IChord } from "../../models/IBar"
 import { Chord } from "./Chord.component"
 import { ChordMenu } from "./ChordMenu.component"
 import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
 import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
 import { getNotesFromChord } from "../../models/chords"
+import { getChord } from "../../utils/bar.util"
+import { ChordType } from "../../models/IChordMenuOptions"
 
 export const Bar = (props: {
     bar: IBar
@@ -25,28 +27,21 @@ export const Bar = (props: {
         onMenuClick,
         masterSheet,
         showHouseNumber,
-        bar: {
-            chordsAndNotes,
-            repAfter,
-            repBefore,
-            house,
-            barId,
-            songId,
-            songVoiceId,
-        },
+        bar: { chords, repAfter, repBefore, house, barId, songId, songVoiceId },
         height = 160,
     } = props
     const [menuPosition, setMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()
-    const xl = useMediaQuery("(min-width: 1920px)")
+    const xl = useMediaQuery("(min-width: 1080px)")
     const [rightClicked, setRightClicked] = useState<number | null>(null)
     const [positionArray, setPositionArray] = useState<number[]>([])
     const {
         dispatchSong,
-        selectedChord,
-        selectedNoteLength,
-        isNoteSelected,
+        chordMenuOptions,
+        setValuesForSelectedChord,
+        dispatchChordMenuOptions,
+        selectedChordId,
     } = useContext(SongContext)
     const { postChord } = useCreateChord(songId, songVoiceId, barId)
     const { deleteChord } = useDeleteChord(
@@ -56,12 +51,14 @@ export const Bar = (props: {
         rightClicked
     )
 
-    const handleRightClick = (noteId: number | null) => (
+    const handleRightClick = (chordId: number | null) => (
         event: React.MouseEvent
     ) => {
         event.preventDefault()
-        setMenuPosition({ top: event.clientY - 4, left: event.clientX - 2 })
-        setRightClicked(noteId)
+        if (chordId !== null) {
+            setMenuPosition({ top: event.clientY - 4, left: event.clientX - 2 })
+            setRightClicked(chordId)
+        }
     }
 
     const handleMenuSelect = async (method: "delete") => {
@@ -75,37 +72,84 @@ export const Bar = (props: {
         }
     }
 
-    const handleClick = async (position: number) => {
-        const notes = isNoteSelected
-            ? [selectedChord]
-            : getNotesFromChord(selectedChord)
-        const { error, result } = await postChord.run({
-            position: positionArray.length > 0 ? positionArray[0] : position,
-            length: selectedNoteLength,
-            notes,
-        } as IChordAndNotes)
+    const updateMenuOptions = (chord: IChord) => {
+        const chordType =
+            chord.notes.length === 1 ? ChordType.NOTE : ChordType.CHORD
+        dispatchChordMenuOptions({
+            type: "UPDATE_OPTIONS",
+            menuOptions: {
+                chordLength: chord.length,
+                chord:
+                    chordType === ChordType.NOTE
+                        ? chord.notes[0]
+                        : getChord(chord.notes),
+                chordType: chordType,
+            },
+        })
+    }
 
-        if (!error && result) {
-            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+    const handleClick = async (chord: IChord) => {
+        if (chord.notes[0] === "Z") {
+            const notes =
+                chordMenuOptions.chordType === ChordType.NOTE
+                    ? [chordMenuOptions.chord]
+                    : getNotesFromChord(chordMenuOptions.chord)
+
+            const position =
+                positionArray.length > 0 ? positionArray[0] : chord.position
+            const { error, result } = await postChord.run({
+                position,
+                length: chordMenuOptions.chordLength,
+                notes,
+            } as IChord)
+
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+                setValuesForSelectedChord(
+                    result.data.chords.find((c) => c.position === position)
+                        ?.chordId,
+                    result.data.barId,
+                    position
+                )
+            }
+        } else {
+            updateMenuOptions(chord)
+            setValuesForSelectedChord(
+                chord.chordId,
+                props.bar.barId,
+                chord.position
+            )
+        }
+    }
+
+    const handleChordFocus = (chord: IChord) => {
+        if (chord.notes[0] !== "Z") {
+            setValuesForSelectedChord(chord.chordId, barId, chord.position)
+            updateMenuOptions(chord)
+        } else {
+            setValuesForSelectedChord(undefined, undefined, chord.position)
         }
     }
 
     const onMouseEnterChord = (
-        chord: IChordAndNotes,
+        chord: IChord,
         indexOfChord: number,
-        allChords: IChordAndNotes[]
+        allChords: IChord[]
     ) => {
         if (xl && chord.notes[0] === "Z") {
             let i = 0
-            while (i <= selectedNoteLength) {
+            while (i <= chordMenuOptions.chordLength) {
                 const start = indexOfChord - i
-                const end = start + selectedNoteLength
+                const end = start + chordMenuOptions.chordLength
                 const interval = allChords.slice(start, end)
                 const isOnlyRests =
                     interval.findIndex(
                         (currentChord) => currentChord.notes[0] !== "Z"
                     ) === -1
-                if (isOnlyRests && interval.length === selectedNoteLength) {
+                if (
+                    isOnlyRests &&
+                    interval.length === chordMenuOptions.chordLength
+                ) {
                     setPositionArray(
                         interval.map((currentChord) => currentChord.position)
                     )
@@ -114,7 +158,7 @@ export const Bar = (props: {
                 i++
             }
         } else {
-            setPositionArray([])
+            setPositionArray([chord.position])
         }
     }
 
@@ -142,8 +186,8 @@ export const Bar = (props: {
                         width="100%"
                         minWidth={0}
                     >
-                        {chordsAndNotes
-                            .reduce((noter: IChordAndNotes[], note) => {
+                        {chords
+                            .reduce((noter: IChord[], note) => {
                                 if (note.notes[0] === "Z") {
                                     const numberOfRests = note.length
                                     const rests = []
@@ -152,7 +196,7 @@ export const Bar = (props: {
                                             length: 1,
                                             notes: ["Z"],
                                             position: note.position + i,
-                                            noteId: null,
+                                            chordId: null,
                                         })
                                     }
                                     return [...noter, ...rests]
@@ -175,14 +219,18 @@ export const Bar = (props: {
                                                 allChords
                                             )
                                         }
-                                        chordsAndNotes={chord}
+                                        chords={chord}
                                         highlight={highlight}
                                         key={chord.position}
                                         onContextMenu={handleRightClick(
-                                            chord.noteId
+                                            chord.chordId
                                         )}
-                                        onClick={() =>
-                                            handleClick(chord.position)
+                                        onClick={() => handleClick(chord)}
+                                        isSelected={
+                                            selectedChordId === chord.chordId
+                                        }
+                                        handleChordFocus={() =>
+                                            handleChordFocus(chord)
                                         }
                                     />
                                 )

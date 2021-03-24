@@ -1,20 +1,98 @@
 import React from "react"
-import { Box, ButtonBase, Typography, useTheme } from "@material-ui/core"
+import { Box, ButtonBase, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
-import { IChordAndNotes } from "../../models/IBar"
+import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
-import { getChord, getColor, tangentToNumber } from "../../utils/bar.util"
+import { getChord, tangentToNumber } from "../../utils/bar.util"
 
 type ChordProps = {
-    chordsAndNotes: IChordAndNotes
+    chords: IChord
     onContextMenu: (event: React.MouseEvent) => void
-    onClick: () => void
+    onClick: (event: React.MouseEvent) => void
     onMouseEnter: () => void
     onMouseLeave: () => void
     highlight: boolean
     disabled: boolean
     showChordLetters: boolean
+    isSelected: boolean
+    handleChordFocus: () => void
 }
+
+const useStyle = makeStyles(() => ({
+    buttonBase: {
+        "&:hover": {
+            filter: `brightness(80%)`,
+        },
+        "&:focus": {
+            outline: `4px solid ${colors.focus}`,
+        },
+    },
+    emptyChordContainer: {
+        "&:hover": {
+            filter: `brightness(100%)`,
+        },
+        "&:focus": {
+            outline: `4px solid ${colors.focus}`,
+        },
+    },
+    noteContainer: {
+        marginTop: "1px",
+        borderColor: "rgb(0 0 0 / 12%)",
+        borderRadius: "3px",
+        display: "flex",
+        flex: "1",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "white",
+        border: "1px solid",
+    },
+    C: {
+        backgroundColor: colors.C.main,
+    },
+    D: {
+        backgroundColor: colors.D.main,
+    },
+    E: {
+        backgroundColor: colors.E.main,
+    },
+    F: {
+        backgroundColor: colors.F.main,
+    },
+    G: {
+        backgroundColor: colors.G.main,
+    },
+    A: {
+        backgroundColor: colors.A.main,
+    },
+    H: {
+        backgroundColor: colors.H.main,
+    },
+    "C#": {
+        backgroundColor: colors.gray_500,
+    },
+    "D#": {
+        backgroundColor: colors.gray_500,
+    },
+    "F#": {
+        backgroundColor: colors.gray_500,
+    },
+    "G#": {
+        backgroundColor: colors.gray_500,
+    },
+    "A#": {
+        backgroundColor: colors.gray_500,
+    },
+    disabled: {
+        border: 0,
+    },
+    highlight: {
+        backgroundColor: colors.focus,
+        filter: `brightness(100%)`,
+    },
+    selected: {
+        outline: `4px solid ${colors.focus}`,
+    },
+}))
 
 const ChordText = (props: { notes: string[] }) => {
     return (
@@ -34,20 +112,9 @@ const ChordText = (props: { notes: string[] }) => {
     )
 }
 
-const useStyle = makeStyles(() => ({
-    buttonBase: {
-        "&:hover": {
-            outline: `4px solid ${colors.focus}`,
-        },
-        "&:focus": {
-            outline: `4px solid ${colors.focus}`,
-        },
-    },
-}))
-
 export const Chord = (props: ChordProps) => {
     const {
-        chordsAndNotes,
+        chords,
         onClick,
         onContextMenu,
         onMouseEnter,
@@ -55,23 +122,15 @@ export const Chord = (props: ChordProps) => {
         highlight,
         disabled,
         showChordLetters,
+        isSelected,
+        handleChordFocus,
     } = props
     const classes = useStyle()
-    const isChord = chordsAndNotes.notes.length > 2
-    const {
-        palette: { getContrastText },
-    } = useTheme()
-
-    const getBackgroundColor = (note: string) => {
-        if (highlight && note === "Z") {
-            return colors.focus
-        }
-        return getColor(note)
-    }
+    const isChord = chords.notes.length > 2
 
     return (
         <Box
-            flexGrow={chordsAndNotes.length}
+            flexGrow={chords.length}
             display="flex"
             flexDirection="column"
             position="relative"
@@ -83,15 +142,20 @@ export const Chord = (props: ChordProps) => {
             minWidth={0}
         >
             {isChord && showChordLetters && (
-                <ChordText notes={chordsAndNotes.notes} />
+                <ChordText notes={chords.notes} />
             )}
             <ButtonBase
+                id="chordButton"
                 disabled={disabled}
                 onClick={onClick}
                 onContextMenu={onContextMenu}
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
-                className={classes.buttonBase}
+                className={`${
+                    chords.notes[0] === "Z"
+                        ? classes.emptyChordContainer
+                        : classes.buttonBase
+                } ${isSelected ? classes.selected : ""}`}
                 focusVisibleClassName={classes.buttonBase}
                 style={{
                     display: "flex",
@@ -101,30 +165,24 @@ export const Chord = (props: ChordProps) => {
                     minWidth: 0,
                     alignItems: "stretch",
                 }}
+                onFocus={handleChordFocus}
             >
-                {chordsAndNotes.notes
+                {chords.notes
                     .map((note, i) => {
-                        const text = tangentToNumber(note)
-                        const bgcolor = getBackgroundColor(note)
-                        const color = bgcolor
-                            ? getContrastText(bgcolor)
-                            : "#000000"
                         return (
-                            <Box
+                            <div
+                                id="singleChord"
+                                className={`${classes.noteContainer} ${
+                                    (classes as any)[note]
+                                } ${disabled ? "disabled" : ""} ${
+                                    note === "Z" && highlight
+                                        ? classes.highlight
+                                        : ""
+                                }`}
                                 key={note + i}
-                                bgcolor={bgcolor}
-                                color={color}
-                                mt="1px"
-                                borderColor="divider"
-                                borderRadius={3}
-                                border={disabled ? 0 : 1}
-                                display="flex"
-                                flex={1}
-                                justifyContent="center"
-                                alignItems="center"
                             >
-                                {text}
-                            </Box>
+                                {tangentToNumber(note)}
+                            </div>
                         )
                     })
                     .reverse()}
