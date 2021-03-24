@@ -9,7 +9,6 @@ import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
 import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
 import { getNotesFromChord } from "../../models/chords"
-import { getChord } from "../../utils/bar.util"
 import { ChordType } from "../../models/IChordMenuOptions"
 
 export const Bar = (props: {
@@ -101,7 +100,7 @@ export const Bar = (props: {
 
             const activeChord = chordMenuOptions.chordType === ChordType.CHORD 
                 ? chordMenuOptions.chord
-                : ""
+                : null
              
             const { error, result } = await postChord.run({
                 position,

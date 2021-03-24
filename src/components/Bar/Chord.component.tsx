@@ -126,7 +126,6 @@ export const Chord = (props: ChordProps) => {
         handleChordFocus,
     } = props
     const classes = useStyle()
-    const isChord = chords.activeChord ? true : false
 
     return (
         <Box
@@ -141,7 +140,7 @@ export const Chord = (props: ChordProps) => {
             mr={1}
             minWidth={0}
         >
-            {isChord && showChordLetters && (
+            {chords.activeChord && showChordLetters && (
                 <ChordText activeChord={chords.activeChord} />
             )}
             <ButtonBase

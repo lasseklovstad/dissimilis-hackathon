@@ -58,26 +58,37 @@ const skalaToner = [
     "undesim",
 ]
 
-export const ChordOptionsMenu = (props: {
+export const ChordOptions = (props: {
     chord: string,
-    onChordTonesChange: (clickedNote: string, checked: boolean) => void
+    onChordNotesChange: (clickedNote: string, checked: boolean) => void
 }) => {
     const styles = useStyles()
     const {
         chordMenuOptions,
     } = useContext(SongContext)
+    if (chordMenuOptions.chordType === ChordType.NOTE)
+        return (
+            <></>
+        )
 
-    const notes = getNotesFromChord(props.chord)
+    const allNotes = getNotesFromChord(props.chord)
     return (
 
-        <Box className={styles.root}>
-            <FormGroup aria-label="position" row >
+        <Box id="chordOptionsContainer" className={styles.root}>
+            <FormGroup id="chordOptions" row >
                 {
-                    notes.map((note, i) => {
+                    allNotes.map((note, i) => {
                         const chordContainsNote = chordMenuOptions.chordNotes.includes(note as string)
                         return (
                             <FormControlLabel
-                                control={<Checkbox checked={chordContainsNote} onChange={() => props.onChordTonesChange(note as string, chordContainsNote)} />}
+                                control={
+                                    <Checkbox
+                                        id={skalaToner[i]}
+                                        checked={chordContainsNote}
+                                        disabled={chordContainsNote && chordMenuOptions.chordNotes.length === 1}
+                                        onClick={() => props.onChordNotesChange(note as string, chordContainsNote)}
+                                        color="default"
+                                    />}
                                 label={skalaToner[i]}
                             />
                         )
