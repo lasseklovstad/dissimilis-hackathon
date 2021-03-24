@@ -21,8 +21,11 @@ const useStyle = makeStyles(() => ({
         borderRadius: "5px",
         padding: "3px 0px 3px 0px",
         "&.editMode": {
-            boxShadow: `0 0 0px 2px ${colors.gray_400}`,
-            backgroundColor: colors.gray_200
+            boxShadow: `0 0 0px 4px ${colors.gray_400}`,
+            backgroundColor: colors.gray_200,
+            "&:hover": {
+                boxShadow: `0 0 0px 4px ${colors.focus}`,
+            },
         },
     },
 }))
@@ -106,7 +109,7 @@ export const Bar = (props: {
         })
     }
 
-    const handleClick = async (chord: IChord) => {
+    const handleChordClick = async (chord: IChord) => {
         if (chord.notes[0] === "Z") {
             const notes =
                 chordMenuOptions.chordType === ChordType.NOTE
@@ -193,6 +196,7 @@ export const Bar = (props: {
                 justifyContent="flex-start"
                 width="100%"
                 minWidth={0}
+                m="2px"
             >
                 <House houseOrder={house} showHouseNumber={showHouseNumber} />
 
@@ -234,8 +238,11 @@ export const Bar = (props: {
                                     <Chord
                                         showChordLetters={showChordLetters}
                                         disabled={exportMode}
-                                        onMouseLeave={onMouseLeaveChord}
+                                        onMouseLeave={() =>
+                                            !barEditMode && onMouseLeaveChord
+                                        }
                                         onMouseEnter={() =>
+                                            !barEditMode &&
                                             onMouseEnterChord(
                                                 chord,
                                                 i,
@@ -248,13 +255,18 @@ export const Bar = (props: {
                                         onContextMenu={handleRightClick(
                                             chord.chordId
                                         )}
-                                        onClick={() => handleClick(chord)}
+                                        onClick={() =>
+                                            !barEditMode &&
+                                            handleChordClick(chord)
+                                        }
                                         isSelected={
                                             selectedChordId === chord.chordId
                                         }
                                         handleChordFocus={() =>
+                                            !barEditMode &&
                                             handleChordFocus(chord)
                                         }
+                                        barEditMode={barEditMode}
                                     />
                                 )
                             })}

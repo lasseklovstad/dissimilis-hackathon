@@ -16,6 +16,7 @@ type ChordProps = {
     showChordLetters: boolean
     isSelected: boolean
     handleChordFocus: () => void
+    barEditMode: boolean
 }
 
 const useStyle = makeStyles(() => ({
@@ -124,6 +125,7 @@ export const Chord = (props: ChordProps) => {
         showChordLetters,
         isSelected,
         handleChordFocus,
+        barEditMode,
     } = props
     const classes = useStyle()
     const isChord = chords.notes.length > 2
@@ -149,8 +151,11 @@ export const Chord = (props: ChordProps) => {
                 onContextMenu={onContextMenu}
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
+                disableRipple={barEditMode}
                 className={`${
-                    chords.notes[0] === "Z"
+                    barEditMode
+                        ? ""
+                        : chords.notes[0] === "Z"
                         ? classes.emptyChordContainer
                         : classes.buttonBase
                 } ${isSelected ? classes.selected : ""}`}
