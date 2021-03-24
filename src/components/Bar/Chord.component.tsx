@@ -3,7 +3,7 @@ import { Box, ButtonBase, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
-import { getChord, tangentToNumber } from "../../utils/bar.util"
+import { tangentToNumber } from "../../utils/bar.util"
 
 type ChordProps = {
     chords: IChord
@@ -126,7 +126,7 @@ export const Chord = (props: ChordProps) => {
         handleChordFocus,
     } = props
     const classes = useStyle()
-    const isChord = chords.notes.length > 2
+    const isChord = chords.activeChord ? true : false
 
     return (
         <Box

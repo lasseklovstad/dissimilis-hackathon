@@ -313,9 +313,41 @@ export const SongView = () => {
                     chordNotes: updatedChordNotes as string[],
                 })
             }
+            return
         }
+        if(!checked) {
+            const activeChordNotes = getNotesFromChord(chordMenuOptions.chord)
+            let activeChordIndex = 0
+            let insertIndex = 0
 
-        
+            while(activeChordIndex < activeChordNotes.length) {
+                if(activeChordNotes[activeChordIndex] === clickedNote) {
+                    break
+                }
+                if(activeChordNotes[activeChordIndex] === chordMenuOptions.chordNotes[insertIndex]) {
+                    insertIndex++
+                }
+                activeChordIndex++
+            }
+
+            let updatedChordNotes = [...chordMenuOptions.chordNotes]
+            updatedChordNotes.splice(insertIndex, 0, clickedNote)
+
+            const { error, result } = await updateChord.run({
+                position: selectedChordPosition,
+                length: chordMenuOptions.chordLength,
+                notes: updatedChordNotes,
+                activeChord: chordMenuOptions.chord
+            })
+
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+                dispatchChordMenuOptions({
+                    type: "UPDATE_CHORD_NOTES", 
+                    chordNotes: updatedChordNotes as string[],
+                })
+            }
+        }        
     }
 
     const handleDeleteSelectedChord = async () => {
