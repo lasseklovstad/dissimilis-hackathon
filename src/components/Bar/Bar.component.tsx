@@ -98,10 +98,10 @@ export const Bar = (props: {
             const position =
                 positionArray.length > 0 ? positionArray[0] : chord.position
 
-            const activeChord = chordMenuOptions.chordType === ChordType.CHORD 
+            const activeChord = chordMenuOptions.chordType === ChordType.CHORD
                 ? chordMenuOptions.chord
                 : null
-             
+
             const { error, result } = await postChord.run({
                 position,
                 length: chordMenuOptions.chordLength,

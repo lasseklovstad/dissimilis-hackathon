@@ -12,4 +12,10 @@ export const bottombarEn = {
     quarterNote: "Quarter note",
     eighthNote: "Eighth note",
     open: "Open",
+    keynote: "keynote",
+    third: "third",
+    fifth: "fifth",
+    seventh: "seventh",
+    ninth: "ninth",
+    eleventh: "undesim",
 }

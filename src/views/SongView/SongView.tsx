@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react"
+import React, { MutableRefObject, useEffect, useReducer, useRef, useState } from "react"
 import { Grid, makeStyles, Slide, useScrollTrigger } from "@material-ui/core"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -20,7 +20,7 @@ import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { SongContext, songReducer } from "./SongContextProvider.component"
 import { IVoice } from "../../models/IVoice"
-import { chords, getNotesFromChord, notes } from "../../models/chords"
+import { chords, getNotesFromChord, notes, toneNames } from "../../models/chords"
 import { IBar, IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { ChordType } from "../../models/IChordMenuOptions"
@@ -70,6 +70,7 @@ export const SongView = () => {
     const [selectedChordPosition, setSelectedChordPosition] = useState<number>(
         0
     )
+    const chordOptionsRef = useRef() as MutableRefObject<HTMLAnchorElement>
 
     const setValuesForSelectedChord = (
         chordId: number | undefined | null,
@@ -115,19 +116,9 @@ export const SongView = () => {
         selectedChordId
     )
 
-    const skalaToner = [
-        "Grunntone",
-        "Ters",
-        "Kvint",
-        "Septim",
-        "non",
-        "undesim",
-    ]
     const clickOutsideOfBottomBarListener = (e: any) => {
-        if (e.target.id !== "chordButton" && e.target.id !== "singleChord" 
-            && !skalaToner.includes(e.target.id) && e.target.id !== "chordOptions" 
-            && e.target.id !== "chordOptionsContainer" && e.target.id !== "label") 
-        {
+        if (e.target.id !== "chordButton" && e.target.id !== "singleChord"
+            && chordOptionsRef.current && !chordOptionsRef.current.contains(e.target)) {
             setValuesForSelectedChord(undefined, undefined, 0)
         }
     }
@@ -157,14 +148,17 @@ export const SongView = () => {
         chord: string,
         length: number,
         position: number,
-        chordType: ChordType
+        chordType: ChordType,
+        chordNotes?: string[],
     ) => {
         const notes =
-            chordType === ChordType.NOTE ? [chord] : getNotesFromChord(chord)
+            chordNotes ? chordNotes
+                : chordType === ChordType.NOTE ? [chord] : getNotesFromChord(chord)
         const activeChord =
             chordType === ChordType.CHORD
-                ? chordMenuOptions.chord
+                ? chord
                 : null
+
         const { error, result } = await updateChord.run({
             position,
             length,
@@ -279,11 +273,11 @@ export const SongView = () => {
     const handleNoteSelectedChange = (chordType: ChordType) => {
         let chord
         if (chordType === ChordType.NOTE) {
-            chord = chordMenuOptions.chord
-        } else {
             chord = chordMenuOptions.chord.includes("#")
                 ? chordMenuOptions.chord.substring(0, 2)
                 : chordMenuOptions.chord.charAt(0)
+        } else {
+            chord = chordMenuOptions.chord
         }
         if (selectedChordId && selectedVoiceId) {
             makeChordUpdate(
@@ -308,39 +302,27 @@ export const SongView = () => {
         }
     }
 
-    const updateChordNotes = async (updatedChordNotes: string[]) => {
-        const { error, result } = await updateChord.run({
-            position: selectedChordPosition,
-            length: chordMenuOptions.chordLength,
-            notes: updatedChordNotes,
-            activeChord: chordMenuOptions.chord
-        })
-
-        if (!error && result) {
-            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-            dispatchChordMenuOptions({
-                type: "UPDATE_CHORD_NOTES", 
-                chordNotes: updatedChordNotes as string[],
-            })
-        }
-    }
-
     const handleChordNotesChange = (clickedNote: string, checked: boolean) => {
-        if (checked && chordMenuOptions.chordNotes.length > 1)
-        {
+        if (!checked && chordMenuOptions.chordNotes.length > 1) {
             const updatedChordNotes = chordMenuOptions.chordNotes.filter(note => note !== clickedNote)
-            updateChordNotes(updatedChordNotes)
+            makeChordUpdate(
+                chordMenuOptions.chord,
+                chordMenuOptions.chordLength,
+                selectedChordPosition,
+                ChordType.CHORD,
+                updatedChordNotes,
+            )
         }
-        if(!checked) {
+        if (checked) {
             const activeChordNotes = getNotesFromChord(chordMenuOptions.chord)
             let activeChordIndex = 0
             let insertIndex = 0
 
-            while(activeChordIndex < activeChordNotes.length) {
-                if(activeChordNotes[activeChordIndex] === clickedNote) {
+            while (activeChordIndex < activeChordNotes.length) {
+                if (activeChordNotes[activeChordIndex] === clickedNote) {
                     break
                 }
-                if(activeChordNotes[activeChordIndex] === chordMenuOptions.chordNotes[insertIndex]) {
+                if (activeChordNotes[activeChordIndex] === chordMenuOptions.chordNotes[insertIndex]) {
                     insertIndex++
                 }
                 activeChordIndex++
@@ -349,8 +331,14 @@ export const SongView = () => {
             let updatedChordNotes = [...chordMenuOptions.chordNotes]
             updatedChordNotes.splice(insertIndex, 0, clickedNote)
 
-            updateChordNotes(updatedChordNotes)
-        }        
+            makeChordUpdate(
+                chordMenuOptions.chord,
+                chordMenuOptions.chordLength,
+                selectedChordPosition,
+                ChordType.CHORD,
+                updatedChordNotes,
+            )
+        }
     }
 
     const handleDeleteSelectedChord = async () => {
@@ -470,6 +458,7 @@ export const SongView = () => {
                     clickOutsideListener={clickOutsideOfBottomBarListener}
                     onChordNotesChange={handleChordNotesChange}
                     deleteSelectedChord={handleDeleteSelectedChord}
+                    chordOptionsRef={chordOptionsRef}
                 />
             )}
         </SongContext.Provider>

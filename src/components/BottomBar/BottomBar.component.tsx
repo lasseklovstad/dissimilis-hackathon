@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { RefObject, useContext } from "react"
 import {
     Button,
     ClickAwayListener,
@@ -6,6 +6,7 @@ import {
     Grid,
     makeStyles,
     MenuItem,
+    RootRef,
     Select,
     Typography,
     withStyles,
@@ -136,6 +137,7 @@ export const BottomBar = (props: {
     deleteSelectedChord: () => void
     clickOutsideListener: (e: any) => void
     onChordNotesChange: (clickedNote: string, checked: boolean) => void
+    chordOptionsRef: RefObject<any>
 }) => {
     const {
         timeSignature: { numerator, denominator },
@@ -148,7 +150,8 @@ export const BottomBar = (props: {
         chordDropdownContent,
         clickOutsideListener,
         deleteSelectedChord,
-        onChordNotesChange
+        onChordNotesChange,
+        chordOptionsRef
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
@@ -218,7 +221,6 @@ export const BottomBar = (props: {
             <Grid container justify="center">
                 <Grid item xs={12} sm={10} className={classes.outercontainer}>
                     <ClickAwayListener onClickAway={clickOutsideListener}>
-
                         <div className={classes.container}>
                             <div className={classes.flexelement}>{Menu}</div>
                             <div className={classes.flexelement}>
@@ -252,12 +254,13 @@ export const BottomBar = (props: {
                         </div>
                     </ClickAwayListener>
 
-
                     {
                         chordMenuOptions.chordType === ChordType.CHORD && selectedChordId ?
-                            <div className={classes.container}>
-                                <ChordOptions chord={chordMenuOptions.chord} onChordNotesChange={onChordNotesChange} />
-                            </div>
+                            <RootRef rootRef={chordOptionsRef}>
+                                <div className={classes.container}>
+                                    <ChordOptions chord={chordMenuOptions.chord} onChordNotesChange={onChordNotesChange} />
+                                </div>
+                            </RootRef>
                             : undefined
                     }
                     <div className={classes.container}>

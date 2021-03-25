@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import { getColor, tangentToNumber } from "../../utils/bar.util"
 import { ChordType } from "../../models/IChordMenuOptions"
-import { getNotesFromChord } from "../../models/chords"
+import { getNotesFromChord, toneNames } from "../../models/chords"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
 
 const useStyles = makeStyles({
@@ -49,14 +49,6 @@ const useStyles = makeStyles({
     }
 })
 
-const skalaToner = [
-    "Grunntone",
-    "Ters",
-    "Kvint",
-    "Septim",
-    "non",
-    "undesim",
-]
 
 export const ChordOptions = (props: {
     chord: string,
@@ -66,10 +58,17 @@ export const ChordOptions = (props: {
     const {
         chordMenuOptions,
     } = useContext(SongContext)
+    const { t } = useTranslation()
+
+    const handleChange = (event: any) => {
+        props.onChordNotesChange(event.target.name, event.target.checked)
+    }
+
     if (chordMenuOptions.chordType === ChordType.NOTE)
         return (
             <></>
         )
+
 
     const allNotes = getNotesFromChord(props.chord)
     return (
@@ -81,15 +80,17 @@ export const ChordOptions = (props: {
                         const chordContainsNote = chordMenuOptions.chordNotes.includes(note as string)
                         return (
                             <FormControlLabel
+                                key={i}
                                 control={
                                     <Checkbox
-                                        id={skalaToner[i]}
-                                        checked={chordContainsNote}
-                                        disabled={chordContainsNote && chordMenuOptions.chordNotes.length === 1}
-                                        onClick={() => props.onChordNotesChange(note as string, chordContainsNote)}
+                                        id={toneNames[i]}
                                         color="default"
+                                        disabled={chordContainsNote && chordMenuOptions.chordNotes.length === 1}
+                                        checked={chordContainsNote}
+                                        onChange={handleChange}
+                                        name={note as string}
                                     />}
-                                label={skalaToner[i]}
+                                label={t(`BottomBar:${toneNames[i]}`)}
                             />
                         )
                     })
