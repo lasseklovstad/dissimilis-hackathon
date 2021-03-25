@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { getChord, tangentToNumber } from "../../utils/bar.util"
+import { isNumericLiteral } from "typescript"
 
 type ChordProps = {
     chords: IChord
@@ -171,6 +172,7 @@ export const Chord = (props: ChordProps) => {
             >
                 {chords.notes
                     .map((note, i) => {
+                        const tangent = tangentToNumber(note)
                         return (
                             <div
                                 id="singleChord"
@@ -183,7 +185,7 @@ export const Chord = (props: ChordProps) => {
                                 }`}
                                 key={note + i}
                             >
-                                {showNoteLetters? tangentToNumber(note) : undefined}
+                                {showNoteLetters || Number(tangent)? tangent : undefined}
                             </div>
                         )
                     })
