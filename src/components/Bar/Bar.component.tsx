@@ -73,7 +73,7 @@ export const Bar = (props: {
 
     const updateMenuOptions = (chord: IChord) => {
         const chordType =
-            chord.notes.length === 1 && !chord.activeChord ? ChordType.NOTE : ChordType.CHORD
+            !chord.activeChord ? ChordType.NOTE : ChordType.CHORD
         dispatchChordMenuOptions({
             type: "UPDATE_OPTIONS",
             menuOptions: {
