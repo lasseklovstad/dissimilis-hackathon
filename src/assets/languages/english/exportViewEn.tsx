@@ -7,5 +7,5 @@ export const exportViewEn = {
     chordLetters: "Chord letters",
     showChordLetters: "Yes",
     hideChordLetters: "No",
-    noteLetters: "Note value",
+    noteLetters: "Note name",
 }
