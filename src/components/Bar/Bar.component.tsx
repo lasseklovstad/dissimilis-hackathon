@@ -112,6 +112,7 @@ export const Bar = (props: {
 
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+                dispatchChordMenuOptions({ type: "UPDATE_CHORD_NOTES", chordNotes: notes as string[] })
                 setValuesForSelectedChord(
                     result.data.chords.find((c) => c.position === position)
                         ?.chordId,

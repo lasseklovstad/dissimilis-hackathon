@@ -118,7 +118,8 @@ export const SongView = () => {
 
     const clickOutsideOfBottomBarListener = (e: any) => {
         if (e.target.id !== "chordButton" && e.target.id !== "singleChord"
-            && chordOptionsRef.current && !chordOptionsRef.current.contains(e.target)) {
+            && ((chordOptionsRef.current && !chordOptionsRef.current.contains(e.target)) 
+            || !chordOptionsRef.current)) {
             setValuesForSelectedChord(undefined, undefined, 0)
         }
     }
