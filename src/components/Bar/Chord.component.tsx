@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { getChord, tangentToNumber } from "../../utils/bar.util"
-import { isNumericLiteral } from "typescript"
 
 type ChordProps = {
     chords: IChord
