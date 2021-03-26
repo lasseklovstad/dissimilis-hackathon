@@ -415,7 +415,6 @@ export const SongView = () => {
             const { error, result } = await postCopyBars.run(body)
 
             if (!error && result) {
-                setBarsClipboard(undefined)
                 dispatchSong({ type: "UPDATE_SONG", song: result.data })
             }
         }
