@@ -14,6 +14,7 @@ type ChordProps = {
     highlight: boolean
     exportMode: boolean
     showChordLetters: boolean
+    showNoteLetters: boolean
     isSelected: boolean
     handleChordFocus: () => void
 }
@@ -125,6 +126,7 @@ export const Chord = (props: ChordProps) => {
         highlight,
         exportMode,
         showChordLetters,
+        showNoteLetters,
         isSelected,
         handleChordFocus,
     } = props
@@ -185,7 +187,7 @@ export const Chord = (props: ChordProps) => {
                                 } ${Number(tangent) && exportMode ? classes.exportNumberSize : undefined}`}
                                 key={note + i}
                             >
-                                {tangentToNumber(note)}
+                                {showNoteLetters || Number(tangent)? tangent : undefined}
                             </div>
                         )
                     })

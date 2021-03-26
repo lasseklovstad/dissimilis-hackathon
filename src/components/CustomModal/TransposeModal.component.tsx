@@ -16,7 +16,6 @@ import {
 
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
-import { theme } from "../../theme"
 
 const useStyles = makeStyles({
     modal: {

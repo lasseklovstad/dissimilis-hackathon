@@ -125,6 +125,7 @@ const CustomSwitch = withStyles({
 
 export const ExportView = () => {
     const [showChordLetters, setShowChordLetters] = useState(true)
+    const [showNoteLetters, setShowNoteLetters] = useState(true)
     const [selectedBarConfig, setSelectedBarConfig] = useState(barsConfig[2])
     const [
         selectedRowsPerSheetConfig,
@@ -200,6 +201,9 @@ export const ExportView = () => {
                                                 exportMode
                                                 showChordLetters={
                                                     showChordLetters
+                                                }
+                                                showNoteLetters={
+                                                    showNoteLetters
                                                 }
                                                 voice={{
                                                     ...selectedVoice,
@@ -380,6 +384,46 @@ export const ExportView = () => {
                                         onChange={() =>
                                             setShowChordLetters(
                                                 !showChordLetters
+                                            )
+                                        }
+                                    />
+                                }
+                            />
+                        </FormGroup>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={2}
+                        md={1}
+                        className={`${classes.box} ${classes.flexCenter}`}
+                        style={{
+                            order: 4,
+                        }}
+                    >
+                        <FormGroup
+                            className={`${classes.formControl} ${classes.flexStart}`}
+                        >
+                            <Typography className={classes.chordLetters}>
+                                {t("ExportView:noteLetters")}
+                            </Typography>
+                            <FormControlLabel
+                                label={
+                                    showNoteLetters
+                                        ? t("ExportView:showChordLetters")
+                                        : t("ExportView:hideChordLetters")
+                                }
+                                className={classes.flexStart}
+                                style={{
+                                    margin: 0,
+                                    fontSize: "10px",
+                                }}
+                                control={
+                                    <CustomSwitch
+                                        size="small"
+                                        checked={showNoteLetters}
+                                        onChange={() =>
+                                            setShowNoteLetters(
+                                                !showNoteLetters
                                             )
                                         }
                                     />
