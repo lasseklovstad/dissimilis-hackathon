@@ -9,6 +9,7 @@ import { Song } from "../../components/Song/Song.component"
 import { useVoice } from "../../utils/useVoice"
 import { ISong } from "../../models/ISong"
 import {
+    useCopyBars,
     useDeleteChord,
     useGetSong,
     useUpdateChord,
@@ -71,6 +72,21 @@ export const SongView = () => {
         0
     )
     const [barEditMode, setBarEditMode] = useState(false)
+    const [selectedBars, setSelectedBars] = useState<
+        | {
+              fromPosition: number
+              toPosition: number
+          }
+        | undefined
+    >(undefined)
+    const [barsClipboard, setBarsClipboard] = useState<
+        | {
+              fromPosition: number
+              toPosition: number
+          }
+        | undefined
+    >(undefined)
+    const { postCopyBars } = useCopyBars(songId)
     const setValuesForSelectedChord = (
         chordId: number | undefined | null,
         barId: number | undefined,
@@ -329,8 +345,63 @@ export const SongView = () => {
         return <LoadingLogo />
     }
 
-    const updateBarEditMode = () => {
-        setBarEditMode(!barEditMode)
+    const barClicked = (bar: IBar) => {
+        if (!selectedBars) {
+            setSelectedBars({
+                fromPosition: bar.position,
+                toPosition: bar.position,
+            })
+        } else {
+            if (bar.position > selectedBars.fromPosition) {
+                setSelectedBars({
+                    fromPosition: selectedBars.fromPosition,
+                    toPosition: bar.position,
+                })
+            } else if (selectedBars.fromPosition === bar.position) {
+                setSelectedBars(undefined)
+            } else {
+                setSelectedBars({
+                    fromPosition: bar.position,
+                    toPosition: bar.position,
+                })
+            }
+        }
+    }
+
+    const copySelectedBars = () => {
+        setBarsClipboard(selectedBars)
+        setSelectedBars(undefined)
+    }
+
+    const pasteBars = async (type: "pasteBefore" | "pasteAfter", bar: IBar) => {
+        if (barsClipboard) {
+            let body
+            if (type === "pasteBefore") {
+                body = {
+                    fromPosition: barsClipboard.fromPosition,
+                    copyLength:
+                        barsClipboard.toPosition -
+                        barsClipboard.fromPosition +
+                        1,
+                    toPosition: bar.position,
+                }
+            } else {
+                body = {
+                    fromPosition: barsClipboard.fromPosition,
+                    copyLength:
+                        barsClipboard.toPosition -
+                        barsClipboard.fromPosition +
+                        1,
+                    toPosition: bar.position + 1,
+                }
+            }
+            setBarsClipboard(undefined)
+            const { error, result } = await postCopyBars.run(body)
+
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_SONG", song: result.data })
+            }
+        }
     }
 
     return (
@@ -341,6 +412,13 @@ export const SongView = () => {
                 chordMenuOptions,
                 setValuesForSelectedChord,
                 selectedChordId,
+                editBars: {
+                    barEditMode: barEditMode,
+                    barClicked: barClicked,
+                    copyBars: copySelectedBars,
+                    barsClipboard: barsClipboard,
+                    selectedBars: selectedBars,
+                },
             }}
         >
             <ErrorDialog
@@ -359,7 +437,11 @@ export const SongView = () => {
                                     onTitleBlur={handleTitleBlur}
                                     voiceId={selectedVoiceId}
                                     user={userInit?.email}
-                                    setBarEditMode={updateBarEditMode}
+                                    setBarEditMode={() => {
+                                        setBarEditMode(!barEditMode)
+                                        setSelectedBars(undefined)
+                                        setBarsClipboard(undefined)
+                                    }}
                                     barEditMode={barEditMode}
                                 />
                             </Grid>
@@ -382,7 +464,7 @@ export const SongView = () => {
                             timeSignature={{ denominator, numerator }}
                             heightOfBar={heightOfBar}
                             exportMode={false}
-                            barEditMode={barEditMode}
+                            pasteBars={pasteBars}
                         />
                     </Grid>
                 </Grid>

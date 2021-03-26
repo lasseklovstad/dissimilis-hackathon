@@ -18,7 +18,7 @@ type SongProps = {
     heightOfBar: number
     exportMode?: boolean
     showChordLetters?: boolean
-    barEditMode?: boolean
+    pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
@@ -47,7 +47,6 @@ export const Song = (props: SongProps) => {
         heightOfBar,
         exportMode,
         showChordLetters,
-        barEditMode,
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
@@ -112,11 +111,7 @@ export const Song = (props: SongProps) => {
                                             onMenuClick={openMenu(bar)}
                                             bar={bar}
                                             height={heightOfBar}
-                                            barEditMode={
-                                                barEditMode !== undefined
-                                                    ? barEditMode
-                                                    : false
-                                            }
+                                            pasteBars={props.pasteBars}
                                         />
                                         <BarLine />
                                     </React.Fragment>

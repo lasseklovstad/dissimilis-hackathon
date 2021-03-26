@@ -22,17 +22,15 @@ export const ChordMenu = (props: ChordMenuProps) => {
     }, [position])
 
     return (
-        <>
-            <Menu
-                open={open}
-                onClose={() => setOpen(false)}
-                anchorReference="anchorPosition"
-                anchorPosition={position}
-            >
-                <MenuItem tabIndex={-1} onClick={handleClose("delete")}>
-                    Slett
-                </MenuItem>
-            </Menu>
-        </>
+        <Menu
+            open={open}
+            onClose={() => setOpen(false)}
+            anchorReference="anchorPosition"
+            anchorPosition={position}
+        >
+            <MenuItem tabIndex={-1} onClick={handleClose("delete")}>
+                Slett
+            </MenuItem>
+        </Menu>
     )
 }
