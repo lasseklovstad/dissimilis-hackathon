@@ -175,8 +175,7 @@ export const ExportView = () => {
                             <Grid container>
                                 <Grid item xs={12}>
                                     <Typography
-                                        style={{ textAlign: "center" }}
-                                        variant="h1"
+                                        style={{ textAlign: "center", fontSize: "1.75rem" }}
                                     >
                                         {songInit?.title}
                                     </Typography>
@@ -184,7 +183,9 @@ export const ExportView = () => {
                                         style={{ textAlign: "center" }}
                                         variant="body1"
                                     >
-                                        {selectedVoice?.title}
+                                        {selectedVoice?.title
+                                        ? t("CreateSongTab:song")
+                                        : selectedVoice?.title}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12}>

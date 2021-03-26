@@ -12,7 +12,7 @@ type ChordProps = {
     onMouseEnter: () => void
     onMouseLeave: () => void
     highlight: boolean
-    disabled: boolean
+    exportMode: boolean
     showChordLetters: boolean
     isSelected: boolean
     handleChordFocus: () => void
@@ -34,6 +34,9 @@ const useStyle = makeStyles(() => ({
         "&:focus": {
             outline: `4px solid ${colors.focus}`,
         },
+    },
+    exportNumberSize: {
+        fontSize: "1.25rem"
     },
     noteContainer: {
         marginTop: "1px",
@@ -120,7 +123,7 @@ export const Chord = (props: ChordProps) => {
         onMouseEnter,
         onMouseLeave,
         highlight,
-        disabled,
+        exportMode,
         showChordLetters,
         isSelected,
         handleChordFocus,
@@ -146,7 +149,7 @@ export const Chord = (props: ChordProps) => {
             )}
             <ButtonBase
                 id="chordButton"
-                disabled={disabled}
+                disabled={exportMode}
                 onClick={onClick}
                 onContextMenu={onContextMenu}
                 onMouseEnter={onMouseEnter}
@@ -169,16 +172,17 @@ export const Chord = (props: ChordProps) => {
             >
                 {chords.notes
                     .map((note, i) => {
+                        const tangent = tangentToNumber(note)
                         return (
                             <div
                                 id="singleChord"
                                 className={`${classes.noteContainer} ${
                                     (classes as any)[note]
-                                } ${disabled ? "disabled" : ""} ${
+                                } ${exportMode ? "disabled" : ""} ${
                                     note === "Z" && highlight
                                         ? classes.highlight
                                         : ""
-                                }`}
+                                } ${Number(tangent) && exportMode ? classes.exportNumberSize : undefined}`}
                                 key={note + i}
                             >
                                 {tangentToNumber(note)}

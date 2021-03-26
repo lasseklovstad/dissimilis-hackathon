@@ -210,7 +210,7 @@ export const Bar = (props: {
                                 return (
                                     <Chord
                                         showChordLetters={showChordLetters}
-                                        disabled={exportMode}
+                                        exportMode={exportMode}
                                         onMouseLeave={onMouseLeaveChord}
                                         onMouseEnter={() =>
                                             onMouseEnterChord(
