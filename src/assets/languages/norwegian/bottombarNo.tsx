@@ -16,6 +16,6 @@ export const bottombarNo = {
     third: "Ters",
     fifth: "Kvint",
     seventh: "Septim",
-    ninth: "non",
-    eleventh: "undesim",
+    ninth: "Non",
+    eleventh: "Undesim",
 }
