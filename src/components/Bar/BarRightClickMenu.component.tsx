@@ -76,7 +76,7 @@ const BarRightClickMenu = (props: {
                 id="menuItem"
                 disabled={props.selectedBars === undefined}
                 tabIndex={-1}
-                onClick={handleClose("deleteBars")}
+                onClick={handleClose("delete")}
             >
                 {t("ChordMenu:deleteBars")}
             </MenuItem>

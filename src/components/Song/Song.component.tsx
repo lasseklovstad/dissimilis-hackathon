@@ -19,6 +19,7 @@ type SongProps = {
     exportMode?: boolean
     showChordLetters?: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
+    deleteBars?: () => void
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
@@ -112,6 +113,7 @@ export const Song = (props: SongProps) => {
                                             bar={bar}
                                             height={heightOfBar}
                                             pasteBars={props.pasteBars}
+                                            deleteBars={props.deleteBars}
                                         />
                                         <BarLine />
                                     </React.Fragment>

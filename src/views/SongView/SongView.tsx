@@ -10,6 +10,7 @@ import { useVoice } from "../../utils/useVoice"
 import { ISong } from "../../models/ISong"
 import {
     useCopyBars,
+    useDeleteBars,
     useDeleteChord,
     useGetSong,
     useUpdateChord,
@@ -87,6 +88,7 @@ export const SongView = () => {
         | undefined
     >(undefined)
     const { postCopyBars } = useCopyBars(songId)
+    const { postDeleteBars } = useDeleteBars(songId)
     const setValuesForSelectedChord = (
         chordId: number | undefined | null,
         barId: number | undefined,
@@ -373,6 +375,21 @@ export const SongView = () => {
         setSelectedBars(undefined)
     }
 
+    const deleteBars = async () => {
+        if (selectedBars) {
+            const { error, result } = await postDeleteBars.run({
+                fromPosition: selectedBars.fromPosition,
+                deleteLength:
+                    selectedBars.toPosition - selectedBars.fromPosition + 1,
+            })
+
+            if (!error && result) {
+                setSelectedBars(undefined)
+                dispatchSong({ type: "UPDATE_SONG", song: result.data })
+            }
+        }
+    }
+
     const pasteBars = async (type: "pasteBefore" | "pasteAfter", bar: IBar) => {
         if (barsClipboard) {
             let body
@@ -395,10 +412,10 @@ export const SongView = () => {
                     toPosition: bar.position + 1,
                 }
             }
-            setBarsClipboard(undefined)
             const { error, result } = await postCopyBars.run(body)
 
             if (!error && result) {
+                setBarsClipboard(undefined)
                 dispatchSong({ type: "UPDATE_SONG", song: result.data })
             }
         }
@@ -465,6 +482,7 @@ export const SongView = () => {
                             heightOfBar={heightOfBar}
                             exportMode={false}
                             pasteBars={pasteBars}
+                            deleteBars={deleteBars}
                         />
                     </Grid>
                 </Grid>

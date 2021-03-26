@@ -44,6 +44,7 @@ export const Bar = (props: {
     masterSheet: boolean
     showHouseNumber: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
+    deleteBars?: () => void
 }) => {
     const {
         exportMode,
@@ -121,6 +122,8 @@ export const Bar = (props: {
             props.pasteBars && props.pasteBars("pasteBefore", props.bar)
         } else if (method === "pasteAfter") {
             props.pasteBars && props.pasteBars("pasteAfter", props.bar)
+        } else if (method === "delete") {
+            props.deleteBars && props.deleteBars()
         }
     }
 

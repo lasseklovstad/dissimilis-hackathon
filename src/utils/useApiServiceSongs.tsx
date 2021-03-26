@@ -264,6 +264,22 @@ export const useCopyBars = (songId: string) => {
     }
 }
 
+export const useDeleteBars = (songId: string) => {
+    const url = `song/${songId}/deleteBars`
+    const headers = getHeaders()
+
+    const api = useApiService<ISong>(url, {
+        headers,
+    })
+    return {
+        postDeleteBars: {
+            run: (body: { fromPosition: number; deleteLength: number }) =>
+                api.postData(body),
+            ...api.state,
+        },
+    }
+}
+
 export const useDeleteChord = (
     songId: number,
     voiceId: number,
