@@ -18,6 +18,8 @@ import { modalEn } from "./assets/languages/english/modalEn"
 import { modalNo } from "./assets/languages/norwegian/modalNo"
 import { generalNo } from "./assets/languages/norwegian/generalNo"
 import { generalEn } from "./assets/languages/english/generalEn"
+import { chordMenuEn } from "./assets/languages/english/chordMenuEn"
+import { chordMenuNo } from "./assets/languages/norwegian/chordMenuNo"
 
 const resources: Resource = {
     en: {
@@ -30,6 +32,7 @@ const resources: Resource = {
         ExportView: exportViewEn,
         Modal: modalEn,
         General: generalEn,
+        ChordMenu: chordMenuEn,
     },
     no: {
         DashboardView: dashboardNo,
@@ -41,6 +44,7 @@ const resources: Resource = {
         ExportView: exportViewNo,
         Modal: modalNo,
         General: generalNo,
+        ChordMenu: chordMenuNo,
     },
 }
 

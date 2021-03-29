@@ -56,11 +56,13 @@ const useStyles = makeStyles({
     },
 })
 
-export const NavBarCreateSong = (props: {
+export const SongNavBar = (props: {
     title: string
     voiceId: number
     onTitleBlur: (title: string) => void
     user?: string
+    setBarEditMode: () => void
+    barEditMode: boolean
 }) => {
     const classes = useStyles()
     const matches = useMediaQuery("(max-width:600px)")
@@ -101,7 +103,13 @@ export const NavBarCreateSong = (props: {
                             <Typography>{props.user}</Typography>
                         </Box>
                     ) : undefined}
-                    <MenuButton voiceId={props.voiceId} showName={matches} user={props.user} />
+                    <MenuButton
+                        voiceId={props.voiceId}
+                        showName={matches}
+                        user={props.user}
+                        setBarEditMode={props.setBarEditMode}
+                        barEditMode={props.barEditMode}
+                    />
                 </Box>
             </AppBar>
         </Box>

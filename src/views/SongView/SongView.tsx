@@ -8,7 +8,6 @@ import React, {
 import { Grid, makeStyles, Slide, useScrollTrigger } from "@material-ui/core"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { NavBarCreateSong } from "../../components/NavBarCreateSong/NavBarCreateSong.component"
 import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.component"
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
 import { useBarsPerRow } from "../../utils/useBarsPerRow"
@@ -16,6 +15,8 @@ import { Song } from "../../components/Song/Song.component"
 import { useVoice } from "../../utils/useVoice"
 import { ISong } from "../../models/ISong"
 import {
+    useCopyBars,
+    useDeleteBars,
     useDeleteChord,
     useGetSong,
     useUpdateChord,
@@ -31,6 +32,7 @@ import { IBar, IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { chordMenuReducer } from "./ChordMenuOptions.component"
+import { SongNavBar } from "../../components/SongNavBar/SongNavBar.component"
 
 const useStyles = makeStyles({
     root: {
@@ -55,7 +57,7 @@ const useStyles = makeStyles({
     },
 })
 
-const heightOfBar = 160
+const heightOfBar = 185
 
 export const SongView = () => {
     const classes = useStyles()
@@ -78,6 +80,23 @@ export const SongView = () => {
     )
     const chordOptionsRef = useRef() as MutableRefObject<HTMLAnchorElement>
 
+    const [barEditMode, setBarEditMode] = useState(false)
+    const [selectedBars, setSelectedBars] = useState<
+        | {
+              fromPosition: number
+              toPosition: number
+          }
+        | undefined
+    >(undefined)
+    const [barsClipboard, setBarsClipboard] = useState<
+        | {
+              fromPosition: number
+              toPosition: number
+          }
+        | undefined
+    >(undefined)
+    const { postCopyBars } = useCopyBars(songId)
+    const { postDeleteBars } = useDeleteBars(songId)
     const setValuesForSelectedChord = (
         chordId: number | undefined | null,
         barId: number | undefined,
@@ -406,6 +425,79 @@ export const SongView = () => {
         return <LoadingLogo />
     }
 
+    const barClicked = (bar: IBar) => {
+        if (!selectedBars) {
+            setSelectedBars({
+                fromPosition: bar.position,
+                toPosition: bar.position,
+            })
+        } else {
+            if (bar.position > selectedBars.fromPosition) {
+                setSelectedBars({
+                    fromPosition: selectedBars.fromPosition,
+                    toPosition: bar.position,
+                })
+            } else if (selectedBars.fromPosition === bar.position) {
+                setSelectedBars(undefined)
+            } else {
+                setSelectedBars({
+                    fromPosition: bar.position,
+                    toPosition: bar.position,
+                })
+            }
+        }
+    }
+
+    const copySelectedBars = () => {
+        setBarsClipboard(selectedBars)
+        setSelectedBars(undefined)
+    }
+
+    const deleteBars = async () => {
+        if (selectedBars) {
+            const { error, result } = await postDeleteBars.run({
+                fromPosition: selectedBars.fromPosition,
+                deleteLength:
+                    selectedBars.toPosition - selectedBars.fromPosition + 1,
+            })
+
+            if (!error && result) {
+                setSelectedBars(undefined)
+                dispatchSong({ type: "UPDATE_SONG", song: result.data })
+            }
+        }
+    }
+
+    const pasteBars = async (type: "pasteBefore" | "pasteAfter", bar: IBar) => {
+        if (barsClipboard) {
+            let body
+            if (type === "pasteBefore") {
+                body = {
+                    fromPosition: barsClipboard.fromPosition,
+                    copyLength:
+                        barsClipboard.toPosition -
+                        barsClipboard.fromPosition +
+                        1,
+                    toPosition: bar.position,
+                }
+            } else {
+                body = {
+                    fromPosition: barsClipboard.fromPosition,
+                    copyLength:
+                        barsClipboard.toPosition -
+                        barsClipboard.fromPosition +
+                        1,
+                    toPosition: bar.position + 1,
+                }
+            }
+            const { error, result } = await postCopyBars.run(body)
+
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_SONG", song: result.data })
+            }
+        }
+    }
+
     return (
         <SongContext.Provider
             value={{
@@ -414,6 +506,13 @@ export const SongView = () => {
                 chordMenuOptions,
                 setValuesForSelectedChord,
                 selectedChordId,
+                editBars: {
+                    barEditMode: barEditMode,
+                    barClicked: barClicked,
+                    copyBars: copySelectedBars,
+                    barsClipboard: barsClipboard,
+                    selectedBars: selectedBars,
+                },
             }}
         >
             <ErrorDialog
@@ -427,11 +526,17 @@ export const SongView = () => {
                     <Slide appear={false} direction="down" in={!trigger}>
                         <Grid container className={classes.header}>
                             <Grid item xs={12}>
-                                <NavBarCreateSong
+                                <SongNavBar
                                     title={song.title}
                                     onTitleBlur={handleTitleBlur}
                                     voiceId={selectedVoiceId}
                                     user={userInit?.email}
+                                    setBarEditMode={() => {
+                                        setBarEditMode(!barEditMode)
+                                        setSelectedBars(undefined)
+                                        setBarsClipboard(undefined)
+                                    }}
+                                    barEditMode={barEditMode}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -453,6 +558,8 @@ export const SongView = () => {
                             timeSignature={{ denominator, numerator }}
                             heightOfBar={heightOfBar}
                             exportMode={false}
+                            pasteBars={pasteBars}
+                            deleteBars={deleteBars}
                         />
                     </Grid>
                 </Grid>

@@ -14,8 +14,10 @@ type ChordProps = {
     highlight: boolean
     disabled: boolean
     showChordLetters: boolean
+    showNoteLetters: boolean
     isSelected: boolean
     handleChordFocus: () => void
+    barEditMode: boolean
 }
 
 const useStyle = makeStyles(() => ({
@@ -122,8 +124,10 @@ export const Chord = (props: ChordProps) => {
         highlight,
         disabled,
         showChordLetters,
+        showNoteLetters,
         isSelected,
         handleChordFocus,
+        barEditMode,
     } = props
     const classes = useStyle()
 
@@ -133,11 +137,11 @@ export const Chord = (props: ChordProps) => {
             display="flex"
             flexDirection="column"
             position="relative"
-            height="calc(100% + 25px)"
+            height="100%"
             justifyContent="flex-end"
-            top="-25px"
             flexBasis="0"
-            mr={1}
+            mr={0.5}
+            ml={0.5}
             minWidth={0}
         >
             {chords.activeChord && showChordLetters && (
@@ -150,8 +154,11 @@ export const Chord = (props: ChordProps) => {
                 onContextMenu={onContextMenu}
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
+                disableRipple={barEditMode}
                 className={`${
-                    chords.notes[0] === "Z"
+                    barEditMode
+                        ? ""
+                        : chords.notes[0] === "Z"
                         ? classes.emptyChordContainer
                         : classes.buttonBase
                 } ${isSelected ? classes.selected : ""}`}
@@ -168,6 +175,7 @@ export const Chord = (props: ChordProps) => {
             >
                 {chords.notes
                     .map((note, i) => {
+                        const tangent = tangentToNumber(note)
                         return (
                             <div
                                 id="singleChord"
@@ -180,7 +188,7 @@ export const Chord = (props: ChordProps) => {
                                 }`}
                                 key={note + i}
                             >
-                                {tangentToNumber(note)}
+                                {showNoteLetters || Number(tangent)? tangent : undefined}
                             </div>
                         )
                     })
