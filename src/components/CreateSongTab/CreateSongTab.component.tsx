@@ -37,6 +37,15 @@ const useStyles = makeStyles({
         "&:hover": {
             backgroundColor: colors.gray_200,
         },
+        "&:focus": {
+            boxShadow: `0 0 0 4px ${colors.focus}`,
+        },
+    },
+
+    iconRoot: {
+        "&:focus": {
+            boxShadow: `0 0 0 4px ${colors.focus}`,
+        },
     },
 
     selected: {
@@ -182,6 +191,7 @@ export const CreateSongTab = (props: {
                                 key={voice.songVoiceId}
                                 value={voice.songVoiceId}
                                 label={label}
+                                disableFocusRipple
                                 onClick={() =>
                                     history.push(`?voice=${voice.songVoiceId}`)
                                 }
@@ -203,6 +213,8 @@ export const CreateSongTab = (props: {
                     aria-haspopup="true"
                     aria-label="tab options"
                     onClick={handleMenuClick}
+                    classes={{ root: classes.iconRoot }}
+                    disableFocusRipple
                 >
                     <MoreVertIcon />
                 </IconButton>
@@ -216,10 +228,12 @@ export const CreateSongTab = (props: {
                 onClose={() => handleClose()}
                 role="menu"
             >
-                <MenuItem onClick={() => {
+                <MenuItem
+                    onClick={() => {
                         setNewInstrumentModalIsOpen(true)
                         setAnchorEl(null)
-                    }}>
+                    }}
+                >
                     {t("CreateSongTab:newInstrument")}
                 </MenuItem>
                 <MenuItem
