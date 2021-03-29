@@ -11,8 +11,7 @@ const getArrangerId = () => {
 const getHeaders = () => {
     const apiKey = sessionStorage.getItem("apiKey") || ""
     const userId = sessionStorage.getItem("userId") || ""
-    const headers = { "X-API-Key": apiKey, "X-User-ID": userId }
-    return headers
+    return { "X-API-Key": apiKey, "X-User-ID": userId }
 }
 
 /**
@@ -91,7 +90,11 @@ export const useGetAllSongs = (orderTerm: string, orderDescending: boolean) => {
  * Get songs from database based on title or part of title
  * @param query title or part of title
  */
-export const useGetFilteredSongs = (title: string, orderTerm: string, orderDescending: boolean) => {
+export const useGetFilteredSongs = (
+    title: string,
+    orderTerm: string,
+    orderDescending: boolean
+) => {
     const url = "song/search"
     const initialData: ISong[] = []
     const headers = getHeaders()
@@ -119,7 +122,10 @@ export const useGetFilteredSongs = (title: string, orderTerm: string, orderDesce
 /**
  * Get songs based on recent songs
  * */
-export const useGetRecentSongs = (orderTerm: string, orderDescending: boolean) => {
+export const useGetRecentSongs = (
+    orderTerm: string,
+    orderDescending: boolean
+) => {
     const url = "song/search"
     const body = {
         num: "5",
@@ -129,11 +135,14 @@ export const useGetRecentSongs = (orderTerm: string, orderDescending: boolean) =
     }
     const initialData: ISong[] = []
     const headers = getHeaders()
-    const { postSearchWithArrangerId, state, data } = useApiService<ISong[]>(url, {
-        body,
-        initialData,
-        headers,
-    })
+    const { postSearchWithArrangerId, state, data } = useApiService<ISong[]>(
+        url,
+        {
+            body,
+            initialData,
+            headers,
+        }
+    )
 
     useEffect(() => {
         postSearchWithArrangerId(body)
@@ -236,6 +245,41 @@ export const useCreateChord = (
     }
 }
 
+export const useCopyBars = (songId: string) => {
+    const url = `song/${songId}/copyBars`
+    const headers = getHeaders()
+
+    const api = useApiService<ISong>(url, {
+        headers,
+    })
+    return {
+        postCopyBars: {
+            run: (body: {
+                fromPosition: number
+                copyLength: number
+                toPosition: number
+            }) => api.postData(body),
+            ...api.state,
+        },
+    }
+}
+
+export const useDeleteBars = (songId: string) => {
+    const url = `song/${songId}/deleteBars`
+    const headers = getHeaders()
+
+    const api = useApiService<ISong>(url, {
+        headers,
+    })
+    return {
+        postDeleteBars: {
+            run: (body: { fromPosition: number; deleteLength: number }) =>
+                api.postData(body),
+            ...api.state,
+        },
+    }
+}
+
 export const useDeleteChord = (
     songId: number,
     voiceId: number,
@@ -254,15 +298,15 @@ export const useDeleteChord = (
 export const useUpdateChord = (
     songId: string,
     voiceId: number | undefined,
-    barId: number | undefined, 
+    barId: number | undefined,
     noteId: number | undefined | null
 ) => {
     const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${noteId}`
     const headers = getHeaders()
-    const api = useApiService<IBar>(url, {headers})
+    const api = useApiService<IBar>(url, { headers })
 
     return {
-        updateChord: {run: api.putData, ...api.state},
+        updateChord: { run: api.putData, ...api.state },
     }
 }
 

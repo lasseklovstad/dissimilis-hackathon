@@ -7,8 +7,12 @@ export const TimeSignature = (props: { timeSignature: ITimeSignature }) => {
     return (
         <Typography variant="body1" component="div">
             <Box fontWeight="fontWeightBold" width="30px">
-                <Box>{props.timeSignature.numerator}</Box>
-                <Box>{props.timeSignature.denominator}</Box>
+                <Box lineHeight={1} height={24}>
+                    {props.timeSignature.numerator}
+                </Box>
+                <Box lineHeight={1} height={24}>
+                    {props.timeSignature.denominator}
+                </Box>
             </Box>
         </Typography>
     )

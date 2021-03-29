@@ -111,6 +111,23 @@ interface ISongContext {
         position: number
     ) => void
     selectedChordId: number | undefined | null
+    editBars: {
+        barEditMode: boolean
+        barClicked: (bar: IBar) => void
+        copyBars: () => void
+        barsClipboard:
+            | {
+                  fromPosition: number
+                  toPosition: number
+              }
+            | undefined
+        selectedBars:
+            | {
+                  fromPosition: number
+                  toPosition: number
+              }
+            | undefined
+    }
 }
 
 export const SongContext = React.createContext<ISongContext>({
@@ -129,4 +146,15 @@ export const SongContext = React.createContext<ISongContext>({
         throw new Error("dispatchChordMenuOptions is not implemented")
     },
     selectedChordId: undefined,
+    editBars: {
+        barEditMode: false,
+        barClicked: () => {
+            throw new Error("barClicked is not implemented")
+        },
+        copyBars: () => {
+            throw new Error("barClicked is not implemented")
+        },
+        barsClipboard: undefined,
+        selectedBars: undefined,
+    },
 })

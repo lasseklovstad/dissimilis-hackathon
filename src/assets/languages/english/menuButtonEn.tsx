@@ -6,4 +6,6 @@ export const menuButtonEn = {
     hide: "Hide bar numbers",
     save: "Save",
     delete: "Delete song",
+    editBars: "Edit bars",
+    cancelEditBars: "Stop editing bars",
 }
