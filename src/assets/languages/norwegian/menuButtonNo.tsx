@@ -6,4 +6,6 @@ export const menuButtonNo = {
     hide: "Skjul nummerering av takt",
     save: "Lagre",
     delete: "Slett sang",
+    editBars: "Rediger takter",
+    cancelEditBars: "Avslutt redigering av takter",
 }
