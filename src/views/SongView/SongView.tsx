@@ -1,4 +1,10 @@
-import React, { MutableRefObject, useEffect, useReducer, useRef, useState } from "react"
+import React, {
+    MutableRefObject,
+    useEffect,
+    useReducer,
+    useRef,
+    useState,
+} from "react"
 import { Grid, makeStyles, Slide, useScrollTrigger } from "@material-ui/core"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -117,9 +123,13 @@ export const SongView = () => {
     )
 
     const clickOutsideOfBottomBarListener = (e: any) => {
-        if (e.target.id !== "chordButton" && e.target.id !== "singleChord"
-            && ((chordOptionsRef.current && !chordOptionsRef.current.contains(e.target)) 
-            || !chordOptionsRef.current)) {
+        if (
+            e.target.id !== "chordButton" &&
+            e.target.id !== "singleChord" &&
+            ((chordOptionsRef.current &&
+                !chordOptionsRef.current.contains(e.target)) ||
+                !chordOptionsRef.current)
+        ) {
             setValuesForSelectedChord(undefined, undefined, 0)
         }
     }
@@ -141,7 +151,11 @@ export const SongView = () => {
             )
         } else {
             const notes = getNotesFromChord(chord)
-            dispatchChordMenuOptions({ type: "UPDATE_CHORD", chord, chordNotes: notes as string[] })
+            dispatchChordMenuOptions({
+                type: "UPDATE_CHORD",
+                chord,
+                chordNotes: notes as string[],
+            })
         }
     }
 
@@ -150,21 +164,20 @@ export const SongView = () => {
         length: number,
         position: number,
         chordType: ChordType,
-        chordNotes?: string[],
+        chordNotes?: string[]
     ) => {
-        const notes =
-            chordNotes ? chordNotes
-                : chordType === ChordType.NOTE ? [chord] : getNotesFromChord(chord)
-        const activeChord =
-            chordType === ChordType.CHORD
-                ? chord
-                : null
+        const notes = chordNotes
+            ? chordNotes
+            : chordType === ChordType.NOTE
+            ? [chord]
+            : getNotesFromChord(chord)
+        const activeChord = chordType === ChordType.CHORD ? chord : null
 
         const { error, result } = await updateChord.run({
             position,
             length,
             notes,
-            activeChord
+            activeChord,
         })
 
         if (!error && result) {
@@ -226,7 +239,7 @@ export const SongView = () => {
                         notes: ["Z"],
                         position: note.position + i,
                         chordId: null,
-                        activeChord: ""
+                        activeChord: "",
                     })
                 }
                 return [...noter, ...rests]
@@ -288,16 +301,17 @@ export const SongView = () => {
                 chordType
             )
         } else {
-            const notes = chordType === ChordType.CHORD
-                ? getNotesFromChord(chord)
-                : [chord]
+            const notes =
+                chordType === ChordType.CHORD
+                    ? getNotesFromChord(chord)
+                    : [chord]
             dispatchChordMenuOptions({
                 type: "UPDATE_OPTIONS",
                 menuOptions: {
                     chordLength: chordMenuOptions.chordLength,
                     chord: chord,
                     chordType: chordType,
-                    chordNotes: notes as string[]
+                    chordNotes: notes as string[],
                 },
             })
         }
@@ -305,13 +319,15 @@ export const SongView = () => {
 
     const handleChordNotesChange = (clickedNote: string, checked: boolean) => {
         if (!checked && chordMenuOptions.chordNotes.length > 1) {
-            const updatedChordNotes = chordMenuOptions.chordNotes.filter(note => note !== clickedNote)
+            const updatedChordNotes = chordMenuOptions.chordNotes.filter(
+                (note) => note !== clickedNote
+            )
             makeChordUpdate(
                 chordMenuOptions.chord,
                 chordMenuOptions.chordLength,
                 selectedChordPosition,
                 ChordType.CHORD,
-                updatedChordNotes,
+                updatedChordNotes
             )
         }
         if (checked) {
@@ -323,7 +339,10 @@ export const SongView = () => {
                 if (activeChordNotes[activeChordIndex] === clickedNote) {
                     break
                 }
-                if (activeChordNotes[activeChordIndex] === chordMenuOptions.chordNotes[insertIndex]) {
+                if (
+                    activeChordNotes[activeChordIndex] ===
+                    chordMenuOptions.chordNotes[insertIndex]
+                ) {
                     insertIndex++
                 }
                 activeChordIndex++
@@ -337,7 +356,7 @@ export const SongView = () => {
                 chordMenuOptions.chordLength,
                 selectedChordPosition,
                 ChordType.CHORD,
-                updatedChordNotes,
+                updatedChordNotes
             )
         }
     }

@@ -42,59 +42,57 @@ const useStyles = makeStyles({
     },
     root: {
         display: "flex",
-        height: "56px",
         justifyContent: "space-between",
-        paddingLeft: "8px",
-        paddingRight: "8px"
-    }
+        padding: "7px 8px",
+        height: "auto",
+    },
 })
 
-
 export const ChordOptions = (props: {
-    chord: string,
+    chord: string
     onChordNotesChange: (clickedNote: string, checked: boolean) => void
 }) => {
     const styles = useStyles()
-    const {
-        chordMenuOptions,
-    } = useContext(SongContext)
+    const { chordMenuOptions } = useContext(SongContext)
     const { t } = useTranslation()
 
-    const handleChange = (event: any) => {
-        props.onChordNotesChange(event.target.name, event.target.checked)
+    if (chordMenuOptions.chordType === ChordType.NOTE) {
+        return <></>
     }
-
-    if (chordMenuOptions.chordType === ChordType.NOTE)
-        return (
-            <></>
-        )
-
 
     const allNotes = getNotesFromChord(props.chord)
     return (
-
         <Box id="chordOptionsContainer" className={styles.root}>
-            <FormGroup id="chordOptions" row >
-                {
-                    allNotes.map((note, i) => {
-                        const chordContainsNote = chordMenuOptions.chordNotes.includes(note as string)
-                        return (
-                            <FormControlLabel
-                                key={i}
-                                control={
-                                    <Checkbox
-                                        id={toneNames[i]}
-                                        color="default"
-                                        disabled={chordContainsNote && chordMenuOptions.chordNotes.length === 1}
-                                        checked={chordContainsNote}
-                                        onChange={handleChange}
-                                        name={note as string}
-                                    />}
-                                label={t(`BottomBar:${toneNames[i]}`)}
-                            />
-                        )
-                    })
-                }
+            <FormGroup id="chordOptions" row>
+                {allNotes.map((note, i) => {
+                    const chordContainsNote = chordMenuOptions.chordNotes.includes(
+                        note as string
+                    )
+                    return (
+                        <FormControlLabel
+                            key={i}
+                            control={
+                                <Checkbox
+                                    id={toneNames[i]}
+                                    color="default"
+                                    disabled={
+                                        chordContainsNote &&
+                                        chordMenuOptions.chordNotes.length === 1
+                                    }
+                                    checked={chordContainsNote}
+                                    onChange={(e) =>
+                                        props.onChordNotesChange(
+                                            e.target.name,
+                                            e.target.checked
+                                        )
+                                    }
+                                    name={note as string}
+                                />
+                            }
+                            label={t(`BottomBar:${toneNames[i]}`)}
+                        />
+                    )
+                })}
             </FormGroup>
         </Box>
     )

@@ -47,13 +47,13 @@ export const songReducer = (song: ISong, action: SongAction) => {
                 voices: song.voices.map((voice) => {
                     return voice.songVoiceId === action.bar.songVoiceId
                         ? {
-                            ...voice,
-                            bars: voice.bars.map((bar) => {
-                                return bar.barId === action.bar.barId
-                                    ? action.bar
-                                    : bar
-                            }),
-                        }
+                              ...voice,
+                              bars: voice.bars.map((bar) => {
+                                  return bar.barId === action.bar.barId
+                                      ? action.bar
+                                      : bar
+                              }),
+                          }
                         : voice
                 }),
             }
@@ -121,7 +121,7 @@ export const SongContext = React.createContext<ISongContext>({
         chordLength: 1,
         chord: "C",
         chordType: ChordType.NOTE,
-        chordNotes: ["C"]
+        chordNotes: ["C"],
     },
     setValuesForSelectedChord: () => {
         throw new Error("setValuesForSelectedChord is not implemented")

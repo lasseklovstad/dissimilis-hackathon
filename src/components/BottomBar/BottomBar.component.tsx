@@ -151,7 +151,7 @@ export const BottomBar = (props: {
         clickOutsideListener,
         deleteSelectedChord,
         onChordNotesChange,
-        chordOptionsRef
+        chordOptionsRef,
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
@@ -225,7 +225,9 @@ export const BottomBar = (props: {
                             <div className={classes.flexelement}>{Menu}</div>
                             <div className={classes.flexelement}>
                                 <DropdownAutocomplete
-                                    selectedChordType={chordMenuOptions.chordType}
+                                    selectedChordType={
+                                        chordMenuOptions.chordType
+                                    }
                                     selectedChord={chordMenuOptions.chord}
                                     onChordChange={onChordChange}
                                     icon={<MusicNoteIcon fontSize="small" />}
@@ -254,15 +256,17 @@ export const BottomBar = (props: {
                         </div>
                     </ClickAwayListener>
 
-                    {
-                        chordMenuOptions.chordType === ChordType.CHORD && selectedChordId ?
-                            <RootRef rootRef={chordOptionsRef}>
-                                <div className={classes.container}>
-                                    <ChordOptions chord={chordMenuOptions.chord} onChordNotesChange={onChordNotesChange} />
-                                </div>
-                            </RootRef>
-                            : undefined
-                    }
+                    {chordMenuOptions.chordType === ChordType.CHORD &&
+                    selectedChordId ? (
+                        <RootRef rootRef={chordOptionsRef}>
+                            <div className={classes.container}>
+                                <ChordOptions
+                                    chord={chordMenuOptions.chord}
+                                    onChordNotesChange={onChordNotesChange}
+                                />
+                            </div>
+                        </RootRef>
+                    ) : undefined}
                     <div className={classes.container}>
                         <MenuButtonWithAddIcon
                             text={t("BottomBar:addBar")}

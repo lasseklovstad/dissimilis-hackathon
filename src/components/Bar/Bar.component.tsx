@@ -72,8 +72,7 @@ export const Bar = (props: {
     }
 
     const updateMenuOptions = (chord: IChord) => {
-        const chordType =
-            !chord.activeChord ? ChordType.NOTE : ChordType.CHORD
+        const chordType = !chord.activeChord ? ChordType.NOTE : ChordType.CHORD
         dispatchChordMenuOptions({
             type: "UPDATE_OPTIONS",
             menuOptions: {
@@ -98,21 +97,24 @@ export const Bar = (props: {
             const position =
                 positionArray.length > 0 ? positionArray[0] : chord.position
 
-            const activeChord = chordMenuOptions.chordType === ChordType.CHORD
-                ? chordMenuOptions.chord
-                : null
+            const activeChord =
+                chordMenuOptions.chordType === ChordType.CHORD
+                    ? chordMenuOptions.chord
+                    : null
 
             const { error, result } = await postChord.run({
                 position,
                 length: chordMenuOptions.chordLength,
                 notes,
-                activeChord
-
+                activeChord,
             } as IChord)
 
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-                dispatchChordMenuOptions({ type: "UPDATE_CHORD_NOTES", chordNotes: notes as string[] })
+                dispatchChordMenuOptions({
+                    type: "UPDATE_CHORD_NOTES",
+                    chordNotes: notes as string[],
+                })
                 setValuesForSelectedChord(
                     result.data.chords.find((c) => c.position === position)
                         ?.chordId,
