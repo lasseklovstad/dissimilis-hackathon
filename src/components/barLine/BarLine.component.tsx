@@ -7,8 +7,8 @@ export const BarLine = () => {
             minWidth="2px"
             width="2px"
             bgcolor="black"
-            mr={0.5}
-            ml={0.5}
+            mr={1.5}
+            ml={1.5}
             height="calc(100% - 17px)"
         />
     )
