@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import { getColor, tangentToNumber } from "../../utils/bar.util"
 import { ChordType } from "../../models/IChordMenuOptions"
+import classes from "*.module.css"
 
 const useStyles = makeStyles({
     button: {
@@ -35,6 +36,9 @@ const useStyles = makeStyles({
             border: "0px",
         },
     },
+    icon: {
+        right: 7,
+    }
 })
 
 export const MenuButtonWithAddIcon = (props: {
@@ -103,6 +107,7 @@ export const DropdownAutocomplete = (props: {
             PopperComponent={customPopperPlacement}
             closeIcon={false}
             className={styles.dropdown}
+            classes={{popupIndicator: styles.icon}}
             noOptionsText={props.noOptionsText}
             renderInput={(params) => (
                 <TextField

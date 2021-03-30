@@ -72,7 +72,7 @@ const useStyles = makeStyles({
     },
 
     input: {
-        padding: "18px 10px 10px 10px",
+        padding: "18px 10px 10px 18px",
         height: "28px",
     },
     removeDefaultStyling: {
@@ -80,6 +80,9 @@ const useStyles = makeStyles({
             border: "0",
         },
     },
+    selectIcon: {
+        right: 14
+    }
 })
 
 const StyledToggleButtonGroup = withStyles((theme) => ({
@@ -181,6 +184,7 @@ export const BottomBar = (props: {
                 value={chordMenuOptions.chordLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
+                classes={{icon: classes.selectIcon}}
                 MenuProps={{ disablePortal: true }}
             >
                 {noteLengths.map(({ length, Icon }) => {
