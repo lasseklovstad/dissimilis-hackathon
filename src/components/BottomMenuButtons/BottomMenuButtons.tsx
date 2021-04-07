@@ -17,7 +17,6 @@ import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import { getColor, tangentToNumber } from "../../utils/bar.util"
 import { ChordType } from "../../models/IChordMenuOptions"
-import classes from "*.module.css"
 
 const useStyles = makeStyles({
     button: {
@@ -39,11 +38,6 @@ const useStyles = makeStyles({
     icon: {
         right: 7,
     },
-    focusElement: {
-        "&:focus": {
-            boxShadow: `0 0 0 4px ${colors.focus}`,
-        },
-    }
 })
 
 export const MenuButtonWithAddIcon = (props: {
