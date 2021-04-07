@@ -12,7 +12,7 @@ type ChordProps = {
     onMouseEnter: () => void
     onMouseLeave: () => void
     highlight: boolean
-    disabled: boolean
+    exportMode: boolean
     showChordLetters: boolean
     showNoteLetters: boolean
     isSelected: boolean
@@ -38,6 +38,9 @@ const useStyle = makeStyles(() => ({
         "&:focus": {
             boxShadow: `0 0 0 4px ${colors.focus}`,
         },
+    },
+    exportNumberSize: {
+        fontSize: "1.25rem"
     },
     noteContainer: {
         marginTop: "1px",
@@ -124,7 +127,7 @@ export const Chord = (props: ChordProps) => {
         onMouseEnter,
         onMouseLeave,
         highlight,
-        disabled,
+        exportMode,
         showChordLetters,
         showNoteLetters,
         isSelected,
@@ -150,7 +153,7 @@ export const Chord = (props: ChordProps) => {
             {isChord && showChordLetters && <ChordText notes={chords.notes} />}
             <ButtonBase
                 id="chordButton"
-                disabled={disabled}
+                disabled={exportMode}
                 onClick={onClick}
                 onContextMenu={onContextMenu}
                 onMouseEnter={onMouseEnter}
@@ -182,11 +185,11 @@ export const Chord = (props: ChordProps) => {
                                 id="singleChord"
                                 className={`${classes.noteContainer} ${
                                     (classes as any)[note]
-                                } ${disabled ? "disabled" : ""} ${
+                                } ${exportMode ? "disabled" : ""} ${
                                     note === "Z" && highlight
                                         ? classes.highlight
                                         : ""
-                                }`}
+                                } ${Number(tangent) && exportMode ? classes.exportNumberSize : undefined}`}
                                 key={note + i}
                             >
                                 {showNoteLetters || Number(tangent)? tangent : undefined}
