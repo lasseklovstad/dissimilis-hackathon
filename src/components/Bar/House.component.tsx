@@ -16,7 +16,7 @@ export const House = (props: {
     }
 
     return (
-        <Box position="relative" top="-30px" height={0}>
+        <Box position="relative" top="-5px" height={0}>
             <Typography variant="body1" component="div">
                 {props.houseOrder === undefined ? null : (
                     <Box
