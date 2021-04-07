@@ -38,6 +38,11 @@ const useStyles = makeStyles({
     },
     icon: {
         right: 7,
+    },
+    focusElement: {
+        "&:focus": {
+            boxShadow: `0 0 0 4px ${colors.focus}`,
+        },
     }
 })
 
@@ -52,6 +57,7 @@ export const MenuButtonWithAddIcon = (props: {
             variant="outlined"
             size="large"
             className={styles.addbutton}
+            disableFocusRipple
             style={{
                 backgroundColor: props.selected
                     ? colors.gray_200
@@ -107,7 +113,7 @@ export const DropdownAutocomplete = (props: {
             PopperComponent={customPopperPlacement}
             closeIcon={false}
             className={styles.dropdown}
-            classes={{popupIndicator: styles.icon}}
+            classes={{ popupIndicator: styles.icon }}
             noOptionsText={props.noOptionsText}
             renderInput={(params) => (
                 <TextField

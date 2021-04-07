@@ -56,6 +56,12 @@ const useStyles = makeStyles((theme) => ({
             fontSize: "1rem",
         },
     },
+    buttonFocus: {
+        "&:focus": {
+            boxShadow: `0 0 0 4px ${colors.focus}`,
+            // border: `4px solid ${colors.focus}`
+        }
+    },
 }))
 
 export type ButtonProps = {
@@ -100,7 +106,11 @@ export const DashboardButtonWithAddIcon: FC<ButtonProps> = (props) => {
                 component={Link}
                 onClick={() => props.func && props.func()}
             >
-                <Box className={styles.container} py={2} pl={1}>
+                <Box
+                    className={`${styles.container} ${styles.buttonFocus}`}
+                    py={2}
+                    pl={1}
+                >
                     <AddIcon />
                     <Box pl={1} pr={2}>
                         <Typography>{props.text}</Typography>
@@ -116,16 +126,16 @@ export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (
 ) => {
     const styles = useStyles()
     return (
-        <Card className={styles.button}>
-            <CardActionArea onClick={() => props.func && props.func()}>
-                <Box className={styles.container} py={2} pl={1}>
-                    <AddIcon />
-                    <Box pl={1} pr={2}>
-                        <Typography>{props.text}</Typography>
+            <Card className={styles.button}>
+                <CardActionArea onClick={() => props.func && props.func()} classes={{root: styles.buttonFocus}}>
+                    <Box className={styles.container} py={2} pl={1}>
+                        <AddIcon />
+                        <Box pl={1} pr={2}>
+                            <Typography>{props.text}</Typography>
+                        </Box>
                     </Box>
-                </Box>
-            </CardActionArea>
-        </Card>
+                </CardActionArea>
+            </Card>
     )
 }
 
@@ -167,6 +177,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
             >
                 <Grid item xs={4}>
                     <Button
+                        disableFocusRipple
                         endIcon={
                             orderTerm === "song" ? (
                                 orderDescending ? (
@@ -186,6 +197,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
 
                 <Grid item xs={4}>
                     <Button
+                        disableFocusRipple
                         endIcon={
                             orderTerm === "user" ? (
                                 orderDescending ? (
@@ -205,6 +217,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
 
                 <Grid item xs={4}>
                     <Button
+                        disableFocusRipple
                         endIcon={
                             orderTerm === "date" ? (
                                 orderDescending ? (
@@ -321,7 +334,7 @@ export const DashboardTopBarIcon = (props: { onGoHome?: () => void }) => {
     const altProp = t("DashboardView:altButterflyButtonProp")
     const { onGoHome } = props
     return (
-        <IconButton component={Link} to="/dashboard" onClick={onGoHome}>
+        <IconButton disableFocusRipple component={Link} to="/dashboard" onClick={onGoHome}>
             <Icon fontSize="large">
                 <img src={butterflyBlue} alt={altProp} />
             </Icon>

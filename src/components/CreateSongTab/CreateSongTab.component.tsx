@@ -37,15 +37,6 @@ const useStyles = makeStyles({
         "&:hover": {
             backgroundColor: colors.gray_200,
         },
-        "&:focus": {
-            boxShadow: `0 0 0 4px ${colors.focus}`,
-        },
-    },
-
-    iconRoot: {
-        "&:focus": {
-            boxShadow: `0 0 0 4px ${colors.focus}`,
-        },
     },
 
     selected: {
@@ -213,7 +204,6 @@ export const CreateSongTab = (props: {
                     aria-haspopup="true"
                     aria-label="tab options"
                     onClick={handleMenuClick}
-                    classes={{ root: classes.iconRoot }}
                     disableFocusRipple
                 >
                     <MoreVertIcon />

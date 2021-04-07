@@ -433,12 +433,14 @@ export const ExportView = () => {
                     <Grid item xs={3} className={classes.exportButtons}>
                         <Button
                             className={`${classes.confirmOrCancelButtons} ${classes.confirmButton}`}
+                            disableFocusRipple
                             onClick={() => window.print()}
                         >
                             {t("ExportView:createPDF")}
                         </Button>
                         <Button
                             className={classes.confirmOrCancelButtons}
+                            disableFocusRipple
                             onClick={() => history.push(`/song/${songId}/`)}
                         >
                             {t("ExportView:cancel")}
