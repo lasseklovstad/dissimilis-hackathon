@@ -1,6 +1,5 @@
 import { createMuiTheme } from "@material-ui/core/styles"
 import { colors } from "./utils/colors"
-import { MenuItem, emphasize } from "@material-ui/core"
 
 export const theme = createMuiTheme({
     overrides: {
@@ -17,14 +16,14 @@ export const theme = createMuiTheme({
                 "&:focus": {
                     boxShadow: `0 0 0 4px ${colors.focus}`,
                 },
-            } 
+            },
         },
         MuiIconButton: {
             root: {
                 "&:focus": {
                     boxShadow: `0 0 0 4px ${colors.focus}`,
                 },
-            }
+            },
         },
         MuiButton: {
             root: {
@@ -38,8 +37,18 @@ export const theme = createMuiTheme({
                 "&:focus": {
                     boxShadow: `0 0 0 4px ${colors.focus}`,
                 },
-            }
+            },
         },
+        MuiCardActionArea: {
+            root: {
+                "&:focus $focusHighlight": {
+                    opacity: 0,
+                },
+                "&:focus:hover $focusHighlight": {
+                    opacity: 0.04   
+                }
+            }
+        }
     },
     spacing: 8,
     palette: {

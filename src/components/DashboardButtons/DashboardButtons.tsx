@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useState } from "react"
 import { Link } from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
@@ -56,12 +56,6 @@ const useStyles = makeStyles((theme) => ({
             fontSize: "1rem",
         },
     },
-    buttonFocus: {
-        "&:focus": {
-            boxShadow: `0 0 0 4px ${colors.focus}`,
-            // border: `4px solid ${colors.focus}`
-        }
-    },
 }))
 
 export type ButtonProps = {
@@ -106,11 +100,7 @@ export const DashboardButtonWithAddIcon: FC<ButtonProps> = (props) => {
                 component={Link}
                 onClick={() => props.func && props.func()}
             >
-                <Box
-                    className={`${styles.container} ${styles.buttonFocus}`}
-                    py={2}
-                    pl={1}
-                >
+                <Box className={styles.container} py={2} pl={1}>
                     <AddIcon />
                     <Box pl={1} pr={2}>
                         <Typography>{props.text}</Typography>
@@ -125,17 +115,30 @@ export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (
     props
 ) => {
     const styles = useStyles()
+    const [focused, setFocused] = useState(false)
     return (
-            <Card className={styles.button}>
-                <CardActionArea onClick={() => props.func && props.func()} classes={{root: styles.buttonFocus}}>
-                    <Box className={styles.container} py={2} pl={1}>
-                        <AddIcon />
-                        <Box pl={1} pr={2}>
-                            <Typography>{props.text}</Typography>
-                        </Box>
+        <Card
+            className={styles.button}
+            style={{
+                boxShadow: focused
+                    ? `0 0 0 4px ${colors.focus}`
+                    : "2px 0px 3px rgba(66, 66, 66, 0.05)",
+            }}
+        >
+            <CardActionArea
+                onClick={() => props.func && props.func()}
+                onFocus={() => setFocused(true)}
+                onBlur={() => setFocused(false)}
+                disableRipple
+            >
+                <Box className={styles.container} py={2} pl={1}>
+                    <AddIcon />
+                    <Box pl={1} pr={2}>
+                        <Typography>{props.text}</Typography>
                     </Box>
-                </CardActionArea>
-            </Card>
+                </Box>
+            </CardActionArea>
+        </Card>
     )
 }
 
@@ -253,15 +256,26 @@ const convertToDate = (time: number) => {
 export const DashboardButton: FC<ButtonSongProps> = (props) => {
     const styles = useStyles()
     const { t } = useTranslation()
-
+    const [focused, setFocused] = useState(false)
     return (
-        <Card className={styles.button}>
+        <Card
+            className={styles.button}
+            style={{
+                boxShadow: focused
+                    ? `0 0 0 4px ${colors.focus}`
+                    : "2px 0px 3px rgba(66, 66, 66, 0.05)",
+            }}
+        >
             <Grid container className={styles.songContainer}>
                 <Box flexGrow={1}>
                     <CardActionArea
                         to={props.link}
                         component={Link}
-                        style={{ height: "100%" }}
+                        onFocus={() => setFocused(true)}
+                        onBlur={() => setFocused(false)}
+                        style={{
+                            height: "100%",
+                        }}
                     >
                         <Grid
                             container
@@ -314,10 +328,23 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
 
 export const DashboardLibraryButton: FC<ButtonProps> = ({ text, link }) => {
     const styles = useStyles()
+    const [focused, setFocused] = useState(false)
     return (
         <Box>
-            <Card className={styles.buttonGreen}>
-                <CardActionArea to={link} component={Link}>
+            <Card
+                className={styles.buttonGreen}
+                style={{
+                    boxShadow: focused
+                        ? `0 0 0 4px ${colors.focus}`
+                        : "2px 0px 3px rgba(66, 66, 66, 0.05)",
+                }}
+            >
+                <CardActionArea
+                    to={link}
+                    component={Link}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
+                >
                     <Box className={styles.container}>
                         <Box p={2}>
                             <Typography>{text}</Typography>
@@ -334,7 +361,12 @@ export const DashboardTopBarIcon = (props: { onGoHome?: () => void }) => {
     const altProp = t("DashboardView:altButterflyButtonProp")
     const { onGoHome } = props
     return (
-        <IconButton disableFocusRipple component={Link} to="/dashboard" onClick={onGoHome}>
+        <IconButton
+            disableFocusRipple
+            component={Link}
+            to="/dashboard"
+            onClick={onGoHome}
+        >
             <Icon fontSize="large">
                 <img src={butterflyBlue} alt={altProp} />
             </Icon>
