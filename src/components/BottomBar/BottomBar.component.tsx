@@ -266,7 +266,7 @@ export const BottomBar = (props: {
                                     </Typography>
                                 </ToggleButton>
                             </StyledToggleButtonGroup>
-                            <Button onClick={deleteSelectedChord}>
+                            <Button disableFocusRipple onClick={deleteSelectedChord}>
                                 <Delete />
                             </Button>
                         </div>
