@@ -87,8 +87,8 @@ export const DashboardView = () => {
         orderTerm,
         orderDescending
     )
-    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>() 
-    
+    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>()
+
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
         orderTerm,
@@ -197,12 +197,12 @@ export const DashboardView = () => {
                                 songs={recentSongs}
                                 removeSong={removeSongFromRecentSongs}
                                 isLoading={getRecentSongs.loading}
-                                orderTerm={orderTerm}
-                                changeOrderTerm={handleChangeOrderTerm}
-                                orderDescending={orderDescending}
+                                orderTerm=""
+                                changeOrderTerm={() => undefined}
+                                orderDescending
                             >
                                 <DashboardLibraryButton
-                                    text={t("DashboardView:libraryButton")}
+                                    text={t("DashboardView:allSongLabel")}
                                     link="/library"
                                 />
                             </SongGrid>

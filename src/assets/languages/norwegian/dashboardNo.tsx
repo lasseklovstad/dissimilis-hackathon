@@ -1,9 +1,8 @@
 export const dashboardNo = {
     newSongLabel: "Nytt partitur",
-    recentSongLabel: "Nylige",
+    recentSongLabel: "Siste fem sanger",
     searchSongLabel: "Søk",
     allSongLabel: "Alle sanger",
-    libraryButton: "Bibliotek",
     measure: "takt",
     search: "Søk etter sanger eller brukere",
     altButterflyButtonProp: "Bilde av Dissimilis' sommerfugl",
@@ -13,6 +12,6 @@ export const dashboardNo = {
     duplicateText: "Dupliser sang",
     delete: "Slett",
     date: "Dato endret",
-    user: "Bruker", 
+    user: "Bruker",
     song: "Sang",
 }
