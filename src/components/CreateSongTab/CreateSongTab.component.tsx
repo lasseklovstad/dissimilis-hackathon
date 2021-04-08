@@ -216,10 +216,12 @@ export const CreateSongTab = (props: {
                 onClose={() => handleClose()}
                 role="menu"
             >
-                <MenuItem onClick={() => {
+                <MenuItem
+                    onClick={() => {
                         setNewInstrumentModalIsOpen(true)
                         setAnchorEl(null)
-                    }}>
+                    }}
+                >
                     {t("CreateSongTab:newInstrument")}
                 </MenuItem>
                 <MenuItem

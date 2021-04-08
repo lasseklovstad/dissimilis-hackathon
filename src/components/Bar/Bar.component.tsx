@@ -129,7 +129,7 @@ export const Bar = (props: {
     }
 
     const updateMenuOptions = (chord: IChord) => {
-        const chordType = !chord.activeChord ? ChordType.NOTE : ChordType.CHORD
+        const chordType = !chord.chordName ? ChordType.NOTE : ChordType.CHORD
         dispatchChordMenuOptions({
             type: "UPDATE_OPTIONS",
             menuOptions: {
@@ -137,7 +137,7 @@ export const Bar = (props: {
                 chord:
                     chordType === ChordType.NOTE
                         ? chord.notes[0]
-                        : chord.activeChord,
+                        : chord.chordName,
                 chordType: chordType,
                 chordNotes: chord.notes,
             },
@@ -154,7 +154,7 @@ export const Bar = (props: {
             const position =
                 positionArray.length > 0 ? positionArray[0] : chord.position
 
-            const activeChord =
+            const chordName =
                 chordMenuOptions.chordType === ChordType.CHORD
                     ? chordMenuOptions.chord
                     : null
@@ -163,7 +163,7 @@ export const Bar = (props: {
                 position,
                 length: chordMenuOptions.chordLength,
                 notes,
-                activeChord,
+                chordName,
             } as IChord)
 
             if (!error && result) {
@@ -281,7 +281,7 @@ export const Bar = (props: {
                                             notes: ["Z"],
                                             position: note.position + i,
                                             chordId: null,
-                                            activeChord: "",
+                                            chordName: "",
                                         })
                                     }
                                     return [...noter, ...rests]

@@ -15,6 +15,6 @@ export const dashboardEn = {
     duplicateText: "Duplicate song",
     delete: "Delete",
     date: "Date changed",
-    user: "User", 
+    user: "User",
     song: "Song",
 }

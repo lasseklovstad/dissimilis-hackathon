@@ -190,13 +190,13 @@ export const SongView = () => {
             : chordType === ChordType.NOTE
             ? [chord]
             : getNotesFromChord(chord)
-        const activeChord = chordType === ChordType.CHORD ? chord : null
+        const chordName = chordType === ChordType.CHORD ? chord : null
 
         const { error, result } = await updateChord.run({
             position,
             length,
             notes,
-            activeChord,
+            chordName,
         })
 
         if (!error && result) {
@@ -258,7 +258,7 @@ export const SongView = () => {
                         notes: ["Z"],
                         position: note.position + i,
                         chordId: null,
-                        activeChord: "",
+                        chordName: "",
                     })
                 }
                 return [...noter, ...rests]

@@ -421,9 +421,7 @@ export const ExportView = () => {
                                         size="small"
                                         checked={showNoteLetters}
                                         onChange={() =>
-                                            setShowNoteLetters(
-                                                !showNoteLetters
-                                            )
+                                            setShowNoteLetters(!showNoteLetters)
                                         }
                                     />
                                 }

@@ -3,7 +3,7 @@ export interface IChord {
     notes: string[]
     length: number
     chordId: number | null
-    activeChord: string
+    chordName: string
 }
 
 export interface IBar {
