@@ -27,7 +27,7 @@ export const DashboardTopBar = (props: {
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const searchPlaceholder = t("DashboardView:search")
+    const searchPlaceholder = t("DashboardView.search")
     const [searchBarFocus, setSearchBarFocus] = useState(false)
     const { onGoHome, searchTerm } = props
     const sm = useMediaQuery("(min-width: 600px)")
@@ -44,10 +44,7 @@ export const DashboardTopBar = (props: {
                             <DashboardTopBarIcon onGoHome={onGoHome} />
                         </Grid>
                         <Hidden smDown>
-                            <Grid
-                                item
-                                md={searchBarFocus ? 1 : 3}
-                            />
+                            <Grid item md={searchBarFocus ? 1 : 3} />
                         </Hidden>
                         <Grid
                             container

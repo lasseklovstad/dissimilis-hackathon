@@ -99,7 +99,7 @@ export const DropdownAutocomplete = (props: {
                 }
             }}
             blurOnSelect="touch"
-            openText={t("BottomBar:open")}
+            openText={t("BottomBar.open")}
             PopperComponent={customPopperPlacement}
             closeIcon={false}
             className={styles.dropdown}

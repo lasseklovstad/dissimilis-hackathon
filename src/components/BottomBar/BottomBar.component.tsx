@@ -219,12 +219,14 @@ export const BottomBar = (props: {
                             <div className={classes.flexelement}>{Menu}</div>
                             <div className={classes.flexelement}>
                                 <DropdownAutocomplete
-                                    selectedChordType={chordMenuOptions.chordType}
+                                    selectedChordType={
+                                        chordMenuOptions.chordType
+                                    }
                                     selectedChord={chordMenuOptions.chord}
                                     onChordChange={onChordChange}
                                     icon={<MusicNoteIcon fontSize="small" />}
                                     chordDropdownContent={chordDropdownContent}
-                                    noOptionsText={t("BottomBar:noOptions")}
+                                    noOptionsText={t("BottomBar.noOptions")}
                                 />
                             </div>
                             <StyledToggleButtonGroup
@@ -236,12 +238,12 @@ export const BottomBar = (props: {
                             >
                                 <ToggleButton value={ChordType.CHORD}>
                                     <Typography>
-                                        {t("BottomBar:chord")}
+                                        {t("BottomBar.chord")}
                                     </Typography>
                                 </ToggleButton>
                                 <ToggleButton value={ChordType.NOTE}>
                                     <Typography>
-                                        {t("BottomBar:note")}
+                                        {t("BottomBar.note")}
                                     </Typography>
                                 </ToggleButton>
                             </StyledToggleButtonGroup>
@@ -253,7 +255,7 @@ export const BottomBar = (props: {
 
                     <div className={classes.container}>
                         <MenuButtonWithAddIcon
-                            text={t("BottomBar:addBar")}
+                            text={t("BottomBar.addBar")}
                             onClick={handleAddBar}
                         />
                     </div>

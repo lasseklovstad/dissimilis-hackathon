@@ -103,20 +103,20 @@ export const BarMenu = (props: BarMenuProps) => {
             role="menu"
         >
             <MenuItem onClick={() => handleClose("delete")}>
-                {t("BarContainer:deleteBar")}{" "}
+                {t("BarContainer.deleteBar")}{" "}
             </MenuItem>
             <MenuItem onClick={() => handleClose("duplicate")}>
-                {t("BarContainer:duplicateBar")}{" "}
+                {t("BarContainer.duplicateBar")}{" "}
             </MenuItem>
             <MenuItem onClick={() => handleClose("toggleRepBefore")}>
                 {bar.repBefore
-                    ? t("BarContainer:removeRepBefore")
-                    : t("BarContainer:addRepBefore")}{" "}
+                    ? t("BarContainer.removeRepBefore")
+                    : t("BarContainer.addRepBefore")}{" "}
             </MenuItem>
             <MenuItem onClick={() => handleClose("toggleRepAfter")}>
                 {bar.repAfter
-                    ? t("BarContainer:removeRepAfter")
-                    : t("BarContainer:addRepAfter")}{" "}
+                    ? t("BarContainer.removeRepAfter")
+                    : t("BarContainer.addRepAfter")}{" "}
             </MenuItem>
             <MenuItem
                 onClick={() =>
@@ -126,8 +126,8 @@ export const BarMenu = (props: BarMenuProps) => {
                 }
             >
                 {bar.house === 1
-                    ? t("BarContainer:removeHouseOne")
-                    : t("BarContainer:addHouseOne")}
+                    ? t("BarContainer.removeHouseOne")
+                    : t("BarContainer.addHouseOne")}
             </MenuItem>
             <MenuItem
                 onClick={() =>
@@ -137,8 +137,8 @@ export const BarMenu = (props: BarMenuProps) => {
                 }
             >
                 {bar.house === 2
-                    ? t("BarContainer:removeHouseTwo")
-                    : t("BarContainer:addHouseTwo")}
+                    ? t("BarContainer.removeHouseTwo")
+                    : t("BarContainer.addHouseTwo")}
             </MenuItem>
         </Menu>
     )
