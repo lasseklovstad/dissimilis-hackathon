@@ -6,10 +6,14 @@ import {
     TextField,
     Typography,
     useMediaQuery,
+    IconButton,
 } from "@material-ui/core"
 import { MenuButton } from "../MenuButton/MenuButton.component"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 import { colors } from "../../utils/colors"
+import { useHistory } from "react-router"
+import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
+import { useLogout } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles({
     root: {
@@ -72,6 +76,16 @@ export const SongNavBar = (props: {
         setTitle(props.title)
     }, [props.title])
 
+    const history = useHistory()
+    const axiosGet = useLogout()
+
+    const onLogout = () => {
+        axiosGet().then(() => {
+            sessionStorage.clear()
+            history.replace("/login")
+        })
+    }
+
     return (
         <Box className={classes.root} mb={matches ? 2 : 4}>
             <AppBar position="static" elevation={0} className={classes.appbar}>
@@ -99,9 +113,16 @@ export const SongNavBar = (props: {
                         />
                     </Box>
                     {!matches ? (
-                        <Box ml={4} mr={4}>
-                            <Typography>{props.user}</Typography>
-                        </Box>
+                        <>
+                            <Box ml={4} mr={1}>
+                                <Typography>{props.user}</Typography>
+                            </Box>
+                            <Box mr={4}>
+                                <IconButton onClick={onLogout}>
+                                    <LogoutIcon />
+                                </IconButton>
+                            </Box>
+                        </>
                     ) : undefined}
                     <MenuButton
                         voiceId={props.voiceId}
@@ -109,6 +130,7 @@ export const SongNavBar = (props: {
                         user={props.user}
                         setBarEditMode={props.setBarEditMode}
                         barEditMode={props.barEditMode}
+                        onLogout={onLogout}
                     />
                 </Box>
             </AppBar>

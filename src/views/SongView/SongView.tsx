@@ -230,6 +230,7 @@ export const SongView = () => {
                         notes: ["Z"],
                         position: note.position + i,
                         chordId: null,
+                        chordName: "",
                     })
                 }
                 return [...noter, ...rests]
