@@ -1,17 +1,31 @@
 import React, { ReactNode } from "react"
 import { Box, Grid, Typography } from "@material-ui/core"
 import { ISong } from "../../models/ISong"
-import { DashboardButton } from "../DashboardButtons/DashboardButtons"
+import {
+    DashboardButton,
+    SortingButtons,
+} from "../DashboardButtons/DashboardButtons"
 import { Loading } from "../loading/Loading.component"
 
 type SongGridProps = {
-    title: string
+    title: string | undefined
     songs: ISong[] | undefined
+    removeSong: (songId: number) => void
     isLoading: boolean
     children?: ReactNode
+    orderTerm: string
+    changeOrderTerm: (term: "date" | "song" | "user") => void
+    orderDescending: boolean
 }
 
-const GridItem = (props: { children: ReactNode }) => {
+const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
+    if (props.isSong) {
+        return (
+            <Grid item xs={12}>
+                {props.children}
+            </Grid>
+        )
+    }
     return (
         <Grid item xs={12} sm={4} lg={3}>
             {props.children}
@@ -20,7 +34,15 @@ const GridItem = (props: { children: ReactNode }) => {
 }
 
 export const SongGrid = (props: SongGridProps) => {
-    const { songs, title, isLoading, children } = props
+    const {
+        songs,
+        title,
+        isLoading,
+        children,
+        orderTerm,
+        changeOrderTerm,
+        orderDescending,
+    } = props
 
     const getChildren = () => {
         if (children) {
@@ -28,12 +50,16 @@ export const SongGrid = (props: SongGridProps) => {
                 return (
                     <>
                         {children.map((child, i) => {
-                            return <GridItem key={i}>{child}</GridItem>
+                            return (
+                                <GridItem key={i} isSong={false}>
+                                    {child}
+                                </GridItem>
+                            )
                         })}
                     </>
                 )
             }
-            return <GridItem>{children}</GridItem>
+            return <GridItem isSong={false}>{children}</GridItem>
         }
         return undefined
     }
@@ -42,10 +68,15 @@ export const SongGrid = (props: SongGridProps) => {
         if (!isLoading) {
             return (
                 <>
+                    {getSorting()}
                     {songs?.map((song) => (
-                        <GridItem key={song.songId}>
+                        <GridItem key={song.songId} isSong>
                             <DashboardButton
-                                text={song.title}
+                                title={song.title}
+                                arrangerName={song.arrangerName}
+                                updatedOn={song.updatedOn}
+                                songId={song.songId}
+                                removeSong={props.removeSong}
                                 link={`/song/${song.songId}`}
                             />
                         </GridItem>
@@ -57,15 +88,39 @@ export const SongGrid = (props: SongGridProps) => {
         return undefined
     }
 
-    return (
-        <Grid item xs={12} sm={10}>
-            <Box mb={4}>
+    const getHeader = () => {
+        if (title !== undefined) {
+            return (
                 <Box m={2}>
                     <Typography variant="h1">{title}</Typography>
                 </Box>
+            )
+        }
+        return undefined
+    }
+
+    const getSorting = () => {
+        if (orderTerm !== "") {
+            return (
+                <Grid item xs={12}>
+                    <SortingButtons
+                        orderTerm={orderTerm}
+                        changeOrderTerm={changeOrderTerm}
+                        orderDescending={orderDescending}
+                    />
+                </Grid>
+            )
+        }
+        return undefined
+    }
+
+    return (
+        <Grid item xs={12} sm={10}>
+            <Box mb={4}>
+                {getHeader()}
                 <Grid container spacing={3}>
                     {getItems()}
-                    <GridItem>
+                    <GridItem isSong={false}>
                         <Loading isLoading={isLoading} />
                     </GridItem>
                 </Grid>

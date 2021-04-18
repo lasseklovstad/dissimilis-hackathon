@@ -17,6 +17,10 @@ type SongProps = {
     timeSignature: ITimeSignature
     heightOfBar: number
     exportMode?: boolean
+    showChordLetters?: boolean
+    showNoteLetters?: boolean
+    pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
+    deleteBars?: () => void
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
@@ -30,7 +34,11 @@ const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
     }
     const PrefixItem = getPrefixItem()
 
-    return <Box flexGrow={0}>{PrefixItem}</Box>
+    return (
+        <Box flexGrow={0} height="calc(100% - 25px)">
+            {PrefixItem}
+        </Box>
+    )
 }
 
 export const Song = (props: SongProps) => {
@@ -40,6 +48,8 @@ export const Song = (props: SongProps) => {
         timeSignature,
         heightOfBar,
         exportMode,
+        showChordLetters,
+        showNoteLetters
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
@@ -67,7 +77,13 @@ export const Song = (props: SongProps) => {
         <>
             <Box width="100%">
                 {getBarRows(bars).map((barsInRow, i) => (
-                    <Box display="flex" mt={exportMode ? 7 : 10} key={i}>
+                    <Box
+                        display="flex"
+                        alignItems="flex-end"
+                        mt={exportMode ? 7 : i === 0 ? 7 : 10}
+                        key={i}
+                        height={heightOfBar}
+                    >
                         <BarPrefix
                             index={barsInRow[0].position - 1}
                             timeSignature={timeSignature}
@@ -78,6 +94,8 @@ export const Song = (props: SongProps) => {
                             flexGrow={barsInRow.length}
                             minWidth={0}
                             flexBasis="0"
+                            alignItems="flex-end"
+                            height="100%"
                         >
                             {barsInRow.map((bar, i, bars) => {
                                 const showHouseNumber =
@@ -87,10 +105,22 @@ export const Song = (props: SongProps) => {
                                         <Bar
                                             showHouseNumber={showHouseNumber}
                                             exportMode={!!exportMode}
+                                            showChordLetters={
+                                                showChordLetters === undefined
+                                                    ? true
+                                                    : showChordLetters
+                                            }
+                                            showNoteLetters={
+                                                showNoteLetters === undefined
+                                                    ? true
+                                                    : showNoteLetters
+                                            }
                                             masterSheet={!exportMode && isMain}
                                             onMenuClick={openMenu(bar)}
                                             bar={bar}
                                             height={heightOfBar}
+                                            pasteBars={props.pasteBars}
+                                            deleteBars={props.deleteBars}
                                         />
                                         <BarLine />
                                     </React.Fragment>

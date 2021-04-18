@@ -2,108 +2,211 @@ import React, { useContext, useState } from "react"
 import { Box, useMediaQuery } from "@material-ui/core"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { House } from "./House.component"
-import { IBar, IChordAndNotes } from "../../models/IBar"
+import { IBar, IChord } from "../../models/IBar"
 import { Chord } from "./Chord.component"
 import { ChordMenu } from "./ChordMenu.component"
 import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
 import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
 import { getNotesFromChord } from "../../models/chords"
+import { getChord } from "../../utils/bar.util"
+import { ChordType } from "../../models/IChordMenuOptions"
+import { makeStyles } from "@material-ui/core/styles"
+import { colors } from "../../utils/colors"
+import BarRightClickMenu from "./BarRightClickMenu.component"
+
+const useStyle = makeStyles(() => ({
+    barContainer: {
+        display: "flex",
+        minWidth: 0,
+        borderRadius: "5px",
+        padding: "3px 0px 3px 0px",
+        "&.editMode": {
+            boxShadow: `0 0 0px 4px ${colors.gray_400}`,
+            backgroundColor: colors.gray_200,
+            "&:hover": {
+                boxShadow: `0 0 0px 4px ${colors.focus}`,
+            },
+            "&.selected": {
+                boxShadow: `0 0 0px 4px ${colors.focus}`,
+                backgroundColor: colors.teal_100,
+            },
+        },
+    },
+}))
 
 export const Bar = (props: {
     bar: IBar
     height?: number
     exportMode: boolean
+    showChordLetters: boolean
+    showNoteLetters: boolean
     onMenuClick: (anchorEl: HTMLElement) => void
     masterSheet: boolean
     showHouseNumber: boolean
+    pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
+    deleteBars?: () => void
 }) => {
     const {
         exportMode,
+        showChordLetters,
+        showNoteLetters,
         onMenuClick,
         masterSheet,
         showHouseNumber,
-        bar: {
-            chordsAndNotes,
-            repAfter,
-            repBefore,
-            house,
-            barId,
-            songId,
-            songVoiceId,
-        },
-        height = 160,
+        bar: { chords, repAfter, repBefore, house, barId, songId, songVoiceId },
+        height,
     } = props
-    const [menuPosition, setMenuPosition] = useState<
+    const [chordMenuPosition, setChordMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()
-    const xl = useMediaQuery("(min-width: 1920px)")
-    const [rightClicked, setRightClicked] = useState<number | null>(null)
+    const [barMenuPosition, setBarMenuPosition] = useState<
+        { top: number; left: number } | undefined
+    >()
+    const xl = useMediaQuery("(min-width: 1080px)")
+    const [rightClickedChordId, setRightClickedChordId] = useState<
+        number | null
+    >(null)
     const [positionArray, setPositionArray] = useState<number[]>([])
     const {
         dispatchSong,
-        selectedChord,
-        selectedNoteLength,
-        isNoteSelected,
+        chordMenuOptions,
+        setValuesForSelectedChord,
+        dispatchChordMenuOptions,
+        selectedChordId,
+        editBars,
     } = useContext(SongContext)
     const { postChord } = useCreateChord(songId, songVoiceId, barId)
     const { deleteChord } = useDeleteChord(
         songId,
         songVoiceId,
         barId,
-        rightClicked
+        rightClickedChordId
     )
+    const classes = useStyle()
 
-    const handleRightClick = (noteId: number | null) => (
+    const handleChordRightClick = (chordId: number | null) => (
         event: React.MouseEvent
     ) => {
         event.preventDefault()
-        setMenuPosition({ top: event.clientY - 4, left: event.clientX - 2 })
-        setRightClicked(noteId)
+        if (!editBars.barEditMode && chordId !== null) {
+            setChordMenuPosition({
+                top: event.clientY - 4,
+                left: event.clientX - 2,
+            })
+            setRightClickedChordId(chordId)
+        }
     }
 
-    const handleMenuSelect = async (method: "delete") => {
-        if (method === "delete") {
-            if (rightClicked) {
-                const { error, result } = await deleteChord.run()
-                if (!error && result) {
-                    dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-                }
+    const handleBarRightClick = (event: React.MouseEvent) => {
+        event.preventDefault()
+        if (editBars.barEditMode) {
+            setBarMenuPosition({
+                top: event.clientY - 4,
+                left: event.clientX - 2,
+            })
+        }
+    }
+
+    const handleChordMenuSelect = async (method: string) => {
+        if (method === "delete" && rightClickedChordId) {
+            const { error, result } = await deleteChord.run()
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
             }
         }
     }
 
-    const handleClick = async (position: number) => {
-        const notes = isNoteSelected
-            ? [selectedChord]
-            : getNotesFromChord(selectedChord)
-        const { error, result } = await postChord.run({
-            position: positionArray.length > 0 ? positionArray[0] : position,
-            length: selectedNoteLength,
-            notes,
-        } as IChordAndNotes)
+    const handleBarMenuSelect = (method: string) => {
+        if (method === "copy") {
+            editBars.copyBars()
+        } else if (method === "pasteBefore") {
+            props.pasteBars && props.pasteBars("pasteBefore", props.bar)
+        } else if (method === "pasteAfter") {
+            props.pasteBars && props.pasteBars("pasteAfter", props.bar)
+        } else if (method === "delete") {
+            props.deleteBars && props.deleteBars()
+        }
+    }
 
-        if (!error && result) {
-            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+    const updateMenuOptions = (chord: IChord) => {
+        const chordType =
+            chord.notes.length === 1 ? ChordType.NOTE : ChordType.CHORD
+        dispatchChordMenuOptions({
+            type: "UPDATE_OPTIONS",
+            menuOptions: {
+                chordLength: chord.length,
+                chord:
+                    chordType === ChordType.NOTE
+                        ? chord.notes[0]
+                        : getChord(chord.notes),
+                chordType: chordType,
+            },
+        })
+    }
+
+    const handleChordClick = async (chord: IChord) => {
+        if (chord.notes[0] === "Z") {
+            const notes =
+                chordMenuOptions.chordType === ChordType.NOTE
+                    ? [chordMenuOptions.chord]
+                    : getNotesFromChord(chordMenuOptions.chord)
+
+            const position =
+                positionArray.length > 0 ? positionArray[0] : chord.position
+            const { error, result } = await postChord.run({
+                position,
+                length: chordMenuOptions.chordLength,
+                notes,
+            } as IChord)
+
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+                setValuesForSelectedChord(
+                    result.data.chords.find((c) => c.position === position)
+                        ?.chordId,
+                    result.data.barId,
+                    position
+                )
+            }
+        } else {
+            updateMenuOptions(chord)
+            setValuesForSelectedChord(
+                chord.chordId,
+                props.bar.barId,
+                chord.position
+            )
+        }
+    }
+
+    const handleChordFocus = (chord: IChord) => {
+        if (chord.notes[0] !== "Z") {
+            setValuesForSelectedChord(chord.chordId, barId, chord.position)
+            updateMenuOptions(chord)
+        } else {
+            setValuesForSelectedChord(undefined, undefined, chord.position)
         }
     }
 
     const onMouseEnterChord = (
-        chord: IChordAndNotes,
+        chord: IChord,
         indexOfChord: number,
-        allChords: IChordAndNotes[]
+        allChords: IChord[]
     ) => {
         if (xl && chord.notes[0] === "Z") {
             let i = 0
-            while (i <= selectedNoteLength) {
+            while (i <= chordMenuOptions.chordLength) {
                 const start = indexOfChord - i
-                const end = start + selectedNoteLength
+                const end = start + chordMenuOptions.chordLength
                 const interval = allChords.slice(start, end)
                 const isOnlyRests =
                     interval.findIndex(
                         (currentChord) => currentChord.notes[0] !== "Z"
                     ) === -1
-                if (isOnlyRests && interval.length === selectedNoteLength) {
+                if (
+                    isOnlyRests &&
+                    interval.length === chordMenuOptions.chordLength
+                ) {
                     setPositionArray(
                         interval.map((currentChord) => currentChord.position)
                     )
@@ -112,12 +215,8 @@ export const Bar = (props: {
                 i++
             }
         } else {
-            setPositionArray([])
+            setPositionArray([chord.position])
         }
-    }
-
-    const onMouseLeaveChord = () => {
-        setPositionArray([])
     }
 
     return (
@@ -129,10 +228,31 @@ export const Bar = (props: {
                 justifyContent="flex-start"
                 width="100%"
                 minWidth={0}
+                m="2px"
             >
                 <House houseOrder={house} showHouseNumber={showHouseNumber} />
 
-                <Box display="flex" minWidth={0}>
+                <div
+                    id="barContainer"
+                    onContextMenu={(e) =>
+                        editBars.barEditMode && handleBarRightClick(e)
+                    }
+                    className={`${classes.barContainer} ${
+                        editBars.barEditMode ? "editMode" : ""
+                    } ${
+                        editBars.selectedBars &&
+                        props.bar.position >=
+                            editBars.selectedBars.fromPosition &&
+                        props.bar.position <= editBars.selectedBars.toPosition
+                            ? "selected"
+                            : ""
+                    }`}
+                    onClick={(e: React.MouseEvent) => {
+                        ;(e.target as HTMLElement).id !== "menuItem" &&
+                            editBars.barEditMode &&
+                            editBars.barClicked(props.bar)
+                    }}
+                >
                     <RepetitionSign display={repBefore} />
                     <Box
                         height={height || "100%"}
@@ -140,8 +260,8 @@ export const Bar = (props: {
                         width="100%"
                         minWidth={0}
                     >
-                        {chordsAndNotes
-                            .reduce((noter: IChordAndNotes[], note) => {
+                        {chords
+                            .reduce((noter: IChord[], note) => {
                                 if (note.notes[0] === "Z") {
                                     const numberOfRests = note.length
                                     const rests = []
@@ -150,7 +270,7 @@ export const Bar = (props: {
                                             length: 1,
                                             notes: ["Z"],
                                             position: note.position + i,
-                                            noteId: null,
+                                            chordId: null,
                                         })
                                     }
                                     return [...noter, ...rests]
@@ -163,34 +283,55 @@ export const Bar = (props: {
                                 )
                                 return (
                                     <Chord
+                                        showChordLetters={showChordLetters}
+                                        showNoteLetters={showNoteLetters}
                                         disabled={exportMode}
-                                        onMouseLeave={onMouseLeaveChord}
+                                        onMouseLeave={() =>
+                                            !editBars.barEditMode &&
+                                            setPositionArray([])
+                                        }
                                         onMouseEnter={() =>
+                                            !editBars.barEditMode &&
                                             onMouseEnterChord(
                                                 chord,
                                                 i,
                                                 allChords
                                             )
                                         }
-                                        chordsAndNotes={chord}
+                                        chords={chord}
                                         highlight={highlight}
                                         key={chord.position}
-                                        onContextMenu={handleRightClick(
-                                            chord.noteId
+                                        onContextMenu={handleChordRightClick(
+                                            chord.chordId
                                         )}
                                         onClick={() =>
-                                            handleClick(chord.position)
+                                            !editBars.barEditMode &&
+                                            handleChordClick(chord)
                                         }
+                                        isSelected={
+                                            selectedChordId === chord.chordId
+                                        }
+                                        handleChordFocus={() =>
+                                            !editBars.barEditMode &&
+                                            handleChordFocus(chord)
+                                        }
+                                        barEditMode={editBars.barEditMode}
                                     />
                                 )
                             })}
                     </Box>
                     <RepetitionSign display={repAfter} />
                     <ChordMenu
-                        position={menuPosition}
-                        onSelect={handleMenuSelect}
+                        position={chordMenuPosition}
+                        onSelect={handleChordMenuSelect}
                     />
-                </Box>
+                    <BarRightClickMenu
+                        barsClipboard={editBars.barsClipboard}
+                        selectedBars={editBars.selectedBars}
+                        onSelect={handleBarMenuSelect}
+                        position={barMenuPosition}
+                    />
+                </div>
             </Box>
         </>
     )

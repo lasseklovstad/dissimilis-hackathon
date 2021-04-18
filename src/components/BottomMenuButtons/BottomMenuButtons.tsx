@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
@@ -16,6 +16,7 @@ import Autocomplete, {
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import { getColor, tangentToNumber } from "../../utils/bar.util"
+import { ChordType } from "../../models/IChordMenuOptions"
 
 const useStyles = makeStyles({
     button: {
@@ -67,33 +68,29 @@ const filterOptions = createFilterOptions<string>({ matchFrom: "start" })
 
 export const DropdownAutocomplete = (props: {
     icon: React.ReactNode
-    notesOrChords: string[]
+    chordDropdownContent: string[]
     noOptionsText: string
-    noteIsSelected: boolean
+    selectedChordType: ChordType
     selectedChord: string
     onChordChange: (chord: string) => void
 }) => {
     const {
-        noteIsSelected,
+        selectedChordType,
         selectedChord,
         onChordChange,
-        notesOrChords,
+        chordDropdownContent,
     } = props
     const styles = useStyles()
-    const [options, setOptions] = useState(props.notesOrChords)
 
-    useEffect(() => {
-        setOptions(notesOrChords)
-    }, [notesOrChords])
     const showValue = selectedChord
-    if (!options.includes(selectedChord)) {
-        onChordChange(options[0])
+    if (!chordDropdownContent.includes(selectedChord)) {
+        onChordChange(chordDropdownContent[0])
     }
     const { t } = useTranslation()
 
     return (
         <Autocomplete<string>
-            options={options}
+            options={chordDropdownContent}
             value={showValue}
             filterOptions={filterOptions}
             onChange={(event, value) => {
@@ -101,6 +98,7 @@ export const DropdownAutocomplete = (props: {
                     onChordChange(value)
                 }
             }}
+            blurOnSelect="touch"
             openText={t("BottomBar:open")}
             PopperComponent={customPopperPlacement}
             closeIcon={false}
@@ -117,41 +115,39 @@ export const DropdownAutocomplete = (props: {
                 />
             )}
             renderOption={(options) => (
-                <>
-                    <Grid container>
-                        <Grid item xs={9}>
-                            <Typography>{options}</Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                            {noteIsSelected ? (
-                                <Box
-                                    style={{
-                                        height: "24px",
-                                        width: "24px",
-                                        backgroundColor: getColor(options),
-                                        borderRadius: "5px",
-                                        verticalAlign: "center",
-                                    }}
-                                >
-                                    {tangentToNumber(options) !== 0 ? (
-                                        <Typography
-                                            style={{
-                                                color: colors.white,
-                                                textAlign: "center",
-                                            }}
-                                        >
-                                            {tangentToNumber(options)}
-                                        </Typography>
-                                    ) : (
-                                        <></>
-                                    )}
-                                </Box>
-                            ) : (
-                                <></>
-                            )}
-                        </Grid>
+                <Grid container>
+                    <Grid item xs={9}>
+                        <Typography>{options}</Typography>
                     </Grid>
-                </>
+                    <Grid item xs={3}>
+                        {selectedChordType === ChordType.NOTE ? (
+                            <Box
+                                style={{
+                                    height: "24px",
+                                    width: "24px",
+                                    backgroundColor: getColor(options),
+                                    borderRadius: "5px",
+                                    verticalAlign: "center",
+                                }}
+                            >
+                                {tangentToNumber(options) !== 0 ? (
+                                    <Typography
+                                        style={{
+                                            color: colors.white,
+                                            textAlign: "center",
+                                        }}
+                                    >
+                                        {tangentToNumber(options)}
+                                    </Typography>
+                                ) : (
+                                    <></>
+                                )}
+                            </Box>
+                        ) : (
+                            <></>
+                        )}
+                    </Grid>
+                </Grid>
             )}
         />
     )

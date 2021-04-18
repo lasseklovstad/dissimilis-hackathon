@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, Grid, makeStyles } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
@@ -14,10 +14,11 @@ import {
 } from "../../utils/useApiServiceSongs"
 import { InputModal } from "../../components/CustomModal/InputModal.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
-import { Loading } from "../../components/loading/Loading.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
 import { getTimeSignatureText } from "../../utils/bar.util"
+import { ISong } from "../../models/ISong"
+import { useGetUser } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles({
     container: {
@@ -32,7 +33,7 @@ type MusicTacts = {
         denominator: number
     }
 }
-const marginBottom = 10
+const marginBottom = 4
 const musicTacts: MusicTacts[] = [
     {
         id: 1,
@@ -71,6 +72,8 @@ export const DashboardView = () => {
     const [dashboardView, setDashboardView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
     const [addSongModalIsOpen, setAddSongModalIsOpen] = useState(false)
+    const [orderTerm, setOrderTerm] = useState<"date" | "song" | "user">("date")
+    const [orderDescending, setOrderDescending] = useState<boolean>(true)
     const [timeSignature, setTimeSignature] = useState<
         ITimeSignature | undefined
     >()
@@ -78,8 +81,45 @@ export const DashboardView = () => {
     const { postSong } = usePostSong()
     const history = useHistory()
     const measureText = t("DashboardView:measure")
-    const { getRecentSongs, recentSongs } = useGetRecentSongs()
-    const { getFilteredSongs, filteredSongs } = useGetFilteredSongs(searchTerm)
+    const { userInit } = useGetUser()
+
+    const { getRecentSongs, recentSongsFetched } = useGetRecentSongs(
+        orderTerm,
+        orderDescending
+    )
+    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>() 
+    
+    const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
+        searchTerm,
+        orderTerm,
+        orderDescending
+    )
+    const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
+
+    useEffect(() => {
+        if (recentSongsFetched) {
+            setRecentSongs(recentSongsFetched)
+        }
+        if (filteredSongsFetched) {
+            setFilteredSongs(filteredSongsFetched)
+        }
+    }, [recentSongsFetched, filteredSongsFetched])
+
+    const removeSongFromRecentSongs = (songId: number) => {
+        setRecentSongs(
+            recentSongs?.filter((song) => {
+                return song.songId !== songId
+            })
+        )
+    }
+
+    const removeSongFromFilteredSongs = (songId: number) => {
+        setFilteredSongs(
+            filteredSongs?.filter((song) => {
+                return song.songId !== songId
+            })
+        )
+    }
 
     const handleAddSong = async (title: string) => {
         setAddSongModalIsOpen(false)
@@ -98,6 +138,15 @@ export const DashboardView = () => {
         setAddSongModalIsOpen(false)
     }
 
+    const handleChangeOrderTerm = (term: "date" | "song" | "user") => {
+        if (term === orderTerm || (term !== orderTerm && !orderDescending)) {
+            setOrderDescending(!orderDescending)
+        }
+        if (term !== orderTerm) {
+            setOrderTerm(term)
+        }
+    }
+
     return (
         <>
             <Box mx={2}>
@@ -105,11 +154,16 @@ export const DashboardView = () => {
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
                             <DashboardTopBar
-                                onGoHome={() => setDashboardView(true)}
+                                onGoHome={() => {
+                                    setSearchTerm("")
+                                    setDashboardView(true)
+                                }}
                                 onChange={(txt) => {
                                     setSearchTerm(txt)
                                     setDashboardView(false)
                                 }}
+                                searchTerm={searchTerm}
+                                user={userInit?.email}
                             />
                         </Box>
                     </Grid>
@@ -119,7 +173,11 @@ export const DashboardView = () => {
                             <SongGrid
                                 title={t("DashboardView:newSongLabel")}
                                 songs={undefined}
+                                removeSong={() => undefined}
                                 isLoading={false}
+                                orderTerm=""
+                                changeOrderTerm={() => undefined}
+                                orderDescending
                             >
                                 {musicTacts.map((song) => (
                                     <DashboardButtonWithAddIconNoLink
@@ -133,10 +191,15 @@ export const DashboardView = () => {
                                     />
                                 ))}
                             </SongGrid>
+
                             <SongGrid
                                 title={t("DashboardView:recentSongLabel")}
                                 songs={recentSongs}
+                                removeSong={removeSongFromRecentSongs}
                                 isLoading={getRecentSongs.loading}
+                                orderTerm={orderTerm}
+                                changeOrderTerm={handleChangeOrderTerm}
+                                orderDescending={orderDescending}
                             >
                                 <DashboardLibraryButton
                                     text={t("DashboardView:libraryButton")}
@@ -153,18 +216,22 @@ export const DashboardView = () => {
                                 cancelText={t("Modal:cancel")}
                                 headerText={t("Modal:addSong")}
                                 labelText={t("Modal:nameOfSong")}
+                                isLoading={postSong.loading}
                             />
                         </>
                     ) : (
                         <SongGrid
                             title={t("DashboardView:searchSongLabel")}
                             songs={filteredSongs}
+                            removeSong={removeSongFromFilteredSongs}
                             isLoading={getFilteredSongs.loading}
+                            orderTerm={orderTerm}
+                            changeOrderTerm={handleChangeOrderTerm}
+                            orderDescending={orderDescending}
                         />
                     )}
                 </Grid>
             </Box>
-            <Loading isLoading={postSong.loading} fullScreen />
             <ErrorDialog isError={postSong.isError} error={postSong.error} />
         </>
     )

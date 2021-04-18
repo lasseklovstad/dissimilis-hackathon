@@ -5,6 +5,8 @@ export const modalNo = {
     addInstrument: "Legg til et instrument",
     newVoiceName: "Nytt navn",
     changeVoiceName: "Endre navn",
+    deleteVoice: "Slett instrument",
+    deleteVoiceDescription: "Er du sikker du vil slette dette instrumentet?",
     saveChangesPrompt: "Vil du lagre endringer?",
     saveChangesPromptDescription:
         "Trykk 'ikke lagre' for å gå tilbake til dashboard uten å lagre",
@@ -20,4 +22,9 @@ export const modalNo = {
     save: "Lagre",
     errorTitle: "Det oppstod en feil",
     getSongError: "Det oppstod en feil ved henting av sang",
+    transposeSong: "Transponer sang",
+    transposed: "transponert",
+    transposingSong: "Transponerer sang",
+    transposeSongError: "Det oppstod en feil ved transponering av sang",
+    semiNotes: "Halvtoner",
 }

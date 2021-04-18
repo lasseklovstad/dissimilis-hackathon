@@ -2,14 +2,11 @@ import { useApiService } from "./useApiService"
 
 /**
  * Get one song
- * @param id songs id
  */
-
 export const useLoginRedirect = () => {
     const url = "login"
     const params = { web_app_url: process.env.REACT_APP_PUBLIC_URL as string }
-    const getLoginUrl = useApiService<string>(url, { params }).getData
-    return getLoginUrl
+    return useApiService<string>(url, { params }).getData
 }
 
 export const useLoginPost = (code: string | null) => {
@@ -20,8 +17,7 @@ export const useLoginPost = (code: string | null) => {
         "X-User-ID": sessionStorage.getItem("userId") || "",
     }
     const body = { code }
-    const postLogin = useApiService<Token>(url, { params, body }).postData
-    return postLogin
+    return useApiService<Token>(url, { params, body }).postData
 }
 
 export type Token = {

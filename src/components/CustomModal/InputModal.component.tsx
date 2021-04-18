@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import {
     Backdrop,
     Button,
+    CircularProgress,
     Fade,
     Grid,
     makeStyles,
@@ -43,9 +44,15 @@ const useStyles = makeStyles({
     container: {
         width: "100%",
     },
+    loading: {
+        margin: "8px",
+        marginRight: "16px",
+        justifyContent: "center",
+        alignContent: "center", 
+        minWidth: "64px",
+        maxWidth: "64px",
+    }
 })
-
-const CHARACTER_LIMIT = 250
 
 export const InputModal = (props: {
     defaultValue?: string
@@ -57,9 +64,14 @@ export const InputModal = (props: {
     cancelText: string
     headerText: string
     labelText: string
+    characterLimit?: number
+    isLoading?: boolean
 }) => {
     const classes = useStyles()
     const [textFieldInput, setTextFieldInput] = useState("")
+
+    const CHARACTER_LIMIT =
+        props.characterLimit === undefined ? 250 : props.characterLimit
 
     useEffect(() => {
         if (props.defaultValue) {
@@ -85,49 +97,65 @@ export const InputModal = (props: {
                         transform: `translate(-50%)`,
                     }}
                 >
-                    <Grid container>
-                        <Typography className={classes.title} variant="h2">
-                            {props.headerText}
-                        </Typography>
-                        <Grid item className={classes.insertName} xs={12}>
-                            <TextField
-                                inputProps={{ maxLength: CHARACTER_LIMIT }}
-                                helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`}
-                                autoFocus
-                                value={textFieldInput}
-                                variant="filled"
-                                onChange={(e) => {
-                                    setTextFieldInput(e.target.value)
-                                }}
-                                label={props.labelText}
-                                style={{ width: "100%" }}
-                            />
+                    <form
+                        className={classes.container}
+                        onSubmit={(event) => {
+                            event.preventDefault()
+                            props.handleOnSaveClick(textFieldInput)
+                        }}
+                    >
+                        <Grid container>
+                            <Typography className={classes.title} variant="h2">
+                                {props.headerText}
+                            </Typography>
+                            <Grid item className={classes.insertName} xs={12}>
+                                <TextField
+                                    inputProps={{ maxLength: CHARACTER_LIMIT }}
+                                    helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`}
+                                    autoFocus
+                                    value={textFieldInput}
+                                    variant="filled"
+                                    onChange={(e) => {
+                                        setTextFieldInput(e.target.value)
+                                    }}
+                                    label={props.labelText}
+                                    style={{ width: "100%" }}
+                                />
+                            </Grid>
+                            <Grid container xs={12} >
+                                {props.isLoading ? (
+                                    <Grid container className={classes.loading}>
+                                        <CircularProgress size={24} />
+                                    </Grid>
+                                ) : (
+                                    <Grid item >
+                                        <Button
+                                            className={classes.button}
+                                            size="large"
+                                            variant="contained"
+                                            disabled={!textFieldInput}
+                                            type="submit"
+                                        >
+                                            {props.saveText}
+                                        </Button>
+                                    </Grid>
+                                )}
+                                <Grid item>
+                                    <Button
+                                        className={classes.button}
+                                        size="large"
+                                        variant="outlined"
+                                        onClick={() => {
+                                            props.handleOnCancelClick()
+                                            setTextFieldInput("")
+                                        }}
+                                    >
+                                        {props.cancelText}
+                                    </Button>
+                                </Grid>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12}>
-                            <Button
-                                className={classes.button}
-                                size="large"
-                                variant="contained"
-                                disabled={!textFieldInput}
-                                onClick={() =>
-                                    props.handleOnSaveClick(textFieldInput)
-                                }
-                            >
-                                {props.saveText}
-                            </Button>
-                            <Button
-                                className={classes.button}
-                                size="large"
-                                variant="outlined"
-                                onClick={() => {
-                                    props.handleOnCancelClick()
-                                    setTextFieldInput("")
-                                }}
-                            >
-                                {props.cancelText}
-                            </Button>
-                        </Grid>
-                    </Grid>
+                    </form>
                 </div>
             </Fade>
         </Modal>

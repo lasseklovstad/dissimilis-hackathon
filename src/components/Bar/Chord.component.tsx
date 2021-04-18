@@ -1,18 +1,100 @@
 import React from "react"
-import { Box, ButtonBase, Typography, useTheme } from "@material-ui/core"
-import { IChordAndNotes } from "../../models/IBar"
+import { Box, ButtonBase, Typography } from "@material-ui/core"
+import { makeStyles } from "@material-ui/core/styles"
+import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
-import { getChord, getColor, tangentToNumber } from "../../utils/bar.util"
+import { getChord, tangentToNumber } from "../../utils/bar.util"
 
 type ChordProps = {
-    chordsAndNotes: IChordAndNotes
+    chords: IChord
     onContextMenu: (event: React.MouseEvent) => void
-    onClick: () => void
+    onClick: (event: React.MouseEvent) => void
     onMouseEnter: () => void
     onMouseLeave: () => void
     highlight: boolean
     disabled: boolean
+    showChordLetters: boolean
+    showNoteLetters: boolean
+    isSelected: boolean
+    handleChordFocus: () => void
+    barEditMode: boolean
 }
+
+const useStyle = makeStyles(() => ({
+    buttonBase: {
+        "&:hover": {
+            filter: `brightness(80%)`,
+        },
+        "&:focus": {
+            outline: `4px solid ${colors.focus}`,
+        },
+    },
+    emptyChordContainer: {
+        "&:hover": {
+            filter: `brightness(100%)`,
+        },
+        "&:focus": {
+            outline: `4px solid ${colors.focus}`,
+        },
+    },
+    noteContainer: {
+        marginTop: "1px",
+        borderColor: "rgb(0 0 0 / 12%)",
+        borderRadius: "3px",
+        display: "flex",
+        flex: "1",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "white",
+        border: "1px solid",
+    },
+    C: {
+        backgroundColor: colors.C.main,
+    },
+    D: {
+        backgroundColor: colors.D.main,
+    },
+    E: {
+        backgroundColor: colors.E.main,
+    },
+    F: {
+        backgroundColor: colors.F.main,
+    },
+    G: {
+        backgroundColor: colors.G.main,
+    },
+    A: {
+        backgroundColor: colors.A.main,
+    },
+    H: {
+        backgroundColor: colors.H.main,
+    },
+    "C#": {
+        backgroundColor: colors.gray_500,
+    },
+    "D#": {
+        backgroundColor: colors.gray_500,
+    },
+    "F#": {
+        backgroundColor: colors.gray_500,
+    },
+    "G#": {
+        backgroundColor: colors.gray_500,
+    },
+    "A#": {
+        backgroundColor: colors.gray_500,
+    },
+    disabled: {
+        border: 0,
+    },
+    highlight: {
+        backgroundColor: colors.focus,
+        filter: `brightness(100%)`,
+    },
+    selected: {
+        outline: `4px solid ${colors.focus}`,
+    },
+}))
 
 const ChordText = (props: { notes: string[] }) => {
     return (
@@ -34,85 +116,83 @@ const ChordText = (props: { notes: string[] }) => {
 
 export const Chord = (props: ChordProps) => {
     const {
-        chordsAndNotes,
+        chords,
         onClick,
         onContextMenu,
         onMouseEnter,
         onMouseLeave,
         highlight,
         disabled,
+        showChordLetters,
+        showNoteLetters,
+        isSelected,
+        handleChordFocus,
+        barEditMode,
     } = props
-    const isChord = chordsAndNotes.notes.length > 2
-    const {
-        palette: { getContrastText },
-    } = useTheme()
-
-    const getBackgroundColor = (note: string) => {
-        if (highlight && note === "Z") {
-            return colors.focus
-        }
-        return getColor(note)
-    }
+    const classes = useStyle()
+    const isChord = chords.notes.length > 2
 
     return (
-        <>
-            <Box
-                flexGrow={chordsAndNotes.length}
-                display="flex"
-                flexDirection="column"
-                position="relative"
-                height="calc(100% + 25px)"
-                justifyContent="flex-end"
-                top="-25px"
-                flexBasis="0"
-                mr={1}
-                minWidth={0}
+        <Box
+            flexGrow={chords.length}
+            display="flex"
+            flexDirection="column"
+            position="relative"
+            height="100%"
+            justifyContent="flex-end"
+            flexBasis="0"
+            mr={0.5}
+            ml={0.5}
+            minWidth={0}
+        >
+            {isChord && showChordLetters && <ChordText notes={chords.notes} />}
+            <ButtonBase
+                id="chordButton"
+                disabled={disabled}
+                onClick={onClick}
+                onContextMenu={onContextMenu}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                disableRipple={barEditMode}
+                className={`${
+                    barEditMode
+                        ? ""
+                        : chords.notes[0] === "Z"
+                        ? classes.emptyChordContainer
+                        : classes.buttonBase
+                } ${isSelected ? classes.selected : ""}`}
+                focusVisibleClassName={classes.buttonBase}
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "calc(100% - 25px)",
+                    width: "100%",
+                    minWidth: 0,
+                    alignItems: "stretch",
+                }}
+                onFocus={handleChordFocus}
             >
-                {isChord && <ChordText notes={chordsAndNotes.notes} />}
-                <ButtonBase
-                    disabled={disabled}
-                    focusRipple
-                    onClick={onClick}
-                    onContextMenu={onContextMenu}
-                    onMouseEnter={onMouseEnter}
-                    onMouseLeave={onMouseLeave}
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        height: "calc(100% - 25px)",
-                        width: "100%",
-                        minWidth: 0,
-                        alignItems: "stretch",
-                    }}
-                >
-                    {chordsAndNotes.notes
-                        .map((note, i) => {
-                            const text = tangentToNumber(note)
-                            const bgcolor = getBackgroundColor(note)
-                            const color = bgcolor
-                                ? getContrastText(bgcolor)
-                                : "#000000"
-                            return (
-                                <Box
-                                    key={note + i}
-                                    bgcolor={bgcolor}
-                                    color={color}
-                                    mt="1px"
-                                    borderColor="divider"
-                                    borderRadius={3}
-                                    border={disabled ? 0 : 1}
-                                    display="flex"
-                                    flex={1}
-                                    justifyContent="center"
-                                    alignItems="center"
-                                >
-                                    {text}
-                                </Box>
-                            )
-                        })
-                        .reverse()}
-                </ButtonBase>
-            </Box>
-        </>
+                {chords.notes
+                    .map((note, i) => {
+                        const tangent = tangentToNumber(note)
+                        return (
+                            <div
+                                id="singleChord"
+                                className={`${classes.noteContainer} ${
+                                    (classes as any)[note]
+                                } ${disabled ? "disabled" : ""} ${
+                                    note === "Z" && highlight
+                                        ? classes.highlight
+                                        : ""
+                                }`}
+                                key={note + i}
+                            >
+                                {showNoteLetters || Number(tangent)? tangent : undefined}
+                            </div>
+                        )
+                    })
+                    .reverse()}
+            </ButtonBase>
+        </Box>
     )
 }

@@ -1,7 +1,15 @@
 import React, { useState } from "react"
-import { AppBar, Box, Grid, makeStyles, TextField } from "@material-ui/core"
+import {
+    AppBar,
+    Box,
+    Grid,
+    Hidden,
+    makeStyles,
+    TextField,
+    Typography,
+    useMediaQuery,
+} from "@material-ui/core"
 import { useTranslation } from "react-i18next"
-import { useHistory } from "react-router"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 
 const useStyles = makeStyles(() => ({
@@ -14,32 +22,48 @@ const useStyles = makeStyles(() => ({
 export const DashboardTopBar = (props: {
     onChange: (txt: string) => void
     onGoHome?: () => void
+    searchTerm?: string
+    user?: string
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const history = useHistory()
     const searchPlaceholder = t("DashboardView:search")
     const [searchBarFocus, setSearchBarFocus] = useState(false)
+    const { onGoHome, searchTerm } = props
+    const sm = useMediaQuery("(min-width: 600px)")
 
     return (
         <div>
             <AppBar position="static" className={classes.background}>
                 <Box py={3}>
                     <Grid container spacing={2}>
-                        <Grid item sm={1} />
+                        <Hidden xsDown>
+                            <Grid item sm={1} />
+                        </Hidden>
                         <Grid item xs={2}>
-                            <DashboardTopBarIcon />
+                            <DashboardTopBarIcon onGoHome={onGoHome} />
+                        </Grid>
+                        <Hidden smDown>
+                            <Grid
+                                item
+                                md={searchBarFocus ? 1 : 3}
+                            />
+                        </Hidden>
+                        <Grid
+                            container
+                            xs={10}
+                            sm={searchBarFocus ? 3 : 5}
+                            md={2}
+                            justify="flex-end"
+                            alignItems="center"
+                            style={{ paddingRight: sm ? 32 : 8 }}
+                        >
+                            <Typography>{props.user}</Typography>
                         </Grid>
                         <Grid
                             item
-                            xs={6}
-                            sm={searchBarFocus ? 2 : 5}
-                            md={searchBarFocus ? 3 : 5}
-                        />
-                        <Grid
-                            item
                             xs={12}
-                            sm={searchBarFocus ? 6 : 3}
+                            sm={searchBarFocus ? 5 : 3}
                             md={searchBarFocus ? 5 : 3}
                         >
                             <TextField
@@ -57,6 +81,7 @@ export const DashboardTopBar = (props: {
                                 onChange={(event) =>
                                     props.onChange(event.target.value)
                                 }
+                                value={searchTerm}
                             />
                         </Grid>
                     </Grid>
