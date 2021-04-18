@@ -284,8 +284,8 @@ export const Bar = (props: {
                                 return (
                                     <Chord
                                         showChordLetters={showChordLetters}
+                                        exportMode={exportMode}
                                         showNoteLetters={showNoteLetters}
-                                        disabled={exportMode}
                                         onMouseLeave={() =>
                                             !editBars.barEditMode &&
                                             setPositionArray([])

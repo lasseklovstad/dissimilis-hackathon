@@ -245,6 +245,9 @@ export const BottomBar = (props: {
                                     </Typography>
                                 </ToggleButton>
                             </StyledToggleButtonGroup>
+                            <Button onClick={deleteSelectedChord}>
+                                <Delete />
+                            </Button>
                         </div>
                     </ClickAwayListener>
 
@@ -253,9 +256,6 @@ export const BottomBar = (props: {
                             text={t("BottomBar:addBar")}
                             onClick={handleAddBar}
                         />
-                        <Button onClick={deleteSelectedChord}>
-                            <Delete />
-                        </Button>
                     </div>
                 </Grid>
             </Grid>
