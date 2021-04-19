@@ -42,7 +42,13 @@
         "halfNote": "Halvnote",
         "quarterNote": "Firedelsnote",
         "eighthNote": "Åttendelsnote",
-        "open": "Åpne"
+        "open": "Åpne",
+        "keynote": "Grunntone",
+        "third": "Ters",
+        "fifth": "Kvint",
+        "seventh": "Septim",
+        "ninth": "Non",
+        "eleventh": "Undesim"
     },
     "ChordMenu": {
         "deleteChord": "Slett",

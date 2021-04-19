@@ -47,15 +47,21 @@ export const DashboardTopBar = (props: {
                             <Grid item md={searchBarFocus ? 1 : 3} />
                         </Hidden>
                         <Grid
-                            container
+                            item
                             xs={10}
                             sm={searchBarFocus ? 3 : 5}
                             md={2}
-                            justify="flex-end"
-                            alignItems="center"
                             style={{ paddingRight: sm ? 32 : 8 }}
                         >
-                            <Typography>{props.user}</Typography>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="flex-end"
+                                alignItems="center"
+                                style={{ height: "100%" }}
+                            >
+                                <Typography>{props.user}</Typography>
+                            </Grid>
                         </Grid>
                         <Grid
                             item
