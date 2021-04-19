@@ -89,7 +89,7 @@ export const ChordOptions = (props: {
                                     name={note as string}
                                 />
                             }
-                            label={t(`BottomBar:${toneNames[i]}`)}
+                            label={t(`BottomBar.${toneNames[i]}`)}
                         />
                     )
                 })}
@@ -160,7 +160,7 @@ export const DropdownAutocomplete = (props: {
                 }
             }}
             blurOnSelect="touch"
-            openText={t("BottomBar:open")}
+            openText={t("BottomBar.open")}
             PopperComponent={customPopperPlacement}
             closeIcon={false}
             className={styles.dropdown}

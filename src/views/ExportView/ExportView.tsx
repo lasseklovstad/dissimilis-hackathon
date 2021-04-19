@@ -176,7 +176,10 @@ export const ExportView = () => {
                             <Grid container>
                                 <Grid item xs={12}>
                                     <Typography
-                                        style={{ textAlign: "center", fontSize: "1.75rem" }}
+                                        style={{
+                                            textAlign: "center",
+                                            fontSize: "1.75rem",
+                                        }}
                                     >
                                         {songInit?.title}
                                     </Typography>
@@ -185,8 +188,8 @@ export const ExportView = () => {
                                         variant="body1"
                                     >
                                         {selectedVoice?.title
-                                        ? t("CreateSongTab:song")
-                                        : selectedVoice?.title}
+                                            ? t("CreateSongTab.song")
+                                            : selectedVoice?.title}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12}>
@@ -249,7 +252,7 @@ export const ExportView = () => {
                     >
                         <FormControl className={classes.formControl}>
                             <InputLabel id="voice">
-                                {t("ExportView:voice")}
+                                {t("ExportView.voice")}
                             </InputLabel>
                             <Select
                                 labelId="voice"
@@ -267,7 +270,7 @@ export const ExportView = () => {
                                             value={voice.songVoiceId}
                                         >
                                             {voice.isMain
-                                                ? t("CreateSongTab:song")
+                                                ? t("CreateSongTab.song")
                                                 : voice.title}
                                         </MenuItem>
                                     )
@@ -285,7 +288,7 @@ export const ExportView = () => {
                     >
                         <FormControl className={classes.formControl}>
                             <InputLabel id="barPerRow">
-                                {t("ExportView:barPerRow")}
+                                {t("ExportView.barPerRow")}
                             </InputLabel>
                             <Select
                                 labelId="barPerRow"
@@ -323,7 +326,7 @@ export const ExportView = () => {
                     >
                         <FormControl className={classes.formControl}>
                             <InputLabel id="rowsPerSheet">
-                                {t("ExportView:rowsPerSheet")}
+                                {t("ExportView.rowsPerSheet")}
                             </InputLabel>
                             <Select
                                 labelId="rowsPerSheet"
@@ -364,13 +367,13 @@ export const ExportView = () => {
                             className={`${classes.formControl} ${classes.flexStart}`}
                         >
                             <Typography className={classes.chordLetters}>
-                                {t("ExportView:chordLetters")}
+                                {t("ExportView.chordLetters")}
                             </Typography>
                             <FormControlLabel
                                 label={
                                     showChordLetters
-                                        ? t("ExportView:showChordLetters")
-                                        : t("ExportView:hideChordLetters")
+                                        ? t("ExportView.showChordLetters")
+                                        : t("ExportView.hideChordLetters")
                                 }
                                 className={classes.flexStart}
                                 style={{
@@ -404,13 +407,13 @@ export const ExportView = () => {
                             className={`${classes.formControl} ${classes.flexStart}`}
                         >
                             <Typography className={classes.chordLetters}>
-                                {t("ExportView:noteLetters")}
+                                {t("ExportView.noteLetters")}
                             </Typography>
                             <FormControlLabel
                                 label={
                                     showNoteLetters
-                                        ? t("ExportView:showChordLetters")
-                                        : t("ExportView:hideChordLetters")
+                                        ? t("ExportView.showChordLetters")
+                                        : t("ExportView.hideChordLetters")
                                 }
                                 className={classes.flexStart}
                                 style={{
@@ -434,13 +437,13 @@ export const ExportView = () => {
                             className={`${classes.confirmOrCancelButtons} ${classes.confirmButton}`}
                             onClick={() => window.print()}
                         >
-                            {t("ExportView:createPDF")}
+                            {t("ExportView.createPDF")}
                         </Button>
                         <Button
                             className={classes.confirmOrCancelButtons}
                             onClick={() => history.push(`/song/${songId}/`)}
                         >
-                            {t("ExportView:cancel")}
+                            {t("ExportView.cancel")}
                         </Button>
                     </Grid>
                 </Grid>

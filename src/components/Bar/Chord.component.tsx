@@ -38,7 +38,7 @@ const useStyle = makeStyles(() => ({
         },
     },
     exportNumberSize: {
-        fontSize: "1.25rem"
+        fontSize: "1.25rem",
     },
     noteContainer: {
         marginTop: "1px",
@@ -188,7 +188,11 @@ export const Chord = (props: ChordProps) => {
                                     note === "Z" && highlight
                                         ? classes.highlight
                                         : ""
-                                } ${Number(tangent) && exportMode ? classes.exportNumberSize : undefined}`}
+                                } ${
+                                    Number(tangent) && exportMode
+                                        ? classes.exportNumberSize
+                                        : undefined
+                                }`}
                                 key={note + i}
                             >
                                 {showNoteLetters || Number(tangent)
