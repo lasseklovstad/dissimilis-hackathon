@@ -12,7 +12,7 @@ const getHeaders = () => {
 /**
  * Get current user
  */
- export const useGetUser = () => {
+export const useGetUser = () => {
     const url = "user/currentUser"
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IUser>(url, { headers })

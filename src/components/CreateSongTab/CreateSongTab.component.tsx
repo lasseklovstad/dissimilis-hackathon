@@ -175,7 +175,7 @@ export const CreateSongTab = (props: {
                 >
                     {voices.map((voice) => {
                         const label = voice.isMain
-                            ? t("CreateSongTab:song")
+                            ? t("CreateSongTab.song")
                             : voice.title
                         return (
                             <Tab
@@ -216,11 +216,13 @@ export const CreateSongTab = (props: {
                 onClose={() => handleClose()}
                 role="menu"
             >
-                <MenuItem onClick={() => {
+                <MenuItem
+                    onClick={() => {
                         setNewInstrumentModalIsOpen(true)
                         setAnchorEl(null)
-                    }}>
-                    {t("CreateSongTab:newInstrument")}
+                    }}
+                >
+                    {t("CreateSongTab.newInstrument")}
                 </MenuItem>
                 <MenuItem
                     disabled={selectedVoice?.isMain}
@@ -229,7 +231,7 @@ export const CreateSongTab = (props: {
                         setAnchorEl(null)
                     }}
                 >
-                    {t("CreateSongTab:changeVoiceName")}
+                    {t("CreateSongTab.changeVoiceName")}
                 </MenuItem>
                 <MenuItem
                     disabled={selectedVoice?.isMain}
@@ -238,7 +240,7 @@ export const CreateSongTab = (props: {
                         setAnchorEl(null)
                     }}
                 >
-                    {t("CreateSongTab:deleteVoice")}
+                    {t("CreateSongTab.deleteVoice")}
                 </MenuItem>
                 <MenuItem
                     disabled={selectedVoice?.isMain}
@@ -247,7 +249,7 @@ export const CreateSongTab = (props: {
                         setAnchorEl(null)
                     }}
                 >
-                    {t("CreateSongTab:duplicateVoice")}
+                    {t("CreateSongTab.duplicateVoice")}
                 </MenuItem>
             </Menu>
 
@@ -256,10 +258,10 @@ export const CreateSongTab = (props: {
                 handleOnSaveClick={handleAddInstrument}
                 handleClosed={() => handleClose()}
                 modalOpen={newInstrumentModalIsOpen}
-                saveText={t("Modal:create")}
-                cancelText={t("Modal:cancel")}
-                headerText={t("Modal:addInstrument")}
-                labelText={t("Modal:nameOfInstrument")}
+                saveText={t("Modal.create")}
+                cancelText={t("Modal.cancel")}
+                headerText={t("Modal.addInstrument")}
+                labelText={t("Modal.nameOfInstrument")}
                 characterLimit={100}
                 isLoading={postVoice.loading}
             />
@@ -269,10 +271,10 @@ export const CreateSongTab = (props: {
                 handleOnSaveClick={handleChangeVoiceTitle}
                 handleClosed={handleClose}
                 modalOpen={renameModalIsOpen}
-                saveText={t("Modal:save")}
-                cancelText={t("Modal:cancel")}
-                headerText={t("Modal:changeVoiceName")}
-                labelText={t("Modal:newVoiceName")}
+                saveText={t("Modal.save")}
+                cancelText={t("Modal.cancel")}
+                headerText={t("Modal.changeVoiceName")}
+                labelText={t("Modal.newVoiceName")}
                 isLoading={putVoice.loading}
                 characterLimit={100}
             />
@@ -280,11 +282,11 @@ export const CreateSongTab = (props: {
                 handleOnCancelClick={handleClose}
                 handleClosed={handleClose}
                 handleOnSaveClick={handleDeleteInstrument}
-                ackText={t("Modal:deleteVoice")}
+                ackText={t("Modal.deleteVoice")}
                 modalOpen={deleteModalIsOpen}
-                cancelText={t("Modal:cancel")}
-                headerText={t("Modal:deleteVoice")}
-                descriptionText={t("Modal:deleteVoiceDescription")}
+                cancelText={t("Modal.cancel")}
+                headerText={t("Modal.deleteVoice")}
+                descriptionText={t("Modal.deleteVoiceDescription")}
             />
             <Menu
                 open={!!rightClickMenuPosition}
@@ -300,7 +302,7 @@ export const CreateSongTab = (props: {
                         setRightClickMenuPosition(undefined)
                     }}
                 >
-                    {t("CreateSongTab:changeVoiceName")}
+                    {t("CreateSongTab.changeVoiceName")}
                 </MenuItem>
                 <MenuItem
                     onClick={() => {
@@ -308,7 +310,7 @@ export const CreateSongTab = (props: {
                         setRightClickMenuPosition(undefined)
                     }}
                 >
-                    {t("CreateSongTab:deleteVoice")}
+                    {t("CreateSongTab.deleteVoice")}
                 </MenuItem>
                 <MenuItem
                     onClick={() => {
@@ -316,7 +318,7 @@ export const CreateSongTab = (props: {
                         setRightClickMenuPosition(undefined)
                     }}
                 >
-                    {t("CreateSongTab:duplicateVoice")}
+                    {t("CreateSongTab.duplicateVoice")}
                 </MenuItem>
             </Menu>
         </>

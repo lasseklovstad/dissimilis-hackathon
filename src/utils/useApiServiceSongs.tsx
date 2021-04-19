@@ -135,21 +135,18 @@ export const useGetRecentSongs = (
     }
     const initialData: ISong[] = []
     const headers = getHeaders()
-    const { postSearchWithArrangerId, state, data } = useApiService<ISong[]>(
-        url,
-        {
-            body,
-            initialData,
-            headers,
-        }
-    )
+    const { postData, state, data } = useApiService<ISong[]>(url, {
+        body,
+        initialData,
+        headers,
+    })
 
     useEffect(() => {
-        postSearchWithArrangerId(body)
-    }, [postSearchWithArrangerId])
+        postData()
+    }, [postData])
 
     return {
-        getRecentSongs: { run: postSearchWithArrangerId, ...state },
+        getRecentSongs: { run: postData, ...state },
         recentSongsFetched: data,
     }
 }

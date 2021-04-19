@@ -111,7 +111,7 @@ export const LoginView = () => {
                     </IconButton>
                 }
             >
-                {t("LoginView:loginFailed")}
+                {t("LoginView.loginFailed")}
             </Alert>
         </Collapse>
     )
@@ -155,14 +155,14 @@ export const LoginView = () => {
                     <TextField
                         className={classes.textfield}
                         fullWidth
-                        label={t("LoginView:username")}
+                        label={t("LoginView.username")}
                         variant="filled"
                         onSubmit={tryLogin}
                     />
                     <TextField
                         className={classes.textfield}
                         fullWidth
-                        label={t("LoginView:password")}
+                        label={t("LoginView.password")}
                         type="password"
                         variant="filled"
                         onSubmit={tryLogin}
@@ -173,7 +173,7 @@ export const LoginView = () => {
                         fullWidth
                         variant="outlined"
                     >
-                        {t("LoginView:login")}
+                        {t("LoginView.login")}
                     </Button>
                     <Button
                         size="large"
@@ -182,7 +182,7 @@ export const LoginView = () => {
                         variant="outlined"
                         onClick={tryLogin}
                     >
-                        {t("LoginView:loginWithMicrosoft")}
+                        {t("LoginView.loginWithMicrosoft")}
                     </Button>
                     {warning}
                 </Grid>

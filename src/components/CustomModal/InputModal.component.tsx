@@ -48,10 +48,10 @@ const useStyles = makeStyles({
         margin: "8px",
         marginRight: "16px",
         justifyContent: "center",
-        alignContent: "center", 
+        alignContent: "center",
         minWidth: "64px",
         maxWidth: "64px",
-    }
+    },
 })
 
 export const InputModal = (props: {
@@ -122,36 +122,41 @@ export const InputModal = (props: {
                                     style={{ width: "100%" }}
                                 />
                             </Grid>
-                            <Grid container xs={12} >
-                                {props.isLoading ? (
-                                    <Grid container className={classes.loading}>
-                                        <CircularProgress size={24} />
-                                    </Grid>
-                                ) : (
-                                    <Grid item >
+                            <Grid item xs={12}>
+                                <Grid container>
+                                    {props.isLoading ? (
+                                        <Grid
+                                            container
+                                            className={classes.loading}
+                                        >
+                                            <CircularProgress size={24} />
+                                        </Grid>
+                                    ) : (
+                                        <Grid item>
+                                            <Button
+                                                className={classes.button}
+                                                size="large"
+                                                variant="contained"
+                                                disabled={!textFieldInput}
+                                                type="submit"
+                                            >
+                                                {props.saveText}
+                                            </Button>
+                                        </Grid>
+                                    )}
+                                    <Grid item>
                                         <Button
                                             className={classes.button}
                                             size="large"
-                                            variant="contained"
-                                            disabled={!textFieldInput}
-                                            type="submit"
+                                            variant="outlined"
+                                            onClick={() => {
+                                                props.handleOnCancelClick()
+                                                setTextFieldInput("")
+                                            }}
                                         >
-                                            {props.saveText}
+                                            {props.cancelText}
                                         </Button>
                                     </Grid>
-                                )}
-                                <Grid item>
-                                    <Button
-                                        className={classes.button}
-                                        size="large"
-                                        variant="outlined"
-                                        onClick={() => {
-                                            props.handleOnCancelClick()
-                                            setTextFieldInput("")
-                                        }}
-                                    >
-                                        {props.cancelText}
-                                    </Button>
                                 </Grid>
                             </Grid>
                         </Grid>

@@ -13,7 +13,7 @@ describe("CreateSongTab", () => {
             </BrowserRouter>
         )
         const addNewInstrumentButton = screen.getByRole("button", {
-            name: /CreateSongTab:newInstrument/i,
+            name: /CreateSongTab.newInstrument/i,
         })
         addNewInstrumentButton.click()
 
@@ -21,7 +21,7 @@ describe("CreateSongTab", () => {
         userEvent.type(textInputField, "Guitar")
 
         const saveButton = screen.getByRole("button", {
-            name: /CreateSongTab:save/i,
+            name: /CreateSongTab.save/i,
         })
 
         expect(saveButton).toBeEnabled()
@@ -34,12 +34,12 @@ describe("CreateSongTab", () => {
             </BrowserRouter>
         )
         const addNewInstrumentButton = screen.getByRole("button", {
-            name: /CreateSongTab:newInstrument/i,
+            name: /CreateSongTab.newInstrument/i,
         })
         addNewInstrumentButton.click()
 
         const saveButton = screen.getByRole("button", {
-            name: /CreateSongTab:save/i,
+            name: /CreateSongTab.save/i,
         })
 
         expect(saveButton).toBeDisabled()

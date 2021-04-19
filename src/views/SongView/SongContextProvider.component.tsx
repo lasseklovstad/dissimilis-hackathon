@@ -138,6 +138,7 @@ export const SongContext = React.createContext<ISongContext>({
         chordLength: 1,
         chord: "C",
         chordType: ChordType.NOTE,
+        chordNotes: ["C"],
     },
     setValuesForSelectedChord: () => {
         throw new Error("setValuesForSelectedChord is not implemented")
