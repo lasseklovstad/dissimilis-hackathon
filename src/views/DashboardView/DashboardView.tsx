@@ -87,8 +87,8 @@ export const DashboardView = () => {
         orderTerm,
         orderDescending
     )
-    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>() 
-    
+    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>()
+
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
         orderTerm,

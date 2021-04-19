@@ -12,4 +12,10 @@ export const bottombarNo = {
     quarterNote: "Firedelsnote",
     eighthNote: "Åttendelsnote",
     open: "Åpne",
+    keynote: "Grunntone",
+    third: "Ters",
+    fifth: "Kvint",
+    seventh: "Septim",
+    ninth: "Non",
+    eleventh: "Undesim",
 }

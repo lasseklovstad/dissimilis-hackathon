@@ -3,7 +3,7 @@ import { Box, ButtonBase, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
-import { getChord, tangentToNumber } from "../../utils/bar.util"
+import { tangentToNumber } from "../../utils/bar.util"
 
 type ChordProps = {
     chords: IChord
@@ -99,7 +99,7 @@ const useStyle = makeStyles(() => ({
     },
 }))
 
-const ChordText = (props: { notes: string[] }) => {
+const ChordText = (props: { chordName: string }) => {
     return (
         <Typography
             variant="body1"
@@ -112,7 +112,7 @@ const ChordText = (props: { notes: string[] }) => {
                 color: "#555555",
             }}
         >
-            {`${getChord(props.notes)} `}
+            {`${props.chordName} `}
         </Typography>
     )
 }
@@ -133,7 +133,6 @@ export const Chord = (props: ChordProps) => {
         barEditMode,
     } = props
     const classes = useStyle()
-    const isChord = chords.notes.length > 2
 
     return (
         <Box
@@ -148,7 +147,9 @@ export const Chord = (props: ChordProps) => {
             ml={0.5}
             minWidth={0}
         >
-            {isChord && showChordLetters && <ChordText notes={chords.notes} />}
+            {chords.chordName && showChordLetters && (
+                <ChordText chordName={chords.chordName} />
+            )}
             <ButtonBase
                 id="chordButton"
                 disabled={exportMode}
@@ -190,7 +191,9 @@ export const Chord = (props: ChordProps) => {
                                 } ${Number(tangent) && exportMode ? classes.exportNumberSize : undefined}`}
                                 key={note + i}
                             >
-                                {showNoteLetters || Number(tangent)? tangent : undefined}
+                                {showNoteLetters || Number(tangent)
+                                    ? tangent
+                                    : undefined}
                             </div>
                         )
                     })
