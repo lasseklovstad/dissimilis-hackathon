@@ -44,7 +44,7 @@ const BarRightClickMenu = (props: {
                 tabIndex={-1}
                 onClick={handleClose("copy")}
             >
-                {t("ChordMenu:copy")}
+                {t("ChordMenu.copy")}
             </MenuItem>
             <MenuItem
                 id="menuItem"
@@ -57,7 +57,7 @@ const BarRightClickMenu = (props: {
                 tabIndex={-1}
                 onClick={handleClose("pasteBefore")}
             >
-                {t("ChordMenu:pasteBefore")}
+                {t("ChordMenu.pasteBefore")}
             </MenuItem>
             <MenuItem
                 id="menuItem"
@@ -70,7 +70,7 @@ const BarRightClickMenu = (props: {
                 tabIndex={-1}
                 onClick={handleClose("pasteAfter")}
             >
-                {t("ChordMenu:pasteAfter")}
+                {t("ChordMenu.pasteAfter")}
             </MenuItem>
             <MenuItem
                 id="menuItem"
@@ -78,7 +78,7 @@ const BarRightClickMenu = (props: {
                 tabIndex={-1}
                 onClick={handleClose("delete")}
             >
-                {t("ChordMenu:deleteBars")}
+                {t("ChordMenu.deleteBars")}
             </MenuItem>
         </Menu>
     )

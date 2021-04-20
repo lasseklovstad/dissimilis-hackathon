@@ -7,4 +7,5 @@ export interface IChordMenuOptions {
     chordLength: number
     chord: string
     chordType: ChordType.CHORD | ChordType.NOTE
+    chordNotes: string[]
 }

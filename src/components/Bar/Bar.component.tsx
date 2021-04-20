@@ -9,7 +9,6 @@ import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
 import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
 import { getNotesFromChord } from "../../models/chords"
-import { getChord } from "../../utils/bar.util"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { makeStyles } from "@material-ui/core/styles"
 import { colors } from "../../utils/colors"
@@ -130,8 +129,7 @@ export const Bar = (props: {
     }
 
     const updateMenuOptions = (chord: IChord) => {
-        const chordType =
-            chord.notes.length === 1 ? ChordType.NOTE : ChordType.CHORD
+        const chordType = !chord.chordName ? ChordType.NOTE : ChordType.CHORD
         dispatchChordMenuOptions({
             type: "UPDATE_OPTIONS",
             menuOptions: {
@@ -139,8 +137,9 @@ export const Bar = (props: {
                 chord:
                     chordType === ChordType.NOTE
                         ? chord.notes[0]
-                        : getChord(chord.notes),
+                        : chord.chordName,
                 chordType: chordType,
+                chordNotes: chord.notes,
             },
         })
     }
@@ -154,14 +153,25 @@ export const Bar = (props: {
 
             const position =
                 positionArray.length > 0 ? positionArray[0] : chord.position
+
+            const chordName =
+                chordMenuOptions.chordType === ChordType.CHORD
+                    ? chordMenuOptions.chord
+                    : null
+
             const { error, result } = await postChord.run({
                 position,
                 length: chordMenuOptions.chordLength,
                 notes,
+                chordName,
             } as IChord)
 
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+                dispatchChordMenuOptions({
+                    type: "UPDATE_CHORD_NOTES",
+                    chordNotes: notes as string[],
+                })
                 setValuesForSelectedChord(
                     result.data.chords.find((c) => c.position === position)
                         ?.chordId,
@@ -271,6 +281,7 @@ export const Bar = (props: {
                                             notes: ["Z"],
                                             position: note.position + i,
                                             chordId: null,
+                                            chordName: "",
                                         })
                                     }
                                     return [...noter, ...rests]

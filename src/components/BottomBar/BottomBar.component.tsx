@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { RefObject, useContext } from "react"
 import {
     Button,
     ClickAwayListener,
@@ -6,6 +6,7 @@ import {
     Grid,
     makeStyles,
     MenuItem,
+    RootRef,
     Select,
     Typography,
     withStyles,
@@ -16,6 +17,7 @@ import { useTranslation } from "react-i18next"
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup"
 import ToggleButton from "@material-ui/lab/ToggleButton"
 import {
+    ChordOptions,
     DropdownAutocomplete,
     MenuButtonWithAddIcon,
 } from "../BottomMenuButtons/BottomMenuButtons"
@@ -144,6 +146,8 @@ export const BottomBar = (props: {
     chordDropdownContent: string[]
     deleteSelectedChord: () => void
     clickOutsideListener: (e: any) => void
+    onChordNotesChange: (clickedNote: string, checked: boolean) => void
+    chordOptionsRef: RefObject<any>
 }) => {
     const {
         timeSignature: { numerator, denominator },
@@ -156,10 +160,12 @@ export const BottomBar = (props: {
         chordDropdownContent,
         clickOutsideListener,
         deleteSelectedChord,
+        onChordNotesChange,
+        chordOptionsRef,
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
-    const { chordMenuOptions } = useContext(SongContext)
+    const { chordMenuOptions, selectedChordId } = useContext(SongContext)
 
     const { postBar } = useAddBar(songId, voiceId)
 
@@ -237,7 +243,7 @@ export const BottomBar = (props: {
                                     onChordChange={onChordChange}
                                     icon={<MusicNoteIcon fontSize="small" />}
                                     chordDropdownContent={chordDropdownContent}
-                                    noOptionsText={t("BottomBar:noOptions")}
+                                    noOptionsText={t("BottomBar.noOptions")}
                                 />
                             </div>
                             <StyledToggleButtonGroup
@@ -253,7 +259,7 @@ export const BottomBar = (props: {
                                     className={classes.focusElement}
                                 >
                                     <Typography>
-                                        {t("BottomBar:chord")}
+                                        {t("BottomBar.chord")}
                                     </Typography>
                                 </ToggleButton>
                                 <ToggleButton
@@ -262,7 +268,7 @@ export const BottomBar = (props: {
                                     className={classes.focusElement}
                                 >
                                     <Typography>
-                                        {t("BottomBar:note")}
+                                        {t("BottomBar.note")}
                                     </Typography>
                                 </ToggleButton>
                             </StyledToggleButtonGroup>
@@ -272,9 +278,20 @@ export const BottomBar = (props: {
                         </div>
                     </ClickAwayListener>
 
+                    {chordMenuOptions.chordType === ChordType.CHORD &&
+                    selectedChordId ? (
+                        <RootRef rootRef={chordOptionsRef}>
+                            <div className={classes.container}>
+                                <ChordOptions
+                                    chord={chordMenuOptions.chord}
+                                    onChordNotesChange={onChordNotesChange}
+                                />
+                            </div>
+                        </RootRef>
+                    ) : undefined}
                     <div className={classes.container}>
                         <MenuButtonWithAddIcon
-                            text={t("BottomBar:addBar")}
+                            text={t("BottomBar.addBar")}
                             onClick={handleAddBar}
                         />
                     </div>

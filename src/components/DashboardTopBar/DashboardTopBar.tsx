@@ -27,7 +27,7 @@ export const DashboardTopBar = (props: {
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const searchPlaceholder = t("DashboardView:search")
+    const searchPlaceholder = t("DashboardView.search")
     const [searchBarFocus, setSearchBarFocus] = useState(false)
     const { onGoHome, searchTerm } = props
     const sm = useMediaQuery("(min-width: 600px)")
@@ -44,21 +44,24 @@ export const DashboardTopBar = (props: {
                             <DashboardTopBarIcon onGoHome={onGoHome} />
                         </Grid>
                         <Hidden smDown>
-                            <Grid
-                                item
-                                md={searchBarFocus ? 1 : 3}
-                            />
+                            <Grid item md={searchBarFocus ? 1 : 3} />
                         </Hidden>
                         <Grid
-                            container
+                            item
                             xs={10}
                             sm={searchBarFocus ? 3 : 5}
                             md={2}
-                            justify="flex-end"
-                            alignItems="center"
                             style={{ paddingRight: sm ? 32 : 8 }}
                         >
-                            <Typography>{props.user}</Typography>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="flex-end"
+                                alignItems="center"
+                                style={{ height: "100%" }}
+                            >
+                                <Typography>{props.user}</Typography>
+                            </Grid>
                         </Grid>
                         <Grid
                             item
