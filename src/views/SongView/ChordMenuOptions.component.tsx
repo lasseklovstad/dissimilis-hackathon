@@ -12,10 +12,16 @@ export type ChordMenuAction =
     | {
           type: "UPDATE_CHORD"
           chord: string
+          chordNotes: string[]
       }
     | {
           type: "UPDATE_CHORD_TYPE"
           chordType: ChordType.CHORD | ChordType.NOTE
+          chordNotes: string[]
+      }
+    | {
+          type: "UPDATE_CHORD_NOTES"
+          chordNotes: string[]
       }
 
 export const chordMenuReducer = (
@@ -28,6 +34,7 @@ export const chordMenuReducer = (
                 chordLength: action.menuOptions.chordLength,
                 chord: action.menuOptions.chord,
                 chordType: action.menuOptions.chordType,
+                chordNotes: action.menuOptions.chordNotes,
             }
         case "UPDATE_CHORD_LENGTH":
             return {
@@ -38,11 +45,18 @@ export const chordMenuReducer = (
             return {
                 ...chordOptions,
                 chord: action.chord,
+                chordNotes: action.chordNotes,
             }
         case "UPDATE_CHORD_TYPE":
             return {
                 ...chordOptions,
                 chordType: action.chordType,
+                chordNotes: action.chordNotes,
+            }
+        case "UPDATE_CHORD_NOTES":
+            return {
+                ...chordOptions,
+                chordNotes: action.chordNotes,
             }
         default:
             return chordOptions

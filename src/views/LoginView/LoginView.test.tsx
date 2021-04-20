@@ -23,7 +23,7 @@ describe("LoginView", () => {
             </BrowserRouter>
         )
         const LoginButton = screen.getAllByRole("button", {
-            name: /LoginView:login/i,
+            name: /LoginView.login/i,
         })
         expect(LoginButton[0]).toBeEnabled()
     })
@@ -35,7 +35,7 @@ describe("LoginView", () => {
             </BrowserRouter>
         )
         const LoginButtonMicrosoft = screen.getAllByRole("button", {
-            name: /LoginView:loginWithMicrosoft/i,
+            name: /LoginView.loginWithMicrosoft/i,
         })
         expect(LoginButtonMicrosoft[0]).toBeEnabled()
     })
