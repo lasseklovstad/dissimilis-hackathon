@@ -175,9 +175,6 @@ export const DashboardView = () => {
                                 songs={undefined}
                                 removeSong={() => undefined}
                                 isLoading={false}
-                                orderTerm=""
-                                changeOrderTerm={() => undefined}
-                                orderDescending
                             >
                                 {musicTacts.map((song) => (
                                     <DashboardButtonWithAddIconNoLink
@@ -197,9 +194,6 @@ export const DashboardView = () => {
                                 songs={recentSongs}
                                 removeSong={removeSongFromRecentSongs}
                                 isLoading={getRecentSongs.loading}
-                                orderTerm=""
-                                changeOrderTerm={() => undefined}
-                                orderDescending
                             >
                                 <DashboardLibraryButton
                                     text={t("DashboardView.allSongLabel")}
