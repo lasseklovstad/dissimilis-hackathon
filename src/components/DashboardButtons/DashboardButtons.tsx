@@ -321,7 +321,7 @@ export const DashboardTopBarIcon = (props: { onGoHome?: () => void }) => {
     const altProp = t("DashboardView.altButterflyButtonProp")
     const { onGoHome } = props
     return (
-        <IconButton component={Link} to="/dashboard" onClick={onGoHome}>
+        <IconButton component={Link} to="/dashboard" onClick={onGoHome} aria-label="Go home">
             <Icon fontSize="large">
                 <img src={butterflyBlue} alt={altProp} />
             </Icon>
