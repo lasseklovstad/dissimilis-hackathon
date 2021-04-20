@@ -5,15 +5,15 @@ import { TestWrapper } from "../../TestWrapper.komponent"
 import userEvent from "@testing-library/user-event"
 import renderWithi18next from "../../renderWithi18next"
 
-let container
+let DashboardTopBarIconWithi18nextRender
 
 describe("Kontrollklient-Iframe-Komponent", () => {
-    container = renderWithi18next(<DashboardTopBarIcon />);
+    DashboardTopBarIconWithi18nextRender = renderWithi18next(<DashboardTopBarIcon />);
     beforeEach(() => {
         jest.clearAllMocks()
         render(
             <TestWrapper>
-                container
+                DashboardTopBarIconWithi18nextRender
                 <DashboardLibraryButton
                     text={"Alle sanger"}
                     link="/library"/>
