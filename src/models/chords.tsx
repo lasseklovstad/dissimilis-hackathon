@@ -294,6 +294,15 @@ export const notes = [
     "H",
 ]
 
+export const toneNames = [
+    "keynote",
+    "third",
+    "fifth",
+    "seventh",
+    "ninth",
+    "eleventh",
+]
+
 const simplifyNote = (note: string) => {
     const chroma = Note.chroma(note)
     return chroma !== undefined && notes[chroma]

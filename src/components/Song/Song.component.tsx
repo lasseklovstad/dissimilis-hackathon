@@ -49,7 +49,7 @@ export const Song = (props: SongProps) => {
         heightOfBar,
         exportMode,
         showChordLetters,
-        showNoteLetters
+        showNoteLetters,
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()

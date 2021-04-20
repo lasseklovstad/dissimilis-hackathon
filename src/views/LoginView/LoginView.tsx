@@ -111,7 +111,7 @@ export const LoginView = () => {
                     </IconButton>
                 }
             >
-                {t("LoginView:loginFailed")}
+                {t("LoginView.loginFailed")}
             </Alert>
         </Collapse>
     )
@@ -160,7 +160,7 @@ export const LoginView = () => {
                         onClick={tryLogin}
                         startIcon={<MicrosoftLogoIcon />}
                     >
-                        {t("LoginView:loginWithMicrosoft")}
+                        {t("LoginView.loginWithMicrosoft")}
                     </Button>
                     {warning}
                 </Grid>

@@ -80,15 +80,15 @@ export const DashboardView = () => {
 
     const { postSong } = usePostSong()
     const history = useHistory()
-    const measureText = t("DashboardView:measure")
+    const measureText = t("DashboardView.measure")
     const { userInit } = useGetUser()
 
     const { getRecentSongs, recentSongsFetched } = useGetRecentSongs(
         orderTerm,
         orderDescending
     )
-    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>() 
-    
+    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>()
+
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
         orderTerm,
@@ -171,7 +171,7 @@ export const DashboardView = () => {
                     {dashboardView ? (
                         <>
                             <SongGrid
-                                title={t("DashboardView:newSongLabel")}
+                                title={t("DashboardView.newSongLabel")}
                                 songs={undefined}
                                 removeSong={() => undefined}
                                 isLoading={false}
@@ -193,7 +193,7 @@ export const DashboardView = () => {
                             </SongGrid>
 
                             <SongGrid
-                                title={t("DashboardView:recentSongLabel")}
+                                title={t("DashboardView.recentSongLabel")}
                                 songs={recentSongs}
                                 removeSong={removeSongFromRecentSongs}
                                 isLoading={getRecentSongs.loading}
@@ -202,7 +202,7 @@ export const DashboardView = () => {
                                 orderDescending={orderDescending}
                             >
                                 <DashboardLibraryButton
-                                    text={t("DashboardView:libraryButton")}
+                                    text={t("DashboardView.allSongLabel")}
                                     link="/library"
                                 />
                             </SongGrid>
@@ -212,16 +212,16 @@ export const DashboardView = () => {
                                 handleOnSaveClick={handleAddSong}
                                 handleClosed={handleClose}
                                 modalOpen={addSongModalIsOpen}
-                                saveText={t("Modal:create")}
-                                cancelText={t("Modal:cancel")}
-                                headerText={t("Modal:addSong")}
-                                labelText={t("Modal:nameOfSong")}
+                                saveText={t("Modal.create")}
+                                cancelText={t("Modal.cancel")}
+                                headerText={t("Modal.addSong")}
+                                labelText={t("Modal.nameOfSong")}
                                 isLoading={postSong.loading}
                             />
                         </>
                     ) : (
                         <SongGrid
-                            title={t("DashboardView:searchSongLabel")}
+                            title={t("DashboardView.searchSongLabel")}
                             songs={filteredSongs}
                             removeSong={removeSongFromFilteredSongs}
                             isLoading={getFilteredSongs.loading}
