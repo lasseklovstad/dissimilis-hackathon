@@ -13,8 +13,8 @@ import {
 import { useTranslation } from "react-i18next"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
-import { useHistory } from "react-router"
 import { useLogout } from "../../utils/useApiServiceUsers"
+import { Loading } from "../loading/Loading.component"
 
 const useStyles = makeStyles(() => ({
     background: {
@@ -35,15 +35,7 @@ export const DashboardTopBar = (props: {
     const [searchBarFocus, setSearchBarFocus] = useState(false)
     const { onGoHome, searchTerm } = props
     const sm = useMediaQuery("(min-width: 600px)")
-    const history = useHistory()
-    const axiosGet = useLogout()
-
-    const onLogout = () => {
-        axiosGet().then(() => {
-            sessionStorage.clear()
-            history.replace("/login")
-        })
-    }
+    const { logout } = useLogout()
 
     return (
         <div>
@@ -78,7 +70,7 @@ export const DashboardTopBar = (props: {
                                 <Typography style={{ marginRight: 8 }}>
                                     {props.user}
                                 </Typography>
-                                <IconButton onClick={onLogout}>
+                                <IconButton onClick={logout.run}>
                                     <LogoutIcon />
                                 </IconButton>
                             </Grid>
@@ -105,6 +97,7 @@ export const DashboardTopBar = (props: {
                     </Grid>
                 </Box>
             </AppBar>
+            <Loading isLoading={logout.loading} fullScreen />
         </div>
     )
 }

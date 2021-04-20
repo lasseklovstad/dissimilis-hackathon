@@ -11,9 +11,9 @@ import {
 import { MenuButton } from "../MenuButton/MenuButton.component"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 import { colors } from "../../utils/colors"
-import { useHistory } from "react-router"
 import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
 import { useLogout } from "../../utils/useApiServiceUsers"
+import { Loading } from "../loading/Loading.component"
 
 const useStyles = makeStyles({
     root: {
@@ -76,15 +76,7 @@ export const SongNavBar = (props: {
         setTitle(props.title)
     }, [props.title])
 
-    const history = useHistory()
-    const axiosGet = useLogout()
-
-    const onLogout = () => {
-        axiosGet().then(() => {
-            sessionStorage.clear()
-            history.replace("/login")
-        })
-    }
+    const { logout } = useLogout()
 
     return (
         <Box className={classes.root} mb={matches ? 2 : 4}>
@@ -118,7 +110,7 @@ export const SongNavBar = (props: {
                                 <Typography>{props.user}</Typography>
                             </Box>
                             <Box mr={4}>
-                                <IconButton onClick={onLogout}>
+                                <IconButton onClick={logout.run}>
                                     <LogoutIcon />
                                 </IconButton>
                             </Box>
@@ -130,10 +122,11 @@ export const SongNavBar = (props: {
                         user={props.user}
                         setBarEditMode={props.setBarEditMode}
                         barEditMode={props.barEditMode}
-                        onLogout={onLogout}
+                        onLogout={logout.run}
                     />
                 </Box>
             </AppBar>
+            <Loading isLoading={logout.loading} fullScreen />
         </Box>
     )
 }
