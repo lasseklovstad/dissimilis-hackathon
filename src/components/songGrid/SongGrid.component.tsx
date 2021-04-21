@@ -13,9 +13,9 @@ type SongGridProps = {
     removeSong: (songId: number) => void
     isLoading: boolean
     children?: ReactNode
-    orderTerm: string
-    changeOrderTerm: (term: "date" | "song" | "user") => void
-    orderDescending: boolean
+    orderTerm?: string
+    changeOrderTerm?: (term: "date" | "song" | "user") => void
+    orderDescending?: boolean
 }
 
 const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
@@ -100,7 +100,7 @@ export const SongGrid = (props: SongGridProps) => {
     }
 
     const getSorting = () => {
-        if (orderTerm !== "") {
+        if (orderTerm && changeOrderTerm && orderDescending !== undefined) {
             return (
                 <Grid item xs={12}>
                     <SortingButtons

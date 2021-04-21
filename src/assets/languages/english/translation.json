@@ -1,10 +1,9 @@
 {
     "DashboardView": {
         "newSongLabel": "New song",
-        "recentSongLabel": "Recent",
+        "recentSongLabel": "Last five songs",
         "searchSongLabel": "Search",
         "allSongLabel": "All songs",
-        "libraryButton": "Library",
         "measure": "measure",
         "search": "Search for songs or arrangers",
         "altButterflyButtonProp": "Image of Dissimilis' butterfly-logo",
