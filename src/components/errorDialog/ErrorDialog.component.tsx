@@ -39,7 +39,7 @@ export const ErrorDialog = (props: ErrorDialogProps) => {
 
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
-            <DialogTitle>{title || t("Modal:errorTitle")}</DialogTitle>
+            <DialogTitle>{title || t("Modal.errorTitle")}</DialogTitle>
             <DialogContent>
                 <DialogContentText>{getErrorMessage()}</DialogContentText>
             </DialogContent>

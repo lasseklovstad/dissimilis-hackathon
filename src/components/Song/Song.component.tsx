@@ -19,6 +19,7 @@ type SongProps = {
     exportMode?: boolean
     showChordLetters?: boolean
     showNoteLetters?: boolean
+    lastPage: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
     deleteBars?: () => void
 }
@@ -49,7 +50,8 @@ export const Song = (props: SongProps) => {
         heightOfBar,
         exportMode,
         showChordLetters,
-        showNoteLetters
+        showNoteLetters,
+        lastPage,
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
@@ -62,6 +64,11 @@ export const Song = (props: SongProps) => {
             bars.slice(idx * barsPerRow, idx * barsPerRow + barsPerRow)
         )
     }
+
+    const lastBarPosition = Math.max.apply(
+        Math,
+        bars.map((bar) => bar.position)
+    )
 
     const openMenu = (bar: IBar) => (anchorEl: HTMLElement) => {
         setAnchorEl(anchorEl)
@@ -123,6 +130,8 @@ export const Song = (props: SongProps) => {
                                             deleteBars={props.deleteBars}
                                         />
                                         <BarLine />
+                                        {bar.position === lastBarPosition &&
+                                            lastPage && <BarLine />}
                                     </React.Fragment>
                                 )
                             })}

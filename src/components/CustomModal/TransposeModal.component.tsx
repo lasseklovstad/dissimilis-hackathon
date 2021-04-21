@@ -49,7 +49,6 @@ const useStyles = makeStyles({
         width: "100%",
     },
     formControl: {
-        // margin: theme.spacing(1),
         marginBottom: "24px",
         minWidth: 120,
     },
@@ -103,7 +102,7 @@ export const TransposeModal = (props: {
                 >
                     <Grid container>
                         <Typography className={classes.title} variant="h2">
-                            {t("Modal:transposeSong")}
+                            {t("Modal.transposeSong")}
                         </Typography>
                         <Grid item className={classes.insertName} xs={12}>
                             <TextField
@@ -116,7 +115,7 @@ export const TransposeModal = (props: {
                                 onChange={(e) => {
                                     setTitleInput(e.target.value)
                                 }}
-                                label={t("Modal:nameOfSong")}
+                                label={t("Modal.nameOfSong")}
                                 style={{ width: "100%" }}
                             />
                         </Grid>
@@ -125,7 +124,7 @@ export const TransposeModal = (props: {
                                 variant="outlined"
                                 className={classes.formControl}
                             >
-                                <InputLabel>{t("Modal:semiNotes")}</InputLabel>
+                                <InputLabel>{t("Modal.semiNotes")}</InputLabel>
                                 <Select
                                     value={transposeInput}
                                     onChange={(
@@ -164,7 +163,7 @@ export const TransposeModal = (props: {
                                     )
                                 }
                             >
-                                {t("Modal:save")}
+                                {t("Modal.save")}
                             </Button>
                             <Button
                                 className={classes.button}
@@ -175,7 +174,7 @@ export const TransposeModal = (props: {
                                     setTitleInput("")
                                 }}
                             >
-                                {t("Modal:cancel")}
+                                {t("Modal.cancel")}
                             </Button>
                         </Grid>
                     </Grid>

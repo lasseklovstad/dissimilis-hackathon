@@ -102,7 +102,7 @@ export const LibraryView = () => {
 
                     {libraryView ? (
                         <SongGrid
-                            title={t("DashboardView:allSongLabel")}
+                            title={t("DashboardView.allSongLabel")}
                             songs={allSongs}
                             removeSong={removeSongFromAllSongs}
                             isLoading={getAllSongs.loading}
@@ -112,7 +112,7 @@ export const LibraryView = () => {
                         />
                     ) : (
                         <SongGrid
-                            title={t("DashboardView:searchSongLabel")}
+                            title={t("DashboardView.searchSongLabel")}
                             songs={filteredSongs}
                             removeSong={removeSongFromFilteredSongs}
                             isLoading={getFilteredSongs.loading}

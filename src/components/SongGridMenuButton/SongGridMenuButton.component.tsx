@@ -102,24 +102,24 @@ export const SongGridMenuButton = (props: {
                     role="menu"
                 >
                     <MenuItem onClick={() => handleClose("open")}>
-                        {t("DashboardView:open")}
+                        {t("DashboardView.open")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("copy")}>
-                        {t("DashboardView:duplicate")}
+                        {t("DashboardView.duplicate")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("delete")}>
-                        {t("DashboardView:delete")}
+                        {t("DashboardView.delete")}
                     </MenuItem>
                 </Menu>
                 <ChoiceModal
                     handleOnCancelClick={() => handleClose()}
                     handleClosed={() => handleClose()}
                     handleOnSaveClick={handleDeleteSong}
-                    ackText={t("Modal:deleteSong")}
+                    ackText={t("Modal.deleteSong")}
                     modalOpen={deleteSongModalIsOpen}
-                    cancelText={t("Modal:cancel")}
-                    headerText={t("Modal:deleteSong")}
-                    descriptionText={t("Modal:deleteDescription")}
+                    cancelText={t("Modal.cancel")}
+                    headerText={t("Modal.deleteSong")}
+                    descriptionText={t("Modal.deleteDescription")}
                 />
             </div>
             <InputModal
@@ -127,21 +127,21 @@ export const SongGridMenuButton = (props: {
                 handleOnSaveClick={handleDuplicateSong}
                 handleClosed={() => handleCloseDuplicateDialog()}
                 modalOpen={duplicateSongModalIsOpen}
-                saveText={t("Modal:create")}
-                cancelText={t("Modal:cancel")}
-                headerText={t("DashboardView:duplicateText")}
-                labelText={t("Modal:newVoiceName")}
+                saveText={t("Modal.create")}
+                cancelText={t("Modal.cancel")}
+                headerText={t("DashboardView.duplicateText")}
+                labelText={t("Modal.newVoiceName")}
                 isLoading={duplicateSong.loading}
             />
             <Loading
                 isLoading={deleteSong.loading}
                 fullScreen
-                text={t("Modal:deleteSongLoading")}
+                text={t("Modal.deleteSongLoading")}
             />
             <ErrorDialog
                 isError={deleteSong.isError}
                 error={deleteSong.error}
-                title={t("Modal:deleteSongError")}
+                title={t("Modal.deleteSongError")}
             />
         </>
     )

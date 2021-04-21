@@ -180,7 +180,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                         }
                         onClick={() => changeOrderTerm("song")}
                     >
-                        {t("DashboardView:song")}
+                        {t("DashboardView.song")}
                     </Button>
                 </Grid>
 
@@ -199,7 +199,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                         }
                         onClick={() => changeOrderTerm("user")}
                     >
-                        {t("DashboardView:user")}
+                        {t("DashboardView.user")}
                     </Button>
                 </Grid>
 
@@ -218,7 +218,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
                         }
                         onClick={() => changeOrderTerm("date")}
                     >
-                        {t("DashboardView:date")}
+                        {t("DashboardView.date")}
                     </Button>
                 </Grid>
             </Grid>
@@ -276,7 +276,7 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                             </Grid>
                             <Grid item xs={12} sm={4}>
                                 <Typography className={styles.songScalableText}>
-                                    {t("DashboardView:updatedOn")}{" "}
+                                    {t("DashboardView.updatedOn")}{" "}
                                     {props.updatedOn
                                         ? convertToDate(
                                               Date.parse(props.updatedOn)
@@ -318,7 +318,7 @@ export const DashboardLibraryButton: FC<ButtonProps> = ({ text, link }) => {
 
 export const DashboardTopBarIcon = (props: { onGoHome?: () => void }) => {
     const { t } = useTranslation()
-    const altProp = t("DashboardView:altButterflyButtonProp")
+    const altProp = t("DashboardView.altButterflyButtonProp")
     const { onGoHome } = props
     return (
         <IconButton component={Link} to="/dashboard" onClick={onGoHome}>
