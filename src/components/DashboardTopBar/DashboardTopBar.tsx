@@ -15,6 +15,7 @@ import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
 import { useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
+import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
 const useStyles = makeStyles(() => ({
     background: {
@@ -98,6 +99,11 @@ export const DashboardTopBar = (props: {
                 </Box>
             </AppBar>
             <Loading isLoading={logout.loading} fullScreen />
+            <ErrorDialog
+                isError={logout.isError}
+                error={logout.error}
+                title={t("LoginView.logoutError")}
+            />
         </div>
     )
 }

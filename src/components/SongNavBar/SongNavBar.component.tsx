@@ -14,6 +14,8 @@ import { colors } from "../../utils/colors"
 import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
 import { useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
+import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
+import { useTranslation } from "react-i18next"
 
 const useStyles = makeStyles({
     root: {
@@ -71,6 +73,7 @@ export const SongNavBar = (props: {
     const classes = useStyles()
     const matches = useMediaQuery("(max-width:600px)")
     const [title, setTitle] = useState(props.title)
+    const { t } = useTranslation()
 
     useEffect(() => {
         setTitle(props.title)
@@ -127,6 +130,11 @@ export const SongNavBar = (props: {
                 </Box>
             </AppBar>
             <Loading isLoading={logout.loading} fullScreen />
+            <ErrorDialog
+                isError={logout.isError}
+                error={logout.error}
+                title={t("LoginView.logoutError")}
+            />
         </Box>
     )
 }

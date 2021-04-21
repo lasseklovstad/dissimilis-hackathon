@@ -38,6 +38,7 @@ export const useLogout = () => {
             sessionStorage.clear()
             history.replace("/login")
         }
+        return { error, result }
     }
 
     return {

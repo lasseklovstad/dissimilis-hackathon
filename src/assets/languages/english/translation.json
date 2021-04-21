@@ -80,6 +80,7 @@
         "loginWithMicrosoft": "Sign in with Microsoft",
         "login": "Sign in",
         "logout": "Sign out",
+        "logoutError": "Error logging out",
         "username": "Username",
         "password": "Password",
         "loginFailed": "Wrong username or password"
