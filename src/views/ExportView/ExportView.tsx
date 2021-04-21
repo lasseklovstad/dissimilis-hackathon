@@ -187,7 +187,7 @@ export const ExportView = () => {
                                         style={{ textAlign: "center" }}
                                         variant="body1"
                                     >
-                                        {selectedVoice?.title
+                                        {selectedVoice?.isMain
                                             ? t("CreateSongTab.song")
                                             : selectedVoice?.title}
                                     </Typography>
@@ -273,6 +273,7 @@ export const ExportView = () => {
                                             key={voice.songVoiceId}
                                             value={voice.songVoiceId}
                                         >
+                                            {console.log(voice)}
                                             {voice.isMain
                                                 ? t("CreateSongTab.song")
                                                 : voice.title}
