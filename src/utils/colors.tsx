@@ -8,6 +8,7 @@ export const colors = {
     black: "#212121",
     white: "#FFFFFF",
     focus: "#00E5FF",
+    hover_background: "#F6F6F6",
     C: { main: "#43A047" },
     D: { main: "#8E24AA" },
     E: { main: "#6D4C41" },

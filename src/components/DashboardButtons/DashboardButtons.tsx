@@ -42,8 +42,8 @@ const useStyles = makeStyles((theme) => ({
             },
         },
         "&:hover": {
-            border: "4px solid #f6f6f6",
-            backgroundColor: "#f6f6f6",
+            border: `4px solid ${colors.hover_background}`,
+            backgroundColor: `${colors.hover_background}`,
         },
     },
     buttonGreen: {
@@ -266,12 +266,8 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
     const { t } = useTranslation()
     return (
         <Card className={styles.button}>
-            <Grid
-                container
-                className={styles.songContainer}
-                style={{ height: "100%" }}
-            >
-                <Box flexGrow={1} style={{ height: "100%" }}>
+            <Grid container className={styles.songContainer}>
+                <Box flexGrow={1}>
                     <CardActionArea
                         to={props.link}
                         component={Link}
