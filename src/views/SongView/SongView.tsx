@@ -560,6 +560,7 @@ export const SongView = () => {
                             exportMode={false}
                             pasteBars={pasteBars}
                             deleteBars={deleteBars}
+                            lastPage={true}
                         />
                     </Grid>
                 </Grid>

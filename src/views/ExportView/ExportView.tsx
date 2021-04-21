@@ -231,6 +231,10 @@ export const ExportView = () => {
                                                 heightOfBar={
                                                     selectedRowsPerSheetConfig.heightAvailableToBars
                                                 }
+                                                lastPage={
+                                                    amountOfPages ===
+                                                    pageIndex + 1
+                                                }
                                             />
                                         )}
                                     </Grid>
