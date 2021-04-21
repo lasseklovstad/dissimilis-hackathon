@@ -19,7 +19,7 @@ type SongProps = {
     exportMode?: boolean
     showChordLetters?: boolean
     showNoteLetters?: boolean
-    lastPage?: boolean
+    lastPage: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
     deleteBars?: () => void
 }
@@ -131,7 +131,7 @@ export const Song = (props: SongProps) => {
                                         />
                                         <BarLine />
                                         {bar.position === lastBarPosition &&
-                                            (lastPage ?? true) && <BarLine />}
+                                            lastPage && <BarLine />}
                                     </React.Fragment>
                                 )
                             })}
