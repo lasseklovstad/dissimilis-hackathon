@@ -28,6 +28,18 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: colors.white,
         boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)",
     },
+    newSongButton: {
+        "&:focus-within": {
+            boxShadow: `0 0 0 4px ${colors.focus}`,
+        },
+    },
+    songButton: {
+        height: "100%",
+        border: `4px solid ${colors.white}`,
+        "&:focus": {
+            border: `4px solid ${colors.focus}`,
+        },
+    },
     buttonGreen: {
         backgroundColor: colors.teal_100,
         boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)",
@@ -115,20 +127,10 @@ export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (
     props
 ) => {
     const styles = useStyles()
-    const [focused, setFocused] = useState(false)
     return (
-        <Card
-            className={styles.button}
-            style={{
-                boxShadow: focused
-                    ? `0 0 0 4px ${colors.focus}`
-                    : "2px 0px 3px rgba(66, 66, 66, 0.05)",
-            }}
-        >
+        <Card className={`${styles.button} ${styles.newSongButton}`}>
             <CardActionArea
                 onClick={() => props.func && props.func()}
-                onFocus={() => setFocused(true)}
-                onBlur={() => setFocused(false)}
                 disableRipple
             >
                 <Box className={styles.container} py={2} pl={1}>
@@ -256,26 +258,14 @@ const convertToDate = (time: number) => {
 export const DashboardButton: FC<ButtonSongProps> = (props) => {
     const styles = useStyles()
     const { t } = useTranslation()
-    const [focused, setFocused] = useState(false)
     return (
-        <Card
-            className={styles.button}
-            style={{
-                boxShadow: focused
-                    ? `0 0 0 4px ${colors.focus}`
-                    : "2px 0px 3px rgba(66, 66, 66, 0.05)",
-            }}
-        >
+        <Card className={styles.button}>
             <Grid container className={styles.songContainer}>
                 <Box flexGrow={1}>
                     <CardActionArea
                         to={props.link}
                         component={Link}
-                        onFocus={() => setFocused(true)}
-                        onBlur={() => setFocused(false)}
-                        style={{
-                            height: "100%",
-                        }}
+                        className={styles.songButton}
                     >
                         <Grid
                             container
@@ -328,23 +318,10 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
 
 export const DashboardLibraryButton: FC<ButtonProps> = ({ text, link }) => {
     const styles = useStyles()
-    const [focused, setFocused] = useState(false)
     return (
         <Box>
-            <Card
-                className={styles.buttonGreen}
-                style={{
-                    boxShadow: focused
-                        ? `0 0 0 4px ${colors.focus}`
-                        : "2px 0px 3px rgba(66, 66, 66, 0.05)",
-                }}
-            >
-                <CardActionArea
-                    to={link}
-                    component={Link}
-                    onFocus={() => setFocused(true)}
-                    onBlur={() => setFocused(false)}
-                >
+            <Card className={`${styles.buttonGreen} ${styles.newSongButton}`}>
+                <CardActionArea to={link} component={Link}>
                     <Box className={styles.container}>
                         <Box p={2}>
                             <Typography>{text}</Typography>
