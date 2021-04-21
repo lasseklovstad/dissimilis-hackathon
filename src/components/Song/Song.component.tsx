@@ -131,9 +131,7 @@ export const Song = (props: SongProps) => {
                                         />
                                         <BarLine />
                                         {bar.position === lastBarPosition &&
-                                        (lastPage ?? true) ? (
-                                            <BarLine />
-                                        ) : undefined}
+                                            (lastPage ?? true) && <BarLine />}
                                     </React.Fragment>
                                 )
                             })}
