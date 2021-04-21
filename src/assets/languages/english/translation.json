@@ -8,6 +8,7 @@
         "measure": "measure",
         "search": "Search for songs or arrangers",
         "altButterflyButtonProp": "Image of Dissimilis' butterfly-logo",
+        "ariaButterflyButtonProp": "Go to start",
         "deleteSong": "Delete song",
         "deleteDescription": "Are you sure you want to delete the song?",
         "updatedOn": "Last edited",
