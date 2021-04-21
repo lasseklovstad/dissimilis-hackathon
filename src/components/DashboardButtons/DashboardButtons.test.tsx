@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen, waitFor } from "@testing-library/react"
+import { render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { DashboardLibraryButton, DashboardTopBarIcon } from "./DashboardButtons"
 import { TestWrapper } from "../../TestWrapper.komponent"
@@ -18,14 +18,14 @@ describe("Kontrollklient-Iframe-Komponent", () => {
     })
 
     it("Skal finne ikon-knappen med aria-label og alt-tekst oversatt med i18next", async () => {
-        expect(screen.getByLabelText("Gå til startskjermen")).toBeInTheDocument()
-        expect(screen.getByAltText("Bilde av Dissimilis' sommerfugl")).toBeInTheDocument()
+        expect(screen.getByLabelText("Gå til startskjermen")).toBeVisible()
+        expect(screen.getByAltText("Bilde av Dissimilis' sommerfugl")).toBeVisible()
     })
 
     it("Skal finne knappen 'Alle sanger' og knappen skal bli borte dersom man trykker på den", async () => {
         const libraryButton = screen.getByRole("button", { name: "Alle sanger" })
-        expect(libraryButton).toBeInTheDocument()
+        expect(libraryButton).toBeVisible()
         userEvent.click(libraryButton)
-        waitFor(() => expect(libraryButton).not.toBeInTheDocument())
+        waitFor(() => expect(libraryButton).toBeNull())
     })
 })
