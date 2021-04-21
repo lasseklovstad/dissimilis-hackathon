@@ -71,7 +71,10 @@ export const DashboardTopBar = (props: {
                                 <Typography style={{ marginRight: 8 }}>
                                     {props.user}
                                 </Typography>
-                                <IconButton onClick={logout.run}>
+                                <IconButton
+                                    disableFocusRipple
+                                    onClick={logout.run}
+                                >
                                     <LogoutIcon />
                                 </IconButton>
                             </Grid>

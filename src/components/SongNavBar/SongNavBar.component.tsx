@@ -113,7 +113,10 @@ export const SongNavBar = (props: {
                                 <Typography>{props.user}</Typography>
                             </Box>
                             <Box mr={4}>
-                                <IconButton onClick={logout.run}>
+                                <IconButton
+                                    disableFocusRipple
+                                    onClick={logout.run}
+                                >
                                     <LogoutIcon />
                                 </IconButton>
                             </Box>
