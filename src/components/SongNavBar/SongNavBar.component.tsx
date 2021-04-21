@@ -6,10 +6,16 @@ import {
     TextField,
     Typography,
     useMediaQuery,
+    IconButton,
 } from "@material-ui/core"
 import { MenuButton } from "../MenuButton/MenuButton.component"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 import { colors } from "../../utils/colors"
+import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
+import { useLogout } from "../../utils/useApiServiceUsers"
+import { Loading } from "../loading/Loading.component"
+import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
+import { useTranslation } from "react-i18next"
 
 const useStyles = makeStyles({
     root: {
@@ -67,10 +73,13 @@ export const SongNavBar = (props: {
     const classes = useStyles()
     const matches = useMediaQuery("(max-width:600px)")
     const [title, setTitle] = useState(props.title)
+    const { t } = useTranslation()
 
     useEffect(() => {
         setTitle(props.title)
     }, [props.title])
+
+    const { logout } = useLogout()
 
     return (
         <Box className={classes.root} mb={matches ? 2 : 4}>
@@ -99,9 +108,16 @@ export const SongNavBar = (props: {
                         />
                     </Box>
                     {!matches ? (
-                        <Box ml={4} mr={4}>
-                            <Typography>{props.user}</Typography>
-                        </Box>
+                        <>
+                            <Box ml={4} mr={1}>
+                                <Typography>{props.user}</Typography>
+                            </Box>
+                            <Box mr={4}>
+                                <IconButton onClick={logout.run}>
+                                    <LogoutIcon />
+                                </IconButton>
+                            </Box>
+                        </>
                     ) : undefined}
                     <MenuButton
                         voiceId={props.voiceId}
@@ -109,9 +125,16 @@ export const SongNavBar = (props: {
                         user={props.user}
                         setBarEditMode={props.setBarEditMode}
                         barEditMode={props.barEditMode}
+                        onLogout={logout.run}
                     />
                 </Box>
             </AppBar>
+            <Loading isLoading={logout.loading} fullScreen />
+            <ErrorDialog
+                isError={logout.isError}
+                error={logout.error}
+                title={t("LoginView.logoutError")}
+            />
         </Box>
     )
 }
