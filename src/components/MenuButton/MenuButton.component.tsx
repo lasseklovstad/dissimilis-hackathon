@@ -28,6 +28,7 @@ export const MenuButton = (props: {
     user?: string
     setBarEditMode: () => void
     barEditMode: boolean
+    onLogout: () => void
 }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
@@ -163,6 +164,9 @@ export const MenuButton = (props: {
                             <Divider variant="middle" />
                             <MenuItem disabled>
                                 <Typography>{props.user}</Typography>
+                            </MenuItem>
+                            <MenuItem onClick={props.onLogout}>
+                                <Typography>{t("LoginView.logout")}</Typography>
                             </MenuItem>
                         </>
                     ) : undefined}

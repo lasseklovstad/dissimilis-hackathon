@@ -1,10 +1,9 @@
 {
     "DashboardView": {
         "newSongLabel": "Nytt partitur",
-        "recentSongLabel": "Nylige",
+        "recentSongLabel": "Siste fem sanger",
         "searchSongLabel": "Søk",
         "allSongLabel": "Alle sanger",
-        "libraryButton": "Bibliotek",
         "measure": "takt",
         "search": "Søk etter sanger eller brukere",
         "altButterflyButtonProp": "Bilde av Dissimilis' sommerfugl",
@@ -79,6 +78,8 @@
     "LoginView": {
         "loginWithMicrosoft": "Logg inn med Microsoft",
         "login": "Logg inn",
+        "logout": "Logg ut",
+        "logoutError": "Det oppstod en feil under avlogging",
         "username": "Brukernavn",
         "password": "Passord",
         "loginFailed": "Feil brukernavn eller passord"

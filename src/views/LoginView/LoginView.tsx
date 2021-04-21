@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
 import Grid from "@material-ui/core/Grid"
-import TextField from "@material-ui/core/TextField"
 import { Collapse, useMediaQuery } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router"
@@ -14,6 +13,7 @@ import { useLoginPost, useLoginRedirect } from "../../utils/useApiServiceLogin"
 import { colors } from "../../utils/colors"
 import { ReactComponent as LoginLogo } from "../../assets/images/LoginLogo.svg"
 import { ReactComponent as BackgroundImage } from "../../assets/images/butterflyGreen.svg"
+import { ReactComponent as MicrosoftLogoIcon } from "../../assets/images/MicrosoftLogo.svg"
 
 const useStyles = makeStyles({
     root: {
@@ -33,9 +33,6 @@ const useStyles = makeStyles({
     paddinglarge: {
         padding: "48px",
     },
-    textfield: {
-        marginBottom: "16px",
-    },
     loginlogo: {
         marginBottom: "16px",
         width: "60%",
@@ -44,6 +41,9 @@ const useStyles = makeStyles({
         marginBottom: "16px",
         lineHeight: "24px",
         textTransform: "none",
+        "& .MuiButton-startIcon": {
+            marginRight: "12px",
+        },
     },
     backgroundimage: {
         position: "absolute",
@@ -152,35 +152,13 @@ export const LoginView = () => {
                     }
                 >
                     <LoginLogo className={classes.loginlogo} />
-                    <TextField
-                        className={classes.textfield}
-                        fullWidth
-                        label={t("LoginView.username")}
-                        variant="filled"
-                        onSubmit={tryLogin}
-                    />
-                    <TextField
-                        className={classes.textfield}
-                        fullWidth
-                        label={t("LoginView.password")}
-                        type="password"
-                        variant="filled"
-                        onSubmit={tryLogin}
-                    />
-                    <Button
-                        size="large"
-                        className={classes.loginbutton}
-                        fullWidth
-                        variant="outlined"
-                    >
-                        {t("LoginView.login")}
-                    </Button>
                     <Button
                         size="large"
                         className={classes.loginbutton}
                         fullWidth
                         variant="outlined"
                         onClick={tryLogin}
+                        startIcon={<MicrosoftLogoIcon />}
                     >
                         {t("LoginView.loginWithMicrosoft")}
                     </Button>
