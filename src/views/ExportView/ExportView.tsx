@@ -273,7 +273,6 @@ export const ExportView = () => {
                                             key={voice.songVoiceId}
                                             value={voice.songVoiceId}
                                         >
-                                            {console.log(voice)}
                                             {voice.isMain
                                                 ? t("CreateSongTab.song")
                                                 : voice.title}
