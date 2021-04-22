@@ -28,6 +28,7 @@ export const MenuButton = (props: {
     user?: string
     setBarEditMode: () => void
     barEditMode: boolean
+    onLogout: () => void
 }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
@@ -139,30 +140,33 @@ export const MenuButton = (props: {
                     role="menu"
                 >
                     <MenuItem onClick={() => handleClose("duplicate")}>
-                        {t("MenuButton:duplicate")}
+                        {t("MenuButton.duplicate")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("transpose")}>
-                        {t("MenuButton:transpose")}
+                        {t("MenuButton.transpose")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("export")}>
-                        {t("MenuButton:export")}
+                        {t("MenuButton.export")}
                     </MenuItem>
                     <MenuItem disabled onClick={() => handleClose()}>
-                        {t("MenuButton:hide")}
+                        {t("MenuButton.hide")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("delete")}>
-                        {t("MenuButton:delete")}
+                        {t("MenuButton.delete")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("editBars")}>
                         {props.barEditMode
-                            ? t("MenuButton:cancelEditBars")
-                            : t("MenuButton:editBars")}
+                            ? t("MenuButton.cancelEditBars")
+                            : t("MenuButton.editBars")}
                     </MenuItem>
                     {props.showName ? (
                         <>
                             <Divider variant="middle" />
                             <MenuItem disabled>
                                 <Typography>{props.user}</Typography>
+                            </MenuItem>
+                            <MenuItem onClick={props.onLogout}>
+                                <Typography>{t("LoginView.logout")}</Typography>
                             </MenuItem>
                         </>
                     ) : undefined}
@@ -171,15 +175,15 @@ export const MenuButton = (props: {
                     handleOnCancelClick={handleClose}
                     handleClosed={handleClose}
                     handleOnSaveClick={handleDeleteSong}
-                    ackText={t("Modal:deleteSong")}
+                    ackText={t("Modal.deleteSong")}
                     modalOpen={deleteSongModalIsOpen}
-                    cancelText={t("Modal:cancel")}
-                    headerText={t("Modal:deleteSong")}
-                    descriptionText={t("Modal:deleteDescription")}
+                    cancelText={t("Modal.cancel")}
+                    headerText={t("Modal.deleteSong")}
+                    descriptionText={t("Modal.deleteDescription")}
                 />
                 <TransposeModal
                     defaultValue={`${songInit?.title} (${t(
-                        "Modal:transposed"
+                        "Modal.transposed"
                     )})`}
                     modalOpen={transposeSongModalIsOpen}
                     handleClosed={handleClose}
@@ -194,32 +198,32 @@ export const MenuButton = (props: {
                     handleClosed={() => setDuplicateSongModalIsOpen(false)}
                     modalOpen={duplicateSongModalIsOpen}
                     defaultValue={`${songInit?.title} (2)`}
-                    saveText={t("Modal:create")}
-                    cancelText={t("Modal:cancel")}
-                    headerText={t("DashboardView:duplicateText")}
-                    labelText={t("Modal:newVoiceName")}
+                    saveText={t("Modal.create")}
+                    cancelText={t("Modal.cancel")}
+                    headerText={t("DashboardView.duplicateText")}
+                    labelText={t("Modal.newVoiceName")}
                     isLoading={duplicateSong.loading}
                 />
             </div>
             <Loading
                 isLoading={deleteSong.loading}
                 fullScreen
-                text={t("Modal:deleteSongLoading")}
+                text={t("Modal.deleteSongLoading")}
             />
             <Loading
                 isLoading={transposeSong.loading}
                 fullScreen
-                text={t("Modal:transposingSong")}
+                text={t("Modal.transposingSong")}
             />
             <ErrorDialog
                 isError={deleteSong.isError}
                 error={deleteSong.error}
-                title={t("Modal:deleteSongError")}
+                title={t("Modal.deleteSongError")}
             />
             <ErrorDialog
                 isError={transposeSong.isError}
                 error={transposeSong.error}
-                title={t("Modal:transposeSongError")}
+                title={t("Modal.transposeSongError")}
             />
         </>
     )

@@ -144,20 +144,6 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
         [fetchData]
     )
 
-    const postSearchWithArrangerId = useCallback(
-        async (body: {
-            num?: string
-            orderBy: string
-            arrangerId?: string
-            orderDescending: boolean
-        }) => {
-            let bodyToPost = body
-            bodyToPost.arrangerId = sessionStorage.getItem("userId") || ""
-            return fetchData("post", bodyToPost)
-        },
-        [fetchData]
-    )
-
     const putData = useCallback(
         async (body?: unknown) => {
             return fetchData("patch", body)
@@ -179,7 +165,6 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
     return {
         getData,
         postData,
-        postSearchWithArrangerId,
         putData,
         deleteData,
         data,
