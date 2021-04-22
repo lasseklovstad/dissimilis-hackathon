@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Box } from "@material-ui/core"
 import { BarLine } from "../barLine/BarLine.component"
 import { BarMenu } from "../BarMenu/BarMenu.component"
-import { IBar } from "../../models/IBar"
+import { IBar, IChord } from "../../models/IBar"
 import {
     BarNumber,
     TimeSignature,
@@ -14,6 +14,7 @@ import { IVoice } from "../../models/IVoice"
 type SongProps = {
     barsPerRow: number
     voice: IVoice
+    getMainVoiceChordName: (bar: IBar, chord: IChord) => string | undefined
     timeSignature: ITimeSignature
     heightOfBar: number
     exportMode?: boolean
@@ -46,6 +47,7 @@ export const Song = (props: SongProps) => {
     const {
         barsPerRow,
         voice: { bars, isMain },
+        getMainVoiceChordName,
         timeSignature,
         heightOfBar,
         exportMode,
@@ -123,6 +125,9 @@ export const Song = (props: SongProps) => {
                                                     : showNoteLetters
                                             }
                                             masterSheet={!exportMode && isMain}
+                                            getMainVoiceChordName={
+                                                getMainVoiceChordName
+                                            }
                                             onMenuClick={openMenu(bar)}
                                             bar={bar}
                                             height={heightOfBar}

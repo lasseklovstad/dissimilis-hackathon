@@ -1,12 +1,13 @@
 import React from "react"
 import { Box, ButtonBase, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
-import { IChord } from "../../models/IBar"
+import { IChord, IBar } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { tangentToNumber } from "../../utils/bar.util"
 
 type ChordProps = {
     chords: IChord
+    bar: IBar
     onContextMenu: (event: React.MouseEvent) => void
     onClick: (event: React.MouseEvent) => void
     onMouseEnter: () => void
@@ -17,6 +18,7 @@ type ChordProps = {
     showNoteLetters: boolean
     isSelected: boolean
     handleChordFocus: () => void
+    getMainVoiceChordName: (bar: IBar, chord: IChord) => string | undefined
     barEditMode: boolean
 }
 
@@ -120,10 +122,12 @@ const ChordText = (props: { chordName: string }) => {
 export const Chord = (props: ChordProps) => {
     const {
         chords,
+        bar,
         onClick,
         onContextMenu,
         onMouseEnter,
         onMouseLeave,
+        getMainVoiceChordName,
         highlight,
         exportMode,
         showChordLetters,
@@ -133,6 +137,8 @@ export const Chord = (props: ChordProps) => {
         barEditMode,
     } = props
     const classes = useStyle()
+
+    const chordName = getMainVoiceChordName(bar, chords)
 
     return (
         <Box
@@ -147,8 +153,8 @@ export const Chord = (props: ChordProps) => {
             ml={0.5}
             minWidth={0}
         >
-            {chords.chordName && showChordLetters && (
-                <ChordText chordName={chords.chordName} />
+            {chordName && showChordLetters && (
+                <ChordText chordName={chordName} />
             )}
             <ButtonBase
                 id="chordButton"

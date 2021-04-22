@@ -41,6 +41,7 @@ export const Bar = (props: {
     showChordLetters: boolean
     showNoteLetters: boolean
     onMenuClick: (anchorEl: HTMLElement) => void
+    getMainVoiceChordName: (bar: IBar, chord: IChord) => string | undefined
     masterSheet: boolean
     showHouseNumber: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
@@ -50,12 +51,14 @@ export const Bar = (props: {
         exportMode,
         showChordLetters,
         showNoteLetters,
+        getMainVoiceChordName,
         onMenuClick,
         masterSheet,
         showHouseNumber,
-        bar: { chords, repAfter, repBefore, house, barId, songId, songVoiceId },
+        bar, //: { chords, repAfter, repBefore, house, barId, songId, songVoiceId },
         height,
     } = props
+
     const [chordMenuPosition, setChordMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()
@@ -75,11 +78,11 @@ export const Bar = (props: {
         selectedChordId,
         editBars,
     } = useContext(SongContext)
-    const { postChord } = useCreateChord(songId, songVoiceId, barId)
+    const { postChord } = useCreateChord(bar.songId, bar.songVoiceId, bar.barId)
     const { deleteChord } = useDeleteChord(
-        songId,
-        songVoiceId,
-        barId,
+        bar.songId,
+        bar.songVoiceId,
+        bar.barId,
         rightClickedChordId
     )
     const classes = useStyle()
@@ -191,7 +194,7 @@ export const Bar = (props: {
 
     const handleChordFocus = (chord: IChord) => {
         if (chord.notes[0] !== "Z") {
-            setValuesForSelectedChord(chord.chordId, barId, chord.position)
+            setValuesForSelectedChord(chord.chordId, bar.barId, chord.position)
             updateMenuOptions(chord)
         } else {
             setValuesForSelectedChord(undefined, undefined, chord.position)
@@ -240,7 +243,10 @@ export const Bar = (props: {
                 minWidth={0}
                 m="2px"
             >
-                <House houseOrder={house} showHouseNumber={showHouseNumber} />
+                <House
+                    houseOrder={bar.house}
+                    showHouseNumber={showHouseNumber}
+                />
 
                 <div
                     id="barContainer"
@@ -263,14 +269,14 @@ export const Bar = (props: {
                             editBars.barClicked(props.bar)
                     }}
                 >
-                    <RepetitionSign display={repBefore} />
+                    <RepetitionSign display={bar.repBefore} />
                     <Box
                         height={height || "100%"}
                         display="flex"
                         width="100%"
                         minWidth={0}
                     >
-                        {chords
+                        {bar.chords
                             .reduce((noter: IChord[], note) => {
                                 if (note.notes[0] === "Z") {
                                     const numberOfRests = note.length
@@ -294,7 +300,11 @@ export const Bar = (props: {
                                 )
                                 return (
                                     <Chord
+                                        bar={bar}
                                         showChordLetters={showChordLetters}
+                                        getMainVoiceChordName={
+                                            getMainVoiceChordName
+                                        }
                                         exportMode={exportMode}
                                         showNoteLetters={showNoteLetters}
                                         onMouseLeave={() =>
@@ -331,7 +341,7 @@ export const Bar = (props: {
                                 )
                             })}
                     </Box>
-                    <RepetitionSign display={repAfter} />
+                    <RepetitionSign display={bar.repAfter} />
                     <ChordMenu
                         position={chordMenuPosition}
                         onSelect={handleChordMenuSelect}

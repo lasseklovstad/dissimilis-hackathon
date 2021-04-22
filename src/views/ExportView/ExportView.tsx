@@ -220,6 +220,9 @@ export const ExportView = () => {
                                                                 selectedBarConfig.barsPerRow
                                                         ) || [],
                                                 }}
+                                                getMainVoiceChordName={() =>
+                                                    undefined
+                                                }
                                                 timeSignature={{
                                                     denominator:
                                                         songInit?.denominator ||

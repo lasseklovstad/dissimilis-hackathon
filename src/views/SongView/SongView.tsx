@@ -127,6 +127,13 @@ export const SongView = () => {
     const [selectedVoice, setSelectedVoice] = useState<IVoice | undefined>(
         voices.find((voice) => voice.songVoiceId === selectedVoiceId)
     )
+    const mainVoice = voices.find((voice) => voice.isMain)
+    const getMainVoiceChordName = (bar: IBar, chord: IChord) => {
+        return mainVoice?.bars
+            .find((mainBar) => mainBar.position === bar.position)
+            ?.chords.find((mainChord) => mainChord.position === chord.position)
+            ?.chordName
+    }
 
     useEffect(() => {
         setSelectedVoice(
@@ -555,6 +562,7 @@ export const SongView = () => {
                         <Song
                             barsPerRow={barsPerRow}
                             voice={selectedVoice}
+                            getMainVoiceChordName={getMainVoiceChordName}
                             timeSignature={{ denominator, numerator }}
                             heightOfBar={heightOfBar}
                             exportMode={false}
