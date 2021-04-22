@@ -1,7 +1,7 @@
 {
     "DashboardView": {
         "newSongLabel": "Nytt partitur",
-        "recentSongLabel": "Siste fem sanger",
+        "recentSongLabel": "Dine siste fem sanger",
         "searchSongLabel": "Søk",
         "allSongLabel": "Alle sanger",
         "measure": "takt",
