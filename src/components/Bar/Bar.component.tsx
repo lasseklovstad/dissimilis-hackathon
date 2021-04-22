@@ -41,7 +41,7 @@ export const Bar = (props: {
     showChordLetters: boolean
     showNoteLetters: boolean
     onMenuClick: (anchorEl: HTMLElement) => void
-    getMainVoiceChordName: (bar: IBar, chord: IChord) => string | undefined
+    getChordNameFromMainVoice: (bar: IBar, chord: IChord) => string | undefined
     masterSheet: boolean
     showHouseNumber: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
@@ -51,7 +51,7 @@ export const Bar = (props: {
         exportMode,
         showChordLetters,
         showNoteLetters,
-        getMainVoiceChordName,
+        getChordNameFromMainVoice,
         onMenuClick,
         masterSheet,
         showHouseNumber,
@@ -302,8 +302,8 @@ export const Bar = (props: {
                                     <Chord
                                         bar={bar}
                                         showChordLetters={showChordLetters}
-                                        getMainVoiceChordName={
-                                            getMainVoiceChordName
+                                        getChordNameFromMainVoice={
+                                            getChordNameFromMainVoice
                                         }
                                         exportMode={exportMode}
                                         showNoteLetters={showNoteLetters}

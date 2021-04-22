@@ -22,6 +22,7 @@ import { Song } from "../../components/Song/Song.component"
 import { useGetSong } from "../../utils/useApiServiceSongs"
 import { useVoice } from "../../utils/useVoice"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
+import { IBar, IChord } from "../../models/IBar"
 
 const useStyles = makeStyles({
     root: {
@@ -138,6 +139,13 @@ export const ExportView = () => {
     const selectedVoice = songInit?.voices.find(
         (voice) => voice.songVoiceId === selectedVoiceId
     )
+    const mainVoice = songInit?.voices.find((voice) => voice.isMain)
+    const getChordNameFromMainVoice = (bar: IBar, chord: IChord) => {
+        return mainVoice?.bars
+            .find((mainBar) => mainBar.position === bar.position)
+            ?.chords.find((mainChord) => mainChord.position === chord.position)
+            ?.chordName
+    }
 
     const classes = useStyles()
     const history = useHistory()
@@ -220,8 +228,8 @@ export const ExportView = () => {
                                                                 selectedBarConfig.barsPerRow
                                                         ) || [],
                                                 }}
-                                                getMainVoiceChordName={() =>
-                                                    undefined
+                                                getChordNameFromMainVoice={
+                                                    getChordNameFromMainVoice
                                                 }
                                                 timeSignature={{
                                                     denominator:

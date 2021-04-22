@@ -18,7 +18,7 @@ type ChordProps = {
     showNoteLetters: boolean
     isSelected: boolean
     handleChordFocus: () => void
-    getMainVoiceChordName: (bar: IBar, chord: IChord) => string | undefined
+    getChordNameFromMainVoice: (bar: IBar, chord: IChord) => string | undefined
     barEditMode: boolean
 }
 
@@ -127,7 +127,7 @@ export const Chord = (props: ChordProps) => {
         onContextMenu,
         onMouseEnter,
         onMouseLeave,
-        getMainVoiceChordName,
+        getChordNameFromMainVoice,
         highlight,
         exportMode,
         showChordLetters,
@@ -138,7 +138,7 @@ export const Chord = (props: ChordProps) => {
     } = props
     const classes = useStyle()
 
-    const chordName = getMainVoiceChordName(bar, chords)
+    const chordName = getChordNameFromMainVoice(bar, chords)
 
     return (
         <Box
