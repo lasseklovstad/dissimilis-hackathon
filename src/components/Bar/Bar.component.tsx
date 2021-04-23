@@ -41,7 +41,10 @@ export const Bar = (props: {
     showChordLetters: boolean
     showNoteLetters: boolean
     onMenuClick: (anchorEl: HTMLElement) => void
-    getChordNameFromMainVoice: (bar: IBar, chord: IChord) => string | undefined
+    getChordNameFromMainVoice: (
+        barPosition: number,
+        chordPosition: number
+    ) => string | undefined
     masterSheet: boolean
     showHouseNumber: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
@@ -55,7 +58,16 @@ export const Bar = (props: {
         onMenuClick,
         masterSheet,
         showHouseNumber,
-        bar, //: { chords, repAfter, repBefore, house, barId, songId, songVoiceId },
+        bar: {
+            chords,
+            repAfter,
+            repBefore,
+            house,
+            barId,
+            songId,
+            songVoiceId,
+            position,
+        },
         height,
     } = props
 
@@ -78,11 +90,11 @@ export const Bar = (props: {
         selectedChordId,
         editBars,
     } = useContext(SongContext)
-    const { postChord } = useCreateChord(bar.songId, bar.songVoiceId, bar.barId)
+    const { postChord } = useCreateChord(songId, songVoiceId, barId)
     const { deleteChord } = useDeleteChord(
-        bar.songId,
-        bar.songVoiceId,
-        bar.barId,
+        songId,
+        songVoiceId,
+        barId,
         rightClickedChordId
     )
     const classes = useStyle()
@@ -194,7 +206,7 @@ export const Bar = (props: {
 
     const handleChordFocus = (chord: IChord) => {
         if (chord.notes[0] !== "Z") {
-            setValuesForSelectedChord(chord.chordId, bar.barId, chord.position)
+            setValuesForSelectedChord(chord.chordId, barId, chord.position)
             updateMenuOptions(chord)
         } else {
             setValuesForSelectedChord(undefined, undefined, chord.position)
@@ -243,10 +255,7 @@ export const Bar = (props: {
                 minWidth={0}
                 m="2px"
             >
-                <House
-                    houseOrder={bar.house}
-                    showHouseNumber={showHouseNumber}
-                />
+                <House houseOrder={house} showHouseNumber={showHouseNumber} />
 
                 <div
                     id="barContainer"
@@ -269,14 +278,14 @@ export const Bar = (props: {
                             editBars.barClicked(props.bar)
                     }}
                 >
-                    <RepetitionSign display={bar.repBefore} />
+                    <RepetitionSign display={repBefore} />
                     <Box
                         height={height || "100%"}
                         display="flex"
                         width="100%"
                         minWidth={0}
                     >
-                        {bar.chords
+                        {chords
                             .reduce((noter: IChord[], note) => {
                                 if (note.notes[0] === "Z") {
                                     const numberOfRests = note.length
@@ -300,7 +309,7 @@ export const Bar = (props: {
                                 )
                                 return (
                                     <Chord
-                                        bar={bar}
+                                        barPosition={position}
                                         showChordLetters={showChordLetters}
                                         getChordNameFromMainVoice={
                                             getChordNameFromMainVoice
@@ -341,7 +350,7 @@ export const Bar = (props: {
                                 )
                             })}
                     </Box>
-                    <RepetitionSign display={bar.repAfter} />
+                    <RepetitionSign display={repAfter} />
                     <ChordMenu
                         position={chordMenuPosition}
                         onSelect={handleChordMenuSelect}

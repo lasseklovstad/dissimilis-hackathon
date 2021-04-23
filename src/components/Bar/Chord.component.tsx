@@ -1,13 +1,13 @@
 import React from "react"
 import { Box, ButtonBase, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
-import { IChord, IBar } from "../../models/IBar"
+import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { tangentToNumber } from "../../utils/bar.util"
 
 type ChordProps = {
     chords: IChord
-    bar: IBar
+    barPosition: number
     onContextMenu: (event: React.MouseEvent) => void
     onClick: (event: React.MouseEvent) => void
     onMouseEnter: () => void
@@ -18,7 +18,10 @@ type ChordProps = {
     showNoteLetters: boolean
     isSelected: boolean
     handleChordFocus: () => void
-    getChordNameFromMainVoice: (bar: IBar, chord: IChord) => string | undefined
+    getChordNameFromMainVoice: (
+        barPosition: number,
+        chordPosition: number
+    ) => string | undefined
     barEditMode: boolean
 }
 
@@ -122,7 +125,7 @@ const ChordText = (props: { chordName: string }) => {
 export const Chord = (props: ChordProps) => {
     const {
         chords,
-        bar,
+        barPosition,
         onClick,
         onContextMenu,
         onMouseEnter,
@@ -138,7 +141,7 @@ export const Chord = (props: ChordProps) => {
     } = props
     const classes = useStyle()
 
-    const chordName = getChordNameFromMainVoice(bar, chords)
+    const chordName = getChordNameFromMainVoice(barPosition, chords.position)
 
     return (
         <Box

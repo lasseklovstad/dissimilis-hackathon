@@ -22,7 +22,6 @@ import { Song } from "../../components/Song/Song.component"
 import { useGetSong } from "../../utils/useApiServiceSongs"
 import { useVoice } from "../../utils/useVoice"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
-import { IBar, IChord } from "../../models/IBar"
 
 const useStyles = makeStyles({
     root: {
@@ -140,10 +139,13 @@ export const ExportView = () => {
         (voice) => voice.songVoiceId === selectedVoiceId
     )
     const mainVoice = songInit?.voices.find((voice) => voice.isMain)
-    const getChordNameFromMainVoice = (bar: IBar, chord: IChord) => {
+    const getChordNameFromMainVoice = (
+        barPosition: number,
+        chordPosition: number
+    ) => {
         return mainVoice?.bars
-            .find((mainBar) => mainBar.position === bar.position)
-            ?.chords.find((mainChord) => mainChord.position === chord.position)
+            .find((mainBar) => mainBar.position === barPosition)
+            ?.chords.find((mainChord) => mainChord.position === chordPosition)
             ?.chordName
     }
 

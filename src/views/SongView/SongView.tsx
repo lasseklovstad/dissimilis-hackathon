@@ -128,10 +128,13 @@ export const SongView = () => {
         voices.find((voice) => voice.songVoiceId === selectedVoiceId)
     )
     const mainVoice = voices.find((voice) => voice.isMain)
-    const getChordNameFromMainVoice = (bar: IBar, chord: IChord) => {
+    const getChordNameFromMainVoice = (
+        barPosition: number,
+        chordPosition: number
+    ) => {
         return mainVoice?.bars
-            .find((mainBar) => mainBar.position === bar.position)
-            ?.chords.find((mainChord) => mainChord.position === chord.position)
+            .find((mainBar) => mainBar.position === barPosition)
+            ?.chords.find((mainChord) => mainChord.position === chordPosition)
             ?.chordName
     }
 
