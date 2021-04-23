@@ -158,6 +158,7 @@ export const LoginView = () => {
                         fullWidth
                         variant="outlined"
                         onClick={tryLogin}
+                        disableFocusRipple
                         startIcon={<MicrosoftLogoIcon />}
                     >
                         {t("LoginView.loginWithMicrosoft")}

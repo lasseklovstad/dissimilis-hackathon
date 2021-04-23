@@ -10,6 +10,45 @@ export const theme = createMuiTheme({
                 },
             },
         },
+
+        MuiTab: {
+            root: {
+                "&:focus": {
+                    boxShadow: `0 0 0 4px ${colors.focus}`,
+                },
+            },
+        },
+        MuiIconButton: {
+            root: {
+                "&:focus": {
+                    boxShadow: `0 0 0 4px ${colors.focus}`,
+                },
+            },
+        },
+        MuiButton: {
+            root: {
+                "&:focus": {
+                    boxShadow: `0 0 0 4px ${colors.focus}`,
+                },
+            },
+        },
+        MuiSelect: {
+            root: {
+                "&:focus": {
+                    boxShadow: `0 0 0 4px ${colors.focus}`,
+                },
+            },
+        },
+        MuiCardActionArea: {
+            root: {
+                "&:focus $focusHighlight": {
+                    opacity: 0,
+                },
+                "&:focus:hover $focusHighlight": {
+                    opacity: 0.04   
+                }
+            }
+        }
     },
     spacing: 8,
     palette: {

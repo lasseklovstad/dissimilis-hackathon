@@ -22,19 +22,21 @@ type ChordProps = {
 
 const useStyle = makeStyles(() => ({
     buttonBase: {
+        borderRadius: "3px",
         "&:hover": {
             filter: `brightness(80%)`,
         },
         "&:focus": {
-            outline: `4px solid ${colors.focus}`,
+            boxShadow: `0 0 0 4px ${colors.focus}`,        
         },
     },
     emptyChordContainer: {
+        borderRadius: "3px",
         "&:hover": {
             filter: `brightness(100%)`,
         },
         "&:focus": {
-            outline: `4px solid ${colors.focus}`,
+            boxShadow: `0 0 0 4px ${colors.focus}`,
         },
     },
     exportNumberSize: {
@@ -95,7 +97,7 @@ const useStyle = makeStyles(() => ({
         filter: `brightness(100%)`,
     },
     selected: {
-        outline: `4px solid ${colors.focus}`,
+        boxShadow: `0 0 0 4px ${colors.focus}`,
     },
 }))
 

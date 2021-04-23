@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, IconButton } from "@material-ui/core"
+import { Box, IconButton, makeStyles } from "@material-ui/core"
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 
 type BarMenuButtonProps = {
@@ -24,6 +24,7 @@ export const BarMenuButton = (props: BarMenuButtonProps) => {
                 aria-haspopup="true"
                 onClick={handleClick}
                 aria-label="Bar options"
+                disableFocusRipple
             >
                 <MoreHorizIcon />
             </IconButton>
