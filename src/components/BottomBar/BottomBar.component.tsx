@@ -72,15 +72,25 @@ const useStyles = makeStyles({
             color: colors.black,
         },
     },
-
+    focusElement: {
+        "&:focus": {
+            boxShadow: `0 0 0 4px ${colors.focus}`,
+        },
+    },
     input: {
-        padding: "18px 10px 10px 10px",
+        padding: "18px 10px 10px 18px",
         height: "28px",
+        "&:focus": {
+            outline: "none !important"
+        },
     },
     removeDefaultStyling: {
         "& .MuiOutlinedInput-notchedOutline": {
             border: "0",
         },
+    },
+    selectIcon: {
+        right: 14,
     },
 })
 
@@ -187,6 +197,7 @@ export const BottomBar = (props: {
                 value={chordMenuOptions.chordLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
+                classes={{ icon: classes.selectIcon }}
                 MenuProps={{ disablePortal: true }}
             >
                 {noteLengths.map(({ length, Icon }) => {
@@ -242,18 +253,26 @@ export const BottomBar = (props: {
                                 className={classes.flexelement}
                                 size="small"
                             >
-                                <ToggleButton value={ChordType.CHORD}>
+                                <ToggleButton
+                                    value={ChordType.CHORD}
+                                    disableFocusRipple
+                                    className={classes.focusElement}
+                                >
                                     <Typography>
                                         {t("BottomBar.chord")}
                                     </Typography>
                                 </ToggleButton>
-                                <ToggleButton value={ChordType.NOTE}>
+                                <ToggleButton
+                                    value={ChordType.NOTE}
+                                    disableFocusRipple
+                                    className={classes.focusElement}
+                                >
                                     <Typography>
                                         {t("BottomBar.note")}
                                     </Typography>
                                 </ToggleButton>
                             </StyledToggleButtonGroup>
-                            <Button onClick={deleteSelectedChord}>
+                            <Button disableFocusRipple onClick={deleteSelectedChord}>
                                 <Delete />
                             </Button>
                         </div>
