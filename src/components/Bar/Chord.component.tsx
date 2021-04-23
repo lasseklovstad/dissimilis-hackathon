@@ -32,7 +32,7 @@ const useStyle = makeStyles(() => ({
             filter: `brightness(80%)`,
         },
         "&:focus": {
-            boxShadow: `0 0 0 4px ${colors.focus}`,        
+            boxShadow: `0 0 0 4px ${colors.focus}`,
         },
     },
     emptyChordContainer: {

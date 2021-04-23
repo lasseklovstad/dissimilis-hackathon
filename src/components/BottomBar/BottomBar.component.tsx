@@ -81,7 +81,7 @@ const useStyles = makeStyles({
         padding: "18px 10px 10px 18px",
         height: "28px",
         "&:focus": {
-            outline: "none !important"
+            outline: "none !important",
         },
     },
     removeDefaultStyling: {
@@ -272,7 +272,10 @@ export const BottomBar = (props: {
                                     </Typography>
                                 </ToggleButton>
                             </StyledToggleButtonGroup>
-                            <Button disableFocusRipple onClick={deleteSelectedChord}>
+                            <Button
+                                disableFocusRipple
+                                onClick={deleteSelectedChord}
+                            >
                                 <Delete />
                             </Button>
                         </div>

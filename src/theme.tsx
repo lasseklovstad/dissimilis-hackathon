@@ -45,10 +45,10 @@ export const theme = createMuiTheme({
                     opacity: 0,
                 },
                 "&:focus:hover $focusHighlight": {
-                    opacity: 0.04   
-                }
-            }
-        }
+                    opacity: 0.04,
+                },
+            },
+        },
     },
     spacing: 8,
     palette: {
