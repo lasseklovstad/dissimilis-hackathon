@@ -1,10 +1,9 @@
 {
     "DashboardView": {
         "newSongLabel": "New song",
-        "recentSongLabel": "Recent",
+        "recentSongLabel": "Your last five songs",
         "searchSongLabel": "Search",
         "allSongLabel": "All songs",
-        "libraryButton": "Library",
         "measure": "measure",
         "search": "Search for songs or arrangers",
         "altButterflyButtonProp": "Image of Dissimilis' butterfly-logo",
@@ -80,6 +79,8 @@
     "LoginView": {
         "loginWithMicrosoft": "Sign in with Microsoft",
         "login": "Sign in",
+        "logout": "Sign out",
+        "logoutError": "Error logging out",
         "username": "Username",
         "password": "Password",
         "loginFailed": "Wrong username or password"
