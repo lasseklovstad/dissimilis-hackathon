@@ -138,6 +138,16 @@ export const ExportView = () => {
     const selectedVoice = songInit?.voices.find(
         (voice) => voice.songVoiceId === selectedVoiceId
     )
+    const mainVoice = songInit?.voices.find((voice) => voice.isMain)
+    const getChordNameFromMainVoice = (
+        barPosition: number,
+        chordPosition: number
+    ) => {
+        return mainVoice?.bars
+            .find((mainBar) => mainBar.position === barPosition)
+            ?.chords.find((mainChord) => mainChord.position === chordPosition)
+            ?.chordName
+    }
 
     const classes = useStyles()
     const history = useHistory()
@@ -220,6 +230,9 @@ export const ExportView = () => {
                                                                 selectedBarConfig.barsPerRow
                                                         ) || [],
                                                 }}
+                                                getChordNameFromMainVoice={
+                                                    getChordNameFromMainVoice
+                                                }
                                                 timeSignature={{
                                                     denominator:
                                                         songInit?.denominator ||

@@ -41,6 +41,10 @@ export const Bar = (props: {
     showChordLetters: boolean
     showNoteLetters: boolean
     onMenuClick: (anchorEl: HTMLElement) => void
+    getChordNameFromMainVoice: (
+        barPosition: number,
+        chordPosition: number
+    ) => string | undefined
     masterSheet: boolean
     showHouseNumber: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
@@ -50,12 +54,23 @@ export const Bar = (props: {
         exportMode,
         showChordLetters,
         showNoteLetters,
+        getChordNameFromMainVoice,
         onMenuClick,
         masterSheet,
         showHouseNumber,
-        bar: { chords, repAfter, repBefore, house, barId, songId, songVoiceId },
+        bar: {
+            chords,
+            repAfter,
+            repBefore,
+            house,
+            barId,
+            songId,
+            songVoiceId,
+            position,
+        },
         height,
     } = props
+
     const [chordMenuPosition, setChordMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()
@@ -294,7 +309,11 @@ export const Bar = (props: {
                                 )
                                 return (
                                     <Chord
+                                        barPosition={position}
                                         showChordLetters={showChordLetters}
+                                        getChordNameFromMainVoice={
+                                            getChordNameFromMainVoice
+                                        }
                                         exportMode={exportMode}
                                         showNoteLetters={showNoteLetters}
                                         onMouseLeave={() =>

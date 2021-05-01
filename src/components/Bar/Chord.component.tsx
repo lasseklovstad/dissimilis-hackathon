@@ -7,6 +7,7 @@ import { tangentToNumber } from "../../utils/bar.util"
 
 type ChordProps = {
     chords: IChord
+    barPosition: number
     onContextMenu: (event: React.MouseEvent) => void
     onClick: (event: React.MouseEvent) => void
     onMouseEnter: () => void
@@ -17,6 +18,10 @@ type ChordProps = {
     showNoteLetters: boolean
     isSelected: boolean
     handleChordFocus: () => void
+    getChordNameFromMainVoice: (
+        barPosition: number,
+        chordPosition: number
+    ) => string | undefined
     barEditMode: boolean
 }
 
@@ -27,7 +32,7 @@ const useStyle = makeStyles(() => ({
             filter: `brightness(80%)`,
         },
         "&:focus": {
-            boxShadow: `0 0 0 4px ${colors.focus}`,        
+            boxShadow: `0 0 0 4px ${colors.focus}`,
         },
     },
     emptyChordContainer: {
@@ -122,10 +127,12 @@ const ChordText = (props: { chordName: string }) => {
 export const Chord = (props: ChordProps) => {
     const {
         chords,
+        barPosition,
         onClick,
         onContextMenu,
         onMouseEnter,
         onMouseLeave,
+        getChordNameFromMainVoice,
         highlight,
         exportMode,
         showChordLetters,
@@ -135,6 +142,8 @@ export const Chord = (props: ChordProps) => {
         barEditMode,
     } = props
     const classes = useStyle()
+
+    const chordName = getChordNameFromMainVoice(barPosition, chords.position)
 
     return (
         <Box
@@ -149,8 +158,8 @@ export const Chord = (props: ChordProps) => {
             ml={0.5}
             minWidth={0}
         >
-            {chords.chordName && showChordLetters && (
-                <ChordText chordName={chords.chordName} />
+            {chordName && showChordLetters && (
+                <ChordText chordName={chordName} />
             )}
             <ButtonBase
                 id="chordButton"

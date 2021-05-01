@@ -14,6 +14,10 @@ import { IVoice } from "../../models/IVoice"
 type SongProps = {
     barsPerRow: number
     voice: IVoice
+    getChordNameFromMainVoice: (
+        barPosition: number,
+        chordPosition: number
+    ) => string | undefined
     timeSignature: ITimeSignature
     heightOfBar: number
     exportMode?: boolean
@@ -46,6 +50,7 @@ export const Song = (props: SongProps) => {
     const {
         barsPerRow,
         voice: { bars, isMain },
+        getChordNameFromMainVoice,
         timeSignature,
         heightOfBar,
         exportMode,
@@ -123,6 +128,9 @@ export const Song = (props: SongProps) => {
                                                     : showNoteLetters
                                             }
                                             masterSheet={!exportMode && isMain}
+                                            getChordNameFromMainVoice={
+                                                getChordNameFromMainVoice
+                                            }
                                             onMenuClick={openMenu(bar)}
                                             bar={bar}
                                             height={heightOfBar}
@@ -131,7 +139,9 @@ export const Song = (props: SongProps) => {
                                         />
                                         <BarLine />
                                         {bar.position === lastBarPosition &&
-                                            lastPage && <BarLine />}
+                                            lastPage && (
+                                                <BarLine lastPosition />
+                                            )}
                                     </React.Fragment>
                                 )
                             })}
