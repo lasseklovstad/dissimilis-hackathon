@@ -342,14 +342,11 @@ export const DashboardLibraryButton: FC<ButtonProps> = ({ text, link }) => {
 export const DashboardTopBarIcon = (props: { onGoHome?: () => void }) => {
     const { t } = useTranslation()
     const altProp = t("DashboardView.altButterflyButtonProp")
+    const ariaProp = t("DashboardView.ariaButterflyButtonProp")
     const { onGoHome } = props
     return (
         <IconButton
-            disableFocusRipple
-            component={Link}
-            to="/dashboard"
-            onClick={onGoHome}
-        >
+            disableFocusRipple component={Link} to="/dashboard" onClick={onGoHome} aria-label={ariaProp}>
             <Icon fontSize="large">
                 <img src={butterflyBlue} alt={altProp} />
             </Icon>
