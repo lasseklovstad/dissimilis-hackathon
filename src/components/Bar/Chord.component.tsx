@@ -25,7 +25,7 @@ type ChordProps = {
     barEditMode: boolean
 }
 
-const useStyle = makeStyles(() => ({
+const useStyle = makeStyles((theme) => ({
     buttonBase: {
         borderRadius: "3px",
         "&:hover": {
@@ -45,6 +45,8 @@ const useStyle = makeStyles(() => ({
         },
     },
     exportNumberSize: {
+        ...theme.typography.body1,
+        "@media(max-width:600px)": {},
         fontSize: "1.25rem",
     },
     noteContainer: {
@@ -58,26 +60,37 @@ const useStyle = makeStyles(() => ({
         color: "white",
         border: "1px solid",
     },
+    noteFont: {
+        ...theme.typography.body1,
+        "@media(max-width:600px)": {},
+    },
     C: {
         backgroundColor: colors.C.main,
+        color: colors.C.text,
     },
     D: {
         backgroundColor: colors.D.main,
+        color: colors.D.text,
     },
     E: {
         backgroundColor: colors.E.main,
+        color: colors.E.text,
     },
     F: {
         backgroundColor: colors.F.main,
+        color: colors.F.text,
     },
     G: {
         backgroundColor: colors.G.main,
+        color: colors.G.text,
     },
     A: {
         backgroundColor: colors.A.main,
+        color: colors.A.text,
     },
     H: {
         backgroundColor: colors.H.main,
+        color: colors.H.text,
     },
     "C#": {
         backgroundColor: colors.gray_500,
@@ -109,7 +122,6 @@ const useStyle = makeStyles(() => ({
 const ChordText = (props: { chordName: string }) => {
     return (
         <Typography
-            variant="body1"
             style={{
                 zIndex: 0,
                 textOverflow: "ellipsis",
@@ -202,7 +214,7 @@ export const Chord = (props: ChordProps) => {
                                 } ${
                                     Number(tangent) && exportMode
                                         ? classes.exportNumberSize
-                                        : undefined
+                                        : classes.noteFont
                                 }`}
                                 key={note + i}
                             >

@@ -346,7 +346,12 @@ export const DashboardTopBarIcon = (props: { onGoHome?: () => void }) => {
     const { onGoHome } = props
     return (
         <IconButton
-            disableFocusRipple component={Link} to="/dashboard" onClick={onGoHome} aria-label={ariaProp}>
+            disableFocusRipple
+            component={Link}
+            to="/dashboard"
+            onClick={onGoHome}
+            aria-label={ariaProp}
+        >
             <Icon fontSize="large">
                 <img src={butterflyBlue} alt={altProp} />
             </Icon>
