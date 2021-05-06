@@ -588,7 +588,9 @@ export const SongView = () => {
                         handleChangeChordLength(length)
                     }
                     timeSignature={{ denominator, numerator }}
-                    addBar={(bar) => dispatchSong({ type: "ADD_BAR", bar })}
+                    addBar={(song) =>
+                        dispatchSong({ type: "UPDATE_SONG", song })
+                    }
                     songId={songId}
                     voiceId={selectedVoiceId}
                     chordDropdownContent={
