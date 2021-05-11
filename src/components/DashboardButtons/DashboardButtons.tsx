@@ -74,6 +74,10 @@ const useStyles = makeStyles((theme) => ({
             fontSize: "1rem",
         },
     },
+    breakableText: {
+        marginRight: 8,
+        overflowWrap: "break-word",
+    },
 }))
 
 export type ButtonProps = {
@@ -86,7 +90,7 @@ export type ButtonProps = {
 
 type ButtonSongProps = {
     title: string
-    arrangerName?: string
+    arrangerEmail?: string
     updatedOn?: string
     songId: number
     removeSong: (songId: number) => void
@@ -290,15 +294,21 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                             }}
                         >
                             <Grid item xs={12} sm={4}>
-                                <Typography>{props.title}</Typography>
-                            </Grid>
-                            <Grid item xs={12} sm={4}>
-                                <Typography className={styles.songScalableText}>
-                                    {props.arrangerName}
+                                <Typography className={styles.breakableText}>
+                                    {props.title}
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} sm={4}>
-                                <Typography className={styles.songScalableText}>
+                                <Typography
+                                    className={`${styles.songScalableText} ${styles.breakableText}`}
+                                >
+                                    {props.arrangerEmail}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <Typography
+                                    className={`${styles.songScalableText} ${styles.breakableText}`}
+                                >
                                     {t("DashboardView.updatedOn")}{" "}
                                     {props.updatedOn
                                         ? convertToDate(
