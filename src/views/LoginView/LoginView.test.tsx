@@ -39,4 +39,11 @@ describe("LoginView", () => {
         })
         expect(LoginButtonMicrosoft[0]).toBeEnabled()
     })
+
+    it("should route user to /dashboard if already logged inn", () => {
+        sessionStorageMock.setItem("apiKey", "MockApiKey")
+        sessionStorageMock.setItem("userId", "10")
+        render(<LoginView />, { wrapper: TestWrapper })
+        expect(mockReplaceHistory).toHaveBeenCalledWith("/dashboard")
+    })
 })
