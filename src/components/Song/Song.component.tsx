@@ -92,7 +92,7 @@ export const Song = (props: SongProps) => {
                     <Box
                         display="flex"
                         alignItems="flex-end"
-                        mt={exportMode ? 7 : i === 0 ? 7 : 10}
+                        mt={exportMode ? 5 : i === 0 ? 7 : 10}
                         key={i}
                         height={heightOfBar}
                     >

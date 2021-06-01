@@ -28,10 +28,10 @@ import { ReactComponent as QuarternoteIcon } from "../../assets/images/icon_quar
 import { ReactComponent as EighthnoteIcon } from "../../assets/images/icon_eighth-note.svg"
 import { ReactComponent as HalfnoteDottedIcon } from "../../assets/images/icon_half-note-dotted.svg"
 import { ReactComponent as QuarternoteDottedIcon } from "../../assets/images/icon_quarter-note-dotted.svg"
-import { IBar } from "../../models/IBar"
 import { useAddBar } from "../../utils/useApiServiceSongs"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
 import { ChordType } from "../../models/IChordMenuOptions"
+import { ISong } from "../../models/ISong"
 
 const useStyles = makeStyles({
     outercontainer: {
@@ -137,7 +137,7 @@ const noteLengths = [
 
 export const BottomBar = (props: {
     timeSignature: { numerator: number; denominator: number }
-    addBar: (bar: IBar) => void
+    addBar: (song: ISong) => void
     songId: string
     voiceId: number
     onChordChange: (chord: string) => void
@@ -180,7 +180,7 @@ export const BottomBar = (props: {
     const handleAddBar = async () => {
         const { error, result } = await postBar.run()
         if (!error && result) {
-            addBar(result.data.bars[result.data.bars.length - 1])
+            addBar(result.data)
             scrollToBottom()
         }
     }
