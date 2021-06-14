@@ -72,9 +72,8 @@ export const CreateSongTab = (props: {
         onUpdateVoice,
         onDeleteVoice,
     } = props
-    const [newInstrumentModalIsOpen, setNewInstrumentModalIsOpen] = useState(
-        false
-    )
+    const [newInstrumentModalIsOpen, setNewInstrumentModalIsOpen] =
+        useState(false)
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false)
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false)
     const { t } = useTranslation()

@@ -127,10 +127,8 @@ export const ExportView = () => {
     const [showChordLetters, setShowChordLetters] = useState(true)
     const [showNoteLetters, setShowNoteLetters] = useState(true)
     const [selectedBarConfig, setSelectedBarConfig] = useState(barsConfig[2])
-    const [
-        selectedRowsPerSheetConfig,
-        setSelectedRowsPerSheetConfig,
-    ] = useState(rowsPerSheetConfig[3])
+    const [selectedRowsPerSheetConfig, setSelectedRowsPerSheetConfig] =
+        useState(rowsPerSheetConfig[3])
     const [amountOfPages, setAmountOfPages] = useState<number>(1)
     const { songId } = useParams<{ songId: string }>()
     const { songInit, getSong } = useGetSong(songId)

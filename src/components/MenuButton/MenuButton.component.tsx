@@ -32,9 +32,8 @@ export const MenuButton = (props: {
 }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
-    const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(
-        false
-    )
+    const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] =
+        useState(false)
     const { t } = useTranslation()
     const history = useHistory()
     const { songId, title, transpose } = useParams<{
@@ -44,9 +43,8 @@ export const MenuButton = (props: {
     }>()
     const { deleteSong } = useDeleteSong(songId)
     const { songInit } = useGetSong(songId)
-    const [transposeSongModalIsOpen, setTransposeSongModalIsOpen] = useState(
-        false
-    )
+    const [transposeSongModalIsOpen, setTransposeSongModalIsOpen] =
+        useState(false)
     const { transposeSong } = useTransposeSong(songId, title, transpose)
     const { duplicateSong } = useDuplicateSong(Number(songId))
 
