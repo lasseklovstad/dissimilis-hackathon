@@ -72,7 +72,6 @@ export const LoginView = () => {
 
     const tryLogin = () => {
         axiosGet().then(({ result }) => {
-            console.log(result)
             window.location.href = result?.headers.location
         })
     }
