@@ -315,7 +315,7 @@ export const useAddBar = (songId: string, voiceId: number) => {
         repAfter: false,
         house: 0,
     }
-    const api = useApiService<IVoice>(url, { headers, body })
+    const api = useApiService<ISong>(url, { headers, body })
 
     return {
         postBar: { run: api.postData, ...api.state },

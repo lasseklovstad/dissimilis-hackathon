@@ -89,6 +89,7 @@ export const SongGridMenuButton = (props: {
                     aria-haspopup="true"
                     aria-label="Bar options"
                     onClick={handleClick}
+                    disableFocusRipple
                 >
                     <MoreVertIcon />
                 </IconButton>

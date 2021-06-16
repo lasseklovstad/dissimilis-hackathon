@@ -24,6 +24,7 @@ export const BarMenuButton = (props: BarMenuButtonProps) => {
                 aria-haspopup="true"
                 onClick={handleClick}
                 aria-label="Bar options"
+                disableFocusRipple
             >
                 <MoreHorizIcon />
             </IconButton>

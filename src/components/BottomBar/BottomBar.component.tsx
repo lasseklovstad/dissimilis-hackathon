@@ -28,10 +28,10 @@ import { ReactComponent as QuarternoteIcon } from "../../assets/images/icon_quar
 import { ReactComponent as EighthnoteIcon } from "../../assets/images/icon_eighth-note.svg"
 import { ReactComponent as HalfnoteDottedIcon } from "../../assets/images/icon_half-note-dotted.svg"
 import { ReactComponent as QuarternoteDottedIcon } from "../../assets/images/icon_quarter-note-dotted.svg"
-import { IBar } from "../../models/IBar"
 import { useAddBar } from "../../utils/useApiServiceSongs"
 import { SongContext } from "../../views/SongView/SongContextProvider.component"
 import { ChordType } from "../../models/IChordMenuOptions"
+import { ISong } from "../../models/ISong"
 
 const useStyles = makeStyles({
     outercontainer: {
@@ -72,15 +72,25 @@ const useStyles = makeStyles({
             color: colors.black,
         },
     },
-
+    focusElement: {
+        "&:focus": {
+            boxShadow: `0 0 0 4px ${colors.focus}`,
+        },
+    },
     input: {
-        padding: "18px 10px 10px 10px",
+        padding: "18px 10px 10px 18px",
         height: "28px",
+        "&:focus": {
+            outline: "none !important",
+        },
     },
     removeDefaultStyling: {
         "& .MuiOutlinedInput-notchedOutline": {
             border: "0",
         },
+    },
+    selectIcon: {
+        right: 14,
     },
 })
 
@@ -127,7 +137,7 @@ const noteLengths = [
 
 export const BottomBar = (props: {
     timeSignature: { numerator: number; denominator: number }
-    addBar: (bar: IBar) => void
+    addBar: (song: ISong) => void
     songId: string
     voiceId: number
     onChordChange: (chord: string) => void
@@ -170,7 +180,7 @@ export const BottomBar = (props: {
     const handleAddBar = async () => {
         const { error, result } = await postBar.run()
         if (!error && result) {
-            addBar(result.data.bars[result.data.bars.length - 1])
+            addBar(result.data)
             scrollToBottom()
         }
     }
@@ -187,6 +197,7 @@ export const BottomBar = (props: {
                 value={chordMenuOptions.chordLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
+                classes={{ icon: classes.selectIcon }}
                 MenuProps={{ disablePortal: true }}
             >
                 {noteLengths.map(({ length, Icon }) => {
@@ -242,18 +253,29 @@ export const BottomBar = (props: {
                                 className={classes.flexelement}
                                 size="small"
                             >
-                                <ToggleButton value={ChordType.CHORD}>
+                                <ToggleButton
+                                    value={ChordType.CHORD}
+                                    disableFocusRipple
+                                    className={classes.focusElement}
+                                >
                                     <Typography>
                                         {t("BottomBar.chord")}
                                     </Typography>
                                 </ToggleButton>
-                                <ToggleButton value={ChordType.NOTE}>
+                                <ToggleButton
+                                    value={ChordType.NOTE}
+                                    disableFocusRipple
+                                    className={classes.focusElement}
+                                >
                                     <Typography>
                                         {t("BottomBar.note")}
                                     </Typography>
                                 </ToggleButton>
                             </StyledToggleButtonGroup>
-                            <Button onClick={deleteSelectedChord}>
+                            <Button
+                                disableFocusRipple
+                                onClick={deleteSelectedChord}
+                            >
                                 <Delete />
                             </Button>
                         </div>

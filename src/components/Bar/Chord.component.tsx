@@ -7,6 +7,7 @@ import { tangentToNumber } from "../../utils/bar.util"
 
 type ChordProps = {
     chords: IChord
+    barPosition: number
     onContextMenu: (event: React.MouseEvent) => void
     onClick: (event: React.MouseEvent) => void
     onMouseEnter: () => void
@@ -17,27 +18,35 @@ type ChordProps = {
     showNoteLetters: boolean
     isSelected: boolean
     handleChordFocus: () => void
+    getChordNameFromMainVoice: (
+        barPosition: number,
+        chordPosition: number
+    ) => string | undefined
     barEditMode: boolean
 }
 
-const useStyle = makeStyles(() => ({
+const useStyle = makeStyles((theme) => ({
     buttonBase: {
+        borderRadius: "3px",
         "&:hover": {
             filter: `brightness(80%)`,
         },
         "&:focus": {
-            outline: `4px solid ${colors.focus}`,
+            boxShadow: `0 0 0 4px ${colors.focus}`,
         },
     },
     emptyChordContainer: {
+        borderRadius: "3px",
         "&:hover": {
             filter: `brightness(100%)`,
         },
         "&:focus": {
-            outline: `4px solid ${colors.focus}`,
+            boxShadow: `0 0 0 4px ${colors.focus}`,
         },
     },
     exportNumberSize: {
+        ...theme.typography.body1,
+        "@media(max-width:600px)": {},
         fontSize: "1.25rem",
     },
     noteContainer: {
@@ -51,26 +60,37 @@ const useStyle = makeStyles(() => ({
         color: "white",
         border: "1px solid",
     },
+    noteFont: {
+        ...theme.typography.body1,
+        "@media(max-width:600px)": {},
+    },
     C: {
         backgroundColor: colors.C.main,
+        color: colors.C.text,
     },
     D: {
         backgroundColor: colors.D.main,
+        color: colors.D.text,
     },
     E: {
         backgroundColor: colors.E.main,
+        color: colors.E.text,
     },
     F: {
         backgroundColor: colors.F.main,
+        color: colors.F.text,
     },
     G: {
         backgroundColor: colors.G.main,
+        color: colors.G.text,
     },
     A: {
         backgroundColor: colors.A.main,
+        color: colors.A.text,
     },
     H: {
         backgroundColor: colors.H.main,
+        color: colors.H.text,
     },
     "C#": {
         backgroundColor: colors.gray_500,
@@ -95,14 +115,13 @@ const useStyle = makeStyles(() => ({
         filter: `brightness(100%)`,
     },
     selected: {
-        outline: `4px solid ${colors.focus}`,
+        boxShadow: `0 0 0 4px ${colors.focus}`,
     },
 }))
 
 const ChordText = (props: { chordName: string }) => {
     return (
         <Typography
-            variant="body1"
             style={{
                 zIndex: 0,
                 textOverflow: "ellipsis",
@@ -120,10 +139,12 @@ const ChordText = (props: { chordName: string }) => {
 export const Chord = (props: ChordProps) => {
     const {
         chords,
+        barPosition,
         onClick,
         onContextMenu,
         onMouseEnter,
         onMouseLeave,
+        getChordNameFromMainVoice,
         highlight,
         exportMode,
         showChordLetters,
@@ -133,6 +154,8 @@ export const Chord = (props: ChordProps) => {
         barEditMode,
     } = props
     const classes = useStyle()
+
+    const chordName = getChordNameFromMainVoice(barPosition, chords.position)
 
     return (
         <Box
@@ -147,8 +170,8 @@ export const Chord = (props: ChordProps) => {
             ml={0.5}
             minWidth={0}
         >
-            {chords.chordName && showChordLetters && (
-                <ChordText chordName={chords.chordName} />
+            {chordName && showChordLetters && (
+                <ChordText chordName={chordName} />
             )}
             <ButtonBase
                 id="chordButton"
@@ -191,7 +214,7 @@ export const Chord = (props: ChordProps) => {
                                 } ${
                                     Number(tangent) && exportMode
                                         ? classes.exportNumberSize
-                                        : undefined
+                                        : classes.noteFont
                                 }`}
                                 key={note + i}
                             >

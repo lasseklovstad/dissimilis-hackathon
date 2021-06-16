@@ -9,5 +9,5 @@ export interface ISong {
     denominator: number
     numerator: number
     updatedOn?: string
-    arrangerName?: string
+    arrangerEmail?: string
 }

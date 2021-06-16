@@ -181,6 +181,7 @@ export const CreateSongTab = (props: {
                                 key={voice.songVoiceId}
                                 value={voice.songVoiceId}
                                 label={label}
+                                disableFocusRipple
                                 onClick={() =>
                                     history.push(`?voice=${voice.songVoiceId}`)
                                 }
@@ -202,6 +203,7 @@ export const CreateSongTab = (props: {
                     aria-haspopup="true"
                     aria-label="tab options"
                     onClick={handleMenuClick}
+                    disableFocusRipple
                 >
                     <MoreVertIcon />
                 </IconButton>

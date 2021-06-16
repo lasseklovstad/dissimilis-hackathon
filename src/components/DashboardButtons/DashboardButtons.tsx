@@ -28,6 +28,24 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: colors.white,
         boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)",
     },
+    newSongButton: {
+        "&:focus-within": {
+            boxShadow: `0 0 0 4px ${colors.focus}`,
+        },
+    },
+    songButton: {
+        border: `4px solid ${colors.white}`,
+        "&:focus": {
+            border: `4px solid ${colors.focus}`,
+            "&:hover": {
+                border: `4px solid ${colors.focus}`,
+            },
+        },
+        "&:hover": {
+            border: `4px solid ${colors.hover_background}`,
+            backgroundColor: `${colors.hover_background}`,
+        },
+    },
     buttonGreen: {
         backgroundColor: colors.teal_100,
         boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)",
@@ -56,6 +74,10 @@ const useStyles = makeStyles((theme) => ({
             fontSize: "1rem",
         },
     },
+    breakableText: {
+        marginRight: 8,
+        overflowWrap: "break-word",
+    },
 }))
 
 export type ButtonProps = {
@@ -68,7 +90,7 @@ export type ButtonProps = {
 
 type ButtonSongProps = {
     title: string
-    arrangerName?: string
+    arrangerEmail?: string
     updatedOn?: string
     songId: number
     removeSong: (songId: number) => void
@@ -116,8 +138,11 @@ export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (
 ) => {
     const styles = useStyles()
     return (
-        <Card className={styles.button}>
-            <CardActionArea onClick={() => props.func && props.func()}>
+        <Card className={`${styles.button} ${styles.newSongButton}`}>
+            <CardActionArea
+                onClick={() => props.func && props.func()}
+                disableRipple
+            >
                 <Box className={styles.container} py={2} pl={1}>
                     <AddIcon />
                     <Box pl={1} pr={2}>
@@ -167,6 +192,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
             >
                 <Grid item xs={4}>
                     <Button
+                        disableFocusRipple
                         endIcon={
                             orderTerm === "song" ? (
                                 orderDescending ? (
@@ -186,6 +212,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
 
                 <Grid item xs={4}>
                     <Button
+                        disableFocusRipple
                         endIcon={
                             orderTerm === "user" ? (
                                 orderDescending ? (
@@ -205,6 +232,7 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
 
                 <Grid item xs={4}>
                     <Button
+                        disableFocusRipple
                         endIcon={
                             orderTerm === "date" ? (
                                 orderDescending ? (
@@ -243,7 +271,6 @@ const convertToDate = (time: number) => {
 export const DashboardButton: FC<ButtonSongProps> = (props) => {
     const styles = useStyles()
     const { t } = useTranslation()
-
     return (
         <Card className={styles.button}>
             <Grid container className={styles.songContainer}>
@@ -251,7 +278,7 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                     <CardActionArea
                         to={props.link}
                         component={Link}
-                        style={{ height: "100%" }}
+                        className={styles.songButton}
                     >
                         <Grid
                             container
@@ -270,15 +297,21 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                             }}
                         >
                             <Grid item xs={12} sm={4}>
-                                <Typography>{props.title}</Typography>
-                            </Grid>
-                            <Grid item xs={12} sm={4}>
-                                <Typography className={styles.songScalableText}>
-                                    {props.arrangerName}
+                                <Typography className={styles.breakableText}>
+                                    {props.title}
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} sm={4}>
-                                <Typography className={styles.songScalableText}>
+                                <Typography
+                                    className={`${styles.songScalableText} ${styles.breakableText}`}
+                                >
+                                    {props.arrangerEmail}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <Typography
+                                    className={`${styles.songScalableText} ${styles.breakableText}`}
+                                >
                                     {t("DashboardView.updatedOn")}{" "}
                                     {props.updatedOn
                                         ? convertToDate(
@@ -306,7 +339,7 @@ export const DashboardLibraryButton: FC<ButtonProps> = ({ text, link }) => {
     const styles = useStyles()
     return (
         <Box>
-            <Card className={styles.buttonGreen}>
+            <Card className={`${styles.buttonGreen} ${styles.newSongButton}`}>
                 <CardActionArea to={link} component={Link}>
                     <Box className={styles.container}>
                         <Box p={2}>
@@ -322,9 +355,16 @@ export const DashboardLibraryButton: FC<ButtonProps> = ({ text, link }) => {
 export const DashboardTopBarIcon = (props: { onGoHome?: () => void }) => {
     const { t } = useTranslation()
     const altProp = t("DashboardView.altButterflyButtonProp")
+    const ariaProp = t("DashboardView.ariaButterflyButtonProp")
     const { onGoHome } = props
     return (
-        <IconButton component={Link} to="/dashboard" onClick={onGoHome}>
+        <IconButton
+            disableFocusRipple
+            component={Link}
+            to="/dashboard"
+            onClick={onGoHome}
+            aria-label={ariaProp}
+        >
             <Icon fontSize="large">
                 <img src={butterflyBlue} alt={altProp} />
             </Icon>
