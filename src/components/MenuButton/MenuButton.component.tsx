@@ -13,7 +13,6 @@ import { colors } from "../../utils/colors"
 import {
     useDeleteSong,
     useDuplicateSong,
-    useGetSong,
     useTransposeSong,
 } from "../../utils/useApiServiceSongs"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
@@ -34,9 +33,8 @@ export const MenuButton = (props: {
     const { songTitle } = props
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
-    const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(
-        false
-    )
+    const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] =
+        useState(false)
     const { t } = useTranslation()
     const history = useHistory()
     const { songId, title, transpose } = useParams<{
@@ -45,9 +43,8 @@ export const MenuButton = (props: {
         transpose: string
     }>()
     const { deleteSong } = useDeleteSong(songId)
-    const [transposeSongModalIsOpen, setTransposeSongModalIsOpen] = useState(
-        false
-    )
+    const [transposeSongModalIsOpen, setTransposeSongModalIsOpen] =
+        useState(false)
     const { transposeSong } = useTransposeSong(songId, title, transpose)
     const { duplicateSong } = useDuplicateSong(Number(songId))
 

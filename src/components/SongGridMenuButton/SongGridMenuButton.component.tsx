@@ -15,9 +15,8 @@ export const SongGridMenuButton = (props: {
     removeSong: (songId: number) => void
 }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(
-        false
-    )
+    const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] =
+        useState(false)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()

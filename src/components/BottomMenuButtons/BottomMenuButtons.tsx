@@ -68,9 +68,8 @@ export const ChordOptions = (props: {
         <Box id="chordOptionsContainer" className={styles.root}>
             <FormGroup id="chordOptions" row>
                 {allNotes.map((note, i) => {
-                    const chordContainsNote = chordMenuOptions.chordNotes.includes(
-                        note as string
-                    )
+                    const chordContainsNote =
+                        chordMenuOptions.chordNotes.includes(note as string)
                     return (
                         <FormControlLabel
                             key={i}

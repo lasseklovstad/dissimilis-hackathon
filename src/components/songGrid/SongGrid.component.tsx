@@ -73,7 +73,7 @@ export const SongGrid = (props: SongGridProps) => {
                         <GridItem key={song.songId} isSong>
                             <DashboardButton
                                 title={song.title}
-                                arrangerName={song.arrangerEmail}
+                                arrangerEmail={song.arrangerEmail}
                                 updatedOn={song.updatedOn}
                                 songId={song.songId}
                                 removeSong={props.removeSong}

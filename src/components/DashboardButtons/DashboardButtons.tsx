@@ -74,6 +74,10 @@ const useStyles = makeStyles((theme) => ({
             fontSize: "1rem",
         },
     },
+    breakableText: {
+        marginRight: 8,
+        overflowWrap: "break-word",
+    },
 }))
 
 export type ButtonProps = {
@@ -86,7 +90,7 @@ export type ButtonProps = {
 
 type ButtonSongProps = {
     title: string
-    arrangerName?: string | null
+    arrangerEmail?: string | null
     updatedOn?: string
     songId: number
     removeSong: (songId: number) => void
@@ -208,7 +212,10 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
 }
 
 const convertToDate = (time: number) => {
-    const timeOptions = { hour: "2-digit", minute: "2-digit" }
+    const timeOptions = {
+        hour: "2-digit",
+        minute: "2-digit",
+    } as Intl.DateTimeFormatOptions
     const date: Date = new Date()
     date.setTime(time)
 
@@ -247,15 +254,21 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                             }}
                         >
                             <Grid item xs={12} sm={4}>
-                                <Typography>{props.title}</Typography>
-                            </Grid>
-                            <Grid item xs={12} sm={4}>
-                                <Typography className={styles.songScalableText}>
-                                    {props.arrangerName}
+                                <Typography className={styles.breakableText}>
+                                    {props.title}
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} sm={4}>
-                                <Typography className={styles.songScalableText}>
+                                <Typography
+                                    className={`${styles.songScalableText} ${styles.breakableText}`}
+                                >
+                                    {props.arrangerEmail}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <Typography
+                                    className={`${styles.songScalableText} ${styles.breakableText}`}
+                                >
                                     {t("DashboardView.updatedOn")}{" "}
                                     {props.updatedOn
                                         ? convertToDate(

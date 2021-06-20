@@ -75,9 +75,8 @@ export const SongView = () => {
     const [selectedBarId, setSelectedBarId] = useState<number | undefined>(
         undefined
     )
-    const [selectedChordPosition, setSelectedChordPosition] = useState<number>(
-        0
-    )
+    const [selectedChordPosition, setSelectedChordPosition] =
+        useState<number>(0)
     const chordOptionsRef = useRef() as MutableRefObject<HTMLAnchorElement>
 
     const [barEditMode, setBarEditMode] = useState(false)
@@ -590,7 +589,9 @@ export const SongView = () => {
                         handleChangeChordLength(length)
                     }
                     timeSignature={{ denominator, numerator }}
-                    addBar={(bar) => dispatchSong({ type: "ADD_BAR", bar })}
+                    addBar={(song) =>
+                        dispatchSong({ type: "UPDATE_SONG", song })
+                    }
                     songId={songId}
                     voiceId={selectedVoiceId}
                     chordDropdownContent={
