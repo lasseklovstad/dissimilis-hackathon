@@ -53,7 +53,8 @@
         "eleventh": "Undesim",
         "chordLabel": "Select chord",
         "noteLabel": "Select note",
-        "noteLength": "Note duration"
+        "noteLength": "Note duration",
+        "deleteSelectedChord": "Delete selected chord"
     },
     "ChordMenu": {
         "deleteChord": "Delete",
@@ -135,6 +136,7 @@
     "Song": {
         "timeSignature": "Time signature",
         "bar": "Bar",
+        "barNumber": "Bar number",
         "barMenu": "Bar menu"
     }
 }

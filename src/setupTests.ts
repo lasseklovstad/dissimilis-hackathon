@@ -4,7 +4,7 @@
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom/extend-expect"
 import { resetSongDB, server } from "./test/test-server"
-import { login, logout } from "./test/test-utils"
+import { login, logout, resetIndex } from "./test/test-utils"
 
 class SessionStorageMock implements Storage {
     private store: any = {}
@@ -46,6 +46,7 @@ afterEach(() => {
     server.resetHandlers()
     logout()
     resetSongDB()
+    resetIndex()
 })
 
 afterAll(() => {

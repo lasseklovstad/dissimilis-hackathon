@@ -28,7 +28,11 @@ export const TimeSignature = (props: { timeSignature: ITimeSignature }) => {
 export const BarNumber = (props: { barNumber: number }) => {
     const { t } = useTranslation()
     return (
-        <Box width="30px" color={colors.gray_400} aria-label={t("Song.bar")}>
+        <Box
+            width="30px"
+            color={colors.gray_400}
+            aria-label={t("Song.barNumber")}
+        >
             <Typography variant="body1">{props.barNumber}</Typography>
         </Box>
     )

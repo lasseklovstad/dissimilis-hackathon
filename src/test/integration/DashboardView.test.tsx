@@ -38,14 +38,28 @@ describe("Dashboard", () => {
         userEvent.click(screen.getByRole("button", { name: /4\/4-takt/i }))
         userEvent.type(
             await screen.findByLabelText("Navn på sang"),
-            "Test sang"
+            "Test sang 4/4"
         )
         userEvent.click(screen.getByRole("button", { name: "Opprett" }))
         await screen.findByLabelText("Loading")
         await waitDoneLoading()
         screen.getByRole("tab", { name: "Partitur" })
-        expect(screen.getByLabelText("Navn på sang")).toHaveValue("Test sang")
+        expect(screen.getByLabelText("Navn på sang")).toHaveValue(
+            "Test sang 4/4"
+        )
         expect(screen.getByLabelText("Taktart")).toHaveTextContent("4/4")
+    })
+
+    it("Should create 3/4 song", async () => {
+        await renderDashboard()
+        userEvent.click(screen.getByRole("button", { name: /3\/4-takt/i }))
+        userEvent.type(await screen.findByLabelText("Navn på sang"), "Test 3/4")
+        userEvent.click(screen.getByRole("button", { name: "Opprett" }))
+        await screen.findByLabelText("Loading")
+        await waitDoneLoading()
+        screen.getByRole("tab", { name: "Partitur" })
+        expect(screen.getByLabelText("Navn på sang")).toHaveValue("Test 3/4")
+        expect(screen.getByLabelText("Taktart")).toHaveTextContent("3/4")
     })
 
     it("Should delete song", async () => {

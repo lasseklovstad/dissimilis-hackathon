@@ -53,7 +53,8 @@
         "eleventh": "Undesim",
         "chordLabel": "Velg akkord",
         "noteLabel": "Velg note",
-        "noteLength": "Noteverdi"
+        "noteLength": "Noteverdi",
+        "deleteSelectedChord": "Slett valgt akkord"
     },
     "ChordMenu": {
         "deleteChord": "Slett",
@@ -135,6 +136,7 @@
     "Song": {
         "timeSignature": "Taktart",
         "bar": "Takt",
+        "barNumber": "Taktnummer",
         "barMenu": "Takt meny"
     }
 }

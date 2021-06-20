@@ -289,6 +289,7 @@ export const BottomBar = (props: {
                             <Button
                                 disableFocusRipple
                                 onClick={deleteSelectedChord}
+                                aria-label={t("BottomBar.deleteSelectedChord")}
                             >
                                 <Delete />
                             </Button>

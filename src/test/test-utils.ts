@@ -3,6 +3,12 @@ import { IBar, IBarPost, IChord } from "../models/IBar"
 import { screen, waitFor } from "@testing-library/react"
 import { sessionStorageMock } from "../setupTests"
 
+let chordId = 100
+
+export const resetIndex = () => {
+    chordId = 100
+}
+
 export const generateNewSong = (song: ISongPost): ISong => {
     return {
         ...song,
@@ -41,26 +47,110 @@ export const generateNewSong = (song: ISongPost): ISong => {
     }
 }
 
-export const addChordToBar = (bar: IBar, newChord: IBarPost) => {
-    const chords = bar.chords.reduce((allChords, currentChord) => {
-        if (currentChord.position === newChord.position) {
-            return [
-                ...allChords,
-                {
-                    ...newChord,
-                    chordId: 1,
-                },
-                {
-                    ...currentChord,
-                    position: currentChord.position + newChord.length,
-                    length: currentChord.length - newChord.length,
-                },
-            ]
-        }
-        return [...allChords, currentChord]
-    }, [] as IChord[])
+// Sort based on position
+const compareChord = (a: IChord, b: IChord) => {
+    if (a.position < b.position) {
+        return -1
+    }
+    if (a.position > b.position) {
+        return 1
+    }
+    return 0
+}
 
-    return { ...bar, chords }
+export const addChordToBar = (
+    bar: IBar,
+    newChord: IBarPost,
+    barLength: number
+) => {
+    chordId = chordId + 1
+    const chords: IChord[] = [
+        ...removeEmptyChords(bar.chords),
+        { ...newChord, chordId },
+    ].sort(compareChord)
+    return { ...bar, chords: fillWithEmptyChords(chords, barLength) }
+}
+
+export const deleteChord = (bar: IBar, chordId: number, barLength: number) => {
+    const chords = removeEmptyChords(bar.chords).filter(
+        (chord) => chord.chordId !== chordId
+    )
+    return { ...bar, chords: fillWithEmptyChords(chords, barLength) }
+}
+
+const removeEmptyChords = (chords: IChord[]) => {
+    return chords.filter((chord) => chord.notes[0] !== "Z")
+}
+
+const createEmptyChord = (position: number, length: number) => {
+    return {
+        position,
+        notes: ["Z"],
+        length,
+        chordId: null,
+        chordName: null,
+    }
+}
+
+// Get an array of empty chords which will fill the space before currentChord
+// and after previousChord
+// If previousChord === undefined assume fra start of bar
+const getEmptyBefore = (currentChord: IChord, previousChord?: IChord) => {
+    const lastChordEnd = previousChord
+        ? previousChord.position + previousChord.length
+        : 0
+    const lengthNeededBefore = currentChord.position - lastChordEnd
+
+    if (lengthNeededBefore > 0) {
+        return [
+            createEmptyChord(
+                currentChord.position - lengthNeededBefore,
+                lengthNeededBefore
+            ),
+        ]
+    }
+    return []
+}
+
+// Get an array of empty chords which will fill the space after currentChord
+const getEmptyAfter = (currentChord: IChord, barLength: number) => {
+    const lengthNeededAfter =
+        barLength - (currentChord.position + currentChord.length)
+
+    if (lengthNeededAfter > 0) {
+        return [
+            createEmptyChord(barLength - lengthNeededAfter, lengthNeededAfter),
+        ]
+    }
+    return []
+}
+
+const fillWithEmptyChords = (chords: IChord[], barLength: number) => {
+    if (chords.length === 0) {
+        return [createEmptyChord(0, barLength)]
+    }
+
+    return chords.reduce((allChords, currentChord, index, chordsArray) => {
+        const numberOfChords = chordsArray.length
+        const isLastChord = numberOfChords - 1 === index
+        const isFirstChord = index === 0
+        if (isFirstChord && isLastChord) {
+            const emptyBefore = getEmptyBefore(currentChord)
+            const emptyAfter = getEmptyAfter(currentChord, barLength)
+            return [...emptyBefore, currentChord, ...emptyAfter]
+        } else if (isFirstChord && !isLastChord) {
+            const emptyBefore = getEmptyBefore(currentChord)
+            return [...emptyBefore, currentChord]
+        } else if (!isFirstChord && isLastChord) {
+            const emptyAfter = getEmptyAfter(currentChord, barLength)
+            return [...allChords, currentChord, ...emptyAfter]
+        } else {
+            // A Chord in the middle we only add empty notes before
+            const previousChord = chordsArray[index - 1]
+            const emptyBefore = getEmptyBefore(currentChord, previousChord)
+            return [...allChords, ...emptyBefore, currentChord]
+        }
+    }, [] as IChord[])
 }
 
 export const waitDoneLoading = async () => {

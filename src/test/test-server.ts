@@ -2,16 +2,16 @@ import { setupServer } from "msw/node"
 import { rest } from "msw"
 import { user } from "./data/user.mock"
 import { songs } from "./data/songs.mock"
-import { addChordToBar, generateNewSong } from "./test-utils"
+import { addChordToBar, deleteChord, generateNewSong } from "./test-utils"
 import { ISong, ISongPost } from "../models/ISong"
-import { emptySong } from "./data/song.mock"
+import { emptySong, songWithChords } from "./data/song.mock"
 import { IBar, IBarPost } from "../models/IBar"
 
 const apiUrl = process.env.REACT_APP_API_URL
 
-let songDB: ISong[] = [emptySong]
+let songDB: ISong[] = [emptySong, songWithChords]
 
-export const resetSongDB = () => (songDB = [emptySong])
+export const resetSongDB = () => (songDB = [emptySong, songWithChords])
 
 export const server = setupServer(
     rest.get(`${apiUrl}user/currentUser`, (req, res, ctx) => {
@@ -46,8 +46,37 @@ export const server = setupServer(
             )
             let bar = voice?.bars.find((bar) => bar.barId.toString() === barId)
 
-            if (bar) {
-                bar = addChordToBar(bar, req.body)
+            if (bar && song) {
+                bar = addChordToBar(
+                    bar,
+                    req.body,
+                    getBarLength(song.denominator, song.numerator)
+                )
+                return res(ctx.status(201), ctx.json(bar))
+            } else {
+                return res(ctx.status(404))
+            }
+        }
+    ),
+    rest.delete<IBarPost, IBar>(
+        `${apiUrl}song/:songId/voice/:voiceId/bar/:barId/note/:noteId`,
+        (req, res, ctx) => {
+            const { songId, voiceId, barId, noteId } = req.params
+
+            const song = songDB.find(
+                (song) => song.songId.toString() === songId
+            )
+            const voice = song?.voices.find(
+                (voice) => voice.songVoiceId.toString() === voiceId
+            )
+            let bar = voice?.bars.find((bar) => bar.barId.toString() === barId)
+
+            if (bar && song) {
+                bar = deleteChord(
+                    bar,
+                    parseInt(noteId),
+                    getBarLength(song.denominator, song.numerator)
+                )
                 return res(ctx.status(201), ctx.json(bar))
             } else {
                 return res(ctx.status(404))
@@ -55,3 +84,7 @@ export const server = setupServer(
         }
     )
 )
+
+const getBarLength = (den: number, num: number) => {
+    return (8 / den) * num
+}
