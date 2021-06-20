@@ -42,6 +42,27 @@ const logout = () => {
     sessionStorageMock.clear()
 }
 
+const selectNote = (note: string) => {
+    userEvent.click(screen.getByRole("button", { name: "Note" }))
+    const selectNote = screen.getByRole("textbox", { name: "Velg note" })
+    userEvent.click(selectNote)
+    userEvent.click(screen.getByRole("option", { name: note }))
+    expect(selectNote).toHaveValue(note)
+}
+
+const selectChord = (chord: string) => {
+    userEvent.click(screen.getByRole("button", { name: "Akkord" }))
+    const selectNote = screen.getByRole("textbox", { name: "Velg akkord" })
+    userEvent.click(selectNote)
+    userEvent.click(screen.getByRole("option", { name: chord }))
+    expect(selectNote).toHaveValue(chord)
+}
+
+const selectChordDuration = (duration: string) => {
+    userEvent.click(screen.getByLabelText("Noteverdi"))
+    userEvent.click(screen.getByRole("option", { name: duration }))
+}
+
 beforeAll(() => {
     // Enable the mocking in tests.
     server.listen({ onUnhandledRequest: "warn" })
@@ -63,7 +84,7 @@ beforeEach(() => {
 })
 
 describe("Dashboard", () => {
-    it("Should show dashboard", async () => {
+    it("Should show dashboard with links", async () => {
         await renderDashboard()
         screen.getByRole("heading", { name: /Nytt partitur/i })
         screen.getByRole("heading", { name: /Dine siste fem sanger/i })
@@ -112,7 +133,7 @@ describe("Dashboard", () => {
     })
 })
 
-fdescribe("SongView", () => {
+describe("SongView", () => {
     it("Should add default note C", async () => {
         await renderSongView()
         expect(screen.getByLabelText("Navn på sang")).toHaveValue(
@@ -123,13 +144,9 @@ fdescribe("SongView", () => {
         userEvent.click(firstNote)
         await waitFor(() => expect(firstNote).toHaveTextContent("C"))
     })
-    fit("Should add note D", async () => {
+    it("Should add note D", async () => {
         await renderSongView()
-        const selectNote = screen.getByRole("textbox", { name: "Velg note" })
-        expect(selectNote).toHaveValue("C")
-        userEvent.click(selectNote)
-        userEvent.click(screen.getByRole("option", { name: "D" }))
-        expect(selectNote).toHaveValue("D")
+        selectNote("D")
         const bar = screen.getByLabelText("Takt")
         const firstNote = getAllByRole(bar, "button")[0]
 
@@ -138,16 +155,19 @@ fdescribe("SongView", () => {
     })
     it("Should add chord D", async () => {
         await renderSongView()
-        userEvent.click(screen.getByRole("button", { name: "Akkord" }))
-        const selectNote = screen.getByRole("combobox", { name: "Velg akkord" })
-        userEvent.click(selectNote)
-        userEvent.click(await screen.findByRole("option", { name: "D" }))
+        selectChord("D")
         const bar = screen.getByLabelText("Takt")
         const firstNote = getAllByRole(bar, "button")[0]
         userEvent.click(firstNote)
-        await waitFor(() => {
-            screen.debug(firstNote)
-            return expect(firstNote).toHaveTextContent("D")
-        })
+        await waitFor(() => expect(firstNote).toHaveTextContent("A1D"))
+    })
+
+    it("Should change note length and add note C", async () => {
+        await renderSongView()
+        selectChordDuration("Halvnote")
+        const bar = screen.getByLabelText("Takt")
+        const emptyNotes = getAllByRole(bar, "button")
+        userEvent.click(emptyNotes[0])
+        await waitFor(() => expect(getAllByRole(bar, "button")).toHaveLength(5))
     })
 })

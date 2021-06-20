@@ -48,7 +48,6 @@ export const server = setupServer(
 
             if (bar) {
                 bar = addChordToBar(bar, req.body)
-                console.log(bar.chords)
                 return res(ctx.status(201), ctx.json(bar))
             } else {
                 return res(ctx.status(404))

@@ -8,6 +8,7 @@ import {
     MenuItem,
     RootRef,
     Select,
+    SvgIcon,
     Typography,
     withStyles,
 } from "@material-ui/core"
@@ -112,26 +113,32 @@ const noteLengths = [
     {
         length: 8,
         Icon: <WholenoteIcon />,
+        label: "BottomBar.wholeNote",
     },
     {
         length: 6,
         Icon: <HalfnoteDottedIcon />,
+        label: "BottomBar.halfNoteDotted",
     },
     {
         length: 4,
         Icon: <HalfnoteIcon />,
+        label: "BottomBar.halfNote",
     },
     {
         length: 3,
         Icon: <QuarternoteDottedIcon />,
+        label: "BottomBar.quarterNoteDotted",
     },
     {
         length: 2,
         Icon: <QuarternoteIcon />,
+        label: "BottomBar.quarterNote",
     },
     {
         length: 1,
         Icon: <EighthnoteIcon />,
+        label: "BottomBar.eighthNote",
     },
 ]
 
@@ -193,18 +200,23 @@ export const BottomBar = (props: {
             fullWidth
             classes={{ root: classes.removeDefaultStyling }}
         >
+            <label id="selectChordLengthLabel" hidden>
+                {t("BottomBar.noteLength")}
+            </label>
             <Select
+                labelId={"selectChordLengthLabel"}
+                id={"selectChordLength"}
                 value={chordMenuOptions.chordLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
                 classes={{ icon: classes.selectIcon }}
-                MenuProps={{ disablePortal: true }}
             >
-                {noteLengths.map(({ length, Icon }) => {
+                {noteLengths.map(({ length, Icon, label }) => {
                     return (
                         <MenuItem
                             value={length}
                             key={length}
+                            aria-label={t(label)}
                             style={{
                                 display:
                                     timeSignatureNumerator < length
@@ -212,7 +224,7 @@ export const BottomBar = (props: {
                                         : "block",
                             }}
                         >
-                            {Icon}
+                            <SvgIcon>{Icon}</SvgIcon>
                         </MenuItem>
                     )
                 })}
@@ -224,7 +236,9 @@ export const BottomBar = (props: {
         event: React.MouseEvent<HTMLElement>,
         chordType: ChordType
     ) => {
-        onNoteSelectedChange(chordType)
+        if (chordType) {
+            onNoteSelectedChange(chordType)
+        }
     }
 
     return (

@@ -40,7 +40,9 @@
         "noOptions": "No options",
         "wholeNote": "Whole note",
         "halfNote": "Half note",
+        "halfNoteDotted": "Dotted half note",
         "quarterNote": "Quarter note",
+        "quarterNoteDotted": "Dotted quarter note",
         "eighthNote": "Eighth note",
         "open": "Open",
         "keynote": "Keynote",
@@ -50,7 +52,8 @@
         "ninth": "Ninth",
         "eleventh": "Undesim",
         "chordLabel": "Select chord",
-        "noteLabel": "Select note"
+        "noteLabel": "Select note",
+        "noteLength": "Note duration"
     },
     "ChordMenu": {
         "deleteChord": "Delete",

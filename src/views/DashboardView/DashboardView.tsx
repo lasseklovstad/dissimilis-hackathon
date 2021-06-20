@@ -17,8 +17,7 @@ import { SongGrid } from "../../components/songGrid/SongGrid.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
 import { getTimeSignatureText } from "../../utils/bar.util"
-import { ISong, ISongIndex } from "../../models/ISong"
-import { useGetUser } from "../../utils/useApiServiceUsers"
+import { ISongIndex } from "../../models/ISong"
 import { Loading } from "../../components/loading/Loading.component"
 
 const useStyles = makeStyles({
@@ -108,7 +107,6 @@ export const DashboardView = () => {
     }, [recentSongsFetched, filteredSongsFetched])
 
     const removeSongFromRecentSongs = (songId: number) => {
-        console.log("songid", songId)
         setRecentSongs(
             recentSongs?.filter((song) => {
                 return song.songId !== songId
@@ -128,7 +126,6 @@ export const DashboardView = () => {
         setAddSongModalIsOpen(false)
         const { result } = await postSong.run({ ...timeSignature, title })
         if (result?.status === 201) {
-            console.log("result.data.songId", result.data.songId)
             history.push(`/song/${result.data.songId}`)
         }
     }

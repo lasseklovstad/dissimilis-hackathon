@@ -40,7 +40,9 @@
         "noOptions": "Ingen valg",
         "wholeNote": "Helnote",
         "halfNote": "Halvnote",
+        "halfNoteDotted": "Punktert halvnote",
         "quarterNote": "Firedelsnote",
+        "quarterNoteDotted": "Punktert firedelsnote",
         "eighthNote": "Åttendelsnote",
         "open": "Åpne",
         "keynote": "Grunntone",
@@ -50,7 +52,8 @@
         "ninth": "Non",
         "eleventh": "Undesim",
         "chordLabel": "Velg akkord",
-        "noteLabel": "Velg note"
+        "noteLabel": "Velg note",
+        "noteLength": "Noteverdi"
     },
     "ChordMenu": {
         "deleteChord": "Slett",
