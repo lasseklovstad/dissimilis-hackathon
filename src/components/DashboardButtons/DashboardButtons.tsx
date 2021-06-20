@@ -255,7 +255,10 @@ export const SortingButtons: FC<SortingButtonsProps> = (props) => {
 }
 
 const convertToDate = (time: number) => {
-    const timeOptions = { hour: "2-digit", minute: "2-digit" }
+    const timeOptions = {
+        hour: "2-digit",
+        minute: "2-digit",
+    } as Intl.DateTimeFormatOptions
     const date: Date = new Date()
     date.setTime(time)
 

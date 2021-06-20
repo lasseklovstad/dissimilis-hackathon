@@ -75,9 +75,8 @@ export const SongView = () => {
     const [selectedBarId, setSelectedBarId] = useState<number | undefined>(
         undefined
     )
-    const [selectedChordPosition, setSelectedChordPosition] = useState<number>(
-        0
-    )
+    const [selectedChordPosition, setSelectedChordPosition] =
+        useState<number>(0)
     const chordOptionsRef = useRef() as MutableRefObject<HTMLAnchorElement>
 
     const [barEditMode, setBarEditMode] = useState(false)
