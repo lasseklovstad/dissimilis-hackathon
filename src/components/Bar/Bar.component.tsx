@@ -100,18 +100,17 @@ export const Bar = (props: {
     )
     const classes = useStyle()
 
-    const handleChordRightClick = (chordId: number | null) => (
-        event: React.MouseEvent
-    ) => {
-        event.preventDefault()
-        if (!editBars.barEditMode && chordId !== null) {
-            setChordMenuPosition({
-                top: event.clientY - 4,
-                left: event.clientX - 2,
-            })
-            setRightClickedChordId(chordId)
+    const handleChordRightClick =
+        (chordId: number | null) => (event: React.MouseEvent) => {
+            event.preventDefault()
+            if (!editBars.barEditMode && chordId !== null) {
+                setChordMenuPosition({
+                    top: event.clientY - 4,
+                    left: event.clientX - 2,
+                })
+                setRightClickedChordId(chordId)
+            }
         }
-    }
 
     const handleBarRightClick = (event: React.MouseEvent) => {
         event.preventDefault()
