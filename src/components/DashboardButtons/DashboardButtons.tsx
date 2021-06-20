@@ -86,7 +86,7 @@ export type ButtonProps = {
 
 type ButtonSongProps = {
     title: string
-    arrangerName?: string
+    arrangerName?: string | null
     updatedOn?: string
     songId: number
     removeSong: (songId: number) => void

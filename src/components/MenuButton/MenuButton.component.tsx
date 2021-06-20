@@ -29,7 +29,9 @@ export const MenuButton = (props: {
     setBarEditMode: () => void
     barEditMode: boolean
     onLogout: () => void
+    songTitle: string
 }) => {
+    const { songTitle } = props
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] = useState(
@@ -43,7 +45,6 @@ export const MenuButton = (props: {
         transpose: string
     }>()
     const { deleteSong } = useDeleteSong(songId)
-    const { songInit } = useGetSong(songId)
     const [transposeSongModalIsOpen, setTransposeSongModalIsOpen] = useState(
         false
     )
@@ -67,9 +68,7 @@ export const MenuButton = (props: {
     }
 
     const handleOpenTransposeSongModal = async () => {
-        if (songInit !== undefined) {
-            setTransposeSongModalIsOpen(true)
-        }
+        setTransposeSongModalIsOpen(true)
     }
 
     const handleTransposeSong = async (title: string, transpose: string) => {
@@ -126,13 +125,14 @@ export const MenuButton = (props: {
                 <IconButton
                     style={{ backgroundColor: colors.gray_200 }}
                     aria-haspopup="true"
+                    aria-controls="songMenu"
                     onClick={handleClick}
-                    aria-label="Bar menu"
+                    aria-label={t("MenuButton.song")}
                 >
                     <MoreHorizIcon />
                 </IconButton>
                 <Menu
-                    id="menuBar"
+                    id="songMenu"
                     anchorEl={anchorEl}
                     keepMounted
                     open={!!anchorEl}
@@ -182,9 +182,7 @@ export const MenuButton = (props: {
                     descriptionText={t("Modal.deleteDescription")}
                 />
                 <TransposeModal
-                    defaultValue={`${songInit?.title} (${t(
-                        "Modal.transposed"
-                    )})`}
+                    defaultValue={`${songTitle} (${t("Modal.transposed")})`}
                     modalOpen={transposeSongModalIsOpen}
                     handleClosed={handleClose}
                     handleOnCancelClick={handleClose}
@@ -197,7 +195,7 @@ export const MenuButton = (props: {
                     handleOnSaveClick={handleDuplicateSong}
                     handleClosed={() => setDuplicateSongModalIsOpen(false)}
                     modalOpen={duplicateSongModalIsOpen}
-                    defaultValue={`${songInit?.title} (2)`}
+                    defaultValue={`${songTitle} (2)`}
                     saveText={t("Modal.create")}
                     cancelText={t("Modal.cancel")}
                     headerText={t("DashboardView.duplicateText")}

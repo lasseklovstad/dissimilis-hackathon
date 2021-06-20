@@ -48,7 +48,9 @@
         "fifth": "Kvint",
         "seventh": "Septim",
         "ninth": "Non",
-        "eleventh": "Undesim"
+        "eleventh": "Undesim",
+        "chordLabel": "Velg akkord",
+        "noteLabel": "Velg note"
     },
     "ChordMenu": {
         "deleteChord": "Slett",
@@ -58,6 +60,7 @@
         "copy": "Kopier"
     },
     "CreateSongTab": {
+        "menu": "Instrument meny",
         "song": "Partitur",
         "instrument": "Instrument",
         "newInstrument": "Nytt instrument",
@@ -86,6 +89,7 @@
         "loginFailed": "Feil brukernavn eller passord"
     },
     "MenuButton": {
+        "song": "Sang meny",
         "duplicate": "Dupliser prosjekt",
         "change": "Endre takt",
         "transpose": "Transponer",
@@ -124,5 +128,10 @@
         "transposingSong": "Transponerer sang",
         "transposeSongError": "Det oppstod en feil ved transponering av sang",
         "semiNotes": "Halvtoner"
+    },
+    "Song": {
+        "timeSignature": "Taktart",
+        "bar": "Takt",
+        "barMenu": "Takt meny"
     }
 }

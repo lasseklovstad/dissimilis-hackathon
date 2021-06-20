@@ -18,5 +18,7 @@ i18n.use(initReactI18next).init({
     fallbackLng: "en",
 })
 
+document.documentElement.lang = i18n.language
+
 // eslint-disable-next-line import/no-default-export
 export default i18n

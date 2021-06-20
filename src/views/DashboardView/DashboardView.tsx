@@ -17,8 +17,9 @@ import { SongGrid } from "../../components/songGrid/SongGrid.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
 import { getTimeSignatureText } from "../../utils/bar.util"
-import { ISong } from "../../models/ISong"
+import { ISong, ISongIndex } from "../../models/ISong"
 import { useGetUser } from "../../utils/useApiServiceUsers"
+import { Loading } from "../../components/loading/Loading.component"
 
 const useStyles = makeStyles({
     container: {
@@ -81,20 +82,21 @@ export const DashboardView = () => {
     const { postSong } = usePostSong()
     const history = useHistory()
     const measureText = t("DashboardView.measure")
-    const { userInit } = useGetUser()
 
     const { getRecentSongs, recentSongsFetched } = useGetRecentSongs(
         orderTerm,
         orderDescending
     )
-    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>()
+    const [recentSongs, setRecentSongs] = useState<ISongIndex[] | undefined>()
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
         orderTerm,
         orderDescending
     )
-    const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
+    const [filteredSongs, setFilteredSongs] = useState<
+        ISongIndex[] | undefined
+    >()
 
     useEffect(() => {
         if (recentSongsFetched) {
@@ -106,6 +108,7 @@ export const DashboardView = () => {
     }, [recentSongsFetched, filteredSongsFetched])
 
     const removeSongFromRecentSongs = (songId: number) => {
+        console.log("songid", songId)
         setRecentSongs(
             recentSongs?.filter((song) => {
                 return song.songId !== songId
@@ -125,6 +128,7 @@ export const DashboardView = () => {
         setAddSongModalIsOpen(false)
         const { result } = await postSong.run({ ...timeSignature, title })
         if (result?.status === 201) {
+            console.log("result.data.songId", result.data.songId)
             history.push(`/song/${result.data.songId}`)
         }
     }
@@ -149,6 +153,7 @@ export const DashboardView = () => {
 
     return (
         <>
+            <Loading isLoading={postSong.loading} fullScreen />
             <Box mx={2}>
                 <Grid container justify="center" className={styles.container}>
                     <Grid item xs={12}>
@@ -163,7 +168,6 @@ export const DashboardView = () => {
                                     setDashboardView(false)
                                 }}
                                 searchTerm={searchTerm}
-                                user={userInit?.email}
                             />
                         </Box>
                     </Grid>

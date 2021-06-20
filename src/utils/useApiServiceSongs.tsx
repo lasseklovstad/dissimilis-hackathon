@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useApiService } from "./useApiService"
-import { ISong } from "../models/ISong"
+import { ISong, ISongIndex } from "../models/ISong"
 import { IBar } from "../models/IBar"
 import { IVoice } from "../models/IVoice"
 
@@ -68,9 +68,9 @@ export const useGetAllSongs = (orderTerm: string, orderDescending: boolean) => {
         orderBy: orderTerm,
         orderDescending,
     }
-    const initialData: ISong[] = []
+    const initialData: ISongIndex[] = []
     const headers = getHeaders()
-    const { postData, state, data } = useApiService<ISong[]>(url, {
+    const { postData, state, data } = useApiService<ISongIndex[]>(url, {
         body,
         initialData,
         headers,
@@ -96,14 +96,14 @@ export const useGetFilteredSongs = (
     orderDescending: boolean
 ) => {
     const url = "song/search"
-    const initialData: ISong[] = []
+    const initialData: ISongIndex[] = []
     const headers = getHeaders()
     const body = {
         title,
         orderBy: orderTerm,
         orderDescending,
     }
-    const { postData, state, data } = useApiService<ISong[]>(url, {
+    const { postData, state, data } = useApiService<ISongIndex[]>(url, {
         initialData,
         headers,
         body,
@@ -133,9 +133,9 @@ export const useGetRecentSongs = (
         orderDescending,
         arrangerId: getArrangerId(),
     }
-    const initialData: ISong[] = []
+    const initialData: ISongIndex[] = []
     const headers = getHeaders()
-    const { postData, state, data } = useApiService<ISong[]>(url, {
+    const { postData, state, data } = useApiService<ISongIndex[]>(url, {
         body,
         initialData,
         headers,

@@ -308,7 +308,10 @@ const simplifyNote = (note: string) => {
     return chroma !== undefined && notes[chroma]
 }
 
-export const getNotesFromChord = (chord: string) => {
+export const getNotesFromChord = (chord: string | null) => {
+    if (!chord) {
+        return []
+    }
     return Chord.get(chord.replace("H", "B")).notes.map((note) => {
         return simplifyNote(note)
     })

@@ -52,7 +52,7 @@ const useStyles = makeStyles({
 })
 
 export const ChordOptions = (props: {
-    chord: string
+    chord: string | null
     onChordNotesChange: (clickedNote: string, checked: boolean) => void
 }) => {
     const styles = useStyles()
@@ -136,7 +136,7 @@ export const DropdownAutocomplete = (props: {
     chordDropdownContent: string[]
     noOptionsText: string
     selectedChordType: ChordType
-    selectedChord: string
+    selectedChord: string | null
     onChordChange: (chord: string) => void
 }) => {
     const {
@@ -148,7 +148,7 @@ export const DropdownAutocomplete = (props: {
     const styles = useStyles()
 
     const showValue = selectedChord
-    if (!chordDropdownContent.includes(selectedChord)) {
+    if (selectedChord && !chordDropdownContent.includes(selectedChord)) {
         onChordChange(chordDropdownContent[0])
     }
     const { t } = useTranslation()
@@ -159,6 +159,7 @@ export const DropdownAutocomplete = (props: {
             value={showValue}
             filterOptions={filterOptions}
             onChange={(event, value) => {
+                console.log(value)
                 if (typeof value === "string") {
                     onChordChange(value)
                 }
@@ -174,6 +175,14 @@ export const DropdownAutocomplete = (props: {
                 <TextField
                     {...params}
                     variant="outlined"
+                    hiddenLabel
+                    inputProps={{
+                        ...params.inputProps,
+                        "aria-label":
+                            selectedChordType === "NOTE"
+                                ? t("BottomBar.noteLabel")
+                                : t("BottomBar.chordLabel"),
+                    }}
                     InputProps={{
                         ...params.InputProps,
                         className: styles.dropdown,
@@ -185,7 +194,7 @@ export const DropdownAutocomplete = (props: {
                     <Grid item xs={9}>
                         <Typography>{options}</Typography>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={3} aria-hidden>
                         {selectedChordType === ChordType.NOTE ? (
                             <Box
                                 style={{

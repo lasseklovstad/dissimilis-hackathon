@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react"
 import { Box, Grid, Typography } from "@material-ui/core"
-import { ISong } from "../../models/ISong"
+import { ISongIndex } from "../../models/ISong"
 import {
     DashboardButton,
     SortingButtons,
@@ -9,7 +9,7 @@ import { Loading } from "../loading/Loading.component"
 
 type SongGridProps = {
     title: string | undefined
-    songs: ISong[] | undefined
+    songs: ISongIndex[] | undefined
     removeSong: (songId: number) => void
     isLoading: boolean
     children?: ReactNode
@@ -73,7 +73,7 @@ export const SongGrid = (props: SongGridProps) => {
                         <GridItem key={song.songId} isSong>
                             <DashboardButton
                                 title={song.title}
-                                arrangerName={song.arrangerName}
+                                arrangerName={song.arrangerEmail}
                                 updatedOn={song.updatedOn}
                                 songId={song.songId}
                                 removeSong={props.removeSong}
@@ -102,7 +102,7 @@ export const SongGrid = (props: SongGridProps) => {
     const getSorting = () => {
         if (orderTerm && changeOrderTerm && orderDescending !== undefined) {
             return (
-                <Grid item xs={12}>
+                <Grid item xs={12} role="row">
                     <SortingButtons
                         orderTerm={orderTerm}
                         changeOrderTerm={changeOrderTerm}

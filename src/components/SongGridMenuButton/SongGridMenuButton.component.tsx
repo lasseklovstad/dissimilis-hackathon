@@ -88,7 +88,7 @@ export const SongGridMenuButton = (props: {
                 <IconButton
                     aria-controls="menuBar"
                     aria-haspopup="true"
-                    aria-label="Bar options"
+                    aria-label={t("MenuButton.song")}
                     onClick={handleClick}
                     disableFocusRipple
                 >

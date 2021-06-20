@@ -13,7 +13,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
-import { useLogout } from "../../utils/useApiServiceUsers"
+import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
@@ -28,7 +28,6 @@ export const DashboardTopBar = (props: {
     onChange: (txt: string) => void
     onGoHome?: () => void
     searchTerm?: string
-    user?: string
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
@@ -37,6 +36,7 @@ export const DashboardTopBar = (props: {
     const { onGoHome, searchTerm } = props
     const sm = useMediaQuery("(min-width: 600px)")
     const { logout } = useLogout()
+    const { userInit, getUser } = useGetUser()
 
     return (
         <div>
@@ -68,12 +68,17 @@ export const DashboardTopBar = (props: {
                                 alignItems="center"
                                 style={{ height: "100%" }}
                             >
-                                <Typography style={{ marginRight: 8 }}>
-                                    {props.user}
+                                <Typography
+                                    style={{ marginRight: 8 }}
+                                    component="div"
+                                >
+                                    <Loading isLoading={getUser.loading} />
+                                    {userInit?.email}
                                 </Typography>
                                 <IconButton
                                     disableFocusRipple
                                     onClick={logout.run}
+                                    aria-label={t("LoginView.logout")}
                                 >
                                     <LogoutIcon />
                                 </IconButton>
