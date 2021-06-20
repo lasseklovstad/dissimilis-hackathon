@@ -64,7 +64,7 @@ export const LoginView = () => {
     const history = useHistory()
     const axiosGet = useLoginRedirect()
 
-    const url = new URLSearchParams(useLocation().search)
+    const url = new URLSearchParams(window.location.search)
     const code = url.get("code") ? url.get("code") : null
 
     const axiosPost = useLoginPost(code)
