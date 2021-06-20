@@ -3,6 +3,8 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom/extend-expect"
+import { resetSongDB, server } from "./test/test-server"
+import { login, logout } from "./test/test-utils"
 
 class SessionStorageMock implements Storage {
     private store: any = {}
@@ -33,3 +35,23 @@ class SessionStorageMock implements Storage {
 export const sessionStorageMock = new SessionStorageMock()
 Object.defineProperty(window, "sessionStorage", { value: sessionStorageMock })
 jest.setTimeout(20000)
+
+beforeAll(() => {
+    // Enable the mocking in tests.
+    server.listen({ onUnhandledRequest: "warn" })
+})
+
+afterEach(() => {
+    // Reset any runtime handlers tests may use.
+    server.resetHandlers()
+    logout()
+    resetSongDB()
+})
+
+afterAll(() => {
+    // Clean up once the tests are done.
+    server.close()
+})
+beforeEach(() => {
+    login()
+})

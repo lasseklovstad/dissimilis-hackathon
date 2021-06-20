@@ -1,5 +1,7 @@
 import { ISong, ISongPost } from "../models/ISong"
 import { IBar, IBarPost, IChord } from "../models/IBar"
+import { screen, waitFor } from "@testing-library/react"
+import { sessionStorageMock } from "../setupTests"
 
 export const generateNewSong = (song: ISongPost): ISong => {
     return {
@@ -59,4 +61,22 @@ export const addChordToBar = (bar: IBar, newChord: IBarPost) => {
     }, [] as IChord[])
 
     return { ...bar, chords }
+}
+
+export const waitDoneLoading = async () => {
+    await waitFor(() =>
+        expect(screen.queryAllByRole("progressbar")).toHaveLength(0)
+    )
+    await waitFor(() =>
+        expect(screen.queryAllByLabelText("Loading")).toHaveLength(0)
+    )
+}
+
+export const login = () => {
+    sessionStorageMock.setItem("apiKey", "MockApiKey")
+    sessionStorageMock.setItem("userId", "10")
+}
+
+export const logout = () => {
+    sessionStorageMock.clear()
 }
