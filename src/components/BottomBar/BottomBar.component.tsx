@@ -1,4 +1,4 @@
-import React, { RefObject, useContext } from "react"
+import React, { RefObject, useContext, useRef } from "react"
 import {
     Button,
     ClickAwayListener,
@@ -173,6 +173,7 @@ export const BottomBar = (props: {
     const { t } = useTranslation()
     const classes = useStyles()
     const { chordMenuOptions, selectedChordId } = useContext(SongContext)
+    const container = useRef(null)
 
     const { postBar } = useAddBar(songId, voiceId)
 
@@ -200,6 +201,7 @@ export const BottomBar = (props: {
             fullWidth
             classes={{ root: classes.removeDefaultStyling }}
         >
+            <div ref={container} />
             <label id="selectChordLengthLabel" hidden>
                 {t("BottomBar.noteLength")}
             </label>
@@ -210,6 +212,7 @@ export const BottomBar = (props: {
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
                 classes={{ icon: classes.selectIcon }}
+                MenuProps={{ container: container.current }}
             >
                 {noteLengths.map(({ length, Icon, label }) => {
                     return (
@@ -234,7 +237,7 @@ export const BottomBar = (props: {
 
     const handleToggle = (
         event: React.MouseEvent<HTMLElement>,
-        chordType: ChordType
+        chordType: ChordType | null
     ) => {
         if (chordType) {
             onNoteSelectedChange(chordType)

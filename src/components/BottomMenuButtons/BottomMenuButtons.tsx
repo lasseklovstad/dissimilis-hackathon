@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
@@ -126,7 +126,7 @@ export const MenuButtonWithAddIcon = (props: {
 }
 
 const customPopperPlacement = (props: PopperProps) => {
-    return <Popper {...props} placement="top" />
+    return <Popper {...props} placement="top" children={props.children} />
 }
 const filterOptions = createFilterOptions<string>({ matchFrom: "start" })
 
@@ -147,10 +147,14 @@ export const DropdownAutocomplete = (props: {
     const styles = useStyles()
 
     const showValue = selectedChord
-    if (selectedChord && !chordDropdownContent.includes(selectedChord)) {
-        onChordChange(chordDropdownContent[0])
-    }
+
     const { t } = useTranslation()
+
+    useEffect(() => {
+        if (selectedChord && !chordDropdownContent.includes(selectedChord)) {
+            onChordChange(chordDropdownContent[0])
+        }
+    }, [selectedChord, chordDropdownContent, onChordChange])
 
     return (
         <Autocomplete<string>
@@ -176,10 +180,13 @@ export const DropdownAutocomplete = (props: {
                     hiddenLabel
                     inputProps={{
                         ...params.inputProps,
-                        "aria-label":
-                            selectedChordType === "NOTE"
-                                ? t("BottomBar.noteLabel")
-                                : t("BottomBar.chordLabel"),
+                        "aria-label": t(
+                            `BottomBar.${
+                                selectedChordType === "NOTE"
+                                    ? "noteLabel"
+                                    : "chordLabel"
+                            }`
+                        ),
                     }}
                     InputProps={{
                         ...params.InputProps,
