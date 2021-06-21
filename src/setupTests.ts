@@ -34,7 +34,7 @@ class SessionStorageMock implements Storage {
 
 export const sessionStorageMock = new SessionStorageMock()
 Object.defineProperty(window, "sessionStorage", { value: sessionStorageMock })
-jest.setTimeout(20000)
+jest.setTimeout(50000)
 
 beforeAll(() => {
     // Enable the mocking in tests.
