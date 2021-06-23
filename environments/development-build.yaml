@@ -21,7 +21,7 @@ steps:
   inputs:
     command: custom
     verbose: false
-    customCommand: 'run test'
+    customCommand: 'run test-final'
 
 
 - task: PublishBuildArtifacts@1
