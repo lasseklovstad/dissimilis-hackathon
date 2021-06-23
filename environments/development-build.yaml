@@ -16,6 +16,14 @@ steps:
     verbose: false
     customCommand: 'run build:development'
 
+- task: Npm@1
+  displayName: 'npm run test-final'
+  inputs:
+    command: custom
+    verbose: false
+    customCommand: 'run test'
+
+
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
   inputs:
