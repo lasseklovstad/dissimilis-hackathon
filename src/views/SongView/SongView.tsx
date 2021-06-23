@@ -111,6 +111,8 @@ export const SongView = () => {
         denominator: 4,
         numerator: 4,
         voices: [],
+        updatedOn: "",
+        arrangerName: "",
     } as ISong)
     const [chordMenuOptions, dispatchChordMenuOptions] = useReducer(
         chordMenuReducer,
@@ -188,7 +190,7 @@ export const SongView = () => {
     }
 
     const makeChordUpdate = async (
-        chord: string,
+        chord: string | null,
         length: number,
         position: number,
         chordType: ChordType,
@@ -315,9 +317,9 @@ export const SongView = () => {
     const handleNoteSelectedChange = (chordType: ChordType) => {
         let chord
         if (chordType === ChordType.NOTE) {
-            chord = chordMenuOptions.chord.includes("#")
+            chord = chordMenuOptions.chord?.includes("#")
                 ? chordMenuOptions.chord.substring(0, 2)
-                : chordMenuOptions.chord.charAt(0)
+                : chordMenuOptions.chord?.charAt(0) || null
         } else {
             chord = chordMenuOptions.chord
         }

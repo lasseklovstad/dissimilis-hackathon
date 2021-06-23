@@ -21,7 +21,7 @@ type ChordProps = {
     getChordNameFromMainVoice: (
         barPosition: number,
         chordPosition: number
-    ) => string | undefined
+    ) => string | null | undefined
     barEditMode: boolean
 }
 

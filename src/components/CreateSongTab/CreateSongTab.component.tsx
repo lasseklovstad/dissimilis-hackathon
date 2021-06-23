@@ -201,7 +201,8 @@ export const CreateSongTab = (props: {
 
                 <IconButton
                     aria-haspopup="true"
-                    aria-label="tab options"
+                    aria-controls="voiceTabMenu"
+                    aria-label={t("CreateSongTab.menu")}
                     onClick={handleMenuClick}
                     disableFocusRipple
                 >
@@ -210,7 +211,7 @@ export const CreateSongTab = (props: {
             </Box>
 
             <Menu
-                id="menuBar"
+                id="voiceTabMenu"
                 anchorEl={anchorEl}
                 keepMounted
                 open={!!anchorEl}

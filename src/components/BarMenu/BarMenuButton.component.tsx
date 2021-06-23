@@ -1,12 +1,14 @@
 import React from "react"
 import { Box, IconButton } from "@material-ui/core"
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
+import { useTranslation } from "react-i18next"
 
 type BarMenuButtonProps = {
     onMenuClick: (anchorEl: HTMLElement) => void
 }
 
 export const BarMenuButton = (props: BarMenuButtonProps) => {
+    const { t } = useTranslation()
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         props.onMenuClick(event.currentTarget)
     }
@@ -23,7 +25,7 @@ export const BarMenuButton = (props: BarMenuButtonProps) => {
                 aria-controls="menuBar"
                 aria-haspopup="true"
                 onClick={handleClick}
-                aria-label="Bar options"
+                aria-label={t("Song.barMenu")}
                 disableFocusRipple
             >
                 <MoreHorizIcon />

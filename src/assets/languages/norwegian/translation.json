@@ -40,7 +40,9 @@
         "noOptions": "Ingen valg",
         "wholeNote": "Helnote",
         "halfNote": "Halvnote",
+        "halfNoteDotted": "Punktert halvnote",
         "quarterNote": "Firedelsnote",
+        "quarterNoteDotted": "Punktert firedelsnote",
         "eighthNote": "Åttendelsnote",
         "open": "Åpne",
         "keynote": "Grunntone",
@@ -48,7 +50,11 @@
         "fifth": "Kvint",
         "seventh": "Septim",
         "ninth": "Non",
-        "eleventh": "Undesim"
+        "eleventh": "Undesim",
+        "chordLabel": "Velg akkord",
+        "noteLabel": "Velg note",
+        "noteLength": "Noteverdi",
+        "deleteSelectedChord": "Slett valgt akkord"
     },
     "ChordMenu": {
         "deleteChord": "Slett",
@@ -58,6 +64,7 @@
         "copy": "Kopier"
     },
     "CreateSongTab": {
+        "menu": "Instrument meny",
         "song": "Partitur",
         "instrument": "Instrument",
         "newInstrument": "Nytt instrument",
@@ -86,6 +93,7 @@
         "loginFailed": "Feil brukernavn eller passord"
     },
     "MenuButton": {
+        "song": "Sang meny",
         "duplicate": "Dupliser prosjekt",
         "change": "Endre takt",
         "transpose": "Transponer",
@@ -124,5 +132,11 @@
         "transposingSong": "Transponerer sang",
         "transposeSongError": "Det oppstod en feil ved transponering av sang",
         "semiNotes": "Halvtoner"
+    },
+    "Song": {
+        "timeSignature": "Taktart",
+        "bar": "Takt",
+        "barNumber": "Taktnummer",
+        "barMenu": "Takt meny"
     }
 }

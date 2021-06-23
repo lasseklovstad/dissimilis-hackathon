@@ -99,7 +99,10 @@ export const SongNavBar = (props: {
                                     focused: classes.focused,
                                     root: classes.titleRoot,
                                 },
-                                inputProps: { maxLength: 250 },
+                                inputProps: {
+                                    maxLength: 250,
+                                    "aria-label": t("Modal.nameOfSong"),
+                                },
                             }}
                             value={title}
                             onBlur={(ev) => props.onTitleBlur(ev.target.value)}
@@ -116,6 +119,7 @@ export const SongNavBar = (props: {
                                 <IconButton
                                     disableFocusRipple
                                     onClick={logout.run}
+                                    aria-label={t("LoginView.logout")}
                                 >
                                     <LogoutIcon />
                                 </IconButton>
@@ -123,6 +127,7 @@ export const SongNavBar = (props: {
                         </>
                     ) : undefined}
                     <MenuButton
+                        songTitle={title}
                         voiceId={props.voiceId}
                         showName={matches}
                         user={props.user}

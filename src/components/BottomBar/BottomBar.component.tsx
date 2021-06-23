@@ -1,4 +1,4 @@
-import React, { RefObject, useContext } from "react"
+import React, { RefObject, useContext, useRef } from "react"
 import {
     Button,
     ClickAwayListener,
@@ -8,6 +8,7 @@ import {
     MenuItem,
     RootRef,
     Select,
+    SvgIcon,
     Typography,
     withStyles,
 } from "@material-ui/core"
@@ -112,26 +113,32 @@ const noteLengths = [
     {
         length: 8,
         Icon: <WholenoteIcon />,
+        label: "BottomBar.wholeNote",
     },
     {
         length: 6,
         Icon: <HalfnoteDottedIcon />,
+        label: "BottomBar.halfNoteDotted",
     },
     {
         length: 4,
         Icon: <HalfnoteIcon />,
+        label: "BottomBar.halfNote",
     },
     {
         length: 3,
         Icon: <QuarternoteDottedIcon />,
+        label: "BottomBar.quarterNoteDotted",
     },
     {
         length: 2,
         Icon: <QuarternoteIcon />,
+        label: "BottomBar.quarterNote",
     },
     {
         length: 1,
         Icon: <EighthnoteIcon />,
+        label: "BottomBar.eighthNote",
     },
 ]
 
@@ -166,6 +173,7 @@ export const BottomBar = (props: {
     const { t } = useTranslation()
     const classes = useStyles()
     const { chordMenuOptions, selectedChordId } = useContext(SongContext)
+    const container = useRef(null)
 
     const { postBar } = useAddBar(songId, voiceId)
 
@@ -193,18 +201,25 @@ export const BottomBar = (props: {
             fullWidth
             classes={{ root: classes.removeDefaultStyling }}
         >
+            <div ref={container} />
+            <label id="selectChordLengthLabel" hidden>
+                {t("BottomBar.noteLength")}
+            </label>
             <Select
+                labelId={"selectChordLengthLabel"}
+                id={"selectChordLength"}
                 value={chordMenuOptions.chordLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
                 classes={{ icon: classes.selectIcon }}
-                MenuProps={{ disablePortal: true }}
+                MenuProps={{ container: container.current }}
             >
-                {noteLengths.map(({ length, Icon }) => {
+                {noteLengths.map(({ length, Icon, label }) => {
                     return (
                         <MenuItem
                             value={length}
                             key={length}
+                            aria-label={t(label)}
                             style={{
                                 display:
                                     timeSignatureNumerator < length
@@ -212,7 +227,7 @@ export const BottomBar = (props: {
                                         : "block",
                             }}
                         >
-                            {Icon}
+                            <SvgIcon>{Icon}</SvgIcon>
                         </MenuItem>
                     )
                 })}
@@ -222,9 +237,11 @@ export const BottomBar = (props: {
 
     const handleToggle = (
         event: React.MouseEvent<HTMLElement>,
-        chordType: ChordType
+        chordType: ChordType | null
     ) => {
-        onNoteSelectedChange(chordType)
+        if (chordType) {
+            onNoteSelectedChange(chordType)
+        }
     }
 
     return (
@@ -275,6 +292,7 @@ export const BottomBar = (props: {
                             <Button
                                 disableFocusRipple
                                 onClick={deleteSelectedChord}
+                                aria-label={t("BottomBar.deleteSelectedChord")}
                             >
                                 <Delete />
                             </Button>

@@ -17,8 +17,8 @@ import { SongGrid } from "../../components/songGrid/SongGrid.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
 import { getTimeSignatureText } from "../../utils/bar.util"
-import { ISong } from "../../models/ISong"
-import { useGetUser } from "../../utils/useApiServiceUsers"
+import { ISongIndex } from "../../models/ISong"
+import { Loading } from "../../components/loading/Loading.component"
 
 const useStyles = makeStyles({
     container: {
@@ -81,20 +81,21 @@ export const DashboardView = () => {
     const { postSong } = usePostSong()
     const history = useHistory()
     const measureText = t("DashboardView.measure")
-    const { userInit } = useGetUser()
 
     const { getRecentSongs, recentSongsFetched } = useGetRecentSongs(
         orderTerm,
         orderDescending
     )
-    const [recentSongs, setRecentSongs] = useState<ISong[] | undefined>()
+    const [recentSongs, setRecentSongs] = useState<ISongIndex[] | undefined>()
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
         orderTerm,
         orderDescending
     )
-    const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
+    const [filteredSongs, setFilteredSongs] = useState<
+        ISongIndex[] | undefined
+    >()
 
     useEffect(() => {
         if (recentSongsFetched) {
@@ -149,6 +150,7 @@ export const DashboardView = () => {
 
     return (
         <>
+            <Loading isLoading={postSong.loading} fullScreen />
             <Box mx={2}>
                 <Grid container justify="center" className={styles.container}>
                     <Grid item xs={12}>
@@ -163,7 +165,6 @@ export const DashboardView = () => {
                                     setDashboardView(false)
                                 }}
                                 searchTerm={searchTerm}
-                                user={userInit?.email}
                             />
                         </Box>
                     </Grid>

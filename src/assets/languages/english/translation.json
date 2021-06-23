@@ -40,7 +40,9 @@
         "noOptions": "No options",
         "wholeNote": "Whole note",
         "halfNote": "Half note",
+        "halfNoteDotted": "Dotted half note",
         "quarterNote": "Quarter note",
+        "quarterNoteDotted": "Dotted quarter note",
         "eighthNote": "Eighth note",
         "open": "Open",
         "keynote": "Keynote",
@@ -48,7 +50,11 @@
         "fifth": "Fifth",
         "seventh": "Seventh",
         "ninth": "Ninth",
-        "eleventh": "Undesim"
+        "eleventh": "Undesim",
+        "chordLabel": "Select chord",
+        "noteLabel": "Select note",
+        "noteLength": "Note duration",
+        "deleteSelectedChord": "Delete selected chord"
     },
     "ChordMenu": {
         "deleteChord": "Delete",
@@ -58,6 +64,7 @@
         "copy": "Copy"
     },
     "CreateSongTab": {
+        "menu": "Instrument menu",
         "song": "Song",
         "instrument": "Instrument",
         "newInstrument": "New instrument",
@@ -86,6 +93,7 @@
         "loginFailed": "Wrong username or password"
     },
     "MenuButton": {
+        "song": "Song menu",
         "duplicate": "Duplicate project",
         "change": "Modify bar",
         "transpose": "Transpose",
@@ -124,5 +132,11 @@
         "transposingSong": "Transposing song",
         "transposeSongError": "Error transposing song",
         "semiNotes": "Semi notes"
+    },
+    "Song": {
+        "timeSignature": "Time signature",
+        "bar": "Bar",
+        "barNumber": "Bar number",
+        "barMenu": "Bar menu"
     }
 }

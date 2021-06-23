@@ -90,7 +90,7 @@ export type ButtonProps = {
 
 type ButtonSongProps = {
     title: string
-    arrangerEmail?: string
+    arrangerEmail?: string | null
     updatedOn?: string
     songId: number
     removeSong: (songId: number) => void
@@ -113,26 +113,6 @@ type SortingButtonsProps = {
     orderDescending: boolean
 }
 
-export const DashboardButtonWithAddIcon: FC<ButtonProps> = (props) => {
-    const styles = useStyles()
-    return (
-        <Card className={styles.button}>
-            <CardActionArea
-                to={props.link}
-                component={Link}
-                onClick={() => props.func && props.func()}
-            >
-                <Box className={styles.container} py={2} pl={1}>
-                    <AddIcon />
-                    <Box pl={1} pr={2}>
-                        <Typography>{props.text}</Typography>
-                    </Box>
-                </Box>
-            </CardActionArea>
-        </Card>
-    )
-}
-
 export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (
     props
 ) => {
@@ -146,29 +126,6 @@ export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (
                 <Box className={styles.container} py={2} pl={1}>
                     <AddIcon />
                     <Box pl={1} pr={2}>
-                        <Typography>{props.text}</Typography>
-                    </Box>
-                </Box>
-            </CardActionArea>
-        </Card>
-    )
-}
-
-export const DashboardButtonNoLink: FC<ButtonNoLinkProps> = (props) => {
-    const styles = useStyles()
-    return (
-        <Card className={styles.button}>
-            <CardActionArea onClick={() => props.func && props.func()}>
-                <Box
-                    className={styles.container}
-                    style={{
-                        backgroundColor:
-                            props.selected === true
-                                ? colors.gray_200
-                                : colors.white,
-                    }}
-                >
-                    <Box p={2}>
                         <Typography>{props.text}</Typography>
                     </Box>
                 </Box>

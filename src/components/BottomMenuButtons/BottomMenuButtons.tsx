@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
@@ -52,7 +52,7 @@ const useStyles = makeStyles({
 })
 
 export const ChordOptions = (props: {
-    chord: string
+    chord: string | null
     onChordNotesChange: (clickedNote: string, checked: boolean) => void
 }) => {
     const styles = useStyles()
@@ -126,7 +126,7 @@ export const MenuButtonWithAddIcon = (props: {
 }
 
 const customPopperPlacement = (props: PopperProps) => {
-    return <Popper {...props} placement="top" />
+    return <Popper {...props} placement="top" children={props.children} />
 }
 const filterOptions = createFilterOptions<string>({ matchFrom: "start" })
 
@@ -135,7 +135,7 @@ export const DropdownAutocomplete = (props: {
     chordDropdownContent: string[]
     noOptionsText: string
     selectedChordType: ChordType
-    selectedChord: string
+    selectedChord: string | null
     onChordChange: (chord: string) => void
 }) => {
     const {
@@ -147,10 +147,14 @@ export const DropdownAutocomplete = (props: {
     const styles = useStyles()
 
     const showValue = selectedChord
-    if (!chordDropdownContent.includes(selectedChord)) {
-        onChordChange(chordDropdownContent[0])
-    }
+
     const { t } = useTranslation()
+
+    useEffect(() => {
+        if (selectedChord && !chordDropdownContent.includes(selectedChord)) {
+            onChordChange(chordDropdownContent[0])
+        }
+    }, [selectedChord, chordDropdownContent, onChordChange])
 
     return (
         <Autocomplete<string>
@@ -173,6 +177,17 @@ export const DropdownAutocomplete = (props: {
                 <TextField
                     {...params}
                     variant="outlined"
+                    hiddenLabel
+                    inputProps={{
+                        ...params.inputProps,
+                        "aria-label": t(
+                            `BottomBar.${
+                                selectedChordType === "NOTE"
+                                    ? "noteLabel"
+                                    : "chordLabel"
+                            }`
+                        ),
+                    }}
                     InputProps={{
                         ...params.InputProps,
                         className: styles.dropdown,
@@ -184,7 +199,7 @@ export const DropdownAutocomplete = (props: {
                     <Grid item xs={9}>
                         <Typography>{options}</Typography>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={3} aria-hidden>
                         {selectedChordType === ChordType.NOTE ? (
                             <Box
                                 style={{

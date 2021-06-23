@@ -13,6 +13,7 @@ import { ChordType } from "../../models/IChordMenuOptions"
 import { makeStyles } from "@material-ui/core/styles"
 import { colors } from "../../utils/colors"
 import BarRightClickMenu from "./BarRightClickMenu.component"
+import { useTranslation } from "react-i18next"
 
 const useStyle = makeStyles(() => ({
     barContainer: {
@@ -44,7 +45,7 @@ export const Bar = (props: {
     getChordNameFromMainVoice: (
         barPosition: number,
         chordPosition: number
-    ) => string | undefined
+    ) => string | undefined | null
     masterSheet: boolean
     showHouseNumber: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
@@ -70,7 +71,7 @@ export const Bar = (props: {
         },
         height,
     } = props
-
+    const { t } = useTranslation()
     const [chordMenuPosition, setChordMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()
@@ -253,6 +254,7 @@ export const Bar = (props: {
                 width="100%"
                 minWidth={0}
                 m="2px"
+                aria-label={t("Song.bar")}
             >
                 <House houseOrder={house} showHouseNumber={showHouseNumber} />
 

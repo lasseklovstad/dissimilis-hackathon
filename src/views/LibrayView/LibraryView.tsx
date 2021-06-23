@@ -6,10 +6,9 @@ import {
     useGetAllSongs,
     useGetFilteredSongs,
 } from "../../utils/useApiServiceSongs"
-import { ISong } from "../../models/ISong"
+import { ISongIndex } from "../../models/ISong"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
-import { useGetUser } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles({
     container: {
@@ -24,20 +23,21 @@ export const LibraryView = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const [orderTerm, setOrderTerm] = useState<"date" | "song" | "user">("date")
     const [orderDescending, setOrderDescending] = useState<boolean>(true)
-    const { userInit } = useGetUser()
 
     const { getAllSongs, allSongsFetched } = useGetAllSongs(
         orderTerm,
         orderDescending
     )
-    const [allSongs, setAllSongs] = useState<ISong[] | undefined>()
+    const [allSongs, setAllSongs] = useState<ISongIndex[] | undefined>()
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
         orderTerm,
         orderDescending
     )
-    const [filteredSongs, setFilteredSongs] = useState<ISong[] | undefined>()
+    const [filteredSongs, setFilteredSongs] = useState<
+        ISongIndex[] | undefined
+    >()
 
     const marginBottom = 4
 
@@ -95,7 +95,6 @@ export const LibraryView = () => {
                             <DashboardTopBar
                                 onChange={handleOnChangeSearch}
                                 searchTerm={searchTerm}
-                                user={userInit?.email}
                             />
                         </Box>
                     </Grid>

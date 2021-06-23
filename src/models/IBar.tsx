@@ -3,7 +3,7 @@ export interface IChord {
     notes: string[]
     length: number
     chordId: number | null
-    chordName: string
+    chordName: string | null
 }
 
 export interface IBar {
@@ -15,4 +15,11 @@ export interface IBar {
     repBefore: boolean
     repAfter: boolean
     chords: IChord[]
+}
+
+export interface IBarPost {
+    position: number
+    length: number
+    notes: string[]
+    chordName: string | null
 }

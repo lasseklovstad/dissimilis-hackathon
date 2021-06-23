@@ -110,6 +110,7 @@ export const InputModal = (props: {
                             </Typography>
                             <Grid item className={classes.insertName} xs={12}>
                                 <TextField
+                                    id="input-modal-textfield"
                                     inputProps={{ maxLength: CHARACTER_LIMIT }}
                                     helperText={`${textFieldInput.length}/${CHARACTER_LIMIT}`}
                                     autoFocus

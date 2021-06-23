@@ -17,7 +17,7 @@ type SongProps = {
     getChordNameFromMainVoice: (
         barPosition: number,
         chordPosition: number
-    ) => string | undefined
+    ) => string | null | undefined
     timeSignature: ITimeSignature
     heightOfBar: number
     exportMode?: boolean
