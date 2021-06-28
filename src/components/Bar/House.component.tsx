@@ -19,8 +19,7 @@ export const House = (props: {
         <Box position="relative" top="-5px" height={0}>
             <Typography variant="body1" component="div">
                 {props.houseOrder === undefined ? null : (
-                    <Box
-                        ml={4}
+                    <Box                  
                         display="flex"
                         justifyContent="flex-end"
                         height={0}
