@@ -1,13 +1,35 @@
 import React from "react"
 import { Box, Typography } from "@material-ui/core"
+import { makeStyles } from "@material-ui/core"
+
+const useStyle = makeStyles(() => {
+    return {
+        houseContainer: {
+            display: "flex",
+            justifyContent: "flex-end",
+            lineHeight: "0",
+        },
+        houseLine: {
+            textAlign: "left",
+            borderBottom: "2px solid black",
+            width: "100%",
+        },
+        houseBefore: {
+            boxShadow: "-30px 0px black",
+        },
+    }
+})
 
 export const House = (props: {
     houseOrder: number | undefined | null
     showHouseNumber: boolean
 }) => {
+    const classes = useStyle()
+
     if (!props.houseOrder) {
         return <></>
     }
+
     const getHouseNumber = () => {
         if (props.showHouseNumber) {
             return `${props.houseOrder}.`
@@ -19,19 +41,11 @@ export const House = (props: {
         <Box position="relative" top="-5px" height={0}>
             <Typography variant="body1" component="div">
                 {props.houseOrder === undefined ? null : (
-                    <Box                  
-                        display="flex"
-                        justifyContent="flex-end"
-                        height={0}
-                    >
+                    <Box className={classes.houseContainer}>
                         <Box
-                            height={0}
-                            flexGrow={2}
-                            style={{
-                                textAlign: "left",
-                                borderBottom: "2px solid black",
-                                lineHeight: 0,
-                            }}
+                            className={`${classes.houseLine} ${
+                                props.showHouseNumber ? "" : classes.houseBefore
+                            }`}
                         >
                             <span
                                 style={{ position: "relative", top: "-10px" }}
