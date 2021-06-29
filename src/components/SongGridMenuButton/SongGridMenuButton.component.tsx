@@ -18,11 +18,13 @@ export const SongGridMenuButton = (props: {
     const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] =
         useState(false)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
+    const [songInfoModalIsOpen, setSongInfoModalIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
     const { songId } = props
     const { deleteSong } = useDeleteSong(songId.toString())
     const { duplicateSong } = useDuplicateSong(songId)
+    const { saveSongInfo } = useSaveSongInfo(songId)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -55,6 +57,17 @@ export const SongGridMenuButton = (props: {
         }
     }
 
+    const handleSaveSongInfo = async (title: string) => {
+        const { error, result } = await saveSongInfo.run({ // usikker på naming scheme på sånne metoder
+            title, // lagrer bare tittel foreløpig
+        })
+
+        if (!error && result) {
+            setSongInfoModalIsOpen(false)
+            history.push(`song/${result.data.songId.toString()}`) // hakke peiling hva som skjer her
+        }
+    }
+
     const handleOpenDuplicateDialog = () => {
         setDuplicateSongModalIsOpen(true)
     }
@@ -63,7 +76,15 @@ export const SongGridMenuButton = (props: {
         setDuplicateSongModalIsOpen(false)
     }
 
-    const handleClose = async (method?: "delete" | "copy" | "open") => {
+    const handleOpenSongInfoModal = () => {
+        setSongInfoModalIsOpen(true)
+    }
+
+    const handleCloseSongInfoModal = () => {
+        setSongInfoModalIsOpen(false)
+    }
+
+    const handleClose = async (method?: "delete" | "copy" | "info" | "open") => {
         setAnchorEl(null)
         setDeleteSongModalIsOpen(false)
         switch (method) {
@@ -72,6 +93,9 @@ export const SongGridMenuButton = (props: {
                 break
             case "copy":
                 handleOpenDuplicateDialog()
+                break
+            case "info":
+                handleOpenSongInfoModal()
                 break
             case "open":
                 handleOpenSong()
@@ -104,6 +128,9 @@ export const SongGridMenuButton = (props: {
                     <MenuItem onClick={() => handleClose("open")}>
                         {t("DashboardView.open")}
                     </MenuItem>
+                    <MenuItem onClick={() => handleClose("info")}>
+                        {t("DashboardView.info")}
+                    </MenuItem>
                     <MenuItem onClick={() => handleClose("copy")}>
                         {t("DashboardView.duplicate")}
                     </MenuItem>
@@ -125,6 +152,17 @@ export const SongGridMenuButton = (props: {
             <InputModal
                 handleOnCancelClick={() => handleCloseDuplicateDialog()}
                 handleOnSaveClick={handleDuplicateSong}
+                handleClosed={() => handleCloseDuplicateDialog()}
+                modalOpen={duplicateSongModalIsOpen}
+                saveText={t("Modal.create")}
+                cancelText={t("Modal.cancel")}
+                headerText={t("DashboardView.duplicateText")}
+                labelText={t("Modal.newVoiceName")}
+                isLoading={duplicateSong.loading}
+            />
+            <InputModal
+                handleOnCancelClick={() => handleCloseSongInfoDialog()}
+                handleOnSaveClick={handleSaveSongInfo()}
                 handleClosed={() => handleCloseDuplicateDialog()}
                 modalOpen={duplicateSongModalIsOpen}
                 saveText={t("Modal.create")}
