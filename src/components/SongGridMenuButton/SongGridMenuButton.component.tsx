@@ -3,7 +3,11 @@ import { IconButton, Menu, MenuItem } from "@material-ui/core"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
-import { useDeleteSong, useDuplicateSong } from "../../utils/useApiServiceSongs"
+import {
+    useDeleteSong,
+    useDuplicateSong,
+    useUpdateSong,
+} from "../../utils/useApiServiceSongs"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
 import { InputModal } from "../CustomModal/InputModal.component"
 import { Loading } from "../loading/Loading.component"
@@ -24,7 +28,9 @@ export const SongGridMenuButton = (props: {
     const { songId } = props
     const { deleteSong } = useDeleteSong(songId.toString())
     const { duplicateSong } = useDuplicateSong(songId)
-    const { saveSongInfo } = useSaveSongInfo(songId)
+    const { putSong } = useUpdateSong(songId.toString())
+    // songId is sometimes a number, sometimes a string (why?):
+    //const { saveSongInfo } = useUpdateSong(songId.toString())
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -57,9 +63,10 @@ export const SongGridMenuButton = (props: {
         }
     }
 
-    const handleSaveSongInfo = async (title: string) => {
-        const { error, result } = await saveSongInfo.run({ // usikker på naming scheme på sånne metoder
-            title, // lagrer bare tittel foreløpig
+    const handleSaveSongInfo = async (songId: string) => {
+        const { error, result } = await putSong.run({
+            // usikker på naming scheme på sånne metoder
+            songId, // lagrer bare tittel foreløpig
         })
 
         if (!error && result) {
@@ -84,7 +91,9 @@ export const SongGridMenuButton = (props: {
         setSongInfoModalIsOpen(false)
     }
 
-    const handleClose = async (method?: "delete" | "copy" | "info" | "open") => {
+    const handleClose = async (
+        method?: "delete" | "copy" | "info" | "open"
+    ) => {
         setAnchorEl(null)
         setDeleteSongModalIsOpen(false)
         switch (method) {
@@ -161,8 +170,8 @@ export const SongGridMenuButton = (props: {
                 isLoading={duplicateSong.loading}
             />
             <InputModal
-                handleOnCancelClick={() => handleCloseSongInfoDialog()}
-                handleOnSaveClick={handleSaveSongInfo()}
+                handleOnCancelClick={() => handleCloseSongInfoModal()}
+                handleOnSaveClick={handleSaveSongInfo}
                 handleClosed={() => handleCloseDuplicateDialog()}
                 modalOpen={duplicateSongModalIsOpen}
                 saveText={t("Modal.create")}
