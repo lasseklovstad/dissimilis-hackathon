@@ -373,3 +373,18 @@ export const useDuplicateSong = (songId: number) => {
         duplicateSong: { run: api.postData, ...api.state },
     }
 }
+
+/**
+ * Save song info
+ * @param songId //idk, må vel sende mere gjennom her
+ */
+export const useSaveSongInfo = (songId: number) => {
+    const url = `song/${songId}/duplicateSong`
+    const headers = getHeaders()
+
+    const api = useApiService<IVoice>(url, { headers })
+
+    return {
+        saveSongInfo: { run: api.}
+    }
+}
