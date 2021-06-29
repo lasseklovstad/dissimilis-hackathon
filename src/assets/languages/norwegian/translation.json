@@ -15,7 +15,8 @@
         "delete": "Slett",
         "date": "Dato endret",
         "user": "Bruker",
-        "song": "Sang"
+        "song": "Sang",
+        "info": "Vis info"
     },
     "BarContainer": {
         "deleteBar": "Slett takt",
