@@ -16,7 +16,8 @@
         "date": "Dato endret",
         "user": "Bruker",
         "song": "Sang",
-        "info": "Vis info"
+        "showInfo": "Vis info",
+        "info": "Sanginfo"
     },
     "BarContainer": {
         "deleteBar": "Slett takt",

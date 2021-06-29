@@ -373,3 +373,25 @@ export const useDuplicateSong = (songId: number) => {
         duplicateSong: { run: api.postData, ...api.state },
     }
 }
+
+/*
+/**
+ * Update song metadata
+ * @param songId
+ * @param title
+export const useUpdateSongMetadata = (songId: number, title: string) => {
+    const url = `song/${songId}/`
+    const headers = getHeaders()
+    const body = {
+        title,
+    }
+    const api = useApiService<ISong>(url, {
+        headers,
+        body,
+    })
+
+    return {
+        updateSongInfo: { run: api.postData, ...api.state },
+    }
+}
+*/

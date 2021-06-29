@@ -23,6 +23,7 @@ export const SongGridMenuButton = (props: {
         useState(false)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const [songInfoModalIsOpen, setSongInfoModalIsOpen] = useState(false)
+    const [title] = useState<"title" | "song" | "user">("title")
     const { t } = useTranslation()
     const history = useHistory()
     const { songId } = props
@@ -30,7 +31,7 @@ export const SongGridMenuButton = (props: {
     const { duplicateSong } = useDuplicateSong(songId)
     const { putSong } = useUpdateSong(songId.toString())
     // songId is sometimes a number, sometimes a string (why?):
-    //const { saveSongInfo } = useUpdateSong(songId.toString())
+    //const { updateSongInfo } = useUpdateSong()
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -63,10 +64,9 @@ export const SongGridMenuButton = (props: {
         }
     }
 
-    const handleSaveSongInfo = async (songId: string) => {
+    const handleSaveSongInfo = async (title: string) => {
         const { error, result } = await putSong.run({
-            // usikker på naming scheme på sånne metoder
-            songId, // lagrer bare tittel foreløpig
+            title,
         })
 
         if (!error && result) {
@@ -138,7 +138,7 @@ export const SongGridMenuButton = (props: {
                         {t("DashboardView.open")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("info")}>
-                        {t("DashboardView.info")}
+                        {t("DashboardView.showInfo")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("copy")}>
                         {t("DashboardView.duplicate")}
@@ -173,12 +173,12 @@ export const SongGridMenuButton = (props: {
                 handleOnCancelClick={() => handleCloseSongInfoModal()}
                 handleOnSaveClick={handleSaveSongInfo}
                 handleClosed={() => handleCloseDuplicateDialog()}
-                modalOpen={duplicateSongModalIsOpen}
-                saveText={t("Modal.create")}
+                modalOpen={songInfoModalIsOpen}
+                saveText={t("Modal.save")}
                 cancelText={t("Modal.cancel")}
-                headerText={t("DashboardView.duplicateText")}
-                labelText={t("Modal.newVoiceName")}
-                isLoading={duplicateSong.loading}
+                headerText={t("DashboardView.info")}
+                labelText={t("Modal.nameOfSong")}
+                isLoading={putSong.loading}
             />
             <Loading
                 isLoading={deleteSong.loading}
