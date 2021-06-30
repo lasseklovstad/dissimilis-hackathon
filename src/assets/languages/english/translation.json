@@ -109,6 +109,7 @@
     "Modal": {
         "nameOfSong": "Name of song",
         "addSong": "Add a new song",
+        "arranger": "Arranger",
         "nameOfInstrument": "Name of instrument",
         "addInstrument": "Add a new instrument",
         "newVoiceName": "New name",

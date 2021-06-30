@@ -10,6 +10,7 @@ import {
 } from "../../utils/useApiServiceSongs"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
 import { InputModal } from "../CustomModal/InputModal.component"
+import { SongInfoDialog } from "../CustomModal/SongInfoDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
@@ -22,16 +23,13 @@ export const SongGridMenuButton = (props: {
     const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] =
         useState(false)
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
-    const [songInfoModalIsOpen, setSongInfoModalIsOpen] = useState(false)
-    const [title] = useState<"title" | "song" | "user">("title")
+    const [songInfoDialogIsOpen, setSongInfoDialogIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
     const { songId } = props
     const { deleteSong } = useDeleteSong(songId.toString())
     const { duplicateSong } = useDuplicateSong(songId)
     const { putSong } = useUpdateSong(songId.toString())
-    // songId is sometimes a number, sometimes a string (why?):
-    //const { updateSongInfo } = useUpdateSong()
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -70,8 +68,9 @@ export const SongGridMenuButton = (props: {
         })
 
         if (!error && result) {
-            setSongInfoModalIsOpen(false)
-            history.push(`song/${result.data.songId.toString()}`) // hakke peiling hva som skjer her
+            setSongInfoDialogIsOpen(false)
+            // TODO: Her må siden refreshes elns, sånn at den nye informasjonen dukker opp
+            // history.push(`dashboard`) // tror ikke dette gjorde susen
         }
     }
 
@@ -83,12 +82,12 @@ export const SongGridMenuButton = (props: {
         setDuplicateSongModalIsOpen(false)
     }
 
-    const handleOpenSongInfoModal = () => {
-        setSongInfoModalIsOpen(true)
+    const handleOpenSongInfoDialog = () => {
+        setSongInfoDialogIsOpen(true)
     }
 
-    const handleCloseSongInfoModal = () => {
-        setSongInfoModalIsOpen(false)
+    const handleCloseSongInfoDialog = () => {
+        setSongInfoDialogIsOpen(false)
     }
 
     const handleClose = async (
@@ -104,7 +103,7 @@ export const SongGridMenuButton = (props: {
                 handleOpenDuplicateDialog()
                 break
             case "info":
-                handleOpenSongInfoModal()
+                handleOpenSongInfoDialog()
                 break
             case "open":
                 handleOpenSong()
@@ -169,16 +168,19 @@ export const SongGridMenuButton = (props: {
                 labelText={t("Modal.newVoiceName")}
                 isLoading={duplicateSong.loading}
             />
-            <InputModal
-                handleOnCancelClick={() => handleCloseSongInfoModal()}
+            <SongInfoDialog
+                handleOnCancelClick={() => handleCloseSongInfoDialog()}
                 handleOnSaveClick={handleSaveSongInfo}
-                handleClosed={() => handleCloseDuplicateDialog()}
-                modalOpen={songInfoModalIsOpen}
+                handleClosed={() => handleCloseSongInfoDialog()}
+                dialogOpen={songInfoDialogIsOpen}
                 saveText={t("Modal.save")}
                 cancelText={t("Modal.cancel")}
                 headerText={t("DashboardView.info")}
-                labelText={t("Modal.nameOfSong")}
+                songNameLabelText={t("Modal.nameOfSong")}
+                arrangerLabelText={t("Modal.arranger")}
                 isLoading={putSong.loading}
+                songNameDefaultValue={"tittel"} // need song title reference
+                arrangerDefaultValue={"arrangør"} // need arranger reference
             />
             <Loading
                 isLoading={deleteSong.loading}

@@ -70,7 +70,7 @@ export const DashboardView = () => {
     const { t } = useTranslation()
 
     const [dashboardView, setDashboardView] = useState(true)
-    const [searchTerm, setSearchTerm] = useState("")
+    const [searchTerm, setSearchTerm] = useState("æææ")
     const [addSongModalIsOpen, setAddSongModalIsOpen] = useState(false)
     const [orderTerm, setOrderTerm] = useState<"date" | "song" | "user">("date")
     const [orderDescending, setOrderDescending] = useState<boolean>(true)

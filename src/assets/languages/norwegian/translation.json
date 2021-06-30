@@ -109,6 +109,7 @@
     "Modal": {
         "nameOfSong": "Navn på sang",
         "addSong": "Legg til ny sang",
+        "arranger": "Arrangør",
         "nameOfInstrument": "Navn på instrument",
         "addInstrument": "Legg til et instrument",
         "newVoiceName": "Nytt navn",
