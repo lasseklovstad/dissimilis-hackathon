@@ -1,8 +1,8 @@
 import React from "react"
-import { Box, Typography } from "@material-ui/core"
+import { Box, Theme, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core"
 
-const useStyle = makeStyles(() => {
+const useStyle = makeStyles((theme: Theme) => {
     return {
         houseContainer: {
             display: "flex",
@@ -16,11 +16,6 @@ const useStyle = makeStyles(() => {
             lineHeight: 0,
         },
         houseBefore: {
-            //boxShadow: "-30px 0px black",
-            textAlign: "left",
-            borderBottom: "2px solid black",
-            width: "100%",
-            lineHeight: 0,
             "&:before": {
                 width: "30px",
                 content: "' '",
