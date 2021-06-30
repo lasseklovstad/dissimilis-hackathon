@@ -13,9 +13,23 @@ const useStyle = makeStyles(() => {
             textAlign: "left",
             borderBottom: "2px solid black",
             width: "100%",
+            lineHeight: 0,
         },
         houseBefore: {
-            boxShadow: "-30px 0px black",
+            //boxShadow: "-30px 0px black",
+            textAlign: "left",
+            borderBottom: "2px solid black",
+            width: "100%",
+            lineHeight: 0,
+            "&:before": {
+                width: "30px",
+                content: "' '",
+                display: "table-cell",
+                borderBottom: "2px solid black",
+                position: "relative",
+                left: "-30px",
+                bottom: "-2px",
+            },
         },
     }
 })
