@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { IVoice } from "../../models/IVoice"
 import { InputModal } from "../CustomModal/InputModal.component"
+import { InputAndRadioButtonModal } from "../CustomModal/InputAndRadioButtonModal.component"
 import {
     useCreateVoice,
     useDeleteVoice,
@@ -93,19 +94,50 @@ export const CreateSongTab = (props: {
     const history = useHistory()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
-    const handleAddInstrument = async (title: string) => {
+    const handleAddInstrument = async (title: string, option: string) => {
         const voiceNumber = Math.max(
             ...voices.map((voice) => voice.partNumber),
             0
         )
-        const { error, result } = await postVoice.run({
-            instrument: title,
-            voiceNumber: voiceNumber + 1,
-        })
-
-        if (!error && result) {
-            onAddVoice(result.data)
-            setNewInstrumentModalIsOpen(false)
+        switch (option) {
+            case "Modal.duplicateFullSong": {
+                //handleDuplicateInstrument()
+                console.log(
+                    "Valgt radiobutton var: " +
+                        option +
+                        " Og tittel var:" +
+                        title
+                )
+                setNewInstrumentModalIsOpen(false)
+                break
+            }
+            case "Modal.duplicateEmptySong": {
+                const { error, result } = await postVoice.run({
+                    instrument: title,
+                    voiceNumber: voiceNumber + 1,
+                })
+                if (!error && result) {
+                    onAddVoice(result.data)
+                    setNewInstrumentModalIsOpen(false)
+                    console.log(
+                        "Valgt radiobutton var: " +
+                            option +
+                            " Og tittel var:" +
+                            title
+                    )
+                }
+                break
+            }
+            case "Modal.duplicateCustomSong": {
+                console.log(
+                    "Valgt radiobutton var: " +
+                        option +
+                        " Og tittel var:" +
+                        title
+                )
+                setNewInstrumentModalIsOpen(false)
+                break
+            }
         }
     }
 
@@ -255,7 +287,7 @@ export const CreateSongTab = (props: {
                 </MenuItem>
             </Menu>
 
-            <InputModal
+            <InputAndRadioButtonModal
                 handleOnCancelClick={() => handleClose()}
                 handleOnSaveClick={handleAddInstrument}
                 handleClosed={() => handleClose()}
@@ -264,6 +296,12 @@ export const CreateSongTab = (props: {
                 cancelText={t("Modal.cancel")}
                 headerText={t("Modal.addInstrument")}
                 labelText={t("Modal.nameOfInstrument")}
+                radioButtonLabel={t("Modal.CustomNewInstrument")}
+                radioButtonOptions={[
+                    "Modal.duplicateFullSong",
+                    "Modal.duplicateEmptySong",
+                    "Modal.duplicateCustomSong",
+                ]}
                 characterLimit={100}
                 isLoading={postVoice.loading}
             />
