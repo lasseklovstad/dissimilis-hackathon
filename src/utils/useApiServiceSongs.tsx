@@ -200,11 +200,15 @@ export const useCreateVoice = (songId: string) => {
 
 export const useDuplicateVoice = (
     songId: string,
-    voiceId: number | undefined
+    voiceId: number | undefined,
+    title: string
 ) => {
     const url = `song/${songId}/voice/${voiceId}/duplicate`
+    const body = {
+        title,
+    }
     const headers = getHeaders()
-    const api = useApiService<IVoice>(url, { headers })
+    const api = useApiService<IVoice>(url, { body, headers })
     return {
         duplicateVoice: { run: api.postData, ...api.state },
     }

@@ -131,7 +131,10 @@
         "transposed": "transposed",
         "transposingSong": "Transposing song",
         "transposeSongError": "Error transposing song",
-        "semiNotes": "Semi notes"
+        "semiNotes": "Semi notes",
+        "duplicateFullSong": "Duplicate of sheet music",
+        "duplicateEmptySong": "Duplicate of sheet music with empty bars and chord names", 
+        "duplicateCustomSong": "Custom"
     },
     "Song": {
         "timeSignature": "Time signature",

@@ -77,6 +77,7 @@ export const CreateSongTab = (props: {
         useState(false)
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false)
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false)
+    const [voiceTitle, setVoiceTitle] = useState("")
     const { t } = useTranslation()
     const [clickedId, setClickedId] = useState<undefined | number>()
     const clickedVoice = voices.find((voice) => voice.songVoiceId === clickedId)
@@ -89,7 +90,7 @@ export const CreateSongTab = (props: {
     const { postVoice } = useCreateVoice(songId)
     const { putVoice } = useUpdateVoice(songId, clickedId)
     const { deleteVoice } = useDeleteVoice(songId, clickedId)
-    const { duplicateVoice } = useDuplicateVoice(songId, clickedId)
+    const { duplicateVoice } = useDuplicateVoice(songId, clickedId, voiceTitle)
     const classes = useStyles()
     const history = useHistory()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -101,14 +102,21 @@ export const CreateSongTab = (props: {
         )
         switch (option) {
             case "Modal.duplicateFullSong": {
-                //handleDuplicateInstrument()
-                console.log(
-                    "Valgt radiobutton var: " +
-                        option +
-                        " Og tittel var:" +
-                        title
-                )
-                setNewInstrumentModalIsOpen(false)
+                setVoiceTitle(title)
+                const { error, result } = await duplicateVoice.run({
+                    instrument: title,
+                    voiceNumber: voiceNumber + 1,
+                }) //????? Kanskje feil
+                if (!error && result) {
+                    onAddVoice(result.data)
+                    setNewInstrumentModalIsOpen(false)
+                    console.log(
+                        "Valgt radiobutton var: " +
+                            option +
+                            " Og tittel var:" +
+                            title
+                    )
+                }
                 break
             }
             case "Modal.duplicateEmptySong": {
@@ -184,6 +192,7 @@ export const CreateSongTab = (props: {
     }
 
     const handleDuplicateInstrument = async () => {
+        //MÅ SETTE VOICE NAVN TIL NAVN + TALL
         const { error, result } = await duplicateVoice.run()
 
         if (!error && result) {

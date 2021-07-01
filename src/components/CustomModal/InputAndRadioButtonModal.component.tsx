@@ -142,7 +142,7 @@ export const InputAndRadioButtonModal = (props: {
         setRadioButtonValue(event.target.value)
     }
 
-    var StyledRadio = function (props: RadioProps) {
+    const StyledRadio = function (props: RadioProps) {
         const classes = useStyles()
 
         return (
@@ -227,10 +227,7 @@ export const InputAndRadioButtonModal = (props: {
                                                         }
                                                         control={
                                                             <StyledRadio
-                                                                autoFocus={
-                                                                    option ===
-                                                                    radioButtonValue
-                                                                }
+                                                            //autoFocus={option===radioButtonValue}
                                                             />
                                                         }
                                                         label={t(option)}
@@ -258,7 +255,9 @@ export const InputAndRadioButtonModal = (props: {
                                                 className={classes.button}
                                                 size="large"
                                                 variant="contained"
-                                                disabled={!textFieldInput}
+                                                disabled={
+                                                    !textFieldInput.trim()
+                                                }
                                                 type="submit"
                                             >
                                                 {props.saveText}
