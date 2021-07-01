@@ -177,10 +177,16 @@ export const SongGridMenuButton = (props: {
                 cancelText={t("Modal.cancel")}
                 headerText={t("DashboardView.info")}
                 songNameLabelText={t("Modal.nameOfSong")}
-                arrangerLabelText={t("Modal.arranger")}
+                arrangerLabelText={t("Song.arranger")}
+                composerLabelText={t("Song.composer")}
+                songNotesLabelText={t("Song.songNotes")}
+                tempoLabelText={t("Song.tempo")}
                 isLoading={putSong.loading}
-                songNameDefaultValue={"tittel"} // need song title reference
-                arrangerDefaultValue={"arrangør"} // need arranger reference
+                songNameDefaultValue={"Title"} // need song title reference
+                //arrangerDefaultValue={"Navnesen"} // need arranger reference
+                //composerDefaultValue={"Johan Gambolputty"} // need arranger reference
+                //songNotesDefaultValue={"This is a song made by..."} // need arranger reference
+                //tempoDefaultValue={120} // need arranger reference
             />
             <Loading
                 isLoading={deleteSong.loading}

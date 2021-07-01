@@ -109,7 +109,6 @@
     "Modal": {
         "nameOfSong": "Name of song",
         "addSong": "Add a new song",
-        "arranger": "Arranger",
         "nameOfInstrument": "Name of instrument",
         "addInstrument": "Add a new instrument",
         "newVoiceName": "New name",
@@ -137,6 +136,10 @@
         "semiNotes": "Semi notes"
     },
     "Song": {
+        "arranger": "Arranger",
+        "composer": "Composer",
+        "songNotes": "Notes",
+        "tempo": "Tempo",
         "timeSignature": "Time signature",
         "bar": "Bar",
         "barNumber": "Bar number",

@@ -109,7 +109,6 @@
     "Modal": {
         "nameOfSong": "Navn på sang",
         "addSong": "Legg til ny sang",
-        "arranger": "Arrangør",
         "nameOfInstrument": "Navn på instrument",
         "addInstrument": "Legg til et instrument",
         "newVoiceName": "Nytt navn",
@@ -137,6 +136,10 @@
         "semiNotes": "Halvtoner"
     },
     "Song": {
+        "arranger": "Arrangør",
+        "composer": "Komponist",
+        "songNotes": "Notater",
+        "songSpeed": "Tempo",
         "timeSignature": "Taktart",
         "bar": "Takt",
         "barNumber": "Taktnummer",

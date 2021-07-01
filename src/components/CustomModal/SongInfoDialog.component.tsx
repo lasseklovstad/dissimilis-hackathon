@@ -7,9 +7,7 @@ import {
     Grid,
     makeStyles,
     Dialog,
-    DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
     TextField,
     Typography,
@@ -31,10 +29,10 @@ const useStyles = makeStyles({
         outline: "none",
     },
     dialog: {
-        //top: "-32%",
+        top: "-32%",
     },
     dialogContent: {
-        //padding: "40px",
+        padding: "40px",
         //paddingTop: "40px", // Hvorfor har ikke denne noen effekt?!
     },
     insertName: {
@@ -67,6 +65,9 @@ const useStyles = makeStyles({
 export const SongInfoDialog = (props: {
     songNameDefaultValue?: string
     arrangerDefaultValue?: string
+    composerDefaultValue?: string
+    songNotesDefaultValue?: string
+    tempoDefaultValue?: number
     handleOnSaveClick: (songName: string, arranger: string) => void
     handleOnCancelClick: () => void
     dialogOpen: boolean
@@ -76,12 +77,18 @@ export const SongInfoDialog = (props: {
     headerText: string
     songNameLabelText: string
     arrangerLabelText: string
+    composerLabelText: string
+    songNotesLabelText: string
+    tempoLabelText: string
     characterLimit?: number
     isLoading?: boolean
 }) => {
     const classes = useStyles()
     const [songNameTextFieldInput, setSongNameTextFieldInput] = useState("")
     const [arrangerTextFieldInput, setArrangerTextFieldInput] = useState("")
+    const [composerTextFieldInput, setComposerTextFieldInput] = useState("")
+    const [songNotesTextFieldInput, setSongNotesTextFieldInput] = useState("")
+    const [tempoTextFieldInput, setTempoTextFieldInput] = useState("") // May not be a textfield, as its inputs are numbers
 
     const CHARACTER_LIMIT =
         props.characterLimit === undefined ? 250 : props.characterLimit
@@ -97,6 +104,24 @@ export const SongInfoDialog = (props: {
             setArrangerTextFieldInput(props.arrangerDefaultValue)
         }
     }, [props.arrangerDefaultValue])
+
+    useEffect(() => {
+        if (props.composerDefaultValue) {
+            setComposerTextFieldInput(props.composerDefaultValue)
+        }
+    }, [props.composerDefaultValue])
+
+    useEffect(() => {
+        if (props.songNotesDefaultValue) {
+            setSongNotesTextFieldInput(props.songNotesDefaultValue)
+        }
+    }, [props.songNotesDefaultValue])
+
+    useEffect(() => {
+        if (props.tempoDefaultValue) {
+            setTempoTextFieldInput(props.tempoDefaultValue.toString()) // May need to be changed
+        }
+    }, [props.tempoDefaultValue])
 
     return (
         <Dialog
@@ -119,7 +144,7 @@ export const SongInfoDialog = (props: {
             >
                 <Fade in={props.dialogOpen}>
                     <div
-                        className={classes.dialogContent}
+                        //className={classes.dialogContent}
                     >
                         <form
                             className={classes.container}
@@ -179,56 +204,56 @@ export const SongInfoDialog = (props: {
                                     />
                                     <TextField
                                         // Composer
-                                        id="song-info-modal-arranger-textfield"
+                                        id="song-info-modal-composer-textfield"
                                         inputProps={{
                                             maxLength: CHARACTER_LIMIT,
                                         }}
-                                        helperText={`${arrangerTextFieldInput.length}/${CHARACTER_LIMIT}`}
+                                        helperText={`${composerTextFieldInput.length}/${CHARACTER_LIMIT}`}
                                         autoFocus
-                                        value={arrangerTextFieldInput}
+                                        value={composerTextFieldInput}
                                         variant="filled"
                                         onChange={(e) => {
-                                            setArrangerTextFieldInput(
+                                            setComposerTextFieldInput(
                                                 e.target.value
                                             )
                                         }}
-                                        label={props.arrangerLabelText}
+                                        label={props.composerLabelText}
                                         style={{ width: "100%" }}
                                     />
                                     <TextField
                                         // Song related notes
-                                        id="song-info-modal-arranger-textfield"
+                                        id="song-info-modal-song-notes-textfield"
                                         inputProps={{
                                             maxLength: CHARACTER_LIMIT,
                                         }}
-                                        helperText={`${arrangerTextFieldInput.length}/${CHARACTER_LIMIT}`}
+                                        helperText={`${songNotesTextFieldInput.length}/${CHARACTER_LIMIT}`}
                                         autoFocus
-                                        value={arrangerTextFieldInput}
+                                        value={songNotesTextFieldInput}
                                         variant="filled"
                                         onChange={(e) => {
-                                            setArrangerTextFieldInput(
+                                            setSongNotesTextFieldInput(
                                                 e.target.value
                                             )
                                         }}
-                                        label={props.arrangerLabelText}
+                                        label={props.songNotesLabelText}
                                         style={{ width: "100%" }}
                                     />
                                     <TextField
                                         // speed
-                                        id="song-info-modal-arranger-textfield"
+                                        id="song-info-modal-song-speed-textfield"
                                         inputProps={{
                                             maxLength: CHARACTER_LIMIT,
                                         }}
-                                        helperText={`${arrangerTextFieldInput.length}/${CHARACTER_LIMIT}`}
+                                        helperText={`${tempoTextFieldInput.length}/${CHARACTER_LIMIT}`}
                                         autoFocus
-                                        value={arrangerTextFieldInput}
+                                        value={tempoTextFieldInput}
                                         variant="filled"
                                         onChange={(e) => {
-                                            setArrangerTextFieldInput(
+                                            setTempoTextFieldInput(
                                                 e.target.value
                                             )
                                         }}
-                                        label={props.arrangerLabelText}
+                                        label={props.tempoLabelText}
                                         style={{ width: "100%" }}
                                     />
                                 </Grid>
