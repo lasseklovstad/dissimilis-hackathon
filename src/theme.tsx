@@ -22,6 +22,7 @@ export const theme = createMuiTheme({
             root: {
                 "&:focus": {
                     boxShadow: `0 0 0 4px ${colors.focus}`,
+                    borderRadius: 2,
                 },
             },
         },
@@ -29,6 +30,7 @@ export const theme = createMuiTheme({
             root: {
                 "&:focus": {
                     boxShadow: `0 0 0 4px ${colors.focus}`,
+                    borderRadius: 4,
                 },
             },
         },
@@ -39,6 +41,13 @@ export const theme = createMuiTheme({
                 },
             },
         },
+        MuiInputBase: { 
+            input: {
+                "&:focus": {
+                    boxShadow: `0 0 0 4px ${colors.focus}`,
+                },
+            },
+          },
         MuiCardActionArea: {
             root: {
                 "&:focus $focusHighlight": {
@@ -58,6 +67,7 @@ export const theme = createMuiTheme({
         background: {
             default: colors.gray_100,
         },
+
     },
     /* props: {
         MuiTypography: {
@@ -97,6 +107,7 @@ export const theme = createMuiTheme({
         },
         button: {
             textTransform: "none",
+
         },
         body2: {
             lineHeight: 0,

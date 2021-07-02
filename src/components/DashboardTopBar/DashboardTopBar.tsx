@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { ChangeEvent, useState } from "react"
 import {
     AppBar,
     Box,
@@ -16,6 +16,7 @@ import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg
 import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
+import { SearchField } from "./SearchField"
 
 const useStyles = makeStyles(() => ({
     background: {
@@ -31,8 +32,6 @@ export const DashboardTopBar = (props: {
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const searchPlaceholder = t("DashboardView.search")
-    const [searchBarFocus, setSearchBarFocus] = useState(false)
     const { onGoHome, searchTerm } = props
     const sm = useMediaQuery("(min-width: 600px)")
     const { logout } = useLogout()
@@ -49,11 +48,9 @@ export const DashboardTopBar = (props: {
                         <Grid item xs={2}>
                             <DashboardTopBarIcon onGoHome={onGoHome} />
                         </Grid>
-                        {searchBarFocus ? undefined : (
-                            <Hidden smDown>
-                                <Grid item md={1} />
-                            </Hidden>
-                        )}
+                        <Hidden smDown>
+                            <Grid item md={1} />
+                        </Hidden>
                         <Grid
                             item
                             xs={10}
@@ -84,24 +81,10 @@ export const DashboardTopBar = (props: {
                                 </IconButton>
                             </Grid>
                         </Grid>
-                        <Grid item xs={12} sm={3} md={searchBarFocus ? 4 : 3}>
-                            <TextField
-                                id="standard-basic"
-                                label={searchPlaceholder}
-                                variant="outlined"
-                                type="search"
-                                fullWidth
-                                onFocus={() => {
-                                    setSearchBarFocus(true)
-                                }}
-                                onBlur={() => {
-                                    setSearchBarFocus(false)
-                                }}
-                                onChange={(event) =>
-                                    props.onChange(event.target.value)
-                                }
-                                value={searchTerm}
-                            />
+                        <Grid item xs={12} sm={3} md={4}>
+                            <SearchField 
+                                onChange={(input: string) => console.log(input)}
+                                searchTerm={searchTerm}/>
                         </Grid>
                     </Grid>
                 </Box>
