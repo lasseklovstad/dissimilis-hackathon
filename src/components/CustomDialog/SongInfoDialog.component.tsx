@@ -116,9 +116,6 @@ export const SongInfoDialog = (props: {
             BackdropProps={{
                 timeout: 240,
             }}
-            style={{
-                top: "-32%",
-            }}
         >
             <DialogContent
                 style={{
