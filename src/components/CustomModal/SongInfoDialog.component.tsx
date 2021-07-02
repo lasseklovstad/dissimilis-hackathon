@@ -8,7 +8,6 @@ import {
     makeStyles,
     Dialog,
     DialogContent,
-    DialogTitle,
     TextField,
     Typography,
 } from "@material-ui/core"
@@ -16,25 +15,6 @@ import {
 import { colors } from "../../utils/colors"
 
 const useStyles = makeStyles({
-    dummy: {
-        position: "absolute",
-        boxShadow: "0 3px 6px 2px rgba(0, 0, 0, 0.1)",
-        height: "auto",
-        borderRadius: 1,
-        backgroundColor: "white",
-        "@media (max-width: 600px)": {
-            width: "80%",
-            padding: "48px",
-        },
-        outline: "none",
-    },
-    dialog: {
-        top: "-32%",
-    },
-    dialogContent: {
-        padding: "40px",
-        //paddingTop: "40px", // Hvorfor har ikke denne noen effekt?!
-    },
     insertName: {
         marginBottom: "24px",
     },
@@ -89,12 +69,14 @@ export const SongInfoDialog = (props: {
     const [arrangerTextFieldInput, setArrangerTextFieldInput] = useState("")
     const [composerTextFieldInput, setComposerTextFieldInput] = useState("")
     const [songNotesTextFieldInput, setSongNotesTextFieldInput] = useState("")
-    const [tempoTextFieldInput, setTempoTextFieldInput] = useState("") // May not be a textfield, as its inputs are numbers
+    const [tempoTextFieldInput, setTempoTextFieldInput] = useState("")
 
     const CHARACTER_LIMIT =
         props.characterLimit === undefined ? 250 : props.characterLimit
     const NUMBER_CHARACTER_LIMIT =
-        props.numberCharacterLimit === undefined ? 25 : props.numberCharacterLimit
+        props.numberCharacterLimit === undefined
+            ? 5
+            : props.numberCharacterLimit
 
     useEffect(() => {
         if (props.songNameDefaultValue) {
@@ -122,7 +104,7 @@ export const SongInfoDialog = (props: {
 
     useEffect(() => {
         if (props.tempoDefaultValue) {
-            setTempoTextFieldInput(props.tempoDefaultValue.toString()) // May need to be changed
+            setTempoTextFieldInput(props.tempoDefaultValue.toString())
         }
     }, [props.tempoDefaultValue])
 
@@ -130,7 +112,6 @@ export const SongInfoDialog = (props: {
         <Dialog
             open={props.dialogOpen}
             onClose={() => props.handleClosed()}
-            //className={classes.dialog}
             BackdropComponent={Backdrop}
             BackdropProps={{
                 timeout: 240,
@@ -140,15 +121,12 @@ export const SongInfoDialog = (props: {
             }}
         >
             <DialogContent
-                //className={classes.dialogContent}
                 style={{
                     padding: "40px",
                 }}
             >
                 <Fade in={props.dialogOpen}>
-                    <div
-                        //className={classes.dialogContent}
-                    >
+                    <div>
                         <form
                             className={classes.container}
                             onSubmit={(event) => {
@@ -206,7 +184,6 @@ export const SongInfoDialog = (props: {
                                         style={{ width: "100%" }}
                                     />
                                     <TextField
-                                        // Composer
                                         id="song-info-modal-composer-textfield"
                                         inputProps={{
                                             maxLength: CHARACTER_LIMIT,
@@ -224,7 +201,6 @@ export const SongInfoDialog = (props: {
                                         style={{ width: "100%" }}
                                     />
                                     <TextField
-                                        // Song related notes
                                         id="song-info-modal-song-notes-textfield"
                                         inputProps={{
                                             maxLength: CHARACTER_LIMIT,
@@ -242,16 +218,21 @@ export const SongInfoDialog = (props: {
                                         style={{ width: "100%" }}
                                     />
                                     <TextField
-                                        // tempo
                                         id="song-info-modal-song-speed-textfield"
-                                        inputProps={{
-                                            maxLength: CHARACTER_LIMIT,
-                                        }}
-                                        helperText={`${tempoTextFieldInput.length}/${CHARACTER_LIMIT}`}
+                                        helperText={`${tempoTextFieldInput.length}/${NUMBER_CHARACTER_LIMIT}`}
                                         autoFocus
                                         value={tempoTextFieldInput}
                                         variant="filled"
                                         onChange={(e) => {
+                                            e.target.value = Math.max(
+                                                0,
+                                                parseInt(e.target.value)
+                                            )
+                                                .toString()
+                                                .slice(
+                                                    0,
+                                                    NUMBER_CHARACTER_LIMIT
+                                                )
                                             setTempoTextFieldInput(
                                                 e.target.value
                                             )
