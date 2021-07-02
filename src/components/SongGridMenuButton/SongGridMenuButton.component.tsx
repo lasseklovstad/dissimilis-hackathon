@@ -10,9 +10,10 @@ import {
 } from "../../utils/useApiServiceSongs"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
 import { InputModal } from "../CustomModal/InputModal.component"
-import { SongInfoDialog } from "../CustomModal/SongInfoDialog.component"
+import { SongInfoDialog } from "../CustomDialog/SongInfoDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
+import { context } from "msw"
 
 export const SongGridMenuButton = (props: {
     songId: number
@@ -69,8 +70,7 @@ export const SongGridMenuButton = (props: {
 
         if (!error && result) {
             setSongInfoDialogIsOpen(false)
-            // TODO: Her må siden refreshes elns, sånn at den nye informasjonen dukker opp
-            // history.push(`dashboard`) // tror ikke dette gjorde susen
+            // How to refresh?
         }
     }
 
@@ -91,7 +91,7 @@ export const SongGridMenuButton = (props: {
     }
 
     const handleClose = async (
-        method?: "delete" | "copy" | "info" | "open"
+        method?: "delete" | "info" | "copy" | "open"
     ) => {
         setAnchorEl(null)
         setDeleteSongModalIsOpen(false)
@@ -99,11 +99,11 @@ export const SongGridMenuButton = (props: {
             case "delete":
                 handleOpenDeleteSongModal()
                 break
-            case "copy":
-                handleOpenDuplicateDialog()
-                break
             case "info":
                 handleOpenSongInfoDialog()
+                break
+            case "copy":
+                handleOpenDuplicateDialog()
                 break
             case "open":
                 handleOpenSong()
@@ -184,9 +184,9 @@ export const SongGridMenuButton = (props: {
                 isLoading={putSong.loading}
                 songNameDefaultValue={"Title"} // need song title reference
                 //arrangerDefaultValue={"Navnesen"} // need arranger reference
-                //composerDefaultValue={"Johan Gambolputty"} // need arranger reference
-                //songNotesDefaultValue={"This is a song made by..."} // need arranger reference
-                //tempoDefaultValue={120} // need arranger reference
+                //composerDefaultValue={"Johan Gambolputty"} // need composer reference
+                //songNotesDefaultValue={"This is a song made by..."} // need song notes reference
+                //tempoDefaultValue={120} // need tempo reference
             />
             <Loading
                 isLoading={deleteSong.loading}
