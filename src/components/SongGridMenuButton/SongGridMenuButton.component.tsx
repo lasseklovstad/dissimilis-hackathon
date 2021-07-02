@@ -13,7 +13,6 @@ import { InputModal } from "../CustomModal/InputModal.component"
 import { SongInfoDialog } from "../CustomDialog/SongInfoDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
-import { context } from "msw"
 
 export const SongGridMenuButton = (props: {
     songId: number
@@ -182,6 +181,7 @@ export const SongGridMenuButton = (props: {
                 songNotesLabelText={t("Song.songNotes")}
                 tempoLabelText={t("Song.tempo")}
                 isLoading={putSong.loading}
+                // Må slappe inn no context her for å få henta verdiene
                 songNameDefaultValue={"Title"} // need song title reference
                 //arrangerDefaultValue={"Navnesen"} // need arranger reference
                 //composerDefaultValue={"Johan Gambolputty"} // need composer reference
