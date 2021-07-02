@@ -104,6 +104,7 @@
         "save": "Lagre",
         "delete": "Slett sang",
         "editBars": "Rediger takter",
+        "showInfo": "Vis info",
         "cancelEditBars": "Avslutt redigering av takter"
     },
     "Modal": {

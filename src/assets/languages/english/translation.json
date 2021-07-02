@@ -104,7 +104,8 @@
         "save": "Save",
         "delete": "Delete song",
         "editBars": "Edit bars",
-        "cancelEditBars": "Stop editing bars"
+        "cancelEditBars": "Stop editing bars",
+        "showInfo": "Show info"
     },
     "Modal": {
         "nameOfSong": "Name of song",

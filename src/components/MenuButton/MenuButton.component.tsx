@@ -14,12 +14,14 @@ import {
     useDeleteSong,
     useDuplicateSong,
     useTransposeSong,
+    useUpdateSong,
 } from "../../utils/useApiServiceSongs"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { TransposeModal } from "../CustomModal/TransposeModal.component"
 import { InputModal } from "../CustomModal/InputModal.component"
+import { SongInfoDialog } from "../CustomDialog/SongInfoDialog.component"
 
 export const MenuButton = (props: {
     voiceId: number
@@ -35,6 +37,7 @@ export const MenuButton = (props: {
     const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
     const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] =
         useState(false)
+    const [songInfoDialogIsOpen, setSongInfoDialogIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
     const { songId, title, transpose } = useParams<{
@@ -47,6 +50,7 @@ export const MenuButton = (props: {
         useState(false)
     const { transposeSong } = useTransposeSong(songId, title, transpose)
     const { duplicateSong } = useDuplicateSong(Number(songId))
+    const { putSong } = useUpdateSong(songId.toString())
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -78,8 +82,22 @@ export const MenuButton = (props: {
         }
     }
 
+    const handleOpenSongInfoDialog = () => {
+        setSongInfoDialogIsOpen(true)
+    }
+
+    const handleCloseSongInfoDialog = () => {
+        setSongInfoDialogIsOpen(false)
+    }
+
     const handleClose = async (
-        method?: "transpose" | "export" | "delete" | "duplicate" | "editBars"
+        method?:
+            | "transpose"
+            | "export"
+            | "delete"
+            | "duplicate"
+            | "editBars"
+            | "info"
     ) => {
         setAnchorEl(null)
         setDeleteSongModalIsOpen(false)
@@ -100,6 +118,9 @@ export const MenuButton = (props: {
             case "editBars":
                 props.setBarEditMode()
                 break
+            case "info":
+                handleOpenSongInfoDialog()
+                break
             default:
                 break
         }
@@ -113,6 +134,17 @@ export const MenuButton = (props: {
         if (!error && result) {
             setDuplicateSongModalIsOpen(false)
             history.push(`/song/${result.data.songId.toString()}`)
+        }
+    }
+
+    const handleSaveSongInfo = async (title: string) => {
+        const { error, result } = await putSong.run({
+            title,
+        })
+
+        if (!error && result) {
+            setSongInfoDialogIsOpen(false)
+            // How to refresh?
         }
     }
 
@@ -156,6 +188,9 @@ export const MenuButton = (props: {
                             ? t("MenuButton.cancelEditBars")
                             : t("MenuButton.editBars")}
                     </MenuItem>
+                    <MenuItem onClick={() => handleClose("info")}>
+                        {t("MenuButton.showInfo")}
+                    </MenuItem>
                     {props.showName ? (
                         <>
                             <Divider variant="middle" />
@@ -198,6 +233,27 @@ export const MenuButton = (props: {
                     headerText={t("DashboardView.duplicateText")}
                     labelText={t("Modal.newVoiceName")}
                     isLoading={duplicateSong.loading}
+                />
+                <SongInfoDialog
+                    handleOnCancelClick={() => handleCloseSongInfoDialog()}
+                    handleOnSaveClick={handleSaveSongInfo}
+                    handleClosed={() => handleCloseSongInfoDialog()}
+                    dialogOpen={songInfoDialogIsOpen}
+                    saveText={t("Modal.save")}
+                    cancelText={t("Modal.cancel")}
+                    headerText={t("DashboardView.info")}
+                    songNameLabelText={t("Modal.nameOfSong")}
+                    arrangerLabelText={t("Song.arranger")}
+                    composerLabelText={t("Song.composer")}
+                    songNotesLabelText={t("Song.songNotes")}
+                    tempoLabelText={t("Song.tempo")}
+                    isLoading={putSong.loading}
+                    // Må slappe inn no context her for å få henta verdiene
+                    songNameDefaultValue={"Title"} // need song title reference
+                    //arrangerDefaultValue={"Navnesen"} // need arranger reference
+                    //composerDefaultValue={"Johan Gambolputty"} // need composer reference
+                    //songNotesDefaultValue={"This is a song made by..."} // need song notes reference
+                    //tempoDefaultValue={120} // need tempo reference
                 />
             </div>
             <Loading
