@@ -13,7 +13,6 @@ import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { IVoice } from "../../models/IVoice"
 import { InputModal } from "../CustomModal/InputModal.component"
-import { InputAndRadioButtonModal } from "../CustomModal/InputAndRadioButtonModal.component"
 import {
     useCreateVoice,
     useDeleteVoice,
@@ -22,6 +21,7 @@ import {
 } from "../../utils/useApiServiceSongs"
 import { colors } from "../../utils/colors"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
+import { NewVoiceDialog } from "../CustomModal/NewVoiceDialog"
 
 const useStyles = makeStyles({
     root: {
@@ -77,7 +77,7 @@ export const CreateSongTab = (props: {
         useState(false)
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false)
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false)
-    const [voiceTitle, setVoiceTitle] = useState("")
+    //const [voiceTitle, setVoiceTitle] = useState("")
     const { t } = useTranslation()
     const [clickedId, setClickedId] = useState<undefined | number>()
     const clickedVoice = voices.find((voice) => voice.songVoiceId === clickedId)
@@ -90,7 +90,8 @@ export const CreateSongTab = (props: {
     const { postVoice } = useCreateVoice(songId)
     const { putVoice } = useUpdateVoice(songId, clickedId)
     const { deleteVoice } = useDeleteVoice(songId, clickedId)
-    const { duplicateVoice } = useDuplicateVoice(songId, clickedId, voiceTitle)
+    const { duplicateVoice } = useDuplicateVoice(songId, clickedId)
+    //const { duplicateVoice } = useDuplicateVoice(songId, clickedId, voiceTitle)
     const classes = useStyles()
     const history = useHistory()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -102,21 +103,16 @@ export const CreateSongTab = (props: {
         )
         switch (option) {
             case "Modal.duplicateFullSong": {
-                setVoiceTitle(title)
+                /*setVoiceTitle(title)
                 const { error, result } = await duplicateVoice.run({
                     instrument: title,
                     voiceNumber: voiceNumber + 1,
-                }) //????? Kanskje feil
+                })
                 if (!error && result) {
                     onAddVoice(result.data)
                     setNewInstrumentModalIsOpen(false)
-                    console.log(
-                        "Valgt radiobutton var: " +
-                            option +
-                            " Og tittel var:" +
-                            title
-                    )
-                }
+                }*/
+                setNewInstrumentModalIsOpen(false)
                 break
             }
             case "Modal.duplicateEmptySong": {
@@ -127,22 +123,10 @@ export const CreateSongTab = (props: {
                 if (!error && result) {
                     onAddVoice(result.data)
                     setNewInstrumentModalIsOpen(false)
-                    console.log(
-                        "Valgt radiobutton var: " +
-                            option +
-                            " Og tittel var:" +
-                            title
-                    )
                 }
                 break
             }
             case "Modal.duplicateCustomSong": {
-                console.log(
-                    "Valgt radiobutton var: " +
-                        option +
-                        " Og tittel var:" +
-                        title
-                )
                 setNewInstrumentModalIsOpen(false)
                 break
             }
@@ -192,7 +176,7 @@ export const CreateSongTab = (props: {
     }
 
     const handleDuplicateInstrument = async () => {
-        //MÅ SETTE VOICE NAVN TIL NAVN + TALL
+        //MÅ SETTE VOICE NAVN TIL NAVN + TALL HVIS TITLE ER ""
         const { error, result } = await duplicateVoice.run()
 
         if (!error && result) {
@@ -296,16 +280,16 @@ export const CreateSongTab = (props: {
                 </MenuItem>
             </Menu>
 
-            <InputAndRadioButtonModal
+            <NewVoiceDialog
                 handleOnCancelClick={() => handleClose()}
                 handleOnSaveClick={handleAddInstrument}
                 handleClosed={() => handleClose()}
-                modalOpen={newInstrumentModalIsOpen}
+                dialogOpen={newInstrumentModalIsOpen}
                 saveText={t("Modal.create")}
                 cancelText={t("Modal.cancel")}
                 headerText={t("Modal.addInstrument")}
                 labelText={t("Modal.nameOfInstrument")}
-                radioButtonLabel={t("Modal.CustomNewInstrument")}
+                radioButtonLabel={t("Modal.customNewInstrument")}
                 radioButtonOptions={[
                     "Modal.duplicateFullSong",
                     "Modal.duplicateEmptySong",

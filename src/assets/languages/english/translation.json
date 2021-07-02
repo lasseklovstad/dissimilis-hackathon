@@ -132,6 +132,7 @@
         "transposingSong": "Transposing song",
         "transposeSongError": "Error transposing song",
         "semiNotes": "Semi notes",
+        "customNewInstrument": "Spesification of new voice",
         "duplicateFullSong": "Duplicate of sheet music",
         "duplicateEmptySong": "Duplicate of sheet music with empty bars and chord names", 
         "duplicateCustomSong": "Custom"
