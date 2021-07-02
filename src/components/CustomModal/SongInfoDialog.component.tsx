@@ -81,6 +81,7 @@ export const SongInfoDialog = (props: {
     songNotesLabelText: string
     tempoLabelText: string
     characterLimit?: number
+    numberCharacterLimit?: number
     isLoading?: boolean
 }) => {
     const classes = useStyles()
@@ -92,6 +93,8 @@ export const SongInfoDialog = (props: {
 
     const CHARACTER_LIMIT =
         props.characterLimit === undefined ? 250 : props.characterLimit
+    const NUMBER_CHARACTER_LIMIT =
+        props.numberCharacterLimit === undefined ? 25 : props.numberCharacterLimit
 
     useEffect(() => {
         if (props.songNameDefaultValue) {
@@ -239,7 +242,7 @@ export const SongInfoDialog = (props: {
                                         style={{ width: "100%" }}
                                     />
                                     <TextField
-                                        // speed
+                                        // tempo
                                         id="song-info-modal-song-speed-textfield"
                                         inputProps={{
                                             maxLength: CHARACTER_LIMIT,
@@ -255,6 +258,7 @@ export const SongInfoDialog = (props: {
                                         }}
                                         label={props.tempoLabelText}
                                         style={{ width: "100%" }}
+                                        type="number"
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
