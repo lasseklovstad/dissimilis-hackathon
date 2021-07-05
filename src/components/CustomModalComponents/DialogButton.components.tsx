@@ -31,7 +31,7 @@ export const DialogButton = (props: {
 
     return (
         <div>
-            {buttonType && onClick != undefined ? (
+            {buttonType && onClick !== undefined ? (
                 <Button
                     className={classes.button}
                     size="large"
