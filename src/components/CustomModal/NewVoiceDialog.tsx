@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import {
     Backdrop,
-    Button,
     CircularProgress,
     Dialog,
     DialogActions,
@@ -13,10 +12,9 @@ import {
     TextField,
 } from "@material-ui/core"
 
-import { colors } from "../../utils/colors"
-
 import { useTranslation } from "react-i18next"
 import { RadioButtons } from "../CustomModalComponents/RadioButtons.component"
+import { DialogButton } from "../CustomModalComponents/DialogButton.components"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -34,14 +32,6 @@ const useStyles = makeStyles((theme) => {
         insertName: {
             marginBottom: theme.spacing(1),
             marginTop: theme.spacing(0.1),
-        },
-        button: {
-            "&:hover": {
-                backgroundColor: colors.gray_300,
-            },
-            marginRight: theme.spacing(1),
-            float: "left",
-            position: "relative",
         },
         title: {
             marginBottom: theme.spacing(1),
@@ -167,29 +157,22 @@ export const NewVoiceDialog = (props: {
                                     </Grid>
                                 ) : (
                                     <Grid item>
-                                        <Button
-                                            className={classes.button}
-                                            size="large"
-                                            variant="contained"
+                                        <DialogButton
                                             disabled={!textFieldInput.trim()}
-                                            type="submit"
-                                        >
-                                            {saveText}
-                                        </Button>
+                                            buttonText={saveText}
+                                            isCancelButton={false}
+                                        />
                                     </Grid>
                                 )}
                                 <Grid item>
-                                    <Button
-                                        className={classes.button}
-                                        size="large"
-                                        variant="outlined"
+                                    <DialogButton
+                                        buttonText={cancelText}
                                         onClick={() => {
                                             handleOnCancelClick()
                                             setTextFieldInput("")
                                         }}
-                                    >
-                                        {cancelText}
-                                    </Button>
+                                        isCancelButton
+                                    />
                                 </Grid>
                             </Grid>
                         </DialogActions>
