@@ -15,9 +15,7 @@
         "delete": "Slett",
         "date": "Dato endret",
         "user": "Bruker",
-        "song": "Sang",
-        "showInfo": "Vis info",
-        "info": "Sanginfo"
+        "song": "Sang"
     },
     "BarContainer": {
         "deleteBar": "Slett takt",
@@ -105,7 +103,8 @@
         "delete": "Slett sang",
         "editBars": "Rediger takter",
         "showInfo": "Vis info",
-        "cancelEditBars": "Avslutt redigering av takter"
+        "cancelEditBars": "Avslutt redigering av takter",
+        "details": "Detaljer"
     },
     "Modal": {
         "nameOfSong": "Navn på sang",

@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { IconButton, Menu, MenuItem } from "@material-ui/core"
+import { IconButton, Menu, Dialog, MenuItem } from "@material-ui/core"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
@@ -147,7 +147,7 @@ export const SongGridMenuButton = (props: {
                         {t("DashboardView.open")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("info")}>
-                        {t("DashboardView.showInfo")}
+                        {t("MenuButton.details")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("copy")}>
                         {t("DashboardView.duplicate")}
@@ -178,27 +178,27 @@ export const SongGridMenuButton = (props: {
                 labelText={t("Modal.newVoiceName")}
                 isLoading={duplicateSong.loading}
             />
-            <EditSongInfoDialog
-                handleOnCancelClick={() => handleCloseSongInfoDialog()}
-                handleOnSaveClick={handleSaveSongInfo}
-                handleClosed={() => handleCloseSongInfoDialog()}
-                dialogOpen={songInfoDialogIsOpen}
-                saveText={t("Modal.save")}
-                cancelText={t("Modal.cancel")}
-                headerText={t("DashboardView.info")}
-                songNameLabelText={t("Modal.nameOfSong")}
-                arrangerLabelText={t("Song.arranger")}
-                composerLabelText={t("Song.composer")}
-                songNotesLabelText={t("Song.songNotes")}
-                speedLabelText={t("Song.tempo")}
-                isLoading={putSong.loading}
-                // Må slappe inn no context her for å få henta verdiene
-                songNameDefaultValue={"Title"} // need song title reference
-                //arrangerDefaultValue={"Navnesen"} // need arranger reference
-                //composerDefaultValue={"Johan Gambolputty"} // need composer reference
-                //songNotesDefaultValue={"This is a song made by..."} // need song notes reference
-                //speedDefaultValue={120} // need tempo reference
-            />
+            <Dialog
+                open={songInfoDialogIsOpen}
+                onClose={() => handleCloseSongInfoDialog()}
+            >
+                <EditSongInfoDialog
+                    songId={songId}
+                    handleOnCancelClick={() => handleCloseSongInfoDialog()}
+                    handleOnSaveClick={handleSaveSongInfo}
+                    handleClosed={() => handleCloseSongInfoDialog()}
+                    dialogOpen={songInfoDialogIsOpen}
+                    saveText={t("Modal.save")}
+                    cancelText={t("Modal.cancel")}
+                    headerText={t("MenuButton.details")}
+                    songNameLabelText={t("Modal.nameOfSong")}
+                    arrangerLabelText={t("Song.arranger")}
+                    composerLabelText={t("Song.composer")}
+                    songNotesLabelText={t("Song.songNotes")}
+                    speedLabelText={t("Song.songSpeed")}
+                    isLoadingPatch={putSong.loading}
+                />
+            </Dialog>
             <Loading
                 isLoading={deleteSong.loading}
                 fullScreen
