@@ -36,10 +36,6 @@ const useStyles = makeStyles((theme) => {
         title: {
             marginBottom: theme.spacing(1),
         },
-        subtitle: {
-            fontWeight: "bold",
-            marginBottom: "5px",
-        },
         container: {
             width: "100%",
         },
@@ -123,8 +119,7 @@ export const NewVoiceDialog = (props: {
                         }}
                     >
                         <DialogTitle className={classes.title}>
-                            {" "}
-                            {t(headerText)}{" "}
+                            {t(headerText)}
                         </DialogTitle>
                         <DialogContent>
                             <TextField
