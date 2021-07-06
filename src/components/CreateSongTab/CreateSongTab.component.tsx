@@ -77,7 +77,6 @@ export const CreateSongTab = (props: {
         useState(false)
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false)
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false)
-    //const [voiceTitle, setVoiceTitle] = useState("")
     const { t } = useTranslation()
     const [clickedId, setClickedId] = useState<undefined | number>()
     const clickedVoice = voices.find((voice) => voice.songVoiceId === clickedId)
@@ -91,7 +90,6 @@ export const CreateSongTab = (props: {
     const { putVoice } = useUpdateVoice(songId, clickedId)
     const { deleteVoice } = useDeleteVoice(songId, clickedId)
     const { duplicateVoice } = useDuplicateVoice(songId, clickedId)
-    //const { duplicateVoice } = useDuplicateVoice(songId, clickedId, voiceTitle)
     const classes = useStyles()
     const history = useHistory()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -112,6 +110,7 @@ export const CreateSongTab = (props: {
                     onAddVoice(result.data)
                     setNewInstrumentModalIsOpen(false)
                 }*/
+                handleDuplicateFullVoice(title)
                 setNewInstrumentModalIsOpen(false)
                 break
             }
@@ -130,6 +129,20 @@ export const CreateSongTab = (props: {
                 setNewInstrumentModalIsOpen(false)
                 break
             }
+        }
+    }
+
+
+
+    const handleDuplicateFullVoice = async (title: string) => {
+
+        //MÅ SETTE VOICE NAVN TIL NAVN + TALL HVIS TITLE ER ""
+        const { error, result } = await duplicateVoice.run({
+            title
+        })
+
+        if (!error && result) {
+            onAddVoice(result.data)
         }
     }
 
@@ -176,6 +189,7 @@ export const CreateSongTab = (props: {
     }
 
     const handleDuplicateInstrument = async () => {
+
         //MÅ SETTE VOICE NAVN TIL NAVN + TALL HVIS TITLE ER ""
         const { error, result } = await duplicateVoice.run()
 
