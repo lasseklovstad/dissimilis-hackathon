@@ -8,10 +8,12 @@ import {
     DialogContent,
     TextField,
     Typography,
+    DialogContentText,
 } from "@material-ui/core"
 
 import { colors } from "../../utils/colors"
 import { useGetSongMetadata } from "../../utils/useApiServiceSongs"
+import { useTranslation } from "react-i18next"
 
 const useStyles = makeStyles({
     insertName: {
@@ -51,8 +53,6 @@ export const EditSongInfoDialog = (props: {
         speed: number
     ) => void
     handleOnCancelClick: () => void
-    dialogOpen: boolean
-    handleClosed: () => void
     saveText: string
     cancelText: string
     headerText: string
@@ -71,6 +71,7 @@ export const EditSongInfoDialog = (props: {
     const [composerTextFieldInput, setComposerTextFieldInput] = useState("")
     const [songNotesTextFieldInput, setSongNotesTextFieldInput] = useState("")
     const [speedTextFieldInput, setSpeedTextFieldInput] = useState<number>(0)
+    const { t } = useTranslation()
 
     const { songId } = props
 
@@ -110,162 +111,141 @@ export const EditSongInfoDialog = (props: {
                 padding: "40px",
             }}
         >
-            <Fade in={props.dialogOpen}>
-                <div>
-                    <form
-                        className={classes.container}
-                        onSubmit={(event) => {
-                            event.preventDefault()
-                            props.handleOnSaveClick(
-                                songNameTextFieldInput,
-                                arrangerTextFieldInput,
-                                composerTextFieldInput,
-                                songNotesTextFieldInput,
-                                speedTextFieldInput
-                            )
-                        }}
-                    >
-                        <Grid container>
+            <div>
+                <form
+                    className={classes.container}
+                    onSubmit={(event) => {
+                        event.preventDefault()
+                        props.handleOnSaveClick(
+                            songNameTextFieldInput,
+                            arrangerTextFieldInput,
+                            composerTextFieldInput,
+                            songNotesTextFieldInput,
+                            speedTextFieldInput
+                        )
+                    }}
+                >
+                    <Grid container>
+                        {/* 
                             <Typography className={classes.title} variant="h2">
                                 {props.headerText}
                             </Typography>
-                            <Grid item className={classes.insertName} xs={12}>
-                                <TextField
-                                    id="song-info-modal-song-name-textfield"
-                                    inputProps={{
-                                        maxLength: CHARACTER_LIMIT,
-                                    }}
-                                    helperText={`${songNameTextFieldInput.length}/${CHARACTER_LIMIT}`}
-                                    autoFocus
-                                    value={songNameTextFieldInput}
-                                    variant="filled"
-                                    onChange={(e) => {
-                                        setSongNameTextFieldInput(
-                                            e.target.value
-                                        )
-                                    }}
-                                    label={props.songNameLabelText}
-                                    style={{ width: "100%" }}
-                                />
-                                <TextField
-                                    id="song-info-modal-arranger-textfield"
-                                    inputProps={{
-                                        maxLength: CHARACTER_LIMIT,
-                                    }}
-                                    helperText={`${arrangerTextFieldInput.length}/${CHARACTER_LIMIT}`}
-                                    autoFocus
-                                    value={arrangerTextFieldInput}
-                                    variant="filled"
-                                    onChange={(e) => {
-                                        setArrangerTextFieldInput(
-                                            e.target.value
-                                        )
-                                    }}
-                                    label={props.arrangerLabelText}
-                                    style={{ width: "100%" }}
-                                />
-                                <TextField
-                                    id="song-info-modal-composer-textfield"
-                                    inputProps={{
-                                        maxLength: CHARACTER_LIMIT,
-                                    }}
-                                    helperText={`${composerTextFieldInput.length}/${CHARACTER_LIMIT}`}
-                                    autoFocus
-                                    value={composerTextFieldInput}
-                                    variant="filled"
-                                    onChange={(e) => {
-                                        setComposerTextFieldInput(
-                                            e.target.value
-                                        )
-                                    }}
-                                    label={props.composerLabelText}
-                                    style={{ width: "100%" }}
-                                />
-                                <TextField
-                                    id="song-info-modal-song-notes-textfield"
-                                    inputProps={{
-                                        maxLength: CHARACTER_LIMIT,
-                                    }}
-                                    helperText={`${songNotesTextFieldInput.length}/${CHARACTER_LIMIT}`}
-                                    autoFocus
-                                    value={songNotesTextFieldInput}
-                                    variant="filled"
-                                    onChange={(e) => {
-                                        setSongNotesTextFieldInput(
-                                            e.target.value
-                                        )
-                                    }}
-                                    label={props.songNotesLabelText}
-                                    style={{ width: "100%" }}
-                                />
-                                <TextField
-                                    id="song-info-modal-song-speed-textfield"
-                                    //how to signify max value
-                                    //helperText={`${speedTextFieldInput.length}/${NUMBER_CHARACTER_LIMIT}`}
-                                    autoFocus
-                                    value={speedTextFieldInput}
-                                    variant="filled"
-                                    onChange={(e) => {
-                                        e.target.value = Math.max(
-                                            NUMBER_MIN,
-                                            Math.min(
-                                                NUMBER_MAX,
-                                                parseInt(e.target.value)
-                                            )
-                                        ).toString()
-                                        setSpeedTextFieldInput(
+                            */}
+                        <Grid item className={classes.insertName} xs={12}>
+                            <TextField
+                                id="song-info-modal-song-name-textfield"
+                                inputProps={{
+                                    maxLength: CHARACTER_LIMIT,
+                                    style: {
+                                        fontSize: "1.5rem",
+                                    },
+                                }}
+                                autoFocus
+                                value={songNameTextFieldInput}
+                                onChange={(e) => {
+                                    setSongNameTextFieldInput(e.target.value)
+                                }}
+                                style={{
+                                    width: "100%",
+                                }}
+                            />
+                            <Typography gutterBottom>
+                                {t("Song.arranger") +
+                                    ": " +
+                                    arrangerTextFieldInput}
+                            </Typography>
+                            <TextField
+                                id="song-info-modal-composer-textfield"
+                                inputProps={{
+                                    maxLength: CHARACTER_LIMIT,
+                                }}
+                                helperText={`${composerTextFieldInput.length}/${CHARACTER_LIMIT}`}
+                                autoFocus
+                                value={composerTextFieldInput}
+                                variant="filled"
+                                onChange={(e) => {
+                                    setComposerTextFieldInput(e.target.value)
+                                }}
+                                label={props.composerLabelText}
+                                style={{ width: "100%" }}
+                            />
+                            <TextField
+                                id="song-info-modal-song-notes-textfield"
+                                inputProps={{
+                                    maxLength: CHARACTER_LIMIT,
+                                }}
+                                helperText={`${songNotesTextFieldInput.length}/${CHARACTER_LIMIT}`}
+                                autoFocus
+                                value={songNotesTextFieldInput}
+                                variant="filled"
+                                onChange={(e) => {
+                                    setSongNotesTextFieldInput(e.target.value)
+                                }}
+                                label={props.songNotesLabelText}
+                                style={{ width: "100%" }}
+                            />
+                            <TextField
+                                id="song-info-modal-song-speed-textfield"
+                                //how to signify max value
+                                //helperText={`${speedTextFieldInput.length}/${NUMBER_CHARACTER_LIMIT}`}
+                                autoFocus
+                                value={speedTextFieldInput}
+                                variant="filled"
+                                onChange={(e) => {
+                                    e.target.value = Math.max(
+                                        NUMBER_MIN,
+                                        Math.min(
+                                            NUMBER_MAX,
                                             parseInt(e.target.value)
                                         )
-                                    }}
-                                    label={props.speedLabelText}
-                                    style={{ width: "100%" }}
-                                    type="number"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Grid container>
-                                    {props.isLoadingPatch ? (
-                                        <Grid
-                                            container
-                                            className={classes.loading}
-                                        >
-                                            <CircularProgress size={24} />
-                                        </Grid>
-                                    ) : (
-                                        <Grid item>
-                                            <Button
-                                                className={classes.button}
-                                                size="large"
-                                                variant="contained"
-                                                disabled={
-                                                    !songNameTextFieldInput
-                                                }
-                                                type="submit"
-                                            >
-                                                {props.saveText}
-                                            </Button>
-                                        </Grid>
-                                    )}
+                                    ).toString()
+                                    setSpeedTextFieldInput(
+                                        parseInt(e.target.value)
+                                    )
+                                }}
+                                label={props.speedLabelText}
+                                style={{ width: "100%" }}
+                                type="number"
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Grid container>
+                                {props.isLoadingPatch ? (
+                                    <Grid container className={classes.loading}>
+                                        <CircularProgress size={24} />
+                                    </Grid>
+                                ) : (
                                     <Grid item>
                                         <Button
                                             className={classes.button}
                                             size="large"
-                                            variant="outlined"
-                                            onClick={() => {
-                                                props.handleOnCancelClick()
-                                                setSongNameTextFieldInput("")
-                                                setArrangerTextFieldInput("")
-                                            }}
+                                            variant="contained"
+                                            disabled={!songNameTextFieldInput}
+                                            type="submit"
                                         >
-                                            {props.cancelText}
+                                            {props.saveText}
                                         </Button>
                                     </Grid>
+                                )}
+                                <Grid item>
+                                    <Button
+                                        className={classes.button}
+                                        size="large"
+                                        variant="outlined"
+                                        onClick={() => {
+                                            props.handleOnCancelClick()
+                                            setSongNameTextFieldInput("")
+                                            setArrangerTextFieldInput("")
+                                        }}
+                                    >
+                                        {props.cancelText}
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </Grid>
-                    </form>
-                </div>
-            </Fade>
+                    </Grid>
+                </form>
+            </div>
         </DialogContent>
     )
 }

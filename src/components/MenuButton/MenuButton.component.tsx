@@ -253,8 +253,6 @@ export const MenuButton = (props: {
                         songId={parseInt(songId)}
                         handleOnCancelClick={() => handleCloseSongInfoDialog()}
                         handleOnSaveClick={handleSaveSongInfo}
-                        handleClosed={() => handleCloseSongInfoDialog()}
-                        dialogOpen={songInfoDialogIsOpen}
                         saveText={t("Modal.save")}
                         cancelText={t("Modal.cancel")}
                         headerText={t("MenuButton.details")}

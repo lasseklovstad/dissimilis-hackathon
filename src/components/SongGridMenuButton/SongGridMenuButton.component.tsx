@@ -146,14 +146,14 @@ export const SongGridMenuButton = (props: {
                     <MenuItem onClick={() => handleClose("open")}>
                         {t("DashboardView.open")}
                     </MenuItem>
-                    <MenuItem onClick={() => handleClose("info")}>
-                        {t("MenuButton.details")}
-                    </MenuItem>
                     <MenuItem onClick={() => handleClose("copy")}>
                         {t("DashboardView.duplicate")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("delete")}>
                         {t("DashboardView.delete")}
+                    </MenuItem>
+                    <MenuItem onClick={() => handleClose("info")}>
+                        {t("MenuButton.details")}
                     </MenuItem>
                 </Menu>
                 <ChoiceModal
@@ -186,8 +186,6 @@ export const SongGridMenuButton = (props: {
                     songId={songId}
                     handleOnCancelClick={() => handleCloseSongInfoDialog()}
                     handleOnSaveClick={handleSaveSongInfo}
-                    handleClosed={() => handleCloseSongInfoDialog()}
-                    dialogOpen={songInfoDialogIsOpen}
                     saveText={t("Modal.save")}
                     cancelText={t("Modal.cancel")}
                     headerText={t("MenuButton.details")}
