@@ -21,7 +21,7 @@ import {
 } from "../../utils/useApiServiceSongs"
 import { colors } from "../../utils/colors"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
-import { NewVoiceDialog } from "../CustomModal/NewVoiceDialog.component."
+import { NewVoiceDialog } from "../CustomModal/NewVoiceDialog.component"
 
 const useStyles = makeStyles({
     root: {
