@@ -135,7 +135,8 @@
         "customNewInstrument": "Spesification of new voice",
         "duplicateFullSong": "Duplicate of selected voice",
         "duplicateEmptySong": "Duplicate of selected voice with empty bars and chord names", 
-        "duplicateCustomSong": "Custom"
+        "duplicateCustomSong": "Custom",
+        "newVoiceError": "An error occured while creating new voice"
     },
     "Song": {
         "timeSignature": "Time signature",

@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import {
     Box,
+    Dialog,
     IconButton,
     makeStyles,
     Menu,
@@ -22,6 +23,7 @@ import {
 import { colors } from "../../utils/colors"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
 import { NewVoiceDialog } from "../CustomModal/NewVoiceDialog.component"
+import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -102,7 +104,6 @@ export const CreateSongTab = (props: {
         switch (option) {
             case "Modal.duplicateFullSong": {
                 handleDuplicateVoice(title)
-                setNewInstrumentModalIsOpen(false)
                 break
             }
             case "Modal.duplicateEmptySong": {
@@ -263,24 +264,18 @@ export const CreateSongTab = (props: {
                 </MenuItem>
             </Menu>
 
-            <NewVoiceDialog
-                handleOnCancelClick={() => handleClose()}
-                handleOnSaveClick={handleAddInstrument}
-                handleClosed={() => handleClose()}
-                dialogOpen={newInstrumentModalIsOpen}
-                saveText={t("Modal.create")}
-                cancelText={t("Modal.cancel")}
-                headerText={t("Modal.addInstrument")}
-                labelText={t("Modal.nameOfInstrument")}
-                radioButtonLabel={t("Modal.customNewInstrument")}
-                radioButtonOptions={[
-                    "Modal.duplicateFullSong",
-                    "Modal.duplicateEmptySong",
-                    "Modal.duplicateCustomSong",
-                ]}
-                characterLimit={100}
-                isLoading={postVoice.loading}
-            />
+            <Dialog
+                open={newInstrumentModalIsOpen}
+                onClose={() => handleClose()}
+                aria-labelledby={t("Modal.addInstrument")}
+            >
+                <NewVoiceDialog
+                    handleOnCancelClick={() => handleClose()}
+                    handleOnSaveClick={handleAddInstrument}
+                    characterLimit={100}
+                    isLoading={postVoice.loading}
+                />
+            </Dialog>
             <InputModal
                 defaultValue={clickedVoice?.voiceName || ""}
                 handleOnCancelClick={handleClose}
@@ -329,6 +324,16 @@ export const CreateSongTab = (props: {
                     {t("CreateSongTab.deleteVoice")}
                 </MenuItem>
             </Menu>
+            <ErrorDialog
+                isError={postVoice.isError}
+                error={postVoice.error}
+                title={t("Modal.newVoiceError")}
+            />
+            <ErrorDialog
+                isError={duplicateVoice.isError}
+                error={duplicateVoice.error}
+                title={t("Modal.newVoiceError")}
+            />
         </>
     )
 }

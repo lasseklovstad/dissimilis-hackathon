@@ -49,6 +49,22 @@ export const theme = createMuiTheme({
                 },
             },
         },
+        MuiDialog: {
+            paper: {
+                padding: 5,
+            },
+        },
+        MuiDialogTitle: {
+            root: {
+                marginBottom: 8,
+                padding: "0px 0px",
+            },
+        },
+        MuiDialogActions: {
+            root: {
+                padding: "5px 0px",
+            },
+        },
     },
     spacing: 8,
     palette: {

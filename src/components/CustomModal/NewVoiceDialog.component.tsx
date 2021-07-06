@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react"
 import {
-    Backdrop,
     CircularProgress,
-    Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    Fade,
     Grid,
     makeStyles,
     TextField,
@@ -18,23 +15,9 @@ import { DialogButton } from "../CustomModalComponents/DialogButton.components"
 
 const useStyles = makeStyles((theme) => {
     return {
-        dialog: {
-            boxShadow: "0 3px 6px 2px rgba(0, 0, 0, 0.1)",
-            height: "auto",
-            borderRadius: 2,
-            padding: "20px",
-            "@media (max-width: 600px)": {
-                width: "80%",
-                padding: "48px",
-            },
-            outline: "none",
-        },
         insertName: {
-            marginBottom: theme.spacing(1),
-            marginTop: theme.spacing(0.1),
-        },
-        title: {
-            marginBottom: theme.spacing(1),
+            marginBottom: theme.spacing(2),
+            marginTop: theme.spacing(1),
         },
         container: {
             width: "100%",
@@ -54,14 +37,6 @@ export const NewVoiceDialog = (props: {
     defaultValue?: string
     handleOnSaveClick: (value: string, option: string) => void
     handleOnCancelClick: () => void
-    dialogOpen: boolean
-    handleClosed: () => void
-    saveText: string
-    cancelText: string
-    headerText: string
-    labelText: string
-    radioButtonLabel: string
-    radioButtonOptions: string[]
     characterLimit?: number
     isLoading?: boolean
 }) => {
@@ -69,14 +44,6 @@ export const NewVoiceDialog = (props: {
         defaultValue,
         handleOnSaveClick,
         handleOnCancelClick,
-        dialogOpen,
-        handleClosed,
-        saveText,
-        cancelText,
-        headerText,
-        labelText,
-        radioButtonLabel,
-        radioButtonOptions,
         characterLimit = 250,
         isLoading,
     } = props
@@ -91,7 +58,7 @@ export const NewVoiceDialog = (props: {
     }, [defaultValue])
 
     const [radioButtonValue, setRadioButtonValue] = React.useState(
-        radioButtonOptions[0]
+        "Modal.duplicateFullSong"
     )
 
     const handleChange = (event: {
@@ -101,79 +68,70 @@ export const NewVoiceDialog = (props: {
     }
 
     return (
-        <Dialog
-            open={dialogOpen}
-            onClose={() => handleClosed}
-            aria-labelledby={t(headerText)}
-            BackdropComponent={Backdrop}
-            BackdropProps={{
-                timeout: 240,
-            }}
-        >
-            <Fade in={dialogOpen}>
-                <div className={classes.dialog}>
-                    <form
-                        onSubmit={(event) => {
-                            event.preventDefault()
-                            handleOnSaveClick(textFieldInput, radioButtonValue)
-                        }}
-                    >
-                        <DialogTitle className={classes.title}>
-                            {t(headerText)}
-                        </DialogTitle>
-                        <DialogContent>
-                            <TextField
-                                id="input-modal-textfield"
-                                inputProps={{ maxLength: characterLimit }}
-                                helperText={`${textFieldInput.length}/${characterLimit}`}
-                                className={classes.insertName}
-                                autoFocus
-                                value={textFieldInput}
-                                variant="filled"
-                                onChange={(e) => {
-                                    setTextFieldInput(e.target.value)
-                                }}
-                                label={labelText}
-                                style={{ width: "100%" }}
-                            />
-                            <RadioButtons
-                                radioButtonLabel={radioButtonLabel}
-                                radioButtonOptions={radioButtonOptions}
-                                radioButtonValue={radioButtonValue}
-                                handleChange={handleChange}
-                            />
-                        </DialogContent>
+        <DialogContent>
+            <div>
+                <form
+                    onSubmit={(event) => {
+                        event.preventDefault()
+                        handleOnSaveClick(textFieldInput, radioButtonValue)
+                    }}
+                >
+                    <DialogTitle>{t("Modal.addInstrument")}</DialogTitle>
 
-                        <DialogActions>
-                            <Grid container>
-                                {isLoading ? (
-                                    <Grid container className={classes.loading}>
-                                        <CircularProgress size={24} />
-                                    </Grid>
-                                ) : (
-                                    <Grid item>
-                                        <DialogButton
-                                            disabled={!textFieldInput.trim()}
-                                            buttonText={saveText}
-                                            isCancelButton={false}
-                                        />
-                                    </Grid>
-                                )}
+                    <TextField
+                        id="input-modal-textfield"
+                        inputProps={{ maxLength: characterLimit }}
+                        helperText={`${textFieldInput.length}/${characterLimit}`}
+                        className={classes.insertName}
+                        autoFocus
+                        value={textFieldInput}
+                        variant="filled"
+                        onChange={(e) => {
+                            setTextFieldInput(e.target.value)
+                        }}
+                        label={t("Modal.nameOfInstrument")}
+                        style={{ width: "100%" }}
+                    />
+                    <RadioButtons
+                        radioButtonLabel={t("Modal.customNewInstrument")}
+                        radioButtonOptions={[
+                            "Modal.duplicateFullSong",
+                            "Modal.duplicateEmptySong",
+                            "Modal.duplicateCustomSong",
+                        ]}
+                        radioButtonValue={radioButtonValue}
+                        handleChange={handleChange}
+                    />
+
+                    <DialogActions>
+                        <Grid container>
+                            {isLoading ? (
+                                <Grid container className={classes.loading}>
+                                    <CircularProgress size={24} />
+                                </Grid>
+                            ) : (
                                 <Grid item>
                                     <DialogButton
-                                        buttonText={cancelText}
-                                        onClick={() => {
-                                            handleOnCancelClick()
-                                            setTextFieldInput("")
-                                        }}
-                                        isCancelButton
+                                        disabled={!textFieldInput.trim()}
+                                        buttonText={t("Modal.create")}
+                                        isCancelButton={false}
                                     />
                                 </Grid>
+                            )}
+                            <Grid item>
+                                <DialogButton
+                                    buttonText={t("Modal.cancel")}
+                                    onClick={() => {
+                                        handleOnCancelClick()
+                                        setTextFieldInput("")
+                                    }}
+                                    isCancelButton
+                                />
                             </Grid>
-                        </DialogActions>
-                    </form>
-                </div>
-            </Fade>
-        </Dialog>
+                        </Grid>
+                    </DialogActions>
+                </form>
+            </div>
+        </DialogContent>
     )
 }

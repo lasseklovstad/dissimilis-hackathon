@@ -3,23 +3,23 @@ import {
     FormControl,
     FormControlLabel,
     makeStyles,
-    Radio,
     RadioGroup,
-    RadioProps,
     Typography,
 } from "@material-ui/core"
 import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
+import { theme } from "../../theme"
+import { StyledRadio } from "./StyledRadio.component"
 
 const useStyles = makeStyles({
     subtitle: {
         fontWeight: "bold",
-        marginBottom: "5px",
+        marginBottom: theme.spacing(1),
     },
     radioButtonGroup: {
         color: colors.black,
-        marginBottom: "24px",
-        marginTop: "12px",
+        marginBottom: theme.spacing(3),
+        marginTop: theme.spacing(2),
     },
     root: {
         "&:hover": {
@@ -36,22 +36,6 @@ const useStyles = makeStyles({
         "input:hover ~ &": {
             backgroundColor: colors.gray_200,
         },
-    },
-    checkedRadioButton: {
-        backgroundColor: colors.gray_500,
-        backgroundImage:
-            "linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))",
-        borderRadius: "50%",
-        "&:before": {
-            display: "block",
-            width: 16,
-            height: 16,
-            backgroundImage: "radial-gradient(#fff,#fff 28%,transparent 32%)",
-            content: '""',
-        },
-    },
-    focusedRadioButton: {
-        boxShadow: `0 0 0 3px ${colors.focus}`,
     },
 })
 
@@ -72,22 +56,6 @@ export const RadioButtons = (props: {
     const classes = useStyles()
     const { t } = useTranslation()
 
-    const StyledRadio = function (props: RadioProps) {
-        const classes = useStyles()
-
-        return (
-            <Radio
-                className={classes.root}
-                disableFocusRipple
-                color="default"
-                checkedIcon={<span className={classes.checkedRadioButton} />}
-                icon={<span className={classes.radioButton} />}
-                focusVisibleClassName={classes.focusedRadioButton}
-                {...props}
-            />
-        )
-    }
-
     return (
         <div className={classes.radioButtonGroup}>
             <Typography className={classes.subtitle}>
@@ -102,6 +70,7 @@ export const RadioButtons = (props: {
                 >
                     {radioButtonOptions.map((option) => (
                         <FormControlLabel
+                            key={option}
                             value={option}
                             checked={option === radioButtonValue}
                             control={<StyledRadio />}
