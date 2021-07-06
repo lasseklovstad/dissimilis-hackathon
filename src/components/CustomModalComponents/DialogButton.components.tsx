@@ -21,27 +21,36 @@ export const DialogButton = (props: {
     onClick?: () => void
     isCancelButton: boolean
 }) => {
-    const {
-        disabled = true,
-        buttonText,
-        onClick,
-        isCancelButton: buttonType,
-    } = props
+    const { disabled = false, buttonText, onClick, isCancelButton } = props
     const classes = useStyles()
 
     return (
         <div>
-            {buttonType && onClick !== undefined ? (
-                <Button
-                    className={classes.button}
-                    size="large"
-                    variant="outlined"
-                    onClick={() => {
-                        onClick()
-                    }}
-                >
-                    {buttonText}
-                </Button>
+            {onClick !== undefined ? (
+                isCancelButton ? (
+                    <Button
+                        className={classes.button}
+                        size="large"
+                        variant="outlined"
+                        onClick={() => {
+                            onClick()
+                        }}
+                    >
+                        {buttonText}
+                    </Button>
+                ) : (
+                    <Button
+                        className={classes.button}
+                        size="large"
+                        variant="contained"
+                        onClick={() => {
+                            onClick()
+                        }}
+                        disabled={disabled}
+                    >
+                        {buttonText}
+                    </Button>
+                )
             ) : (
                 <Button
                     className={classes.button}

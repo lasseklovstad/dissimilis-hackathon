@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import {
     Backdrop,
-    Button,
     Fade,
     FormControl,
     Grid,
@@ -15,7 +14,7 @@ import {
 } from "@material-ui/core"
 
 import { useTranslation } from "react-i18next"
-import { colors } from "../../utils/colors"
+import { DialogButton } from "../CustomModalComponents/DialogButton.components"
 
 const useStyles = makeStyles({
     modal: {
@@ -34,14 +33,7 @@ const useStyles = makeStyles({
     insertName: {
         marginBottom: "24px",
     },
-    button: {
-        "&:hover": {
-            backgroundColor: colors.gray_300,
-        },
-        marginRight: "8px",
-        float: "left",
-        position: "relative",
-    },
+
     title: {
         marginBottom: "8px",
     },
@@ -151,31 +143,25 @@ export const TransposeModal = (props: {
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
-                            <Button
-                                className={classes.button}
-                                size="large"
-                                variant="contained"
-                                disabled={!titleInput}
+                            <DialogButton
+                                disabled={!titleInput || !transposeInput}
+                                buttonText={t("Modal.save")}
                                 onClick={() =>
                                     handleOnSaveClick(
                                         titleInput,
                                         transposeInput
                                     )
                                 }
-                            >
-                                {t("Modal.save")}
-                            </Button>
-                            <Button
-                                className={classes.button}
-                                size="large"
-                                variant="outlined"
+                                isCancelButton={false}
+                            />
+                            <DialogButton
+                                buttonText={t("Modal.cancel")}
                                 onClick={() => {
                                     handleOnCancelClick()
                                     setTitleInput("")
                                 }}
-                            >
-                                {t("Modal.cancel")}
-                            </Button>
+                                isCancelButton
+                            />
                         </Grid>
                     </Grid>
                 </div>
