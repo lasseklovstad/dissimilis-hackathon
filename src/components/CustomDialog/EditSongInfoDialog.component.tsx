@@ -42,13 +42,19 @@ const useStyles = makeStyles({
     },
 })
 
-export const SongInfoDialog = (props: {
+export const EditSongInfoDialog = (props: {
     songNameDefaultValue?: string
     arrangerDefaultValue?: string
     composerDefaultValue?: string
     songNotesDefaultValue?: string
-    tempoDefaultValue?: number
-    handleOnSaveClick: (songName: string, arranger: string) => void
+    speedDefaultValue?: number
+    handleOnSaveClick: (
+        songName: string,
+        arranger: string,
+        composer: string,
+        songNotes: string,
+        speed: number
+    ) => void
     handleOnCancelClick: () => void
     dialogOpen: boolean
     handleClosed: () => void
@@ -59,9 +65,9 @@ export const SongInfoDialog = (props: {
     arrangerLabelText: string
     composerLabelText: string
     songNotesLabelText: string
-    tempoLabelText: string
+    speedLabelText: string
     characterLimit?: number
-    numberCharacterLimit?: number
+    numberLimit?: number
     isLoading?: boolean
 }) => {
     const classes = useStyles()
@@ -69,14 +75,12 @@ export const SongInfoDialog = (props: {
     const [arrangerTextFieldInput, setArrangerTextFieldInput] = useState("")
     const [composerTextFieldInput, setComposerTextFieldInput] = useState("")
     const [songNotesTextFieldInput, setSongNotesTextFieldInput] = useState("")
-    const [tempoTextFieldInput, setTempoTextFieldInput] = useState("")
+    const [speedTextFieldInput, setSpeedTextFieldInput] = useState("")
 
     const CHARACTER_LIMIT =
         props.characterLimit === undefined ? 250 : props.characterLimit
     const NUMBER_CHARACTER_LIMIT =
-        props.numberCharacterLimit === undefined
-            ? 5
-            : props.numberCharacterLimit
+        props.numberLimit === undefined ? 256 : props.numberLimit
 
     useEffect(() => {
         if (props.songNameDefaultValue) {
@@ -103,10 +107,10 @@ export const SongInfoDialog = (props: {
     }, [props.songNotesDefaultValue])
 
     useEffect(() => {
-        if (props.tempoDefaultValue) {
-            setTempoTextFieldInput(props.tempoDefaultValue.toString())
+        if (props.speedDefaultValue) {
+            setSpeedTextFieldInput(props.speedDefaultValue.toString())
         }
-    }, [props.tempoDefaultValue])
+    }, [props.speedDefaultValue])
 
     return (
         <Dialog
@@ -130,7 +134,10 @@ export const SongInfoDialog = (props: {
                                 event.preventDefault()
                                 props.handleOnSaveClick(
                                     songNameTextFieldInput,
-                                    arrangerTextFieldInput
+                                    arrangerTextFieldInput,
+                                    composerTextFieldInput,
+                                    songNotesTextFieldInput,
+                                    parseInt(speedTextFieldInput)
                                 )
                             }}
                         >
@@ -216,25 +223,20 @@ export const SongInfoDialog = (props: {
                                     />
                                     <TextField
                                         id="song-info-modal-song-speed-textfield"
-                                        helperText={`${tempoTextFieldInput.length}/${NUMBER_CHARACTER_LIMIT}`}
+                                        helperText={`${speedTextFieldInput.length}/${NUMBER_CHARACTER_LIMIT}`}
                                         autoFocus
-                                        value={tempoTextFieldInput}
+                                        value={speedTextFieldInput}
                                         variant="filled"
                                         onChange={(e) => {
                                             e.target.value = Math.max(
                                                 0,
                                                 parseInt(e.target.value)
-                                            )
-                                                .toString()
-                                                .slice(
-                                                    0,
-                                                    NUMBER_CHARACTER_LIMIT
-                                                )
-                                            setTempoTextFieldInput(
+                                            ).toString()
+                                            setSpeedTextFieldInput(
                                                 e.target.value
                                             )
                                         }}
-                                        label={props.tempoLabelText}
+                                        label={props.speedLabelText}
                                         style={{ width: "100%" }}
                                         type="number"
                                     />

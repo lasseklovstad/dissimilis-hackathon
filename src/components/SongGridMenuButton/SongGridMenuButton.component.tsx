@@ -10,7 +10,7 @@ import {
 } from "../../utils/useApiServiceSongs"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
 import { InputModal } from "../CustomModal/InputModal.component"
-import { SongInfoDialog } from "../CustomDialog/SongInfoDialog.component"
+import { EditSongInfoDialog } from "../CustomDialog/EditSongInfoDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
@@ -62,9 +62,20 @@ export const SongGridMenuButton = (props: {
         }
     }
 
-    const handleSaveSongInfo = async (title: string) => {
+    const handleSaveSongInfo = async (
+        title: string,
+        arrangerName: string,
+        composer: string,
+        songNotes: string,
+        speed: number // tempo is called speed in backend
+    ) => {
+        console.log("Update " + title + ", comp: " + composer)
         const { error, result } = await putSong.run({
             title,
+            arrangerName,
+            composer,
+            songNotes,
+            speed,
         })
 
         if (!error && result) {
@@ -167,7 +178,7 @@ export const SongGridMenuButton = (props: {
                 labelText={t("Modal.newVoiceName")}
                 isLoading={duplicateSong.loading}
             />
-            <SongInfoDialog
+            <EditSongInfoDialog
                 handleOnCancelClick={() => handleCloseSongInfoDialog()}
                 handleOnSaveClick={handleSaveSongInfo}
                 handleClosed={() => handleCloseSongInfoDialog()}
@@ -179,14 +190,14 @@ export const SongGridMenuButton = (props: {
                 arrangerLabelText={t("Song.arranger")}
                 composerLabelText={t("Song.composer")}
                 songNotesLabelText={t("Song.songNotes")}
-                tempoLabelText={t("Song.tempo")}
+                speedLabelText={t("Song.tempo")}
                 isLoading={putSong.loading}
                 // Må slappe inn no context her for å få henta verdiene
                 songNameDefaultValue={"Title"} // need song title reference
                 //arrangerDefaultValue={"Navnesen"} // need arranger reference
                 //composerDefaultValue={"Johan Gambolputty"} // need composer reference
                 //songNotesDefaultValue={"This is a song made by..."} // need song notes reference
-                //tempoDefaultValue={120} // need tempo reference
+                //speedDefaultValue={120} // need tempo reference
             />
             <Loading
                 isLoading={deleteSong.loading}
