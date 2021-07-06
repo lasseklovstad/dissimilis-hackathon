@@ -1,7 +1,7 @@
 import { IBar } from "./IBar"
 
 export interface IVoice {
-    title: string
+    voiceName: string
     partNumber: number
     bars: IBar[]
     songVoiceId: number

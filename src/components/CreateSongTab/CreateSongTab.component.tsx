@@ -101,22 +101,13 @@ export const CreateSongTab = (props: {
         )
         switch (option) {
             case "Modal.duplicateFullSong": {
-                /*setVoiceTitle(title)
-                const { error, result } = await duplicateVoice.run({
-                    instrument: title,
-                    voiceNumber: voiceNumber + 1,
-                })
-                if (!error && result) {
-                    onAddVoice(result.data)
-                    setNewInstrumentModalIsOpen(false)
-                }*/
-                handleDuplicateFullVoice(title)
+                handleDuplicateVoice(title)
                 setNewInstrumentModalIsOpen(false)
                 break
             }
             case "Modal.duplicateEmptySong": {
                 const { error, result } = await postVoice.run({
-                    instrument: title,
+                    voiceName: title,
                     voiceNumber: voiceNumber + 1,
                 })
                 if (!error && result) {
@@ -132,17 +123,14 @@ export const CreateSongTab = (props: {
         }
     }
 
-
-
-    const handleDuplicateFullVoice = async (title: string) => {
-
-        //MÅ SETTE VOICE NAVN TIL NAVN + TALL HVIS TITLE ER ""
+    const handleDuplicateVoice = async (voiceName: string) => {
         const { error, result } = await duplicateVoice.run({
-            title
+            voiceName,
         })
 
         if (!error && result) {
             onAddVoice(result.data)
+            setNewInstrumentModalIsOpen(false)
         }
     }
 
@@ -188,16 +176,6 @@ export const CreateSongTab = (props: {
         })
     }
 
-    const handleDuplicateInstrument = async () => {
-
-        //MÅ SETTE VOICE NAVN TIL NAVN + TALL HVIS TITLE ER ""
-        const { error, result } = await duplicateVoice.run()
-
-        if (!error && result) {
-            onAddVoice(result.data)
-        }
-    }
-
     return (
         <>
             <Box display="flex" flexWrap="wrap" alignItems="center">
@@ -214,7 +192,7 @@ export const CreateSongTab = (props: {
                     {voices.map((voice) => {
                         const label = voice.isMain
                             ? t("CreateSongTab.song")
-                            : voice.title
+                            : voice.voiceName
                         return (
                             <Tab
                                 key={voice.songVoiceId}
@@ -283,15 +261,6 @@ export const CreateSongTab = (props: {
                 >
                     {t("CreateSongTab.deleteVoice")}
                 </MenuItem>
-                <MenuItem
-                    disabled={selectedVoice?.isMain}
-                    onClick={() => {
-                        handleDuplicateInstrument()
-                        setAnchorEl(null)
-                    }}
-                >
-                    {t("CreateSongTab.duplicateVoice")}
-                </MenuItem>
             </Menu>
 
             <NewVoiceDialog
@@ -313,7 +282,7 @@ export const CreateSongTab = (props: {
                 isLoading={postVoice.loading}
             />
             <InputModal
-                defaultValue={clickedVoice?.title || ""}
+                defaultValue={clickedVoice?.voiceName || ""}
                 handleOnCancelClick={handleClose}
                 handleOnSaveClick={handleChangeVoiceTitle}
                 handleClosed={handleClose}
@@ -358,14 +327,6 @@ export const CreateSongTab = (props: {
                     }}
                 >
                     {t("CreateSongTab.deleteVoice")}
-                </MenuItem>
-                <MenuItem
-                    onClick={() => {
-                        handleDuplicateInstrument()
-                        setRightClickMenuPosition(undefined)
-                    }}
-                >
-                    {t("CreateSongTab.duplicateVoice")}
                 </MenuItem>
             </Menu>
         </>
