@@ -133,6 +133,7 @@ export const SongNavBar = (props: {
                         user={props.user}
                         setBarEditMode={props.setBarEditMode}
                         barEditMode={props.barEditMode}
+                        updateSongTitle={setTitle}
                         onLogout={logout.run}
                     />
                 </Box>

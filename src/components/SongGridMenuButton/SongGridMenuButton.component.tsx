@@ -18,6 +18,7 @@ export const SongGridMenuButton = (props: {
     songId: number
     link: string
     removeSong: (songId: number) => void
+    renameSong: (songId: number, title: string) => void
 }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] =
@@ -80,7 +81,7 @@ export const SongGridMenuButton = (props: {
 
         if (!error && result) {
             setSongInfoDialogIsOpen(false)
-            // How to refresh?
+            props.renameSong(songId, title)
         }
     }
 

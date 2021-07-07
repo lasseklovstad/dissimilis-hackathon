@@ -122,6 +122,28 @@ export const DashboardView = () => {
         )
     }
 
+    const renameSongInRecentSongs = (songId: number, title: string) => {
+        setRecentSongs(
+            recentSongs?.map((song: ISongIndex) => {
+                if (song.songId === songId) {
+                    song.title = title
+                }
+                return song
+            })
+        )
+    }
+
+    const renameSongInFilteredSongs = (songId: number, title: string) => {
+        setFilteredSongs(
+            recentSongs?.map((song: ISongIndex) => {
+                if (song.songId === songId) {
+                    song.title = title
+                }
+                return song
+            })
+        )
+    }
+
     const handleAddSong = async (title: string) => {
         setAddSongModalIsOpen(false)
         const { result } = await postSong.run({ ...timeSignature, title })
@@ -175,6 +197,7 @@ export const DashboardView = () => {
                                 title={t("DashboardView.newSongLabel")}
                                 songs={undefined}
                                 removeSong={() => undefined}
+                                renameSong={() => undefined}
                                 isLoading={false}
                             >
                                 {musicTacts.map((song) => (
@@ -194,6 +217,7 @@ export const DashboardView = () => {
                                 title={t("DashboardView.recentSongLabel")}
                                 songs={recentSongs}
                                 removeSong={removeSongFromRecentSongs}
+                                renameSong={renameSongInRecentSongs}
                                 isLoading={getRecentSongs.loading}
                             >
                                 <DashboardLibraryButton
@@ -219,6 +243,7 @@ export const DashboardView = () => {
                             title={t("DashboardView.searchSongLabel")}
                             songs={filteredSongs}
                             removeSong={removeSongFromFilteredSongs}
+                            renameSong={renameSongInFilteredSongs}
                             isLoading={getFilteredSongs.loading}
                             orderTerm={orderTerm}
                             changeOrderTerm={handleChangeOrderTerm}

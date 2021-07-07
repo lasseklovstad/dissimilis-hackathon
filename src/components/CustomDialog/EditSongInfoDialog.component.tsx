@@ -79,7 +79,6 @@ export const EditSongInfoDialog = (props: {
         songId.toString()
     )
 
-    // Vet ikke om dette går an
     const isLoadingGet = getSongMetadata.loading
 
     const CHARACTER_LIMIT =
@@ -126,25 +125,25 @@ export const EditSongInfoDialog = (props: {
                     }}
                 >
                     <Grid container>
-                        {/* 
-                            <Typography className={classes.title} variant="h2">
-                                {props.headerText}
-                            </Typography>
-                            */}
+                        <Typography className={classes.title} variant="h2">
+                            {props.headerText}
+                        </Typography>
                         <Grid item className={classes.insertName} xs={12}>
                             <TextField
                                 id="song-info-modal-song-name-textfield"
                                 inputProps={{
                                     maxLength: CHARACTER_LIMIT,
                                     style: {
-                                        fontSize: "1.5rem",
+                                        fontSize: "1.25rem",
                                     },
                                 }}
                                 autoFocus
+                                variant="filled"
                                 value={songNameTextFieldInput}
                                 onChange={(e) => {
                                     setSongNameTextFieldInput(e.target.value)
                                 }}
+                                label={props.songNameLabelText}
                                 style={{
                                     width: "100%",
                                 }}
@@ -210,7 +209,7 @@ export const EditSongInfoDialog = (props: {
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container>
-                                {props.isLoadingPatch ? (
+                                {props.isLoadingPatch || isLoadingGet ? (
                                     <Grid container className={classes.loading}>
                                         <CircularProgress size={24} />
                                     </Grid>

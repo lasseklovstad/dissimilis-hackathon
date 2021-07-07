@@ -31,6 +31,7 @@ export const MenuButton = (props: {
     setBarEditMode: () => void
     barEditMode: boolean
     onLogout: () => void
+    updateSongTitle: (title: string) => void
     songTitle: string
 }) => {
     const { songTitle } = props
@@ -155,7 +156,7 @@ export const MenuButton = (props: {
 
         if (!error && result) {
             setSongInfoDialogIsOpen(false)
-            // How to refresh?
+            props.updateSongTitle(title)
         }
     }
 

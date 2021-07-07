@@ -66,6 +66,28 @@ export const LibraryView = () => {
         )
     }
 
+    const renameSongInFilteredSongs = (songId: number, title: string) => {
+        setFilteredSongs(
+            filteredSongs?.map((song: ISongIndex) => {
+                if (song.songId === songId) {
+                    song.title = title
+                }
+                return song
+            })
+        )
+    }
+
+    const renameSongInAllSongs = (songId: number, title: string) => {
+        setAllSongs(
+            allSongs?.map((song: ISongIndex) => {
+                if (song.songId === songId) {
+                    song.title = title
+                }
+                return song
+            })
+        )
+    }
+
     const handleOnChangeSearch = (searchTermParam: string) => {
         setSearchTerm(searchTermParam)
         setLibraryView(false)
@@ -104,6 +126,7 @@ export const LibraryView = () => {
                             title={t("DashboardView.allSongLabel")}
                             songs={allSongs}
                             removeSong={removeSongFromAllSongs}
+                            renameSong={renameSongInAllSongs}
                             isLoading={getAllSongs.loading}
                             orderTerm={orderTerm}
                             changeOrderTerm={handleChangeOrderTerm}
@@ -114,6 +137,7 @@ export const LibraryView = () => {
                             title={t("DashboardView.searchSongLabel")}
                             songs={filteredSongs}
                             removeSong={removeSongFromFilteredSongs}
+                            renameSong={renameSongInFilteredSongs}
                             isLoading={getFilteredSongs.loading}
                             orderTerm={orderTerm}
                             changeOrderTerm={handleChangeOrderTerm}
