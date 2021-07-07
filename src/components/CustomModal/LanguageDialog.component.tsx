@@ -15,7 +15,6 @@ import {
 
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
-import i18n from "../../i18n"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -63,7 +62,6 @@ export const LanguageDialog = (props: {
     const [languageChoice, setLanguageChoice] = useState(userLanguage)
     const { t } = useTranslation()
 
-    console.log(i18n.language)
     const { handleOnCancelClick, handleOnSaveClick } = props
 
     return (
@@ -86,8 +84,8 @@ export const LanguageDialog = (props: {
                                 setLanguageChoice(e.target.value)
                             }}
                         >
-                            <MenuItem value={"nb"}>No</MenuItem>
-                            <MenuItem value={"en"}>En</MenuItem>
+                            <MenuItem value={"nb"}>Norsk</MenuItem>
+                            <MenuItem value={"en"}>English</MenuItem>
                         </Select>
                     </FormControl>
                 </DialogContent>
@@ -98,7 +96,6 @@ export const LanguageDialog = (props: {
                             className={classes.button}
                             size="large"
                             variant="contained"
-                            //disabled={!languageChoice}
                             onClick={() => handleOnSaveClick(languageChoice)}
                         >
                             {t("Modal.save")}
