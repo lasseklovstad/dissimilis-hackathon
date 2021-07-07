@@ -102,7 +102,9 @@
         "save": "Save",
         "delete": "Delete song",
         "editBars": "Edit bars",
-        "cancelEditBars": "Stop editing bars"
+        "cancelEditBars": "Stop editing bars",
+        "changeLanguage": "Change language",
+        "languageDescription" : "Select a language from the list"
     },
     "Modal": {
         "nameOfSong": "Name of song",

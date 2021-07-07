@@ -16,6 +16,7 @@ import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg
 import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
+import { DashboardMenu } from "../DashboardTopBar/DashboardMenu.component"
 
 const useStyles = makeStyles(() => ({
     background: {
@@ -102,6 +103,9 @@ export const DashboardTopBar = (props: {
                                 }
                                 value={searchTerm}
                             />
+                        </Grid>
+                        <Grid item xs={1}>
+                            <DashboardMenu />
                         </Grid>
                     </Grid>
                 </Box>

@@ -7,14 +7,13 @@ const resources: Resource = {
     en: {
         translation: translationEN,
     },
-    no: {
+    nb: {
         translation: translationNO,
     },
 }
 
 i18n.use(initReactI18next).init({
     resources,
-    lng: "no",
     fallbackLng: "en",
 })
 
