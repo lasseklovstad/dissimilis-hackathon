@@ -13,32 +13,40 @@ import { colors } from "../../utils/colors"
 import { useGetSongMetadata } from "../../utils/useApiServiceSongs"
 import { useTranslation } from "react-i18next"
 
-const useStyles = makeStyles({
-    insertName: {
-        marginBottom: "24px",
-    },
-    button: {
-        "&:hover": {
-            backgroundColor: colors.gray_300,
+const useStyles = makeStyles((theme) => {
+    return {
+        gridItem: {
+            marginBottom: theme.spacing(4),
         },
-        marginRight: "8px",
-        float: "left",
-        position: "relative",
-    },
-    title: {
-        marginBottom: "8px",
-    },
-    container: {
-        width: "100%",
-    },
-    loading: {
-        margin: "8px",
-        marginRight: "16px",
-        justifyContent: "center",
-        alignContent: "center",
-        minWidth: "64px",
-        maxWidth: "64px",
-    },
+        textFields: {
+            marginBottom: theme.spacing(0.5),
+        },
+        button: {
+            "&:hover": {
+                backgroundColor: colors.gray_300,
+            },
+            marginRight: "8px",
+            float: "left",
+            position: "relative",
+        },
+        arranger: {
+            marginBottom: theme.spacing(4),
+        },
+        title: {
+            marginBottom: "8px",
+        },
+        container: {
+            width: "100%",
+        },
+        loading: {
+            margin: "8px",
+            marginRight: "16px",
+            justifyContent: "center",
+            alignContent: "center",
+            minWidth: "64px",
+            maxWidth: "64px",
+        },
+    }
 })
 
 export const EditSongInfoDialog = (props: {
@@ -126,15 +134,13 @@ export const EditSongInfoDialog = (props: {
                         <Typography className={classes.title} variant="h2">
                             {props.headerText}
                         </Typography>
-                        <Grid item className={classes.insertName} xs={12}>
+                        <Grid className={classes.gridItem} item xs={12}>
                             <TextField
                                 id="song-info-modal-song-name-textfield"
                                 inputProps={{
                                     maxLength: CHARACTER_LIMIT,
-                                    style: {
-                                        fontSize: "1.25rem",
-                                    },
                                 }}
+                                helperText={`${songNameTextFieldInput.length}/${CHARACTER_LIMIT}`}
                                 autoFocus
                                 variant="filled"
                                 value={songNameTextFieldInput}
@@ -146,7 +152,7 @@ export const EditSongInfoDialog = (props: {
                                     width: "100%",
                                 }}
                             />
-                            <Typography gutterBottom>
+                            <Typography className={classes.arranger}>
                                 {t("Song.arranger") +
                                     ": " +
                                     arrangerTextFieldInput}
@@ -157,6 +163,7 @@ export const EditSongInfoDialog = (props: {
                                     maxLength: CHARACTER_LIMIT,
                                 }}
                                 helperText={`${composerTextFieldInput.length}/${CHARACTER_LIMIT}`}
+                                className={classes.textFields}
                                 autoFocus
                                 value={composerTextFieldInput}
                                 variant="filled"
@@ -167,26 +174,11 @@ export const EditSongInfoDialog = (props: {
                                 style={{ width: "100%" }}
                             />
                             <TextField
-                                id="song-info-modal-song-notes-textfield"
-                                inputProps={{
-                                    maxLength: CHARACTER_LIMIT,
-                                }}
-                                helperText={`${songNotesTextFieldInput.length}/${CHARACTER_LIMIT}`}
-                                autoFocus
-                                value={songNotesTextFieldInput}
-                                variant="filled"
-                                onChange={(e) => {
-                                    setSongNotesTextFieldInput(e.target.value)
-                                }}
-                                label={props.songNotesLabelText}
-                                style={{ width: "100%" }}
-                            />
-                            <TextField
                                 id="song-info-modal-song-speed-textfield"
-                                //how to signify max value
-                                //helperText={`${speedTextFieldInput.length}/${NUMBER_CHARACTER_LIMIT}`}
                                 autoFocus
                                 value={speedTextFieldInput}
+                                className={classes.textFields}
+                                helperText={t("Song.bpm")}
                                 variant="filled"
                                 onChange={(e) => {
                                     e.target.value = Math.max(
@@ -203,6 +195,23 @@ export const EditSongInfoDialog = (props: {
                                 label={props.speedLabelText}
                                 style={{ width: "100%" }}
                                 type="number"
+                            />
+                            <TextField
+                                id="song-info-modal-song-notes-textfield"
+                                inputProps={{
+                                    maxLength: CHARACTER_LIMIT,
+                                }}
+                                className={classes.textFields}
+                                helperText={`${songNotesTextFieldInput.length}/${CHARACTER_LIMIT}`}
+                                autoFocus
+                                multiline
+                                value={songNotesTextFieldInput}
+                                variant="filled"
+                                onChange={(e) => {
+                                    setSongNotesTextFieldInput(e.target.value)
+                                }}
+                                label={props.songNotesLabelText}
+                                style={{ width: "100%" }}
                             />
                         </Grid>
                         <Grid item xs={12}>

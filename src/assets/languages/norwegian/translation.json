@@ -104,7 +104,7 @@
         "editBars": "Rediger takter",
         "showInfo": "Vis info",
         "cancelEditBars": "Avslutt redigering av takter",
-        "details": "Detaljer"
+        "details": "Informasjon om partitur"
     },
     "Modal": {
         "nameOfSong": "Navn på sang",
@@ -143,6 +143,7 @@
         "timeSignature": "Taktart",
         "bar": "Takt",
         "barNumber": "Taktnummer",
-        "barMenu": "Takt meny"
+        "barMenu": "Takt meny",
+        "bpm": "BPM"
     }
 }

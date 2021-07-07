@@ -103,7 +103,7 @@
         "delete": "Delete song",
         "editBars": "Edit bars",
         "cancelEditBars": "Stop editing bars",
-        "details": "Details"
+        "details": "Information about song"
     },
     "Modal": {
         "nameOfSong": "Name of song",
@@ -142,6 +142,7 @@
         "timeSignature": "Time signature",
         "bar": "Bar",
         "barNumber": "Bar number",
-        "barMenu": "Bar menu"
+        "barMenu": "Bar menu",
+        "bpm": "BPM"
     }
 }
