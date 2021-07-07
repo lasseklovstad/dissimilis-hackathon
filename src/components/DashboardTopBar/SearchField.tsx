@@ -19,8 +19,8 @@ export const SearchField = (props: { searchTermInit?: string }) => {
         <div>
             <TextField
                 id="standard-basic"
-                label={searchPlaceholder}
-                variant="filled"
+                variant="outlined"
+                placeholder={searchPlaceholder}
                 value={searchTerm}
                 onFocus={() => {}}
                 onBlur={() => {}}
@@ -28,7 +28,6 @@ export const SearchField = (props: { searchTermInit?: string }) => {
                     setSeachTerm(event.target.value)
                 }}
                 InputProps={{
-                    disableUnderline: true,
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton
@@ -38,7 +37,6 @@ export const SearchField = (props: { searchTermInit?: string }) => {
                             >
                                 <SearchIcon />
                             </IconButton>
-                            ,
                             <IconButton
                                 aria-label="clear"
                                 onClick={() => {

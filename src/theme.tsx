@@ -46,6 +46,14 @@ export const theme = createMuiTheme({
                 },
             },
         },
+        MuiOutlinedInput: {
+            root: {
+                "&:hover:not($disabled):not($focused):not($error) $notchedOutline":
+                    {
+                        borderColor: `${colors.gray_500_dark}`,
+                    },
+            },
+        },
         MuiCardActionArea: {
             root: {
                 "&:focus $focusHighlight": {

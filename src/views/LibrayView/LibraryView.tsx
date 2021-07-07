@@ -74,7 +74,11 @@ export const LibraryView = () => {
                         </Box>
                     </Grid>
                     <SongGrid
-                        title={t("LibraryView.heading")}
+                        title={
+                            searchTerm
+                                ? t("LibraryView.searchHeading") + searchTerm
+                                : t("LibraryView.defaultHeading")
+                        }
                         songs={filteredSongs}
                         removeSong={removeSongFromFilteredSongs}
                         isLoading={getFilteredSongs.loading}

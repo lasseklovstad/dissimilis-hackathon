@@ -19,7 +19,8 @@
         "song": "Song"
     },
     "LibraryView": {
-        "heading": "Library"
+        "defaultHeading": "Library",
+        "searchHeading": "Seach: "
     },
     "BarContainer": {
         "deleteBar": "Delete bar",

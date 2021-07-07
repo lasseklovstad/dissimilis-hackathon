@@ -17,7 +17,8 @@
         "song": "Sang"
     },
     "LibraryView": {
-        "heading": "Bibliotek"
+        "defaultHeading": "Bibliotek",
+        "searchHeading": "Søk: "
     },
     "BarContainer": {
         "deleteBar": "Slett takt",
