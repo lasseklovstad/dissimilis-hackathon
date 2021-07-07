@@ -2,8 +2,6 @@
     "DashboardView": {
         "newSongLabel": "New song",
         "recentSongLabel": "Your last five songs",
-        "searchSongLabel": "Search",
-        "allSongLabel": "All songs",
         "measure": "measure",
         "search": "Search",
         "altButterflyButtonProp": "Image of Dissimilis' butterfly-logo",
@@ -18,6 +16,9 @@
         "date": "Date changed",
         "user": "User",
         "song": "Song"
+    },
+    "LibraryView": {
+        "heading": "Library"
     },
     "BarContainer": {
         "deleteBar": "Delete bar",

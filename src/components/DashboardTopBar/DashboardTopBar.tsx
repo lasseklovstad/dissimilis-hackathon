@@ -1,11 +1,10 @@
-import React, { ChangeEvent, useState } from "react"
+import React from "react"
 import {
     AppBar,
     Box,
     Grid,
     Hidden,
     makeStyles,
-    TextField,
     Typography,
     useMediaQuery,
     IconButton,
@@ -26,7 +25,6 @@ const useStyles = makeStyles(() => ({
 }))
 
 export const DashboardTopBar = (props: {
-    onChange: (txt: string) => void
     onGoHome?: () => void
     searchTerm?: string
 }) => {
@@ -82,9 +80,7 @@ export const DashboardTopBar = (props: {
                             </Grid>
                         </Grid>
                         <Grid item xs={12} sm={3} md={4}>
-                            <SearchField 
-                                onChange={(input: string) => console.log(input)}
-                                searchTerm={searchTerm}/>
+                            <SearchField searchTermInit={searchTerm} />
                         </Grid>
                     </Grid>
                 </Box>

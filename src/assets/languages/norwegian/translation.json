@@ -2,8 +2,6 @@
     "DashboardView": {
         "newSongLabel": "Nytt partitur",
         "recentSongLabel": "Dine siste fem sanger",
-        "searchSongLabel": "Søk",
-        "allSongLabel": "Alle sanger",
         "measure": "takt",
         "search": "Søk",
         "altButterflyButtonProp": "Bilde av Dissimilis' sommerfugl",
@@ -16,6 +14,9 @@
         "date": "Dato endret",
         "user": "Bruker",
         "song": "Sang"
+    },
+    "LibraryView": {
+        "heading": "Bibliotek"
     },
     "BarContainer": {
         "deleteBar": "Slett takt",
