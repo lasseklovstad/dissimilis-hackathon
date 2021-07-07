@@ -27,6 +27,13 @@ export const SearchField = (props: { searchTermInit?: string }) => {
                 onChange={(event) => {
                     setSeachTerm(event.target.value)
                 }}
+                onKeyPress={(ev) => {
+                    console.log(`Pressed keyCode ${ev.key}`)
+                    if (ev.key === "Enter") {
+                        handleOnClick()
+                        ev.preventDefault()
+                    }
+                }}
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
