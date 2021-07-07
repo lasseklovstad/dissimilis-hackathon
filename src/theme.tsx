@@ -22,7 +22,6 @@ export const theme = createMuiTheme({
             root: {
                 "&:focus": {
                     boxShadow: `0 0 0 4px ${colors.focus}`,
-                    borderRadius: 4,
                 },
             },
         },
@@ -30,7 +29,6 @@ export const theme = createMuiTheme({
             root: {
                 "&:focus": {
                     boxShadow: `0 0 0 4px ${colors.focus}`,
-                    borderRadius: 4,
                 },
             },
         },
