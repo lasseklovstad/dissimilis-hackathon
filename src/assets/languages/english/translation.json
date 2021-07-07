@@ -2,6 +2,7 @@
     "DashboardView": {
         "newSongLabel": "New song",
         "recentSongLabel": "Your last five songs",
+        "allSongLabel": "All songs",
         "measure": "measure",
         "search": "Search",
         "altButterflyButtonProp": "Image of Dissimilis' butterfly-logo",

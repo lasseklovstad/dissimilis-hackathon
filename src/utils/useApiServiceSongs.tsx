@@ -93,12 +93,14 @@ export const useGetAllSongs = (orderTerm: string, orderDescending: boolean) => {
 export const useGetFilteredSongs = (
     title: string,
     orderTerm: string,
-    orderDescending: boolean
+    orderDescending: boolean,
+    numberOfResults?: string
 ) => {
     const url = "song/search"
     const initialData: ISongIndex[] = []
     const headers = getHeaders()
     const body = {
+        num: numberOfResults,
         title,
         orderBy: orderTerm,
         orderDescending,

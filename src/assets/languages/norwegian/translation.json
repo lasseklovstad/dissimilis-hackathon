@@ -2,6 +2,7 @@
     "DashboardView": {
         "newSongLabel": "Nytt partitur",
         "recentSongLabel": "Dine siste fem sanger",
+        "allSongLabel": "Alle sanger",
         "measure": "takt",
         "search": "Søk",
         "altButterflyButtonProp": "Bilde av Dissimilis' sommerfugl",

@@ -23,11 +23,13 @@ export const LibraryView = () => {
     const url = new URLSearchParams(window.location.search)
     const searchTermUrl = url.get("search")
     const searchTerm = searchTermUrl ? searchTermUrl : ""
+    const numberOfResults = "50"
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
         orderTerm,
-        orderDescending
+        orderDescending,
+        numberOfResults
     )
     const [filteredSongs, setFilteredSongs] = useState<
         ISongIndex[] | undefined
