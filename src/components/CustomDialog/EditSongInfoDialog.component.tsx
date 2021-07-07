@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react"
 import {
     Button,
     CircularProgress,
-    Fade,
     Grid,
     makeStyles,
     DialogContent,
     TextField,
     Typography,
-    DialogContentText,
 } from "@material-ui/core"
 
 import { colors } from "../../utils/colors"
