@@ -77,14 +77,16 @@ export const DashboardTopBar = (props: {
                                     <Loading isLoading={getUser.loading} />
                                     {userInit?.email}
                                 </Typography>
-                                <IconButton
-                                    disableFocusRipple
-                                    onClick={logout.run}
-                                    aria-label={t("LoginView.logout")}
-                                >
-                                    <LogoutIcon />
-                                </IconButton>
                             </Grid>
+                        </Grid>
+                        <Grid container xs={1} alignItems="center">
+                            <IconButton
+                                disableFocusRipple
+                                onClick={logout.run}
+                                aria-label={t("LoginView.logout")}
+                            >
+                                <LogoutIcon />
+                            </IconButton>
                         </Grid>
                         <Grid item xs={12} sm={3} md={searchBarFocus ? 4 : 3}>
                             <TextField
@@ -110,7 +112,6 @@ export const DashboardTopBar = (props: {
                             direction="row"
                             justify="flex-end"
                             alignItems="center"
-                            style={{ height: "100%" }}
                             item
                             xs={1}
                         >
