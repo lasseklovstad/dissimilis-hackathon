@@ -8,3 +8,12 @@ export interface IVoice {
     songId: number
     isMain: boolean
 }
+
+export interface IVoiceDuplicatePost {
+    voiceName: string
+}
+
+export interface IVoicePost {
+    voiceName: string
+    voiceId: number
+}

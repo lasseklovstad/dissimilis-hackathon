@@ -75,8 +75,7 @@ export const CreateSongTab = (props: {
         onUpdateVoice,
         onDeleteVoice,
     } = props
-    const [newInstrumentModalIsOpen, setNewInstrumentModalIsOpen] =
-        useState(false)
+    const [newVoiceModalIsOpen, setNewVoiceModalIsOpen] = useState(false)
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false)
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false)
     const { t } = useTranslation()
@@ -96,7 +95,7 @@ export const CreateSongTab = (props: {
     const history = useHistory()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
-    const handleAddInstrument = async (title: string, option: string) => {
+    const handleAddVoice = async (title: string, option: string) => {
         const voiceNumber = Math.max(
             ...voices.map((voice) => voice.partNumber),
             0
@@ -113,12 +112,12 @@ export const CreateSongTab = (props: {
                 })
                 if (!error && result) {
                     onAddVoice(result.data)
-                    setNewInstrumentModalIsOpen(false)
+                    setNewVoiceModalIsOpen(false)
                 }
                 break
             }
             case "Modal.duplicateCustomSong": {
-                setNewInstrumentModalIsOpen(false)
+                setNewVoiceModalIsOpen(false)
                 break
             }
         }
@@ -131,11 +130,11 @@ export const CreateSongTab = (props: {
 
         if (!error && result) {
             onAddVoice(result.data)
-            setNewInstrumentModalIsOpen(false)
+            setNewVoiceModalIsOpen(false)
         }
     }
 
-    const handleDeleteInstrument = async () => {
+    const handleDeleteVoice = async () => {
         const { error } = await deleteVoice.run()
 
         if (!error && clickedVoice) {
@@ -151,14 +150,14 @@ export const CreateSongTab = (props: {
 
     const handleClose = () => {
         setAnchorEl(null)
-        setNewInstrumentModalIsOpen(false)
+        setNewVoiceModalIsOpen(false)
         setRenameModalIsOpen(false)
         setDeleteModalIsOpen(false)
     }
 
     const handleChangeVoiceTitle = async (voiceTitle: string) => {
         const { error, result } = await putVoice.run({
-            instrument: voiceTitle,
+            voiceTitle: voiceTitle,
             voiceNumber: clickedVoice?.partNumber,
         })
 
@@ -238,11 +237,11 @@ export const CreateSongTab = (props: {
             >
                 <MenuItem
                     onClick={() => {
-                        setNewInstrumentModalIsOpen(true)
+                        setNewVoiceModalIsOpen(true)
                         setAnchorEl(null)
                     }}
                 >
-                    {t("CreateSongTab.newInstrument")}
+                    {t("CreateSongTab.newVoice")}
                 </MenuItem>
                 <MenuItem
                     disabled={selectedVoice?.isMain}
@@ -265,13 +264,13 @@ export const CreateSongTab = (props: {
             </Menu>
 
             <Dialog
-                open={newInstrumentModalIsOpen}
+                open={newVoiceModalIsOpen}
                 onClose={() => handleClose()}
-                aria-labelledby={t("Modal.addInstrument")}
+                aria-labelledby={t("Modal.addVoice")}
             >
                 <NewVoiceDialog
                     handleOnCancelClick={() => handleClose()}
-                    handleOnSaveClick={handleAddInstrument}
+                    handleOnSaveClick={handleAddVoice}
                     characterLimit={100}
                     isLoading={postVoice.loading}
                 />
@@ -292,7 +291,7 @@ export const CreateSongTab = (props: {
             <ChoiceModal
                 handleOnCancelClick={handleClose}
                 handleClosed={handleClose}
-                handleOnSaveClick={handleDeleteInstrument}
+                handleOnSaveClick={handleDeleteVoice}
                 ackText={t("Modal.deleteVoice")}
                 modalOpen={deleteModalIsOpen}
                 cancelText={t("Modal.cancel")}

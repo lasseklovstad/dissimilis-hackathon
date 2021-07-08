@@ -4,6 +4,7 @@ import {
     screen,
     waitFor,
     fireEvent,
+    getByLabelText,
 } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { App } from "../../App"
@@ -98,5 +99,21 @@ describe("SongView", () => {
             screen.getByRole("button", { name: "Slett valgt akkord" })
         )
         await waitFor(() => expect(chord).toHaveTextContent(""))
+    })
+
+    fit("Should create new voice with same notes as main voice", async () => {
+        await renderSongView("10")
+        const voiceMenu = screen.getByLabelText("Stemme meny")
+        userEvent.click(voiceMenu)
+        const newVoiceDialog = screen.getByRole("menuitem", {
+            name: "Ny stemme",
+        })
+        userEvent.click(newVoiceDialog)
+        const title = screen.getByRole("heading")
+        expect(title).toHaveTextContent("Legg til en stemme")
+        userEvent.type(screen.getByLabelText("Navn på stemme"), "Test")
+        userEvent.click(screen.getByRole("button", { name: "Opprett" }))
+        await waitDoneLoading()
+        expect(screen.getByRole("tab", { name: "Test" })).toBeInTheDocument()
     })
 })

@@ -76,7 +76,7 @@ export const NewVoiceDialog = (props: {
                         handleOnSaveClick(textFieldInput, radioButtonValue)
                     }}
                 >
-                    <DialogTitle>{t("Modal.addInstrument")}</DialogTitle>
+                    <DialogTitle>{t("Modal.addVoice")}</DialogTitle>
 
                     <TextField
                         id="input-modal-textfield"
@@ -89,11 +89,11 @@ export const NewVoiceDialog = (props: {
                         onChange={(e) => {
                             setTextFieldInput(e.target.value)
                         }}
-                        label={t("Modal.nameOfInstrument")}
+                        label={t("Modal.nameOfVoice")}
                         style={{ width: "100%" }}
                     />
                     <RadioButtons
-                        radioButtonLabel={t("Modal.customNewInstrument")}
+                        radioButtonLabel={t("Modal.customNewVoice")}
                         radioButtonOptions={[
                             "Modal.duplicateFullSong",
                             "Modal.duplicateEmptySong",

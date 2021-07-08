@@ -7,6 +7,7 @@ import { ISong, ISongPost } from "../models/ISong"
 import { emptySong, songWithChords } from "./data/song.mock"
 import { IBar, IBarPost } from "../models/IBar"
 import { Token } from "../utils/useApiServiceLogin"
+import { IVoicePost, IVoice, IVoiceDuplicatePost } from "../models/IVoice"
 
 const apiUrl = process.env.REACT_APP_API_URL
 
@@ -48,6 +49,18 @@ export const server = setupServer(
     }),
     rest.delete(`${apiUrl}song/:songId`, (req, res, ctx) => {
         return res(ctx.status(204))
+    }),
+    rest.post<IVoiceDuplicatePost, IVoice>(`${apiUrl}song/:songId/voice/:voiceId/duplicate`, (req, res, ctx) => {
+        const {songId, voiceId} = req.params
+        const song = songDB.find((song) => song.songId.toString() === songId)
+        const voice = song?.voices.find((voice) => voice.songVoiceId.toString() === voiceId)
+        if (voice){
+        const newVoice:IVoice = {...voice, songVoiceId:voiceId+1, voiceName: req.body.voiceName}
+        return res(ctx.json(newVoice), ctx.status(201))
+        }
+        else {
+            res(ctx.status(404))
+        }
     }),
     rest.post<IBarPost, IBar>(
         `${apiUrl}song/:songId/voice/:voiceId/bar/:barId/note`,
