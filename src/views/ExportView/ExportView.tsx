@@ -197,7 +197,7 @@ export const ExportView = () => {
                                     >
                                         {selectedVoice?.isMain
                                             ? t("CreateSongTab.song")
-                                            : selectedVoice?.title}
+                                            : selectedVoice?.voiceName}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12}>
@@ -286,7 +286,7 @@ export const ExportView = () => {
                                         >
                                             {voice.isMain
                                                 ? t("CreateSongTab.song")
-                                                : voice.title}
+                                                : voice.voiceName}
                                         </MenuItem>
                                     )
                                 })}

@@ -42,7 +42,7 @@ describe("SongView", () => {
     it("Should add default note C", async () => {
         await renderSongView("1")
         expect(screen.getByLabelText("Navn på sang")).toHaveValue(
-            "Stairway to heaven"
+            "Stairway to heaven",
         )
         const bar = screen.getByLabelText("Takt")
         const firstNote = getAllByRole(bar, "button")[0]
@@ -95,8 +95,50 @@ describe("SongView", () => {
         expect(chord).toHaveTextContent("C")
         userEvent.click(chord) // Select chord
         userEvent.click(
-            screen.getByRole("button", { name: "Slett valgt akkord" })
+            screen.getByRole("button", { name: "Slett valgt akkord" }),
         )
         await waitFor(() => expect(chord).toHaveTextContent(""))
+    })
+
+    it("Should create new voice with same notes as main voice", async () => {
+        await renderSongView("10")
+        const voiceMenu = screen.getByLabelText("Stemme meny")
+        userEvent.click(voiceMenu)
+        const newVoiceDialog = screen.getByRole("menuitem", {
+            name: "Ny stemme",
+        })
+        userEvent.click(newVoiceDialog)
+        const title = screen.getByRole("heading")
+        expect(title).toHaveTextContent("Legg til en stemme")
+        userEvent.type(
+            screen.getByLabelText("Navn på stemme"),
+            "Test Ny Stemme",
+        )
+        userEvent.click(screen.getByRole("button", { name: "Opprett" }))
+        await waitDoneLoading()
+        await screen.findByRole("tab", { name: "Test Ny Stemme" })
+    })
+    it("Should create new blank voice", async () => {
+        await renderSongView("10")
+        const voiceMenu = screen.getByLabelText("Stemme meny")
+        userEvent.click(voiceMenu)
+        const newVoiceDialog = screen.getByRole("menuitem", {
+            name: "Ny stemme",
+        })
+        userEvent.click(newVoiceDialog)
+        const title = screen.getByRole("heading")
+        expect(title).toHaveTextContent("Legg til en stemme")
+        userEvent.type(
+            screen.getByLabelText("Navn på stemme"),
+            "Test Ny Stemme",
+        )
+        userEvent.click(
+            screen.getByRole("radio", {
+                name: "Radio: Stemme med tomme takter og besifring fra partitur",
+            }),
+        )
+        userEvent.click(screen.getByRole("button", { name: "Opprett" }))
+        await waitDoneLoading()
+        await screen.findByRole("tab", { name: "Test Ny Stemme" })
     })
 })
