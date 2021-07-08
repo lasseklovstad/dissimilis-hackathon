@@ -70,7 +70,6 @@ export const SongGridMenuButton = (props: {
         songNotes: string,
         speed: number // tempo is called speed in backend
     ) => {
-        console.log("Update " + title + ", comp: " + composer)
         const { error, result } = await putSong.run({
             title,
             arrangerName,
