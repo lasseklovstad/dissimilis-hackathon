@@ -101,7 +101,7 @@ describe("SongView", () => {
         await waitFor(() => expect(chord).toHaveTextContent(""))
     })
 
-    fit("Should create new voice with same notes as main voice", async () => {
+    it("Should create new voice with same notes as main voice", async () => {
         await renderSongView("10")
         const voiceMenu = screen.getByLabelText("Stemme meny")
         userEvent.click(voiceMenu)
@@ -111,9 +111,35 @@ describe("SongView", () => {
         userEvent.click(newVoiceDialog)
         const title = screen.getByRole("heading")
         expect(title).toHaveTextContent("Legg til en stemme")
-        userEvent.type(screen.getByLabelText("Navn på stemme"), "Test")
+        userEvent.type(
+            screen.getByLabelText("Navn på stemme"),
+            "Test Ny Stemme"
+        )
         userEvent.click(screen.getByRole("button", { name: "Opprett" }))
         await waitDoneLoading()
-        expect(screen.getByRole("tab", { name: "Test" })).toBeInTheDocument()
+        await screen.findByRole("tab", { name: "Test Ny Stemme" })
+    })
+    fit("Should create new blank voice", async () => {
+        await renderSongView("10")
+        const voiceMenu = screen.getByLabelText("Stemme meny")
+        userEvent.click(voiceMenu)
+        const newVoiceDialog = screen.getByRole("menuitem", {
+            name: "Ny stemme",
+        })
+        userEvent.click(newVoiceDialog)
+        const title = screen.getByRole("heading")
+        expect(title).toHaveTextContent("Legg til en stemme")
+        userEvent.type(
+            screen.getByLabelText("Navn på stemme"),
+            "Test Ny Stemme"
+        )
+        userEvent.click(
+            screen.getByRole("radio", {
+                name: "Radio: Stemme med tomme takter og besifring fra partitur",
+            })
+        )
+        userEvent.click(screen.getByRole("button", { name: "Opprett" }))
+        await waitDoneLoading()
+        await screen.findByRole("tab", { name: "Test Ny Stemme" })
     })
 })

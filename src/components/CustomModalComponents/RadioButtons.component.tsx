@@ -75,7 +75,7 @@ export const RadioButtons = (props: {
                             checked={option === radioButtonValue}
                             control={<StyledRadio />}
                             label={t(option)}
-                            aria-label={t(option)}
+                            aria-label={"Radio: " + t(option)}
                         />
                     ))}
                 </RadioGroup>

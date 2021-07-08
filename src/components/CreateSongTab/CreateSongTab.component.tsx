@@ -111,8 +111,8 @@ export const CreateSongTab = (props: {
                     voiceNumber: voiceNumber + 1,
                 })
                 if (!error && result) {
-                    onAddVoice(result.data)
                     setNewVoiceModalIsOpen(false)
+                    onAddVoice(result.data)
                 }
                 break
             }
@@ -272,7 +272,7 @@ export const CreateSongTab = (props: {
                     handleOnCancelClick={() => handleClose()}
                     handleOnSaveClick={handleAddVoice}
                     characterLimit={100}
-                    isLoading={postVoice.loading}
+                    isLoading={postVoice.loading || duplicateVoice.loading}
                 />
             </Dialog>
             <InputModal

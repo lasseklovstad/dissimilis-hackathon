@@ -2,6 +2,7 @@ import { ISong, ISongPost } from "../models/ISong"
 import { IBar, IBarPost, IChord } from "../models/IBar"
 import { screen, waitFor } from "@testing-library/react"
 import { sessionStorageMock } from "../setupTests"
+import { IVoicePost, IVoice } from "../models/IVoice"
 
 let chordId = 100
 
@@ -45,6 +46,37 @@ export const generateNewSong = (song: ISongPost): ISong => {
             },
         ],
     }
+}
+
+export const generateNewVoice = (song: ISong, voice: IVoicePost): IVoice => {
+    return {
+        
+                songVoiceId: 2001,
+                songId: song.songId,
+                voiceName: voice.voiceName,
+                isMain: false,
+                partNumber: voice.voiceId,
+                bars: [
+                    {
+                        barId: 3000,
+                        songVoiceId: 2001,
+                        songId: song.songId,
+                        position: 1,
+                        repBefore: false,
+                        repAfter: false,
+                        house: null,
+                        chords: [
+                            {
+                                chordId: null,
+                                position: 0,
+                                length: 8,
+                                chordName: null,
+                                notes: ["Z"],
+                            },
+                        ],
+                    },
+                ],
+            }
 }
 
 // Sort based on position

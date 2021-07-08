@@ -134,7 +134,7 @@
         "semiNotes": "Semi notes",
         "customNewVoice": "Spesification of new voice",
         "duplicateFullSong": "Duplicate of selected voice",
-        "duplicateEmptySong": "Duplicate of selected voice with empty bars and chord names", 
+        "duplicateEmptySong": "New voice with empty bars and chord names", 
         "duplicateCustomSong": "Custom",
         "newVoiceError": "An error occured while creating new voice"
     },

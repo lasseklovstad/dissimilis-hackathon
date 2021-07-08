@@ -2,7 +2,7 @@ import { setupServer } from "msw/node"
 import { rest } from "msw"
 import { user } from "./data/user.mock"
 import { songs } from "./data/songs.mock"
-import { addChordToBar, deleteChord, generateNewSong } from "./test-utils"
+import { addChordToBar, deleteChord, generateNewSong, generateNewVoice } from "./test-utils"
 import { ISong, ISongPost } from "../models/ISong"
 import { emptySong, songWithChords } from "./data/song.mock"
 import { IBar, IBarPost } from "../models/IBar"
@@ -55,7 +55,18 @@ export const server = setupServer(
         const song = songDB.find((song) => song.songId.toString() === songId)
         const voice = song?.voices.find((voice) => voice.songVoiceId.toString() === voiceId)
         if (voice){
-        const newVoice:IVoice = {...voice, songVoiceId:voiceId+1, voiceName: req.body.voiceName}
+        const newVoice:IVoice = {...voice, songVoiceId:voiceId+1, voiceName: req.body.voiceName, isMain: false}
+        return res(ctx.json(newVoice), ctx.status(201))
+        }
+        else {
+            res(ctx.status(404))
+        }
+    }),
+    rest.post<IVoicePost, IVoice>(`${apiUrl}song/:songId/voice`, (req, res, ctx) => {
+        const {songId} = req.params
+        const song = songDB.find((song) => song.songId.toString() === songId)
+        if (song){
+        const newVoice = generateNewVoice(song, req.body)
         return res(ctx.json(newVoice), ctx.status(201))
         }
         else {
