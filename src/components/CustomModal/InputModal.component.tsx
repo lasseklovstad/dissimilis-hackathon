@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import {
     Backdrop,
-    Button,
     CircularProgress,
     Fade,
     Grid,
@@ -10,8 +9,7 @@ import {
     TextField,
     Typography,
 } from "@material-ui/core"
-
-import { colors } from "../../utils/colors"
+import { DialogButton } from "../CustomModalComponents/DialogButton.components"
 
 const useStyles = makeStyles({
     modal: {
@@ -30,14 +28,7 @@ const useStyles = makeStyles({
     insertName: {
         marginBottom: "24px",
     },
-    button: {
-        "&:hover": {
-            backgroundColor: colors.gray_300,
-        },
-        marginRight: "8px",
-        float: "left",
-        position: "relative",
-    },
+
     title: {
         marginBottom: "8px",
     },
@@ -134,29 +125,22 @@ export const InputModal = (props: {
                                         </Grid>
                                     ) : (
                                         <Grid item>
-                                            <Button
-                                                className={classes.button}
-                                                size="large"
-                                                variant="contained"
+                                            <DialogButton
                                                 disabled={!textFieldInput}
-                                                type="submit"
-                                            >
-                                                {props.saveText}
-                                            </Button>
+                                                buttonText={props.saveText}
+                                                isCancelButton={false}
+                                            />
                                         </Grid>
                                     )}
                                     <Grid item>
-                                        <Button
-                                            className={classes.button}
-                                            size="large"
-                                            variant="outlined"
+                                        <DialogButton
+                                            buttonText={props.cancelText}
                                             onClick={() => {
                                                 props.handleOnCancelClick()
                                                 setTextFieldInput("")
                                             }}
-                                        >
-                                            {props.cancelText}
-                                        </Button>
+                                            isCancelButton
+                                        />
                                     </Grid>
                                 </Grid>
                             </Grid>

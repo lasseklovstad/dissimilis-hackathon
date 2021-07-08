@@ -2,7 +2,6 @@ import React from "react"
 import {
     Backdrop,
     Box,
-    Button,
     Fade,
     Grid,
     makeStyles,
@@ -10,8 +9,8 @@ import {
     Typography,
 } from "@material-ui/core"
 
-import { colors } from "../../utils/colors"
 import { LoadingLogo } from "../loadingLogo/LoadingLogo.component"
+import { DialogButton } from "../CustomModalComponents/DialogButton.components"
 
 const useStyles = makeStyles({
     modal: {
@@ -26,15 +25,6 @@ const useStyles = makeStyles({
             padding: "48px",
         },
         outline: "none",
-    },
-    button: {
-        "&:hover": {
-            backgroundColor: colors.gray_300,
-        },
-        marginRight: "8px",
-
-        float: "left",
-        position: "relative",
     },
     title: {
         marginBottom: "8px",
@@ -97,26 +87,20 @@ export const ChoiceModal = (props: {
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Button
-                                        className={classes.button}
-                                        size="large"
-                                        variant="contained"
+                                    <DialogButton
+                                        buttonText={props.ackText}
                                         onClick={() =>
                                             props.handleOnSaveClick()
                                         }
-                                    >
-                                        {props.ackText}
-                                    </Button>
-                                    <Button
-                                        className={classes.button}
-                                        size="large"
-                                        variant="outlined"
+                                        isCancelButton={false}
+                                    />
+                                    <DialogButton
+                                        buttonText={props.cancelText}
                                         onClick={() =>
                                             props.handleOnCancelClick()
                                         }
-                                    >
-                                        {props.cancelText}
-                                    </Button>
+                                        isCancelButton
+                                    />
                                 </Grid>
                             </Box>
                         )}
