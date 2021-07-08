@@ -41,7 +41,11 @@ export const DashboardMenu = (props: {}) => {
 
     return (
         <>
-            <IconButton aria-haspopup="true" onClick={handleClick}>
+            <IconButton
+                aria-haspopup="true"
+                aria-label="settings"
+                onClick={handleClick}
+            >
                 <SettingsIcon />
             </IconButton>
             <Menu

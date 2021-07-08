@@ -79,7 +79,7 @@ export const DashboardTopBar = (props: {
                                 </Typography>
                             </Grid>
                         </Grid>
-                        <Grid container xs={1} alignItems="center">
+                        <Grid item xs={1} alignItems="center">
                             <IconButton
                                 disableFocusRipple
                                 onClick={logout.run}

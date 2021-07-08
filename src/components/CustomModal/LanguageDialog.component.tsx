@@ -61,7 +61,11 @@ export const LanguageDialog = (props: {
     const { handleOnCancelClick, handleOnSaveClick } = props
 
     return (
-        <Dialog open={props.dialogIsOpen} onClose={() => props.handleClosed}>
+        <Dialog
+            open={props.dialogIsOpen}
+            aria-label="dialog"
+            onClose={() => props.handleClosed}
+        >
             <div className={classes.dialog}>
                 <DialogTitle className={classes.title}>
                     {t("MenuButton.changeLanguage")}
@@ -74,14 +78,19 @@ export const LanguageDialog = (props: {
                     >
                         <Select
                             value={`${languageChoice ? languageChoice : ""}`}
+                            aria-label="dropdown"
                             onChange={(
                                 e: React.ChangeEvent<{ value: any }>
                             ) => {
                                 setLanguageChoice(e.target.value)
                             }}
                         >
-                            <MenuItem value={"nb"}>Norsk</MenuItem>
-                            <MenuItem value={"en"}>English</MenuItem>
+                            <MenuItem aria-label="dropdownNo" value={"nb"}>
+                                Norsk
+                            </MenuItem>
+                            <MenuItem aria-label="dropdownEn" value={"en"}>
+                                English
+                            </MenuItem>
                         </Select>
                     </FormControl>
                 </DialogContent>
@@ -103,6 +112,7 @@ export const LanguageDialog = (props: {
                             className={classes.button}
                             size="large"
                             variant="outlined"
+                            aria-label="save"
                             onClick={() => {
                                 handleOnCancelClick()
                             }}

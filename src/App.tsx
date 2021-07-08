@@ -16,7 +16,7 @@ export const App = () => {
         if (userLanguage) {
             i18n.changeLanguage(userLanguage)
         }
-    })
+    }, [])
 
     return (
         <div>

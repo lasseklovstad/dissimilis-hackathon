@@ -14,7 +14,7 @@ const resources: Resource = {
 
 i18n.use(initReactI18next).init({
     resources,
-    fallbackLng: "en",
+    fallbackLng: "nb",
 })
 
 document.documentElement.lang = i18n.language
