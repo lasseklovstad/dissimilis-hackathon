@@ -4,7 +4,6 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
     FormControl,
     Grid,
@@ -22,30 +21,27 @@ const useStyles = makeStyles((theme) => {
             boxShadow: "0 3px 6px 2px rgba(0, 0, 0, 0.1)",
             height: "auto",
             borderRadius: 2,
-            padding: "20px",
+            padding: theme.spacing(4),
             "@media (max-width: 600px)": {
-                width: "80%",
-                padding: "48px",
+                width: "100%",
+                padding: theme.spacing(2),
             },
             outline: "none",
-        },
-        insertName: {
-            marginBottom: theme.spacing(1),
-            marginTop: theme.spacing(0.1),
         },
         button: {
             "&:hover": {
                 backgroundColor: colors.gray_300,
             },
-            marginRight: "8px",
+            marginRight: theme.spacing(1),
             float: "left",
             position: "relative",
         },
         title: {
             marginBottom: theme.spacing(1),
         },
-        container: {
-            width: "100%",
+        formControl: {
+            marginBottom: theme.spacing(3),
+            minWidth: 150,
         },
     }
 })
@@ -72,10 +68,10 @@ export const LanguageDialog = (props: {
                 </DialogTitle>
 
                 <DialogContent>
-                    <DialogContentText>
-                        {t("MenuButton.languageDescription")}
-                    </DialogContentText>
-                    <FormControl>
+                    <FormControl
+                        variant="outlined"
+                        className={classes.formControl}
+                    >
                         <Select
                             value={`${languageChoice ? languageChoice : ""}`}
                             onChange={(

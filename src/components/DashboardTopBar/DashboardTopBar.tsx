@@ -47,7 +47,7 @@ export const DashboardTopBar = (props: {
                         <Hidden xsDown>
                             <Grid item sm={1} />
                         </Hidden>
-                        <Grid item xs={2}>
+                        <Grid item xs={1}>
                             <DashboardTopBarIcon onGoHome={onGoHome} />
                         </Grid>
                         {searchBarFocus ? undefined : (
@@ -55,6 +55,7 @@ export const DashboardTopBar = (props: {
                                 <Grid item md={1} />
                             </Hidden>
                         )}
+
                         <Grid
                             item
                             xs={10}
@@ -104,7 +105,15 @@ export const DashboardTopBar = (props: {
                                 value={searchTerm}
                             />
                         </Grid>
-                        <Grid item xs={1}>
+                        <Grid
+                            container
+                            direction="row"
+                            justify="flex-end"
+                            alignItems="center"
+                            style={{ height: "100%" }}
+                            item
+                            xs={1}
+                        >
                             <DashboardMenu />
                         </Grid>
                     </Grid>

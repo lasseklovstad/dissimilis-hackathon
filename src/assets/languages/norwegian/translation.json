@@ -103,8 +103,7 @@
         "delete": "Slett sang",
         "editBars": "Rediger takter",
         "cancelEditBars": "Avslutt redigering av takter",
-        "changeLanguage": "Endre språk",
-        "languageDescription" : "Velg et språk fra listen"
+        "changeLanguage": "Endre språk"
     },
     "Modal": {
         "nameOfSong": "Navn på sang",

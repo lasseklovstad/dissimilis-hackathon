@@ -103,8 +103,7 @@
         "delete": "Delete song",
         "editBars": "Edit bars",
         "cancelEditBars": "Stop editing bars",
-        "changeLanguage": "Change language",
-        "languageDescription" : "Select a language from the list"
+        "changeLanguage": "Change language"
     },
     "Modal": {
         "nameOfSong": "Name of song",
