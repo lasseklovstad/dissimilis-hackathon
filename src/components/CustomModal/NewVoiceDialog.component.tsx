@@ -68,70 +68,67 @@ export const NewVoiceDialog = (props: {
     }
 
     return (
-        <DialogContent>
-            <div>
-                <form
-                    onSubmit={(event) => {
-                        event.preventDefault()
-                        handleOnSaveClick(textFieldInput, radioButtonValue)
+        <form
+            onSubmit={(event) => {
+                event.preventDefault()
+                handleOnSaveClick(textFieldInput, radioButtonValue)
+            }}
+        >
+            <DialogTitle>{t("Modal.addVoice")}</DialogTitle>
+            <DialogContent>
+                <TextField
+                    id="input-modal-textfield"
+                    inputProps={{ maxLength: characterLimit }}
+                    helperText={`${textFieldInput.length}/${characterLimit}`}
+                    className={classes.insertName}
+                    autoFocus
+                    value={textFieldInput}
+                    variant="filled"
+                    onChange={(e) => {
+                        setTextFieldInput(e.target.value)
                     }}
-                >
-                    <DialogTitle>{t("Modal.addVoice")}</DialogTitle>
+                    label={t("Modal.nameOfVoice")}
+                    style={{ width: "100%" }}
+                />
+                <RadioButtons
+                    radioButtonLabel={t("Modal.customNewVoice")}
+                    radioButtonOptions={[
+                        "Modal.duplicateFullSong",
+                        "Modal.duplicateEmptySong",
+                        "Modal.duplicateCustomSong",
+                    ]}
+                    radioButtonValue={radioButtonValue}
+                    handleChange={handleChange}
+                />
+            </DialogContent>
 
-                    <TextField
-                        id="input-modal-textfield"
-                        inputProps={{ maxLength: characterLimit }}
-                        helperText={`${textFieldInput.length}/${characterLimit}`}
-                        className={classes.insertName}
-                        autoFocus
-                        value={textFieldInput}
-                        variant="filled"
-                        onChange={(e) => {
-                            setTextFieldInput(e.target.value)
-                        }}
-                        label={t("Modal.nameOfVoice")}
-                        style={{ width: "100%" }}
-                    />
-                    <RadioButtons
-                        radioButtonLabel={t("Modal.customNewVoice")}
-                        radioButtonOptions={[
-                            "Modal.duplicateFullSong",
-                            "Modal.duplicateEmptySong",
-                            "Modal.duplicateCustomSong",
-                        ]}
-                        radioButtonValue={radioButtonValue}
-                        handleChange={handleChange}
-                    />
-
-                    <DialogActions>
-                        <Grid container>
-                            {isLoading ? (
-                                <Grid container className={classes.loading}>
-                                    <CircularProgress size={24} />
-                                </Grid>
-                            ) : (
-                                <Grid item>
-                                    <DialogButton
-                                        disabled={!textFieldInput.trim()}
-                                        buttonText={t("Modal.create")}
-                                        isCancelButton={false}
-                                    />
-                                </Grid>
-                            )}
-                            <Grid item>
-                                <DialogButton
-                                    buttonText={t("Modal.cancel")}
-                                    onClick={() => {
-                                        handleOnCancelClick()
-                                        setTextFieldInput("")
-                                    }}
-                                    isCancelButton
-                                />
-                            </Grid>
+            <DialogActions>
+                <Grid container>
+                    {isLoading ? (
+                        <Grid container className={classes.loading}>
+                            <CircularProgress size={24} />
                         </Grid>
-                    </DialogActions>
-                </form>
-            </div>
-        </DialogContent>
+                    ) : (
+                        <Grid item>
+                            <DialogButton
+                                disabled={!textFieldInput.trim()}
+                                buttonText={t("Modal.create")}
+                                isCancelButton={false}
+                            />
+                        </Grid>
+                    )}
+                    <Grid item>
+                        <DialogButton
+                            buttonText={t("Modal.cancel")}
+                            onClick={() => {
+                                handleOnCancelClick()
+                                setTextFieldInput("")
+                            }}
+                            isCancelButton
+                        />
+                    </Grid>
+                </Grid>
+            </DialogActions>
+        </form>
     )
 }

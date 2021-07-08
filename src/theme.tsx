@@ -1,6 +1,8 @@
 import { createMuiTheme } from "@material-ui/core/styles"
 import { colors } from "./utils/colors"
 
+const defaultTheme = createMuiTheme()
+
 export const theme = createMuiTheme({
     overrides: {
         MuiCssBaseline: {
@@ -10,7 +12,6 @@ export const theme = createMuiTheme({
                 },
             },
         },
-
         MuiTab: {
             root: {
                 "&:focus": {
@@ -51,22 +52,17 @@ export const theme = createMuiTheme({
         },
         MuiDialog: {
             paper: {
-                padding: 5,
-            },
-        },
-        MuiDialogTitle: {
-            root: {
-                marginBottom: 8,
-                padding: "0px 0px",
+                padding: defaultTheme.spacing(1),
             },
         },
         MuiDialogActions: {
             root: {
-                padding: "5px 0px",
+                padding: `${defaultTheme.spacing(1)}px ${defaultTheme.spacing(
+                    2
+                )}px`,
             },
         },
     },
-    spacing: 8,
     palette: {
         primary: {
             main: colors.gray_400,
@@ -75,13 +71,6 @@ export const theme = createMuiTheme({
             default: colors.gray_100,
         },
     },
-    /* props: {
-        MuiTypography: {
-            variantMapping: {
-                p : "body1"
-            }
-        }
-    }, */
     typography: {
         fontFamily: "Roboto",
         h1: {
