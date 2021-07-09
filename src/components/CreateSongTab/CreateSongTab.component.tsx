@@ -13,7 +13,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { IVoice } from "../../models/IVoice"
-import { InputModal } from "../CustomModal/InputModal.component"
+import { InputDialog } from "../CustomModal/InputDialog.component"
 import {
     useCreateVoice,
     useDeleteVoice,
@@ -21,7 +21,7 @@ import {
     useUpdateVoice,
 } from "../../utils/useApiServiceSongs"
 import { colors } from "../../utils/colors"
-import { ChoiceModal } from "../CustomModal/ChoiceDialog.component"
+import { ChoiceDialog } from "../CustomModal/ChoiceDialog.component"
 import { NewVoiceDialog } from "../CustomModal/NewVoiceDialog.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
@@ -275,25 +275,29 @@ export const CreateSongTab = (props: {
                     isLoading={postVoice.loading || duplicateVoice.loading}
                 />
             </Dialog>
-            <InputModal
-                defaultValue={clickedVoice?.voiceName || ""}
-                handleOnCancelClick={handleClose}
-                handleOnSaveClick={handleChangeVoiceTitle}
-                handleClosed={handleClose}
-                modalOpen={renameModalIsOpen}
-                saveText={t("Modal.save")}
-                cancelText={t("Modal.cancel")}
-                headerText={t("Modal.changeVoiceName")}
-                labelText={t("Modal.newVoiceName")}
-                isLoading={putVoice.loading}
-                characterLimit={100}
-            />
+            <Dialog
+                open={renameModalIsOpen}
+                onClose={() => handleClose()}
+                aria-labelledby={t("Modal.changeVoiceName")}
+            >
+                <InputDialog
+                    defaultValue={clickedVoice?.voiceName || ""}
+                    handleOnCancelClick={handleClose}
+                    handleOnSaveClick={handleChangeVoiceTitle}
+                    saveText={t("Modal.save")}
+                    cancelText={t("Modal.cancel")}
+                    headerText={t("Modal.changeVoiceName")}
+                    labelText={t("Modal.newVoiceName")}
+                    isLoading={putVoice.loading}
+                    characterLimit={100}
+                />
+            </Dialog>
             <Dialog
                 open={deleteModalIsOpen}
                 onClose={() => handleClose()}
                 aria-label={t("Modal.deleteVoice")}
             >
-                <ChoiceModal
+                <ChoiceDialog
                     handleOnCancelClick={handleClose}
                     handleOnSaveClick={handleDeleteVoice}
                     ackText={t("Modal.deleteVoice")}

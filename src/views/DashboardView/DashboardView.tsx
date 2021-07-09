@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Box, Grid, makeStyles } from "@material-ui/core"
+import { Box, Dialog, Grid, makeStyles } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import {
@@ -12,7 +12,7 @@ import {
     useGetRecentSongs,
     usePostSong,
 } from "../../utils/useApiServiceSongs"
-import { InputModal } from "../../components/CustomModal/InputModal.component"
+import { InputDialog } from "../../components/CustomModal/InputDialog.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
@@ -202,17 +202,21 @@ export const DashboardView = () => {
                                 />
                             </SongGrid>
 
-                            <InputModal
-                                handleOnCancelClick={handleClose}
-                                handleOnSaveClick={handleAddSong}
-                                handleClosed={handleClose}
-                                modalOpen={addSongModalIsOpen}
-                                saveText={t("Modal.create")}
-                                cancelText={t("Modal.cancel")}
-                                headerText={t("Modal.addSong")}
-                                labelText={t("Modal.nameOfSong")}
-                                isLoading={postSong.loading}
-                            />
+                            <Dialog
+                                open={addSongModalIsOpen}
+                                onClose={() => handleClose}
+                                aria-label={t("Modal.addSong")}
+                            >
+                                <InputDialog
+                                    handleOnCancelClick={handleClose}
+                                    handleOnSaveClick={handleAddSong}
+                                    saveText={t("Modal.create")}
+                                    cancelText={t("Modal.cancel")}
+                                    headerText={t("Modal.addSong")}
+                                    labelText={t("Modal.nameOfSong")}
+                                    isLoading={postSong.loading}
+                                />
+                            </Dialog>
                         </>
                     ) : (
                         <SongGrid

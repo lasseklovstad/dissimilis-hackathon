@@ -16,11 +16,11 @@ import {
     useDuplicateSong,
     useTransposeSong,
 } from "../../utils/useApiServiceSongs"
-import { ChoiceModal } from "../CustomModal/ChoiceDialog.component"
+import { ChoiceDialog } from "../CustomModal/ChoiceDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { TransposeModal } from "../CustomModal/TransposeModal.component"
-import { InputModal } from "../CustomModal/InputModal.component"
+import { InputDialog } from "../CustomModal/InputDialog.component"
 
 export const MenuButton = (props: {
     voiceId: number
@@ -174,7 +174,7 @@ export const MenuButton = (props: {
                     onClose={() => handleClose()}
                     aria-label={t("Modal.deleteSong")}
                 >
-                    <ChoiceModal
+                    <ChoiceDialog
                         handleOnCancelClick={handleClose}
                         handleOnSaveClick={handleDeleteSong}
                         ackText={t("Modal.deleteSong")}
@@ -190,20 +190,24 @@ export const MenuButton = (props: {
                     handleOnCancelClick={handleClose}
                     handleOnSaveClick={handleTransposeSong}
                 />
-                <InputModal
-                    handleOnCancelClick={() =>
-                        setDuplicateSongModalIsOpen(false)
-                    }
-                    handleOnSaveClick={handleDuplicateSong}
-                    handleClosed={() => setDuplicateSongModalIsOpen(false)}
-                    modalOpen={duplicateSongModalIsOpen}
-                    defaultValue={`${songTitle} (2)`}
-                    saveText={t("Modal.create")}
-                    cancelText={t("Modal.cancel")}
-                    headerText={t("DashboardView.duplicateText")}
-                    labelText={t("Modal.newVoiceName")}
-                    isLoading={duplicateSong.loading}
-                />
+                <Dialog
+                    open={duplicateSongModalIsOpen}
+                    onClose={() => setDuplicateSongModalIsOpen(false)}
+                    aria-labelledby={t("DashboardView.duplicateText")}
+                >
+                    <InputDialog
+                        handleOnCancelClick={() =>
+                            setDuplicateSongModalIsOpen(false)
+                        }
+                        handleOnSaveClick={handleDuplicateSong}
+                        defaultValue={`${songTitle} (2)`}
+                        saveText={t("Modal.create")}
+                        cancelText={t("Modal.cancel")}
+                        headerText={t("DashboardView.duplicateText")}
+                        labelText={t("Modal.newVoiceName")}
+                        isLoading={duplicateSong.loading}
+                    />
+                </Dialog>
             </div>
             <Loading
                 isLoading={deleteSong.loading}

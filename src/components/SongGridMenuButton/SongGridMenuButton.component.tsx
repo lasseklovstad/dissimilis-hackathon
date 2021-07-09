@@ -4,8 +4,8 @@ import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { useDeleteSong, useDuplicateSong } from "../../utils/useApiServiceSongs"
-import { ChoiceModal } from "../CustomModal/ChoiceDialog.component"
-import { InputModal } from "../CustomModal/InputModal.component"
+import { ChoiceDialog } from "../CustomModal/ChoiceDialog.component"
+import { InputDialog } from "../CustomModal/InputDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
@@ -116,7 +116,7 @@ export const SongGridMenuButton = (props: {
                     onClose={() => handleClose()}
                     aria-label={t("Modal.deleteSong")}
                 >
-                    <ChoiceModal
+                    <ChoiceDialog
                         handleOnCancelClick={() => handleClose()}
                         handleOnSaveClick={handleDeleteSong}
                         ackText={t("Modal.deleteSong")}
@@ -126,17 +126,21 @@ export const SongGridMenuButton = (props: {
                     />
                 </Dialog>
             </div>
-            <InputModal
-                handleOnCancelClick={() => handleCloseDuplicateDialog()}
-                handleOnSaveClick={handleDuplicateSong}
-                handleClosed={() => handleCloseDuplicateDialog()}
-                modalOpen={duplicateSongModalIsOpen}
-                saveText={t("Modal.create")}
-                cancelText={t("Modal.cancel")}
-                headerText={t("DashboardView.duplicateText")}
-                labelText={t("Modal.newVoiceName")}
-                isLoading={duplicateSong.loading}
-            />
+            <Dialog
+                open={duplicateSongModalIsOpen}
+                onClose={() => handleCloseDuplicateDialog()}
+                aria-label={t("DashboardView.duplicateText")}
+            >
+                <InputDialog
+                    handleOnCancelClick={() => handleCloseDuplicateDialog()}
+                    handleOnSaveClick={handleDuplicateSong}
+                    saveText={t("Modal.create")}
+                    cancelText={t("Modal.cancel")}
+                    headerText={t("DashboardView.duplicateText")}
+                    labelText={t("Modal.newVoiceName")}
+                    isLoading={duplicateSong.loading}
+                />
+            </Dialog>
             <Loading
                 isLoading={deleteSong.loading}
                 fullScreen
