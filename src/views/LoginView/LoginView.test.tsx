@@ -41,7 +41,7 @@ describe("LoginView", () => {
         render(<LoginView />, { wrapper: TestWrapper })
         userEvent.click(
             screen.getByRole("button", {
-                name: /Logg inn med microsoft/i,
+                name: /Sign in with Microsoft/i,
             })
         )
         await waitFor(() => expect(window.location.href).toBe(mockUrl))

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Menu, MenuItem } from "@material-ui/core"
+import { useTranslation } from "react-i18next"
 
 type ChordMenuProps = {
     position: { top: number; left: number } | undefined
@@ -9,7 +10,7 @@ type ChordMenuProps = {
 export const ChordMenu = (props: ChordMenuProps) => {
     const { position, onSelect } = props
     const [open, setOpen] = useState(false)
-
+    const { t } = useTranslation()
     const handleClose = (action: "delete") => () => {
         onSelect(action)
         setOpen(false)
@@ -29,7 +30,7 @@ export const ChordMenu = (props: ChordMenuProps) => {
             anchorPosition={position}
         >
             <MenuItem tabIndex={-1} onClick={handleClose("delete")}>
-                Slett
+                {t("ChordMenu.deleteChord")}
             </MenuItem>
         </Menu>
     )
