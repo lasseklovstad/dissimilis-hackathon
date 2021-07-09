@@ -12,10 +12,22 @@ const resources: Resource = {
     },
 }
 
-i18n.use(initReactI18next).init({
-    resources,
-    fallbackLng: "en",
+i18n.use({
+    type: "languageDetector",
+    async: false,
+    init: function () {},
+    detect: function () {
+        return localStorage.getItem("userLanguage")
+    },
+    cacheUserLanguage: function (lng: string) {
+        localStorage.setItem("userLanguage", lng)
+    },
 })
+    .use(initReactI18next)
+    .init({
+        resources,
+        fallbackLng: "en",
+    })
 
 document.documentElement.lang = i18n.language
 
