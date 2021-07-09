@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core"
 
 import { LoadingLogo } from "../loadingLogo/LoadingLogo.component"
-import { DialogButton } from "../CustomModalComponents/DialogButton.components"
+import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 
 const useStyles = makeStyles((theme) => {
     return {

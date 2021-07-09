@@ -7,7 +7,7 @@ import {
     TextField,
     Typography,
 } from "@material-ui/core"
-import { DialogButton } from "../CustomModalComponents/DialogButton.components"
+import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -67,7 +67,7 @@ export const InputDialog = (props: {
 
                     <Grid item className={classes.insertName} xs={12}>
                         <TextField
-                            id="input-modal-textfield"
+                            id="input-dialog-textfield"
                             inputProps={{ maxLength: characterLimit }}
                             helperText={`${textFieldInput.length}/${characterLimit}`}
                             autoFocus

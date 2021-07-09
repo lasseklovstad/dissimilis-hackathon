@@ -104,7 +104,7 @@
         "editBars": "Rediger takter",
         "cancelEditBars": "Avslutt redigering av takter"
     },
-    "Modal": {
+    "Dialog": {
         "nameOfSong": "Navn på sang",
         "addSong": "Legg til ny sang",
         "nameOfVoice": "Navn på stemme",

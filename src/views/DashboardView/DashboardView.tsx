@@ -12,7 +12,7 @@ import {
     useGetRecentSongs,
     usePostSong,
 } from "../../utils/useApiServiceSongs"
-import { InputDialog } from "../../components/CustomModal/InputDialog.component"
+import { InputDialog } from "../../components/CustomDialog/InputDialog.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
@@ -71,7 +71,7 @@ export const DashboardView = () => {
 
     const [dashboardView, setDashboardView] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
-    const [addSongModalIsOpen, setAddSongModalIsOpen] = useState(false)
+    const [addSongDialogIsOpen, setAddSongDialogIsOpen] = useState(false)
     const [orderTerm, setOrderTerm] = useState<"date" | "song" | "user">("date")
     const [orderDescending, setOrderDescending] = useState<boolean>(true)
     const [timeSignature, setTimeSignature] = useState<
@@ -123,20 +123,20 @@ export const DashboardView = () => {
     }
 
     const handleAddSong = async (title: string) => {
-        setAddSongModalIsOpen(false)
+        setAddSongDialogIsOpen(false)
         const { result } = await postSong.run({ ...timeSignature, title })
         if (result?.status === 201) {
             history.push(`/song/${result.data.songId}`)
         }
     }
 
-    const handleOpenAddSongModal = (song: MusicTacts) => {
+    const handleOpenAddSongDialog = (song: MusicTacts) => {
         setTimeSignature(song.timeSignature)
-        setAddSongModalIsOpen(true)
+        setAddSongDialogIsOpen(true)
     }
 
     const handleClose = () => {
-        setAddSongModalIsOpen(false)
+        setAddSongDialogIsOpen(false)
     }
 
     const handleChangeOrderTerm = (term: "date" | "song" | "user") => {
@@ -181,7 +181,7 @@ export const DashboardView = () => {
                                     <DashboardButtonWithAddIconNoLink
                                         key={song.id}
                                         func={() =>
-                                            handleOpenAddSongModal(song)
+                                            handleOpenAddSongDialog(song)
                                         }
                                         text={`${getTimeSignatureText(
                                             song.timeSignature
@@ -203,17 +203,17 @@ export const DashboardView = () => {
                             </SongGrid>
 
                             <Dialog
-                                open={addSongModalIsOpen}
+                                open={addSongDialogIsOpen}
                                 onClose={() => handleClose}
-                                aria-label={t("Modal.addSong")}
+                                aria-label={t("Dialog.addSong")}
                             >
                                 <InputDialog
                                     handleOnCancelClick={handleClose}
                                     handleOnSaveClick={handleAddSong}
-                                    saveText={t("Modal.create")}
-                                    cancelText={t("Modal.cancel")}
-                                    headerText={t("Modal.addSong")}
-                                    labelText={t("Modal.nameOfSong")}
+                                    saveText={t("Dialog.create")}
+                                    cancelText={t("Dialog.cancel")}
+                                    headerText={t("Dialog.addSong")}
+                                    labelText={t("Dialog.nameOfSong")}
                                     isLoading={postSong.loading}
                                 />
                             </Dialog>

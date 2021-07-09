@@ -104,7 +104,7 @@
         "editBars": "Edit bars",
         "cancelEditBars": "Stop editing bars"
     },
-    "Modal": {
+    "Dialog": {
         "nameOfSong": "Name of song",
         "addSong": "Add a new song",
         "nameOfVoice": "Name of voice",

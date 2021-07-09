@@ -4,8 +4,8 @@ import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { useDeleteSong, useDuplicateSong } from "../../utils/useApiServiceSongs"
-import { ChoiceDialog } from "../CustomModal/ChoiceDialog.component"
-import { InputDialog } from "../CustomModal/InputDialog.component"
+import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
+import { InputDialog } from "../CustomDialog/InputDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
@@ -15,9 +15,9 @@ export const SongGridMenuButton = (props: {
     removeSong: (songId: number) => void
 }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] =
+    const [duplicateSongDialogIsOpen, setDuplicateSongDialogIsOpen] =
         useState(false)
-    const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
+    const [deleteSongDialogIsOpen, setDeleteSongDialogIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
     const { songId } = props
@@ -28,12 +28,12 @@ export const SongGridMenuButton = (props: {
         setAnchorEl(event.currentTarget)
     }
 
-    const handleOpenDeleteSongModal = () => {
-        setDeleteSongModalIsOpen(true)
+    const handleOpenDeleteSongDialog = () => {
+        setDeleteSongDialogIsOpen(true)
     }
 
     const handleDeleteSong = async () => {
-        setDeleteSongModalIsOpen(false)
+        setDeleteSongDialogIsOpen(false)
         const { isError } = await deleteSong.run()
         if (!isError) {
             props.removeSong(songId)
@@ -50,25 +50,25 @@ export const SongGridMenuButton = (props: {
         })
 
         if (!error && result) {
-            setDuplicateSongModalIsOpen(false)
+            setDuplicateSongDialogIsOpen(false)
             history.push(`song/${result.data.songId.toString()}`)
         }
     }
 
     const handleOpenDuplicateDialog = () => {
-        setDuplicateSongModalIsOpen(true)
+        setDuplicateSongDialogIsOpen(true)
     }
 
     const handleCloseDuplicateDialog = () => {
-        setDuplicateSongModalIsOpen(false)
+        setDuplicateSongDialogIsOpen(false)
     }
 
     const handleClose = async (method?: "delete" | "copy" | "open") => {
         setAnchorEl(null)
-        setDeleteSongModalIsOpen(false)
+        setDeleteSongDialogIsOpen(false)
         switch (method) {
             case "delete":
-                handleOpenDeleteSongModal()
+                handleOpenDeleteSongDialog()
                 break
             case "copy":
                 handleOpenDuplicateDialog()
@@ -112,44 +112,44 @@ export const SongGridMenuButton = (props: {
                     </MenuItem>
                 </Menu>
                 <Dialog
-                    open={deleteSongModalIsOpen}
+                    open={deleteSongDialogIsOpen}
                     onClose={() => handleClose()}
-                    aria-label={t("Modal.deleteSong")}
+                    aria-label={t("Dialog.deleteSong")}
                 >
                     <ChoiceDialog
                         handleOnCancelClick={() => handleClose()}
                         handleOnSaveClick={handleDeleteSong}
-                        ackText={t("Modal.deleteSong")}
-                        cancelText={t("Modal.cancel")}
-                        headerText={t("Modal.deleteSong")}
-                        descriptionText={t("Modal.deleteDescription")}
+                        ackText={t("Dialog.deleteSong")}
+                        cancelText={t("Dialog.cancel")}
+                        headerText={t("Dialog.deleteSong")}
+                        descriptionText={t("Dialog.deleteDescription")}
                     />
                 </Dialog>
             </div>
             <Dialog
-                open={duplicateSongModalIsOpen}
+                open={duplicateSongDialogIsOpen}
                 onClose={() => handleCloseDuplicateDialog()}
                 aria-label={t("DashboardView.duplicateText")}
             >
                 <InputDialog
                     handleOnCancelClick={() => handleCloseDuplicateDialog()}
                     handleOnSaveClick={handleDuplicateSong}
-                    saveText={t("Modal.create")}
-                    cancelText={t("Modal.cancel")}
+                    saveText={t("Dialog.create")}
+                    cancelText={t("Dialog.cancel")}
                     headerText={t("DashboardView.duplicateText")}
-                    labelText={t("Modal.newVoiceName")}
+                    labelText={t("Dialog.newVoiceName")}
                     isLoading={duplicateSong.loading}
                 />
             </Dialog>
             <Loading
                 isLoading={deleteSong.loading}
                 fullScreen
-                text={t("Modal.deleteSongLoading")}
+                text={t("Dialog.deleteSongLoading")}
             />
             <ErrorDialog
                 isError={deleteSong.isError}
                 error={deleteSong.error}
-                title={t("Modal.deleteSongError")}
+                title={t("Dialog.deleteSongError")}
             />
         </>
     )
