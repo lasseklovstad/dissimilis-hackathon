@@ -1,10 +1,10 @@
 import React, { useState } from "react"
-import { IconButton, Menu, MenuItem } from "@material-ui/core"
+import { Dialog, IconButton, Menu, MenuItem } from "@material-ui/core"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { useDeleteSong, useDuplicateSong } from "../../utils/useApiServiceSongs"
-import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
+import { ChoiceModal } from "../CustomModal/ChoiceDialog.component"
 import { InputModal } from "../CustomModal/InputModal.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
@@ -111,16 +111,20 @@ export const SongGridMenuButton = (props: {
                         {t("DashboardView.delete")}
                     </MenuItem>
                 </Menu>
-                <ChoiceModal
-                    handleOnCancelClick={() => handleClose()}
-                    handleClosed={() => handleClose()}
-                    handleOnSaveClick={handleDeleteSong}
-                    ackText={t("Modal.deleteSong")}
-                    modalOpen={deleteSongModalIsOpen}
-                    cancelText={t("Modal.cancel")}
-                    headerText={t("Modal.deleteSong")}
-                    descriptionText={t("Modal.deleteDescription")}
-                />
+                <Dialog
+                    open={deleteSongModalIsOpen}
+                    onClose={() => handleClose()}
+                    aria-label={t("Modal.deleteSong")}
+                >
+                    <ChoiceModal
+                        handleOnCancelClick={() => handleClose()}
+                        handleOnSaveClick={handleDeleteSong}
+                        ackText={t("Modal.deleteSong")}
+                        cancelText={t("Modal.cancel")}
+                        headerText={t("Modal.deleteSong")}
+                        descriptionText={t("Modal.deleteDescription")}
+                    />
+                </Dialog>
             </div>
             <InputModal
                 handleOnCancelClick={() => handleCloseDuplicateDialog()}

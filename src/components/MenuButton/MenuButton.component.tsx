@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import {
+    Dialog,
     Divider,
     IconButton,
     Menu,
@@ -15,7 +16,7 @@ import {
     useDuplicateSong,
     useTransposeSong,
 } from "../../utils/useApiServiceSongs"
-import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
+import { ChoiceModal } from "../CustomModal/ChoiceDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { TransposeModal } from "../CustomModal/TransposeModal.component"
@@ -168,16 +169,20 @@ export const MenuButton = (props: {
                         </>
                     ) : undefined}
                 </Menu>
-                <ChoiceModal
-                    handleOnCancelClick={handleClose}
-                    handleClosed={handleClose}
-                    handleOnSaveClick={handleDeleteSong}
-                    ackText={t("Modal.deleteSong")}
-                    modalOpen={deleteSongModalIsOpen}
-                    cancelText={t("Modal.cancel")}
-                    headerText={t("Modal.deleteSong")}
-                    descriptionText={t("Modal.deleteDescription")}
-                />
+                <Dialog
+                    open={deleteSongModalIsOpen}
+                    onClose={() => handleClose()}
+                    aria-label={t("Modal.deleteSong")}
+                >
+                    <ChoiceModal
+                        handleOnCancelClick={handleClose}
+                        handleOnSaveClick={handleDeleteSong}
+                        ackText={t("Modal.deleteSong")}
+                        cancelText={t("Modal.cancel")}
+                        headerText={t("Modal.deleteSong")}
+                        descriptionText={t("Modal.deleteDescription")}
+                    />
+                </Dialog>
                 <TransposeModal
                     defaultValue={`${songTitle} (${t("Modal.transposed")})`}
                     modalOpen={transposeSongModalIsOpen}

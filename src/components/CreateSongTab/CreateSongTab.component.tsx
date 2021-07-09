@@ -21,7 +21,7 @@ import {
     useUpdateVoice,
 } from "../../utils/useApiServiceSongs"
 import { colors } from "../../utils/colors"
-import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
+import { ChoiceModal } from "../CustomModal/ChoiceDialog.component"
 import { NewVoiceDialog } from "../CustomModal/NewVoiceDialog.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
@@ -288,16 +288,20 @@ export const CreateSongTab = (props: {
                 isLoading={putVoice.loading}
                 characterLimit={100}
             />
-            <ChoiceModal
-                handleOnCancelClick={handleClose}
-                handleClosed={handleClose}
-                handleOnSaveClick={handleDeleteVoice}
-                ackText={t("Modal.deleteVoice")}
-                modalOpen={deleteModalIsOpen}
-                cancelText={t("Modal.cancel")}
-                headerText={t("Modal.deleteVoice")}
-                descriptionText={t("Modal.deleteVoiceDescription")}
-            />
+            <Dialog
+                open={deleteModalIsOpen}
+                onClose={() => handleClose()}
+                aria-label={t("Modal.deleteVoice")}
+            >
+                <ChoiceModal
+                    handleOnCancelClick={handleClose}
+                    handleOnSaveClick={handleDeleteVoice}
+                    ackText={t("Modal.deleteVoice")}
+                    cancelText={t("Modal.cancel")}
+                    headerText={t("Modal.deleteVoice")}
+                    descriptionText={t("Modal.deleteVoiceDescription")}
+                />
+            </Dialog>
             <Menu
                 open={!!rightClickMenuPosition}
                 onClose={() => {
