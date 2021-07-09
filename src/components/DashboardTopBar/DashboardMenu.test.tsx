@@ -15,7 +15,9 @@ describe("DashboardMenu", () => {
     it("Should change language in settings", async () => {
         await renderDashboard()
         userEvent.click(screen.getByRole("button", { name: "settings" }))
-        userEvent.click(screen.getByRole("menuitem", { name: "Endre språk" }))
+        userEvent.click(
+            screen.getByRole("menuitem", { name: "Change language" })
+        )
         expect(screen.getByLabelText("dialog")).toBeInTheDocument()
         userEvent.click(screen.getByLabelText("dropdown"))
         expect(screen.getByLabelText("dialog")).toBeInTheDocument()

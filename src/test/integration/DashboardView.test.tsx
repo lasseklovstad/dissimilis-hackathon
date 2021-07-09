@@ -74,26 +74,4 @@ describe("Dashboard", () => {
         await waitDoneLoading()
         expect(songToDelete).not.toBeInTheDocument()
     })
-    fit("Should change language in settings", async () => {
-        await renderDashboard()
-        userEvent.click(screen.getByRole("button", { name: "settings" }))
-        userEvent.click(
-            screen.getByRole("menuitem", { name: "MenuButton.changeLanguage" })
-        )
-        expect(screen.getByLabelText("dialog")).toBeInTheDocument()
-        userEvent.click(screen.getByLabelText("dropdown"))
-        expect(screen.getByLabelText("dialog")).toBeInTheDocument()
-    })
 })
-/* describe("Topbar", () => {
-    it("Should change language in settings", async () => {
-        await renderDashboard()
-        userEvent.click(screen.getByLabelText("settings"))
-        userEvent.click(
-            screen.getByRole("menuitem", { name: "MenuButton.changeLanguage" })
-        )
-        expect(screen.getByLabelText("dialog")).toBeInTheDocument()
-
-        userEvent.click(screen.getByRole("button", { name: "Lagre" }))
-    })
-}) */
