@@ -20,8 +20,15 @@ export const DialogButton = (props: {
     buttonText: string
     onClick?: () => void
     isCancelButton: boolean
+    ariaLabel?: string
 }) => {
-    const { disabled = false, buttonText, onClick, isCancelButton } = props
+    const {
+        disabled = false,
+        buttonText,
+        onClick,
+        isCancelButton,
+        ariaLabel = buttonText,
+    } = props
     const classes = useStyles()
 
     return (
@@ -31,6 +38,7 @@ export const DialogButton = (props: {
                     <Button
                         className={classes.button}
                         size="large"
+                        aria-label={ariaLabel}
                         variant="outlined"
                         onClick={() => {
                             onClick()
@@ -43,6 +51,7 @@ export const DialogButton = (props: {
                         className={classes.button}
                         size="large"
                         variant="contained"
+                        aria-label={ariaLabel}
                         onClick={() => {
                             onClick()
                         }}
@@ -55,6 +64,7 @@ export const DialogButton = (props: {
                 <Button
                     className={classes.button}
                     size="large"
+                    aria-label={ariaLabel}
                     variant="contained"
                     disabled={disabled}
                     type="submit"
