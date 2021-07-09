@@ -200,6 +200,8 @@ export const MenuButton = (props: {
                     open={duplicateSongDialogIsOpen}
                     onClose={() => setDuplicateSongDialogIsOpen(false)}
                     aria-labelledby={t("DashboardView.duplicateText")}
+                    maxWidth="sm"
+                    fullWidth
                 >
                     <InputDialog
                         handleOnCancelClick={() =>

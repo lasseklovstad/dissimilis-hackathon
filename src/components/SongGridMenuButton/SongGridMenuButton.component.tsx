@@ -128,11 +128,13 @@ export const SongGridMenuButton = (props: {
             </div>
             <Dialog
                 open={duplicateSongDialogIsOpen}
-                onClose={() => handleCloseDuplicateDialog()}
+                onClose={handleCloseDuplicateDialog}
                 aria-label={t("DashboardView.duplicateText")}
+                maxWidth="sm"
+                fullWidth
             >
                 <InputDialog
-                    handleOnCancelClick={() => handleCloseDuplicateDialog()}
+                    handleOnCancelClick={handleCloseDuplicateDialog}
                     handleOnSaveClick={handleDuplicateSong}
                     saveText={t("Dialog.create")}
                     cancelText={t("Dialog.cancel")}

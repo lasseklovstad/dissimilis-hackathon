@@ -1,21 +1,24 @@
 import React from "react"
 import {
-    Box,
+    CircularProgress,
     DialogActions,
     DialogContent,
     DialogTitle,
-    Grid,
     makeStyles,
     Typography,
 } from "@material-ui/core"
 
-import { LoadingLogo } from "../loadingLogo/LoadingLogo.component"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 
 const useStyles = makeStyles((theme) => {
     return {
-        paragraph: {
-            marginBottom: theme.spacing(1.5),
+        loading: {
+            margin: theme.spacing(1),
+            marginRight: theme.spacing(2),
+            justifyContent: "center",
+            alignContent: "center",
+            minWidth: "64px",
+            maxWidth: "64px",
         },
     }
 })
@@ -29,8 +32,6 @@ export const ChoiceDialog = (props: {
     descriptionText: string
     isLoading?: boolean
 }) => {
-    const classes = useStyles()
-
     const {
         isLoading,
         headerText,
@@ -41,39 +42,34 @@ export const ChoiceDialog = (props: {
         handleOnCancelClick,
     } = props
 
-    return (
-        <Grid container>
-            {isLoading ? (
-                <Grid item xs={12}>
-                    <LoadingLogo />
-                </Grid>
-            ) : (
-                <Box>
-                    <Grid item xs={12}>
-                        <DialogTitle>{headerText}</DialogTitle>
-                        <DialogContent>
-                            <Typography className={classes.paragraph}>
-                                {descriptionText}
-                            </Typography>
-                        </DialogContent>
-                    </Grid>
+    const classes = useStyles()
 
-                    <DialogActions>
-                        <Grid item xs={12}>
-                            <DialogButton
-                                buttonText={ackText}
-                                onClick={() => handleOnSaveClick()}
-                                isCancelButton={false}
-                            />
-                            <DialogButton
-                                buttonText={cancelText}
-                                onClick={() => handleOnCancelClick()}
-                                isCancelButton
-                            />
-                        </Grid>
-                    </DialogActions>
-                </Box>
-            )}
-        </Grid>
+    return (
+        <>
+            <DialogTitle>{headerText}</DialogTitle>
+            <DialogContent>
+                <Typography gutterBottom>{descriptionText}</Typography>
+            </DialogContent>
+
+            <DialogActions>
+                {isLoading ? (
+                    <div className={classes.loading}>
+                        <CircularProgress size={24} />
+                    </div>
+                ) : (
+                    <DialogButton
+                        onClick={handleOnSaveClick}
+                        type="submit"
+                        variant="contained"
+                    >
+                        {ackText}
+                    </DialogButton>
+                )}
+
+                <DialogButton onClick={handleOnCancelClick}>
+                    {cancelText}
+                </DialogButton>
+            </DialogActions>
+        </>
     )
 }

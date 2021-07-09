@@ -204,8 +204,10 @@ export const DashboardView = () => {
 
                             <Dialog
                                 open={addSongDialogIsOpen}
-                                onClose={() => handleClose}
+                                onClose={handleClose}
                                 aria-label={t("Dialog.addSong")}
+                                maxWidth="sm"
+                                fullWidth
                             >
                                 <InputDialog
                                     handleOnCancelClick={handleClose}

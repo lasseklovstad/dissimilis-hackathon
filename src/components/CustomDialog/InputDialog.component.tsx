@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react"
 import {
     CircularProgress,
+    DialogActions,
     DialogContent,
-    Grid,
+    DialogTitle,
     makeStyles,
     TextField,
-    Typography,
 } from "@material-ui/core"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 
@@ -13,10 +13,6 @@ const useStyles = makeStyles((theme) => {
     return {
         insertName: {
             marginBottom: theme.spacing(3),
-        },
-
-        title: {
-            marginBottom: theme.spacing(2),
         },
     }
 })
@@ -53,63 +49,50 @@ export const InputDialog = (props: {
     }, [defaultValue])
 
     return (
-        <DialogContent>
-            <form
-                onSubmit={(event) => {
-                    event.preventDefault()
-                    handleOnSaveClick(textFieldInput)
-                }}
-            >
-                <Grid container>
-                    <Typography className={classes.title} variant="h2">
-                        {headerText}
-                    </Typography>
-
-                    <Grid item className={classes.insertName} xs={12}>
-                        <TextField
-                            id="input-dialog-textfield"
-                            inputProps={{ maxLength: characterLimit }}
-                            helperText={`${textFieldInput.length}/${characterLimit}`}
-                            autoFocus
-                            value={textFieldInput}
-                            variant="filled"
-                            onChange={(e) => {
-                                setTextFieldInput(e.target.value)
-                            }}
-                            label={labelText}
-                            style={{ width: "100%" }}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <Grid container>
-                            {isLoading ? (
-                                <Grid container>
-                                    <CircularProgress size={24} />
-                                </Grid>
-                            ) : (
-                                <Grid item>
-                                    <DialogButton
-                                        disabled={!textFieldInput}
-                                        buttonText={saveText}
-                                        isCancelButton={false}
-                                    />
-                                </Grid>
-                            )}
-                            <Grid item>
-                                <DialogButton
-                                    buttonText={cancelText}
-                                    onClick={() => {
-                                        handleOnCancelClick()
-                                        setTextFieldInput("")
-                                    }}
-                                    isCancelButton
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </form>
-        </DialogContent>
+        <form
+            onSubmit={(event) => {
+                event.preventDefault()
+                handleOnSaveClick(textFieldInput)
+            }}
+        >
+            <DialogTitle>{headerText}</DialogTitle>
+            <DialogContent>
+                <TextField
+                    id="input-dialog-textfield"
+                    inputProps={{ maxLength: characterLimit }}
+                    helperText={`${textFieldInput.length}/${characterLimit}`}
+                    autoFocus
+                    className={classes.insertName}
+                    value={textFieldInput}
+                    variant="filled"
+                    onChange={(e) => {
+                        setTextFieldInput(e.target.value)
+                    }}
+                    label={labelText}
+                    style={{ width: "100%" }}
+                />
+            </DialogContent>
+            <DialogActions>
+                {isLoading ? (
+                    <CircularProgress size={24} />
+                ) : (
+                    <DialogButton
+                        disabled={!textFieldInput}
+                        type="submit"
+                        variant="contained"
+                    >
+                        {saveText}
+                    </DialogButton>
+                )}
+                <DialogButton
+                    onClick={() => {
+                        handleOnCancelClick()
+                        setTextFieldInput("")
+                    }}
+                >
+                    {cancelText}
+                </DialogButton>
+            </DialogActions>
+        </form>
     )
 }

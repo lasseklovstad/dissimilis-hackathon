@@ -4,7 +4,6 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    Grid,
     makeStyles,
     TextField,
 } from "@material-ui/core"
@@ -18,9 +17,6 @@ const useStyles = makeStyles((theme) => {
         insertName: {
             marginBottom: theme.spacing(2),
             marginTop: theme.spacing(1),
-        },
-        container: {
-            width: "100%",
         },
         loading: {
             margin: theme.spacing(1),
@@ -103,31 +99,27 @@ export const NewVoiceDialog = (props: {
             </DialogContent>
 
             <DialogActions>
-                <Grid container>
-                    {isLoading ? (
-                        <Grid container className={classes.loading}>
-                            <CircularProgress size={24} />
-                        </Grid>
-                    ) : (
-                        <Grid item>
-                            <DialogButton
-                                disabled={!textFieldInput.trim()}
-                                buttonText={t("Dialog.create")}
-                                isCancelButton={false}
-                            />
-                        </Grid>
-                    )}
-                    <Grid item>
-                        <DialogButton
-                            buttonText={t("Dialog.cancel")}
-                            onClick={() => {
-                                handleOnCancelClick()
-                                setTextFieldInput("")
-                            }}
-                            isCancelButton
-                        />
-                    </Grid>
-                </Grid>
+                {isLoading ? (
+                    <div className={classes.loading}>
+                        <CircularProgress size={24} />
+                    </div>
+                ) : (
+                    <DialogButton
+                        disabled={!textFieldInput.trim()}
+                        type="submit"
+                        variant="contained"
+                    >
+                        {t("Dialog.create")}
+                    </DialogButton>
+                )}
+                <DialogButton
+                    onClick={() => {
+                        handleOnCancelClick()
+                        setTextFieldInput("")
+                    }}
+                >
+                    {t("Dialog.cancel")}
+                </DialogButton>
             </DialogActions>
         </form>
     )

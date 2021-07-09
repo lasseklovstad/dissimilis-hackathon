@@ -265,11 +265,11 @@ export const CreateSongTab = (props: {
 
             <Dialog
                 open={newVoiceDialogIsOpen}
-                onClose={() => handleClose()}
+                onClose={handleClose}
                 aria-labelledby={t("Dialog.addVoice")}
             >
                 <NewVoiceDialog
-                    handleOnCancelClick={() => handleClose()}
+                    handleOnCancelClick={handleClose}
                     handleOnSaveClick={handleAddVoice}
                     characterLimit={100}
                     isLoading={postVoice.loading || duplicateVoice.loading}
@@ -277,8 +277,10 @@ export const CreateSongTab = (props: {
             </Dialog>
             <Dialog
                 open={renameDialogIsOpen}
-                onClose={() => handleClose()}
+                onClose={handleClose}
                 aria-labelledby={t("Dialog.changeVoiceName")}
+                maxWidth="sm"
+                fullWidth
             >
                 <InputDialog
                     defaultValue={clickedVoice?.voiceName || ""}
@@ -304,6 +306,7 @@ export const CreateSongTab = (props: {
                     cancelText={t("Dialog.cancel")}
                     headerText={t("Dialog.deleteVoice")}
                     descriptionText={t("Dialog.deleteVoiceDescription")}
+                    isLoading={deleteVoice.loading}
                 />
             </Dialog>
             <Menu
