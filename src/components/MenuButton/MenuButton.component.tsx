@@ -254,14 +254,6 @@ export const MenuButton = (props: {
                         songId={parseInt(songId)}
                         handleOnCancelClick={() => handleCloseSongInfoDialog()}
                         handleOnSaveClick={handleSaveSongInfo}
-                        saveText={t("Modal.save")}
-                        cancelText={t("Modal.cancel")}
-                        headerText={t("MenuButton.details")}
-                        songNameLabelText={t("Modal.nameOfSong")}
-                        arrangerLabelText={t("Song.arranger")}
-                        composerLabelText={t("Song.composer")}
-                        songNotesLabelText={t("Song.songNotes")}
-                        speedLabelText={t("Song.songSpeed")}
                         isLoadingPatch={putSong.loading}
                     />
                 </Dialog>
@@ -285,6 +277,11 @@ export const MenuButton = (props: {
                 isError={transposeSong.isError}
                 error={transposeSong.error}
                 title={t("Modal.transposeSongError")}
+            />
+            <ErrorDialog
+                isError={putSong.isError}
+                error={putSong.error}
+                title={t("Modal.saveSongMetadataError")}
             />
         </>
     )

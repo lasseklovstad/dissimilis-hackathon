@@ -137,7 +137,8 @@
         "duplicateFullSong": "Duplicate of selected voice",
         "duplicateEmptySong": "New voice with empty bars and chord names", 
         "duplicateCustomSong": "Custom",
-        "newVoiceError": "An error occured while creating new voice"
+        "newVoiceError": "An error occured while creating new voice",
+        "saveSongMetadataError": "An error occured while saving information"
     },
     "Song": {
         "arranger": "Arranger",

@@ -2,16 +2,17 @@ import { setupServer } from "msw/node"
 import { rest } from "msw"
 import { user } from "./data/user.mock"
 import { songs } from "./data/songs.mock"
-import { addChordToBar, deleteChord, generateNewSong, generateNewVoice } from "./test-utils"
-import { ISong, ISongPost } from "../models/ISong"
+import { addChordToBar, deleteChord, generateNewSong } from "./test-utils"
+import { ISong, ISongMetadata, ISongPost } from "../models/ISong"
 import { emptySong, songWithChords } from "./data/song.mock"
 import { IBar, IBarPost } from "../models/IBar"
 import { Token } from "../utils/useApiServiceLogin"
-import { IVoicePost, IVoice, IVoiceDuplicatePost } from "../models/IVoice"
+import { songsMetadata } from "./data/songsMetadata.mock"
 
 const apiUrl = process.env.REACT_APP_API_URL
 
 let songDB: ISong[] = [emptySong, songWithChords]
+let songMetadataDB: ISongMetadata[] = songsMetadata
 
 export const resetSongDB = () => (songDB = [emptySong, songWithChords])
 export const mockUrl =
@@ -47,31 +48,26 @@ export const server = setupServer(
         const song = songDB.find((song) => song.songId.toString() === songId)
         return res(ctx.json(song))
     }),
+    rest.get<ISongMetadata>(`${apiUrl}song/:songId/metadata`, (req, res, ctx) => {
+        const songId = req.params.songId
+        const song = songMetadataDB.find((song) => song.songId.toString() === songId)
+        return res(ctx.json(song))
+    }),
+    rest.patch<ISongMetadata, ISongMetadata>(`${apiUrl}song/:songId/`, (req, res, ctx) => {
+        const songId = req.params.songId
+        const {title, composer, speed, songNotes} = req.body
+        const song = songMetadataDB.find((song) => song.songId.toString() === songId)
+        if (song) {
+            song.title = title
+            song.composer = composer
+            song.songNotes = songNotes
+            song.speed = speed
+            return res(ctx.json(song), ctx.status(201))
+        }
+        return res(ctx.status(404))
+    }),
     rest.delete(`${apiUrl}song/:songId`, (req, res, ctx) => {
         return res(ctx.status(204))
-    }),
-    rest.post<IVoiceDuplicatePost, IVoice>(`${apiUrl}song/:songId/voice/:voiceId/duplicate`, (req, res, ctx) => {
-        const {songId, voiceId} = req.params
-        const song = songDB.find((song) => song.songId.toString() === songId)
-        const voice = song?.voices.find((voice) => voice.songVoiceId.toString() === voiceId)
-        if (voice){
-        const newVoice:IVoice = {...voice, songVoiceId:voiceId+1, voiceName: req.body.voiceName, isMain: false}
-        return res(ctx.json(newVoice), ctx.status(201))
-        }
-        else {
-            res(ctx.status(404))
-        }
-    }),
-    rest.post<IVoicePost, IVoice>(`${apiUrl}song/:songId/voice`, (req, res, ctx) => {
-        const {songId} = req.params
-        const song = songDB.find((song) => song.songId.toString() === songId)
-        if (song){
-        const newVoice = generateNewVoice(song, req.body)
-        return res(ctx.json(newVoice), ctx.status(201))
-        }
-        else {
-            res(ctx.status(404))
-        }
     }),
     rest.post<IBarPost, IBar>(
         `${apiUrl}song/:songId/voice/:voiceId/bar/:barId/note`,

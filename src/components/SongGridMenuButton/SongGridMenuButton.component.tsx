@@ -186,14 +186,6 @@ export const SongGridMenuButton = (props: {
                     songId={songId}
                     handleOnCancelClick={() => handleCloseSongInfoDialog()}
                     handleOnSaveClick={handleSaveSongInfo}
-                    saveText={t("Modal.save")}
-                    cancelText={t("Modal.cancel")}
-                    headerText={t("MenuButton.details")}
-                    songNameLabelText={t("Modal.nameOfSong")}
-                    arrangerLabelText={t("Song.arranger")}
-                    composerLabelText={t("Song.composer")}
-                    songNotesLabelText={t("Song.songNotes")}
-                    speedLabelText={t("Song.songSpeed")}
                     isLoadingPatch={putSong.loading}
                 />
             </Dialog>
@@ -206,6 +198,11 @@ export const SongGridMenuButton = (props: {
                 isError={deleteSong.isError}
                 error={deleteSong.error}
                 title={t("Modal.deleteSongError")}
+            />
+            <ErrorDialog
+                isError={putSong.isError}
+                error={putSong.error}
+                title={t("Modal.saveSongMetadataError")}
             />
         </>
     )

@@ -120,6 +120,7 @@
         "dontSaveChanges": "Ikke lagre endringer",
         "saveChanges": "Lagre endringer",
         "saveSongError": "Det oppstod en feil ved lagring av sang",
+        "saveSongMetadataError": "Det oppstod en feil ved lagring av informasjon",
         "deleteSong": "Slett sang",
         "deleteSongLoading": "Sletter sang",
         "deleteSongError": "Det oppstod en feil ved sletting av sang",
@@ -139,7 +140,6 @@
         "duplicateEmptySong": "Stemme med tomme takter og besifring fra partitur", 
         "duplicateCustomSong": "Egendefinert",
         "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme"
-
     },
     "Song": {
         "arranger": "Arrangør",
