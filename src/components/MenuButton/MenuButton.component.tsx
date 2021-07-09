@@ -19,7 +19,7 @@ import {
 import { ChoiceDialog } from "../CustomModal/ChoiceDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
-import { TransposeModal } from "../CustomModal/TransposeModal.component"
+import { TransposeDialog } from "../CustomModal/TransposeDialog.component"
 import { InputDialog } from "../CustomModal/InputDialog.component"
 
 export const MenuButton = (props: {
@@ -183,13 +183,17 @@ export const MenuButton = (props: {
                         descriptionText={t("Modal.deleteDescription")}
                     />
                 </Dialog>
-                <TransposeModal
-                    defaultValue={`${songTitle} (${t("Modal.transposed")})`}
-                    modalOpen={transposeSongModalIsOpen}
-                    handleClosed={handleClose}
-                    handleOnCancelClick={handleClose}
-                    handleOnSaveClick={handleTransposeSong}
-                />
+                <Dialog
+                    open={transposeSongModalIsOpen}
+                    onClose={() => handleClose()}
+                    aria-label={t("Modal.transposed")}
+                >
+                    <TransposeDialog
+                        defaultValue={`${songTitle} (${t("Modal.transposed")})`}
+                        handleOnCancelClick={handleClose}
+                        handleOnSaveClick={handleTransposeSong}
+                    />
+                </Dialog>
                 <Dialog
                     open={duplicateSongModalIsOpen}
                     onClose={() => setDuplicateSongModalIsOpen(false)}
