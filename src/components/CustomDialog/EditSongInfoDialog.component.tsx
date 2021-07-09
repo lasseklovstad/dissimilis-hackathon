@@ -81,19 +81,11 @@ export const EditSongInfoDialog = (props: {
     const isLoadingGet = getSongMetadata.loading
 
     useEffect(() => {
-        if (
-            songMetadataFetched?.title &&
-            songMetadataFetched?.arrangerName &&
-            songMetadataFetched?.composer &&
-            songMetadataFetched?.songNotes &&
-            songMetadataFetched?.speed
-        ) {
-            setSongNameTextFieldInput(songMetadataFetched.title)
-            setArrangerTextFieldInput(songMetadataFetched.arrangerName)
-            setComposerTextFieldInput(songMetadataFetched.composer)
-            setSongNotesTextFieldInput(songMetadataFetched.songNotes)
-            setSpeedTextFieldInput(songMetadataFetched.speed)
-        }
+        setSongNameTextFieldInput(songMetadataFetched?.title || "")
+        setArrangerTextFieldInput(songMetadataFetched?.arrangerName || "")
+        setComposerTextFieldInput(songMetadataFetched?.composer || "")
+        setSongNotesTextFieldInput(songMetadataFetched?.songNotes || "")
+        setSpeedTextFieldInput(songMetadataFetched?.speed || 0)
     }, [songMetadataFetched])
 
     return (
