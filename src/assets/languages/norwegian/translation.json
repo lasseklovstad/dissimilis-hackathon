@@ -137,7 +137,8 @@
         "duplicateFullSong": "Duplikat av valgt stemme",
         "duplicateEmptySong": "Stemme med tomme takter og besifring fra partitur", 
         "duplicateCustomSong": "Egendefinert",
-        "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme"
+        "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme",
+        "loading": "Laster"
 
     },
     "Song": {
@@ -145,5 +146,12 @@
         "bar": "Takt",
         "barNumber": "Taktnummer",
         "barMenu": "Takt meny"
+    },
+    "TopBar": {
+        "languageNorwegian": "Norsk",
+        "languageEnglish": "English",
+        "dropdownLabel": "Dropdown meny",
+        "dialog": "Dialog",
+        "settings": "Innstillinger"
     }
 }

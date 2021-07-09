@@ -137,12 +137,20 @@
         "duplicateFullSong": "Duplicate of selected voice",
         "duplicateEmptySong": "New voice with empty bars and chord names", 
         "duplicateCustomSong": "Custom",
-        "newVoiceError": "An error occured while creating new voice"
+        "newVoiceError": "An error occured while creating new voice",
+        "loading": "Loading"
     },
     "Song": {
         "timeSignature": "Time signature",
         "bar": "Bar",
         "barNumber": "Bar number",
         "barMenu": "Bar menu"
+    },
+    "TopBar": {
+        "languageNorwegian": "Norsk",
+        "languageEnglish": "English",
+        "dropdownLabel": "Dropdown menu",
+        "dialog": "Dialog",
+        "settings": "Settings"
     }
 }

@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => {
             padding: theme.spacing(4),
             "@media (max-width: 600px)": {
                 width: "100%",
-                padding: theme.spacing(2),
+                padding: theme.spacing(1),
             },
             outline: "none",
         },
@@ -63,7 +63,7 @@ export const LanguageDialog = (props: {
     return (
         <Dialog
             open={props.dialogIsOpen}
-            aria-label="dialog"
+            aria-label={t("TopBar.dialog")}
             onClose={() => props.handleClosed}
         >
             <div className={classes.dialog}>
@@ -78,18 +78,24 @@ export const LanguageDialog = (props: {
                     >
                         <Select
                             value={`${languageChoice ? languageChoice : ""}`}
-                            aria-label="dropdown"
+                            aria-label={t("TopBar.dropdownLabel")}
                             onChange={(
                                 e: React.ChangeEvent<{ value: any }>
                             ) => {
                                 setLanguageChoice(e.target.value)
                             }}
                         >
-                            <MenuItem aria-label="dropdownNo" value={"nb"}>
-                                Norsk
+                            <MenuItem
+                                aria-label={t("TopBar.languageNorwegian")}
+                                value={"nb"}
+                            >
+                                {t("TopBar.languageNorwegian")}
                             </MenuItem>
-                            <MenuItem aria-label="dropdownEn" value={"en"}>
-                                English
+                            <MenuItem
+                                aria-label={t("TopBar.languageEnglish")}
+                                value={"en"}
+                            >
+                                {t("TopBar.languageEnglish")}
                             </MenuItem>
                         </Select>
                     </FormControl>
@@ -101,6 +107,7 @@ export const LanguageDialog = (props: {
                             className={classes.button}
                             size="large"
                             variant="contained"
+                            aria-label={t("Modal.save")}
                             onClick={() => handleOnSaveClick(languageChoice)}
                         >
                             {t("Modal.save")}
@@ -112,7 +119,7 @@ export const LanguageDialog = (props: {
                             className={classes.button}
                             size="large"
                             variant="outlined"
-                            aria-label="save"
+                            aria-label={t("Modal.cancel")}
                             onClick={() => {
                                 handleOnCancelClick()
                             }}

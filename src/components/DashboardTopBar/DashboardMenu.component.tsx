@@ -43,7 +43,7 @@ export const DashboardMenu = (props: {}) => {
         <>
             <IconButton
                 aria-haspopup="true"
-                aria-label="settings"
+                aria-label={t("TopBar.settings")}
                 onClick={handleClick}
             >
                 <SettingsIcon />
