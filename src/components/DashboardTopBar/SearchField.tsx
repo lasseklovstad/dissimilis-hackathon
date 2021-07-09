@@ -12,50 +12,49 @@ export const SearchField = (props: { searchTermInit?: string }) => {
     const [searchTerm, setSeachTerm] = useState(props.searchTermInit || "")
 
     const handleOnClick = () => {
-        history.push(`Library?search=${searchTerm}`)
+        history.push(`library?search=${searchTerm}`)
     }
 
     return (
-        <div>
-            <TextField
-                id="standard-basic"
-                variant="outlined"
-                placeholder={searchPlaceholder}
-                value={searchTerm}
-                onFocus={() => {}}
-                onBlur={() => {}}
-                onChange={(event) => {
-                    setSeachTerm(event.target.value)
-                }}
-                onKeyPress={(ev) => {
-                    console.log(`Pressed keyCode ${ev.key}`)
-                    if (ev.key === "Enter") {
-                        handleOnClick()
-                        ev.preventDefault()
-                    }
-                }}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton
-                                type="submit"
-                                aria-label="search"
-                                onClick={handleOnClick}
-                            >
-                                <SearchIcon />
-                            </IconButton>
-                            <IconButton
-                                aria-label="clear"
-                                onClick={() => {
-                                    setSeachTerm("")
-                                }}
-                            >
-                                <ClearIcon />
-                            </IconButton>
-                        </InputAdornment>
-                    ),
-                }}
-            />
-        </div>
+        <TextField
+            id="standard-basic"
+            variant="outlined"
+            fullWidth
+            placeholder={searchPlaceholder}
+            value={searchTerm}
+            onFocus={() => {}}
+            onBlur={() => {}}
+            onChange={(event) => {
+                setSeachTerm(event.target.value)
+            }}
+            onKeyPress={(ev) => {
+                if (ev.key === "Enter") {
+                    handleOnClick()
+                    ev.preventDefault()
+                }
+            }}
+            InputProps={{
+                inputProps: { "aria-label": searchPlaceholder },
+                endAdornment: (
+                    <InputAdornment position="end">
+                        <IconButton
+                            type="submit"
+                            aria-label="search"
+                            onClick={handleOnClick}
+                        >
+                            <SearchIcon />
+                        </IconButton>
+                        <IconButton
+                            aria-label="clear"
+                            onClick={() => {
+                                setSeachTerm("")
+                            }}
+                        >
+                            <ClearIcon />
+                        </IconButton>
+                    </InputAdornment>
+                ),
+            }}
+        />
     )
 }

@@ -54,7 +54,7 @@ export const DashboardTopBar = (props: {
                             xs={10}
                             sm={5}
                             md={4}
-                            style={{ paddingRight: sm ? 32 : 8 }}
+                            /* style={{ paddingRight: sm ? 32 : 8 }}*/
                         >
                             <Grid
                                 container
@@ -79,7 +79,13 @@ export const DashboardTopBar = (props: {
                                 </IconButton>
                             </Grid>
                         </Grid>
-                        <Grid item xs={12} sm={3} md={4}>
+                        <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
+                            <Grid item sm={4} />
+                        </Hidden>
+                        <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
+                            <Grid item sm={1} />
+                        </Hidden>
+                        <Grid item xs={12} sm={10} md={3}>
                             <SearchField searchTermInit={searchTerm} />
                         </Grid>
                     </Grid>

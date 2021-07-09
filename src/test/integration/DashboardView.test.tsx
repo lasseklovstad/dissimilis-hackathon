@@ -74,3 +74,15 @@ describe("Dashboard", () => {
         expect(songToDelete).not.toBeInTheDocument()
     })
 })
+
+describe("Search", () => {
+    it("Should search for songs by title", async () => {
+        await renderDashboard()
+        userEvent.type(screen.getByRole("textbox", { name: /søk/i }), "sang")
+        userEvent.click(screen.getByRole("button", { name: "search" }))
+        await waitDoneLoading()
+        expect(
+            screen.getByRole("button", { name: /Stairway to heaven/i })
+        ).toHaveProperty("href", "http://localhost/song/1")
+    })
+})
