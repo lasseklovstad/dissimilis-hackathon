@@ -64,17 +64,17 @@
         "copy": "Copy"
     },
     "CreateSongTab": {
-        "menu": "Instrument menu",
+        "menu": "Voice menu",
         "song": "Song",
         "instrument": "Instrument",
-        "newInstrument": "New instrument",
+        "newVoice": "New Voice",
         "changeVoiceName": "Change name",
         "deleteVoice": "Delete",
         "duplicateVoice": "Duplicate"
     },
     "ExportView": {
         "barPerRow": "Bars per row",
-        "voice": "Instrument",
+        "voice": "Voice",
         "rowsPerSheet": "Rows per sheet",
         "createPDF": "Create PDF",
         "cancel": "Cancel",
@@ -107,12 +107,12 @@
     "Modal": {
         "nameOfSong": "Name of song",
         "addSong": "Add a new song",
-        "nameOfInstrument": "Name of instrument",
-        "addInstrument": "Add a new instrument",
+        "nameOfVoice": "Name of voice",
+        "addVoice": "Add a new voice",
         "newVoiceName": "New name",
         "changeVoiceName": "Change name",
-        "deleteVoice": "Delete instrument",
-        "deleteVoiceDescription": "Are you sure you want to delete the instrument?",
+        "deleteVoice": "Delete voice",
+        "deleteVoiceDescription": "Are you sure you want to delete the voice?",
         "saveChangesPrompt": "Do you want to save changes?",
         "saveChangesPromptDescription": "Click 'don't save' to go to dashboard without saving",
         "dontSaveChanges": "Don't save changes",
@@ -131,7 +131,12 @@
         "transposed": "transposed",
         "transposingSong": "Transposing song",
         "transposeSongError": "Error transposing song",
-        "semiNotes": "Semi notes"
+        "semiNotes": "Semi notes",
+        "customNewVoice": "Spesification of new voice",
+        "duplicateFullSong": "Duplicate of selected voice",
+        "duplicateEmptySong": "New voice with empty bars and chord names", 
+        "duplicateCustomSong": "Custom",
+        "newVoiceError": "An error occured while creating new voice"
     },
     "Song": {
         "timeSignature": "Time signature",

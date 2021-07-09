@@ -99,4 +99,40 @@ describe("SongView", () => {
         )
         await waitFor(() => expect(chord).toHaveTextContent(""))
     })
+
+    it("Should create new voice with same notes as main voice", async () => {
+        await renderSongView("10")
+        const voiceMenu = screen.getByLabelText("Voice menu")
+        userEvent.click(voiceMenu)
+        const newVoiceDialog = screen.getByRole("menuitem", {
+            name: "New Voice",
+        })
+        userEvent.click(newVoiceDialog)
+        const title = screen.getByRole("heading")
+        expect(title).toHaveTextContent("Add a new voice")
+        userEvent.type(screen.getByLabelText("Name of voice"), "Test Ny Stemme")
+        userEvent.click(screen.getByRole("button", { name: "Create" }))
+        await waitDoneLoading()
+        await screen.findByRole("tab", { name: "Test Ny Stemme" })
+    })
+    it("Should create new blank voice", async () => {
+        await renderSongView("10")
+        const voiceMenu = screen.getByLabelText("Voice menu")
+        userEvent.click(voiceMenu)
+        const newVoiceDialog = screen.getByRole("menuitem", {
+            name: "New Voice",
+        })
+        userEvent.click(newVoiceDialog)
+        const title = screen.getByRole("heading")
+        expect(title).toHaveTextContent("Add a new voice")
+        userEvent.type(screen.getByLabelText("Name of voice"), "Test Ny Stemme")
+        userEvent.click(
+            screen.getByRole("radio", {
+                name: "Radio: New voice with empty bars and chord names",
+            })
+        )
+        userEvent.click(screen.getByRole("button", { name: "Create" }))
+        await waitDoneLoading()
+        await screen.findByRole("tab", { name: "Test Ny Stemme" })
+    })
 })

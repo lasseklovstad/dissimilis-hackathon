@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useApiService } from "./useApiService"
 import { ISong, ISongIndex } from "../models/ISong"
 import { IBar } from "../models/IBar"
-import { IVoice } from "../models/IVoice"
+import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../models/IVoice"
 
 const getArrangerId = () => {
     return sessionStorage.getItem("userId") || ""
@@ -192,7 +192,7 @@ export const useDeleteSong = (id: string) => {
 export const useCreateVoice = (songId: string) => {
     const url = `song/${songId}/voice`
     const headers = getHeaders()
-    const api = useApiService<IVoice>(url, { headers })
+    const api = useApiService<IVoice, IVoicePost>(url, { headers })
     return {
         postVoice: { run: api.postData, ...api.state },
     }
@@ -204,7 +204,7 @@ export const useDuplicateVoice = (
 ) => {
     const url = `song/${songId}/voice/${voiceId}/duplicate`
     const headers = getHeaders()
-    const api = useApiService<IVoice>(url, { headers })
+    const api = useApiService<IVoice, IVoiceDuplicatePost>(url, { headers })
     return {
         duplicateVoice: { run: api.postData, ...api.state },
     }
