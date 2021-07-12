@@ -59,7 +59,6 @@ export const ChoiceDialog = (props: {
                 ) : (
                     <DialogButton
                         onClick={handleOnSaveClick}
-                        type="submit"
                         variant="contained"
                     >
                         {ackText}
