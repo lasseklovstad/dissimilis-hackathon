@@ -155,9 +155,9 @@ export const CreateSongTab = (props: {
         setDeleteModalIsOpen(false)
     }
 
-    const handleChangeVoiceTitle = async (voiceTitle: string) => {
+    const handleChangeVoiceName = async (voiceName: string) => {
         const { error, result } = await putVoice.run({
-            voiceTitle: voiceTitle,
+            voiceName: voiceName,
             voiceNumber: clickedVoice?.partNumber,
         })
 
@@ -278,7 +278,7 @@ export const CreateSongTab = (props: {
             <InputModal
                 defaultValue={clickedVoice?.voiceName || ""}
                 handleOnCancelClick={handleClose}
-                handleOnSaveClick={handleChangeVoiceTitle}
+                handleOnSaveClick={handleChangeVoiceName}
                 handleClosed={handleClose}
                 modalOpen={renameModalIsOpen}
                 saveText={t("Modal.save")}
