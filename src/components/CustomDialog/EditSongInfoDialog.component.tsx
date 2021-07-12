@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react"
 import {
     CircularProgress,
-    Grid,
     makeStyles,
     DialogContent,
     DialogActions,
     TextField,
     Typography,
+    DialogTitle,
+    DialogContentText,
 } from "@material-ui/core"
 
 import { useGetSongMetadata } from "../../utils/useApiServiceSongs"
@@ -101,112 +102,99 @@ export const EditSongInfoDialog = (props: {
                 )
             }}
         >
-            <DialogContent
-                style={{
-                    padding: "40px",
-                }}
-            >
-                <Grid container>
-                    <Typography className={classes.title} variant="h2">
-                        {t("MenuButton.details")}
-                    </Typography>
-                    <TextField
-                        id="song-info-modal-song-name-textfield"
-                        inputProps={{
-                            maxLength: characterLimit,
-                        }}
-                        helperText={`${songNameTextFieldInput.length}/${characterLimit}`}
-                        autoFocus
-                        variant="filled"
-                        value={songNameTextFieldInput}
-                        onChange={(e) => {
-                            setSongNameTextFieldInput(e.target.value)
-                        }}
-                        label={t("Modal.nameOfSong")}
-                        style={{
-                            width: "100%",
-                        }}
-                    />
-                    <Typography className={classes.arranger}>
-                        {t("Song.arranger") + ": " + arrangerTextFieldInput}
-                    </Typography>
-                    <TextField
-                        id="song-info-modal-composer-textfield"
-                        inputProps={{
-                            maxLength: characterLimit,
-                        }}
-                        helperText={`${composerTextFieldInput.length}/${characterLimit}`}
-                        className={classes.textFields}
-                        value={composerTextFieldInput}
-                        variant="filled"
-                        onChange={(e) => {
-                            setComposerTextFieldInput(e.target.value)
-                        }}
-                        label={t("Song.composer")}
-                        style={{ width: "100%" }}
-                    />
-                    <TextField
-                        id="song-info-modal-song-speed-textfield"
-                        value={speedTextFieldInput}
-                        className={classes.textFields}
-                        helperText={t("Song.bpm")}
-                        variant="filled"
-                        onChange={(e) => {
-                            e.target.value = Math.max(
-                                numberMin,
-                                Math.min(numberMax, parseInt(e.target.value))
-                            ).toString()
-                            setSpeedTextFieldInput(parseInt(e.target.value))
-                        }}
-                        label={t("Song.songSpeed")}
-                        style={{ width: "100%" }}
-                        type="number"
-                    />
-                    <TextField
-                        id="song-info-modal-song-notes-textfield"
-                        inputProps={{
-                            maxLength: characterLimit,
-                        }}
-                        className={classes.textFields}
-                        helperText={`${songNotesTextFieldInput.length}/${characterLimit}`}
-                        multiline
-                        value={songNotesTextFieldInput}
-                        variant="filled"
-                        onChange={(e) => {
-                            setSongNotesTextFieldInput(e.target.value)
-                        }}
-                        label={t("Song.songNotes")}
-                        style={{ width: "100%" }}
-                    />
-                </Grid>
+            <DialogTitle>{t("MenuButton.details")}</DialogTitle>
+            <DialogContent>
+                <TextField
+                    id="song-info-modal-song-name-textfield"
+                    inputProps={{
+                        maxLength: characterLimit,
+                    }}
+                    helperText={`${songNameTextFieldInput.length}/${characterLimit}`}
+                    autoFocus
+                    variant="filled"
+                    value={songNameTextFieldInput}
+                    onChange={(e) => {
+                        setSongNameTextFieldInput(e.target.value)
+                    }}
+                    label={t("Modal.nameOfSong")}
+                    style={{
+                        width: "100%",
+                    }}
+                />
+                <DialogContentText className={classes.arranger}>
+                    {t("Song.arranger") + ": " + arrangerTextFieldInput}
+                </DialogContentText>
+                <TextField
+                    id="song-info-modal-composer-textfield"
+                    inputProps={{
+                        maxLength: characterLimit,
+                    }}
+                    helperText={`${composerTextFieldInput.length}/${characterLimit}`}
+                    className={classes.textFields}
+                    value={composerTextFieldInput}
+                    variant="filled"
+                    onChange={(e) => {
+                        setComposerTextFieldInput(e.target.value)
+                    }}
+                    label={t("Song.composer")}
+                    style={{ width: "100%" }}
+                />
+                <TextField
+                    id="song-info-modal-song-speed-textfield"
+                    value={speedTextFieldInput}
+                    className={classes.textFields}
+                    helperText={t("Song.bpm")}
+                    variant="filled"
+                    onChange={(e) => {
+                        e.target.value = Math.max(
+                            numberMin,
+                            Math.min(numberMax, parseInt(e.target.value))
+                        ).toString()
+                        setSpeedTextFieldInput(parseInt(e.target.value))
+                    }}
+                    label={t("Song.songSpeed")}
+                    style={{ width: "100%" }}
+                    type="number"
+                />
+                <TextField
+                    id="song-info-modal-song-notes-textfield"
+                    inputProps={{
+                        maxLength: characterLimit,
+                    }}
+                    className={classes.textFields}
+                    helperText={`${songNotesTextFieldInput.length}/${characterLimit}`}
+                    multiline
+                    value={songNotesTextFieldInput}
+                    variant="filled"
+                    onChange={(e) => {
+                        setSongNotesTextFieldInput(e.target.value)
+                    }}
+                    label={t("Song.songNotes")}
+                    style={{ width: "100%" }}
+                />
             </DialogContent>
             <DialogActions>
-                <Grid container className={classes.buttons}>
-                    {isLoadingPatch || isLoadingGet ? (
-                        <Grid container className={classes.loading}>
-                            <CircularProgress aria-label="Loading" size={24} />
-                        </Grid>
-                    ) : (
-                        <Grid item>
-                            <DialogButton
-                                disabled={!songNameTextFieldInput.trim()}
-                                buttonText={t("Modal.save")}
-                                isCancelButton={false}
-                            />
-                        </Grid>
-                    )}
-                    <Grid item>
-                        <DialogButton
-                            buttonText={t("Modal.cancel")}
-                            onClick={() => {
-                                handleOnCancelClick()
-                                setSongNameTextFieldInput("")
-                                setArrangerTextFieldInput("")
-                            }}
-                            isCancelButton
-                        />
-                    </Grid>
-                </Grid>
+                {isLoadingPatch || isLoadingGet ? (
+                    <CircularProgress aria-label="Loading" size={24} />
+                ) : (
+                    <DialogButton
+                        disabled={!songNameTextFieldInput.trim()}
+                        buttonText={t("Modal.save")}
+                        isCancelButton={false}
+                    />
+                )}
+                <DialogButton
+                    buttonText={t("Modal.cancel")}
+                    onClick={() => {
+                        handleOnCancelClick()
+                        setSongNameTextFieldInput("")
+                        setArrangerTextFieldInput("")
+                        setComposerTextFieldInput("")
+                        setSongNotesTextFieldInput("")
+                        setSpeedTextFieldInput(0)
+                    }}
+                    isCancelButton
+                />
             </DialogActions>
         </form>
     )

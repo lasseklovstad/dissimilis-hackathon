@@ -62,6 +62,11 @@ export const theme = createMuiTheme({
                 )}px`,
             },
         },
+        MuiDialogContentText: {
+            root: {
+                color: colors.black,
+            },
+        },
     },
     palette: {
         primary: {
