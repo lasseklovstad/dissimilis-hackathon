@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core"
 
 import { useTranslation } from "react-i18next"
+import i18n from "../../i18n"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -23,7 +24,6 @@ const useStyles = makeStyles((theme) => {
 })
 
 export const LanguageDialog = (props: {
-    handleOnSaveClick: (language: string | null) => void
     handleOnCancelClick: () => void
     handleClosed: () => void
     dialogIsOpen: boolean
@@ -33,8 +33,15 @@ export const LanguageDialog = (props: {
     const userLanguage = localStorage.getItem("userLanguage")
     const [languageChoice, setLanguageChoice] = useState(userLanguage)
     const { t } = useTranslation()
+    const { handleOnCancelClick } = props
 
-    const { handleOnCancelClick, handleOnSaveClick } = props
+    const handleChangeLanguage = async (language: string | null) => {
+        if (language) {
+            i18n.changeLanguage(language)
+            localStorage.setItem("userLanguage", language)
+            handleOnCancelClick()
+        }
+    }
 
     return (
         <>
@@ -66,7 +73,7 @@ export const LanguageDialog = (props: {
                     <Button
                         size="large"
                         variant="contained"
-                        onClick={() => handleOnSaveClick(languageChoice)}
+                        onClick={() => handleChangeLanguage(languageChoice)}
                     >
                         {t("Modal.save")}
                     </Button>

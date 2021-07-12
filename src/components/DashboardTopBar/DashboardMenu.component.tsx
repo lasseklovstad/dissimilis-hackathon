@@ -3,7 +3,6 @@ import { Dialog, IconButton, Menu, MenuItem } from "@material-ui/core"
 import SettingsIcon from "@material-ui/icons/Settings"
 import { useTranslation } from "react-i18next"
 import { LanguageDialog } from "../CustomModal/LanguageDialog.component"
-import i18n from "../../i18n"
 
 export const DashboardMenu = (props: {}) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -20,14 +19,6 @@ export const DashboardMenu = (props: {}) => {
     }
     const handleCloseChangeLanguageDialog = async () => {
         setChangeLanguageDialogIsOpen(false)
-    }
-
-    const handleChangeLanguage = async (language: string | null) => {
-        if (language) {
-            i18n.changeLanguage(language)
-            localStorage.setItem("userLanguage", language)
-            setChangeLanguageDialogIsOpen(false)
-        }
     }
 
     const handleClose = async (method?: "language" | "profile") => {
@@ -69,7 +60,6 @@ export const DashboardMenu = (props: {}) => {
                 onClose={() => handleCloseChangeLanguageDialog}
             >
                 <LanguageDialog
-                    handleOnSaveClick={handleChangeLanguage}
                     handleOnCancelClick={handleClose}
                     handleClosed={() => setChangeLanguageDialogIsOpen(false)}
                     dialogIsOpen={changeLanguageDialogIsOpen}
