@@ -23,16 +23,15 @@ describe("DashboardMenu", () => {
         userEvent.click(screen.getByRole("option", { name: "Norsk" }))
 
         userEvent.click(screen.getByRole("button", { name: "Save" }))
-        await screen.findByRole("heading", { name: /Dine siste fem sanger/i })
 
+        await screen.findByRole("button", { name: "Innstillinger" })
         userEvent.click(screen.getByRole("button", { name: "Innstillinger" }))
         userEvent.click(screen.getByRole("menuitem", { name: "Endre språk" }))
-        expect(screen.getByLabelText("Dialog")).toBeInTheDocument()
-        userEvent.click(screen.getByLabelText("Dropdown meny"))
+        userEvent.click(screen.getByLabelText("Språkvalg"))
 
-        userEvent.click(screen.getByRole("button", { name: "Norsk" }))
         userEvent.click(screen.getByRole("option", { name: "English" }))
         userEvent.click(screen.getByRole("button", { name: "Lagre" }))
-        await screen.findByRole("heading", { name: /Your last five songs/i })
+        await screen.findByRole("button", { name: "Settings" })
+        userEvent.click(screen.getByRole("button", { name: "Settings" }))
     })
 })
