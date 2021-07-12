@@ -19,6 +19,8 @@ import {
     useDeleteBars,
     useDeleteChord,
     useGetSong,
+    useUndoSong,
+    useRedoSong,
     useUpdateChord,
     useUpdateSong,
 } from "../../utils/useApiServiceSongs"
@@ -33,6 +35,7 @@ import { colors } from "../../utils/colors"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { chordMenuReducer } from "./ChordMenuOptions.component"
 import { SongNavBar } from "../../components/SongNavBar/SongNavBar.component"
+import { useHotkeys } from "react-hotkeys-hook"
 
 const useStyles = makeStyles({
     root: {
@@ -96,6 +99,8 @@ export const SongView = () => {
     >(undefined)
     const { postCopyBars } = useCopyBars(songId)
     const { postDeleteBars } = useDeleteBars(songId)
+    const { undoSong } = useUndoSong(songId)
+    const { redoSong } = useRedoSong(songId)
     const setValuesForSelectedChord = (
         chordId: number | undefined | null,
         barId: number | undefined,
@@ -430,6 +435,33 @@ export const SongView = () => {
 
     const handleUpdateVoice = (voice: IVoice) => {
         dispatchSong({ type: "UPDATE_VOICE_NAME", voice })
+    }
+
+    useHotkeys("ctrl+z", () => undoPressed())
+    useHotkeys("ctrl+y", () => redoPressed())
+    useHotkeys("ctrl+shift+z", () => redoPressed())
+
+    const undoPressed = () => {
+        console.log("Pressed undo")
+        //undo()
+    }
+    const redoPressed = () => {
+        console.log("Pressed redo")
+        //redo()
+    }
+
+    const undo = async () => {
+        const { error } = await undoSong.run()
+
+        if (!error) {
+        }
+    }
+
+    const redo = async () => {
+        const { error } = await redoSong.run()
+
+        if (!error) {
+        }
     }
 
     if (getSong.loading) {
