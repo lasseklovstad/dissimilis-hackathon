@@ -19,6 +19,7 @@ import { ITimeSignature } from "../../models/ITimeSignature"
 import { getTimeSignatureText } from "../../utils/bar.util"
 import { ISongIndex } from "../../models/ISong"
 import { Loading } from "../../components/loading/Loading.component"
+import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
 
 const useStyles = makeStyles({
     container: {
@@ -123,24 +124,12 @@ export const DashboardView = () => {
     }
 
     const renameSongInRecentSongs = (songId: number, title: string) => {
-        setRecentSongs(
-            recentSongs?.map((song: ISongIndex) => {
-                if (song.songId === songId) {
-                    song.title = title
-                }
-                return song
-            })
-        )
+        setRecentSongs(updateSongTitleInListOfSongs(recentSongs, songId, title))
     }
 
     const renameSongInFilteredSongs = (songId: number, title: string) => {
         setFilteredSongs(
-            recentSongs?.map((song: ISongIndex) => {
-                if (song.songId === songId) {
-                    song.title = title
-                }
-                return song
-            })
+            updateSongTitleInListOfSongs(filteredSongs, songId, title)
         )
     }
 

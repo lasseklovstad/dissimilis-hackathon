@@ -9,6 +9,7 @@ import {
 import { ISongIndex } from "../../models/ISong"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
+import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
 
 const useStyles = makeStyles({
     container: {
@@ -68,24 +69,12 @@ export const LibraryView = () => {
 
     const renameSongInFilteredSongs = (songId: number, title: string) => {
         setFilteredSongs(
-            filteredSongs?.map((song: ISongIndex) => {
-                if (song.songId === songId) {
-                    song.title = title
-                }
-                return song
-            })
+            updateSongTitleInListOfSongs(filteredSongs, songId, title)
         )
     }
 
     const renameSongInAllSongs = (songId: number, title: string) => {
-        setAllSongs(
-            allSongs?.map((song: ISongIndex) => {
-                if (song.songId === songId) {
-                    song.title = title
-                }
-                return song
-            })
-        )
+        setAllSongs(updateSongTitleInListOfSongs(allSongs, songId, title))
     }
 
     const handleOnChangeSearch = (searchTermParam: string) => {
