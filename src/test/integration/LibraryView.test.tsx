@@ -17,8 +17,8 @@ describe("Search", () => {
         expect(
             screen.getByRole("button", { name: /Stairway to heaven/i })
         ).toHaveProperty("href", "http://localhost/song/1")
-        userEvent.click(screen.getByLabelText("Søk"))
-        userEvent.keyboard("heaven")
+        userEvent.click(screen.getByLabelText("Search"))
+        userEvent.type(screen.getByRole("textbox", { name: /Search/i }), "sang")
         userEvent.click(screen.getByRole("button", { name: "search" }))
         await waitDoneLoading()
         expect(

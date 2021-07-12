@@ -78,7 +78,7 @@ describe("Dashboard", () => {
 describe("Search", () => {
     it("Should search for songs by title", async () => {
         await renderDashboard()
-        userEvent.type(screen.getByRole("textbox", { name: /søk/i }), "sang")
+        userEvent.type(screen.getByRole("textbox", { name: /Search/i }), "sang")
         userEvent.click(screen.getByRole("button", { name: "search" }))
         await waitDoneLoading()
         expect(

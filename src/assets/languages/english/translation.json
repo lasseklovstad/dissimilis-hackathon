@@ -18,6 +18,9 @@
         "user": "User",
         "song": "Song"
     },
+    "TopBar": {
+        "clear": "Clear"
+    },
     "LibraryView": {
         "defaultHeading": "Library",
         "searchHeading": "Seach: "

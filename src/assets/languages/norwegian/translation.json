@@ -16,6 +16,9 @@
         "user": "Bruker",
         "song": "Sang"
     },
+    "TopBar": {
+        "clear": "Tøm søkefelt"
+    },
     "LibraryView": {
         "defaultHeading": "Bibliotek",
         "searchHeading": "Søk: "

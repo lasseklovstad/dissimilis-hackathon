@@ -39,13 +39,13 @@ export const SearchField = (props: { searchTermInit?: string }) => {
                     <InputAdornment position="end">
                         <IconButton
                             type="submit"
-                            aria-label="search"
+                            aria-label={searchPlaceholder}
                             onClick={handleOnClick}
                         >
                             <SearchIcon />
                         </IconButton>
                         <IconButton
-                            aria-label="clear"
+                            aria-label={t("TopBar.clearLabel")}
                             onClick={() => {
                                 setSeachTerm("")
                             }}
