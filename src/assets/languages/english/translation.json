@@ -149,7 +149,7 @@
     "TopBar": {
         "languageNorwegian": "Norsk",
         "languageEnglish": "English",
-        "dropdownLabel": "Dropdown menu",
+        "languageSelect": "Select language",
         "dialog": "Dialog",
         "settings": "Settings"
     }

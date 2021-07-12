@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { IconButton, Menu, MenuItem } from "@material-ui/core"
+import { Dialog, IconButton, Menu, MenuItem } from "@material-ui/core"
 import SettingsIcon from "@material-ui/icons/Settings"
 import { useTranslation } from "react-i18next"
 import { LanguageDialog } from "../CustomModal/LanguageDialog.component"
@@ -17,6 +17,9 @@ export const DashboardMenu = (props: {}) => {
 
     const handleOpenChangeLanguageDialog = async () => {
         setChangeLanguageDialogIsOpen(true)
+    }
+    const handleCloseChangeLanguageDialog = async () => {
+        setChangeLanguageDialogIsOpen(false)
     }
 
     const handleChangeLanguage = async (language: string | null) => {
@@ -60,12 +63,18 @@ export const DashboardMenu = (props: {}) => {
                     {t("MenuButton.changeLanguage")}
                 </MenuItem>
             </Menu>
-            <LanguageDialog
-                handleOnSaveClick={handleChangeLanguage}
-                handleOnCancelClick={handleClose}
-                handleClosed={() => setChangeLanguageDialogIsOpen(false)}
-                dialogIsOpen={changeLanguageDialogIsOpen}
-            />
+            <Dialog
+                open={changeLanguageDialogIsOpen}
+                aria-label={t("TopBar.dialog")}
+                onClose={() => handleCloseChangeLanguageDialog}
+            >
+                <LanguageDialog
+                    handleOnSaveClick={handleChangeLanguage}
+                    handleOnCancelClick={handleClose}
+                    handleClosed={() => setChangeLanguageDialogIsOpen(false)}
+                    dialogIsOpen={changeLanguageDialogIsOpen}
+                />
+            </Dialog>
         </>
     )
 }

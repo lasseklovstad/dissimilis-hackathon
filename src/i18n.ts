@@ -7,7 +7,7 @@ const resources: Resource = {
     en: {
         translation: translationEN,
     },
-    nb: {
+    no: {
         translation: translationNO,
     },
 }
@@ -17,7 +17,7 @@ i18n.use({
     async: false,
     init: function () {},
     detect: function () {
-        return localStorage.getItem("userLanguage")
+        return localStorage.getItem("userLanguage") || navigator.language
     },
     cacheUserLanguage: function (lng: string) {
         localStorage.setItem("userLanguage", lng)

@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import {
     Button,
-    Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
@@ -13,32 +12,9 @@ import {
 } from "@material-ui/core"
 
 import { useTranslation } from "react-i18next"
-import { colors } from "../../utils/colors"
 
 const useStyles = makeStyles((theme) => {
     return {
-        dialog: {
-            boxShadow: "0 3px 6px 2px rgba(0, 0, 0, 0.1)",
-            height: "auto",
-            borderRadius: 2,
-            padding: theme.spacing(4),
-            "@media (max-width: 600px)": {
-                width: "100%",
-                padding: theme.spacing(1),
-            },
-            outline: "none",
-        },
-        button: {
-            "&:hover": {
-                backgroundColor: colors.gray_300,
-            },
-            marginRight: theme.spacing(1),
-            float: "left",
-            position: "relative",
-        },
-        title: {
-            marginBottom: theme.spacing(1),
-        },
         formControl: {
             marginBottom: theme.spacing(3),
             minWidth: 150,
@@ -61,74 +37,54 @@ export const LanguageDialog = (props: {
     const { handleOnCancelClick, handleOnSaveClick } = props
 
     return (
-        <Dialog
-            open={props.dialogIsOpen}
-            aria-label={t("TopBar.dialog")}
-            onClose={() => props.handleClosed}
-        >
-            <div className={classes.dialog}>
-                <DialogTitle className={classes.title}>
-                    {t("MenuButton.changeLanguage")}
-                </DialogTitle>
+        <>
+            <DialogTitle>{t("MenuButton.changeLanguage")}</DialogTitle>
 
-                <DialogContent>
-                    <FormControl
-                        variant="outlined"
-                        className={classes.formControl}
+            <DialogContent>
+                <FormControl variant="outlined" className={classes.formControl}>
+                    <Select
+                        value={`${languageChoice ? languageChoice : ""}`}
+                        inputProps={{
+                            "aria-label": t("TopBar.languageSelect"),
+                        }}
+                        onChange={(e: React.ChangeEvent<{ value: any }>) => {
+                            setLanguageChoice(e.target.value)
+                        }}
                     >
-                        <Select
-                            value={`${languageChoice ? languageChoice : ""}`}
-                            aria-label={t("TopBar.dropdownLabel")}
-                            onChange={(
-                                e: React.ChangeEvent<{ value: any }>
-                            ) => {
-                                setLanguageChoice(e.target.value)
-                            }}
-                        >
-                            <MenuItem
-                                aria-label={t("TopBar.languageNorwegian")}
-                                value={"nb"}
-                            >
-                                {t("TopBar.languageNorwegian")}
-                            </MenuItem>
-                            <MenuItem
-                                aria-label={t("TopBar.languageEnglish")}
-                                value={"en"}
-                            >
-                                {t("TopBar.languageEnglish")}
-                            </MenuItem>
-                        </Select>
-                    </FormControl>
-                </DialogContent>
+                        <MenuItem value={"no"}>
+                            {t("TopBar.languageNorwegian")}
+                        </MenuItem>
+                        <MenuItem value={"en"}>
+                            {t("TopBar.languageEnglish")}
+                        </MenuItem>
+                    </Select>
+                </FormControl>
+            </DialogContent>
 
-                <DialogActions>
-                    <Grid item>
-                        <Button
-                            className={classes.button}
-                            size="large"
-                            variant="contained"
-                            aria-label={t("Modal.save")}
-                            onClick={() => handleOnSaveClick(languageChoice)}
-                        >
-                            {t("Modal.save")}
-                        </Button>
-                    </Grid>
+            <DialogActions>
+                <Grid item>
+                    <Button
+                        size="large"
+                        variant="contained"
+                        aria-label={t("Modal.save")}
+                        onClick={() => handleOnSaveClick(languageChoice)}
+                    >
+                        {t("Modal.save")}
+                    </Button>
+                </Grid>
 
-                    <Grid item>
-                        <Button
-                            className={classes.button}
-                            size="large"
-                            variant="outlined"
-                            aria-label={t("Modal.cancel")}
-                            onClick={() => {
-                                handleOnCancelClick()
-                            }}
-                        >
-                            {t("Modal.cancel")}
-                        </Button>
-                    </Grid>
-                </DialogActions>
-            </div>
-        </Dialog>
+                <Grid item>
+                    <Button
+                        size="large"
+                        variant="outlined"
+                        onClick={() => {
+                            handleOnCancelClick()
+                        }}
+                    >
+                        {t("Modal.cancel")}
+                    </Button>
+                </Grid>
+            </DialogActions>
+        </>
     )
 }
