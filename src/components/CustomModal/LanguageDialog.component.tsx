@@ -66,7 +66,6 @@ export const LanguageDialog = (props: {
                     <Button
                         size="large"
                         variant="contained"
-                        aria-label={t("Modal.save")}
                         onClick={() => handleOnSaveClick(languageChoice)}
                     >
                         {t("Modal.save")}
