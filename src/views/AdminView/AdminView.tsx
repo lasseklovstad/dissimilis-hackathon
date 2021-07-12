@@ -3,6 +3,8 @@ import { Box, Grid, makeStyles, Typography } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useHistory } from "react-router"
+import { useGetUser } from "../../utils/useApiServiceUsers"
+import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 
 const useStyles = makeStyles({
     container: {
@@ -16,10 +18,25 @@ export const AdminView = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const history = useHistory()
 
+    const { getUser, userInit } = useGetUser()
+    const userId = userInit?.userId
+
     const handleOnChangeSearch = (searchTermParam: string) => {
         // Temporary placeholder
         setSearchTerm(searchTermParam)
         history.push(`/libraryView`)
+    }
+
+    const userIsSystemAdmin = (userId: number | undefined) => {
+        return true
+    }
+
+    const userIsCountryAdmin = (userId: number | undefined) => {
+        return true
+    }
+
+    const userIsGroupAdmin = (userId: number | undefined) => {
+        return true
     }
 
     return (
@@ -31,20 +48,29 @@ export const AdminView = () => {
                             onChange={handleOnChangeSearch}
                             searchTerm={searchTerm}
                         />
-                        {/*
-                        {userHasElevatedPermissions(user) ? (
-                            <SystemSettings></SystemSettings> ?
-                            <CountryGrid></CountryGrid> ?
-                            <GroupGrid></GroupGrid> ?
-                        ) : (
-                            <ErrorDialog></ErrorDialog>
-                            Insufficient user access level!
-                        )}
-                        */}
-                        <Typography variant="h2">
+                        <Typography variant="h1">
                             {t("AdminView.adminPanel")}
                         </Typography>
                         This is the adminView
+                        <Typography variant="h2">
+                            {userIsSystemAdmin(userId) ? "System Admin" : ""}
+                        </Typography>
+                        <Typography variant="h2">
+                            {userIsCountryAdmin(userId) ? "Country Admin" : ""}
+                        </Typography>
+                        <Typography variant="h2">
+                            {userIsGroupAdmin(userId) ? "Group Admin" : ""}
+                        </Typography>
+                        {
+                            //<SystemSettings></SystemSettings> ?
+                            //<CountryGrid></CountryGrid> ?
+                            //<GroupGrid></GroupGrid> ?
+                        }
+                        <ErrorDialog
+                            error={getUser.error}
+                            isError={getUser.isError}
+                            title="There was an error fetching the user access level"
+                        />
                     </Grid>
                 </Grid>
             </Box>
