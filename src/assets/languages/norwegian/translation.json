@@ -17,6 +17,11 @@
         "user": "Bruker",
         "song": "Sang"
     },
+    "AdminView": {
+        "adminPanel": "Adminpanel",
+        "groups": "Grupper",
+        "countries": "Land"
+    },
     "BarContainer": {
         "deleteBar": "Slett takt",
         "duplicateBar": "Dupliser takt",

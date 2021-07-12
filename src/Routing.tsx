@@ -7,6 +7,7 @@ import { SongView } from "./views/SongView/SongView"
 import { PrivateRoute } from "./PrivateRoute"
 import { ExportView } from "./views/ExportView/ExportView"
 import { LibraryView } from "./views/LibrayView/LibraryView"
+import { AdminView } from "./views/AdminView/AdminView"
 
 export const SongRouting = () => {
     return (
@@ -62,6 +63,17 @@ export const Routing = () => {
                             exact
                             path="/library"
                             component={LibraryView}
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/admin"
+                    render={() => (
+                        <PrivateRoute
+                            exact
+                            path="/admin"
+                            component={AdminView}
                         />
                     )}
                 />
