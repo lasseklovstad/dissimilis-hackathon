@@ -17,8 +17,8 @@ export const AdminView = () => {
     const history = useHistory()
 
     const handleOnChangeSearch = (searchTermParam: string) => {
+        // Temporary placeholder
         setSearchTerm(searchTermParam)
-
         history.push(`/libraryView`)
     }
 
@@ -32,9 +32,14 @@ export const AdminView = () => {
                             searchTerm={searchTerm}
                         />
                         {/*
-                        <SystemSettings></SystemSettings> ?
-                        <CountryGrid></CountryGrid> ?
-                        <GroupGrid></GroupGrid> ?
+                        {userHasElevatedPermissions(user) ? (
+                            <SystemSettings></SystemSettings> ?
+                            <CountryGrid></CountryGrid> ?
+                            <GroupGrid></GroupGrid> ?
+                        ) : (
+                            <ErrorDialog></ErrorDialog>
+                            Insufficient user access level!
+                        )}
                         */}
                         <Typography variant="h2">
                             {t("AdminView.adminPanel")}
