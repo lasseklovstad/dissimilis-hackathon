@@ -70,17 +70,17 @@
         "copy": "Kopier"
     },
     "CreateSongTab": {
-        "menu": "Instrument meny",
+        "menu": "Stemme meny",
         "song": "Partitur",
         "instrument": "Instrument",
-        "newInstrument": "Nytt instrument",
+        "newVoice": "Ny stemme",
         "changeVoiceName": "Endre navn",
         "deleteVoice": "Slett",
         "duplicateVoice": "Dupliser"
     },
     "ExportView": {
         "barPerRow": "Takt per rad",
-        "voice": "Instrument",
+        "voice": "Stemme",
         "rowsPerSheet": "Rader per ark",
         "createPDF": "Opprett PDF",
         "cancel": "Avbryt",
@@ -113,12 +113,12 @@
     "Modal": {
         "nameOfSong": "Navn på sang",
         "addSong": "Legg til ny sang",
-        "nameOfInstrument": "Navn på instrument",
-        "addInstrument": "Legg til et instrument",
+        "nameOfVoice": "Navn på stemme",
+        "addVoice": "Legg til en stemme",
         "newVoiceName": "Nytt navn",
         "changeVoiceName": "Endre navn",
-        "deleteVoice": "Slett instrument",
-        "deleteVoiceDescription": "Er du sikker du vil slette dette instrumentet?",
+        "deleteVoice": "Slett stemme",
+        "deleteVoiceDescription": "Er du sikker du vil slette denne stemmen?",
         "saveChangesPrompt": "Vil du lagre endringer?",
         "saveChangesPromptDescription": "Trykk 'ikke lagre' for å gå tilbake til dashboard uten å lagre",
         "dontSaveChanges": "Ikke lagre endringer",
@@ -137,7 +137,13 @@
         "transposed": "transponert",
         "transposingSong": "Transponerer sang",
         "transposeSongError": "Det oppstod en feil ved transponering av sang",
-        "semiNotes": "Halvtoner"
+        "semiNotes": "Halvtoner",
+        "customNewVoice": "Spesifikasjon av ny stemme",
+        "duplicateFullSong": "Duplikat av valgt stemme",
+        "duplicateEmptySong": "Stemme med tomme takter og besifring fra partitur", 
+        "duplicateCustomSong": "Egendefinert",
+        "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme"
+
     },
     "Song": {
         "timeSignature": "Taktart",

@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import {
     Box,
+    Dialog,
     IconButton,
     makeStyles,
     Menu,
@@ -21,6 +22,8 @@ import {
 } from "../../utils/useApiServiceSongs"
 import { colors } from "../../utils/colors"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
+import { NewVoiceDialog } from "../CustomModal/NewVoiceDialog.component"
+import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -72,8 +75,7 @@ export const CreateSongTab = (props: {
         onUpdateVoice,
         onDeleteVoice,
     } = props
-    const [newInstrumentModalIsOpen, setNewInstrumentModalIsOpen] =
-        useState(false)
+    const [newVoiceModalIsOpen, setNewVoiceModalIsOpen] = useState(false)
     const [renameModalIsOpen, setRenameModalIsOpen] = useState(false)
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false)
     const { t } = useTranslation()
@@ -93,23 +95,46 @@ export const CreateSongTab = (props: {
     const history = useHistory()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
-    const handleAddInstrument = async (title: string) => {
+    const handleAddVoice = async (title: string, option: string) => {
         const voiceNumber = Math.max(
             ...voices.map((voice) => voice.partNumber),
             0
         )
-        const { error, result } = await postVoice.run({
-            instrument: title,
-            voiceNumber: voiceNumber + 1,
+        switch (option) {
+            case "Modal.duplicateFullSong": {
+                handleDuplicateVoice(title)
+                break
+            }
+            case "Modal.duplicateEmptySong": {
+                const { error, result } = await postVoice.run({
+                    voiceName: title,
+                    voiceNumber: voiceNumber + 1,
+                })
+                if (!error && result) {
+                    setNewVoiceModalIsOpen(false)
+                    onAddVoice(result.data)
+                }
+                break
+            }
+            case "Modal.duplicateCustomSong": {
+                setNewVoiceModalIsOpen(false)
+                break
+            }
+        }
+    }
+
+    const handleDuplicateVoice = async (voiceName: string) => {
+        const { error, result } = await duplicateVoice.run({
+            voiceName,
         })
 
         if (!error && result) {
             onAddVoice(result.data)
-            setNewInstrumentModalIsOpen(false)
+            setNewVoiceModalIsOpen(false)
         }
     }
 
-    const handleDeleteInstrument = async () => {
+    const handleDeleteVoice = async () => {
         const { error } = await deleteVoice.run()
 
         if (!error && clickedVoice) {
@@ -125,14 +150,14 @@ export const CreateSongTab = (props: {
 
     const handleClose = () => {
         setAnchorEl(null)
-        setNewInstrumentModalIsOpen(false)
+        setNewVoiceModalIsOpen(false)
         setRenameModalIsOpen(false)
         setDeleteModalIsOpen(false)
     }
 
-    const handleChangeVoiceTitle = async (voiceTitle: string) => {
+    const handleChangeVoiceName = async (voiceName: string) => {
         const { error, result } = await putVoice.run({
-            instrument: voiceTitle,
+            voiceName: voiceName,
             voiceNumber: clickedVoice?.partNumber,
         })
 
@@ -151,14 +176,6 @@ export const CreateSongTab = (props: {
         })
     }
 
-    const handleDuplicateInstrument = async () => {
-        const { error, result } = await duplicateVoice.run()
-
-        if (!error && result) {
-            onAddVoice(result.data)
-        }
-    }
-
     return (
         <>
             <Box display="flex" flexWrap="wrap" alignItems="center">
@@ -175,7 +192,7 @@ export const CreateSongTab = (props: {
                     {voices.map((voice) => {
                         const label = voice.isMain
                             ? t("CreateSongTab.song")
-                            : voice.title
+                            : voice.voiceName
                         return (
                             <Tab
                                 key={voice.songVoiceId}
@@ -220,11 +237,11 @@ export const CreateSongTab = (props: {
             >
                 <MenuItem
                     onClick={() => {
-                        setNewInstrumentModalIsOpen(true)
+                        setNewVoiceModalIsOpen(true)
                         setAnchorEl(null)
                     }}
                 >
-                    {t("CreateSongTab.newInstrument")}
+                    {t("CreateSongTab.newVoice")}
                 </MenuItem>
                 <MenuItem
                     disabled={selectedVoice?.isMain}
@@ -244,33 +261,24 @@ export const CreateSongTab = (props: {
                 >
                     {t("CreateSongTab.deleteVoice")}
                 </MenuItem>
-                <MenuItem
-                    disabled={selectedVoice?.isMain}
-                    onClick={() => {
-                        handleDuplicateInstrument()
-                        setAnchorEl(null)
-                    }}
-                >
-                    {t("CreateSongTab.duplicateVoice")}
-                </MenuItem>
             </Menu>
 
+            <Dialog
+                open={newVoiceModalIsOpen}
+                onClose={() => handleClose()}
+                aria-labelledby={t("Modal.addVoice")}
+            >
+                <NewVoiceDialog
+                    handleOnCancelClick={() => handleClose()}
+                    handleOnSaveClick={handleAddVoice}
+                    characterLimit={100}
+                    isLoading={postVoice.loading || duplicateVoice.loading}
+                />
+            </Dialog>
             <InputModal
-                handleOnCancelClick={() => handleClose()}
-                handleOnSaveClick={handleAddInstrument}
-                handleClosed={() => handleClose()}
-                modalOpen={newInstrumentModalIsOpen}
-                saveText={t("Modal.create")}
-                cancelText={t("Modal.cancel")}
-                headerText={t("Modal.addInstrument")}
-                labelText={t("Modal.nameOfInstrument")}
-                characterLimit={100}
-                isLoading={postVoice.loading}
-            />
-            <InputModal
-                defaultValue={clickedVoice?.title || ""}
+                defaultValue={clickedVoice?.voiceName || ""}
                 handleOnCancelClick={handleClose}
-                handleOnSaveClick={handleChangeVoiceTitle}
+                handleOnSaveClick={handleChangeVoiceName}
                 handleClosed={handleClose}
                 modalOpen={renameModalIsOpen}
                 saveText={t("Modal.save")}
@@ -283,7 +291,7 @@ export const CreateSongTab = (props: {
             <ChoiceModal
                 handleOnCancelClick={handleClose}
                 handleClosed={handleClose}
-                handleOnSaveClick={handleDeleteInstrument}
+                handleOnSaveClick={handleDeleteVoice}
                 ackText={t("Modal.deleteVoice")}
                 modalOpen={deleteModalIsOpen}
                 cancelText={t("Modal.cancel")}
@@ -314,15 +322,17 @@ export const CreateSongTab = (props: {
                 >
                     {t("CreateSongTab.deleteVoice")}
                 </MenuItem>
-                <MenuItem
-                    onClick={() => {
-                        handleDuplicateInstrument()
-                        setRightClickMenuPosition(undefined)
-                    }}
-                >
-                    {t("CreateSongTab.duplicateVoice")}
-                </MenuItem>
             </Menu>
+            <ErrorDialog
+                isError={postVoice.isError}
+                error={postVoice.error}
+                title={t("Modal.newVoiceError")}
+            />
+            <ErrorDialog
+                isError={duplicateVoice.isError}
+                error={duplicateVoice.error}
+                title={t("Modal.newVoiceError")}
+            />
         </>
     )
 }
