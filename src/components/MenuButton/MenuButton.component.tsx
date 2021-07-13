@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import {
+    Dialog,
     Divider,
     IconButton,
     Menu,
@@ -15,11 +16,11 @@ import {
     useDuplicateSong,
     useTransposeSong,
 } from "../../utils/useApiServiceSongs"
-import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
+import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
-import { TransposeModal } from "../CustomModal/TransposeModal.component"
-import { InputModal } from "../CustomModal/InputModal.component"
+import { TransposeDialog } from "../CustomDialog/TransposeDialog.component"
+import { InputDialog } from "../CustomDialog/InputDialog.component"
 
 export const MenuButton = (props: {
     voiceId: number
@@ -32,8 +33,8 @@ export const MenuButton = (props: {
 }) => {
     const { songTitle } = props
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const [deleteSongModalIsOpen, setDeleteSongModalIsOpen] = useState(false)
-    const [duplicateSongModalIsOpen, setDuplicateSongModalIsOpen] =
+    const [deleteSongDialogIsOpen, setDeleteSongDialogIsOpen] = useState(false)
+    const [duplicateSongDialogIsOpen, setDuplicateSongDialogIsOpen] =
         useState(false)
     const { t } = useTranslation()
     const history = useHistory()
@@ -43,7 +44,7 @@ export const MenuButton = (props: {
         transpose: string
     }>()
     const { deleteSong } = useDeleteSong(songId)
-    const [transposeSongModalIsOpen, setTransposeSongModalIsOpen] =
+    const [transposeSongDialogIsOpen, setTransposeSongDialogIsOpen] =
         useState(false)
     const { transposeSong } = useTransposeSong(songId, title, transpose)
     const { duplicateSong } = useDuplicateSong(Number(songId))
@@ -53,7 +54,7 @@ export const MenuButton = (props: {
     }
 
     const handleDeleteSong = async () => {
-        setDeleteSongModalIsOpen(false)
+        setDeleteSongDialogIsOpen(false)
         const { isError } = await deleteSong.run()
         if (!isError) {
             history.replace("/dashboard")
@@ -64,8 +65,8 @@ export const MenuButton = (props: {
         history.push(`/song/${songId}/export?voice=${props.voiceId}`)
     }
 
-    const handleOpenTransposeSongModal = async () => {
-        setTransposeSongModalIsOpen(true)
+    const handleOpenTransposeSongDialog = async () => {
+        setTransposeSongDialogIsOpen(true)
     }
 
     const handleTransposeSong = async (title: string, transpose: string) => {
@@ -82,20 +83,20 @@ export const MenuButton = (props: {
         method?: "transpose" | "export" | "delete" | "duplicate" | "editBars"
     ) => {
         setAnchorEl(null)
-        setDeleteSongModalIsOpen(false)
-        setTransposeSongModalIsOpen(false)
+        setDeleteSongDialogIsOpen(false)
+        setTransposeSongDialogIsOpen(false)
         switch (method) {
             case "transpose":
-                handleOpenTransposeSongModal()
+                handleOpenTransposeSongDialog()
                 break
             case "export":
                 await exportSong()
                 break
             case "delete":
-                setDeleteSongModalIsOpen(true)
+                setDeleteSongDialogIsOpen(true)
                 break
             case "duplicate":
-                setDuplicateSongModalIsOpen(true)
+                setDuplicateSongDialogIsOpen(true)
                 break
             case "editBars":
                 props.setBarEditMode()
@@ -111,7 +112,7 @@ export const MenuButton = (props: {
         })
 
         if (!error && result) {
-            setDuplicateSongModalIsOpen(false)
+            setDuplicateSongDialogIsOpen(false)
             history.push(`/song/${result.data.songId.toString()}`)
         }
     }
@@ -168,57 +169,73 @@ export const MenuButton = (props: {
                         </>
                     ) : undefined}
                 </Menu>
-                <ChoiceModal
-                    handleOnCancelClick={handleClose}
-                    handleClosed={handleClose}
-                    handleOnSaveClick={handleDeleteSong}
-                    ackText={t("Modal.deleteSong")}
-                    modalOpen={deleteSongModalIsOpen}
-                    cancelText={t("Modal.cancel")}
-                    headerText={t("Modal.deleteSong")}
-                    descriptionText={t("Modal.deleteDescription")}
-                />
-                <TransposeModal
-                    defaultValue={`${songTitle} (${t("Modal.transposed")})`}
-                    modalOpen={transposeSongModalIsOpen}
-                    handleClosed={handleClose}
-                    handleOnCancelClick={handleClose}
-                    handleOnSaveClick={handleTransposeSong}
-                />
-                <InputModal
-                    handleOnCancelClick={() =>
-                        setDuplicateSongModalIsOpen(false)
-                    }
-                    handleOnSaveClick={handleDuplicateSong}
-                    handleClosed={() => setDuplicateSongModalIsOpen(false)}
-                    modalOpen={duplicateSongModalIsOpen}
-                    defaultValue={`${songTitle} (2)`}
-                    saveText={t("Modal.create")}
-                    cancelText={t("Modal.cancel")}
-                    headerText={t("DashboardView.duplicateText")}
-                    labelText={t("Modal.newVoiceName")}
-                    isLoading={duplicateSong.loading}
-                />
+                <Dialog
+                    open={deleteSongDialogIsOpen}
+                    onClose={() => handleClose()}
+                    aria-label={t("Dialog.deleteSong")}
+                >
+                    <ChoiceDialog
+                        handleOnCancelClick={handleClose}
+                        handleOnSaveClick={handleDeleteSong}
+                        ackText={t("Dialog.deleteSong")}
+                        cancelText={t("Dialog.cancel")}
+                        headerText={t("Dialog.deleteSong")}
+                        descriptionText={t("Dialog.deleteDescription")}
+                    />
+                </Dialog>
+                <Dialog
+                    open={transposeSongDialogIsOpen}
+                    onClose={() => handleClose()}
+                    aria-label={t("Dialog.transposed")}
+                >
+                    <TransposeDialog
+                        defaultValue={`${songTitle} (${t(
+                            "Dialog.transposed"
+                        )})`}
+                        handleOnCancelClick={handleClose}
+                        handleOnSaveClick={handleTransposeSong}
+                    />
+                </Dialog>
+                <Dialog
+                    open={duplicateSongDialogIsOpen}
+                    onClose={() => setDuplicateSongDialogIsOpen(false)}
+                    aria-labelledby={t("DashboardView.duplicateText")}
+                    maxWidth="sm"
+                    fullWidth
+                >
+                    <InputDialog
+                        handleOnCancelClick={() =>
+                            setDuplicateSongDialogIsOpen(false)
+                        }
+                        handleOnSaveClick={handleDuplicateSong}
+                        defaultValue={`${songTitle} (2)`}
+                        saveText={t("Dialog.create")}
+                        cancelText={t("Dialog.cancel")}
+                        headerText={t("DashboardView.duplicateText")}
+                        labelText={t("Dialog.newVoiceName")}
+                        isLoading={duplicateSong.loading}
+                    />
+                </Dialog>
             </div>
             <Loading
                 isLoading={deleteSong.loading}
                 fullScreen
-                text={t("Modal.deleteSongLoading")}
+                text={t("Dialog.deleteSongLoading")}
             />
             <Loading
                 isLoading={transposeSong.loading}
                 fullScreen
-                text={t("Modal.transposingSong")}
+                text={t("Dialog.transposingSong")}
             />
             <ErrorDialog
                 isError={deleteSong.isError}
                 error={deleteSong.error}
-                title={t("Modal.deleteSongError")}
+                title={t("Dialog.deleteSongError")}
             />
             <ErrorDialog
                 isError={transposeSong.isError}
                 error={transposeSong.error}
-                title={t("Modal.transposeSongError")}
+                title={t("Dialog.transposeSongError")}
             />
         </>
     )

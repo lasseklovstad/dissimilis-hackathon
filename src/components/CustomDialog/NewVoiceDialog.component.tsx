@@ -4,23 +4,19 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    Grid,
     makeStyles,
     TextField,
 } from "@material-ui/core"
 
 import { useTranslation } from "react-i18next"
-import { RadioButtons } from "../CustomModalComponents/RadioButtons.component"
-import { DialogButton } from "../CustomModalComponents/DialogButton.components"
+import { RadioButtons } from "../CustomDialogComponents/RadioButtons.component"
+import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 
 const useStyles = makeStyles((theme) => {
     return {
         insertName: {
             marginBottom: theme.spacing(2),
             marginTop: theme.spacing(1),
-        },
-        container: {
-            width: "100%",
         },
         loading: {
             margin: theme.spacing(1),
@@ -58,7 +54,7 @@ export const NewVoiceDialog = (props: {
     }, [defaultValue])
 
     const [radioButtonValue, setRadioButtonValue] = React.useState(
-        "Modal.duplicateFullSong"
+        "Dialog.duplicateFullSong"
     )
 
     const handleChange = (event: {
@@ -74,10 +70,10 @@ export const NewVoiceDialog = (props: {
                 handleOnSaveClick(textFieldInput, radioButtonValue)
             }}
         >
-            <DialogTitle>{t("Modal.addVoice")}</DialogTitle>
+            <DialogTitle>{t("Dialog.addVoice")}</DialogTitle>
             <DialogContent>
                 <TextField
-                    id="input-modal-textfield"
+                    id="input-dialog-textfield"
                     inputProps={{ maxLength: characterLimit }}
                     helperText={`${textFieldInput.length}/${characterLimit}`}
                     className={classes.insertName}
@@ -87,15 +83,15 @@ export const NewVoiceDialog = (props: {
                     onChange={(e) => {
                         setTextFieldInput(e.target.value)
                     }}
-                    label={t("Modal.nameOfVoice")}
+                    label={t("Dialog.nameOfVoice")}
                     style={{ width: "100%" }}
                 />
                 <RadioButtons
-                    radioButtonLabel={t("Modal.customNewVoice")}
+                    radioButtonLabel={t("Dialog.customNewVoice")}
                     radioButtonOptions={[
-                        "Modal.duplicateFullSong",
-                        "Modal.duplicateEmptySong",
-                        "Modal.duplicateCustomSong",
+                        "Dialog.duplicateFullSong",
+                        "Dialog.duplicateEmptySong",
+                        "Dialog.duplicateCustomSong",
                     ]}
                     radioButtonValue={radioButtonValue}
                     handleChange={handleChange}
@@ -103,31 +99,27 @@ export const NewVoiceDialog = (props: {
             </DialogContent>
 
             <DialogActions>
-                <Grid container>
-                    {isLoading ? (
-                        <Grid container className={classes.loading}>
-                            <CircularProgress size={24} />
-                        </Grid>
-                    ) : (
-                        <Grid item>
-                            <DialogButton
-                                disabled={!textFieldInput.trim()}
-                                buttonText={t("Modal.create")}
-                                isCancelButton={false}
-                            />
-                        </Grid>
-                    )}
-                    <Grid item>
-                        <DialogButton
-                            buttonText={t("Modal.cancel")}
-                            onClick={() => {
-                                handleOnCancelClick()
-                                setTextFieldInput("")
-                            }}
-                            isCancelButton
-                        />
-                    </Grid>
-                </Grid>
+                {isLoading ? (
+                    <div className={classes.loading}>
+                        <CircularProgress size={24} />
+                    </div>
+                ) : (
+                    <DialogButton
+                        disabled={!textFieldInput.trim()}
+                        type="submit"
+                        variant="contained"
+                    >
+                        {t("Dialog.create")}
+                    </DialogButton>
+                )}
+                <DialogButton
+                    onClick={() => {
+                        handleOnCancelClick()
+                        setTextFieldInput("")
+                    }}
+                >
+                    {t("Dialog.cancel")}
+                </DialogButton>
             </DialogActions>
         </form>
     )
