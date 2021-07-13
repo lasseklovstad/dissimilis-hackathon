@@ -529,7 +529,7 @@ export const SongView = () => {
             <ErrorDialog
                 isError={getSong.isError}
                 error={getSong.error}
-                title={t("Modal.getSongError")}
+                title={t("Dialog.getSongError")}
             />
 
             {selectedVoiceId !== undefined && selectedVoice && (

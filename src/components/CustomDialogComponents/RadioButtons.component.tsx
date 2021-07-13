@@ -2,9 +2,9 @@ import React from "react"
 import {
     FormControl,
     FormControlLabel,
+    FormLabel,
     makeStyles,
     RadioGroup,
-    Typography,
 } from "@material-ui/core"
 import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
@@ -15,6 +15,7 @@ const useStyles = makeStyles({
     subtitle: {
         fontWeight: "bold",
         marginBottom: theme.spacing(1),
+        color: colors.black,
     },
     radioButtonGroup: {
         color: colors.black,
@@ -58,10 +59,14 @@ export const RadioButtons = (props: {
 
     return (
         <div className={classes.radioButtonGroup}>
-            <Typography className={classes.subtitle}>
-                {radioButtonLabel}
-            </Typography>
             <FormControl component="fieldset">
+                <FormLabel
+                    component="legend"
+                    className={classes.subtitle}
+                    focused={false}
+                >
+                    {radioButtonLabel}
+                </FormLabel>
                 <RadioGroup
                     aria-label={radioButtonLabel}
                     name="radiobuttons"
