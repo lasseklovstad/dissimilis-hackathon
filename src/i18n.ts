@@ -12,6 +12,18 @@ const resources: Resource = {
     },
 }
 
+const fallbackLng = (code?: string) => {
+    if (!code) {
+        return "en"
+    }
+    if (code.startsWith("no-")) {
+        return "no"
+    }
+    if (code.startsWith("en-")) {
+        return "en"
+    }
+}
+
 i18n.use({
     type: "languageDetector",
     async: false,
@@ -26,7 +38,7 @@ i18n.use({
     .use(initReactI18next)
     .init({
         resources,
-        fallbackLng: "en",
+        fallbackLng: fallbackLng(navigator.language),
     })
 
 document.documentElement.lang = i18n.language

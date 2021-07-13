@@ -5,7 +5,6 @@ import {
     DialogContent,
     DialogTitle,
     FormControl,
-    Grid,
     makeStyles,
     MenuItem,
     Select,
@@ -35,7 +34,7 @@ export const LanguageDialog = (props: {
     const { t } = useTranslation()
     const { handleOnCancelClick } = props
 
-    const handleChangeLanguage = async (language: string | null) => {
+    const handleChangeLanguage = (language: string | null) => {
         if (language) {
             i18n.changeLanguage(language)
             localStorage.setItem("userLanguage", language)
@@ -69,27 +68,23 @@ export const LanguageDialog = (props: {
             </DialogContent>
 
             <DialogActions>
-                <Grid item>
-                    <Button
-                        size="large"
-                        variant="contained"
-                        onClick={() => handleChangeLanguage(languageChoice)}
-                    >
-                        {t("Modal.save")}
-                    </Button>
-                </Grid>
+                <Button
+                    size="large"
+                    variant="contained"
+                    onClick={() => handleChangeLanguage(languageChoice)}
+                >
+                    {t("Modal.save")}
+                </Button>
 
-                <Grid item>
-                    <Button
-                        size="large"
-                        variant="outlined"
-                        onClick={() => {
-                            handleOnCancelClick()
-                        }}
-                    >
-                        {t("Modal.cancel")}
-                    </Button>
-                </Grid>
+                <Button
+                    size="large"
+                    variant="outlined"
+                    onClick={() => {
+                        handleOnCancelClick()
+                    }}
+                >
+                    {t("Modal.cancel")}
+                </Button>
             </DialogActions>
         </>
     )

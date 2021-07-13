@@ -17,7 +17,8 @@ describe("DashboardMenu", () => {
         userEvent.click(
             screen.getByRole("menuitem", { name: "Change language" })
         )
-        expect(screen.getByLabelText("Dialog")).toBeInTheDocument()
+        //expect(screen.getByLabelText("Dialog")).toBeInTheDocument()
+        expect(screen.getByRole("dialog")).toBeInTheDocument()
 
         userEvent.click(screen.getByLabelText("Select language"))
         userEvent.click(screen.getByRole("option", { name: "Norsk" }))

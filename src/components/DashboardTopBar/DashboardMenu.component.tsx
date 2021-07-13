@@ -14,10 +14,10 @@ export const DashboardMenu = (props: {}) => {
         setAnchorEl(event.currentTarget)
     }
 
-    const handleOpenChangeLanguageDialog = async () => {
+    const handleOpenChangeLanguageDialog = () => {
         setChangeLanguageDialogIsOpen(true)
     }
-    const handleCloseChangeLanguageDialog = async () => {
+    const handleCloseChangeLanguageDialog = () => {
         setChangeLanguageDialogIsOpen(false)
     }
 
@@ -37,6 +37,7 @@ export const DashboardMenu = (props: {}) => {
         <>
             <IconButton
                 aria-haspopup="true"
+                aria-controls="dashboardMenu"
                 aria-label={t("TopBar.settings")}
                 onClick={handleClick}
             >
@@ -48,7 +49,6 @@ export const DashboardMenu = (props: {}) => {
                 keepMounted
                 open={!!anchorEl}
                 onClose={() => handleClose()}
-                role="menu"
             >
                 <MenuItem onClick={() => handleClose("language")}>
                     {t("MenuButton.changeLanguage")}
