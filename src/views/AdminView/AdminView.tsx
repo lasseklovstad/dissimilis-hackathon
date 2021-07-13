@@ -1,19 +1,93 @@
 import React, { useState } from "react"
-import { Box, Grid, makeStyles, Typography } from "@material-ui/core"
+import { Box, Button, Grid, makeStyles, Typography } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useHistory } from "react-router"
 import { useGetUser } from "../../utils/useApiServiceUsers"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
+import { AccordionComponent } from "../../components/AdminViewComponents/AccordionComponent.component"
+import AddIcon from "@material-ui/icons/Add"
+import { colors } from "../../utils/colors"
 
 const useStyles = makeStyles({
     container: {
         width: "100%",
     },
+    button: {
+        backgroundColor: colors.white,
+        boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)",
+        "&:focus-within": {
+            boxShadow: `0 0 0 4px ${colors.focus}`,
+        },
+        width: "100%",
+        height: "100%",
+        justifyContent: "left",
+        fontSize: "1rem",
+        padding: "8px",
+    },
+    buttonText: {
+        paddingLeft: "8px",
+    },
 })
 
 export const AdminView = () => {
-    const styles = useStyles()
+    // Temporary test data
+    const testUser1 = {
+        userId: 0,
+        name: "Dummy1",
+        isSystemAdmin: true,
+        isCountryAdmin: true,
+        isGroupAdmin: true,
+    }
+    const testUser2 = {
+        userId: 1,
+        name: "Dummy2",
+        isSystemAdmin: false,
+        isCountryAdmin: true,
+        isGroupAdmin: true,
+    }
+    const testUser3 = {
+        userId: 2,
+        name: "Dummy3",
+        isSystemAdmin: false,
+        isCountryAdmin: false,
+        isGroupAdmin: true,
+    }
+    const testUser4 = {
+        userId: 3,
+        name: "Dummy4",
+        isSystemAdmin: false,
+        isCountryAdmin: false,
+        isGroupAdmin: false,
+    }
+    const testCountry1 = {
+        countryId: 0,
+        name: "Norge",
+        notes: `Emma Hjorths vei 50, 1336 Sandvika, Norge
+                Telefon: 67 17 48 80 
+                post@dissimilis.no`,
+        admins: [testUser1],
+        members: [testUser1, testUser2, testUser3, testUser4],
+    }
+    const testCountry2 = {
+        countryId: 1,
+        name: "Sverige",
+        notes: `Medelsvendsonsgate 50, 12323 Stockholm, Sverige
+                Telefon: 67 17 48 80 
+                post@dissimilis.se`,
+        admins: [testUser3],
+        members: [testUser2, testUser3, testUser4],
+    }
+    const countries = [testCountry1, testCountry2]
+    const testGroup = {
+        groupId: 0,
+        name: "Oslo",
+        admins: [testUser2],
+        members: [testUser2, testUser3, testUser4],
+    }
+    const currentUser = testUser1
+
+    const classes = useStyles()
     const { t } = useTranslation()
     const [searchTerm, setSearchTerm] = useState("")
     const history = useHistory()
@@ -27,16 +101,16 @@ export const AdminView = () => {
         history.push(`/library`)
     }
 
-    const userIsSystemAdmin = (userId: number | undefined) => {
-        return true
+    const userIsSystemAdmin = (user: number | undefined) => {
+        return currentUser.isSystemAdmin
     }
 
     const userIsCountryAdmin = (userId: number | undefined) => {
-        return true
+        return currentUser.isCountryAdmin
     }
 
     const userIsGroupAdmin = (userId: number | undefined) => {
-        return true
+        return currentUser.isGroupAdmin
     }
 
     const userIsNotElevated = (userId: number | undefined) => {
@@ -50,41 +124,66 @@ export const AdminView = () => {
     return (
         <>
             <Box mx={2}>
-                <Grid container justify="center" className={styles.container}>
+                <Grid container justify="center" className={classes.container}>
                     <Grid item xs={12}>
-                        <DashboardTopBar
-                            onChange={handleOnChangeSearch}
-                            searchTerm={searchTerm}
-                        />
-                        <Typography variant="h1">
-                            {t("AdminView.adminPanel")}
-                        </Typography>
-                        This is the adminView
-                        <Typography variant="h2">
-                            {userIsSystemAdmin(userId) ? "System Admin" : ""}
-                        </Typography>
-                        <Typography variant="h2">
-                            {userIsCountryAdmin(userId) ? "Country Admin" : ""}
-                        </Typography>
-                        <Typography variant="h2">
-                            {userIsGroupAdmin(userId) ? "Group Admin" : ""}
-                        </Typography>
-                        <Typography variant="h2">
-                            {userIsNotElevated(userId)
-                                ? "You do not have permissions to view this page"
-                                : ""}
-                        </Typography>
-                        {
-                            //<SystemSettings></SystemSettings> ?
-                            //<CountryGrid></CountryGrid> ?
-                            //<GroupGrid></GroupGrid> ?
-                        }
-                        <ErrorDialog
-                            error={getUser.error}
-                            isError={getUser.isError}
-                            title="There was an error fetching the user access level"
-                        />
+                        <Box mb={4}>
+                            <DashboardTopBar
+                                onChange={handleOnChangeSearch}
+                                searchTerm={searchTerm}
+                            />
+                        </Box>
                     </Grid>
+                    <Grid container spacing={3} item xs={10} sm={10}>
+                        <Grid item xs={12}>
+                            <Typography variant="h1">
+                                {t("AdminView.adminPanel")}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <Button
+                                disableFocusRipple
+                                className={classes.button}
+                            >
+                                <AddIcon />
+                                <div className={classes.buttonText}>
+                                    {t("AdminView.inviteUser")}
+                                </div>
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <Button
+                                disableFocusRipple
+                                className={classes.button}
+                            >
+                                <AddIcon />
+                                <div className={classes.buttonText}>
+                                    {t("AdminView.addCountry")}
+                                </div>
+                            </Button>
+                        </Grid>
+                        {userIsCountryAdmin(userId)
+                            ? countries.map((country) => {
+                                  return (
+                                      <Grid item xs={12}>
+                                          <AccordionComponent
+                                              title={country.name}
+                                              description={country.notes}
+                                          />
+                                      </Grid>
+                                  )
+                              })
+                            : ""}
+                    </Grid>
+                    <Typography variant="h2">
+                        {userIsNotElevated(userId)
+                            ? "You do not have permissions to view this page"
+                            : ""}
+                    </Typography>
+                    <ErrorDialog
+                        error={getUser.error}
+                        isError={getUser.isError}
+                        title="There was an error fetching the user access level"
+                    />
                 </Grid>
             </Box>
         </>

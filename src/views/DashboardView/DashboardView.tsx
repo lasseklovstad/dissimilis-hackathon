@@ -246,23 +246,6 @@ export const DashboardView = () => {
                         />
                     )}
                 </Grid>
-                <Grid item xs={12}>
-                    <>
-                        <Button
-                            // This styling is purely for testing purposes
-                            style={{
-                                position: "absolute",
-                                bottom: 0,
-                                right: 0,
-                            }}
-                            onClick={() => {
-                                history.push(`/admin`)
-                            }}
-                        >
-                            {t("AdminView.adminPanel")}
-                        </Button>
-                    </>
-                </Grid>
             </Box>
             <ErrorDialog isError={postSong.isError} error={postSong.error} />
         </>

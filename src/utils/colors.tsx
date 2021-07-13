@@ -18,4 +18,5 @@ export const colors = {
     H: { main: "#FB8C00", text: "#212121" },
     semitone: "#616161",
     teal_100: "#B2DFDB",
+    teal_200: "#97BDB9",
 }

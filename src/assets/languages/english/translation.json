@@ -22,6 +22,14 @@
     "AdminView": {
         "adminPanel": "Admin panel",
         "groups": "Groups",
+        "seeAllMembers": "See all members",
+        "editInfo": "Edit info",
+        "addMember": "Add member",
+        "seeAllGroups": "See all groups",
+        "editAdmins": "Edit administrators",
+        "seeAllSongs": "See all songs",
+        "inviteUser": "Invite user",
+        "addCountry": "Add country",
         "countries": "Countries"
     },
     "BarContainer": {
