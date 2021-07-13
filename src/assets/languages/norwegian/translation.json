@@ -137,9 +137,9 @@
         "transposeSongError": "Det oppstod en feil ved transponering av sang",
         "semiNotes": "Halvtoner",
         "customNewVoice": "Spesifikasjon av ny stemme",
-        "duplicateFullSong": "Duplikat av valgt stemme",
-        "duplicateEmptySong": "Stemme med tomme takter og besifring fra partitur", 
-        "duplicateCustomSong": "Egendefinert",
+        "duplicateFullVoice": "Duplikat av valgt stemme",
+        "duplicateEmptyVoice": "Stemme med tomme takter og besifring fra partitur", 
+        "duplicateCustomVoice": "Egendefinert",
         "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme",
         "loading": "Laster",
         "details": "Informasjon om partitur"

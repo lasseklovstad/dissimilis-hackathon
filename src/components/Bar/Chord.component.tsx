@@ -1,5 +1,11 @@
-import React from "react"
-import { Box, ButtonBase, Typography } from "@material-ui/core"
+import React, { useState } from "react"
+import {
+    Box,
+    ButtonBase,
+    Checkbox,
+    FormControlLabel,
+    Typography,
+} from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
@@ -157,6 +163,8 @@ export const Chord = (props: ChordProps) => {
 
     const chordName = getChordNameFromMainVoice(barPosition, chords.position)
 
+    const [customMode, setCustomMode] = useState(true)
+
     return (
         <Box
             flexGrow={chords.length}
@@ -173,59 +181,137 @@ export const Chord = (props: ChordProps) => {
             {chordName && showChordLetters && (
                 <ChordText chordName={chordName} />
             )}
-            <ButtonBase
-                id="chordButton"
-                disabled={exportMode}
-                onClick={onClick}
-                onContextMenu={onContextMenu}
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-                disableRipple={barEditMode}
-                className={`${
-                    barEditMode
-                        ? ""
-                        : chords.notes[0] === "Z"
-                        ? classes.emptyChordContainer
-                        : classes.buttonBase
-                } ${isSelected ? classes.selected : ""}`}
-                focusVisibleClassName={classes.buttonBase}
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "calc(100% - 25px)",
-                    width: "100%",
-                    minWidth: 0,
-                    alignItems: "stretch",
-                }}
-                onFocus={handleChordFocus}
-            >
-                {chords.notes
-                    .map((note, i) => {
-                        const tangent = tangentToNumber(note)
-                        return (
-                            <div
-                                id="singleChord"
-                                className={`${classes.noteContainer} ${
-                                    (classes as any)[note]
-                                } ${exportMode ? "disabled" : ""} ${
-                                    note === "Z" && highlight
-                                        ? classes.highlight
-                                        : ""
-                                } ${
-                                    Number(tangent) && exportMode
-                                        ? classes.exportNumberSize
-                                        : classes.noteFont
-                                }`}
-                                key={note + i}
-                            >
-                                {showNoteLetters || Number(tangent)
-                                    ? tangent
-                                    : undefined}
-                            </div>
-                        )
-                    })
-                    .reverse()}
-            </ButtonBase>
+            {customMode ? (
+                <Box
+                    /* id="chordButton"
+                    disabled={exportMode}
+                    onClick={onClick}
+                    onContextMenu={onContextMenu}
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                    disableRipple={barEditMode}
+                    className={`${
+                        barEditMode
+                            ? ""
+                            : chords.notes[0] === "Z"
+                            ? classes.emptyChordContainer
+                            : classes.buttonBase
+                    } ${isSelected ? classes.selected : ""}`}
+                    focusVisibleClassName={classes.buttonBase}
+                    
+                    onFocus={handleChordFocus} */
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        height: "calc(100% - 25px)",
+                        width: "100%",
+                        minWidth: 0,
+                        alignItems: "stretch",
+                    }}
+                >
+                    {chords.notes
+                        .map((note, i) => {
+                            const tangent = tangentToNumber(note)
+                            return (
+                                <>
+                                    <ButtonBase
+                                        id="singleChord"
+                                        className={`${classes.noteContainer} ${
+                                            (classes as any)[note]
+                                        } ${exportMode ? "disabled" : ""} ${
+                                            note === "Z" && highlight
+                                                ? classes.highlight
+                                                : ""
+                                        } ${
+                                            Number(tangent) && exportMode
+                                                ? classes.exportNumberSize
+                                                : classes.noteFont
+                                        }`}
+                                        key={note + i}
+                                    >
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    name="checkedC"
+                                                    onClick={onClick}
+                                                    style={{
+                                                        padding: "0px",
+                                                        margin: "0px",
+                                                        maxHeight: "0px",
+                                                        maxWidth: "0px",
+                                                        color: "black",
+                                                        borderRadius: 30,
+                                                    }}
+                                                />
+                                            }
+                                            label=""
+                                        />
+                                        {showNoteLetters || Number(tangent)
+                                            ? tangent
+                                            : undefined}
+                                    </ButtonBase>
+                                </>
+                            )
+                        })
+                        .reverse()}
+                </Box>
+            ) : (
+                <ButtonBase
+                    id="chordButton"
+                    disabled={exportMode}
+                    onClick={onClick}
+                    onContextMenu={onContextMenu}
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                    disableRipple={barEditMode}
+                    className={`${
+                        barEditMode
+                            ? ""
+                            : chords.notes[0] === "Z"
+                            ? classes.emptyChordContainer
+                            : classes.buttonBase
+                    } ${isSelected ? classes.selected : ""}`}
+                    focusVisibleClassName={classes.buttonBase}
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        height: "calc(100% - 25px)",
+                        width: "100%",
+                        minWidth: 0,
+                        alignItems: "stretch",
+                    }}
+                    onFocus={handleChordFocus}
+                >
+                    {chords.notes
+                        .map((note, i) => {
+                            const tangent = tangentToNumber(note)
+                            return (
+                                <>
+                                    <div
+                                        id="singleChord"
+                                        className={`${classes.noteContainer} ${
+                                            (classes as any)[note]
+                                        } ${exportMode ? "disabled" : ""} ${
+                                            note === "Z" && highlight
+                                                ? classes.highlight
+                                                : ""
+                                        } ${
+                                            Number(tangent) && exportMode
+                                                ? classes.exportNumberSize
+                                                : classes.noteFont
+                                        }`}
+                                        key={note + i}
+                                    >
+                                        {showNoteLetters || Number(tangent)
+                                            ? tangent
+                                            : undefined}
+                                    </div>
+                                </>
+                            )
+                        })
+                        .reverse()}
+                </ButtonBase>
+            )}
         </Box>
     )
 }

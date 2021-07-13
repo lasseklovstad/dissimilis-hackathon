@@ -24,6 +24,7 @@ import { colors } from "../../utils/colors"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
+import { CustomVoiceDialog } from "../CustomDialog/CustomVoiceModeDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -78,6 +79,10 @@ export const CreateSongTab = (props: {
     const [newVoiceDialogIsOpen, setNewVoiceDialogIsOpen] = useState(false)
     const [renameDialogIsOpen, setRenameDialogIsOpen] = useState(false)
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false)
+    const [customVoiceDialogIsOpen, setCustomVoiceDialogIsOpen] =
+        useState(false)
+    const [newVoice, setNewVoice] = useState<IVoice>()
+
     const { t } = useTranslation()
     const [clickedId, setClickedId] = useState<undefined | number>()
     const clickedVoice = voices.find((voice) => voice.songVoiceId === clickedId)
@@ -101,11 +106,11 @@ export const CreateSongTab = (props: {
             0
         )
         switch (option) {
-            case "Dialog.duplicateFullSong": {
+            case "Dialog.duplicateFullVoice": {
                 handleDuplicateVoice(title)
                 break
             }
-            case "Dialog.duplicateEmptySong": {
+            case "Dialog.duplicateEmptyVoice": {
                 const { error, result } = await postVoice.run({
                     voiceName: title,
                     voiceNumber: voiceNumber + 1,
@@ -116,8 +121,16 @@ export const CreateSongTab = (props: {
                 }
                 break
             }
-            case "Dialog.duplicateCustomSong": {
-                setNewVoiceDialogIsOpen(false)
+            case "Dialog.duplicateCustomVoice": {
+                const { error, result } = await postVoice.run({
+                    voiceName: title,
+                    voiceNumber: voiceNumber + 1,
+                })
+                if (!error && result) {
+                    setNewVoiceDialogIsOpen(false)
+                    setCustomVoiceDialogIsOpen(true)
+                    setNewVoice(result.data)
+                }
                 break
             }
         }
@@ -127,7 +140,6 @@ export const CreateSongTab = (props: {
         const { error, result } = await duplicateVoice.run({
             voiceName,
         })
-
         if (!error && result) {
             onAddVoice(result.data)
             setNewVoiceDialogIsOpen(false)
@@ -175,6 +187,16 @@ export const CreateSongTab = (props: {
             left: event.clientX - 2,
         })
     }
+
+    const handleCustomVoiceDialogCancel = async () => {
+        //Send API kall for å tømme stemmen
+    }
+
+    const handleCustomVoiceDialogSave = async () => {
+        //Lukk voicedialog, switch til new voice
+    }
+
+    const handleOpenCustomVoiceDialog = async () => {}
 
     return (
         <>
@@ -308,6 +330,20 @@ export const CreateSongTab = (props: {
                     headerText={t("Dialog.deleteVoice")}
                     descriptionText={t("Dialog.deleteVoiceDescription")}
                     isLoading={deleteVoice.loading}
+                />
+            </Dialog>
+            <Dialog
+                fullScreen
+                open={customVoiceDialogIsOpen}
+                onClose={() => handleCustomVoiceDialogCancel}
+                aria-labelledby={t("Modal.CustomNewVoice")}
+            >
+                <CustomVoiceDialog
+                    handleOnSave={handleCustomVoiceDialogSave}
+                    handleOnCancel={handleCustomVoiceDialogCancel}
+                    songId={songId}
+                    baseVoice={clickedVoice || voices[0]} //Antar at voices[0] er partitur
+                    newVoice={newVoice}
                 />
             </Dialog>
             <Menu
