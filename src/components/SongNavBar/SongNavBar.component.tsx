@@ -101,7 +101,7 @@ export const SongNavBar = (props: {
                                 },
                                 inputProps: {
                                     maxLength: 250,
-                                    "aria-label": t("Modal.nameOfSong"),
+                                    "aria-label": t("Dialog.nameOfSong"),
                                 },
                             }}
                             value={title}

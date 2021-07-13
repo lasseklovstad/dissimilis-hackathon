@@ -11,7 +11,7 @@ import {
 
 import { useGetSongMetadata } from "../../utils/useApiServiceSongs"
 import { useTranslation } from "react-i18next"
-import { DialogButton } from "../CustomModalComponents/DialogButton.components"
+import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -83,10 +83,10 @@ export const EditSongInfoDialog = (props: {
                 )
             }}
         >
-            <DialogTitle>{t("MenuButton.details")}</DialogTitle>
+            <DialogTitle>{t("Dialog.details")}</DialogTitle>
             <DialogContent>
                 <TextField
-                    id="song-info-modal-song-name-textfield"
+                    id="song-info-dialog-song-name-textfield"
                     inputProps={{
                         maxLength: characterLimit,
                     }}
@@ -97,14 +97,14 @@ export const EditSongInfoDialog = (props: {
                     onChange={(e) => {
                         setSongNameTextFieldInput(e.target.value)
                     }}
-                    label={t("Modal.nameOfSong")}
+                    label={t("Dialog.nameOfSong")}
                     fullWidth={true}
                 />
                 <DialogContentText className={classes.arranger}>
                     {t("Song.arranger") + ": " + arrangerTextFieldInput}
                 </DialogContentText>
                 <TextField
-                    id="song-info-modal-composer-textfield"
+                    id="song-info-dialog-composer-textfield"
                     inputProps={{
                         maxLength: characterLimit,
                     }}
@@ -119,7 +119,7 @@ export const EditSongInfoDialog = (props: {
                     fullWidth={true}
                 />
                 <TextField
-                    id="song-info-modal-song-speed-textfield"
+                    id="song-info-dialog-song-speed-textfield"
                     value={speedTextFieldInput}
                     className={classes.textFields}
                     helperText={t("Song.bpm")}
@@ -136,7 +136,7 @@ export const EditSongInfoDialog = (props: {
                     type="number"
                 />
                 <TextField
-                    id="song-info-modal-song-notes-textfield"
+                    id="song-info-dialog-song-notes-textfield"
                     inputProps={{
                         maxLength: characterLimit,
                     }}
@@ -158,17 +158,19 @@ export const EditSongInfoDialog = (props: {
                 ) : (
                     <DialogButton
                         disabled={!songNameTextFieldInput.trim()}
-                        buttonText={t("Modal.save")}
-                        isCancelButton={false}
-                    />
+                        type="submit"
+                        variant="contained"
+                    >
+                        {t("Dialog.save")}
+                    </DialogButton>
                 )}
                 <DialogButton
-                    buttonText={t("Modal.cancel")}
                     onClick={() => {
                         handleOnCancelClick()
                     }}
-                    isCancelButton
-                />
+                >
+                    {t("Dialog.cancel")}
+                </DialogButton>
             </DialogActions>
         </form>
     )

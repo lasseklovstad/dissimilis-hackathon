@@ -103,10 +103,9 @@
         "delete": "Slett sang",
         "editBars": "Rediger takter",
         "showInfo": "Vis info",
-        "cancelEditBars": "Avslutt redigering av takter",
-        "details": "Informasjon om partitur"
+        "cancelEditBars": "Avslutt redigering av takter"
     },
-    "Modal": {
+    "Dialog": {
         "nameOfSong": "Navn på sang",
         "addSong": "Legg til ny sang",
         "nameOfVoice": "Navn på stemme",
@@ -139,7 +138,8 @@
         "duplicateFullSong": "Duplikat av valgt stemme",
         "duplicateEmptySong": "Stemme med tomme takter og besifring fra partitur", 
         "duplicateCustomSong": "Egendefinert",
-        "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme"
+        "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme",
+        "details": "Informasjon om partitur"
     },
     "Song": {
         "arranger": "Arrangør",

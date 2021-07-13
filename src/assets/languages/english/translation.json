@@ -102,10 +102,9 @@
         "save": "Save",
         "delete": "Delete song",
         "editBars": "Edit bars",
-        "cancelEditBars": "Stop editing bars",
-        "details": "Information about song"
+        "cancelEditBars": "Stop editing bars"
     },
-    "Modal": {
+    "Dialog": {
         "nameOfSong": "Name of song",
         "addSong": "Add a new song",
         "nameOfVoice": "Name of voice",
@@ -138,7 +137,8 @@
         "duplicateEmptySong": "New voice with empty bars and chord names", 
         "duplicateCustomSong": "Custom",
         "newVoiceError": "An error occured while creating new voice",
-        "saveSongMetadataError": "An error occured while saving information"
+        "saveSongMetadataError": "An error occured while saving information",
+        "details": "Information about song"
     },
     "Song": {
         "arranger": "Arranger",
