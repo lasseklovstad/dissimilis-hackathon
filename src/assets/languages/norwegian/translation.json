@@ -103,7 +103,9 @@
         "delete": "Slett sang",
         "editBars": "Rediger takter",
         "cancelEditBars": "Avslutt redigering av takter",
-        "changeLanguage": "Endre språk"
+        "changeLanguage": "Endre språk",
+        "showInfo": "Vis info",
+        "cancelEditBars": "Avslutt redigering av takter"
     },
     "Dialog": {
         "nameOfSong": "Navn på sang",
@@ -119,6 +121,7 @@
         "dontSaveChanges": "Ikke lagre endringer",
         "saveChanges": "Lagre endringer",
         "saveSongError": "Det oppstod en feil ved lagring av sang",
+        "saveSongMetadataError": "Det oppstod en feil ved lagring av informasjon",
         "deleteSong": "Slett sang",
         "deleteSongLoading": "Sletter sang",
         "deleteSongError": "Det oppstod en feil ved sletting av sang",
@@ -138,19 +141,25 @@
         "duplicateEmptySong": "Stemme med tomme takter og besifring fra partitur", 
         "duplicateCustomSong": "Egendefinert",
         "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme",
-        "loading": "Laster"
-
+        "loading": "Laster",
+        "details": "Informasjon om partitur"
     },
     "Song": {
+        "arranger": "Arrangør",
+        "composer": "Komponist",
+        "songNotes": "Notater",
+        "songSpeed": "Tempo",
         "timeSignature": "Taktart",
         "bar": "Takt",
         "barNumber": "Taktnummer",
-        "barMenu": "Takt meny"
+        "barMenu": "Taktmeny",
+        "bpm": "BPM"
     },
     "TopBar": {
         "languageNorwegian": "Norsk",
         "languageEnglish": "English",
         "languageSelect": "Språkvalg",
         "settings": "Innstillinger"
+
     }
 }

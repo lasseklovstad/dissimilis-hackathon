@@ -1,9 +1,14 @@
 import React, { useState } from "react"
-import { Dialog, IconButton, Menu, MenuItem } from "@material-ui/core"
+import { IconButton, Menu, Dialog, MenuItem } from "@material-ui/core"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
-import { useDeleteSong, useDuplicateSong } from "../../utils/useApiServiceSongs"
+import {
+    useDeleteSong,
+    useDuplicateSong,
+    useUpdateSong,
+} from "../../utils/useApiServiceSongs"
+import { EditSongInfoDialog } from "../CustomDialog/EditSongInfoDialog.component"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
 import { Loading } from "../loading/Loading.component"
@@ -13,16 +18,19 @@ export const SongGridMenuButton = (props: {
     songId: number
     link: string
     removeSong: (songId: number) => void
+    renameSong: (songId: number, title: string) => void
 }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [duplicateSongDialogIsOpen, setDuplicateSongDialogIsOpen] =
         useState(false)
+    const [songInfoDialogIsOpen, setSongInfoDialogIsOpen] = useState(false)
     const [deleteSongDialogIsOpen, setDeleteSongDialogIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
     const { songId } = props
     const { deleteSong } = useDeleteSong(songId.toString())
     const { duplicateSong } = useDuplicateSong(songId)
+    const { putSong } = useUpdateSong(songId.toString())
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -55,6 +63,27 @@ export const SongGridMenuButton = (props: {
         }
     }
 
+    const handleSaveSongInfo = async (
+        title: string,
+        arrangerName: string,
+        composer: string,
+        songNotes: string,
+        speed: number // tempo is called speed in backend
+    ) => {
+        const { error, result } = await putSong.run({
+            title,
+            arrangerName,
+            composer,
+            songNotes,
+            speed,
+        })
+
+        if (!error && result) {
+            setSongInfoDialogIsOpen(false)
+            props.renameSong(songId, title)
+        }
+    }
+
     const handleOpenDuplicateDialog = () => {
         setDuplicateSongDialogIsOpen(true)
     }
@@ -63,12 +92,25 @@ export const SongGridMenuButton = (props: {
         setDuplicateSongDialogIsOpen(false)
     }
 
-    const handleClose = async (method?: "delete" | "copy" | "open") => {
+    const handleOpenSongInfoDialog = () => {
+        setSongInfoDialogIsOpen(true)
+    }
+
+    const handleCloseSongInfoDialog = () => {
+        setSongInfoDialogIsOpen(false)
+    }
+
+    const handleClose = async (
+        method?: "delete" | "info" | "copy" | "open"
+    ) => {
         setAnchorEl(null)
         setDeleteSongDialogIsOpen(false)
         switch (method) {
             case "delete":
                 handleOpenDeleteSongDialog()
+                break
+            case "info":
+                handleOpenSongInfoDialog()
                 break
             case "copy":
                 handleOpenDuplicateDialog()
@@ -110,6 +152,9 @@ export const SongGridMenuButton = (props: {
                     <MenuItem onClick={() => handleClose("delete")}>
                         {t("DashboardView.delete")}
                     </MenuItem>
+                    <MenuItem onClick={() => handleClose("info")}>
+                        {t("Dialog.details")}
+                    </MenuItem>
                 </Menu>
                 <Dialog
                     open={deleteSongDialogIsOpen}
@@ -126,6 +171,17 @@ export const SongGridMenuButton = (props: {
                     />
                 </Dialog>
             </div>
+            <Dialog
+                open={songInfoDialogIsOpen}
+                onClose={() => handleCloseSongInfoDialog()}
+            >
+                <EditSongInfoDialog
+                    songId={songId}
+                    handleOnCancelClick={() => handleCloseSongInfoDialog()}
+                    handleOnSaveClick={handleSaveSongInfo}
+                    isLoadingPatch={putSong.loading}
+                />
+            </Dialog>
             <Dialog
                 open={duplicateSongDialogIsOpen}
                 onClose={handleCloseDuplicateDialog}
@@ -152,6 +208,11 @@ export const SongGridMenuButton = (props: {
                 isError={deleteSong.isError}
                 error={deleteSong.error}
                 title={t("Dialog.deleteSongError")}
+            />
+            <ErrorDialog
+                isError={putSong.isError}
+                error={putSong.error}
+                title={t("Dialog.saveSongMetadataError")}
             />
         </>
     )

@@ -22,6 +22,16 @@ const useStyles = makeStyles((theme) => {
     }
 })
 
+const supportedLanguages = ["en", "no"]
+
+const getLanguage = () => {
+    const userLanguage = localStorage.getItem("userLanguage")
+    if (userLanguage && supportedLanguages.includes(userLanguage)) {
+        return userLanguage
+    }
+    return ""
+}
+
 export const LanguageDialog = (props: {
     handleOnCancelClick: () => void
     handleClosed: () => void
@@ -29,8 +39,7 @@ export const LanguageDialog = (props: {
     defaultValue?: string
 }) => {
     const classes = useStyles()
-    const userLanguage = localStorage.getItem("userLanguage")
-    const [languageChoice, setLanguageChoice] = useState(userLanguage)
+    const [languageChoice, setLanguageChoice] = useState(getLanguage())
     const { t } = useTranslation()
     const { handleOnCancelClick } = props
 
@@ -49,7 +58,7 @@ export const LanguageDialog = (props: {
             <DialogContent>
                 <FormControl variant="outlined" className={classes.formControl}>
                     <Select
-                        value={`${languageChoice ? languageChoice : ""}`}
+                        value={languageChoice}
                         inputProps={{
                             "aria-label": t("TopBar.languageSelect"),
                         }}

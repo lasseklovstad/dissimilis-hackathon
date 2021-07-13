@@ -94,6 +94,7 @@ type ButtonSongProps = {
     updatedOn?: string
     songId: number
     removeSong: (songId: number) => void
+    renameSong: (songId: number, title: string) => void
     link: string
     func?: () => void
     selected?: boolean
@@ -285,6 +286,7 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                         songId={props.songId}
                         link={props.link}
                         removeSong={props.removeSong}
+                        renameSong={props.renameSong}
                     />
                 </Box>
             </Grid>
