@@ -102,7 +102,8 @@
         "save": "Save",
         "delete": "Delete song",
         "editBars": "Edit bars",
-        "cancelEditBars": "Stop editing bars"
+        "cancelEditBars": "Stop editing bars",
+        "changeLanguage": "Change language"
     },
     "Dialog": {
         "nameOfSong": "Name of song",
@@ -137,6 +138,7 @@
         "duplicateEmptySong": "New voice with empty bars and chord names", 
         "duplicateCustomSong": "Custom",
         "newVoiceError": "An error occured while creating new voice",
+        "loading": "Loading",
         "saveSongMetadataError": "An error occured while saving information",
         "details": "Information about song"
     },
@@ -150,5 +152,11 @@
         "barNumber": "Bar number",
         "barMenu": "Bar menu",
         "bpm": "BPM"
+    },
+    "TopBar": {
+        "languageNorwegian": "Norsk",
+        "languageEnglish": "English",
+        "languageSelect": "Select language",
+        "settings": "Settings"
     }
 }

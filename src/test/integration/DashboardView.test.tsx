@@ -78,47 +78,47 @@ describe("Dashboard", () => {
     it("Should show song metadata", async () => {
         await renderDashboard()
 
-        const menus = screen.getAllByRole("button", { name: "Sang meny" })
+        const menus = screen.getAllByRole("button", { name: "Song menu" })
         userEvent.click(menus[0])
         userEvent.click(
-            screen.getByRole("menuitem", { name: "Informasjon om partitur" })
+            screen.getByRole("menuitem", { name: "Information about song" })
         )
 
         await waitDoneLoading()
 
         expect(
-            screen.getByRole("heading", { name: "Informasjon om partitur" })
+            screen.getByRole("heading", { name: "Information about song" })
         ).toBeInTheDocument()
         expect(
             screen.getByRole("textbox", {
-                name: "Navn på sang",
+                name: "Name of song",
             })
         ).toHaveValue("Stairway to heaven")
-        expect(screen.getByRole("textbox", { name: "Komponist" })).toHaveValue(
+        expect(screen.getByRole("textbox", { name: "Composer" })).toHaveValue(
             "Johan Gambolputty"
         )
 
         const tempoSpinbutton = screen.getByRole("spinbutton", {
             name: "Tempo",
         })
-        userEvent.click(screen.getByRole("button", { name: "Avbryt" }))
+        userEvent.click(screen.getByRole("button", { name: "Cancel" }))
         userEvent.click(menus[1])
         await waitDoneLoading()
         expect(tempoSpinbutton).not.toBeInTheDocument()
 
         userEvent.click(
-            screen.getByRole("menuitem", { name: "Informasjon om partitur" })
+            screen.getByRole("menuitem", { name: "Information about song" })
         )
         await waitDoneLoading()
         expect(
             screen.getByRole("textbox", {
-                name: "Navn på sang",
+                name: "Name of song",
             })
         ).toBeInTheDocument()
         expect(screen.getByRole("spinbutton", { name: "Tempo" })).toHaveValue(
             100
         )
-        expect(screen.getByRole("textbox", { name: "Notater" })).toHaveValue(
+        expect(screen.getByRole("textbox", { name: "Notes" })).toHaveValue(
             "Yes"
         )
     })
@@ -126,19 +126,19 @@ describe("Dashboard", () => {
     it("Should change song metadata", async () => {
         await renderDashboard()
 
-        const menus = screen.getAllByRole("button", { name: "Sang meny" })
+        const menus = screen.getAllByRole("button", { name: "Song menu" })
         userEvent.click(menus[0])
         userEvent.click(
-            screen.getByRole("menuitem", { name: "Informasjon om partitur" })
+            screen.getByRole("menuitem", { name: "Information about song" })
         )
 
         await waitDoneLoading()
 
         const nameTextbox = screen.getByRole("textbox", {
-            name: "Navn på sang",
+            name: "Name of song",
         })
         const composerTextbox = screen.getByRole("textbox", {
-            name: "Komponist",
+            name: "Composer",
         })
         const speedSpinbutton = screen.getByRole("spinbutton", {
             name: "Tempo",
@@ -159,18 +159,18 @@ describe("Dashboard", () => {
         expect(composerTextbox).toHaveValue(newComposer)
         expect(speedSpinbutton).toHaveValue(newSpeed)
 
-        userEvent.click(screen.getByRole("button", { name: "Lagre" }))
+        userEvent.click(screen.getByRole("button", { name: "Save" }))
         await waitDoneLoading()
         userEvent.click(menus[1])
         userEvent.click(
-            screen.getByRole("menuitem", { name: "Informasjon om partitur" })
+            screen.getByRole("menuitem", { name: "Information about song" })
         )
         await waitDoneLoading()
-        userEvent.click(screen.getByRole("button", { name: "Avbryt" }))
+        userEvent.click(screen.getByRole("button", { name: "Cancel" }))
         await waitDoneLoading()
         userEvent.click(menus[0])
         userEvent.click(
-            screen.getByRole("menuitem", { name: "Informasjon om partitur" })
+            screen.getByRole("menuitem", { name: "Information about song" })
         )
         await waitDoneLoading()
         expect(nameTextbox).toHaveValue(newName)

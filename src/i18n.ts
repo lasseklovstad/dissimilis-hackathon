@@ -12,10 +12,39 @@ const resources: Resource = {
     },
 }
 
-i18n.use(initReactI18next).init({
-    resources,
-    fallbackLng: "en",
+const fallbackLng = (code?: string) => {
+    if (!code) {
+        return "en"
+    }
+    if (
+        code.startsWith("no-") ||
+        code.startsWith("nn") ||
+        code.startsWith("no")
+    ) {
+        return "no"
+    }
+    if (code.startsWith("en-")) {
+        return "en"
+    }
+    return "en"
+}
+
+i18n.use({
+    type: "languageDetector",
+    async: false,
+    init: function () {},
+    detect: function () {
+        return localStorage.getItem("userLanguage") || navigator.language
+    },
+    cacheUserLanguage: function (lng: string) {
+        localStorage.setItem("userLanguage", lng)
+    },
 })
+    .use(initReactI18next)
+    .init({
+        resources,
+        fallbackLng,
+    })
 
 document.documentElement.lang = i18n.language
 

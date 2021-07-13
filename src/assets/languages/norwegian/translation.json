@@ -102,6 +102,8 @@
         "save": "Lagre",
         "delete": "Slett sang",
         "editBars": "Rediger takter",
+        "cancelEditBars": "Avslutt redigering av takter",
+        "changeLanguage": "Endre språk",
         "showInfo": "Vis info",
         "cancelEditBars": "Avslutt redigering av takter"
     },
@@ -139,6 +141,7 @@
         "duplicateEmptySong": "Stemme med tomme takter og besifring fra partitur", 
         "duplicateCustomSong": "Egendefinert",
         "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme",
+        "loading": "Laster",
         "details": "Informasjon om partitur"
     },
     "Song": {
@@ -151,5 +154,12 @@
         "barNumber": "Taktnummer",
         "barMenu": "Taktmeny",
         "bpm": "BPM"
+    },
+    "TopBar": {
+        "languageNorwegian": "Norsk",
+        "languageEnglish": "English",
+        "languageSelect": "Språkvalg",
+        "settings": "Innstillinger"
+
     }
 }

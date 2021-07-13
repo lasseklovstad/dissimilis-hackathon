@@ -16,6 +16,7 @@ import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg
 import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
+import { DashboardMenu } from "../DashboardTopBar/DashboardMenu.component"
 
 const useStyles = makeStyles(() => ({
     background: {
@@ -46,7 +47,7 @@ export const DashboardTopBar = (props: {
                         <Hidden xsDown>
                             <Grid item sm={1} />
                         </Hidden>
-                        <Grid item xs={2}>
+                        <Grid item xs={1}>
                             <DashboardTopBarIcon onGoHome={onGoHome} />
                         </Grid>
                         {searchBarFocus ? undefined : (
@@ -54,6 +55,7 @@ export const DashboardTopBar = (props: {
                                 <Grid item md={1} />
                             </Hidden>
                         )}
+
                         <Grid
                             item
                             xs={10}
@@ -75,14 +77,16 @@ export const DashboardTopBar = (props: {
                                     <Loading isLoading={getUser.loading} />
                                     {userInit?.email}
                                 </Typography>
-                                <IconButton
-                                    disableFocusRipple
-                                    onClick={logout.run}
-                                    aria-label={t("LoginView.logout")}
-                                >
-                                    <LogoutIcon />
-                                </IconButton>
                             </Grid>
+                        </Grid>
+                        <Grid item xs={1}>
+                            <IconButton
+                                disableFocusRipple
+                                onClick={logout.run}
+                                aria-label={t("LoginView.logout")}
+                            >
+                                <LogoutIcon />
+                            </IconButton>
                         </Grid>
                         <Grid item xs={12} sm={3} md={searchBarFocus ? 4 : 3}>
                             <TextField
@@ -102,6 +106,16 @@ export const DashboardTopBar = (props: {
                                 }
                                 value={searchTerm}
                             />
+                        </Grid>
+                        <Grid
+                            container
+                            direction="row"
+                            justify="flex-end"
+                            alignItems="center"
+                            item
+                            xs={1}
+                        >
+                            <DashboardMenu />
                         </Grid>
                     </Grid>
                 </Box>
