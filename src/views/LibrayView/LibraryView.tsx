@@ -9,6 +9,7 @@ import {
 import { ISongIndex } from "../../models/ISong"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
+import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
 
 const useStyles = makeStyles({
     container: {
@@ -66,6 +67,16 @@ export const LibraryView = () => {
         )
     }
 
+    const renameSongInFilteredSongs = (songId: number, title: string) => {
+        setFilteredSongs(
+            updateSongTitleInListOfSongs(filteredSongs, songId, title)
+        )
+    }
+
+    const renameSongInAllSongs = (songId: number, title: string) => {
+        setAllSongs(updateSongTitleInListOfSongs(allSongs, songId, title))
+    }
+
     const handleOnChangeSearch = (searchTermParam: string) => {
         setSearchTerm(searchTermParam)
         setLibraryView(false)
@@ -104,6 +115,7 @@ export const LibraryView = () => {
                             title={t("DashboardView.allSongLabel")}
                             songs={allSongs}
                             removeSong={removeSongFromAllSongs}
+                            renameSong={renameSongInAllSongs}
                             isLoading={getAllSongs.loading}
                             orderTerm={orderTerm}
                             changeOrderTerm={handleChangeOrderTerm}
@@ -114,6 +126,7 @@ export const LibraryView = () => {
                             title={t("DashboardView.searchSongLabel")}
                             songs={filteredSongs}
                             removeSong={removeSongFromFilteredSongs}
+                            renameSong={renameSongInFilteredSongs}
                             isLoading={getFilteredSongs.loading}
                             orderTerm={orderTerm}
                             changeOrderTerm={handleChangeOrderTerm}

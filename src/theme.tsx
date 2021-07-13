@@ -63,6 +63,11 @@ export const theme = createMuiTheme({
                 justifyContent: "flex-start",
             },
         },
+        MuiDialogContentText: {
+            root: {
+                color: colors.black,
+            },
+        },
     },
     palette: {
         primary: {

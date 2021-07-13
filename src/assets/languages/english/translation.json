@@ -136,12 +136,19 @@
         "duplicateFullSong": "Duplicate of selected voice",
         "duplicateEmptySong": "New voice with empty bars and chord names", 
         "duplicateCustomSong": "Custom",
-        "newVoiceError": "An error occured while creating new voice"
+        "newVoiceError": "An error occured while creating new voice",
+        "saveSongMetadataError": "An error occured while saving information",
+        "details": "Information about song"
     },
     "Song": {
+        "arranger": "Arranger",
+        "composer": "Composer",
+        "songNotes": "Notes",
+        "songSpeed": "Tempo",
         "timeSignature": "Time signature",
         "bar": "Bar",
         "barNumber": "Bar number",
-        "barMenu": "Bar menu"
+        "barMenu": "Bar menu",
+        "bpm": "BPM"
     }
 }

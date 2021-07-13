@@ -74,4 +74,107 @@ describe("Dashboard", () => {
         await waitDoneLoading()
         expect(songToDelete).not.toBeInTheDocument()
     })
+
+    it("Should show song metadata", async () => {
+        await renderDashboard()
+
+        const menus = screen.getAllByRole("button", { name: "Sang meny" })
+        userEvent.click(menus[0])
+        userEvent.click(
+            screen.getByRole("menuitem", { name: "Informasjon om partitur" })
+        )
+
+        await waitDoneLoading()
+
+        expect(
+            screen.getByRole("heading", { name: "Informasjon om partitur" })
+        ).toBeInTheDocument()
+        expect(
+            screen.getByRole("textbox", {
+                name: "Navn på sang",
+            })
+        ).toHaveValue("Stairway to heaven")
+        expect(screen.getByRole("textbox", { name: "Komponist" })).toHaveValue(
+            "Johan Gambolputty"
+        )
+
+        const tempoSpinbutton = screen.getByRole("spinbutton", {
+            name: "Tempo",
+        })
+        userEvent.click(screen.getByRole("button", { name: "Avbryt" }))
+        userEvent.click(menus[1])
+        await waitDoneLoading()
+        expect(tempoSpinbutton).not.toBeInTheDocument()
+
+        userEvent.click(
+            screen.getByRole("menuitem", { name: "Informasjon om partitur" })
+        )
+        await waitDoneLoading()
+        expect(
+            screen.getByRole("textbox", {
+                name: "Navn på sang",
+            })
+        ).toBeInTheDocument()
+        expect(screen.getByRole("spinbutton", { name: "Tempo" })).toHaveValue(
+            100
+        )
+        expect(screen.getByRole("textbox", { name: "Notater" })).toHaveValue(
+            "Yes"
+        )
+    })
+
+    it("Should change song metadata", async () => {
+        await renderDashboard()
+
+        const menus = screen.getAllByRole("button", { name: "Sang meny" })
+        userEvent.click(menus[0])
+        userEvent.click(
+            screen.getByRole("menuitem", { name: "Informasjon om partitur" })
+        )
+
+        await waitDoneLoading()
+
+        const nameTextbox = screen.getByRole("textbox", {
+            name: "Navn på sang",
+        })
+        const composerTextbox = screen.getByRole("textbox", {
+            name: "Komponist",
+        })
+        const speedSpinbutton = screen.getByRole("spinbutton", {
+            name: "Tempo",
+        })
+        expect(nameTextbox).toHaveValue("Stairway to heaven")
+        expect(composerTextbox).toHaveValue("Johan Gambolputty")
+        expect(speedSpinbutton).toHaveValue(134)
+        userEvent.clear(nameTextbox)
+        userEvent.clear(composerTextbox)
+        userEvent.clear(speedSpinbutton)
+        const newName = "Escalator to heaven"
+        const newComposer = "Bach"
+        const newSpeed = 199
+        userEvent.type(nameTextbox, newName)
+        userEvent.type(composerTextbox, newComposer)
+        userEvent.type(speedSpinbutton, newSpeed.toString())
+        expect(nameTextbox).toHaveValue(newName)
+        expect(composerTextbox).toHaveValue(newComposer)
+        expect(speedSpinbutton).toHaveValue(newSpeed)
+
+        userEvent.click(screen.getByRole("button", { name: "Lagre" }))
+        await waitDoneLoading()
+        userEvent.click(menus[1])
+        userEvent.click(
+            screen.getByRole("menuitem", { name: "Informasjon om partitur" })
+        )
+        await waitDoneLoading()
+        userEvent.click(screen.getByRole("button", { name: "Avbryt" }))
+        await waitDoneLoading()
+        userEvent.click(menus[0])
+        userEvent.click(
+            screen.getByRole("menuitem", { name: "Informasjon om partitur" })
+        )
+        await waitDoneLoading()
+        expect(nameTextbox).toHaveValue(newName)
+        expect(composerTextbox).toHaveValue(newComposer)
+        expect(speedSpinbutton).toHaveValue(newSpeed)
+    })
 })
