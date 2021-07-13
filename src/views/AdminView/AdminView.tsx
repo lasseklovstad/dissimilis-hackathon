@@ -24,7 +24,7 @@ export const AdminView = () => {
     const handleOnChangeSearch = (searchTermParam: string) => {
         // Temporary placeholder
         setSearchTerm(searchTermParam)
-        history.push(`/libraryView`)
+        history.push(`/library`)
     }
 
     const userIsSystemAdmin = (userId: number | undefined) => {
@@ -37,6 +37,14 @@ export const AdminView = () => {
 
     const userIsGroupAdmin = (userId: number | undefined) => {
         return true
+    }
+
+    const userIsNotElevated = (userId: number | undefined) => {
+        return (
+            !userIsSystemAdmin(userId) &&
+            !userIsCountryAdmin(userId) &&
+            !userIsGroupAdmin(userId)
+        )
     }
 
     return (
@@ -60,6 +68,11 @@ export const AdminView = () => {
                         </Typography>
                         <Typography variant="h2">
                             {userIsGroupAdmin(userId) ? "Group Admin" : ""}
+                        </Typography>
+                        <Typography variant="h2">
+                            {userIsNotElevated(userId)
+                                ? "You do not have permissions to view this page"
+                                : ""}
                         </Typography>
                         {
                             //<SystemSettings></SystemSettings> ?
