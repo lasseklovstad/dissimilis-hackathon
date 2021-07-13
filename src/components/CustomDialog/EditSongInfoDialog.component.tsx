@@ -18,26 +18,8 @@ const useStyles = makeStyles((theme) => {
         textFields: {
             marginBottom: theme.spacing(0.5),
         },
-        buttons: {
-            marginBottom: theme.spacing(3.2),
-            marginLeft: theme.spacing(3.2),
-        },
         arranger: {
             marginBottom: theme.spacing(4),
-        },
-        title: {
-            marginBottom: theme.spacing(1),
-        },
-        container: {
-            width: "100%",
-        },
-        loading: {
-            margin: "8px",
-            marginRight: "16px",
-            justifyContent: "center",
-            alignContent: "center",
-            minWidth: "64px",
-            maxWidth: "64px",
         },
     }
 })
@@ -116,9 +98,7 @@ export const EditSongInfoDialog = (props: {
                         setSongNameTextFieldInput(e.target.value)
                     }}
                     label={t("Modal.nameOfSong")}
-                    style={{
-                        width: "100%",
-                    }}
+                    fullWidth={true}
                 />
                 <DialogContentText className={classes.arranger}>
                     {t("Song.arranger") + ": " + arrangerTextFieldInput}
@@ -136,7 +116,7 @@ export const EditSongInfoDialog = (props: {
                         setComposerTextFieldInput(e.target.value)
                     }}
                     label={t("Song.composer")}
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                 />
                 <TextField
                     id="song-info-modal-song-speed-textfield"
@@ -152,7 +132,7 @@ export const EditSongInfoDialog = (props: {
                         setSpeedTextFieldInput(parseInt(e.target.value))
                     }}
                     label={t("Song.songSpeed")}
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     type="number"
                 />
                 <TextField
@@ -169,7 +149,7 @@ export const EditSongInfoDialog = (props: {
                         setSongNotesTextFieldInput(e.target.value)
                     }}
                     label={t("Song.songNotes")}
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                 />
             </DialogContent>
             <DialogActions>
@@ -186,11 +166,6 @@ export const EditSongInfoDialog = (props: {
                     buttonText={t("Modal.cancel")}
                     onClick={() => {
                         handleOnCancelClick()
-                        setSongNameTextFieldInput("")
-                        setArrangerTextFieldInput("")
-                        setComposerTextFieldInput("")
-                        setSongNotesTextFieldInput("")
-                        setSpeedTextFieldInput(0)
                     }}
                     isCancelButton
                 />

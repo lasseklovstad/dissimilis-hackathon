@@ -36,9 +36,6 @@ export const useGetSong = (id: string) => {
  * @param id songs id
  */
 export const useGetSongMetadata = (id: string) => {
-    if (!id) {
-        console.log("not")
-    }
     const url = `song/${id}/metadata`
     const headers = getHeaders()
     const { getData, state, data } = useApiService<ISongMetadata>(url, {
