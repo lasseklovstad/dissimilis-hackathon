@@ -10,7 +10,7 @@ export const LoadingLogo = () => {
             <object
                 type="image/svg+xml"
                 data={animatedBird}
-                aria-label={t("Modal.loading")}
+                aria-label={t("Dialog.loading")}
                 style={{ width: "100%", height: "20%" }}
             />
         </Box>

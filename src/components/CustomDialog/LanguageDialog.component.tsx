@@ -73,7 +73,7 @@ export const LanguageDialog = (props: {
                     variant="contained"
                     onClick={() => handleChangeLanguage(languageChoice)}
                 >
-                    {t("Modal.save")}
+                    {t("Dialog.save")}
                 </Button>
 
                 <Button
@@ -83,7 +83,7 @@ export const LanguageDialog = (props: {
                         handleOnCancelClick()
                     }}
                 >
-                    {t("Modal.cancel")}
+                    {t("Dialog.cancel")}
                 </Button>
             </DialogActions>
         </>

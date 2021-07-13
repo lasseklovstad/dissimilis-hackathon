@@ -105,7 +105,7 @@
         "cancelEditBars": "Avslutt redigering av takter",
         "changeLanguage": "Endre språk"
     },
-    "Modal": {
+    "Dialog": {
         "nameOfSong": "Navn på sang",
         "addSong": "Legg til ny sang",
         "nameOfVoice": "Navn på stemme",

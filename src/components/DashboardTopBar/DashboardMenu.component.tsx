@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Dialog, IconButton, Menu, MenuItem } from "@material-ui/core"
 import SettingsIcon from "@material-ui/icons/Settings"
 import { useTranslation } from "react-i18next"
-import { LanguageDialog } from "../CustomModal/LanguageDialog.component"
+import { LanguageDialog } from "../CustomDialog/LanguageDialog.component"
 
 export const DashboardMenu = (props: {}) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -56,7 +56,6 @@ export const DashboardMenu = (props: {}) => {
             </Menu>
             <Dialog
                 open={changeLanguageDialogIsOpen}
-                aria-label={t("TopBar.dialog")}
                 onClose={() => handleCloseChangeLanguageDialog}
             >
                 <LanguageDialog

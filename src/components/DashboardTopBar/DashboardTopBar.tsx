@@ -40,7 +40,7 @@ export const DashboardTopBar = (props: {
     const { userInit, getUser } = useGetUser()
 
     return (
-        <div>
+        <>
             <AppBar position="static" className={classes.background}>
                 <Box py={3}>
                     <Grid container spacing={2}>
@@ -126,6 +126,6 @@ export const DashboardTopBar = (props: {
                 error={logout.error}
                 title={t("LoginView.logoutError")}
             />
-        </div>
+        </>
     )
 }
