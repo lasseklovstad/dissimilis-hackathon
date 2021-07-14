@@ -3,17 +3,17 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
-    Box,
     Button,
+    Dialog,
     Grid,
     makeStyles,
     Typography,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import { DashboardLibraryButton } from "../DashboardButtons/DashboardButtons"
 import { colors } from "../../utils/colors"
-import { Height } from "@material-ui/icons"
 import { useTranslation } from "react-i18next"
+import { EditCountryInfoDialog } from "../CustomDialog/EditCountryInfoDialog.component"
+import { ICountry } from "../../models/ICountry"
 
 const useStyles = makeStyles({
     root: {
@@ -49,12 +49,24 @@ const useStyles = makeStyles({
 })
 
 export const AccordionComponent = (props: {
+    countryId: number
+    country: ICountry // Temporary
     title: string
     description: string
 }) => {
-    const { title, description } = props
+    const { countryId, country, title, description } = props
     const classes = useStyles()
     const { t } = useTranslation()
+    const [countryInfoDialogIsOpen, setCountryInfoDialogIsOpen] =
+        useState(false)
+
+    const handleOpenCountryInfoDialog = () => {
+        setCountryInfoDialogIsOpen(true)
+    }
+
+    const handleCloseCountryInfoDialog = () => {
+        setCountryInfoDialogIsOpen(false)
+    }
 
     return (
         <div className={classes.root}>
@@ -71,6 +83,19 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12}>
                             <Typography>{description}</Typography>
                         </Grid>
+                        <Grid item xs={12}>
+                            <Typography>
+                                {t("AdminView.admin") + ": "}
+                                {country.admins[0].name || ""}
+                                <br />
+                                {country.address || ""}
+                                <br />
+                                {t("AdminView.phoneNumber") + ": "}
+                                {country.phoneNumber || ""}
+                                <br />
+                                {country.email || ""}
+                            </Typography>
+                        </Grid>
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
@@ -85,6 +110,7 @@ export const AccordionComponent = (props: {
                             <Button
                                 disableFocusRipple
                                 className={classes.button}
+                                onClick={handleOpenCountryInfoDialog}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.editInfo")}
@@ -134,6 +160,18 @@ export const AccordionComponent = (props: {
                     </Grid>
                 </AccordionDetails>
             </Accordion>
+            <Dialog
+                open={countryInfoDialogIsOpen}
+                onClose={handleCloseCountryInfoDialog}
+                aria-label={t("Dialog.countryInfo")}
+            >
+                <EditCountryInfoDialog
+                    countryId={countryId}
+                    country={country}
+                    handleOnSaveClick={handleCloseCountryInfoDialog}
+                    handleOnCancelClick={handleCloseCountryInfoDialog}
+                />
+            </Dialog>
         </div>
     )
 }

@@ -21,6 +21,7 @@
     },
     "AdminView": {
         "adminPanel": "Admin panel",
+        "admin": "Administrator",
         "groups": "Groups",
         "seeAllMembers": "See all members",
         "editInfo": "Edit info",
@@ -30,7 +31,8 @@
         "seeAllSongs": "See all songs",
         "inviteUser": "Invite user",
         "addCountry": "Add country",
-        "countries": "Countries"
+        "countries": "Countries",
+        "phoneNumber": "Telephone"
     },
     "BarContainer": {
         "deleteBar": "Delete bar",
@@ -153,7 +155,13 @@
         "newVoiceError": "An error occured while creating new voice",
         "loading": "Loading",
         "saveSongMetadataError": "An error occured while saving information",
-        "details": "Information about song"
+        "details": "Information about song",
+        "countryDetails": "Information about country",
+        "nameOfCountry": "Name of country",
+        "addressOfCountry": "Address of country",
+        "phoneNumberOfCountry": "Phone number of country",
+        "emailOfCountry": "Email of country",
+        "informationAboutCountry": "Information about country"
     },
     "Song": {
         "arranger": "Arranger",

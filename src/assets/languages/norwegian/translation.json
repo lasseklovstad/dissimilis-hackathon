@@ -19,6 +19,7 @@
     },
     "AdminView": {
         "adminPanel": "Adminpanel",
+        "admin": "Administrator",
         "groups": "Grupper",
         "seeAllMembers": "Se alle medlemmer",
         "editInfo": "Rediger info",
@@ -28,7 +29,8 @@
         "seeAllSongs": "Se alle sanger",
         "inviteUser": "Inviter bruker",
         "addCountry": "Legg til land",
-        "countries": "Land"
+        "countries": "Land",
+        "phoneNumber": "Telefon"
     },
     "BarContainer": {
         "deleteBar": "Slett takt",
@@ -154,7 +156,13 @@
         "duplicateCustomSong": "Egendefinert",
         "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme",
         "loading": "Laster",
-        "details": "Informasjon om partitur"
+        "details": "Informasjon om partitur",
+        "countryDetails": "Informasjon om land",
+        "nameOfCountry": "Navn på land",
+        "addressOfCountry": "Adresse til land",
+        "phoneNumberOfCountry": "Telefonnummer til land",
+        "emailOfCountry": "Epost til land",
+        "informationAboutCountry": "Informasjon om land"
     },
     "Song": {
         "arranger": "Arrangør",

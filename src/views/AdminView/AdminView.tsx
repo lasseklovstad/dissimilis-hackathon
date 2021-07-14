@@ -34,28 +34,32 @@ export const AdminView = () => {
     // Temporary test data
     const testUser1 = {
         userId: 0,
-        name: "Dummy1",
+        name: "Per Jensen",
+        email: "user1@mail.no",
         isSystemAdmin: true,
         isCountryAdmin: true,
         isGroupAdmin: true,
     }
     const testUser2 = {
         userId: 1,
-        name: "Dummy2",
+        name: "Jens Persson",
+        email: "user2@mail.no",
         isSystemAdmin: false,
         isCountryAdmin: true,
         isGroupAdmin: true,
     }
     const testUser3 = {
         userId: 2,
-        name: "Dummy3",
+        name: "Navn Navnesen",
+        email: "user3@mail.no",
         isSystemAdmin: false,
         isCountryAdmin: false,
         isGroupAdmin: true,
     }
     const testUser4 = {
         userId: 3,
-        name: "Dummy4",
+        name: "Lisa Gikktilskolensen",
+        email: "user4@mail.no",
         isSystemAdmin: false,
         isCountryAdmin: false,
         isGroupAdmin: false,
@@ -63,19 +67,21 @@ export const AdminView = () => {
     const testCountry1 = {
         countryId: 0,
         name: "Norge",
-        notes: `Emma Hjorths vei 50, 1336 Sandvika, Norge
-                Telefon: 67 17 48 80 
-                post@dissimilis.no`,
+        address: "Emma Hjorths vei 50, 1336 Sandvika, Norge",
+        phoneNumber: "67 17 48 80",
+        email: "post@dissimilis.no",
+        notes: "Dissimilis Norge holder til i Sandvika og er en organisasjon",
         admins: [testUser1],
         members: [testUser1, testUser2, testUser3, testUser4],
     }
     const testCountry2 = {
         countryId: 1,
         name: "Sverige",
-        notes: `Medelsvendsonsgate 50, 12323 Stockholm, Sverige
-                Telefon: 67 17 48 80 
-                post@dissimilis.se`,
-        admins: [testUser3],
+        address: "Medelsvenssonsgate 18, 12323 Stockholm, Sverige",
+        phoneNumber: "023-314 45",
+        email: "post@dissimilis.se",
+        notes: "Dissimilis Sverige är baserat i Sandvika och är en organisation",
+        admins: [testUser3, testUser4],
         members: [testUser2, testUser3, testUser4],
     }
     const countries = [testCountry1, testCountry2]
@@ -166,6 +172,8 @@ export const AdminView = () => {
                                   return (
                                       <Grid item xs={12}>
                                           <AccordionComponent
+                                              countryId={country.countryId}
+                                              country={country}
                                               title={country.name}
                                               description={country.notes}
                                           />
