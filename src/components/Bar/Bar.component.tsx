@@ -347,6 +347,8 @@ export const Bar = (props: {
                                             handleChordFocus(chord)
                                         }
                                         barEditMode={editBars.barEditMode}
+                                        songId={songId}
+                                        voiceId={songVoiceId}
                                     />
                                 )
                             })}

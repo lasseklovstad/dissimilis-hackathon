@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { tangentToNumber } from "../../utils/bar.util"
+import { useAddBar } from "../../utils/useApiServiceSongs"
 
 type ChordProps = {
     chords: IChord
@@ -29,6 +30,8 @@ type ChordProps = {
         chordPosition: number
     ) => string | null | undefined
     barEditMode: boolean
+    songId: number
+    voiceId: number
 }
 
 const useStyle = makeStyles((theme) => ({
@@ -158,12 +161,24 @@ export const Chord = (props: ChordProps) => {
         isSelected,
         handleChordFocus,
         barEditMode,
+        songId,
+        voiceId,
     } = props
     const classes = useStyle()
 
     const chordName = getChordNameFromMainVoice(barPosition, chords.position)
 
     const [customMode, setCustomMode] = useState(true)
+
+    const { postBar } = useAddBar(songId.toString(), voiceId)
+
+    const handleCustomVoiceAddClick = () => {
+        /*    const { error, result } = await postBar.run()
+        console.log(key)
+        if (!error && result) {
+            //setCustomVoiceNoteChecked(result.data)
+        } */
+    }
 
     return (
         <Box
@@ -228,20 +243,26 @@ export const Chord = (props: ChordProps) => {
                                                 : classes.noteFont
                                         }`}
                                         key={note + i}
+                                        onClick={() =>
+                                            handleCustomVoiceAddClick()
+                                        }
                                     >
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    name="checkedC"
-                                                    onClick={onClick}
+                                                    name="checked"
                                                     style={{
                                                         padding: "0px",
-                                                        margin: "0px",
+                                                        marginLeft: "10px",
                                                         maxHeight: "0px",
                                                         maxWidth: "0px",
                                                         color: "black",
                                                         borderRadius: 30,
                                                     }}
+                                                    // checked={}
+                                                    onClick={() =>
+                                                        handleCustomVoiceAddClick()
+                                                    }
                                                 />
                                             }
                                             label=""
