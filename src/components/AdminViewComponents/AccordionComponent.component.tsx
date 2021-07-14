@@ -98,11 +98,13 @@ export const AccordionComponent = (props: {
                                 {t("AdminView.admin") + ": "}
                                 {country.admins[0].name || ""}
                                 <br />
+                                {t("AdminView.address") + ": "}
                                 {country.address || ""}
                                 <br />
                                 {t("AdminView.phoneNumber") + ": "}
                                 {country.phoneNumber || ""}
                                 <br />
+                                {t("AdminView.email") + ": "}
                                 {country.email || ""}
                             </Typography>
                         </Grid>

@@ -66,16 +66,23 @@ export const EditAdminsDialog = (props: {
     const [selectedAdmin, setSelectedAdmin] = useState<IUser>()
 
     const handleDeleteAdmin = /* async */ () => {
-        if (selectedAdmin) {
-            console.log(
-                "Should now delete " + selectedAdmin.name + " from admins."
-            )
+        if (group.admins.length > 1) {
+            if (selectedAdmin) {
+                console.log(
+                    "Should now delete " +
+                        selectedAdmin.name +
+                        " from admins in " +
+                        group.name
+                )
+            }
+            setConfirmationDialogIsOpen(false)
+        } else {
+            console.log("There must be at least one admin in a group!")
         }
-        setConfirmationDialogIsOpen(false)
     }
 
     const handleAddAdmin = /* async */ (email: string) => {
-        console.log("Should add " + email + " as admin")
+        console.log("Should now add " + email + " as admin in " + group.name)
         setAddAdminDialogIsOpen(false)
     }
 

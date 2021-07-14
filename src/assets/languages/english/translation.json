@@ -32,7 +32,9 @@
         "inviteUser": "Invite user",
         "addCountry": "Add country",
         "countries": "Countries",
-        "phoneNumber": "Telephone"
+        "phoneNumber": "Telephone",
+        "address": "Address",
+        "email": "Email"
     },
     "BarContainer": {
         "deleteBar": "Delete bar",

@@ -30,7 +30,9 @@
         "inviteUser": "Inviter bruker",
         "addCountry": "Legg til land",
         "countries": "Land",
-        "phoneNumber": "Telefon"
+        "phoneNumber": "Telefon",
+        "address": "Adresse",
+        "email": "Epost"
     },
     "BarContainer": {
         "deleteBar": "Slett takt",
