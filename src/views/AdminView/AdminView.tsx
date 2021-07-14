@@ -92,6 +92,7 @@ export const AdminView = () => {
         members: [testUser2, testUser3, testUser4],
     }
     const currentUser = testUser1
+    // End of temporary test data
 
     const classes = useStyles()
     const { t } = useTranslation()
