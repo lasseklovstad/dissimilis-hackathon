@@ -80,7 +80,7 @@ export const AdminView = () => {
         address: "Medelsvenssonsgate 18, 12323 Stockholm, Sverige",
         phoneNumber: "023-314 45",
         email: "post@dissimilis.se",
-        notes: "Dissimilis Sverige är baserat i Sandvika och är en organisation",
+        notes: "Dissimilis Sverige är baserat i Stockholm och är en organisation",
         admins: [testUser3, testUser4],
         members: [testUser2, testUser3, testUser4],
     }

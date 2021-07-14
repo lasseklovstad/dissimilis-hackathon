@@ -142,7 +142,9 @@
         "deleteDescription": "Er du sikker du vil slette sangen?",
         "cancel": "Avbryt",
         "create": "Opprett",
+        "add": "Legg til",
         "save": "Lagre",
+        "close": "Lukk",
         "errorTitle": "Det oppstod en feil",
         "getSongError": "Det oppstod en feil ved henting av sang",
         "transposeSong": "Transponer sang",
@@ -162,7 +164,16 @@
         "addressOfCountry": "Adresse til land",
         "phoneNumberOfCountry": "Telefonnummer til land",
         "emailOfCountry": "Epost til land",
-        "informationAboutCountry": "Informasjon om land"
+        "informationAboutCountry": "Informasjon om land",
+        "editAdmins": "Endre administratorer",
+        "addAdmin": "Legg til administrator",
+        "emailOfNewAdmin": "Epost til ny admin",
+        "adminsIn": "Administratorer i",
+        "removeAdmin": "Fjern administrator",
+        "removeAdminDescription": "Er du sikker på at du vil fjerne",
+        "asAdmin": "som administrator?",
+        "cannotUndo": "Denne handlingen kan ikke angres.",
+        "thisUser": "denne brukeren"
     },
     "Song": {
         "arranger": "Arrangør",

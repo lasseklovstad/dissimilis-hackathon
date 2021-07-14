@@ -14,6 +14,7 @@ import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
 import { EditCountryInfoDialog } from "../CustomDialog/EditCountryInfoDialog.component"
 import { ICountry } from "../../models/ICountry"
+import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -59,6 +60,15 @@ export const AccordionComponent = (props: {
     const { t } = useTranslation()
     const [countryInfoDialogIsOpen, setCountryInfoDialogIsOpen] =
         useState(false)
+    const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
+
+    const handleOpenEditAdminsDialog = () => {
+        setEditAdminsDialogIsOpen(true)
+    }
+
+    const handleCloseEditAdminsDialog = () => {
+        setEditAdminsDialogIsOpen(false)
+    }
 
     const handleOpenCountryInfoDialog = () => {
         setCountryInfoDialogIsOpen(true)
@@ -141,6 +151,7 @@ export const AccordionComponent = (props: {
                             <Button
                                 disableFocusRipple
                                 className={classes.button}
+                                onClick={handleOpenEditAdminsDialog}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.editAdmins")}
@@ -170,6 +181,17 @@ export const AccordionComponent = (props: {
                     country={country}
                     handleOnSaveClick={handleCloseCountryInfoDialog}
                     handleOnCancelClick={handleCloseCountryInfoDialog}
+                />
+            </Dialog>
+            <Dialog
+                open={editAdminsDialogIsOpen}
+                onClose={handleCloseEditAdminsDialog}
+                aria-label={t("Dialog.editAdmins")}
+            >
+                <EditAdminsDialog
+                    groupId={countryId}
+                    group={country}
+                    handleOnCloseClick={handleCloseEditAdminsDialog}
                 />
             </Dialog>
         </div>
