@@ -27,9 +27,6 @@ const useStyles = makeStyles({
     accordion: {
         justifyContent: "center",
     },
-    container: {
-        display: "flex",
-    },
     button: {
         backgroundColor: colors.teal_100,
         width: "100%",

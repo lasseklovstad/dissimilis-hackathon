@@ -25,9 +25,6 @@ import { ChoiceDialog } from "./ChoiceDialog.component"
 
 const useStyles = makeStyles((theme) => {
     return {
-        textFields: {
-            marginBottom: theme.spacing(0.5),
-        },
         iconButton: {
             marginRight: theme.spacing(5),
         },
