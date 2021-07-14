@@ -19,6 +19,7 @@
     },
     "AdminView": {
         "adminPanel": "Adminpanel",
+        "backToAdminpanel": "Tilbake til adminpanel",
         "groups": "Grupper",
         "seeAllMembers": "Se alle medlemmer",
         "editInfo": "Rediger info",
@@ -28,7 +29,23 @@
         "seeAllSongs": "Se alle sanger",
         "inviteUser": "Inviter bruker",
         "addCountry": "Legg til land",
-        "countries": "Land"
+        "addGroup": "Legg til gruppe",
+        "countries": "Land",
+        "addMemberTo": "Legg medlem til i",
+        "email": "Epost",
+        "countryName": "Navn på land",
+        "groupName": "Navn på gruppe",
+        "newCountryName": "Legg til et navn på det nye landet",
+        "emailNewAdmin": "Velg brukeren du vil sette som administrator",
+        "newGroupName": "Legg til et navn på den nye gruppa",
+        "newGroupCountry": "Velg hvilket land gruppen skal ligge under",
+        "newUserCountry": "Velg hvilket land brukeren skal legges til",
+        "newUserGroup": "Velg hvilken gruppe brukeren skal legges til (Valgfritt)",
+        "newUserEmail": "Skriv inn eposten brukeren skal bruke for å få tilgang til stystemet",
+        "group": "Gruppe",
+        "noGroup": "Ingen gruppe",
+        "emailNewGroupMember": "Velg brukeren du vil legge til",
+        "add": "Legg til"
     },
     "BarContainer": {
         "deleteBar": "Slett takt",

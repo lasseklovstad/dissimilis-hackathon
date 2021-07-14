@@ -12,13 +12,13 @@ import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBa
 import { useHistory } from "react-router"
 import { useGetUser } from "../../utils/useApiServiceUsers"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
-import { AccordionComponent } from "../../components/AdminViewComponents/AccordionComponent.component"
 import AddIcon from "@material-ui/icons/Add"
 import { colors } from "../../utils/colors"
 import { InviteUserToSystemDialog } from "../../components/CustomDialog/InviteUserToSystemDialog.components"
-import { AddCountryDialog } from "../../components/CustomDialog/AddCountryDialog.component"
 import { AddGroupDialog } from "../../components/CustomDialog/AddGroupDialog.component"
 import { IUser } from "../../models/IUser"
+import { AccordionGroupComponent } from "../../components/AdminViewComponents/AccordionGroupComponent.component"
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
 
 const useStyles = makeStyles({
     container: {
@@ -38,10 +38,22 @@ const useStyles = makeStyles({
     },
     buttonText: {
         paddingLeft: "8px",
+        paddingRight: "8px",
+    },
+    returnButton: {
+        backgroundColor: colors.white,
+        boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)",
+        "&:focus-within": {
+            boxShadow: `0 0 0 4px ${colors.focus}`,
+        },
+        height: "100%",
+        justifyContent: "left",
+        fontSize: "1rem",
+        padding: "8px",
     },
 })
 
-export const AdminView = () => {
+export const GroupAdminView = () => {
     // Temporary test data
     const testUser1 = {
         userId: 0,
@@ -106,13 +118,26 @@ export const AdminView = () => {
         admins: [testUser3],
         members: [testUser2, testUser3, testUser4],
     }
-    const countries = [testCountry1, testCountry2]
-    const testGroup = {
+    const testGroup1 = {
         groupId: 0,
         name: "Oslo",
         admins: [testUser2],
         members: [testUser2, testUser3, testUser4],
     }
+    const testGroup2 = {
+        groupId: 1,
+        name: "Bærum",
+        admins: [testUser2],
+        members: [testUser2, testUser3, testUser4],
+    }
+    const testGroup3 = {
+        groupId: 2,
+        name: "Trondheim",
+        admins: [testUser2],
+        members: [testUser2, testUser3, testUser4],
+    }
+
+    const groups = [testGroup1, testGroup2, testGroup3]
     const currentUser = testUser1
 
     const classes = useStyles()
@@ -124,7 +149,6 @@ export const AdminView = () => {
     const userId = userInit?.userId
 
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
-    const [addCountryIsOpen, setAddCountryIsOpen] = useState(false)
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
 
     const handleOnChangeSearch = (searchTermParam: string) => {
@@ -160,13 +184,6 @@ export const AdminView = () => {
         //Inviter bruker
     }
 
-    const handleAddCountryDialogClose = () => {
-        setAddCountryIsOpen(false)
-    }
-    const handleAddCountryDialogSave = () => {
-        //Legg til Land
-    }
-
     const handleAddGroupDialogClose = () => {
         setAddGroupIsOpen(false)
     }
@@ -188,9 +205,19 @@ export const AdminView = () => {
                     </Grid>
                     <Grid container spacing={3} item xs={10} sm={10}>
                         <Grid item xs={12}>
-                            <Typography variant="h1">
-                                {t("AdminView.adminPanel")}
-                            </Typography>
+                            <Button
+                                disableFocusRipple
+                                onClick={() => history.push(`/admin`)}
+                                className={classes.returnButton}
+                            >
+                                <ArrowBackIosIcon />
+                                <div className={classes.buttonText}>
+                                    {t("AdminView.backToAdminpanel")}
+                                </div>
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="h1">Land - Grupper</Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
                             <Button
@@ -211,20 +238,6 @@ export const AdminView = () => {
                                 disableFocusRipple
                                 className={classes.button}
                                 onClick={() => {
-                                    setAddCountryIsOpen(true)
-                                }}
-                            >
-                                <AddIcon />
-                                <div className={classes.buttonText}>
-                                    {t("AdminView.addCountry")}
-                                </div>
-                            </Button>
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={classes.button}
-                                onClick={() => {
                                     setAddGroupIsOpen(true)
                                 }}
                             >
@@ -235,12 +248,11 @@ export const AdminView = () => {
                             </Button>
                         </Grid>
                         {userIsCountryAdmin(userId)
-                            ? countries.map((country) => {
+                            ? groups.map((group) => {
                                   return (
                                       <Grid item xs={12}>
-                                          <AccordionComponent
-                                              title={country.name}
-                                              description={country.notes}
+                                          <AccordionGroupComponent
+                                              title={group.name}
                                               users={[
                                                   testUser5,
                                                   testUser6,
@@ -265,20 +277,8 @@ export const AdminView = () => {
                                 testCountry1.name,
                                 testCountry2.name,
                             ]}
-                            listOfGroups={[testGroup.name]}
+                            listOfGroups={[testGroup1.name]}
                             defaultCountry={testCountry1.name}
-                        />
-                    </Dialog>
-
-                    <Dialog
-                        open={addCountryIsOpen}
-                        onClose={handleAddCountryDialogClose}
-                        aria-labelledby={t("AdminView.addCountry")}
-                    >
-                        <AddCountryDialog
-                            handleOnSaveClick={handleAddCountryDialogSave}
-                            handleOnCancelClick={handleAddCountryDialogClose}
-                            userList={[testUser5, testUser6, testUser7]}
                         />
                     </Dialog>
 
@@ -295,6 +295,7 @@ export const AdminView = () => {
                                 testCountry2.name,
                             ]}
                             userList={[testUser5, testUser6, testUser7]}
+                            defaultCountry={testCountry1.name}
                         />
                     </Dialog>
 

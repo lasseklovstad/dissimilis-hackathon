@@ -21,6 +21,7 @@
     },
     "AdminView": {
         "adminPanel": "Admin panel",
+        "backToAdminpanel": "Go back to admin panel",
         "groups": "Groups",
         "seeAllMembers": "See all members",
         "editInfo": "Edit info",
@@ -30,7 +31,23 @@
         "seeAllSongs": "See all songs",
         "inviteUser": "Invite user",
         "addCountry": "Add country",
-        "countries": "Countries"
+        "addGroup": "Add group",
+        "countries": "Countries",
+        "addMemberTo": "Add member to",
+        "email": "Email",
+        "countryName": "Name of country",
+        "groupName": "Name of group",
+        "newCountryName": "Add a name for the new country",
+        "emailNewAdmin": "Enter the user who'll become the administrator",
+        "newGroupName": "Add a name for the new group",
+        "newGroupCountry": "Choose which country the group should be registered under",
+        "newUserCountry": "Choose which country the user should added to",
+        "newUserGroup": "Choose which group the user should be added to (Optional)",
+        "newUserEmail": "Enter the email that the user should use to get access to the system",
+        "group": "Group",
+        "noGroup": "No group",
+        "emailNewGroupMember": "Enter the user you want to add",
+        "add": "Add"
     },
     "BarContainer": {
         "deleteBar": "Delete bar",

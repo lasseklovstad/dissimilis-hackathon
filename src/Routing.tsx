@@ -8,6 +8,7 @@ import { PrivateRoute } from "./PrivateRoute"
 import { ExportView } from "./views/ExportView/ExportView"
 import { LibraryView } from "./views/LibrayView/LibraryView"
 import { AdminView } from "./views/AdminView/AdminView"
+import { GroupAdminView } from "./views/AdminView/GroupAdminView"
 
 export const SongRouting = () => {
     return (
@@ -74,6 +75,17 @@ export const Routing = () => {
                             exact
                             path="/admin"
                             component={AdminView}
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/admin/group"
+                    render={() => (
+                        <PrivateRoute
+                            exact
+                            path="/admin/group"
+                            component={GroupAdminView}
                         />
                     )}
                 />

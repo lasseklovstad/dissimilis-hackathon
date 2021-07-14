@@ -14,7 +14,6 @@ import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
 import { IUser } from "../../models/IUser"
 import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCompleteDialog.component"
-import { useHistory } from "react-router"
 
 const useStyles = makeStyles({
     root: {
@@ -49,16 +48,13 @@ const useStyles = makeStyles({
     },
 })
 
-export const AccordionComponent = (props: {
+export const AccordionGroupComponent = (props: {
     title: string
-    description: string
     users: IUser[]
 }) => {
-    const { title, description, users } = props
+    const { title, users } = props
     const classes = useStyles()
     const { t } = useTranslation()
-
-    const history = useHistory()
 
     const [addMemberDialogIsOpen, setAddMemberDialogIsOpen] = useState(false)
 
@@ -82,9 +78,6 @@ export const AccordionComponent = (props: {
                 </AccordionSummary>
                 <AccordionDetails>
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Typography>{description}</Typography>
-                        </Grid>
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
@@ -109,10 +102,9 @@ export const AccordionComponent = (props: {
                             <Button
                                 disableFocusRipple
                                 className={classes.button}
-                                onClick={() => history.push(`/admin/group`)}
                             >
                                 <div className={classes.buttonText}>
-                                    {t("AdminView.seeAllGroups")}
+                                    {t("AdminView.seeAllSongs")}
                                 </div>
                             </Button>
                         </Grid>
@@ -136,16 +128,6 @@ export const AccordionComponent = (props: {
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.editAdmins")}
-                                </div>
-                            </Button>
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={classes.button}
-                            >
-                                <div className={classes.buttonText}>
-                                    {t("AdminView.seeAllSongs")}
                                 </div>
                             </Button>
                         </Grid>
