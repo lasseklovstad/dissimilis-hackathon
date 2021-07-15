@@ -218,8 +218,8 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
         position: number
     ) => {
         setSelectedChordId(chordId)
-        setSelectedBarId(barId)
         setSelectedChordPosition(position)
+        setSelectedBarId(barId)
     }
 
     useEffect(() => {

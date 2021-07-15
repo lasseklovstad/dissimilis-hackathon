@@ -329,7 +329,8 @@ export const Bar = (props: {
                                                 allChords
                                             )
                                         }
-                                        chords={chord}
+                                        barId={barId}
+                                        chord={chord}
                                         highlight={highlight}
                                         key={chord.position}
                                         onContextMenu={handleChordRightClick(

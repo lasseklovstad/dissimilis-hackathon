@@ -11,9 +11,13 @@ import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { tangentToNumber } from "../../utils/bar.util"
 import { useAddBar, useUpdateChord } from "../../utils/useApiServiceSongs"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useChords } from "../../utils/useChords"
+import { getNotesFromChord } from "../../models/chords"
+import { ChordType } from "../../models/IChordMenuOptions"
 
 type ChordProps = {
-    chords: IChord
+    chord: IChord
     barPosition: number
     onContextMenu: (event: React.MouseEvent) => void
     onClick: (event: React.MouseEvent) => void
@@ -30,6 +34,7 @@ type ChordProps = {
         chordPosition: number
     ) => string | null | undefined
     barEditMode: boolean
+    barId: number
 }
 
 const useStyle = makeStyles((theme) => ({
@@ -145,7 +150,7 @@ const ChordText = (props: { chordName: string }) => {
 
 export const Chord = (props: ChordProps) => {
     const {
-        chords: chord,
+        chord: chord,
         barPosition,
         onClick,
         onContextMenu,
@@ -159,10 +164,21 @@ export const Chord = (props: ChordProps) => {
         isSelected,
         handleChordFocus,
         barEditMode,
+        barId,
     } = props
     const classes = useStyle()
 
     const chordName = getChordNameFromMainVoice(barPosition, chord.position)
+
+    const {
+        song,
+        selectedVoiceId,
+        selectedBarId,
+        selectedChordId,
+        dispatchSong,
+        dispatchChordMenuOptions,
+        setValuesForSelectedChord,
+    } = useSongContext()
 
     const [customVoiceNoteStates, setCustomVoiceNoteStates] = useState<
         Boolean[]
@@ -170,32 +186,50 @@ export const Chord = (props: ChordProps) => {
 
     const [customMode, setCustomMode] = useState(true)
 
-    /*      const { updateChord } = useUpdateChord(
-        songId.toString(),
-        voiceId,
-        selectedBarId,
-        selectedChordId
-    ) */
+    const { updateChord } = useUpdateChord(
+        song.songId.toString(),
+        selectedVoiceId,
+        barId,
+        chord.chordId
+    )
 
-    /*     const handleCustomVoiceAddClick = async (index: number) => {
-        console.log("click")
-            const { error, result } = await updateChord.run({
-                positin: chord.position,
-                length: chord.length,
-                notes: chord.notes,
-                chordName: chord.chordName,
+    const handleCustomVoiceAddClick = async (index: number) => {
+        const chordType = !chord.chordName ? ChordType.NOTE : ChordType.CHORD
+        const notes = chord.notes
+            ? chord.notes
+            : chordType === ChordType.NOTE
+            ? [chord]
+            : getNotesFromChord(chord.chordName)
+        const chordName = chordType === ChordType.CHORD ? chord : null
+
+        const { error, result } = await updateChord.run({
+            position: chord.position,
+            length: chord.length,
+            notes,
+            chordName: chord.chordName,
+        })
+
+        if (!error && result) {
+            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+            dispatchChordMenuOptions({
+                type: "UPDATE_OPTIONS",
+                menuOptions: {
+                    chordLength: chord.length,
+                    chord: chord.chordName,
+                    chordType: chordType,
+                    chordNotes: notes as string[],
+                },
             })
-            console.log(index)
-            console.log("HEEER", result)
-            if (!error && result) {
-                const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
-                newCustomVoiceNoteStates[index] =
-                    !newCustomVoiceNoteStates[index]
-                setCustomVoiceNoteStates(newCustomVoiceNoteStates)
-            }
-            return
+            setValuesForSelectedChord(
+                selectedChordId,
+                result.data.barId,
+                chord.position
+            )
+            const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
+            newCustomVoiceNoteStates[index] = !newCustomVoiceNoteStates[index]
+            setCustomVoiceNoteStates(newCustomVoiceNoteStates)
         }
-    } */
+    }
 
     return (
         <Box
@@ -225,7 +259,7 @@ export const Chord = (props: ChordProps) => {
                     className={`${
                         barEditMode
                             ? ""
-                            : chords.notes[0] === "Z"
+                            : chord.notes[0] === "Z"
                             ? classes.emptyChordContainer
                             : classes.buttonBase
                     } ${isSelected ? classes.selected : ""}`}
@@ -261,7 +295,7 @@ export const Chord = (props: ChordProps) => {
                                         }`}
                                         key={note + i}
                                         onClick={() =>
-                                            console.log("hola seniour")
+                                            handleCustomVoiceAddClick(i)
                                         }
                                     >
                                         {showNoteLetters || Number(tangent)

@@ -6,6 +6,7 @@ import { ISong } from "../../models/ISong"
 import { IVoice } from "../../models/IVoice"
 import { useGetSong } from "../../utils/useApiServiceSongs"
 import { useVoice } from "../../utils/useVoice"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { Song } from "../Song/Song.component"
 
 export const CustomVoiceDialog = (props: {
@@ -32,17 +33,18 @@ export const CustomVoiceDialog = (props: {
             ?.chords.find((mainChord) => mainChord.position === chordPosition)
             ?.chordName
     }
+    const { song } = useSongContext()
     console.log(baseVoice.voiceName)
     return (
         <div>
-            <DialogTitle>{newVoice?.voiceName /*song.title*/}</DialogTitle>
+            <DialogTitle>{newVoice?.voiceName}</DialogTitle>
             <Song
                 barsPerRow={2}
-                voice={baseVoice}
+                voice={song.voices[0]}
                 getChordNameFromMainVoice={getChordNameFromMainVoice}
                 timeSignature={{
-                    denominator: songInit?.numerator || 4,
-                    numerator: songInit?.denominator || 4,
+                    numerator: songInit?.numerator || 4,
+                    denominator: songInit?.denominator || 4,
                 }}
                 heightOfBar={185}
                 lastPage={false}

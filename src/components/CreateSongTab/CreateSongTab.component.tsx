@@ -80,7 +80,7 @@ export const CreateSongTab = (props: {
     const [newVoice, setNewVoice] = useState<IVoice>()
 
     const { t } = useTranslation()
-    const [clickedId, Id] = useState<undefined | number>()
+    const [clickedId, setClickedId] = useState<undefined | number>()
     const clickedVoice = voices.find((voice) => voice.songVoiceId === clickedId)
     const selectedVoice = voices.find(
         (voice) => voice.songVoiceId === selectedVoiceId
@@ -340,7 +340,7 @@ export const CreateSongTab = (props: {
                 <CustomVoiceDialog
                     handleOnSave={handleCustomVoiceDialogSave}
                     handleOnCancel={handleCustomVoiceDialogCancel}
-                    songId={songId}
+                    songId={songId.toString()}
                     baseVoice={clickedVoice || voices[0]} //Antar at voices[0] er partitur
                     newVoice={newVoice}
                 />
