@@ -20,6 +20,7 @@
     "AdminView": {
         "adminPanel": "Adminpanel",
         "backToAdminpanel": "Tilbake til adminpanel",
+        "admin": "Administrator",
         "groups": "Grupper",
         "seeAllMembers": "Se alle medlemmer",
         "editInfo": "Rediger info",
@@ -45,7 +46,10 @@
         "group": "Gruppe",
         "noGroup": "Ingen gruppe",
         "emailNewGroupMember": "Velg brukeren du vil legge til",
-        "add": "Legg til"
+        "add": "Legg til",
+        "phoneNumber": "Telefon",
+        "address": "Adresse"
+        
     },
     "BarContainer": {
         "deleteBar": "Slett takt",
@@ -157,7 +161,9 @@
         "deleteDescription": "Er du sikker du vil slette sangen?",
         "cancel": "Avbryt",
         "create": "Opprett",
+        "add": "Legg til",
         "save": "Lagre",
+        "close": "Lukk",
         "errorTitle": "Det oppstod en feil",
         "getSongError": "Det oppstod en feil ved henting av sang",
         "transposeSong": "Transponer sang",
@@ -171,7 +177,22 @@
         "duplicateCustomSong": "Egendefinert",
         "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme",
         "loading": "Laster",
-        "details": "Informasjon om partitur"
+        "details": "Informasjon om partitur",
+        "countryDetails": "Informasjon om land",
+        "nameOfCountry": "Navn på land",
+        "addressOfCountry": "Adresse til land",
+        "phoneNumberOfCountry": "Telefonnummer til land",
+        "emailOfCountry": "Epost til land",
+        "informationAboutCountry": "Informasjon om land",
+        "editAdmins": "Endre administratorer",
+        "addAdmin": "Legg til administrator",
+        "emailOfNewAdmin": "Epost til ny admin",
+        "adminsIn": "Administratorer i",
+        "removeAdmin": "Fjern administrator",
+        "removeAdminDescription": "Er du sikker på at du vil fjerne",
+        "asAdmin": "som administrator?",
+        "cannotUndo": "Denne handlingen kan ikke angres.",
+        "thisUser": "denne brukeren"
     },
     "Song": {
         "arranger": "Arrangør",

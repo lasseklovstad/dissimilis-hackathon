@@ -22,6 +22,7 @@
     "AdminView": {
         "adminPanel": "Admin panel",
         "backToAdminpanel": "Go back to admin panel",
+        "admin": "Administrator",
         "groups": "Groups",
         "seeAllMembers": "See all members",
         "editInfo": "Edit info",
@@ -47,7 +48,9 @@
         "group": "Group",
         "noGroup": "No group",
         "emailNewGroupMember": "Enter the user you want to add",
-        "add": "Add"
+        "add": "Add",
+        "phoneNumber": "Telephone",
+        "address": "Address"
     },
     "BarContainer": {
         "deleteBar": "Delete bar",
@@ -155,7 +158,9 @@
         "deleteDescription": "Are you sure you want to delete the song?",
         "cancel": "Cancel",
         "create": "Create",
+        "add": "Add",
         "save": "Save",
+        "close": "Close",
         "errorTitle": "Error",
         "getSongError": "Error fetching song",
         "transposeSong": "Transpose song",
@@ -170,7 +175,22 @@
         "newVoiceError": "An error occured while creating new voice",
         "loading": "Loading",
         "saveSongMetadataError": "An error occured while saving information",
-        "details": "Information about song"
+        "details": "Information about song",
+        "countryDetails": "Information about country",
+        "nameOfCountry": "Name of country",
+        "addressOfCountry": "Address of country",
+        "phoneNumberOfCountry": "Phone number of country",
+        "emailOfCountry": "Email of country",
+        "informationAboutCountry": "Information about country",
+        "editAdmins": "Edit administrators",
+        "addAdmin": "Add administrator",
+        "emailOfNewAdmin": "Email of new admin",
+        "adminsIn": "Administrators in",
+        "removeAdmin": "Remove administrator",
+        "removeAdminDescription": "Are you sure you want to remove",
+        "asAdmin": "as administrator?",
+        "cannotUndo": "This action can not be undone.",
+        "thisUser": "this user"
     },
     "Song": {
         "arranger": "Arranger",

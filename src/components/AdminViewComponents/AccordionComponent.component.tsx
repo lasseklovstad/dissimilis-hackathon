@@ -15,6 +15,9 @@ import { useTranslation } from "react-i18next"
 import { IUser } from "../../models/IUser"
 import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCompleteDialog.component"
 import { useHistory } from "react-router"
+import { EditCountryInfoDialog } from "../CustomDialog/EditCountryInfoDialog.component"
+import { ICountry } from "../../models/ICountry"
+import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -26,9 +29,6 @@ const useStyles = makeStyles({
     },
     accordion: {
         justifyContent: "center",
-    },
-    container: {
-        display: "flex",
     },
     button: {
         backgroundColor: colors.teal_100,
@@ -50,13 +50,34 @@ const useStyles = makeStyles({
 })
 
 export const AccordionComponent = (props: {
+    countryId: number
+    country: ICountry // Temporary
     title: string
     description: string
     users: IUser[]
 }) => {
-    const { title, description, users } = props
+    const { title, description, users, countryId, country } = props
     const classes = useStyles()
     const { t } = useTranslation()
+    const [countryInfoDialogIsOpen, setCountryInfoDialogIsOpen] =
+        useState(false)
+    const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
+
+    const handleOpenEditAdminsDialog = () => {
+        setEditAdminsDialogIsOpen(true)
+    }
+
+    const handleCloseEditAdminsDialog = () => {
+        setEditAdminsDialogIsOpen(false)
+    }
+
+    const handleOpenCountryInfoDialog = () => {
+        setCountryInfoDialogIsOpen(true)
+    }
+
+    const handleCloseCountryInfoDialog = () => {
+        setCountryInfoDialogIsOpen(false)
+    }
 
     const history = useHistory()
 
@@ -85,6 +106,21 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12}>
                             <Typography>{description}</Typography>
                         </Grid>
+                        <Grid item xs={12}>
+                            <Typography>
+                                {t("AdminView.admin") + ": "}
+                                {country.admins[0].name || ""}
+                                <br />
+                                {t("AdminView.address") + ": "}
+                                {country.address || ""}
+                                <br />
+                                {t("AdminView.phoneNumber") + ": "}
+                                {country.phoneNumber || ""}
+                                <br />
+                                {t("AdminView.email") + ": "}
+                                {country.email || ""}
+                            </Typography>
+                        </Grid>
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
@@ -99,6 +135,7 @@ export const AccordionComponent = (props: {
                             <Button
                                 disableFocusRipple
                                 className={classes.button}
+                                onClick={handleOpenCountryInfoDialog}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.editInfo")}
@@ -133,6 +170,7 @@ export const AccordionComponent = (props: {
                             <Button
                                 disableFocusRipple
                                 className={classes.button}
+                                onClick={handleOpenEditAdminsDialog}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.editAdmins")}
@@ -165,6 +203,29 @@ export const AccordionComponent = (props: {
                     userList={users}
                     title={t("AdminView.addMemberTo") + " " + title}
                     saveText={t("AdminView.add")}
+                />
+            </Dialog>
+            <Dialog
+                open={countryInfoDialogIsOpen}
+                onClose={handleCloseCountryInfoDialog}
+                aria-label={t("Dialog.countryInfo")}
+            >
+                <EditCountryInfoDialog
+                    countryId={countryId}
+                    country={country}
+                    handleOnSaveClick={handleCloseCountryInfoDialog}
+                    handleOnCancelClick={handleCloseCountryInfoDialog}
+                />
+            </Dialog>
+            <Dialog
+                open={editAdminsDialogIsOpen}
+                onClose={handleCloseEditAdminsDialog}
+                aria-label={t("Dialog.editAdmins")}
+            >
+                <EditAdminsDialog
+                    groupId={countryId}
+                    group={country}
+                    handleOnCloseClick={handleCloseEditAdminsDialog}
                 />
             </Dialog>
         </div>
