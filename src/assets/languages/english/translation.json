@@ -102,9 +102,10 @@
         "save": "Save",
         "delete": "Delete song",
         "editBars": "Edit bars",
-        "cancelEditBars": "Stop editing bars"
+        "cancelEditBars": "Stop editing bars",
+        "changeLanguage": "Change language"
     },
-    "Modal": {
+    "Dialog": {
         "nameOfSong": "Name of song",
         "addSong": "Add a new song",
         "nameOfVoice": "Name of voice",
@@ -136,12 +137,26 @@
         "duplicateFullSong": "Duplicate of selected voice",
         "duplicateEmptySong": "New voice with empty bars and chord names", 
         "duplicateCustomSong": "Custom",
-        "newVoiceError": "An error occured while creating new voice"
+        "newVoiceError": "An error occured while creating new voice",
+        "loading": "Loading",
+        "saveSongMetadataError": "An error occured while saving information",
+        "details": "Information about song"
     },
     "Song": {
+        "arranger": "Arranger",
+        "composer": "Composer",
+        "songNotes": "Notes",
+        "songSpeed": "Tempo",
         "timeSignature": "Time signature",
         "bar": "Bar",
         "barNumber": "Bar number",
-        "barMenu": "Bar menu"
+        "barMenu": "Bar menu",
+        "bpm": "BPM"
+    },
+    "TopBar": {
+        "languageNorwegian": "Norsk",
+        "languageEnglish": "English",
+        "languageSelect": "Select language",
+        "settings": "Settings"
     }
 }

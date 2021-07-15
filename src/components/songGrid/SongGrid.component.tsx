@@ -11,6 +11,7 @@ type SongGridProps = {
     title: string | undefined
     songs: ISongIndex[] | undefined
     removeSong: (songId: number) => void
+    renameSong: (songId: number, title: string) => void
     isLoading: boolean
     children?: ReactNode
     orderTerm?: string
@@ -77,6 +78,7 @@ export const SongGrid = (props: SongGridProps) => {
                                 updatedOn={song.updatedOn}
                                 songId={song.songId}
                                 removeSong={props.removeSong}
+                                renameSong={props.renameSong}
                                 link={`/song/${song.songId}`}
                             />
                         </GridItem>
