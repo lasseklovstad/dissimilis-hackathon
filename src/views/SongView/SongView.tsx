@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect, useRef, useState } from "react"
+import React, { MutableRefObject, useEffect, useRef } from "react"
 import { Grid, makeStyles, Slide, useScrollTrigger } from "@material-ui/core"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -6,7 +6,6 @@ import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.comp
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
 import { useBarsPerRow, useBars } from "../../utils/useBars"
 import { Song } from "../../components/Song/Song.component"
-import { ISong } from "../../models/ISong"
 import {
     useGetSong,
     useUndoSong,
@@ -55,7 +54,6 @@ export const SongView = () => {
     const history = useHistory()
     const { songId } = useParams<{ songId: string }>()
     const { getSong, songInit } = useGetSong(songId)
-    const [undoneSong, setUndoneSong] = useState<ISong>()
     const barsPerRow = useBarsPerRow()
     const { putSong } = useUpdateSong(songId)
     const { undoSong } = useUndoSong(songId)
@@ -115,12 +113,6 @@ export const SongView = () => {
         }
     }, [songInit, dispatchSong])
 
-    useEffect(() => {
-        if (undoneSong) {
-            dispatchSong({ type: "UPDATE_SONG", song: undoneSong })
-        }
-    }, [undoneSong, dispatchSong])
-
     const handleTitleBlur = async (title: string) => {
         if (title !== song.title) {
             const { error, result } = await putSong.run({ title })
@@ -147,19 +139,15 @@ export const SongView = () => {
         dispatchSong({ type: "UPDATE_VOICE_NAME", voice })
     }
 
-    useHotkeys("ctrl+z", () => undoPressed())
-
-    const undoPressed = () => {
+    useHotkeys("ctrl+z", () => {
         undo()
-    }
+    })
 
     const undo = async () => {
         const { result, isError } = await undoSong.run()
 
-        if (!isError) {
-            if (result?.data) {
-                setUndoneSong(result.data)
-            }
+        if (!isError && result?.data) {
+            dispatchSong({ type: "UPDATE_SONG", song: result.data })
         }
     }
 
@@ -201,7 +189,8 @@ export const SongView = () => {
                                     songId={songId}
                                     voices={song.voices}
                                     selectedVoiceId={selectedVoiceId}
-                                    onUndo={undoPressed}
+                                    onUndo={undo}
+                                    undoIsLoading={undoSong.loading}
                                 />
                             </Grid>
                         </Grid>

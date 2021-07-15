@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import {
     Box,
     Button,
+    CircularProgress,
     Dialog,
     IconButton,
     makeStyles,
@@ -60,15 +61,13 @@ const useStyles = makeStyles({
     undoButtonContainer: {
         marginLeft: "auto",
     },
-    undoButtonText: {
-        marginLeft: "8px",
-    },
 })
 
 export const CreateSongTab = (props: {
     voices: IVoice[]
     selectedVoiceId: number
     songId: string
+    undoIsLoading?: boolean
     onAddVoice: (voice: IVoice) => void
     onUpdateVoice: (voice: IVoice) => void
     onDeleteVoice: (voice: IVoice) => void
@@ -78,6 +77,7 @@ export const CreateSongTab = (props: {
         voices,
         selectedVoiceId,
         songId,
+        undoIsLoading,
         onAddVoice,
         onUpdateVoice,
         onDeleteVoice,
@@ -233,14 +233,31 @@ export const CreateSongTab = (props: {
                 >
                     <MoreVertIcon />
                 </IconButton>
-                <div className={classes.undoButtonContainer}>
-                    <Button className={classes.buttonsstyle} onClick={onUndo}>
-                        <UndoIcon />
-                        <div className={classes.undoButtonText}>
+                <Box marginLeft="auto">
+                    {undoIsLoading ? (
+                        <Button
+                            startIcon={
+                                <CircularProgress
+                                    aria-label="Loading"
+                                    size={22}
+                                />
+                            }
+                            className={classes.buttonsstyle}
+                            onClick={onUndo}
+                            disabled
+                        >
                             {t("Song.undo")}
-                        </div>
-                    </Button>
-                </div>
+                        </Button>
+                    ) : (
+                        <Button
+                            startIcon={<UndoIcon />}
+                            className={classes.buttonsstyle}
+                            onClick={onUndo}
+                        >
+                            {t("Song.undo")}
+                        </Button>
+                    )}
+                </Box>
             </Box>
 
             <Menu
