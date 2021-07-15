@@ -101,7 +101,7 @@ export const SongNavBar = (props: {
                                 },
                                 inputProps: {
                                     maxLength: 250,
-                                    "aria-label": t("Modal.nameOfSong"),
+                                    "aria-label": t("Dialog.nameOfSong"),
                                 },
                             }}
                             value={title}
@@ -133,6 +133,7 @@ export const SongNavBar = (props: {
                         user={props.user}
                         setBarEditMode={props.setBarEditMode}
                         barEditMode={props.barEditMode}
+                        updateSongTitle={setTitle}
                         onLogout={logout.run}
                     />
                 </Box>

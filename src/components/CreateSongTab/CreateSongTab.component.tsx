@@ -14,7 +14,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { IVoice } from "../../models/IVoice"
-import { InputModal } from "../CustomModal/InputModal.component"
+import { InputDialog } from "../CustomDialog/InputDialog.component"
 import {
     useCreateVoice,
     useDeleteVoice,
@@ -22,8 +22,8 @@ import {
     useUpdateVoice,
 } from "../../utils/useApiServiceSongs"
 import { colors } from "../../utils/colors"
-import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
-import { NewVoiceDialog } from "../CustomModal/NewVoiceDialog.component"
+import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
+import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import UndoIcon from "@material-ui/icons/Undo"
 
@@ -81,9 +81,9 @@ export const CreateSongTab = (props: {
         onUpdateVoice,
         onDeleteVoice,
     } = props
-    const [newVoiceModalIsOpen, setNewVoiceModalIsOpen] = useState(false)
-    const [renameModalIsOpen, setRenameModalIsOpen] = useState(false)
-    const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false)
+    const [newVoiceDialogIsOpen, setNewVoiceDialogIsOpen] = useState(false)
+    const [renameDialogIsOpen, setRenameDialogIsOpen] = useState(false)
+    const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false)
     const { t } = useTranslation()
     const [clickedId, setClickedId] = useState<undefined | number>()
     const clickedVoice = voices.find((voice) => voice.songVoiceId === clickedId)
@@ -107,23 +107,23 @@ export const CreateSongTab = (props: {
             0
         )
         switch (option) {
-            case "Modal.duplicateFullSong": {
+            case "Dialog.duplicateFullSong": {
                 handleDuplicateVoice(title)
                 break
             }
-            case "Modal.duplicateEmptySong": {
+            case "Dialog.duplicateEmptySong": {
                 const { error, result } = await postVoice.run({
                     voiceName: title,
                     voiceNumber: voiceNumber + 1,
                 })
                 if (!error && result) {
-                    setNewVoiceModalIsOpen(false)
+                    setNewVoiceDialogIsOpen(false)
                     onAddVoice(result.data)
                 }
                 break
             }
-            case "Modal.duplicateCustomSong": {
-                setNewVoiceModalIsOpen(false)
+            case "Dialog.duplicateCustomSong": {
+                setNewVoiceDialogIsOpen(false)
                 break
             }
         }
@@ -136,7 +136,7 @@ export const CreateSongTab = (props: {
 
         if (!error && result) {
             onAddVoice(result.data)
-            setNewVoiceModalIsOpen(false)
+            setNewVoiceDialogIsOpen(false)
         }
     }
 
@@ -145,7 +145,7 @@ export const CreateSongTab = (props: {
 
         if (!error && clickedVoice) {
             onDeleteVoice(clickedVoice)
-            setDeleteModalIsOpen(false)
+            setDeleteDialogIsOpen(false)
         }
     }
 
@@ -156,20 +156,20 @@ export const CreateSongTab = (props: {
 
     const handleClose = () => {
         setAnchorEl(null)
-        setNewVoiceModalIsOpen(false)
-        setRenameModalIsOpen(false)
-        setDeleteModalIsOpen(false)
+        setNewVoiceDialogIsOpen(false)
+        setRenameDialogIsOpen(false)
+        setDeleteDialogIsOpen(false)
     }
 
-    const handleChangeVoiceTitle = async (voiceTitle: string) => {
+    const handleChangeVoiceName = async (voiceName: string) => {
         const { error, result } = await putVoice.run({
-            voiceTitle: voiceTitle,
+            voiceName: voiceName,
             voiceNumber: clickedVoice?.partNumber,
         })
 
         if (!error && result) {
             onUpdateVoice(result.data)
-            setRenameModalIsOpen(false)
+            setRenameDialogIsOpen(false)
         }
     }
 
@@ -251,7 +251,7 @@ export const CreateSongTab = (props: {
             >
                 <MenuItem
                     onClick={() => {
-                        setNewVoiceModalIsOpen(true)
+                        setNewVoiceDialogIsOpen(true)
                         setAnchorEl(null)
                     }}
                 >
@@ -260,7 +260,7 @@ export const CreateSongTab = (props: {
                 <MenuItem
                     disabled={selectedVoice?.isMain}
                     onClick={() => {
-                        setRenameModalIsOpen(true)
+                        setRenameDialogIsOpen(true)
                         setAnchorEl(null)
                     }}
                 >
@@ -269,7 +269,7 @@ export const CreateSongTab = (props: {
                 <MenuItem
                     disabled={selectedVoice?.isMain}
                     onClick={() => {
-                        setDeleteModalIsOpen(true)
+                        setDeleteDialogIsOpen(true)
                         setAnchorEl(null)
                     }}
                 >
@@ -278,40 +278,52 @@ export const CreateSongTab = (props: {
             </Menu>
 
             <Dialog
-                open={newVoiceModalIsOpen}
-                onClose={() => handleClose()}
-                aria-labelledby={t("Modal.addVoice")}
+                open={newVoiceDialogIsOpen}
+                onClose={handleClose}
+                aria-labelledby={t("Dialog.addVoice")}
             >
                 <NewVoiceDialog
-                    handleOnCancelClick={() => handleClose()}
+                    handleOnCancelClick={handleClose}
                     handleOnSaveClick={handleAddVoice}
                     characterLimit={100}
                     isLoading={postVoice.loading || duplicateVoice.loading}
                 />
             </Dialog>
-            <InputModal
-                defaultValue={clickedVoice?.voiceName || ""}
-                handleOnCancelClick={handleClose}
-                handleOnSaveClick={handleChangeVoiceTitle}
-                handleClosed={handleClose}
-                modalOpen={renameModalIsOpen}
-                saveText={t("Modal.save")}
-                cancelText={t("Modal.cancel")}
-                headerText={t("Modal.changeVoiceName")}
-                labelText={t("Modal.newVoiceName")}
-                isLoading={putVoice.loading}
-                characterLimit={100}
-            />
-            <ChoiceModal
-                handleOnCancelClick={handleClose}
-                handleClosed={handleClose}
-                handleOnSaveClick={handleDeleteVoice}
-                ackText={t("Modal.deleteVoice")}
-                modalOpen={deleteModalIsOpen}
-                cancelText={t("Modal.cancel")}
-                headerText={t("Modal.deleteVoice")}
-                descriptionText={t("Modal.deleteVoiceDescription")}
-            />
+
+            <Dialog
+                open={renameDialogIsOpen}
+                onClose={handleClose}
+                aria-labelledby={t("Dialog.changeVoiceName")}
+                maxWidth="sm"
+                fullWidth
+            >
+                <InputDialog
+                    defaultValue={clickedVoice?.voiceName || ""}
+                    handleOnCancelClick={handleClose}
+                    handleOnSaveClick={handleChangeVoiceName}
+                    saveText={t("Dialog.save")}
+                    cancelText={t("Dialog.cancel")}
+                    headerText={t("Dialog.changeVoiceName")}
+                    labelText={t("Dialog.newVoiceName")}
+                    isLoading={putVoice.loading}
+                    characterLimit={100}
+                />
+            </Dialog>
+            <Dialog
+                open={deleteDialogIsOpen}
+                onClose={() => handleClose()}
+                aria-label={t("Dialog.deleteVoice")}
+            >
+                <ChoiceDialog
+                    handleOnCancelClick={handleClose}
+                    handleOnSaveClick={handleDeleteVoice}
+                    ackText={t("Dialog.deleteVoice")}
+                    cancelText={t("Dialog.cancel")}
+                    headerText={t("Dialog.deleteVoice")}
+                    descriptionText={t("Dialog.deleteVoiceDescription")}
+                    isLoading={deleteVoice.loading}
+                />
+            </Dialog>
             <Menu
                 open={!!rightClickMenuPosition}
                 onClose={() => {
@@ -322,7 +334,7 @@ export const CreateSongTab = (props: {
             >
                 <MenuItem
                     onClick={() => {
-                        setRenameModalIsOpen(true)
+                        setRenameDialogIsOpen(true)
                         setRightClickMenuPosition(undefined)
                     }}
                 >
@@ -330,7 +342,7 @@ export const CreateSongTab = (props: {
                 </MenuItem>
                 <MenuItem
                     onClick={() => {
-                        setDeleteModalIsOpen(true)
+                        setDeleteDialogIsOpen(true)
                         setRightClickMenuPosition(undefined)
                     }}
                 >
@@ -340,12 +352,12 @@ export const CreateSongTab = (props: {
             <ErrorDialog
                 isError={postVoice.isError}
                 error={postVoice.error}
-                title={t("Modal.newVoiceError")}
+                title={t("Dialog.newVoiceError")}
             />
             <ErrorDialog
                 isError={duplicateVoice.isError}
                 error={duplicateVoice.error}
-                title={t("Modal.newVoiceError")}
+                title={t("Dialog.newVoiceError")}
             />
         </>
     )
