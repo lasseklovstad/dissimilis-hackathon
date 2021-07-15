@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
-import { useHistory } from "react-router"
+import { useHistory, useParams } from "react-router"
 import { useGetUser } from "../../utils/useApiServiceUsers"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import AddIcon from "@material-ui/icons/Add"
@@ -19,6 +19,7 @@ import { AddGroupDialog } from "../../components/CustomDialog/AddGroupDialog.com
 import { IUser } from "../../models/IUser"
 import { AccordionGroupComponent } from "../../components/AdminViewComponents/AccordionGroupComponent.component"
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
+import { IGroup } from "../../models/IGroup"
 
 const useStyles = makeStyles({
     container: {
@@ -103,38 +104,52 @@ export const GroupAdminView = () => {
     const testCountry1 = {
         countryId: 0,
         name: "Norge",
-        notes: `Emma Hjorths vei 50, 1336 Sandvika, Norge
-                Telefon: 67 17 48 80 
-                post@dissimilis.no`,
+        address: "Emma Hjorths vei 50, 1336 Sandvika, Norge",
+        phoneNumber: "67 17 48 80",
+        email: "post@dissimilis.no",
+        notes: "Dissimilis Norge holder til i Sandvika og er en organisasjon",
         admins: [testUser1],
         members: [testUser1, testUser2, testUser3, testUser4],
     }
     const testCountry2 = {
         countryId: 1,
         name: "Sverige",
-        notes: `Medelsvendsonsgate 50, 12323 Stockholm, Sverige
-                Telefon: 67 17 48 80 
-                post@dissimilis.se`,
-        admins: [testUser3],
+        address: "Medelsvenssonsgate 18, 12323 Stockholm, Sverige",
+        phoneNumber: "023-314 45",
+        email: "post@dissimilis.se",
+        notes: "Dissimilis Sverige är baserat i Stockholm och är en organisation",
+        admins: [testUser3, testUser4],
         members: [testUser2, testUser3, testUser4],
     }
-    const testGroup1 = {
+    const testGroup1: IGroup = {
         groupId: 0,
         name: "Oslo",
-        admins: [testUser2],
-        members: [testUser2, testUser3, testUser4],
+        admins: [testUser5],
+        members: [testUser5],
+        address: "Medelsvenssonsgate 18, 12323 Stockholm, Sverige",
+        phoneNumber: "023-314 45",
+        email: "post@dissimilis.se",
+        notes: "Dissimilis Sverige är baserat i Stockholm och är en organisation",
     }
-    const testGroup2 = {
+    const testGroup2: IGroup = {
         groupId: 1,
         name: "Bærum",
-        admins: [testUser2],
-        members: [testUser2, testUser3, testUser4],
+        admins: [testUser6],
+        members: [testUser6, testUser5, testUser7],
+        address: "Medelsvenssonsgate 18, 12323 Stockholm, Sverige",
+        phoneNumber: "023-314 45",
+        email: "post@dissimilis.se",
+        notes: "Dissimilis Sverige är baserat i Stockholm och är en organisation",
     }
-    const testGroup3 = {
+    const testGroup3: IGroup = {
         groupId: 2,
         name: "Trondheim",
-        admins: [testUser2],
-        members: [testUser2, testUser3, testUser4],
+        admins: [testUser6, testUser5, testUser7],
+        members: [testUser6, testUser5, testUser7],
+        address: "Medelsvenssonsgate 18, 12323 Stockholm, Sverige",
+        phoneNumber: "023-314 45",
+        email: "post@dissimilis.se",
+        notes: "Dissimilis Sverige är baserat i Stockholm och är en organisation",
     }
 
     const groups = [testGroup1, testGroup2, testGroup3]
@@ -150,6 +165,8 @@ export const GroupAdminView = () => {
 
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
+
+    const { countryId } = useParams<{ countryId: string }>()
 
     const handleOnChangeSearch = (searchTermParam: string) => {
         // Temporary placeholder
@@ -217,7 +234,7 @@ export const GroupAdminView = () => {
                             </Button>
                         </Grid>
                         <Grid item xs={12}>
-                            <Typography variant="h1">Land - Grupper</Typography>
+                            <Typography variant="h1">{countryId}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
                             <Button
@@ -258,6 +275,8 @@ export const GroupAdminView = () => {
                                                   testUser6,
                                                   testUser7,
                                               ]}
+                                              group={group}
+                                              groupId={group.groupId}
                                           />
                                       </Grid>
                                   )

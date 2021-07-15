@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next"
 import { IUser } from "../../models/IUser"
 import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCompleteDialog.component"
 import { useHistory } from "react-router"
-import { EditCountryInfoDialog } from "../CustomDialog/EditCountryInfoDialog.component"
+import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
 import { ICountry } from "../../models/ICountry"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
 
@@ -53,10 +53,9 @@ export const AccordionComponent = (props: {
     countryId: number
     country: ICountry // Temporary
     title: string
-    description: string
     users: IUser[]
 }) => {
-    const { title, description, users, countryId, country } = props
+    const { title, users, countryId, country } = props
     const classes = useStyles()
     const { t } = useTranslation()
     const [countryInfoDialogIsOpen, setCountryInfoDialogIsOpen] =
@@ -104,7 +103,7 @@ export const AccordionComponent = (props: {
                 <AccordionDetails>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography>{description}</Typography>
+                            <Typography>{country.notes}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography>
@@ -146,7 +145,11 @@ export const AccordionComponent = (props: {
                             <Button
                                 disableFocusRipple
                                 className={classes.button}
-                                onClick={() => history.push(`/admin/group`)}
+                                onClick={() =>
+                                    history.push(
+                                        `/admin/country/${country.countryId}`
+                                    )
+                                }
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.seeAllGroups")}
@@ -202,6 +205,7 @@ export const AccordionComponent = (props: {
                     handleOnSaveClick={handleAddMember}
                     userList={users}
                     title={t("AdminView.addMemberTo") + " " + title}
+                    descriptionText={t("AdminView.emailNewGroupMember")}
                     saveText={t("AdminView.add")}
                 />
             </Dialog>
@@ -210,17 +214,20 @@ export const AccordionComponent = (props: {
                 onClose={handleCloseCountryInfoDialog}
                 aria-label={t("Dialog.countryInfo")}
             >
-                <EditCountryInfoDialog
-                    countryId={countryId}
-                    country={country}
+                <EditGroupInfoDialog
+                    groupId={countryId}
+                    group={country}
                     handleOnSaveClick={handleCloseCountryInfoDialog}
                     handleOnCancelClick={handleCloseCountryInfoDialog}
+                    isGroup={false}
                 />
             </Dialog>
             <Dialog
                 open={editAdminsDialogIsOpen}
                 onClose={handleCloseEditAdminsDialog}
                 aria-label={t("Dialog.editAdmins")}
+                maxWidth="xs"
+                fullWidth
             >
                 <EditAdminsDialog
                     groupId={countryId}

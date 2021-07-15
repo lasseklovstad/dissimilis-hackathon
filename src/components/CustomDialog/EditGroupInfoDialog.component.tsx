@@ -12,6 +12,7 @@ import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { ICountry } from "../../models/ICountry"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
+import { IGroup } from "../../models/IGroup"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -21,17 +22,19 @@ const useStyles = makeStyles((theme) => {
     }
 })
 
-export const EditCountryInfoDialog = (props: {
-    countryId: number
-    country: ICountry // Temporary
+export const EditGroupInfoDialog = (props: {
+    groupId: number
+    group: ICountry | IGroup // Temporary
+    isGroup: boolean
     handleOnSaveClick: () => void
     handleOnCancelClick: () => void
     characterLimit?: number
     isLoadingPatch?: boolean
 }) => {
     const {
-        countryId,
-        country,
+        groupId,
+        group,
+        isGroup,
         handleOnSaveClick,
         handleOnCancelClick,
         characterLimit = 250,
@@ -39,26 +42,21 @@ export const EditCountryInfoDialog = (props: {
     } = props
     const classes = useStyles()
     const { t } = useTranslation()
-    const [countryNameTextFieldInput, setCountryNameTextFieldInput] =
+    const [groupNameTextFieldInput, setGroupNameTextFieldInput] = useState("")
+    const [groupAddressTextFieldInput, setGroupAddressTextFieldInput] =
         useState("")
-    const [countryAddressTextFieldInput, setCountryAddressTextFieldInput] =
+    const [groupPhoneNumberTextFieldInput, setGroupPhoneNumberTextFieldInput] =
         useState("")
-    const [
-        countryPhoneNumberTextFieldInput,
-        setCountryPhoneNumberTextFieldInput,
-    ] = useState("")
-    const [countryEmailTextFieldInput, setCountryEmailTextFieldInput] =
-        useState("")
-    const [countryNotesTextFieldInput, setCountryNotesTextFieldInput] =
-        useState("")
+    const [groupEmailTextFieldInput, setGroupEmailTextFieldInput] = useState("")
+    const [groupNotesTextFieldInput, setGroupNotesTextFieldInput] = useState("")
 
     useEffect(() => {
-        setCountryNameTextFieldInput(country.name || "")
-        setCountryAddressTextFieldInput(country.address || "")
-        setCountryPhoneNumberTextFieldInput(country.phoneNumber || "")
-        setCountryEmailTextFieldInput(country.email || "")
-        setCountryNotesTextFieldInput(country.notes || "")
-    }, [country])
+        setGroupNameTextFieldInput(group.name || "")
+        setGroupAddressTextFieldInput(group.address || "")
+        setGroupPhoneNumberTextFieldInput(group.phoneNumber || "")
+        setGroupEmailTextFieldInput(group.email || "")
+        setGroupNotesTextFieldInput(group.notes || "")
+    }, [group])
 
     return (
         <form
@@ -67,89 +65,113 @@ export const EditCountryInfoDialog = (props: {
                 handleOnSaveClick()
             }}
         >
-            <DialogTitle>{t("Dialog.countryDetails")}</DialogTitle>
+            <DialogTitle>
+                {isGroup
+                    ? t("Dialog.groupDetails")
+                    : t("Dialog.countryDetails")}
+            </DialogTitle>
             <DialogContent>
                 <TextField
-                    id="country-info-dialog-country-name-textfield"
+                    id="group-info-dialog-group-name-textfield"
                     inputProps={{
                         maxLength: characterLimit,
                     }}
-                    helperText={`${countryNameTextFieldInput.length}/${characterLimit}`}
+                    helperText={`${groupNameTextFieldInput.length}/${characterLimit}`}
                     className={classes.textFields}
                     autoFocus
                     variant="filled"
-                    value={countryNameTextFieldInput}
+                    value={groupNameTextFieldInput}
                     onChange={(e) => {
-                        setCountryNameTextFieldInput(e.target.value)
+                        setGroupNameTextFieldInput(e.target.value)
                     }}
-                    label={t("Dialog.nameOfCountry")}
+                    label={
+                        isGroup
+                            ? t("Dialog.nameOfGroup")
+                            : t("Dialog.nameOfCountry")
+                    }
                     fullWidth={true}
                     required
                 />
                 <TextField
-                    id="country-info-dialog-country-address-textfield"
+                    id="group-info-dialog-group-address-textfield"
                     inputProps={{
                         maxLength: characterLimit,
                     }}
-                    helperText={`${countryAddressTextFieldInput.length}/${characterLimit}`}
+                    helperText={`${groupAddressTextFieldInput.length}/${characterLimit}`}
                     className={classes.textFields}
                     autoFocus
                     variant="filled"
-                    value={countryAddressTextFieldInput}
+                    value={groupAddressTextFieldInput}
                     onChange={(e) => {
-                        setCountryAddressTextFieldInput(e.target.value)
+                        setGroupAddressTextFieldInput(e.target.value)
                     }}
-                    label={t("Dialog.addressOfCountry")}
+                    label={
+                        isGroup
+                            ? t("Dialog.addressOfGroup")
+                            : t("Dialog.addressOfCountry")
+                    }
                     fullWidth={true}
                 />
                 <TextField
-                    id="country-info-dialog-country-phone-number-textfield"
+                    id="group-info-dialog-group-phone-number-textfield"
                     inputProps={{
                         maxLength: characterLimit,
                     }}
-                    helperText={`${countryPhoneNumberTextFieldInput.length}/${characterLimit}`}
+                    helperText={`${groupPhoneNumberTextFieldInput.length}/${characterLimit}`}
                     className={classes.textFields}
                     autoFocus
                     variant="filled"
-                    value={countryPhoneNumberTextFieldInput}
+                    value={groupPhoneNumberTextFieldInput}
                     onChange={(e) => {
-                        setCountryPhoneNumberTextFieldInput(e.target.value)
+                        setGroupPhoneNumberTextFieldInput(e.target.value)
                     }}
-                    label={t("Dialog.phoneNumberOfCountry")}
+                    label={
+                        isGroup
+                            ? t("Dialog.phoneNumberOfGroup")
+                            : t("Dialog.phoneNumberOfCountry")
+                    }
                     fullWidth={true}
                     type="tel"
                 />
                 <TextField
-                    id="country-info-dialog-country-email-textfield"
+                    id="group-info-dialog-group-email-textfield"
                     inputProps={{
                         maxLength: characterLimit,
                     }}
-                    helperText={`${countryEmailTextFieldInput.length}/${characterLimit}`}
+                    helperText={`${groupEmailTextFieldInput.length}/${characterLimit}`}
                     className={classes.textFields}
                     autoFocus
                     variant="filled"
-                    value={countryEmailTextFieldInput}
+                    value={groupEmailTextFieldInput}
                     onChange={(e) => {
-                        setCountryEmailTextFieldInput(e.target.value)
+                        setGroupEmailTextFieldInput(e.target.value)
                     }}
-                    label={t("Dialog.emailOfCountry")}
+                    label={
+                        isGroup
+                            ? t("Dialog.emailOfGroup")
+                            : t("Dialog.emailOfCountry")
+                    }
                     fullWidth={true}
                     type="email"
                 />
                 <TextField
-                    id="country-info-dialog-country-notes-textfield"
+                    id="group-info-dialog-group-notes-textfield"
                     inputProps={{
                         maxLength: characterLimit,
                     }}
-                    helperText={`${countryNotesTextFieldInput.length}/${characterLimit}`}
+                    helperText={`${groupNotesTextFieldInput.length}/${characterLimit}`}
                     className={classes.textFields}
                     autoFocus
                     variant="filled"
-                    value={countryNotesTextFieldInput}
+                    value={groupNotesTextFieldInput}
                     onChange={(e) => {
-                        setCountryNotesTextFieldInput(e.target.value)
+                        setGroupNotesTextFieldInput(e.target.value)
                     }}
-                    label={t("Dialog.informationAboutCountry")}
+                    label={
+                        isGroup
+                            ? t("Dialog.informationAboutGroup")
+                            : t("Dialog.informationAboutCountry")
+                    }
                     fullWidth={true}
                     multiline
                 />
@@ -159,7 +181,7 @@ export const EditCountryInfoDialog = (props: {
                     <CircularProgress aria-label="Loading" size={24} />
                 ) : (
                     <DialogButton
-                        disabled={!countryNameTextFieldInput.trim()}
+                        disabled={!groupNameTextFieldInput.trim()}
                         type="submit"
                         variant="contained"
                     >

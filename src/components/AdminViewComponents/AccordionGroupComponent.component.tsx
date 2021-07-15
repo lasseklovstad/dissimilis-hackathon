@@ -14,6 +14,9 @@ import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
 import { IUser } from "../../models/IUser"
 import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCompleteDialog.component"
+import { IGroup } from "../../models/IGroup"
+import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
+import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -49,10 +52,12 @@ const useStyles = makeStyles({
 })
 
 export const AccordionGroupComponent = (props: {
+    groupId: number
+    group: IGroup // Temporary
     title: string
     users: IUser[]
 }) => {
-    const { title, users } = props
+    const { title, users, group, groupId } = props
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -64,6 +69,25 @@ export const AccordionGroupComponent = (props: {
 
     const handleAddMember = () => {
         //Legg til medlem til gruppe
+    }
+
+    const [groupInfoDialogIsOpen, setGroupInfoDialogIsOpen] = useState(false)
+    const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
+
+    const handleOpenEditAdminsDialog = () => {
+        setEditAdminsDialogIsOpen(true)
+    }
+
+    const handleCloseEditAdminsDialog = () => {
+        setEditAdminsDialogIsOpen(false)
+    }
+
+    const handleOpenGroupInfoDialog = () => {
+        setGroupInfoDialogIsOpen(true)
+    }
+
+    const handleCloseGroupInfoDialog = () => {
+        setGroupInfoDialogIsOpen(false)
     }
 
     return (
@@ -78,6 +102,24 @@ export const AccordionGroupComponent = (props: {
                 </AccordionSummary>
                 <AccordionDetails>
                     <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Typography>{group.notes}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography>
+                                {t("AdminView.admin") + ": "}
+                                {group.admins[0].name || ""}
+                                <br />
+                                {t("AdminView.address") + ": "}
+                                {group.address || ""}
+                                <br />
+                                {t("AdminView.phoneNumber") + ": "}
+                                {group.phoneNumber || ""}
+                                <br />
+                                {t("AdminView.email") + ": "}
+                                {group.email || ""}
+                            </Typography>
+                        </Grid>
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
@@ -92,6 +134,7 @@ export const AccordionGroupComponent = (props: {
                             <Button
                                 disableFocusRipple
                                 className={classes.button}
+                                onClick={handleOpenGroupInfoDialog}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.editInfo")}
@@ -125,6 +168,7 @@ export const AccordionGroupComponent = (props: {
                             <Button
                                 disableFocusRipple
                                 className={classes.button}
+                                onClick={handleOpenEditAdminsDialog}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.editAdmins")}
@@ -146,7 +190,34 @@ export const AccordionGroupComponent = (props: {
                     handleOnSaveClick={handleAddMember}
                     userList={users}
                     title={t("AdminView.addMemberTo") + " " + title}
+                    descriptionText={t("AdminView.emailNewGroupMember")}
                     saveText={t("AdminView.add")}
+                />
+            </Dialog>
+            <Dialog
+                open={groupInfoDialogIsOpen}
+                onClose={handleCloseGroupInfoDialog}
+                aria-label={t("Dialog.groupInfo")}
+            >
+                <EditGroupInfoDialog
+                    groupId={groupId}
+                    group={group}
+                    handleOnSaveClick={handleCloseGroupInfoDialog}
+                    handleOnCancelClick={handleCloseGroupInfoDialog}
+                    isGroup
+                />
+            </Dialog>
+            <Dialog
+                open={editAdminsDialogIsOpen}
+                onClose={handleCloseEditAdminsDialog}
+                aria-label={t("Dialog.editAdmins")}
+                maxWidth="xs"
+                fullWidth
+            >
+                <EditAdminsDialog
+                    groupId={groupId}
+                    group={group}
+                    handleOnCloseClick={handleCloseEditAdminsDialog}
                 />
             </Dialog>
         </div>

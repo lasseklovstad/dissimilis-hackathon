@@ -249,7 +249,6 @@ export const AdminView = () => {
                                               countryId={country.countryId}
                                               country={country}
                                               title={country.name}
-                                              description={country.notes}
                                               users={[
                                                   testUser5,
                                                   testUser6,

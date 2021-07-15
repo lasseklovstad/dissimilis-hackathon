@@ -18,10 +18,11 @@ import { ICountry } from "../../models/ICountry"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import DeleteIcon from "@material-ui/icons/Delete"
 import { IUser } from "../../models/IUser"
-import { InputDialog } from "./InputDialog.component"
 import { colors } from "../../utils/colors"
 import AddIcon from "@material-ui/icons/Add"
 import { ChoiceDialog } from "./ChoiceDialog.component"
+import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
+import { IGroup } from "../../models/IGroup"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -50,7 +51,7 @@ const useStyles = makeStyles((theme) => {
 
 export const EditAdminsDialog = (props: {
     groupId: number
-    group: ICountry // Temporary
+    group: ICountry | IGroup // Temporary
     handleOnCloseClick: () => void
 }) => {
     const { groupId, group, handleOnCloseClick } = props
@@ -99,6 +100,23 @@ export const EditAdminsDialog = (props: {
         setConfirmationDialogIsOpen(false)
     }
 
+    const testUser5: IUser = {
+        email: "test.testesen@ciber.no",
+        name: "Test Testesen",
+        userId: 5,
+    }
+    const testUser6: IUser = {
+        email: "hans.hansen@ciber.no",
+        name: "Hans Hansen",
+        userId: 6,
+    }
+    const testUser7: IUser = {
+        email: "kari.karisen@ciber.no",
+        name: "Kari Karisen",
+        userId: 7,
+    }
+    const testUsers = [testUser5, testUser6, testUser7]
+
     return (
         <>
             <DialogTitle>{t("Dialog.editAdmins")}</DialogTitle>
@@ -109,7 +127,7 @@ export const EditAdminsDialog = (props: {
                 <List dense={false}>
                     {group.admins.map((admin) => {
                         return (
-                            <ListItem>
+                            <ListItem key={admin.email + "-list-item"}>
                                 <ListItemText
                                     primary={admin.name}
                                     secondary={secondary ? admin.email : null}
@@ -162,15 +180,16 @@ export const EditAdminsDialog = (props: {
                 open={addAdminDialogIsOpen}
                 onClose={handleCloseAddAdminDialog}
                 aria-label={t("Dialog.addAdmin")}
+                maxWidth="xs"
+                fullWidth
             >
-                <InputDialog
+                <UserAutoCompleteDialog
                     handleOnCancelClick={handleCloseAddAdminDialog}
                     handleOnSaveClick={handleAddAdmin}
                     saveText={t("Dialog.add")}
-                    cancelText={t("Dialog.cancel")}
-                    headerText={t("Dialog.addAdmin")}
-                    labelText={t("Dialog.emailOfNewAdmin")}
-                    isLoading={false}
+                    title={t("Dialog.addAdmin")}
+                    descriptionText={t("Dialog.emailOfNewAdmin")}
+                    userList={testUsers}
                 />
             </Dialog>
             <Dialog

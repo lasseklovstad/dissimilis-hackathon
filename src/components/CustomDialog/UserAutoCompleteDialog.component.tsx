@@ -35,6 +35,7 @@ export const UserAutoCompleteDialog = (props: {
     isLoading?: boolean
     userList: IUser[]
     title: string
+    descriptionText?: string
     saveText: string
 }) => {
     const {
@@ -43,6 +44,7 @@ export const UserAutoCompleteDialog = (props: {
         isLoading,
         userList,
         title,
+        descriptionText = "",
         saveText,
     } = props
 
@@ -65,9 +67,7 @@ export const UserAutoCompleteDialog = (props: {
         >
             <DialogTitle>{title}</DialogTitle>
             <DialogContent>
-                <Typography variant="caption">
-                    {t("AdminView.emailNewGroupMember")}
-                </Typography>
+                <Typography variant="caption">{descriptionText}</Typography>
                 <Autocomplete
                     {...adminListProps}
                     inputValue={userInput}
