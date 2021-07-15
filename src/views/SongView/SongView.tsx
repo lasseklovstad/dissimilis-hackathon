@@ -60,7 +60,6 @@ export const SongView = () => {
         dispatchSong,
         chordMenuOptions,
         selectedVoice,
-        setSelectedVoice,
         selectedVoiceId,
         setBarsClipboard,
         setSelectedBars,

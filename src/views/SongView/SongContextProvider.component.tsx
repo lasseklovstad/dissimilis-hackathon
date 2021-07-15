@@ -251,7 +251,7 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
                 setValuesForSelectedChord,
             }}
         >
-            {children}{" "}
+            {children}
         </SongContext.Provider>
     )
 }
