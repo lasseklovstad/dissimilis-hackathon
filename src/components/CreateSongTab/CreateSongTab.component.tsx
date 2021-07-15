@@ -72,6 +72,7 @@ export const CreateSongTab = (props: {
     onAddVoice: (voice: IVoice) => void
     onUpdateVoice: (voice: IVoice) => void
     onDeleteVoice: (voice: IVoice) => void
+    onUndo: () => void
 }) => {
     const {
         voices,
@@ -80,6 +81,7 @@ export const CreateSongTab = (props: {
         onAddVoice,
         onUpdateVoice,
         onDeleteVoice,
+        onUndo,
     } = props
     const [newVoiceDialogIsOpen, setNewVoiceDialogIsOpen] = useState(false)
     const [renameDialogIsOpen, setRenameDialogIsOpen] = useState(false)
@@ -232,7 +234,7 @@ export const CreateSongTab = (props: {
                     <MoreVertIcon />
                 </IconButton>
                 <div className={classes.undoButtonContainer}>
-                    <Button className={classes.buttonsstyle}>
+                    <Button className={classes.buttonsstyle} onClick={onUndo}>
                         <UndoIcon />
                         <div className={classes.undoButtonText}>
                             {t("Song.undo")}

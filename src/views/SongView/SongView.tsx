@@ -445,7 +445,6 @@ export const SongView = () => {
     useHotkeys("ctrl+z", () => undoPressed())
 
     const undoPressed = () => {
-        console.log("Pressed undo")
         undo()
     }
 
@@ -585,6 +584,7 @@ export const SongView = () => {
                                     songId={songId}
                                     voices={song.voices}
                                     selectedVoiceId={selectedVoiceId}
+                                    onUndo={undoPressed}
                                 />
                             </Grid>
                         </Grid>
