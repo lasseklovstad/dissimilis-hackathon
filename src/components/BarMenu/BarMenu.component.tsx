@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React from "react"
 import { Menu, MenuItem } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { IBar } from "../../models/IBar"
@@ -7,7 +7,7 @@ import {
     useDuplicateBar,
     useUpdateBar,
 } from "../../utils/useApiServiceSongs"
-import { SongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 
 type BarMenuProps = {
     bar: IBar
@@ -20,7 +20,7 @@ export const BarMenu = (props: BarMenuProps) => {
     const { deleteBar } = useDeleteBar(bar.songId, bar.songVoiceId, bar.barId)
     const { putBar } = useUpdateBar(bar.songId, bar.songVoiceId, bar.barId)
     const { duplicateBar } = useDuplicateBar(bar.songId)
-    const { dispatchSong } = useContext(SongContext)
+    const { dispatchSong } = useSongContext()
 
     const { t } = useTranslation()
 

@@ -1,4 +1,4 @@
-import React, { RefObject, useContext, useRef } from "react"
+import React, { RefObject, useRef } from "react"
 import {
     Button,
     ClickAwayListener,
@@ -30,7 +30,7 @@ import { ReactComponent as EighthnoteIcon } from "../../assets/images/icon_eight
 import { ReactComponent as HalfnoteDottedIcon } from "../../assets/images/icon_half-note-dotted.svg"
 import { ReactComponent as QuarternoteDottedIcon } from "../../assets/images/icon_quarter-note-dotted.svg"
 import { useAddBar } from "../../utils/useApiServiceSongs"
-import { SongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { ISong } from "../../models/ISong"
 
@@ -172,7 +172,7 @@ export const BottomBar = (props: {
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
-    const { chordMenuOptions, selectedChordId } = useContext(SongContext)
+    const { chordMenuOptions, selectedChordId } = useSongContext()
     const container = useRef(null)
 
     const { postBar } = useAddBar(songId, voiceId)
