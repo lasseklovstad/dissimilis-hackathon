@@ -227,20 +227,6 @@ export const AdminView = () => {
                                 </div>
                             </Button>
                         </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={classes.button}
-                                onClick={() => {
-                                    setAddGroupIsOpen(true)
-                                }}
-                            >
-                                <AddIcon />
-                                <div className={classes.buttonText}>
-                                    {t("AdminView.addGroup")}
-                                </div>
-                            </Button>
-                        </Grid>
                         {userIsCountryAdmin(userId)
                             ? countries.map((country) => {
                                   return (
