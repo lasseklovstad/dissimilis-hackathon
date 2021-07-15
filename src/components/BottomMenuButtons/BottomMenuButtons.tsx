@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useEffect } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
@@ -21,7 +21,7 @@ import { colors } from "../../utils/colors"
 import { getColor, tangentToNumber } from "../../utils/bar.util"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { getNotesFromChord, toneNames } from "../../models/chords"
-import { SongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 
 const useStyles = makeStyles({
     button: {
@@ -56,7 +56,7 @@ export const ChordOptions = (props: {
     onChordNotesChange: (clickedNote: string, checked: boolean) => void
 }) => {
     const styles = useStyles()
-    const { chordMenuOptions } = useContext(SongContext)
+    const { chordMenuOptions } = useSongContext()
     const { t } = useTranslation()
 
     if (chordMenuOptions.chordType === ChordType.NOTE) {
