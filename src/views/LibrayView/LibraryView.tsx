@@ -6,6 +6,7 @@ import { useGetFilteredSongs } from "../../utils/useApiServiceSongs"
 import { ISongIndex } from "../../models/ISong"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
+import { useLocation } from "react-router"
 
 const useStyles = makeStyles({
     container: {
@@ -19,11 +20,12 @@ export const LibraryView = () => {
     const { t } = useTranslation()
     const [orderTerm, setOrderTerm] = useState<"date" | "song" | "user">("date")
     const [orderDescending, setOrderDescending] = useState<boolean>(true)
+    const numberOfResults = "50"
 
-    const url = new URLSearchParams(window.location.search)
+    const location = useLocation()
+    const url = new URLSearchParams(location.search)
     const searchTermUrl = url.get("search")
     const searchTerm = searchTermUrl ? searchTermUrl : ""
-    const numberOfResults = "50"
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,

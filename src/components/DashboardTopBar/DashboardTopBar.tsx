@@ -6,7 +6,6 @@ import {
     Hidden,
     makeStyles,
     Typography,
-    useMediaQuery,
     IconButton,
 } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
@@ -31,7 +30,6 @@ export const DashboardTopBar = (props: {
     const classes = useStyles()
     const { t } = useTranslation()
     const { onGoHome, searchTerm } = props
-    const sm = useMediaQuery("(min-width: 600px)")
     const { logout } = useLogout()
     const { userInit, getUser } = useGetUser()
 

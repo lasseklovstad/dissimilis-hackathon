@@ -74,12 +74,9 @@ export const DashboardView = () => {
     const history = useHistory()
     const measureText = t("DashboardView.measure")
 
-    const orderTerm = "date"
-    const orderDescending = true
-
     const { getRecentSongs, recentSongsFetched } = useGetRecentSongs(
-        orderTerm,
-        orderDescending
+        "date",
+        true
     )
     const [recentSongs, setRecentSongs] = useState<ISongIndex[] | undefined>()
 
