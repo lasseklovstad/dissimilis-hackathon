@@ -27,7 +27,11 @@
         "addRepAfter": "Add right repeat",
         "removeRepAfter": "Remove rigth repeat",
         "addHouse": "Add 1st and 2nd repeat",
-        "removeHouse": "Remove 1st and 2nd repeat"
+        "removeHouse": "Remove 1st and 2nd repeat",
+        "addHouseOne": "Add 1th repeat",
+        "addHouseTwo": "Add 2nd repeat",
+        "removeHouseOne": "Remove 1th repeat",
+        "removeHouseTwo": "Remove 2nd repeat"
     },
     "BottomBar": {
         "chord": "Chord",

@@ -25,6 +25,7 @@ import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { CustomVoiceDialog } from "../CustomDialog/CustomVoiceModeDialog.component"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 
 const useStyles = makeStyles({
     root: {
@@ -68,14 +69,9 @@ export const CreateSongTab = (props: {
     onUpdateVoice: (voice: IVoice) => void
     onDeleteVoice: (voice: IVoice) => void
 }) => {
-    const {
-        voices,
-        selectedVoiceId,
-        songId,
-        onAddVoice,
-        onUpdateVoice,
-        onDeleteVoice,
-    } = props
+    const { voices, onAddVoice, onUpdateVoice, onDeleteVoice } = props
+    const { song, selectedVoiceId } = useSongContext()
+    const { songId } = song
     const [newVoiceDialogIsOpen, setNewVoiceDialogIsOpen] = useState(false)
     const [renameDialogIsOpen, setRenameDialogIsOpen] = useState(false)
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false)
@@ -84,7 +80,7 @@ export const CreateSongTab = (props: {
     const [newVoice, setNewVoice] = useState<IVoice>()
 
     const { t } = useTranslation()
-    const [clickedId, setClickedId] = useState<undefined | number>()
+    const [clickedId, Id] = useState<undefined | number>()
     const clickedVoice = voices.find((voice) => voice.songVoiceId === clickedId)
     const selectedVoice = voices.find(
         (voice) => voice.songVoiceId === selectedVoiceId
@@ -92,10 +88,10 @@ export const CreateSongTab = (props: {
     const [rightClickMenuPosition, setRightClickMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()
-    const { postVoice } = useCreateVoice(songId)
-    const { putVoice } = useUpdateVoice(songId, clickedId)
-    const { deleteVoice } = useDeleteVoice(songId, clickedId)
-    const { duplicateVoice } = useDuplicateVoice(songId, clickedId)
+    const { postVoice } = useCreateVoice(songId.toString())
+    const { putVoice } = useUpdateVoice(songId.toString(), clickedId)
+    const { deleteVoice } = useDeleteVoice(songId.toString(), clickedId)
+    const { duplicateVoice } = useDuplicateVoice(songId.toString(), clickedId)
     const classes = useStyles()
     const history = useHistory()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)

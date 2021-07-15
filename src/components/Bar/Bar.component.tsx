@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useState } from "react"
 import { Box, useMediaQuery } from "@material-ui/core"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { House } from "./House.component"
@@ -7,13 +7,14 @@ import { Chord } from "./Chord.component"
 import { ChordMenu } from "./ChordMenu.component"
 import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
 import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
-import { SongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { getNotesFromChord } from "../../models/chords"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { makeStyles } from "@material-ui/core/styles"
 import { colors } from "../../utils/colors"
 import BarRightClickMenu from "./BarRightClickMenu.component"
 import { useTranslation } from "react-i18next"
+import { useBars } from "../../utils/useBars"
 
 const useStyle = makeStyles(() => ({
     barContainer: {
@@ -89,8 +90,11 @@ export const Bar = (props: {
         setValuesForSelectedChord,
         dispatchChordMenuOptions,
         selectedChordId,
-        editBars,
-    } = useContext(SongContext)
+        barEditMode,
+        barsClipboard,
+        selectedBars,
+    } = useSongContext()
+    const { copySelectedBars, barClicked } = useBars()
     const { postChord } = useCreateChord(songId, songVoiceId, barId)
     const { deleteChord } = useDeleteChord(
         songId,
@@ -103,7 +107,7 @@ export const Bar = (props: {
     const handleChordRightClick =
         (chordId: number | null) => (event: React.MouseEvent) => {
             event.preventDefault()
-            if (!editBars.barEditMode && chordId !== null) {
+            if (!barEditMode && chordId !== null) {
                 setChordMenuPosition({
                     top: event.clientY - 4,
                     left: event.clientX - 2,
@@ -114,7 +118,7 @@ export const Bar = (props: {
 
     const handleBarRightClick = (event: React.MouseEvent) => {
         event.preventDefault()
-        if (editBars.barEditMode) {
+        if (barEditMode) {
             setBarMenuPosition({
                 top: event.clientY - 4,
                 left: event.clientX - 2,
@@ -133,7 +137,7 @@ export const Bar = (props: {
 
     const handleBarMenuSelect = (method: string) => {
         if (method === "copy") {
-            editBars.copyBars()
+            copySelectedBars()
         } else if (method === "pasteBefore") {
             props.pasteBars && props.pasteBars("pasteBefore", props.bar)
         } else if (method === "pasteAfter") {
@@ -260,23 +264,20 @@ export const Bar = (props: {
 
                 <div
                     id="barContainer"
-                    onContextMenu={(e) =>
-                        editBars.barEditMode && handleBarRightClick(e)
-                    }
+                    onContextMenu={(e) => barEditMode && handleBarRightClick(e)}
                     className={`${classes.barContainer} ${
-                        editBars.barEditMode ? "editMode" : ""
+                        barEditMode ? "editMode" : ""
                     } ${
-                        editBars.selectedBars &&
-                        props.bar.position >=
-                            editBars.selectedBars.fromPosition &&
-                        props.bar.position <= editBars.selectedBars.toPosition
+                        selectedBars &&
+                        props.bar.position >= selectedBars.fromPosition &&
+                        props.bar.position <= selectedBars.toPosition
                             ? "selected"
                             : ""
                     }`}
                     onClick={(e: React.MouseEvent) => {
                         ;(e.target as HTMLElement).id !== "menuItem" &&
-                            editBars.barEditMode &&
-                            editBars.barClicked(props.bar)
+                            barEditMode &&
+                            barClicked(props.bar)
                     }}
                 >
                     <RepetitionSign display={repBefore} />
@@ -318,11 +319,10 @@ export const Bar = (props: {
                                         exportMode={exportMode}
                                         showNoteLetters={showNoteLetters}
                                         onMouseLeave={() =>
-                                            !editBars.barEditMode &&
-                                            setPositionArray([])
+                                            !barEditMode && setPositionArray([])
                                         }
                                         onMouseEnter={() =>
-                                            !editBars.barEditMode &&
+                                            !barEditMode &&
                                             onMouseEnterChord(
                                                 chord,
                                                 i,
@@ -336,19 +336,17 @@ export const Bar = (props: {
                                             chord.chordId
                                         )}
                                         onClick={() =>
-                                            !editBars.barEditMode &&
+                                            !barEditMode &&
                                             handleChordClick(chord)
                                         }
                                         isSelected={
                                             selectedChordId === chord.chordId
                                         }
                                         handleChordFocus={() =>
-                                            !editBars.barEditMode &&
+                                            !barEditMode &&
                                             handleChordFocus(chord)
                                         }
-                                        barEditMode={editBars.barEditMode}
-                                        songId={songId}
-                                        voiceId={songVoiceId}
+                                        barEditMode={barEditMode}
                                     />
                                 )
                             })}
@@ -359,8 +357,8 @@ export const Bar = (props: {
                         onSelect={handleChordMenuSelect}
                     />
                     <BarRightClickMenu
-                        barsClipboard={editBars.barsClipboard}
-                        selectedBars={editBars.selectedBars}
+                        barsClipboard={barsClipboard}
+                        selectedBars={selectedBars}
                         onSelect={handleBarMenuSelect}
                         position={barMenuPosition}
                     />

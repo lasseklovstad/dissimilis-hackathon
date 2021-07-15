@@ -11,7 +11,6 @@ import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { tangentToNumber } from "../../utils/bar.util"
 import { useAddBar, useUpdateChord } from "../../utils/useApiServiceSongs"
-import { Song } from "../Song/Song.component"
 
 type ChordProps = {
     chords: IChord
@@ -31,8 +30,6 @@ type ChordProps = {
         chordPosition: number
     ) => string | null | undefined
     barEditMode: boolean
-    songId: number
-    voiceId: number
 }
 
 const useStyle = makeStyles((theme) => ({
