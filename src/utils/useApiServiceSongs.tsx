@@ -381,17 +381,6 @@ export const useUndoSong = (songId: string) => {
     const api = useApiService<ISong>(url, { headers })
 
     return {
-        undoSong: { run: api.postData, ...api.state },
-    }
-}
-
-export const useRedoSong = (songId: string) => {
-    const url = `song/${songId}/redo`
-    const headers = getHeaders()
-
-    const api = useApiService<ISong>(url, { headers })
-
-    return {
-        redoSong: { run: api.postData, ...api.state },
+        undoSong: { run: api.putData, ...api.state },
     }
 }

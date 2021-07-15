@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import {
     Box,
+    Button,
     Dialog,
     IconButton,
     makeStyles,
@@ -24,6 +25,7 @@ import { colors } from "../../utils/colors"
 import { ChoiceModal } from "../CustomModal/ChoiceModal.component"
 import { NewVoiceDialog } from "../CustomModal/NewVoiceDialog.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
+import UndoIcon from "@material-ui/icons/Undo"
 
 const useStyles = makeStyles({
     root: {
@@ -41,11 +43,9 @@ const useStyles = makeStyles({
             backgroundColor: colors.gray_200,
         },
     },
-
     selected: {
         backgroundColor: colors.gray_200,
     },
-
     buttonsstyle: {
         border: `1px solid ${colors.gray_200}`,
         padding: "8px 16px",
@@ -56,6 +56,12 @@ const useStyles = makeStyles({
         "&:focus": {
             backgroundColor: colors.gray_200,
         },
+    },
+    undoButtonContainer: {
+        marginLeft: "auto",
+    },
+    undoButtonText: {
+        marginLeft: "8px",
     },
 })
 
@@ -225,6 +231,14 @@ export const CreateSongTab = (props: {
                 >
                     <MoreVertIcon />
                 </IconButton>
+                <div className={classes.undoButtonContainer}>
+                    <Button className={classes.buttonsstyle}>
+                        <UndoIcon />
+                        <div className={classes.undoButtonText}>
+                            {t("Song.undo")}
+                        </div>
+                    </Button>
+                </div>
             </Box>
 
             <Menu

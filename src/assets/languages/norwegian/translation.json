@@ -143,6 +143,7 @@
         "timeSignature": "Taktart",
         "bar": "Takt",
         "barNumber": "Taktnummer",
-        "barMenu": "Takt meny"
+        "barMenu": "Takt meny",
+        "undo": "Angre"
     }
 }

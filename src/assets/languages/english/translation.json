@@ -142,6 +142,7 @@
         "timeSignature": "Time signature",
         "bar": "Bar",
         "barNumber": "Bar number",
-        "barMenu": "Bar menu"
+        "barMenu": "Bar menu",
+        "undo": "Undo"
     }
 }

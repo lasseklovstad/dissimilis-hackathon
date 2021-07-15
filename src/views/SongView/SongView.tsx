@@ -20,7 +20,6 @@ import {
     useDeleteChord,
     useGetSong,
     useUndoSong,
-    useRedoSong,
     useUpdateChord,
     useUpdateSong,
 } from "../../utils/useApiServiceSongs"
@@ -68,6 +67,7 @@ export const SongView = () => {
     const history = useHistory()
     const { songId } = useParams<{ songId: string }>()
     const { getSong, songInit } = useGetSong(songId)
+    const [undoneSong, setUndoneSong] = useState<ISong>()
     const barsPerRow = useBarsPerRow()
     const { putSong } = useUpdateSong(songId)
     const { userInit } = useGetUser()
@@ -100,7 +100,6 @@ export const SongView = () => {
     const { postCopyBars } = useCopyBars(songId)
     const { postDeleteBars } = useDeleteBars(songId)
     const { undoSong } = useUndoSong(songId)
-    const { redoSong } = useRedoSong(songId)
     const setValuesForSelectedChord = (
         chordId: number | undefined | null,
         barId: number | undefined,
@@ -411,6 +410,12 @@ export const SongView = () => {
         }
     }, [songInit])
 
+    useEffect(() => {
+        if (undoneSong) {
+            dispatchSong({ type: "UPDATE_SONG", song: undoneSong })
+        }
+    }, [undoneSong])
+
     const handleTitleBlur = async (title: string) => {
         if (title !== song.title) {
             const { error, result } = await putSong.run({ title })
@@ -438,29 +443,19 @@ export const SongView = () => {
     }
 
     useHotkeys("ctrl+z", () => undoPressed())
-    useHotkeys("ctrl+y", () => redoPressed())
-    useHotkeys("ctrl+shift+z", () => redoPressed())
 
     const undoPressed = () => {
         console.log("Pressed undo")
-        //undo()
-    }
-    const redoPressed = () => {
-        console.log("Pressed redo")
-        //redo()
+        undo()
     }
 
     const undo = async () => {
-        const { error } = await undoSong.run()
+        const { result, isError } = await undoSong.run()
 
-        if (!error) {
-        }
-    }
-
-    const redo = async () => {
-        const { error } = await redoSong.run()
-
-        if (!error) {
+        if (!isError) {
+            if (result?.data) {
+                setUndoneSong(result.data)
+            }
         }
     }
 
