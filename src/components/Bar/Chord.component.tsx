@@ -10,7 +10,8 @@ import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { tangentToNumber } from "../../utils/bar.util"
-import { useAddBar } from "../../utils/useApiServiceSongs"
+import { useAddBar, useUpdateChord } from "../../utils/useApiServiceSongs"
+import { Song } from "../Song/Song.component"
 
 type ChordProps = {
     chords: IChord
@@ -147,7 +148,7 @@ const ChordText = (props: { chordName: string }) => {
 
 export const Chord = (props: ChordProps) => {
     const {
-        chords,
+        chords: chord,
         barPosition,
         onClick,
         onContextMenu,
@@ -161,28 +162,47 @@ export const Chord = (props: ChordProps) => {
         isSelected,
         handleChordFocus,
         barEditMode,
-        songId,
-        voiceId,
     } = props
     const classes = useStyle()
 
-    const chordName = getChordNameFromMainVoice(barPosition, chords.position)
+    const chordName = getChordNameFromMainVoice(barPosition, chord.position)
+
+    const [customVoiceNoteStates, setCustomVoiceNoteStates] = useState<
+        Boolean[]
+    >(chord.notes.map(() => false))
 
     const [customMode, setCustomMode] = useState(true)
 
-    const { postBar } = useAddBar(songId.toString(), voiceId)
+    /*      const { updateChord } = useUpdateChord(
+        songId.toString(),
+        voiceId,
+        selectedBarId,
+        selectedChordId
+    ) */
 
-    const handleCustomVoiceAddClick = () => {
-        /*    const { error, result } = await postBar.run()
-        console.log(key)
-        if (!error && result) {
-            //setCustomVoiceNoteChecked(result.data)
-        } */
-    }
+    /*     const handleCustomVoiceAddClick = async (index: number) => {
+        console.log("click")
+            const { error, result } = await updateChord.run({
+                positin: chord.position,
+                length: chord.length,
+                notes: chord.notes,
+                chordName: chord.chordName,
+            })
+            console.log(index)
+            console.log("HEEER", result)
+            if (!error && result) {
+                const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
+                newCustomVoiceNoteStates[index] =
+                    !newCustomVoiceNoteStates[index]
+                setCustomVoiceNoteStates(newCustomVoiceNoteStates)
+            }
+            return
+        }
+    } */
 
     return (
         <Box
-            flexGrow={chords.length}
+            flexGrow={chord.length}
             display="flex"
             flexDirection="column"
             position="relative"
@@ -224,7 +244,7 @@ export const Chord = (props: ChordProps) => {
                         alignItems: "stretch",
                     }}
                 >
-                    {chords.notes
+                    {chord.notes
                         .map((note, i) => {
                             const tangent = tangentToNumber(note)
                             return (
@@ -244,29 +264,9 @@ export const Chord = (props: ChordProps) => {
                                         }`}
                                         key={note + i}
                                         onClick={() =>
-                                            handleCustomVoiceAddClick()
+                                            console.log("hola seniour")
                                         }
                                     >
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    name="checked"
-                                                    style={{
-                                                        padding: "0px",
-                                                        marginLeft: "10px",
-                                                        maxHeight: "0px",
-                                                        maxWidth: "0px",
-                                                        color: "black",
-                                                        borderRadius: 30,
-                                                    }}
-                                                    // checked={}
-                                                    onClick={() =>
-                                                        handleCustomVoiceAddClick()
-                                                    }
-                                                />
-                                            }
-                                            label=""
-                                        />
                                         {showNoteLetters || Number(tangent)
                                             ? tangent
                                             : undefined}
@@ -288,7 +288,7 @@ export const Chord = (props: ChordProps) => {
                     className={`${
                         barEditMode
                             ? ""
-                            : chords.notes[0] === "Z"
+                            : chord.notes[0] === "Z"
                             ? classes.emptyChordContainer
                             : classes.buttonBase
                     } ${isSelected ? classes.selected : ""}`}
@@ -303,7 +303,7 @@ export const Chord = (props: ChordProps) => {
                     }}
                     onFocus={handleChordFocus}
                 >
-                    {chords.notes
+                    {chord.notes
                         .map((note, i) => {
                             const tangent = tangentToNumber(note)
                             return (

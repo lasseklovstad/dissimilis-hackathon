@@ -130,6 +130,8 @@ export const CreateSongTab = (props: {
                     setNewVoiceDialogIsOpen(false)
                     setCustomVoiceDialogIsOpen(true)
                     setNewVoice(result.data)
+                    onAddVoice(result.data)
+                    setClickedId(result.data.songVoiceId)
                 }
                 break
             }
@@ -189,11 +191,12 @@ export const CreateSongTab = (props: {
     }
 
     const handleCustomVoiceDialogCancel = async () => {
-        //Send API kall for å tømme stemmen
+        handleDeleteVoice()
+        setCustomVoiceDialogIsOpen(false)
     }
 
-    const handleCustomVoiceDialogSave = async () => {
-        //Lukk voicedialog, switch til new voice
+    const handleCustomVoiceDialogSave = () => {
+        setCustomVoiceDialogIsOpen(false)
     }
 
     const handleOpenCustomVoiceDialog = async () => {}

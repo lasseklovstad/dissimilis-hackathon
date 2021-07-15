@@ -4,6 +4,8 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import { ISong } from "../../models/ISong"
 import { IVoice } from "../../models/IVoice"
+import { useGetSong } from "../../utils/useApiServiceSongs"
+import { useVoice } from "../../utils/useVoice"
 import { Song } from "../Song/Song.component"
 
 export const CustomVoiceDialog = (props: {
@@ -15,6 +17,11 @@ export const CustomVoiceDialog = (props: {
 }) => {
     const { handleOnCancel, handleOnSave, songId, baseVoice, newVoice } = props
     const { t } = useTranslation()
+    const { songInit, getSong } = useGetSong(songId)
+    const selectedVoiceId = useVoice(songInit?.voices)
+    const selectedVoice = songInit?.voices.find(
+        (voice) => voice.songVoiceId === selectedVoiceId
+    )
 
     const getChordNameFromMainVoice = (
         barPosition: number,
@@ -25,17 +32,17 @@ export const CustomVoiceDialog = (props: {
             ?.chords.find((mainChord) => mainChord.position === chordPosition)
             ?.chordName
     }
-
+    console.log(baseVoice.voiceName)
     return (
         <div>
-            <DialogTitle>{/*song.title*/ "title"}</DialogTitle>
+            <DialogTitle>{newVoice?.voiceName /*song.title*/}</DialogTitle>
             <Song
                 barsPerRow={2}
-                voice={newVoice || baseVoice}
+                voice={baseVoice}
                 getChordNameFromMainVoice={getChordNameFromMainVoice}
                 timeSignature={{
-                    denominator: /* song?.denominator ||*/ 4,
-                    numerator: /* song?.numerator ||*/ 4,
+                    denominator: songInit?.numerator || 4,
+                    numerator: songInit?.denominator || 4,
                 }}
                 heightOfBar={185}
                 lastPage={false}
