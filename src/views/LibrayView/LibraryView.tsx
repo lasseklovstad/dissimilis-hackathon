@@ -7,6 +7,7 @@ import { ISongIndex } from "../../models/ISong"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
 import { useLocation } from "react-router"
+import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
 
 const useStyles = makeStyles({
     container: {
@@ -51,6 +52,12 @@ export const LibraryView = () => {
         )
     }
 
+    const renameSongInFilteredSongs = (songId: number, title: string) => {
+        setFilteredSongs(
+            updateSongTitleInListOfSongs(filteredSongs, songId, title)
+        )
+    }
+
     const handleChangeOrderTerm = (term: "date" | "song" | "user") => {
         if (term === orderTerm || (term !== orderTerm && !orderDescending)) {
             setOrderDescending(!orderDescending)
@@ -83,6 +90,7 @@ export const LibraryView = () => {
                         }
                         songs={filteredSongs}
                         removeSong={removeSongFromFilteredSongs}
+                        renameSong={renameSongInFilteredSongs}
                         isLoading={getFilteredSongs.loading}
                         orderTerm={orderTerm}
                         changeOrderTerm={handleChangeOrderTerm}

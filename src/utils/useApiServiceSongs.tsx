@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useApiService } from "./useApiService"
-import { ISong, ISongIndex } from "../models/ISong"
+import { ISong, ISongIndex, ISongMetadata } from "../models/ISong"
 import { IBar } from "../models/IBar"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../models/IVoice"
 
@@ -28,6 +28,25 @@ export const useGetSong = (id: string) => {
     return {
         getSong: { run: getData, ...state },
         songInit: data,
+    }
+}
+
+/**
+ * Get metadata for one song
+ * @param id songs id
+ */
+export const useGetSongMetadata = (id: string) => {
+    const url = `song/${id}/metadata`
+    const headers = getHeaders()
+    const { getData, state, data } = useApiService<ISongMetadata>(url, {
+        headers,
+    })
+    useEffect(() => {
+        getData()
+    }, [getData])
+    return {
+        getSongMetadata: { run: getData, ...state },
+        songMetadataFetched: data,
     }
 }
 

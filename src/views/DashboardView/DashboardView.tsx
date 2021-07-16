@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Box, Grid, makeStyles } from "@material-ui/core"
+import { Box, Dialog, Grid, makeStyles } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import {
@@ -8,13 +8,14 @@ import {
 } from "../../components/DashboardButtons/DashboardButtons"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useGetRecentSongs, usePostSong } from "../../utils/useApiServiceSongs"
-import { InputModal } from "../../components/CustomModal/InputModal.component"
+import { InputDialog } from "../../components/CustomDialog/InputDialog.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
 import { getTimeSignatureText } from "../../utils/bar.util"
 import { ISongIndex } from "../../models/ISong"
 import { Loading } from "../../components/loading/Loading.component"
+import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
 
 const useStyles = makeStyles({
     container: {
@@ -65,7 +66,7 @@ export const DashboardView = () => {
     const styles = useStyles()
     const { t } = useTranslation()
 
-    const [addSongModalIsOpen, setAddSongModalIsOpen] = useState(false)
+    const [addSongDialogIsOpen, setAddSongDialogIsOpen] = useState(false)
     const [timeSignature, setTimeSignature] = useState<
         ITimeSignature | undefined
     >()
@@ -94,21 +95,25 @@ export const DashboardView = () => {
         )
     }
 
+    const renameSongInRecentSongs = (songId: number, title: string) => {
+        setRecentSongs(updateSongTitleInListOfSongs(recentSongs, songId, title))
+    }
+
     const handleAddSong = async (title: string) => {
-        setAddSongModalIsOpen(false)
+        setAddSongDialogIsOpen(false)
         const { result } = await postSong.run({ ...timeSignature, title })
         if (result?.status === 201) {
             history.push(`/song/${result.data.songId}`)
         }
     }
 
-    const handleOpenAddSongModal = (song: MusicTacts) => {
+    const handleOpenAddSongDialog = (song: MusicTacts) => {
         setTimeSignature(song.timeSignature)
-        setAddSongModalIsOpen(true)
+        setAddSongDialogIsOpen(true)
     }
 
     const handleClose = () => {
-        setAddSongModalIsOpen(false)
+        setAddSongDialogIsOpen(false)
     }
 
     return (
@@ -125,12 +130,13 @@ export const DashboardView = () => {
                         title={t("DashboardView.newSongLabel")}
                         songs={undefined}
                         removeSong={() => undefined}
+                        renameSong={() => undefined}
                         isLoading={false}
                     >
                         {musicTacts.map((song) => (
                             <DashboardButtonWithAddIconNoLink
                                 key={song.id}
-                                func={() => handleOpenAddSongModal(song)}
+                                func={() => handleOpenAddSongDialog(song)}
                                 text={`${getTimeSignatureText(
                                     song.timeSignature
                                 )}-${measureText}`}
@@ -142,6 +148,7 @@ export const DashboardView = () => {
                         title={t("DashboardView.recentSongLabel")}
                         songs={recentSongs}
                         removeSong={removeSongFromRecentSongs}
+                        renameSong={renameSongInRecentSongs}
                         isLoading={getRecentSongs.loading}
                     >
                         <DashboardLibraryButton
@@ -149,18 +156,23 @@ export const DashboardView = () => {
                             link="/library"
                         />
                     </SongGrid>
-
-                    <InputModal
-                        handleOnCancelClick={handleClose}
-                        handleOnSaveClick={handleAddSong}
-                        handleClosed={handleClose}
-                        modalOpen={addSongModalIsOpen}
-                        saveText={t("Modal.create")}
-                        cancelText={t("Modal.cancel")}
-                        headerText={t("Modal.addSong")}
-                        labelText={t("Modal.nameOfSong")}
-                        isLoading={postSong.loading}
-                    />
+                    <Dialog
+                        open={addSongDialogIsOpen}
+                        onClose={handleClose}
+                        aria-label={t("Dialog.addSong")}
+                        maxWidth="sm"
+                        fullWidth
+                    >
+                        <InputDialog
+                            handleOnCancelClick={handleClose}
+                            handleOnSaveClick={handleAddSong}
+                            saveText={t("Dialog.create")}
+                            cancelText={t("Dialog.cancel")}
+                            headerText={t("Dialog.addSong")}
+                            labelText={t("Dialog.nameOfSong")}
+                            isLoading={postSong.loading}
+                        />
+                    </Dialog>
                 </Grid>
             </Box>
             <ErrorDialog isError={postSong.isError} error={postSong.error} />

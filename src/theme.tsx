@@ -75,6 +75,12 @@ export const theme = createMuiTheme({
                 padding: `${defaultTheme.spacing(1)}px ${defaultTheme.spacing(
                     2
                 )}px`,
+                justifyContent: "flex-start",
+            },
+        },
+        MuiDialogContentText: {
+            root: {
+                color: colors.black,
             },
         },
     },

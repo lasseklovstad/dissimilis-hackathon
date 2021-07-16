@@ -15,6 +15,7 @@ import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { SearchField } from "./SearchField"
+import { DashboardMenu } from "../DashboardTopBar/DashboardMenu.component"
 
 const useStyles = makeStyles(() => ({
     background: {
@@ -34,24 +35,25 @@ export const DashboardTopBar = (props: {
     const { userInit, getUser } = useGetUser()
 
     return (
-        <div>
+        <>
             <AppBar position="static" className={classes.background}>
                 <Box py={3}>
                     <Grid container spacing={2}>
                         <Hidden xsDown>
                             <Grid item sm={1} />
                         </Hidden>
-                        <Grid item xs={2}>
+                        <Grid item xs={1}>
                             <DashboardTopBarIcon onGoHome={onGoHome} />
                         </Grid>
-                        <Hidden smDown>
+                        <Hidden mdDown>
                             <Grid item md={1} />
                         </Hidden>
                         <Grid
                             item
-                            xs={10}
-                            sm={5}
-                            md={4}
+                            xs={9}
+                            sm={7}
+                            md={5}
+                            lg={4}
                             /* style={{ paddingRight: sm ? 32 : 8 }}*/
                         >
                             <Grid
@@ -78,7 +80,22 @@ export const DashboardTopBar = (props: {
                             </Grid>
                         </Grid>
                         <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
-                            <Grid item sm={4} />
+                            <Grid item sm={1} />
+                        </Hidden>
+                        <Hidden only={[`md`, `lg`, `xl`]}>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="flex-end"
+                                alignItems="center"
+                                item
+                                xs={1}
+                            >
+                                <DashboardMenu />
+                            </Grid>
+                        </Hidden>
+                        <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
+                            <Grid item sm={1} />
                         </Hidden>
                         <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
                             <Grid item sm={1} />
@@ -86,6 +103,18 @@ export const DashboardTopBar = (props: {
                         <Grid item xs={12} sm={10} md={3}>
                             <SearchField searchTermInit={searchTerm} />
                         </Grid>
+                        <Hidden only={[`xs`, `sm`]}>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="flex-end"
+                                alignItems="center"
+                                item
+                                xs={1}
+                            >
+                                <DashboardMenu />
+                            </Grid>
+                        </Hidden>
                     </Grid>
                 </Box>
             </AppBar>
@@ -95,6 +124,6 @@ export const DashboardTopBar = (props: {
                 error={logout.error}
                 title={t("LoginView.logoutError")}
             />
-        </div>
+        </>
     )
 }
