@@ -64,7 +64,11 @@ export const EditSongInfoDialog = (props: {
 
     useEffect(() => {
         setSongNameTextFieldInput(songMetadataFetched?.title || "")
-        setArrangerTextFieldInput(songMetadataFetched?.arrangerName || "")
+        setArrangerTextFieldInput(
+            songMetadataFetched?.arrangerName ||
+                songMetadataFetched?.arrangerEmail ||
+                ""
+        )
         setComposerTextFieldInput(songMetadataFetched?.composer || "")
         setSongNotesTextFieldInput(songMetadataFetched?.songNotes || "")
         setSpeedTextFieldInput(songMetadataFetched?.speed || 0)
