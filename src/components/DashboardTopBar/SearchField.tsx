@@ -22,8 +22,6 @@ export const SearchField = (props: { searchTermInit?: string }) => {
             fullWidth
             placeholder={searchPlaceholder}
             value={searchTerm}
-            onFocus={() => {}}
-            onBlur={() => {}}
             onChange={(event) => {
                 setSeachTerm(event.target.value)
             }}
@@ -34,7 +32,10 @@ export const SearchField = (props: { searchTermInit?: string }) => {
                 }
             }}
             InputProps={{
-                inputProps: { "aria-label": searchPlaceholder },
+                inputProps: {
+                    "aria-label": searchPlaceholder,
+                    focused: searchTerm ? true : false,
+                },
                 endAdornment: (
                     <InputAdornment position="end">
                         <IconButton
