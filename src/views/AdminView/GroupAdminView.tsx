@@ -229,7 +229,9 @@ export const GroupAdminView = () => {
                             </Button>
                         </Grid>
                         <Grid item xs={12}>
-                            <Typography variant="h1">{countryId}</Typography>
+                            <Typography variant="h1">
+                                {countryId + "-" + t("AdminView.groups")}
+                            </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
                             <Button

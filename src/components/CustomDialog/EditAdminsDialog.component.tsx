@@ -135,7 +135,6 @@ export const EditAdminsDialog = (props: {
                 </Typography>
                 <List dense={false}>
                     {getAdmins().map((admin) => {
-                        //Kanskje endre til en generell admin liste
                         return (
                             <ListItem key={admin.email + "-list-item"}>
                                 <ListItemText
