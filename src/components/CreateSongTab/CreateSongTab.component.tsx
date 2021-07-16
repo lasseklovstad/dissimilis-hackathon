@@ -96,6 +96,8 @@ export const CreateSongTab = (props: {
     const history = useHistory()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
+    const { setCustomMode } = useSongContext()
+
     const handleAddVoice = async (title: string, option: string) => {
         const voiceNumber = Math.max(
             ...voices.map((voice) => voice.partNumber),
@@ -128,6 +130,7 @@ export const CreateSongTab = (props: {
                     setNewVoice(result.data)
                     onAddVoice(result.data)
                     setClickedId(result.data.songVoiceId)
+                    setCustomMode(true)
                 }
                 break
             }
@@ -189,10 +192,12 @@ export const CreateSongTab = (props: {
     const handleCustomVoiceDialogCancel = async () => {
         handleDeleteVoice()
         setCustomVoiceDialogIsOpen(false)
+        setCustomMode(false)
     }
 
     const handleCustomVoiceDialogSave = () => {
         setCustomVoiceDialogIsOpen(false)
+        setCustomMode(false)
     }
 
     const handleOpenCustomVoiceDialog = async () => {}

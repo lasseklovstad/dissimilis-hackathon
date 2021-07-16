@@ -221,7 +221,7 @@ export const Chord = (props: ChordProps) => {
         Boolean[]
     >(chord.notes.map(() => false))
 
-    const [customMode, setCustomMode] = useState(true)
+    const { customMode } = useSongContext()
 
     const { addNote } = useAddNote(
         song.songId.toString(),
@@ -235,13 +235,13 @@ export const Chord = (props: ChordProps) => {
             notePosition: chord.position,
             length: chord.length,
             intervalPosition: index,
+            notes: chord.notes,
         })
 
-        const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
+        /* if (true !error && result) {
+            const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
         newCustomVoiceNoteStates[index] = !newCustomVoiceNoteStates[index]
         setCustomVoiceNoteStates(newCustomVoiceNoteStates)
-
-        /* if (true !error && result) {
             dispatchSong({ type: "UPDATE_BAR", bar: result.data })
             dispatchChordMenuOptions({
                 type: "UPDATE_OPTIONS",
@@ -256,11 +256,11 @@ export const Chord = (props: ChordProps) => {
                 selectedChordId,
                 result.data.barId,
                 chord.position
-            )
+            ) */
             const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
             newCustomVoiceNoteStates[index] = !newCustomVoiceNoteStates[index]
             setCustomVoiceNoteStates(newCustomVoiceNoteStates)
-        } */
+        }
     }
 
     return (
@@ -402,7 +402,9 @@ export const Chord = (props: ChordProps) => {
                                         id="singleChord"
                                         className={`${classes.noteContainer} ${
                                             (classes as any)[note]
-                                        } ${exportMode ? "disabled" : ""} ${
+                                        } ${"main"} ${
+                                            exportMode ? "disabled" : ""
+                                        } ${
                                             note === "Z" && highlight
                                                 ? classes.highlight
                                                 : ""
