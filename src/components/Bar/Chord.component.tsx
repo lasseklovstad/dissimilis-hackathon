@@ -10,11 +10,17 @@ import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { tangentToNumber } from "../../utils/bar.util"
-import { useAddBar, useUpdateChord } from "../../utils/useApiServiceSongs"
+import {
+    useCreateChord,
+    useAddBar,
+    useUpdateChord,
+} from "../../utils/useApiServiceSongs"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { useChords } from "../../utils/useChords"
 import { getNotesFromChord } from "../../models/chords"
 import { ChordType } from "../../models/IChordMenuOptions"
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded"
+import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUncheckedRounded"
 
 type ChordProps = {
     chord: IChord
@@ -76,48 +82,66 @@ const useStyle = makeStyles((theme) => ({
         ...theme.typography.body1,
         "@media(max-width:600px)": {},
     },
+    circleIconChecked: {
+        color: colors.focus,
+        fontSize: "1.25rem",
+        marginRight: "0.1rem",
+    },
+    circleIconUnChecked: {
+        color: colors.gray_400,
+        fontSize: "1.25rem",
+        marginRight: "0.1rem",
+    },
     C: {
-        backgroundColor: colors.C.main,
-        color: colors.C.text,
+        "&.main": { backgroundColor: colors.C.main, color: colors.C.text },
+        "&.opaque": { backgroundColor: colors.C.opaque, color: colors.C.text },
     },
     D: {
-        backgroundColor: colors.D.main,
-        color: colors.D.text,
+        main: { backgroundColor: colors.D.main, color: colors.D.text },
+        opaque: { backgroundColor: colors.D.opaque, color: colors.D.text },
     },
     E: {
-        backgroundColor: colors.E.main,
-        color: colors.E.text,
+        main: { backgroundColor: colors.E.main, color: colors.E.text },
+        opaque: { backgroundColor: colors.E.opaque, color: colors.E.text },
     },
     F: {
-        backgroundColor: colors.F.main,
-        color: colors.F.text,
+        main: { backgroundColor: colors.F.main, color: colors.F.text },
+        opaque: { backgroundColor: colors.F.opaque, color: colors.F.text },
     },
     G: {
-        backgroundColor: colors.G.main,
-        color: colors.G.text,
+        main: { backgroundColor: colors.G.main, color: colors.G.text },
+        opaque: { backgroundColor: colors.G.opaque, color: colors.G.text },
     },
     A: {
-        backgroundColor: colors.A.main,
-        color: colors.A.text,
+        main: { backgroundColor: colors.A.main, color: colors.A.text },
+        opaque: { backgroundColor: colors.A.opaque, color: colors.A.text },
     },
     H: {
-        backgroundColor: colors.H.main,
-        color: colors.H.text,
+        main: { backgroundColor: colors.H.main, color: colors.H.text },
+        opaque: { backgroundColor: colors.H.opaque, color: colors.H.text },
     },
     "C#": {
-        backgroundColor: colors.gray_500,
+        main: { backgroundColor: colors.gray_500 },
+        opaque: { backgroundColor: colors.gray_500 },
     },
     "D#": {
-        backgroundColor: colors.gray_500,
+        main: { backgroundColor: colors.gray_500 },
+        opaque: { backgroundColor: colors.gray_500 },
     },
     "F#": {
-        backgroundColor: colors.gray_500,
+        main: { backgroundColor: colors.gray_500 },
+        opaque: { backgroundColor: colors.gray_500 },
     },
     "G#": {
-        backgroundColor: colors.gray_500,
+        main: { backgroundColor: colors.gray_500 },
+        opaque: { backgroundColor: colors.gray_500 },
     },
     "A#": {
-        backgroundColor: colors.gray_500,
+        main: { backgroundColor: colors.gray_500 },
+        opaque: { backgroundColor: colors.gray_500 },
+    },
+    unselected: {
+        // opacity: "0.1",
     },
     disabled: {
         border: 0,
@@ -186,14 +210,16 @@ export const Chord = (props: ChordProps) => {
 
     const [customMode, setCustomMode] = useState(true)
 
-    const { updateChord } = useUpdateChord(
-        song.songId.toString(),
-        selectedVoiceId,
-        barId,
-        chord.chordId
-    )
+    // const createChord = useCreateChord(song.songId, selectedVoiceId)
 
     const handleCustomVoiceAddClick = async (index: number) => {
+        /* const { error, result } = await createChord.run({
+            position: chord.position,
+            length: chord.length,
+            notes,
+            chordName: chord.chordName,
+        }) */
+
         const chordType = !chord.chordName ? ChordType.NOTE : ChordType.CHORD
         const notes = chord.notes
             ? chord.notes
@@ -202,14 +228,11 @@ export const Chord = (props: ChordProps) => {
             : getNotesFromChord(chord.chordName)
         const chordName = chordType === ChordType.CHORD ? chord : null
 
-        const { error, result } = await updateChord.run({
-            position: chord.position,
-            length: chord.length,
-            notes,
-            chordName: chord.chordName,
-        })
+        const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
+        newCustomVoiceNoteStates[index] = !newCustomVoiceNoteStates[index]
+        setCustomVoiceNoteStates(newCustomVoiceNoteStates)
 
-        if (!error && result) {
+        /* if (true !error && result) {
             dispatchSong({ type: "UPDATE_BAR", bar: result.data })
             dispatchChordMenuOptions({
                 type: "UPDATE_OPTIONS",
@@ -228,7 +251,7 @@ export const Chord = (props: ChordProps) => {
             const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
             newCustomVoiceNoteStates[index] = !newCustomVoiceNoteStates[index]
             setCustomVoiceNoteStates(newCustomVoiceNoteStates)
-        }
+        } */
     }
 
     return (
@@ -283,7 +306,11 @@ export const Chord = (props: ChordProps) => {
                                     <ButtonBase
                                         id="singleChord"
                                         className={`${classes.noteContainer} ${
-                                            (classes as any)[note]
+                                            customMode
+                                                ? (classes as any)[note] +
+                                                  ".opaque"
+                                                : (classes as any)[note] +
+                                                  "main"
                                         } ${exportMode ? "disabled" : ""} ${
                                             note === "Z" && highlight
                                                 ? classes.highlight
@@ -292,12 +319,29 @@ export const Chord = (props: ChordProps) => {
                                             Number(tangent) && exportMode
                                                 ? classes.exportNumberSize
                                                 : classes.noteFont
-                                        }`}
+                                        } ${
+                                            customVoiceNoteStates[i]
+                                                ? ""
+                                                : classes.unselected
+                                        }  `}
                                         key={note + i}
                                         onClick={() =>
                                             handleCustomVoiceAddClick(i)
                                         }
                                     >
+                                        {customVoiceNoteStates[i] ? (
+                                            <CheckCircleRoundedIcon
+                                                className={
+                                                    classes.circleIconChecked
+                                                }
+                                            />
+                                        ) : (
+                                            <RadioButtonUncheckedRoundedIcon
+                                                className={
+                                                    classes.circleIconUnChecked
+                                                }
+                                            />
+                                        )}
                                         {showNoteLetters || Number(tangent)
                                             ? tangent
                                             : undefined}

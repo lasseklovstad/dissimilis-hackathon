@@ -34,7 +34,6 @@ export const CustomVoiceDialog = (props: {
             ?.chordName
     }
     const { song } = useSongContext()
-    console.log(baseVoice.voiceName)
     return (
         <div>
             <DialogTitle>{newVoice?.voiceName}</DialogTitle>
