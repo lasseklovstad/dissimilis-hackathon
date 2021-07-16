@@ -20,6 +20,7 @@ export const SearchField = (props: { searchTermInit?: string }) => {
             id="standard-basic"
             variant="outlined"
             fullWidth
+            autoFocus={!!searchTerm}
             placeholder={searchPlaceholder}
             value={searchTerm}
             onChange={(event) => {
@@ -34,7 +35,6 @@ export const SearchField = (props: { searchTermInit?: string }) => {
             InputProps={{
                 inputProps: {
                     "aria-label": searchPlaceholder,
-                    focused: searchTerm ? true : false,
                 },
                 endAdornment: (
                     <InputAdornment position="end">

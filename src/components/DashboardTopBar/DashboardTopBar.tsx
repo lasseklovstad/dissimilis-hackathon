@@ -50,7 +50,7 @@ export const DashboardTopBar = (props: {
                         </Hidden>
                         <Grid
                             item
-                            xs={9}
+                            xs={10}
                             sm={7}
                             md={5}
                             lg={4}
