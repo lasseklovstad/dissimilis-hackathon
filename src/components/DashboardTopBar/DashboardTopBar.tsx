@@ -48,14 +48,7 @@ export const DashboardTopBar = (props: {
                         <Hidden mdDown>
                             <Grid item md={1} />
                         </Hidden>
-                        <Grid
-                            item
-                            xs={10}
-                            sm={7}
-                            md={5}
-                            lg={4}
-                            /* style={{ paddingRight: sm ? 32 : 8 }}*/
-                        >
+                        <Grid item xs={10} sm={7} md={5} lg={4}>
                             <Grid
                                 container
                                 direction="row"
