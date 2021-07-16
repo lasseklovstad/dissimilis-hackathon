@@ -37,10 +37,6 @@ const useStyles = makeStyles({
         fontSize: "1rem",
         padding: "8px",
     },
-    buttonText: {
-        paddingLeft: "8px",
-        paddingRight: "8px",
-    },
     returnButton: {
         backgroundColor: colors.white,
         boxShadow: "2px 0px 3px rgba(66, 66, 66, 0.05)",
@@ -51,6 +47,7 @@ const useStyles = makeStyles({
         justifyContent: "left",
         fontSize: "1rem",
         padding: "8px",
+        paddingRight: "15px",
     },
 })
 
@@ -205,7 +202,7 @@ export const GroupAdminView = () => {
         setAddGroupIsOpen(false)
     }
     const handleAddGroupDialogSave = () => {
-        //Legg til Land
+        //Legg til Gruppe
     }
 
     return (
@@ -226,11 +223,9 @@ export const GroupAdminView = () => {
                                 disableFocusRipple
                                 onClick={() => history.push(`/admin`)}
                                 className={classes.returnButton}
+                                startIcon={<ArrowBackIosIcon />}
                             >
-                                <ArrowBackIosIcon />
-                                <div className={classes.buttonText}>
-                                    {t("AdminView.backToAdminpanel")}
-                                </div>
+                                {t("AdminView.backToAdminpanel")}
                             </Button>
                         </Grid>
                         <Grid item xs={12}>
@@ -243,11 +238,9 @@ export const GroupAdminView = () => {
                                 onClick={() => {
                                     setInviteUserDialogIsOpen(true)
                                 }}
+                                startIcon={<AddIcon />}
                             >
-                                <AddIcon />
-                                <div className={classes.buttonText}>
-                                    {t("AdminView.inviteUser")}
-                                </div>
+                                {t("AdminView.inviteUser")}
                             </Button>
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -257,11 +250,9 @@ export const GroupAdminView = () => {
                                 onClick={() => {
                                     setAddGroupIsOpen(true)
                                 }}
+                                startIcon={<AddIcon />}
                             >
-                                <AddIcon />
-                                <div className={classes.buttonText}>
-                                    {t("AdminView.addGroup")}
-                                </div>
+                                {t("AdminView.addGroup")}
                             </Button>
                         </Grid>
                         {userIsCountryAdmin(userId)

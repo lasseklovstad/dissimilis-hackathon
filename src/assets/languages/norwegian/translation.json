@@ -48,7 +48,8 @@
         "emailNewGroupMember": "Velg brukeren du vil legge til",
         "add": "Legg til",
         "phoneNumber": "Telefon",
-        "address": "Adresse"
+        "address": "Adresse",
+        "system": "systemet"
         
     },
     "BarContainer": {

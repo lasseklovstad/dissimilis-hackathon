@@ -14,11 +14,13 @@ import { useGetUser } from "../../utils/useApiServiceUsers"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { AccordionComponent } from "../../components/AdminViewComponents/AccordionComponent.component"
 import AddIcon from "@material-ui/icons/Add"
+import EditIcon from "@material-ui/icons/Edit"
 import { colors } from "../../utils/colors"
 import { InviteUserToSystemDialog } from "../../components/CustomDialog/InviteUserToSystemDialog.components"
 import { AddCountryDialog } from "../../components/CustomDialog/AddCountryDialog.component"
 import { AddGroupDialog } from "../../components/CustomDialog/AddGroupDialog.component"
 import { IUser } from "../../models/IUser"
+import { EditAdminsDialog } from "../../components/CustomDialog/EditAdminsDialog.component"
 
 const useStyles = makeStyles({
     container: {
@@ -35,9 +37,6 @@ const useStyles = makeStyles({
         justifyContent: "left",
         fontSize: "1rem",
         padding: "8px",
-    },
-    buttonText: {
-        paddingLeft: "8px",
     },
 })
 
@@ -133,6 +132,8 @@ export const AdminView = () => {
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addCountryIsOpen, setAddCountryIsOpen] = useState(false)
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
+    const [editSysAdminsDialogIsOpen, setEditSysAdminsDialogIsOpen] =
+        useState(false)
 
     const handleOnChangeSearch = (searchTermParam: string) => {
         // Temporary placeholder
@@ -181,6 +182,13 @@ export const AdminView = () => {
         //Legg til Land
     }
 
+    const handleEditSysAdminsDialogClose = () => {
+        setEditSysAdminsDialogIsOpen(false)
+    }
+    const handleEditSysAdminsDialogSave = () => {
+        //??
+    }
+
     return (
         <>
             <Box mx={2}>
@@ -206,11 +214,9 @@ export const AdminView = () => {
                                 onClick={() => {
                                     setInviteUserDialogIsOpen(true)
                                 }}
+                                startIcon={<AddIcon />}
                             >
-                                <AddIcon />
-                                <div className={classes.buttonText}>
-                                    {t("AdminView.inviteUser")}
-                                </div>
+                                {t("AdminView.inviteUser")}
                             </Button>
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -220,11 +226,21 @@ export const AdminView = () => {
                                 onClick={() => {
                                     setAddCountryIsOpen(true)
                                 }}
+                                startIcon={<AddIcon />}
                             >
-                                <AddIcon />
-                                <div className={classes.buttonText}>
-                                    {t("AdminView.addCountry")}
-                                </div>
+                                {t("AdminView.addCountry")}
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <Button
+                                disableFocusRipple
+                                className={classes.button}
+                                onClick={() => {
+                                    setEditSysAdminsDialogIsOpen(true)
+                                }}
+                                startIcon={<EditIcon />}
+                            >
+                                {t("AdminView.editAdmins")}
                             </Button>
                         </Grid>
                         {userIsCountryAdmin(userId)
@@ -289,6 +305,18 @@ export const AdminView = () => {
                                 testCountry2.name,
                             ]}
                             userList={[testUser5, testUser6, testUser7]}
+                        />
+                    </Dialog>
+                    <Dialog
+                        open={editSysAdminsDialogIsOpen}
+                        onClose={handleEditSysAdminsDialogClose}
+                        aria-label={t("Dialog.editAdmins")}
+                        maxWidth="xs"
+                        fullWidth
+                    >
+                        <EditAdminsDialog
+                            editSysAdmins
+                            handleOnCloseClick={handleEditSysAdminsDialogClose}
                         />
                     </Dialog>
 

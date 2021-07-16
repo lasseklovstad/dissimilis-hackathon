@@ -50,11 +50,12 @@ const useStyles = makeStyles((theme) => {
 })
 
 export const EditAdminsDialog = (props: {
-    groupId: number
-    group: ICountry | IGroup // Temporary
+    groupId?: number
+    group?: ICountry | IGroup // Temporary
+    editSysAdmins?: boolean
     handleOnCloseClick: () => void
 }) => {
-    const { groupId, group, handleOnCloseClick } = props
+    const { groupId, group, handleOnCloseClick, editSysAdmins = false } = props
     const classes = useStyles()
     const { t } = useTranslation()
     const secondary = true
@@ -63,14 +64,21 @@ export const EditAdminsDialog = (props: {
         useState(false)
     const [selectedAdmin, setSelectedAdmin] = useState<IUser>()
 
+    const getAdmins = () => {
+        if (group !== undefined && !editSysAdmins) {
+            return group.admins
+        }
+        if (editSysAdmins) {
+            return testUsers //RETURNER SYSTEMADMINS
+        }
+        return []
+    }
+
     const handleDeleteAdmin = /* async */ () => {
-        if (group.admins.length > 1) {
+        if (getAdmins().length > 1) {
             if (selectedAdmin) {
                 console.log(
-                    "Should now delete " +
-                        selectedAdmin.name +
-                        " from admins in " +
-                        group.name
+                    "Should now delete " + selectedAdmin.name + " from admins"
                 )
             }
             setConfirmationDialogIsOpen(false)
@@ -80,7 +88,7 @@ export const EditAdminsDialog = (props: {
     }
 
     const handleAddAdmin = /* async */ (email: string) => {
-        console.log("Should now add " + email + " as admin in " + group.name)
+        //console.log("Should now add " + email + " as admin in " + group.name)
         setAddAdminDialogIsOpen(false)
     }
 
@@ -122,10 +130,12 @@ export const EditAdminsDialog = (props: {
             <DialogTitle>{t("Dialog.editAdmins")}</DialogTitle>
             <DialogContent>
                 <Typography variant="caption">
-                    {t("Dialog.adminsIn")} {group.name}:
+                    {t("Dialog.adminsIn")}{" "}
+                    {group !== undefined ? group.name : t("AdminView.system")}:
                 </Typography>
                 <List dense={false}>
-                    {group.admins.map((admin) => {
+                    {getAdmins().map((admin) => {
+                        //Kanskje endre til en generell admin liste
                         return (
                             <ListItem key={admin.email + "-list-item"}>
                                 <ListItemText
