@@ -11,7 +11,6 @@ import {
     Tab,
     Tabs,
 } from "@material-ui/core"
-import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { IVoice } from "../../models/IVoice"
@@ -26,7 +25,7 @@ import { colors } from "../../utils/colors"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
-import UndoIcon from "@material-ui/icons/Undo"
+import { Undo as UndoIcon, MoreVert as MoreVertIcon } from "@material-ui/icons"
 
 const useStyles = makeStyles({
     root: {
@@ -233,7 +232,7 @@ export const CreateSongTab = (props: {
                 >
                     <MoreVertIcon />
                 </IconButton>
-                <Box marginLeft="auto">
+                <Box ml="auto">
                     {undoIsLoading ? (
                         <Button
                             startIcon={
