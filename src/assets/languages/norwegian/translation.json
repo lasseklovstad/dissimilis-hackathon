@@ -160,6 +160,8 @@
         "languageEnglish": "English",
         "languageSelect": "Språkvalg",
         "settings": "Innstillinger"
-
+    },
+    "Snackbar": {
+        "undoError": "Det er ingenting igjen å angre"
     }
 }

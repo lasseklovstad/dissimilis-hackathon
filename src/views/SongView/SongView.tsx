@@ -22,6 +22,7 @@ import { colors } from "../../utils/colors"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { SongNavBar } from "../../components/SongNavBar/SongNavBar.component"
 import { useHotkeys } from "react-hotkeys-hook"
+import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 
 const useStyles = makeStyles({
     root: {
@@ -71,6 +72,7 @@ export const SongView = () => {
         barEditMode,
         setBarEditMode,
     } = useSongContext()
+    const { launchSnackbar } = useSnackbarContext()
 
     const { denominator, numerator, voices } = song
 
@@ -148,6 +150,8 @@ export const SongView = () => {
 
         if (!isError && result?.data) {
             dispatchSong({ type: "UPDATE_SONG", song: result.data })
+        } else {
+            launchSnackbar(t("Snackbar.undoError"), true)
         }
     }
 

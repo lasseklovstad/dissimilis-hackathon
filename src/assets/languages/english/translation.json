@@ -163,5 +163,8 @@
         "languageEnglish": "English",
         "languageSelect": "Select language",
         "settings": "Settings"
+    },
+    "Snackbar": {
+        "undoError": "There is nothing left to undo"
     }
 }
