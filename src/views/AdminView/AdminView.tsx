@@ -201,7 +201,7 @@ export const AdminView = () => {
                             />
                         </Box>
                     </Grid>
-                    <Grid container spacing={3} item xs={10} sm={10}>
+                    <Grid container spacing={3} item xs={12} sm={10}>
                         <Grid item xs={12}>
                             <Typography variant="h1">
                                 {t("AdminView.adminPanel")}
