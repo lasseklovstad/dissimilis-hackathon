@@ -105,11 +105,7 @@ export const EditGroupInfoDialog = (props: {
                     onChange={(e) => {
                         setGroupAddressTextFieldInput(e.target.value)
                     }}
-                    label={
-                        isGroup
-                            ? t("Dialog.addressOfGroup")
-                            : t("Dialog.addressOfCountry")
-                    }
+                    label={t("Dialog.addressOfCountry")}
                     fullWidth={true}
                 />
                 <TextField
@@ -125,11 +121,7 @@ export const EditGroupInfoDialog = (props: {
                     onChange={(e) => {
                         setGroupPhoneNumberTextFieldInput(e.target.value)
                     }}
-                    label={
-                        isGroup
-                            ? t("Dialog.phoneNumberOfGroup")
-                            : t("Dialog.phoneNumberOfCountry")
-                    }
+                    label={t("Dialog.phoneNumberOfCountry")}
                     fullWidth={true}
                     type="tel"
                 />
@@ -146,11 +138,7 @@ export const EditGroupInfoDialog = (props: {
                     onChange={(e) => {
                         setGroupEmailTextFieldInput(e.target.value)
                     }}
-                    label={
-                        isGroup
-                            ? t("Dialog.emailOfGroup")
-                            : t("Dialog.emailOfCountry")
-                    }
+                    label={t("Dialog.emailOfCountry")}
                     fullWidth={true}
                     type="email"
                 />
