@@ -18,6 +18,7 @@ import { useHistory } from "react-router"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
 import { ICountry } from "../../models/ICountry"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
+import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -47,6 +48,12 @@ const useStyles = makeStyles({
     buttonText: {
         paddingLeft: "8px",
     },
+    deleteButton: {
+        backgroundColor: colors.gray_300,
+        "&:hover": {
+            backgroundColor: colors.gray_400,
+        },
+    },
 })
 
 export const AccordionComponent = (props: {
@@ -61,6 +68,8 @@ export const AccordionComponent = (props: {
     const [countryInfoDialogIsOpen, setCountryInfoDialogIsOpen] =
         useState(false)
     const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
+    const [deleteCountryDialogIsOpen, setDeleteCountryDialogIsOpen] =
+        useState(false)
 
     const handleOpenEditAdminsDialog = () => {
         setEditAdminsDialogIsOpen(true)
@@ -88,6 +97,14 @@ export const AccordionComponent = (props: {
 
     const handleAddMember = () => {
         //Legg til medlem til gruppe
+    }
+
+    const handleDeleteCountryDialogClose = () => {
+        setDeleteCountryDialogIsOpen(false)
+    }
+
+    const handleDeleteCountryDialogSave = () => {
+        //delete
     }
 
     return (
@@ -190,6 +207,22 @@ export const AccordionComponent = (props: {
                                 </div>
                             </Button>
                         </Grid>
+                        <Grid item sm={8} />
+                        <Grid item xs={12} sm={4}>
+                            <Button
+                                disableFocusRipple
+                                className={
+                                    classes.button + " " + classes.deleteButton
+                                }
+                                onClick={() => {
+                                    setDeleteCountryDialogIsOpen(true)
+                                }}
+                            >
+                                <div className={classes.buttonText}>
+                                    {t("AdminView.deleteCountry")}
+                                </div>
+                            </Button>
+                        </Grid>
                     </Grid>
                 </AccordionDetails>
             </Accordion>
@@ -233,6 +266,20 @@ export const AccordionComponent = (props: {
                     groupId={countryId}
                     group={country}
                     handleOnCloseClick={handleCloseEditAdminsDialog}
+                />
+            </Dialog>
+            <Dialog
+                open={deleteCountryDialogIsOpen}
+                onClose={handleDeleteCountryDialogClose}
+                aria-label={t("AdminView.deleteCountry")}
+            >
+                <ChoiceDialog
+                    handleOnCancelClick={handleDeleteCountryDialogClose}
+                    handleOnSaveClick={handleDeleteCountryDialogSave}
+                    ackText={t("Dialog.deleteCountry")}
+                    cancelText={t("Dialog.cancel")}
+                    headerText={t("Dialog.deleteCountry")}
+                    descriptionText={t("Dialog.deleteCountryDescription")}
                 />
             </Dialog>
         </div>
