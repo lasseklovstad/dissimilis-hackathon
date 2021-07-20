@@ -3,7 +3,7 @@ import { IGroup } from "../models/IGroup"
 import { IOrganisation } from "../models/IOrganisation"
 import { useApiService } from "./useApiService"
 
-enum GroupFilter {
+export enum GroupFilter {
     Admin = "ADMIN",
     User = "USER",
     All = "ALL",
@@ -39,8 +39,8 @@ export const useGetGroups = (groupFilter: GroupFilter) => {
     }, [getData])
 
     return {
-        getAllSongs: { run: getData, ...state },
-        allSongsFetched: data,
+        getAllGroups: { run: getData, ...state },
+        allGroupsFetched: data,
     }
 }
 
@@ -64,8 +64,8 @@ export const useGetGroupsInOrganisation = (
     }, [getData])
 
     return {
-        getAllSongs: { run: getData, ...state },
-        allSongsFetched: data,
+        getAllGroups: { run: getData, ...state },
+        allGroupsFetched: data,
     }
 }
 
