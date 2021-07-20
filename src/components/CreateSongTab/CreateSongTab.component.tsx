@@ -200,7 +200,7 @@ export const CreateSongTab = (props: {
         setCustomMode(false)
     }
 
-    const handleOpenCustomVoiceDialog = async () => {}
+    //const handleOpenCustomVoiceDialog = async () => {}
 
     return (
         <>

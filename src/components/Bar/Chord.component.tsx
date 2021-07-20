@@ -1,27 +1,14 @@
 import React, { useState } from "react"
-import {
-    Box,
-    ButtonBase,
-    Checkbox,
-    FormControlLabel,
-    Typography,
-} from "@material-ui/core"
+import { Box, ButtonBase, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { tangentToNumber } from "../../utils/bar.util"
-import {
-    useCreateChord,
-    useAddBar,
-    useUpdateChord,
-    useAddNote,
-} from "../../utils/useApiServiceSongs"
+import { useAddNote } from "../../utils/useApiServiceSongs"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
-import { useChords } from "../../utils/useChords"
-import { getNotesFromChord } from "../../models/chords"
-import { ChordType } from "../../models/IChordMenuOptions"
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded"
 import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUncheckedRounded"
+import { Bar } from "./Bar.component"
 
 type ChordProps = {
     chord: IChord
@@ -238,28 +225,12 @@ export const Chord = (props: ChordProps) => {
             notes: chord.notes,
         })
 
-        /* if (true !error && result) {
-            const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
-        newCustomVoiceNoteStates[index] = !newCustomVoiceNoteStates[index]
-        setCustomVoiceNoteStates(newCustomVoiceNoteStates)
-            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-            dispatchChordMenuOptions({
-                type: "UPDATE_OPTIONS",
-                menuOptions: {
-                    chordLength: chord.length,
-                    chord: chord.chordName,
-                    chordType: chordType,
-                    chordNotes: notes as string[],
-                },
-            })
-            setValuesForSelectedChord(
-                selectedChordId,
-                result.data.barId,
-                chord.position
-            ) */
+        if (!error && result) {
             const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
             newCustomVoiceNoteStates[index] = !newCustomVoiceNoteStates[index]
             setCustomVoiceNoteStates(newCustomVoiceNoteStates)
+
+            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
 
@@ -360,6 +331,7 @@ export const Chord = (props: ChordProps) => {
                                         {showNoteLetters || Number(tangent)
                                             ? tangent
                                             : undefined}
+                                        {console.log(Bar)}
                                     </ButtonBase>
                                 </>
                             )

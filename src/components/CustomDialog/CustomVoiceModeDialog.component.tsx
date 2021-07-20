@@ -1,11 +1,9 @@
-import { Backdrop, Button, Dialog, DialogTitle } from "@material-ui/core"
+import { Button, DialogTitle } from "@material-ui/core"
 import React from "react"
 
-import { useTranslation } from "react-i18next"
-import { ISong } from "../../models/ISong"
 import { IVoice } from "../../models/IVoice"
 import { useGetSong } from "../../utils/useApiServiceSongs"
-import { useVoice } from "../../utils/useVoice"
+
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { Song } from "../Song/Song.component"
 
@@ -17,12 +15,7 @@ export const CustomVoiceDialog = (props: {
     newVoice: IVoice | undefined
 }) => {
     const { handleOnCancel, handleOnSave, songId, baseVoice, newVoice } = props
-    const { t } = useTranslation()
-    const { songInit, getSong } = useGetSong(songId)
-    const selectedVoiceId = useVoice(songInit?.voices)
-    const selectedVoice = songInit?.voices.find(
-        (voice) => voice.songVoiceId === selectedVoiceId
-    )
+    const { songInit /* , getSong  */ } = useGetSong(songId)
 
     const getChordNameFromMainVoice = (
         barPosition: number,
