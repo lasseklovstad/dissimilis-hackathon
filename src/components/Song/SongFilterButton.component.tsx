@@ -14,9 +14,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export const SongFilterButton = () => {
+    /* 
     const classes = useStyles()
     const { getAllGroups } = useGetGroups(GroupFilter.Admin)
-    const getGroups () => {
+  /*   const getGroups () => {
     
             if (Array.isArray(getAllGroups)) {
                 return (
@@ -28,7 +29,7 @@ export const SongFilterButton = () => {
                         })}
                     </>
                 )
-            }
+            } 
     
     }
 
@@ -41,5 +42,5 @@ export const SongFilterButton = () => {
             />
         </Grid>
       
-    )
+    ) */
 }
