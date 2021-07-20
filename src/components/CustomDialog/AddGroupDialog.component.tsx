@@ -37,7 +37,7 @@ export const AddGroupDialog = (props: {
     handleOnSaveClick: (value: string) => void
     handleOnCancelClick: () => void
     listOfCountries: string[]
-    defaultCountry?: string
+    defaultOrganisation?: string
     isLoading?: boolean
     userList: IUser[]
 }) => {
@@ -47,14 +47,14 @@ export const AddGroupDialog = (props: {
         isLoading,
         listOfCountries,
         userList,
-        defaultCountry,
+        defaultOrganisation,
     } = props
 
     const { t } = useTranslation()
     const classes = useStyles()
 
     const [groupNameInput, setGroupNameInput] = useState("")
-    const [countryInput, setCountryInput] = useState("")
+    const [organisationInput, setOrganisationInput] = useState("")
 
     const [adminEmailInput, setAdminEmailInput] = useState("")
 
@@ -64,10 +64,10 @@ export const AddGroupDialog = (props: {
     }
 
     useEffect(() => {
-        if (defaultCountry) {
-            setCountryInput(defaultCountry)
+        if (defaultOrganisation) {
+            setOrganisationInput(defaultOrganisation)
         }
-    }, [defaultCountry])
+    }, [defaultOrganisation])
 
     return (
         <form
@@ -101,15 +101,18 @@ export const AddGroupDialog = (props: {
                 <FormControl variant="outlined" className={classes.formControl}>
                     <InputLabel>{t("AdminView.countries")}</InputLabel>
                     <Select
-                        value={countryInput}
+                        value={organisationInput}
                         onChange={(e: React.ChangeEvent<{ value: any }>) => {
-                            setCountryInput(e.target.value)
+                            setOrganisationInput(e.target.value)
                         }}
                         label={t("AdminView.countries")}
                     >
-                        {listOfCountries.map((country) => {
+                        {listOfCountries.map((organisation) => {
                             return (
-                                <MenuItem value={country}> {country} </MenuItem>
+                                <MenuItem value={organisation}>
+                                    {" "}
+                                    {organisation}{" "}
+                                </MenuItem>
                             )
                         })}
                     </Select>
@@ -144,7 +147,9 @@ export const AddGroupDialog = (props: {
                 ) : (
                     <DialogButton
                         disabled={
-                            !groupNameInput || !adminEmailInput || !countryInput
+                            !groupNameInput ||
+                            !adminEmailInput ||
+                            !organisationInput
                         }
                         type="submit"
                         variant="contained"

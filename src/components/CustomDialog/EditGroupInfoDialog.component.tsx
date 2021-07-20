@@ -10,7 +10,7 @@ import {
 import { useEffect } from "react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { ICountry } from "../../models/ICountry"
+import { IOrganisation } from "../../models/IOrganisation"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { IGroup } from "../../models/IGroup"
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => {
 
 export const EditGroupInfoDialog = (props: {
     groupId: number
-    group: ICountry | IGroup // Temporary
+    group: IOrganisation | IGroup // Temporary
     isGroup: boolean
     handleOnSaveClick: () => void
     handleOnCancelClick: () => void

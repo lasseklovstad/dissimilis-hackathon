@@ -14,7 +14,7 @@ import {
     Typography,
 } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
-import { ICountry } from "../../models/ICountry"
+import { IOrganisation } from "../../models/IOrganisation"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import DeleteIcon from "@material-ui/icons/Delete"
 import { IUser } from "../../models/IUser"
@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => {
 
 export const EditAdminsDialog = (props: {
     groupId?: number
-    group?: ICountry | IGroup // Temporary
+    group?: IOrganisation | IGroup // Temporary
     editSysAdmins?: boolean
     handleOnCloseClick: () => void
 }) => {

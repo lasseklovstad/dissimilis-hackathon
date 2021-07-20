@@ -40,7 +40,7 @@ export const InviteUserToSystemDialog = (props: {
     handleOnCancelClick: () => void
     listOfCountries: string[]
     listOfGroups: string[]
-    defaultCountry: string
+    defaultOrganisation: string
     isLoading?: boolean
 }) => {
     const {
@@ -49,20 +49,20 @@ export const InviteUserToSystemDialog = (props: {
         listOfCountries,
         listOfGroups,
         isLoading,
-        defaultCountry,
+        defaultOrganisation,
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
 
     const [textFieldInput, setTextFieldInput] = useState("")
-    const [countryInput, setCountryInput] = useState("")
+    const [organisationInput, setOrganisationInput] = useState("")
     const [groupInput, setGroupInput] = useState("")
 
     useEffect(() => {
-        if (defaultCountry) {
-            setCountryInput(defaultCountry)
+        if (defaultOrganisation) {
+            setOrganisationInput(defaultOrganisation)
         }
-    }, [defaultCountry])
+    }, [defaultOrganisation])
 
     return (
         <form
@@ -79,15 +79,18 @@ export const InviteUserToSystemDialog = (props: {
                 <FormControl variant="outlined" className={classes.formControl}>
                     <InputLabel>{t("AdminView.countries")}</InputLabel>
                     <Select
-                        value={countryInput}
+                        value={organisationInput}
                         onChange={(e: React.ChangeEvent<{ value: any }>) => {
-                            setCountryInput(e.target.value)
+                            setOrganisationInput(e.target.value)
                         }}
                         label={t("AdminView.countries")}
                     >
-                        {listOfCountries.map((country) => {
+                        {listOfCountries.map((organisation) => {
                             return (
-                                <MenuItem value={country}> {country} </MenuItem>
+                                <MenuItem value={organisation}>
+                                    {" "}
+                                    {organisation}{" "}
+                                </MenuItem>
                             )
                         })}
                     </Select>
@@ -134,7 +137,7 @@ export const InviteUserToSystemDialog = (props: {
                     <CircularProgress size={24} />
                 ) : (
                     <DialogButton
-                        disabled={!textFieldInput || !countryInput}
+                        disabled={!textFieldInput || !organisationInput}
                         type="submit"
                         variant="contained"
                     >

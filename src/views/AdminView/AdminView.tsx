@@ -17,7 +17,7 @@ import AddIcon from "@material-ui/icons/Add"
 import EditIcon from "@material-ui/icons/Edit"
 import { colors } from "../../utils/colors"
 import { InviteUserToSystemDialog } from "../../components/CustomDialog/InviteUserToSystemDialog.components"
-import { AddCountryDialog } from "../../components/CustomDialog/AddCountryDialog.component"
+import { AddOrganisationDialog } from "../../components/CustomDialog/AddOrganisationDialog.component"
 import { AddGroupDialog } from "../../components/CustomDialog/AddGroupDialog.component"
 import { IUser } from "../../models/IUser"
 import { EditAdminsDialog } from "../../components/CustomDialog/EditAdminsDialog.component"
@@ -47,7 +47,7 @@ export const AdminView = () => {
         name: "Per Jensen",
         email: "user1@mail.no",
         isSystemAdmin: true,
-        isCountryAdmin: true,
+        isOrganisationAdmin: true,
         isGroupAdmin: true,
     }
     const testUser2 = {
@@ -55,7 +55,7 @@ export const AdminView = () => {
         name: "Jens Persson",
         email: "user2@mail.no",
         isSystemAdmin: false,
-        isCountryAdmin: true,
+        isOrganisationAdmin: true,
         isGroupAdmin: true,
     }
     const testUser3 = {
@@ -63,7 +63,7 @@ export const AdminView = () => {
         name: "Navn Navnesen",
         email: "user3@mail.no",
         isSystemAdmin: false,
-        isCountryAdmin: false,
+        isOrganisationAdmin: false,
         isGroupAdmin: true,
     }
     const testUser4 = {
@@ -71,7 +71,7 @@ export const AdminView = () => {
         name: "Lisa Gikktilskolensen",
         email: "user4@mail.no",
         isSystemAdmin: false,
-        isCountryAdmin: false,
+        isOrganisationAdmin: false,
         isGroupAdmin: false,
     }
 
@@ -91,8 +91,8 @@ export const AdminView = () => {
         userId: 7,
     }
 
-    const testCountry1 = {
-        countryId: 0,
+    const testOrganisation1 = {
+        organisationId: 0,
         name: "Norge",
         address: "Emma Hjorths vei 50, 1336 Sandvika, Norge",
         phoneNumber: "67 17 48 80",
@@ -101,8 +101,8 @@ export const AdminView = () => {
         admins: [testUser1],
         members: [testUser1, testUser2, testUser3, testUser4],
     }
-    const testCountry2 = {
-        countryId: 1,
+    const testOrganisation2 = {
+        organisationId: 1,
         name: "Sverige",
         address: "Medelsvenssonsgate 18, 12323 Stockholm, Sverige",
         phoneNumber: "023-314 45",
@@ -111,7 +111,7 @@ export const AdminView = () => {
         admins: [testUser3, testUser4],
         members: [testUser2, testUser3, testUser4],
     }
-    const countries = [testCountry1, testCountry2]
+    const countries = [testOrganisation1, testOrganisation2]
     const testGroup = {
         groupId: 0,
         name: "Oslo",
@@ -130,7 +130,7 @@ export const AdminView = () => {
     const userId = userInit?.userId
 
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
-    const [addCountryIsOpen, setAddCountryIsOpen] = useState(false)
+    const [addOrganisationIsOpen, setAddOrganisationIsOpen] = useState(false)
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
     const [editSysAdminsDialogIsOpen, setEditSysAdminsDialogIsOpen] =
         useState(false)
@@ -145,8 +145,8 @@ export const AdminView = () => {
         return currentUser.isSystemAdmin
     }
 
-    const userIsCountryAdmin = (userId: number | undefined) => {
-        return currentUser.isCountryAdmin
+    const userIsOrganisationAdmin = (userId: number | undefined) => {
+        return currentUser.isOrganisationAdmin
     }
 
     const userIsGroupAdmin = (userId: number | undefined) => {
@@ -156,7 +156,7 @@ export const AdminView = () => {
     const userIsNotElevated = (userId: number | undefined) => {
         return (
             !userIsSystemAdmin(userId) &&
-            !userIsCountryAdmin(userId) &&
+            !userIsOrganisationAdmin(userId) &&
             !userIsGroupAdmin(userId)
         )
     }
@@ -168,10 +168,10 @@ export const AdminView = () => {
         //Inviter bruker
     }
 
-    const handleAddCountryDialogClose = () => {
-        setAddCountryIsOpen(false)
+    const handleAddOrganisationDialogClose = () => {
+        setAddOrganisationIsOpen(false)
     }
-    const handleAddCountryDialogSave = () => {
+    const handleAddOrganisationDialogSave = () => {
         //Legg til Land
     }
 
@@ -224,7 +224,7 @@ export const AdminView = () => {
                                 disableFocusRipple
                                 className={classes.button}
                                 onClick={() => {
-                                    setAddCountryIsOpen(true)
+                                    setAddOrganisationIsOpen(true)
                                 }}
                                 startIcon={<AddIcon />}
                             >
@@ -243,14 +243,16 @@ export const AdminView = () => {
                                 {t("AdminView.editAdmins")}
                             </Button>
                         </Grid>
-                        {userIsCountryAdmin(userId)
-                            ? countries.map((country) => {
+                        {userIsOrganisationAdmin(userId)
+                            ? countries.map((organisation) => {
                                   return (
                                       <Grid item xs={12}>
                                           <AccordionComponent
-                                              countryId={country.countryId}
-                                              country={country}
-                                              title={country.name}
+                                              organisationId={
+                                                  organisation.organisationId
+                                              }
+                                              organisation={organisation}
+                                              title={organisation.name}
                                               users={[
                                                   testUser5,
                                                   testUser6,
@@ -272,22 +274,24 @@ export const AdminView = () => {
                             handleOnSaveClick={handleInviteUserDialogSave}
                             handleOnCancelClick={handleInviteUserDialogClose}
                             listOfCountries={[
-                                testCountry1.name,
-                                testCountry2.name,
+                                testOrganisation1.name,
+                                testOrganisation2.name,
                             ]}
                             listOfGroups={[testGroup.name]}
-                            defaultCountry={testCountry1.name}
+                            defaultOrganisation={testOrganisation1.name}
                         />
                     </Dialog>
 
                     <Dialog
-                        open={addCountryIsOpen}
-                        onClose={handleAddCountryDialogClose}
+                        open={addOrganisationIsOpen}
+                        onClose={handleAddOrganisationDialogClose}
                         aria-labelledby={t("AdminView.addCountry")}
                     >
-                        <AddCountryDialog
-                            handleOnSaveClick={handleAddCountryDialogSave}
-                            handleOnCancelClick={handleAddCountryDialogClose}
+                        <AddOrganisationDialog
+                            handleOnSaveClick={handleAddOrganisationDialogSave}
+                            handleOnCancelClick={
+                                handleAddOrganisationDialogClose
+                            }
                             userList={[testUser5, testUser6, testUser7]}
                         />
                     </Dialog>
@@ -301,8 +305,8 @@ export const AdminView = () => {
                             handleOnSaveClick={handleAddGroupDialogSave}
                             handleOnCancelClick={handleAddGroupDialogClose}
                             listOfCountries={[
-                                testCountry1.name,
-                                testCountry2.name,
+                                testOrganisation1.name,
+                                testOrganisation2.name,
                             ]}
                             userList={[testUser5, testUser6, testUser7]}
                         />

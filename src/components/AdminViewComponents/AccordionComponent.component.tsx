@@ -16,7 +16,7 @@ import { IUser } from "../../models/IUser"
 import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCompleteDialog.component"
 import { useHistory } from "react-router"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
-import { ICountry } from "../../models/ICountry"
+import { IOrganisation } from "../../models/IOrganisation"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
 
 const useStyles = makeStyles({
@@ -50,15 +50,15 @@ const useStyles = makeStyles({
 })
 
 export const AccordionComponent = (props: {
-    countryId: number
-    country: ICountry // Temporary
+    organisationId: number
+    organisation: IOrganisation // Temporary
     title: string
     users: IUser[]
 }) => {
-    const { title, users, countryId, country } = props
+    const { title, users, organisationId, organisation } = props
     const classes = useStyles()
     const { t } = useTranslation()
-    const [countryInfoDialogIsOpen, setCountryInfoDialogIsOpen] =
+    const [organisationInfoDialogIsOpen, setOrganisationInfoDialogIsOpen] =
         useState(false)
     const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
 
@@ -70,12 +70,12 @@ export const AccordionComponent = (props: {
         setEditAdminsDialogIsOpen(false)
     }
 
-    const handleOpenCountryInfoDialog = () => {
-        setCountryInfoDialogIsOpen(true)
+    const handleOpenOrganisationInfoDialog = () => {
+        setOrganisationInfoDialogIsOpen(true)
     }
 
-    const handleCloseCountryInfoDialog = () => {
-        setCountryInfoDialogIsOpen(false)
+    const handleCloseOrganisationInfoDialog = () => {
+        setOrganisationInfoDialogIsOpen(false)
     }
 
     const history = useHistory()
@@ -103,21 +103,21 @@ export const AccordionComponent = (props: {
                 <AccordionDetails>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography>{country.notes}</Typography>
+                            <Typography>{organisation.notes}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {country.admins[0].name || ""}
+                                {organisation.admins[0].name || ""}
                                 <br />
                                 {t("AdminView.address") + ": "}
-                                {country.address || ""}
+                                {organisation.address || ""}
                                 <br />
                                 {t("AdminView.phoneNumber") + ": "}
-                                {country.phoneNumber || ""}
+                                {organisation.phoneNumber || ""}
                                 <br />
                                 {t("AdminView.email") + ": "}
-                                {country.email || ""}
+                                {organisation.email || ""}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -134,7 +134,7 @@ export const AccordionComponent = (props: {
                             <Button
                                 disableFocusRipple
                                 className={classes.button}
-                                onClick={handleOpenCountryInfoDialog}
+                                onClick={handleOpenOrganisationInfoDialog}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.editInfo")}
@@ -147,7 +147,7 @@ export const AccordionComponent = (props: {
                                 className={classes.button}
                                 onClick={() =>
                                     history.push(
-                                        `/admin/country/${country.countryId}`
+                                        `/admin/organisation/${organisation.organisationId}`
                                     )
                                 }
                             >
@@ -210,15 +210,15 @@ export const AccordionComponent = (props: {
                 />
             </Dialog>
             <Dialog
-                open={countryInfoDialogIsOpen}
-                onClose={handleCloseCountryInfoDialog}
+                open={organisationInfoDialogIsOpen}
+                onClose={handleCloseOrganisationInfoDialog}
                 aria-label={t("Dialog.countryInfo")}
             >
                 <EditGroupInfoDialog
-                    groupId={countryId}
-                    group={country}
-                    handleOnSaveClick={handleCloseCountryInfoDialog}
-                    handleOnCancelClick={handleCloseCountryInfoDialog}
+                    groupId={organisationId}
+                    group={organisation}
+                    handleOnSaveClick={handleCloseOrganisationInfoDialog}
+                    handleOnCancelClick={handleCloseOrganisationInfoDialog}
                     isGroup={false}
                 />
             </Dialog>
@@ -230,8 +230,8 @@ export const AccordionComponent = (props: {
                 fullWidth
             >
                 <EditAdminsDialog
-                    groupId={countryId}
-                    group={country}
+                    groupId={organisationId}
+                    group={organisation}
                     handleOnCloseClick={handleCloseEditAdminsDialog}
                 />
             </Dialog>

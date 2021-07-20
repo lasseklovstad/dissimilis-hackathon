@@ -57,28 +57,28 @@ export const GroupAdminView = () => {
         userId: 0,
         name: "Dummy1",
         isSystemAdmin: true,
-        isCountryAdmin: true,
+        isOrganisationAdmin: true,
         isGroupAdmin: true,
     }
     const testUser2 = {
         userId: 1,
         name: "Dummy2",
         isSystemAdmin: false,
-        isCountryAdmin: true,
+        isOrganisationAdmin: true,
         isGroupAdmin: true,
     }
     const testUser3 = {
         userId: 2,
         name: "Dummy3",
         isSystemAdmin: false,
-        isCountryAdmin: false,
+        isOrganisationAdmin: false,
         isGroupAdmin: true,
     }
     const testUser4 = {
         userId: 3,
         name: "Dummy4",
         isSystemAdmin: false,
-        isCountryAdmin: false,
+        isOrganisationAdmin: false,
         isGroupAdmin: false,
     }
 
@@ -98,8 +98,8 @@ export const GroupAdminView = () => {
         userId: 7,
     }
 
-    const testCountry1 = {
-        countryId: 0,
+    const testOrganisation1 = {
+        organisationId: 0,
         name: "Norge",
         address: "Emma Hjorths vei 50, 1336 Sandvika, Norge",
         phoneNumber: "67 17 48 80",
@@ -108,8 +108,8 @@ export const GroupAdminView = () => {
         admins: [testUser1],
         members: [testUser1, testUser2, testUser3, testUser4],
     }
-    const testCountry2 = {
-        countryId: 1,
+    const testOrganisation2 = {
+        organisationId: 1,
         name: "Sverige",
         address: "Medelsvenssonsgate 18, 12323 Stockholm, Sverige",
         phoneNumber: "023-314 45",
@@ -163,7 +163,7 @@ export const GroupAdminView = () => {
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
 
-    const { countryId } = useParams<{ countryId: string }>()
+    const { organisationId } = useParams<{ organisationId: string }>()
 
     const handleOnChangeSearch = (searchTermParam: string) => {
         // Temporary placeholder
@@ -175,8 +175,8 @@ export const GroupAdminView = () => {
         return currentUser.isSystemAdmin
     }
 
-    const userIsCountryAdmin = (userId: number | undefined) => {
-        return currentUser.isCountryAdmin
+    const userIsOrganisationAdmin = (userId: number | undefined) => {
+        return currentUser.isOrganisationAdmin
     }
 
     const userIsGroupAdmin = (userId: number | undefined) => {
@@ -186,7 +186,7 @@ export const GroupAdminView = () => {
     const userIsNotElevated = (userId: number | undefined) => {
         return (
             !userIsSystemAdmin(userId) &&
-            !userIsCountryAdmin(userId) &&
+            !userIsOrganisationAdmin(userId) &&
             !userIsGroupAdmin(userId)
         )
     }
@@ -230,7 +230,7 @@ export const GroupAdminView = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="h1">
-                                {countryId + "-" + t("AdminView.groups")}
+                                {organisationId + "-" + t("AdminView.groups")}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -257,7 +257,7 @@ export const GroupAdminView = () => {
                                 {t("AdminView.addGroup")}
                             </Button>
                         </Grid>
-                        {userIsCountryAdmin(userId)
+                        {userIsOrganisationAdmin(userId)
                             ? groups.map((group) => {
                                   return (
                                       <Grid item xs={12}>
@@ -286,11 +286,11 @@ export const GroupAdminView = () => {
                             handleOnSaveClick={handleInviteUserDialogSave}
                             handleOnCancelClick={handleInviteUserDialogClose}
                             listOfCountries={[
-                                testCountry1.name,
-                                testCountry2.name,
+                                testOrganisation1.name,
+                                testOrganisation2.name,
                             ]}
                             listOfGroups={[testGroup1.name]}
-                            defaultCountry={testCountry1.name}
+                            defaultOrganisation={testOrganisation1.name}
                         />
                     </Dialog>
 
@@ -303,11 +303,11 @@ export const GroupAdminView = () => {
                             handleOnSaveClick={handleAddGroupDialogSave}
                             handleOnCancelClick={handleAddGroupDialogClose}
                             listOfCountries={[
-                                testCountry1.name,
-                                testCountry2.name,
+                                testOrganisation1.name,
+                                testOrganisation2.name,
                             ]}
                             userList={[testUser5, testUser6, testUser7]}
-                            defaultCountry={testCountry1.name}
+                            defaultOrganisation={testOrganisation1.name}
                         />
                     </Dialog>
 

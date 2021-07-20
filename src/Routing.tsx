@@ -80,11 +80,11 @@ export const Routing = () => {
                 />
                 <Route
                     exact
-                    path="/admin/country/:countryId"
+                    path="/admin/organisation/:organisationId"
                     render={() => (
                         <PrivateRoute
                             exact
-                            path="/admin/country/:countryId"
+                            path="/admin/organisation/:organisationId"
                             component={GroupAdminView}
                         />
                     )}

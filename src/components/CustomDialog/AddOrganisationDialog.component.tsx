@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => {
     }
 })
 
-export const AddCountryDialog = (props: {
+export const AddOrganisationDialog = (props: {
     handleOnSaveClick: (value: string) => void
     handleOnCancelClick: () => void
     isLoading?: boolean
@@ -35,7 +35,7 @@ export const AddCountryDialog = (props: {
     const { t } = useTranslation()
     const classes = useStyles()
 
-    const [countryNameInput, setCountryNameInput] = useState("")
+    const [organisationNameInput, setOrganisationNameInput] = useState("")
     const [adminEmailInput, setAdminEmailInput] = useState("")
 
     const adminListProps = {
@@ -58,13 +58,13 @@ export const AddCountryDialog = (props: {
                 <TextField
                     id="input-dialog-textfield"
                     inputProps={{ maxLength: 250 }}
-                    helperText={`${countryNameInput.length}/${250}`}
+                    helperText={`${organisationNameInput.length}/${250}`}
                     autoFocus
                     className={classes.inputElements}
-                    value={countryNameInput}
+                    value={organisationNameInput}
                     variant="filled"
                     onChange={(e) => {
-                        setCountryNameInput(e.target.value)
+                        setOrganisationNameInput(e.target.value)
                     }}
                     label={t("AdminView.countryName")}
                     style={{ width: "100%" }}
@@ -97,7 +97,7 @@ export const AddCountryDialog = (props: {
                     <CircularProgress size={24} />
                 ) : (
                     <DialogButton
-                        disabled={!countryNameInput || !adminEmailInput}
+                        disabled={!organisationNameInput || !adminEmailInput}
                         type="submit"
                         variant="contained"
                     >
@@ -107,7 +107,7 @@ export const AddCountryDialog = (props: {
                 <DialogButton
                     onClick={() => {
                         handleOnCancelClick()
-                        setCountryNameInput("")
+                        setOrganisationNameInput("")
                         setAdminEmailInput("")
                     }}
                 >
