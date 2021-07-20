@@ -4,7 +4,6 @@ import { TestWrapper } from "../../TestWrapper.komponent"
 import userEvent from "@testing-library/user-event"
 import React from "react"
 import { waitDoneLoading } from "../test-utils"
-import { useTranslation } from "react-i18next"
 
 const renderDashboard = async () => {
     window.history.pushState({}, "Test page", "/dashboard")

@@ -45,16 +45,10 @@ export const DashboardTopBar = (props: {
                         <Grid item xs={1}>
                             <DashboardTopBarIcon onGoHome={onGoHome} />
                         </Grid>
-                        <Hidden smDown>
+                        <Hidden mdDown>
                             <Grid item md={1} />
                         </Hidden>
-                        <Grid
-                            item
-                            xs={10}
-                            sm={5}
-                            md={4}
-                            /* style={{ paddingRight: sm ? 32 : 8 }}*/
-                        >
+                        <Grid item xs={10} sm={7} md={5} lg={4}>
                             <Grid
                                 container
                                 direction="row"
@@ -69,26 +63,32 @@ export const DashboardTopBar = (props: {
                                     <Loading isLoading={getUser.loading} />
                                     {userInit?.email}
                                 </Typography>
+                                <IconButton
+                                    disableFocusRipple
+                                    onClick={logout.run}
+                                    aria-label={t("LoginView.logout")}
+                                >
+                                    <LogoutIcon />
+                                </IconButton>
                             </Grid>
                         </Grid>
-                        <Grid
-                            container
-                            direction="row"
-                            //justify="flex-end"
-                            alignItems="center"
-                            item
-                            xs={1}
-                        >
-                            <IconButton
-                                disableFocusRipple
-                                onClick={logout.run}
-                                aria-label={t("LoginView.logout")}
-                            >
-                                <LogoutIcon />
-                            </IconButton>
-                        </Grid>
                         <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
-                            <Grid item sm={4} />
+                            <Grid item sm={1} />
+                        </Hidden>
+                        <Hidden only={[`md`, `lg`, `xl`]}>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="flex-end"
+                                alignItems="center"
+                                item
+                                xs={1}
+                            >
+                                <DashboardMenu />
+                            </Grid>
+                        </Hidden>
+                        <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
+                            <Grid item sm={1} />
                         </Hidden>
                         <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
                             <Grid item sm={1} />
@@ -96,16 +96,18 @@ export const DashboardTopBar = (props: {
                         <Grid item xs={12} sm={10} md={3}>
                             <SearchField searchTermInit={searchTerm} />
                         </Grid>
-                        <Grid
-                            container
-                            direction="row"
-                            justify="flex-end"
-                            alignItems="center"
-                            item
-                            xs={1}
-                        >
-                            <DashboardMenu />
-                        </Grid>
+                        <Hidden only={[`xs`, `sm`]}>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="flex-end"
+                                alignItems="center"
+                                item
+                                xs={1}
+                            >
+                                <DashboardMenu />
+                            </Grid>
+                        </Hidden>
                     </Grid>
                 </Box>
             </AppBar>

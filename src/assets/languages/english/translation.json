@@ -18,12 +18,9 @@
         "user": "User",
         "song": "Song"
     },
-    "TopBar": {
-        "clear": "Clear"
-    },
     "LibraryView": {
         "defaultHeading": "Library",
-        "searchHeading": "Seach: "
+        "searchHeading": "Search: "
     },
     "BarContainer": {
         "deleteBar": "Delete bar",
@@ -167,6 +164,7 @@
         "languageNorwegian": "Norsk",
         "languageEnglish": "English",
         "languageSelect": "Select language",
+        "clear": "Clear",
         "settings": "Settings"
     }
 }
