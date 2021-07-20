@@ -15,6 +15,7 @@ import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { SearchField } from "./SearchField"
+import { DashboardMenu } from "../DashboardTopBar/DashboardMenu.component"
 
 const useStyles = makeStyles(() => ({
     background: {
@@ -34,14 +35,14 @@ export const DashboardTopBar = (props: {
     const { userInit, getUser } = useGetUser()
 
     return (
-        <div>
+        <>
             <AppBar position="static" className={classes.background}>
                 <Box py={3}>
                     <Grid container spacing={2}>
                         <Hidden xsDown>
                             <Grid item sm={1} />
                         </Hidden>
-                        <Grid item xs={2}>
+                        <Grid item xs={1}>
                             <DashboardTopBarIcon onGoHome={onGoHome} />
                         </Grid>
                         <Hidden smDown>
@@ -68,14 +69,23 @@ export const DashboardTopBar = (props: {
                                     <Loading isLoading={getUser.loading} />
                                     {userInit?.email}
                                 </Typography>
-                                <IconButton
-                                    disableFocusRipple
-                                    onClick={logout.run}
-                                    aria-label={t("LoginView.logout")}
-                                >
-                                    <LogoutIcon />
-                                </IconButton>
                             </Grid>
+                        </Grid>
+                        <Grid
+                            container
+                            direction="row"
+                            //justify="flex-end"
+                            alignItems="center"
+                            item
+                            xs={1}
+                        >
+                            <IconButton
+                                disableFocusRipple
+                                onClick={logout.run}
+                                aria-label={t("LoginView.logout")}
+                            >
+                                <LogoutIcon />
+                            </IconButton>
                         </Grid>
                         <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
                             <Grid item sm={4} />
@@ -86,6 +96,16 @@ export const DashboardTopBar = (props: {
                         <Grid item xs={12} sm={10} md={3}>
                             <SearchField searchTermInit={searchTerm} />
                         </Grid>
+                        <Grid
+                            container
+                            direction="row"
+                            justify="flex-end"
+                            alignItems="center"
+                            item
+                            xs={1}
+                        >
+                            <DashboardMenu />
+                        </Grid>
                     </Grid>
                 </Box>
             </AppBar>
@@ -95,6 +115,6 @@ export const DashboardTopBar = (props: {
                 error={logout.error}
                 title={t("LoginView.logoutError")}
             />
-        </div>
+        </>
     )
 }

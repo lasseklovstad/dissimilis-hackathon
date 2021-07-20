@@ -24,3 +24,17 @@ export interface ISongPost {
     numerator: number
     title: string
 }
+
+export interface ISongMetadata {
+    songId: number
+    title: string
+    denominator: number
+    numerator: number
+    updatedOn: string
+    arrangerName: string | null
+    arrangerEmail: string | null
+    creatorEmail: string | null
+    composer: string | null
+    songNotes: string | null
+    speed: number
+}
