@@ -128,10 +128,7 @@ export const GroupAdminView = () => {
                 <Grid container justify="center" className={classes.container}>
                     <Grid item xs={12}>
                         <Box mb={4}>
-                            <DashboardTopBar
-                                onChange={handleOnChangeSearch}
-                                searchTerm={searchTerm}
-                            />
+                            <DashboardTopBar />
                         </Box>
                     </Grid>
                     <Grid container spacing={3} item xs={10} sm={10}>
