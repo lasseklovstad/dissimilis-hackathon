@@ -154,7 +154,7 @@ export const AccordionComponent = (props: {
                                 className={classes.button}
                                 onClick={() =>
                                     history.push(
-                                        `/admin/organisation/${organisationFetched?.organisationId}`
+                                        `/admin/organisation/${organisationId}`
                                     )
                                 }
                             >

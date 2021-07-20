@@ -27,6 +27,7 @@ import {
     useGetGroupsInOrganisation,
     useGetOrganisation,
     useGetOrganisations,
+    usePostGroup,
 } from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles({
@@ -66,6 +67,8 @@ export const GroupAdminView = () => {
     const history = useHistory()
     const { organisationId } = useParams<{ organisationId: string }>()
 
+    const { postGroup } = usePostGroup()
+
     const { getUser, userInit } = useGetUser()
     const userId = userInit?.userId
 
@@ -74,11 +77,12 @@ export const GroupAdminView = () => {
     )
 
     const userIsSystemAdmin = () => {
-        return userInit ? userInit?.isSystemAdmin : false
+        return true // FJERN
+        //return userInit ? userInit?.isSystemAdmin : false
     }
 
     const userIsAdminInCurrentOrganisation = () => {
-        return userInit && organisationFetched
+        return userInit && organisationFetched?.admins
             ? organisationFetched?.admins.filter((admin) => {
                   return admin.userId === userId
               })
@@ -118,8 +122,19 @@ export const GroupAdminView = () => {
     const handleAddGroupDialogClose = () => {
         setAddGroupIsOpen(false)
     }
-    const handleAddGroupDialogSave = () => {
-        //Legg til Gruppe
+    const handleAddGroupDialogSave = async (
+        name: string,
+        firstAdminId: number,
+        organisationId: number
+    ) => {
+        const { error, result } = await postGroup.run({
+            name,
+            firstAdminId,
+            organisationId,
+        })
+        if (!error && result) {
+            setAddGroupIsOpen(false)
+        }
     }
 
     return (
@@ -178,7 +193,7 @@ export const GroupAdminView = () => {
                                   return (
                                       <Grid item xs={12}>
                                           <AccordionGroupComponent
-                                              title={group.name}
+                                              title={group.groupName}
                                               groupId={group.groupId}
                                           />
                                       </Grid>
@@ -210,9 +225,8 @@ export const GroupAdminView = () => {
                         <AddGroupDialog
                             handleOnSaveClick={handleAddGroupDialogSave}
                             handleOnCancelClick={handleAddGroupDialogClose}
-                            listOfOrganisations={[]}
-                            userList={[]}
                             defaultOrganisation={organisationFetched}
+                            userIsSystemAdmin={userIsSystemAdmin()}
                         />
                     </Dialog>
 

@@ -24,6 +24,7 @@ import { EditAdminsDialog } from "../../components/CustomDialog/EditAdminsDialog
 import {
     OrganisationFilter,
     useGetOrganisations,
+    usePostOrganisation,
 } from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles({
@@ -50,10 +51,13 @@ export const AdminView = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const history = useHistory()
 
+    const { postOrganisation } = usePostOrganisation()
+
     const { getUser, userInit } = useGetUser()
     const userId = userInit?.userId
+
     const userIsSystemAdmin = () => {
-        return true
+        return true // FJERN
         //return userInit ? userInit?.isSystemAdmin : false
     }
 
@@ -109,15 +113,18 @@ export const AdminView = () => {
     const handleAddOrganisationDialogClose = () => {
         setAddOrganisationIsOpen(false)
     }
-    const handleAddOrganisationDialogSave = () => {
-        //Legg til Land
-    }
-
-    const handleAddGroupDialogClose = () => {
-        setAddGroupIsOpen(false)
-    }
-    const handleAddGroupDialogSave = () => {
-        //Legg til Land
+    const handleAddOrganisationDialogSave = async (
+        name: string,
+        firstAdminId: number
+    ) => {
+        const { error, result } = await postOrganisation.run({
+            name,
+            firstAdminId,
+        })
+        if (!error && result) {
+            setAddOrganisationIsOpen(false)
+            history.push(`/admin`)
+        }
     }
 
     const handleEditSysAdminsDialogClose = () => {
@@ -194,7 +201,9 @@ export const AdminView = () => {
                                               organisationId={
                                                   organisation.organisationId
                                               }
-                                              title={organisation.name}
+                                              title={
+                                                  organisation.organisationName
+                                              }
                                               buttonsIsDisabled={false}
                                           />
                                       </Grid>
@@ -204,8 +213,10 @@ export const AdminView = () => {
                         {userIsGroupAdmin()
                             ? groupAdminOrganisationsFetched?.map(
                                   (organisation) => {
-                                      return organisation.organisationId in
-                                          renderedAdminOrganisationIds ? (
+                                      console.log(organisation.organisationName)
+                                      return renderedAdminOrganisationIds.includes(
+                                          organisation.organisationId
+                                      ) ? (
                                           ""
                                       ) : (
                                           <Grid item xs={12}>
@@ -213,7 +224,9 @@ export const AdminView = () => {
                                                   organisationId={
                                                       organisation.organisationId
                                                   }
-                                                  title={organisation.name}
+                                                  title={
+                                                      organisation.organisationName
+                                                  }
                                               />
                                           </Grid>
                                       )

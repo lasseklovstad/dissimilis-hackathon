@@ -52,7 +52,13 @@ export const EditGroupInfoDialog = (props: {
 
     useEffect(() => {
         if (group) {
-            const { name, address, phoneNumber, email, notes } = group
+            const {
+                organisationName: name,
+                address,
+                phoneNumber,
+                email,
+                notes,
+            } = group
             setGroupNameTextFieldInput(name || "")
             setGroupAddressTextFieldInput(address || "")
             setGroupPhoneNumberTextFieldInput(phoneNumber || "")

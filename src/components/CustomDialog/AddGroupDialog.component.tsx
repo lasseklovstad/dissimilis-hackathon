@@ -18,6 +18,10 @@ import { useTranslation } from "react-i18next"
 import { Autocomplete } from "@material-ui/lab"
 import { IUser } from "../../models/IUser"
 import { IOrganisation } from "../../models/IOrganisation"
+import {
+    useGetOrganisations,
+    OrganisationFilter,
+} from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -35,29 +39,48 @@ const useStyles = makeStyles((theme) => {
 })
 
 export const AddGroupDialog = (props: {
-    handleOnSaveClick: (value: string) => void
+    handleOnSaveClick: (
+        name: string,
+        firstAdminId: number,
+        organisationId: number
+    ) => void
     handleOnCancelClick: () => void
-    listOfOrganisations: string[]
     defaultOrganisation?: IOrganisation
     isLoading?: boolean
-    userList: IUser[]
+    userIsSystemAdmin: boolean
 }) => {
     const {
         handleOnSaveClick,
         handleOnCancelClick,
         isLoading,
-        listOfOrganisations,
-        userList,
         defaultOrganisation,
+        userIsSystemAdmin,
     } = props
 
     const { t } = useTranslation()
     const classes = useStyles()
 
+    const {
+        getOrganisations: getAdminOrganisations,
+        organisationsFetched: adminOrganisationsFetched,
+    } = useGetOrganisations(
+        userIsSystemAdmin ? OrganisationFilter.All : OrganisationFilter.Admin
+    )
+
     const [groupNameInput, setGroupNameInput] = useState("")
     const [organisationInput, setOrganisationInput] = useState<IOrganisation>()
 
     const [adminEmailInput, setAdminEmailInput] = useState("")
+
+    const userList: IUser[] = [
+        {
+            // FJERN
+            name: "Håkon",
+            email: "håkon@fdsf",
+            userId: 2,
+            isSystemAdmin: true,
+        },
+    ]
 
     const adminListProps = {
         options: userList,
@@ -74,7 +97,7 @@ export const AddGroupDialog = (props: {
         <form
             onSubmit={(event) => {
                 event.preventDefault()
-                handleOnSaveClick("")
+                handleOnSaveClick(groupNameInput, 2, 1)
             }}
         >
             <DialogTitle> {t("AdminView.addGroup")} </DialogTitle>
@@ -108,14 +131,18 @@ export const AddGroupDialog = (props: {
                         }}
                         label={t("AdminView.countries")}
                     >
-                        {listOfOrganisations.map((organisation) => {
-                            return (
-                                <MenuItem value={organisation}>
-                                    {" "}
-                                    {organisation}{" "}
-                                </MenuItem>
-                            )
-                        })}
+                        {adminOrganisationsFetched
+                            ? adminOrganisationsFetched.map((organisation) => {
+                                  return (
+                                      <MenuItem
+                                          value={organisation.organisationId}
+                                      >
+                                          {" "}
+                                          {organisation.organisationName}{" "}
+                                      </MenuItem>
+                                  )
+                              })
+                            : ""}
                     </Select>
                 </FormControl>
                 <Typography variant="caption">

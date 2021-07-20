@@ -26,7 +26,7 @@ const getHeaders = () => {
  * Get all groups based on different parameters
  * */
 export const useGetGroups = (groupFilter: GroupFilter) => {
-    const url = `organisations/groups?filter="${groupFilter}"`
+    const url = `organisations/groups?filterBy="${groupFilter}"`
     const initialData: IGroupIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
@@ -51,7 +51,7 @@ export const useGetGroupsInOrganisation = (
     groupFilter: GroupFilter,
     organisationId: number
 ) => {
-    const url = `organisations/${organisationId}/groups?filter="${groupFilter}"`
+    const url = `organisations/${organisationId}/groups?filterBy="${groupFilter}"`
     const initialData: IGroupIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
@@ -73,14 +73,10 @@ export const useGetGroupsInOrganisation = (
  * Get organisations based on different parameters
  * */
 export const useGetOrganisations = (organisationFilter: OrganisationFilter) => {
-    const url = "organization/search"
-    const body = {
-        filter: organisationFilter,
-    }
+    const url = `organisation?filterBy="${organisationFilter}"`
     const initialData: IOrganisationIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IOrganisationIndex[]>(url, {
-        body,
         initialData,
         headers,
     })
@@ -109,6 +105,44 @@ export const useGetGroup = (groupId: number) => {
     return {
         getGroup: { run: getData, ...state },
         groupFetched: data,
+    }
+}
+
+export const usePostGroup = () => {
+    const url = `group/`
+    const headers = getHeaders()
+    const body = {
+        address: "",
+        emailAddress: "",
+        description: "",
+        phoneNumber: "",
+    }
+    const { postData, state, data } = useApiService<IGroup>(url, {
+        body,
+        headers,
+    })
+
+    return {
+        postGroup: { run: postData, ...state },
+    }
+}
+
+export const usePostOrganisation = () => {
+    const url = `organisation/`
+    const headers = getHeaders()
+    const body = {
+        address: "",
+        emailAddress: "",
+        description: "",
+        phoneNumber: "",
+    }
+    const { postData, state, data } = useApiService<IOrganisation>(url, {
+        body,
+        headers,
+    })
+
+    return {
+        postOrganisation: { run: postData, ...state },
     }
 }
 

@@ -2,14 +2,14 @@ import { IUser } from "./IUser"
 
 export interface IGroupIndex {
     groupId: number
-    name: string
+    groupName: string
     organisationId?: number
     organisationName?: string
 }
 
 export interface IGroup {
     groupId: number
-    name: string
+    groupName: string
     address: string
     phoneNumber: string
     email: string

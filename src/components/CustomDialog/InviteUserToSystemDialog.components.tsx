@@ -58,12 +58,12 @@ export const InviteUserToSystemDialog = (props: {
     const { t } = useTranslation()
     const classes = useStyles()
     const [organisations, setOrganisations] = useState<IOrganisationIndex[]>()
-    setOrganisations([{ organisationId: 0, name: "Norge" }])
+    setOrganisations([{ organisationId: 0, organisationName: "Norge" }])
     const [groups, setGroups] = useState<IGroupIndex[]>()
     setGroups([
         {
             groupId: 0,
-            name: "Oslo",
+            groupName: "Oslo",
             organisationId: 0,
             organisationName: "Norge",
         },
@@ -89,7 +89,7 @@ export const InviteUserToSystemDialog = (props: {
                 return organisation.organisationId
             }) || []
         groupAdminOrganisationsFetched?.map((organisation) => {
-            if (!(organisation.organisationId in orgIds)) {
+            if (!(organisation.organisationId in orgIds)) { // use .includes()
                 organisationsFetched.push(organisation)
             }
         })
@@ -137,7 +137,7 @@ export const InviteUserToSystemDialog = (props: {
                                           value={organisation.organisationId}
                                       >
                                           {" "}
-                                          {organisation.name}{" "}
+                                          {organisation.organisationName}{" "}
                                       </MenuItem>
                                   )
                               })
@@ -166,7 +166,7 @@ export const InviteUserToSystemDialog = (props: {
                                           value={group.groupId}
                                       >
                                           {" "}
-                                          {group.name}{" "}
+                                          {group.groupName}{" "}
                                       </MenuItem>
                                   )
                               })

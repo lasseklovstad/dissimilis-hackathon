@@ -13,6 +13,7 @@ import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { useTranslation } from "react-i18next"
 import { Autocomplete } from "@material-ui/lab"
 import { IUser } from "../../models/IUser"
+import { usePostOrganisation } from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export const AddOrganisationDialog = (props: {
-    handleOnSaveClick: (value: string) => void
+    handleOnSaveClick: (name: string, firstAdminId: number) => void
     handleOnCancelClick: () => void
     isLoading?: boolean
 }) => {
@@ -32,7 +33,16 @@ export const AddOrganisationDialog = (props: {
 
     const { t } = useTranslation()
     const classes = useStyles()
-    const userList: IUser[] = []
+
+    const userList: IUser[] = [
+        {
+            // FJERN
+            name: "Håkon",
+            email: "håkon@fdsf",
+            userId: 2,
+            isSystemAdmin: true,
+        },
+    ]
 
     const [organisationNameInput, setOrganisationNameInput] = useState("")
     const [adminEmailInput, setAdminEmailInput] = useState("")
@@ -46,7 +56,7 @@ export const AddOrganisationDialog = (props: {
         <form
             onSubmit={(event) => {
                 event.preventDefault()
-                handleOnSaveClick("")
+                handleOnSaveClick(organisationNameInput, 2)
             }}
         >
             <DialogTitle> {t("AdminView.addCountry")} </DialogTitle>

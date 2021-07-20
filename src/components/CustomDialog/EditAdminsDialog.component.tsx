@@ -115,7 +115,10 @@ export const EditAdminsDialog = (props: {
             <DialogContent>
                 <Typography variant="caption">
                     {t("Dialog.adminsIn")}{" "}
-                    {group !== undefined ? group.name : t("AdminView.system")}:
+                    {group !== undefined
+                        ? group.organisationName
+                        : t("AdminView.system")}
+                    :
                 </Typography>
                 <List dense={false}>
                     {getAdmins().map((admin) => {
