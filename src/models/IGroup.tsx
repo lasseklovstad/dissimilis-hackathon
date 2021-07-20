@@ -8,5 +8,6 @@ export interface IGroup {
     email: string
     notes: string
     admins: IUser[]
-    members: IUser[]
+    organisationId: string
+    organisationName: string
 }
