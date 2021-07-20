@@ -23,31 +23,48 @@ const getHeaders = () => {
 }
 
 /**
- * Get groups based on different parameters
+ * Get all groups based on different parameters
  * */
-export const useGetGroups = (
-    groupFilter: GroupFilter,
-    organisationId: number
-) => {
-    const url = "group/search"
-    const body = {
-        filter: groupFilter,
-        organisationId: organisationId,
-    }
+export const useGetGroups = (groupFilter: GroupFilter) => {
+    const url = `organisations/groups?filter="${groupFilter}"`
     const initialData: IGroup[] = []
     const headers = getHeaders()
-    const { postData, state, data } = useApiService<IGroup[]>(url, {
-        body,
+    const { getData, state, data } = useApiService<IGroup[]>(url, {
         initialData,
         headers,
     })
 
     useEffect(() => {
-        postData()
-    }, [postData])
+        getData()
+    }, [getData])
 
     return {
-        getAllSongs: { run: postData, ...state },
+        getAllSongs: { run: getData, ...state },
+        allSongsFetched: data,
+    }
+}
+
+/**
+ * Get all groups in an organisation, based on different parameters
+ * */
+export const useGetGroupsInOrganisation = (
+    groupFilter: GroupFilter,
+    organisationId: number
+) => {
+    const url = `organisations/${organisationId}/groups?filter="${groupFilter}"`
+    const initialData: IGroup[] = []
+    const headers = getHeaders()
+    const { getData, state, data } = useApiService<IGroup[]>(url, {
+        initialData,
+        headers,
+    })
+
+    useEffect(() => {
+        getData()
+    }, [getData])
+
+    return {
+        getAllSongs: { run: getData, ...state },
         allSongsFetched: data,
     }
 }
@@ -62,18 +79,18 @@ export const useGetOrganisations = (organisationFilter: OrganisationFilter) => {
     }
     const initialData: IOrganisation[] = []
     const headers = getHeaders()
-    const { postData, state, data } = useApiService<IOrganisation[]>(url, {
+    const { getData, state, data } = useApiService<IOrganisation[]>(url, {
         body,
         initialData,
         headers,
     })
 
     useEffect(() => {
-        postData()
-    }, [postData])
+        getData()
+    }, [getData])
 
     return {
-        getOrganisations: { run: postData, ...state },
+        getOrganisations: { run: getData, ...state },
         organisationsFetched: data,
     }
 }
