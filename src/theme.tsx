@@ -40,6 +40,21 @@ export const theme = createMuiTheme({
                 },
             },
         },
+        MuiInputBase: {
+            input: {
+                "&:focus": {
+                    boxShadow: `0 0 0 4px ${colors.focus}`,
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            root: {
+                "&:hover:not($disabled):not($focused):not($error) $notchedOutline":
+                    {
+                        borderColor: `${colors.gray_500_dark}`,
+                    },
+            },
+        },
         MuiCardActionArea: {
             root: {
                 "&:focus $focusHighlight": {

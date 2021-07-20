@@ -2,10 +2,9 @@
     "DashboardView": {
         "newSongLabel": "Nytt partitur",
         "recentSongLabel": "Dine siste fem sanger",
-        "searchSongLabel": "Søk",
         "allSongLabel": "Alle sanger",
         "measure": "takt",
-        "search": "Søk etter sanger eller brukere",
+        "search": "Søk",
         "altButterflyButtonProp": "Bilde av Dissimilis' sommerfugl",
         "ariaButterflyButtonProp": "Gå til startskjermen",
         "updatedOn": "Sist redigert",
@@ -16,6 +15,10 @@
         "date": "Dato endret",
         "user": "Bruker",
         "song": "Sang"
+    },
+    "LibraryView": {
+        "defaultHeading": "Bibliotek",
+        "searchHeading": "Søk: "
     },
     "BarContainer": {
         "deleteBar": "Slett takt",
@@ -159,7 +162,7 @@
         "languageNorwegian": "Norsk",
         "languageEnglish": "English",
         "languageSelect": "Språkvalg",
-        "settings": "Innstillinger"
-
+        "settings": "Innstillinger",
+        "clear": "Tøm søkefelt"
     }
 }
