@@ -2,10 +2,9 @@
     "DashboardView": {
         "newSongLabel": "New song",
         "recentSongLabel": "Your last five songs",
-        "searchSongLabel": "Search",
         "allSongLabel": "All songs",
         "measure": "measure",
-        "search": "Search for songs or arrangers",
+        "search": "Search",
         "altButterflyButtonProp": "Image of Dissimilis' butterfly-logo",
         "ariaButterflyButtonProp": "Go to start",
         "deleteSong": "Delete song",
@@ -19,6 +18,10 @@
         "user": "User",
         "song": "Song"
     },
+    "LibraryView": {
+        "defaultHeading": "Library",
+        "searchHeading": "Search: "
+    },
     "BarContainer": {
         "deleteBar": "Delete bar",
         "duplicateBar": "Duplicate bar",
@@ -27,7 +30,11 @@
         "addRepAfter": "Add right repeat",
         "removeRepAfter": "Remove rigth repeat",
         "addHouse": "Add 1st and 2nd repeat",
-        "removeHouse": "Remove 1st and 2nd repeat"
+        "removeHouse": "Remove 1st and 2nd repeat",
+        "addHouseOne": "Add 1th repeat",
+        "addHouseTwo": "Add 2nd repeat",
+        "removeHouseOne": "Remove 1th repeat",
+        "removeHouseTwo": "Remove 2nd repeat"
     },
     "BottomBar": {
         "chord": "Chord",
@@ -157,6 +164,7 @@
         "languageNorwegian": "Norsk",
         "languageEnglish": "English",
         "languageSelect": "Select language",
+        "clear": "Clear",
         "settings": "Settings"
     }
 }

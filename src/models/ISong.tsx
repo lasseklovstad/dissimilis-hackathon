@@ -32,6 +32,8 @@ export interface ISongMetadata {
     numerator: number
     updatedOn: string
     arrangerName: string | null
+    arrangerEmail: string | null
+    creatorEmail: string | null
     composer: string | null
     songNotes: string | null
     speed: number
