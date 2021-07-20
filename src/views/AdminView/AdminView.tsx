@@ -21,6 +21,10 @@ import { AddOrganisationDialog } from "../../components/CustomDialog/AddOrganisa
 import { AddGroupDialog } from "../../components/CustomDialog/AddGroupDialog.component"
 import { IUser } from "../../models/IUser"
 import { EditAdminsDialog } from "../../components/CustomDialog/EditAdminsDialog.component"
+import {
+    OrganisationFilter,
+    useGetOrganisations,
+} from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles({
     container: {
@@ -41,86 +45,6 @@ const useStyles = makeStyles({
 })
 
 export const AdminView = () => {
-    // Temporary test data
-    const testUser1 = {
-        userId: 0,
-        name: "Per Jensen",
-        email: "user1@mail.no",
-        isSystemAdmin: true,
-        isOrganisationAdmin: true,
-        isGroupAdmin: true,
-    }
-    const testUser2 = {
-        userId: 1,
-        name: "Jens Persson",
-        email: "user2@mail.no",
-        isSystemAdmin: false,
-        isOrganisationAdmin: true,
-        isGroupAdmin: true,
-    }
-    const testUser3 = {
-        userId: 2,
-        name: "Navn Navnesen",
-        email: "user3@mail.no",
-        isSystemAdmin: false,
-        isOrganisationAdmin: false,
-        isGroupAdmin: true,
-    }
-    const testUser4 = {
-        userId: 3,
-        name: "Lisa Gikktilskolensen",
-        email: "user4@mail.no",
-        isSystemAdmin: false,
-        isOrganisationAdmin: false,
-        isGroupAdmin: false,
-    }
-
-    const testUser5: IUser = {
-        email: "test.testesen@ciber.no",
-        name: "Test Testesen",
-        userId: 5,
-    }
-    const testUser6: IUser = {
-        email: "hans.hansen@ciber.no",
-        name: "Hans Hansen",
-        userId: 6,
-    }
-    const testUser7: IUser = {
-        email: "kari.karisen@ciber.no",
-        name: "Kari Karisen",
-        userId: 7,
-    }
-
-    const testOrganisation1 = {
-        organisationId: 0,
-        name: "Norge",
-        address: "Emma Hjorths vei 50, 1336 Sandvika, Norge",
-        phoneNumber: "67 17 48 80",
-        email: "post@dissimilis.no",
-        notes: "Dissimilis Norge holder til i Sandvika og er en organisasjon",
-        admins: [testUser1],
-        members: [testUser1, testUser2, testUser3, testUser4],
-    }
-    const testOrganisation2 = {
-        organisationId: 1,
-        name: "Sverige",
-        address: "Medelsvenssonsgate 18, 12323 Stockholm, Sverige",
-        phoneNumber: "023-314 45",
-        email: "post@dissimilis.se",
-        notes: "Dissimilis Sverige är baserat i Stockholm och är en organisation",
-        admins: [testUser3, testUser4],
-        members: [testUser2, testUser3, testUser4],
-    }
-    const countries = [testOrganisation1, testOrganisation2]
-    const testGroup = {
-        groupId: 0,
-        name: "Oslo",
-        admins: [testUser2],
-        members: [testUser2, testUser3, testUser4],
-    }
-    const currentUser = testUser1
-    // End of temporary test data
-
     const classes = useStyles()
     const { t } = useTranslation()
     const [searchTerm, setSearchTerm] = useState("")
@@ -128,6 +52,22 @@ export const AdminView = () => {
 
     const { getUser, userInit } = useGetUser()
     const userId = userInit?.userId
+    const userIsSystemAdmin = () => {
+        return true
+        //return userInit ? userInit?.isSystemAdmin : false
+    }
+
+    const {
+        getOrganisations: getAdminOrganisations,
+        organisationsFetched: adminOrganisationsFetched,
+    } = useGetOrganisations(
+        userIsSystemAdmin() ? OrganisationFilter.All : OrganisationFilter.Admin
+    )
+
+    const {
+        getOrganisations: getGroupAdminOrganisations,
+        organisationsFetched: groupAdminOrganisationsFetched,
+    } = useGetOrganisations(OrganisationFilter.GroupAdmin)
 
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addOrganisationIsOpen, setAddOrganisationIsOpen] = useState(false)
@@ -135,29 +75,27 @@ export const AdminView = () => {
     const [editSysAdminsDialogIsOpen, setEditSysAdminsDialogIsOpen] =
         useState(false)
 
+    const renderedAdminOrganisationIds: number[] = []
+
     const handleOnChangeSearch = (searchTermParam: string) => {
         // Temporary placeholder
         setSearchTerm(searchTermParam)
         history.push(`/library`)
     }
 
-    const userIsSystemAdmin = (user: number | undefined) => {
-        return currentUser.isSystemAdmin
-    }
-
-    const userIsOrganisationAdmin = (userId: number | undefined) => {
-        return currentUser.isOrganisationAdmin
-    }
-
-    const userIsGroupAdmin = (userId: number | undefined) => {
-        return currentUser.isGroupAdmin
-    }
-
-    const userIsNotElevated = (userId: number | undefined) => {
+    const userIsOrganisationAdmin = () => {
         return (
-            !userIsSystemAdmin(userId) &&
-            !userIsOrganisationAdmin(userId) &&
-            !userIsGroupAdmin(userId)
+            (adminOrganisationsFetched
+                ? adminOrganisationsFetched?.length > 0
+                : false) || userIsSystemAdmin()
+        )
+    }
+
+    const userIsGroupAdmin = () => {
+        return (
+            (groupAdminOrganisationsFetched
+                ? groupAdminOrganisationsFetched?.length > 0
+                : false) || userIsOrganisationAdmin()
         )
     }
 
@@ -207,6 +145,7 @@ export const AdminView = () => {
                                 {t("AdminView.adminPanel")}
                             </Typography>
                         </Grid>
+                        {/**
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
@@ -215,10 +154,12 @@ export const AdminView = () => {
                                     setInviteUserDialogIsOpen(true)
                                 }}
                                 startIcon={<AddIcon />}
+                                disabled={!userIsGroupAdmin()}
                             >
                                 {t("AdminView.inviteUser")}
                             </Button>
                         </Grid>
+                         */}
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
@@ -227,6 +168,7 @@ export const AdminView = () => {
                                     setAddOrganisationIsOpen(true)
                                 }}
                                 startIcon={<AddIcon />}
+                                disabled={!userIsSystemAdmin()}
                             >
                                 {t("AdminView.addCountry")}
                             </Button>
@@ -239,29 +181,47 @@ export const AdminView = () => {
                                     setEditSysAdminsDialogIsOpen(true)
                                 }}
                                 startIcon={<EditIcon />}
+                                disabled={!userIsSystemAdmin()}
                             >
                                 {t("AdminView.editAdmins")}
                             </Button>
                         </Grid>
-                        {userIsOrganisationAdmin(userId)
-                            ? countries.map((organisation) => {
+                        {userIsOrganisationAdmin()
+                            ? adminOrganisationsFetched?.map((organisation) => {
+                                  renderedAdminOrganisationIds.push(
+                                      organisation.organisationId
+                                  )
                                   return (
                                       <Grid item xs={12}>
                                           <AccordionComponent
                                               organisationId={
                                                   organisation.organisationId
                                               }
-                                              organisation={organisation}
                                               title={organisation.name}
-                                              users={[
-                                                  testUser5,
-                                                  testUser6,
-                                                  testUser7,
-                                              ]}
+                                              buttonsIsDisabled={false}
                                           />
                                       </Grid>
                                   )
                               })
+                            : ""}
+                        {userIsGroupAdmin()
+                            ? groupAdminOrganisationsFetched?.map(
+                                  (organisation) => {
+                                      return organisation.organisationId in
+                                          renderedAdminOrganisationIds ? (
+                                          ""
+                                      ) : (
+                                          <Grid item xs={12}>
+                                              <AccordionComponent
+                                                  organisationId={
+                                                      organisation.organisationId
+                                                  }
+                                                  title={organisation.name}
+                                              />
+                                          </Grid>
+                                      )
+                                  }
+                              )
                             : ""}
                     </Grid>
 
@@ -273,12 +233,7 @@ export const AdminView = () => {
                         <InviteUserToSystemDialog
                             handleOnSaveClick={handleInviteUserDialogSave}
                             handleOnCancelClick={handleInviteUserDialogClose}
-                            listOfCountries={[
-                                testOrganisation1.name,
-                                testOrganisation2.name,
-                            ]}
-                            listOfGroups={[testGroup.name]}
-                            defaultOrganisation={testOrganisation1.name}
+                            userIsSystemAdmin={userIsSystemAdmin()}
                         />
                     </Dialog>
 
@@ -292,23 +247,6 @@ export const AdminView = () => {
                             handleOnCancelClick={
                                 handleAddOrganisationDialogClose
                             }
-                            userList={[testUser5, testUser6, testUser7]}
-                        />
-                    </Dialog>
-
-                    <Dialog
-                        open={addGroupIsOpen}
-                        onClose={handleAddGroupDialogClose}
-                        aria-labelledby={t("AdminView.addGroup")}
-                    >
-                        <AddGroupDialog
-                            handleOnSaveClick={handleAddGroupDialogSave}
-                            handleOnCancelClick={handleAddGroupDialogClose}
-                            listOfCountries={[
-                                testOrganisation1.name,
-                                testOrganisation2.name,
-                            ]}
-                            userList={[testUser5, testUser6, testUser7]}
                         />
                     </Dialog>
                     <Dialog
@@ -325,7 +263,7 @@ export const AdminView = () => {
                     </Dialog>
 
                     <Typography variant="h2">
-                        {userIsNotElevated(userId)
+                        {!userIsGroupAdmin()
                             ? "You do not have permissions to view this page"
                             : ""}
                     </Typography>

@@ -27,13 +27,12 @@ export const AddOrganisationDialog = (props: {
     handleOnSaveClick: (value: string) => void
     handleOnCancelClick: () => void
     isLoading?: boolean
-    userList: IUser[]
 }) => {
-    const { handleOnSaveClick, handleOnCancelClick, isLoading, userList } =
-        props
+    const { handleOnSaveClick, handleOnCancelClick, isLoading } = props
 
     const { t } = useTranslation()
     const classes = useStyles()
+    const userList: IUser[] = []
 
     const [organisationNameInput, setOrganisationNameInput] = useState("")
     const [adminEmailInput, setAdminEmailInput] = useState("")

@@ -18,6 +18,7 @@ import { useHistory } from "react-router"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
 import { IOrganisation } from "../../models/IOrganisation"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
+import { useGetOrganisation } from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles({
     root: {
@@ -51,16 +52,17 @@ const useStyles = makeStyles({
 
 export const AccordionComponent = (props: {
     organisationId: number
-    organisation: IOrganisation // Temporary
     title: string
-    users: IUser[]
+    buttonsIsDisabled?: boolean
 }) => {
-    const { title, users, organisationId, organisation } = props
+    const { title, organisationId, buttonsIsDisabled = true } = props
     const classes = useStyles()
     const { t } = useTranslation()
     const [organisationInfoDialogIsOpen, setOrganisationInfoDialogIsOpen] =
         useState(false)
     const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
+    const { getOrganisation, organisationFetched } =
+        useGetOrganisation(organisationId)
 
     const handleOpenEditAdminsDialog = () => {
         setEditAdminsDialogIsOpen(true)
@@ -103,26 +105,29 @@ export const AccordionComponent = (props: {
                 <AccordionDetails>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography>{organisation.notes}</Typography>
+                            <Typography>
+                                {organisationFetched?.notes}
+                            </Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {organisation.admins[0].name || ""}
+                                {organisationFetched?.admins[0].name || ""}
                                 <br />
                                 {t("AdminView.address") + ": "}
-                                {organisation.address || ""}
+                                {organisationFetched?.address || ""}
                                 <br />
                                 {t("AdminView.phoneNumber") + ": "}
-                                {organisation.phoneNumber || ""}
+                                {organisationFetched?.phoneNumber || ""}
                                 <br />
                                 {t("AdminView.email") + ": "}
-                                {organisation.email || ""}
+                                {organisationFetched?.email || ""}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
+                                disabled={buttonsIsDisabled}
                                 className={classes.button}
                             >
                                 <div className={classes.buttonText}>
@@ -133,6 +138,7 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
+                                disabled={buttonsIsDisabled}
                                 className={classes.button}
                                 onClick={handleOpenOrganisationInfoDialog}
                             >
@@ -144,10 +150,11 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
+                                disabled={buttonsIsDisabled}
                                 className={classes.button}
                                 onClick={() =>
                                     history.push(
-                                        `/admin/organisation/${organisation.organisationId}`
+                                        `/admin/organisation/${organisationFetched?.organisationId}`
                                     )
                                 }
                             >
@@ -159,6 +166,7 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
+                                disabled={buttonsIsDisabled}
                                 className={classes.button}
                                 onClick={() => {
                                     setAddMemberDialogIsOpen(true)
@@ -172,6 +180,7 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
+                                disabled={buttonsIsDisabled}
                                 className={classes.button}
                                 onClick={handleOpenEditAdminsDialog}
                             >
@@ -183,6 +192,7 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
+                                disabled={buttonsIsDisabled}
                                 className={classes.button}
                             >
                                 <div className={classes.buttonText}>
@@ -203,7 +213,7 @@ export const AccordionComponent = (props: {
                 <UserAutoCompleteDialog
                     handleOnCancelClick={handleAddMemberClose}
                     handleOnSaveClick={handleAddMember}
-                    userList={users}
+                    userList={[]}
                     title={t("AdminView.addMemberTo") + " " + title}
                     descriptionText={t("AdminView.emailNewGroupMember")}
                     saveText={t("AdminView.add")}
@@ -216,7 +226,7 @@ export const AccordionComponent = (props: {
             >
                 <EditGroupInfoDialog
                     groupId={organisationId}
-                    group={organisation}
+                    group={organisationFetched}
                     handleOnSaveClick={handleCloseOrganisationInfoDialog}
                     handleOnCancelClick={handleCloseOrganisationInfoDialog}
                     isGroup={false}
@@ -231,7 +241,7 @@ export const AccordionComponent = (props: {
             >
                 <EditAdminsDialog
                     groupId={organisationId}
-                    group={organisation}
+                    group={organisationFetched}
                     handleOnCloseClick={handleCloseEditAdminsDialog}
                 />
             </Dialog>

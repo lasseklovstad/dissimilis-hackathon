@@ -20,6 +20,14 @@ import { IUser } from "../../models/IUser"
 import { AccordionGroupComponent } from "../../components/AdminViewComponents/AccordionGroupComponent.component"
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
 import { IGroup } from "../../models/IGroup"
+import {
+    GroupFilter,
+    OrganisationFilter,
+    useGetGroups,
+    useGetGroupsInOrganisation,
+    useGetOrganisation,
+    useGetOrganisations,
+} from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles({
     container: {
@@ -52,118 +60,40 @@ const useStyles = makeStyles({
 })
 
 export const GroupAdminView = () => {
-    // Temporary test data
-    const testUser1 = {
-        userId: 0,
-        name: "Dummy1",
-        isSystemAdmin: true,
-        isOrganisationAdmin: true,
-        isGroupAdmin: true,
-    }
-    const testUser2 = {
-        userId: 1,
-        name: "Dummy2",
-        isSystemAdmin: false,
-        isOrganisationAdmin: true,
-        isGroupAdmin: true,
-    }
-    const testUser3 = {
-        userId: 2,
-        name: "Dummy3",
-        isSystemAdmin: false,
-        isOrganisationAdmin: false,
-        isGroupAdmin: true,
-    }
-    const testUser4 = {
-        userId: 3,
-        name: "Dummy4",
-        isSystemAdmin: false,
-        isOrganisationAdmin: false,
-        isGroupAdmin: false,
-    }
-
-    const testUser5: IUser = {
-        email: "test.testesen@ciber.no",
-        name: "Test Testesen",
-        userId: 5,
-    }
-    const testUser6: IUser = {
-        email: "hans.hansen@ciber.no",
-        name: "Hans Hansen",
-        userId: 6,
-    }
-    const testUser7: IUser = {
-        email: "kari.karisen@ciber.no",
-        name: "Kari Karisen",
-        userId: 7,
-    }
-
-    const testOrganisation1 = {
-        organisationId: 0,
-        name: "Norge",
-        address: "Emma Hjorths vei 50, 1336 Sandvika, Norge",
-        phoneNumber: "67 17 48 80",
-        email: "post@dissimilis.no",
-        notes: "Dissimilis Norge holder til i Sandvika og er en organisasjon",
-        admins: [testUser1],
-        members: [testUser1, testUser2, testUser3, testUser4],
-    }
-    const testOrganisation2 = {
-        organisationId: 1,
-        name: "Sverige",
-        address: "Medelsvenssonsgate 18, 12323 Stockholm, Sverige",
-        phoneNumber: "023-314 45",
-        email: "post@dissimilis.se",
-        notes: "Dissimilis Sverige är baserat i Stockholm och är en organisation",
-        admins: [testUser3, testUser4],
-        members: [testUser2, testUser3, testUser4],
-    }
-    const testGroup1: IGroup = {
-        groupId: 0,
-        name: "Oslo",
-        admins: [testUser5],
-        members: [testUser5],
-        address: "Medelsvenssonsgate 18, 12323 Stockholm, Sverige",
-        phoneNumber: "023-314 45",
-        email: "post@dissimilis.se",
-        notes: "Dissimilis Sverige är baserat i Stockholm och är en organisation",
-    }
-    const testGroup2: IGroup = {
-        groupId: 1,
-        name: "Bærum",
-        admins: [testUser6],
-        members: [testUser6, testUser5, testUser7],
-        address: "Medelsvenssonsgate 18, 12323 Stockholm, Sverige",
-        phoneNumber: "023-314 45",
-        email: "post@dissimilis.se",
-        notes: "Dissimilis Sverige är baserat i Stockholm och är en organisation",
-    }
-    const testGroup3: IGroup = {
-        groupId: 2,
-        name: "Trondheim",
-        admins: [testUser6, testUser5, testUser7],
-        members: [testUser6, testUser5, testUser7],
-        address: "Medelsvenssonsgate 18, 12323 Stockholm, Sverige",
-        phoneNumber: "023-314 45",
-        email: "post@dissimilis.se",
-        notes: "Dissimilis Sverige är baserat i Stockholm och är en organisation",
-    }
-
-    const groups = [testGroup1, testGroup2, testGroup3]
-    const currentUser = testUser1
-
     const classes = useStyles()
     const { t } = useTranslation()
     const [searchTerm, setSearchTerm] = useState("")
     const history = useHistory()
+    const { organisationId } = useParams<{ organisationId: string }>()
 
     const { getUser, userInit } = useGetUser()
     const userId = userInit?.userId
 
+    const { getOrganisation, organisationFetched } = useGetOrganisation(
+        parseInt(organisationId)
+    )
+
+    const userIsSystemAdmin = () => {
+        return userInit ? userInit?.isSystemAdmin : false
+    }
+
+    const userIsAdminInCurrentOrganisation = () => {
+        return userInit && organisationFetched
+            ? organisationFetched?.admins.filter((admin) => {
+                  return admin.userId === userId
+              })
+            : false || userIsSystemAdmin()
+    }
+
+    const { getGroups, groupsFetched } = useGetGroupsInOrganisation(
+        userIsAdminInCurrentOrganisation()
+            ? GroupFilter.All
+            : GroupFilter.Admin,
+        parseInt(organisationId)
+    )
+
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
-
-    const { organisationId } = useParams<{ organisationId: string }>()
 
     const handleOnChangeSearch = (searchTermParam: string) => {
         // Temporary placeholder
@@ -171,23 +101,10 @@ export const GroupAdminView = () => {
         history.push(`/library`)
     }
 
-    const userIsSystemAdmin = (user: number | undefined) => {
-        return currentUser.isSystemAdmin
-    }
-
-    const userIsOrganisationAdmin = (userId: number | undefined) => {
-        return currentUser.isOrganisationAdmin
-    }
-
-    const userIsGroupAdmin = (userId: number | undefined) => {
-        return currentUser.isGroupAdmin
-    }
-
-    const userIsNotElevated = (userId: number | undefined) => {
+    const userIsGroupAdmin = () => {
         return (
-            !userIsSystemAdmin(userId) &&
-            !userIsOrganisationAdmin(userId) &&
-            !userIsGroupAdmin(userId)
+            (groupsFetched ? groupsFetched?.length > 0 : false) ||
+            userIsAdminInCurrentOrganisation()
         )
     }
 
@@ -233,6 +150,7 @@ export const GroupAdminView = () => {
                                 {organisationId + "-" + t("AdminView.groups")}
                             </Typography>
                         </Grid>
+                        {/**
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
@@ -245,6 +163,7 @@ export const GroupAdminView = () => {
                                 {t("AdminView.inviteUser")}
                             </Button>
                         </Grid>
+                         */}
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
@@ -257,18 +176,12 @@ export const GroupAdminView = () => {
                                 {t("AdminView.addGroup")}
                             </Button>
                         </Grid>
-                        {userIsOrganisationAdmin(userId)
-                            ? groups.map((group) => {
+                        {userIsGroupAdmin()
+                            ? groupsFetched?.map((group) => {
                                   return (
                                       <Grid item xs={12}>
                                           <AccordionGroupComponent
                                               title={group.name}
-                                              users={[
-                                                  testUser5,
-                                                  testUser6,
-                                                  testUser7,
-                                              ]}
-                                              group={group}
                                               groupId={group.groupId}
                                           />
                                       </Grid>
@@ -285,12 +198,10 @@ export const GroupAdminView = () => {
                         <InviteUserToSystemDialog
                             handleOnSaveClick={handleInviteUserDialogSave}
                             handleOnCancelClick={handleInviteUserDialogClose}
-                            listOfCountries={[
-                                testOrganisation1.name,
-                                testOrganisation2.name,
-                            ]}
-                            listOfGroups={[testGroup1.name]}
-                            defaultOrganisation={testOrganisation1.name}
+                            defaultOrganisationId={
+                                organisationFetched?.organisationId
+                            }
+                            userIsSystemAdmin={userIsSystemAdmin()}
                         />
                     </Dialog>
 
@@ -302,17 +213,14 @@ export const GroupAdminView = () => {
                         <AddGroupDialog
                             handleOnSaveClick={handleAddGroupDialogSave}
                             handleOnCancelClick={handleAddGroupDialogClose}
-                            listOfCountries={[
-                                testOrganisation1.name,
-                                testOrganisation2.name,
-                            ]}
-                            userList={[testUser5, testUser6, testUser7]}
-                            defaultOrganisation={testOrganisation1.name}
+                            listOfOrganisations={[]}
+                            userList={[]}
+                            defaultOrganisation={organisationFetched}
                         />
                     </Dialog>
 
                     <Typography variant="h2">
-                        {userIsNotElevated(userId)
+                        {!userIsGroupAdmin()
                             ? "You do not have permissions to view this page"
                             : ""}
                     </Typography>

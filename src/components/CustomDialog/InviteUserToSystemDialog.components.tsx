@@ -15,6 +15,12 @@ import {
 
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { useTranslation } from "react-i18next"
+import {
+    OrganisationFilter,
+    useGetOrganisations,
+} from "../../utils/useApiServiceGroups"
+import { IOrganisation, IOrganisationIndex } from "../../models/IOrganisation"
+import { IGroupIndex } from "../../models/IGroup"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -38,32 +44,70 @@ const useStyles = makeStyles((theme) => {
 export const InviteUserToSystemDialog = (props: {
     handleOnSaveClick: (value: string) => void
     handleOnCancelClick: () => void
-    listOfCountries: string[]
-    listOfGroups: string[]
-    defaultOrganisation: string
+    defaultOrganisationId?: number
+    userIsSystemAdmin: boolean
     isLoading?: boolean
 }) => {
     const {
         handleOnSaveClick,
         handleOnCancelClick,
-        listOfCountries,
-        listOfGroups,
         isLoading,
-        defaultOrganisation,
+        defaultOrganisationId,
+        userIsSystemAdmin,
     } = props
     const { t } = useTranslation()
     const classes = useStyles()
+    const [organisations, setOrganisations] = useState<IOrganisationIndex[]>()
+    setOrganisations([{ organisationId: 0, name: "Norge" }])
+    const [groups, setGroups] = useState<IGroupIndex[]>()
+    setGroups([
+        {
+            groupId: 0,
+            name: "Oslo",
+            organisationId: 0,
+            organisationName: "Norge",
+        },
+    ])
+    /*
+    if (userIsSystemAdmin) {
+        const { getOrganisations, organisationsFetched } = useGetOrganisations(
+            OrganisationFilter.All
+        )
+        setOrganisations(organisationsFetched)
+    } else {
+        const {
+            getOrganisations: getAdminOrganisations,
+            organisationsFetched: adminOrganisationsFetched,
+        } = useGetOrganisations(OrganisationFilter.Admin)
+        const {
+            getOrganisations: getGroupAdminOrganisations,
+            organisationsFetched: groupAdminOrganisationsFetched,
+        } = useGetOrganisations(OrganisationFilter.GroupAdmin)
+        const organisationsFetched = adminOrganisationsFetched?.slice() || []
+        const orgIds =
+            adminOrganisationsFetched?.map((organisation) => {
+                return organisation.organisationId
+            }) || []
+        groupAdminOrganisationsFetched?.map((organisation) => {
+            if (!(organisation.organisationId in orgIds)) {
+                organisationsFetched.push(organisation)
+            }
+        })
+        setOrganisations(organisationsFetched)
+    }
+    */
 
     const [textFieldInput, setTextFieldInput] = useState("")
-    const [organisationInput, setOrganisationInput] = useState("")
+    const [organisationInput, setOrganisationInput] = useState<number>()
     const [groupInput, setGroupInput] = useState("")
 
+    /*
     useEffect(() => {
-        if (defaultOrganisation) {
-            setOrganisationInput(defaultOrganisation)
+        if (defaultOrganisationId) {
+            setOrganisationInput(defaultOrganisationId)
         }
-    }, [defaultOrganisation])
-
+    }, [defaultOrganisationId])
+    */
     return (
         <form
             onSubmit={(event) => {
@@ -85,14 +129,19 @@ export const InviteUserToSystemDialog = (props: {
                         }}
                         label={t("AdminView.countries")}
                     >
-                        {listOfCountries.map((organisation) => {
-                            return (
-                                <MenuItem value={organisation}>
-                                    {" "}
-                                    {organisation}{" "}
-                                </MenuItem>
-                            )
-                        })}
+                        {organisations
+                            ? organisations.map((organisation) => {
+                                  return (
+                                      <MenuItem
+                                          key={organisation.organisationId}
+                                          value={organisation.organisationId}
+                                      >
+                                          {" "}
+                                          {organisation.name}{" "}
+                                      </MenuItem>
+                                  )
+                              })
+                            : ""}
                     </Select>
                 </FormControl>
 
@@ -109,9 +158,19 @@ export const InviteUserToSystemDialog = (props: {
                         label={t("AdminView.groups")}
                     >
                         <MenuItem value=""> {t("AdminView.noGroup")} </MenuItem>
-                        {listOfGroups.map((group) => {
-                            return <MenuItem value={group}> {group} </MenuItem>
-                        })}
+                        {groups
+                            ? groups.map((group) => {
+                                  return (
+                                      <MenuItem
+                                          key={group.groupId}
+                                          value={group.groupId}
+                                      >
+                                          {" "}
+                                          {group.name}{" "}
+                                      </MenuItem>
+                                  )
+                              })
+                            : ""}
                     </Select>
                 </FormControl>
 

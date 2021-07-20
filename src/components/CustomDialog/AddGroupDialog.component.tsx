@@ -17,6 +17,7 @@ import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { useTranslation } from "react-i18next"
 import { Autocomplete } from "@material-ui/lab"
 import { IUser } from "../../models/IUser"
+import { IOrganisation } from "../../models/IOrganisation"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -36,8 +37,8 @@ const useStyles = makeStyles((theme) => {
 export const AddGroupDialog = (props: {
     handleOnSaveClick: (value: string) => void
     handleOnCancelClick: () => void
-    listOfCountries: string[]
-    defaultOrganisation?: string
+    listOfOrganisations: string[]
+    defaultOrganisation?: IOrganisation
     isLoading?: boolean
     userList: IUser[]
 }) => {
@@ -45,7 +46,7 @@ export const AddGroupDialog = (props: {
         handleOnSaveClick,
         handleOnCancelClick,
         isLoading,
-        listOfCountries,
+        listOfOrganisations,
         userList,
         defaultOrganisation,
     } = props
@@ -54,7 +55,7 @@ export const AddGroupDialog = (props: {
     const classes = useStyles()
 
     const [groupNameInput, setGroupNameInput] = useState("")
-    const [organisationInput, setOrganisationInput] = useState("")
+    const [organisationInput, setOrganisationInput] = useState<IOrganisation>()
 
     const [adminEmailInput, setAdminEmailInput] = useState("")
 
@@ -107,7 +108,7 @@ export const AddGroupDialog = (props: {
                         }}
                         label={t("AdminView.countries")}
                     >
-                        {listOfCountries.map((organisation) => {
+                        {listOfOrganisations.map((organisation) => {
                             return (
                                 <MenuItem value={organisation}>
                                     {" "}

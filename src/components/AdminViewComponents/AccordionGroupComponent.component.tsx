@@ -17,6 +17,7 @@ import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCo
 import { IGroup } from "../../models/IGroup"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
+import { useGetGroup } from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles({
     root: {
@@ -53,15 +54,14 @@ const useStyles = makeStyles({
 
 export const AccordionGroupComponent = (props: {
     groupId: number
-    group: IGroup // Temporary
     title: string
-    users: IUser[]
 }) => {
-    const { title, users, group, groupId } = props
+    const { title, groupId } = props
     const classes = useStyles()
     const { t } = useTranslation()
 
     const [addMemberDialogIsOpen, setAddMemberDialogIsOpen] = useState(false)
+    const { getGroup, groupFetched } = useGetGroup(groupId)
 
     const handleAddMemberClose = () => {
         setAddMemberDialogIsOpen(false)
@@ -103,21 +103,21 @@ export const AccordionGroupComponent = (props: {
                 <AccordionDetails>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography>{group.notes}</Typography>
+                            <Typography>{groupFetched?.notes}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {group.admins[0].name || ""}
+                                {groupFetched?.admins[0].name || ""}
                                 <br />
                                 {t("AdminView.address") + ": "}
-                                {group.address || ""}
+                                {groupFetched?.address || ""}
                                 <br />
                                 {t("AdminView.phoneNumber") + ": "}
-                                {group.phoneNumber || ""}
+                                {groupFetched?.phoneNumber || ""}
                                 <br />
                                 {t("AdminView.email") + ": "}
-                                {group.email || ""}
+                                {groupFetched?.email || ""}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -188,7 +188,7 @@ export const AccordionGroupComponent = (props: {
                 <UserAutoCompleteDialog
                     handleOnCancelClick={handleAddMemberClose}
                     handleOnSaveClick={handleAddMember}
-                    userList={users}
+                    userList={[]} // Not in sprint 5
                     title={t("AdminView.addMemberTo") + " " + title}
                     descriptionText={t("AdminView.emailNewGroupMember")}
                     saveText={t("AdminView.add")}
@@ -201,7 +201,7 @@ export const AccordionGroupComponent = (props: {
             >
                 <EditGroupInfoDialog
                     groupId={groupId}
-                    group={group}
+                    group={groupFetched}
                     handleOnSaveClick={handleCloseGroupInfoDialog}
                     handleOnCancelClick={handleCloseGroupInfoDialog}
                     isGroup
@@ -216,7 +216,7 @@ export const AccordionGroupComponent = (props: {
             >
                 <EditAdminsDialog
                     groupId={groupId}
-                    group={group}
+                    group={groupFetched}
                     handleOnCloseClick={handleCloseEditAdminsDialog}
                 />
             </Dialog>

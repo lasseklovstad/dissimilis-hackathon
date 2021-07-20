@@ -59,6 +59,7 @@ export const EditAdminsDialog = (props: {
     const classes = useStyles()
     const { t } = useTranslation()
     const secondary = true
+
     const [addAdminDialogIsOpen, setAddAdminDialogIsOpen] = useState(false)
     const [confirmationDialogIsOpen, setConfirmationDialogIsOpen] =
         useState(false)
@@ -69,7 +70,7 @@ export const EditAdminsDialog = (props: {
             return group.admins
         }
         if (editSysAdmins) {
-            return testUsers //RETURNER SYSTEMADMINS
+            return [] //RETURNER SYSTEMADMINS
         }
         return []
     }
@@ -107,23 +108,6 @@ export const EditAdminsDialog = (props: {
     const handleCloseConfirmationDialog = () => {
         setConfirmationDialogIsOpen(false)
     }
-
-    const testUser5: IUser = {
-        email: "test.testesen@ciber.no",
-        name: "Test Testesen",
-        userId: 5,
-    }
-    const testUser6: IUser = {
-        email: "hans.hansen@ciber.no",
-        name: "Hans Hansen",
-        userId: 6,
-    }
-    const testUser7: IUser = {
-        email: "kari.karisen@ciber.no",
-        name: "Kari Karisen",
-        userId: 7,
-    }
-    const testUsers = [testUser5, testUser6, testUser7]
 
     return (
         <>
@@ -198,7 +182,7 @@ export const EditAdminsDialog = (props: {
                     saveText={t("Dialog.add")}
                     title={t("Dialog.addAdmin")}
                     descriptionText={t("Dialog.emailOfNewAdmin")}
-                    userList={testUsers}
+                    userList={[]}
                 />
             </Dialog>
             <Dialog

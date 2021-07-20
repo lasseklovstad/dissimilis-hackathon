@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => {
 
 export const EditGroupInfoDialog = (props: {
     groupId: number
-    group: IOrganisation | IGroup // Temporary
+    group: IOrganisation | IGroup | undefined
     isGroup: boolean
     handleOnSaveClick: () => void
     handleOnCancelClick: () => void
@@ -51,11 +51,14 @@ export const EditGroupInfoDialog = (props: {
     const [groupNotesTextFieldInput, setGroupNotesTextFieldInput] = useState("")
 
     useEffect(() => {
-        setGroupNameTextFieldInput(group.name || "")
-        setGroupAddressTextFieldInput(group.address || "")
-        setGroupPhoneNumberTextFieldInput(group.phoneNumber || "")
-        setGroupEmailTextFieldInput(group.email || "")
-        setGroupNotesTextFieldInput(group.notes || "")
+        if (group) {
+            const { name, address, phoneNumber, email, notes } = group
+            setGroupNameTextFieldInput(name || "")
+            setGroupAddressTextFieldInput(address || "")
+            setGroupPhoneNumberTextFieldInput(phoneNumber || "")
+            setGroupEmailTextFieldInput(email || "")
+            setGroupNotesTextFieldInput(notes || "")
+        }
     }, [group])
 
     return (

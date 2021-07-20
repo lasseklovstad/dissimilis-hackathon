@@ -1,15 +1,15 @@
 import { useEffect } from "react"
-import { IGroup } from "../models/IGroup"
-import { IOrganisation } from "../models/IOrganisation"
+import { IGroup, IGroupIndex } from "../models/IGroup"
+import { IOrganisation, IOrganisationIndex } from "../models/IOrganisation"
 import { useApiService } from "./useApiService"
 
-enum GroupFilter {
+export enum GroupFilter {
     Admin = "ADMIN",
     User = "USER",
     All = "ALL",
 }
 
-enum OrganisationFilter {
+export enum OrganisationFilter {
     Admin = "ADMIN",
     GroupAdmin = "GROUPADMIN",
     User = "USER",
@@ -27,9 +27,9 @@ const getHeaders = () => {
  * */
 export const useGetGroups = (groupFilter: GroupFilter) => {
     const url = `organisations/groups?filter="${groupFilter}"`
-    const initialData: IGroup[] = []
+    const initialData: IGroupIndex[] = []
     const headers = getHeaders()
-    const { getData, state, data } = useApiService<IGroup[]>(url, {
+    const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
         initialData,
         headers,
     })
@@ -39,8 +39,8 @@ export const useGetGroups = (groupFilter: GroupFilter) => {
     }, [getData])
 
     return {
-        getAllSongs: { run: getData, ...state },
-        allSongsFetched: data,
+        getGroups: { run: getData, ...state },
+        groupsFetched: data,
     }
 }
 
@@ -52,9 +52,9 @@ export const useGetGroupsInOrganisation = (
     organisationId: number
 ) => {
     const url = `organisations/${organisationId}/groups?filter="${groupFilter}"`
-    const initialData: IGroup[] = []
+    const initialData: IGroupIndex[] = []
     const headers = getHeaders()
-    const { getData, state, data } = useApiService<IGroup[]>(url, {
+    const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
         initialData,
         headers,
     })
@@ -64,8 +64,8 @@ export const useGetGroupsInOrganisation = (
     }, [getData])
 
     return {
-        getAllSongs: { run: getData, ...state },
-        allSongsFetched: data,
+        getGroups: { run: getData, ...state },
+        groupsFetched: data,
     }
 }
 
@@ -77,9 +77,9 @@ export const useGetOrganisations = (organisationFilter: OrganisationFilter) => {
     const body = {
         filter: organisationFilter,
     }
-    const initialData: IOrganisation[] = []
+    const initialData: IOrganisationIndex[] = []
     const headers = getHeaders()
-    const { getData, state, data } = useApiService<IOrganisation[]>(url, {
+    const { getData, state, data } = useApiService<IOrganisationIndex[]>(url, {
         body,
         initialData,
         headers,
@@ -92,5 +92,39 @@ export const useGetOrganisations = (organisationFilter: OrganisationFilter) => {
     return {
         getOrganisations: { run: getData, ...state },
         organisationsFetched: data,
+    }
+}
+
+export const useGetGroup = (groupId: number) => {
+    const url = `groups/${groupId}`
+    const headers = getHeaders()
+    const { getData, state, data } = useApiService<IGroup>(url, {
+        headers,
+    })
+
+    useEffect(() => {
+        getData()
+    }, [getData])
+
+    return {
+        getGroup: { run: getData, ...state },
+        groupFetched: data,
+    }
+}
+
+export const useGetOrganisation = (organisationId: number) => {
+    const url = `organisations/${organisationId}`
+    const headers = getHeaders()
+    const { getData, state, data } = useApiService<IOrganisation>(url, {
+        headers,
+    })
+
+    useEffect(() => {
+        getData()
+    }, [getData])
+
+    return {
+        getOrganisation: { run: getData, ...state },
+        organisationFetched: data,
     }
 }
