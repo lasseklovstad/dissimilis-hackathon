@@ -22,6 +22,10 @@ import DeleteIcon from "@material-ui/icons/Delete"
 import AddIcon from "@material-ui/icons/Add"
 import { colors } from "../../utils/colors"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
+import {
+    SongProtectionLevel,
+    useChangeSongProtectionLevel,
+} from "../../utils/useApiServiceSongs"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -58,10 +62,9 @@ export const ShareSongDialog = (props: {
     const { t } = useTranslation()
     const classes = useStyles()
     const { handleOnCloseClick, isLoading = false, songId } = props
+    const { changeSongProtectionLevel } = useChangeSongProtectionLevel(songId)
 
-    const [publicSong, setPublicSong] = useState({
-        publicSongState: false,
-    })
+    const [publicSong, setPublicSong] = useState(false)
 
     const userList: IUser[] = [
         {
@@ -130,12 +133,14 @@ export const ShareSongDialog = (props: {
         return userList //ENDRE
     }
 
-    const handleChangePublicPrivate = (
+    const handleChangePublicPrivate = async (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        setPublicSong({
-            ...publicSong,
-            [event.target.name]: event.target.checked,
+        setPublicSong(event.target.checked)
+        const { error, result } = await changeSongProtectionLevel.run({
+            protectionLevel: event.target.checked
+                ? SongProtectionLevel.Public
+                : SongProtectionLevel.Private,
         })
     }
 
@@ -216,7 +221,7 @@ export const ShareSongDialog = (props: {
                         <Grid item>Ingen</Grid>
                         <Grid item>
                             <Switch
-                                checked={publicSong.publicSongState}
+                                checked={publicSong}
                                 onChange={handleChangePublicPrivate}
                                 name="publicSongState"
                             />
@@ -224,7 +229,7 @@ export const ShareSongDialog = (props: {
                         <Grid item>Alle</Grid>
                     </Grid>
                 </Typography>
-                {publicSong.publicSongState ? (
+                {publicSong ? (
                     <>
                         <Typography variant="caption">
                             {
@@ -236,7 +241,7 @@ export const ShareSongDialog = (props: {
                             className={classes.item}
                             id="tags-outlined"
                             options={[]}
-                            disabled={!publicSong.publicSongState}
+                            disabled={!publicSong}
                             onChange={onTagChange}
                             //getOptionLabel={(option) => option.title}
                             filterSelectedOptions

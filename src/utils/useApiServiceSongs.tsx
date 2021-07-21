@@ -4,6 +4,11 @@ import { ISong, ISongIndex, ISongMetadata } from "../models/ISong"
 import { IBar } from "../models/IBar"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../models/IVoice"
 
+export enum SongProtectionLevel {
+    Public = "Public",
+    Private = "Private",
+}
+
 const getArrangerId = () => {
     return sessionStorage.getItem("userId") || ""
 }
@@ -471,7 +476,7 @@ export const useChangeSongProtectionLevel = (songId: number) => {
     const headers = getHeaders()
     const body = {}
 
-    const api = useApiService<ISong>(url, { headers, body })
+    const api = useApiService<void>(url, { headers, body })
 
     return {
         changeSongProtectionLevel: { run: api.postData, ...api.state },
