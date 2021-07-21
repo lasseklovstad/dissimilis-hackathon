@@ -28,8 +28,10 @@ import {
     useChangeSongProtectionLevel,
     useGetSongShareInfo,
     useShareSong,
+    useUnshareSong,
 } from "../../utils/useApiServiceSongs"
 import { InputDialog } from "./InputDialog.component"
+import { ChoiceDialog } from "./ChoiceDialog.component"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -68,11 +70,15 @@ export const ShareSongDialog = (props: {
     const { handleOnCloseClick, isLoading = false, songId } = props
     const { changeSongProtectionLevel } = useChangeSongProtectionLevel(songId)
     const { getSongShareInfo, songShareInfo } = useGetSongShareInfo(songId)
-    const { shareSong } = useShareSong(songId, 2)
+    const { shareSong } = useShareSong(songId)
+    const { unshareSong } = useUnshareSong(songId)
 
     const [publicSong, setPublicSong] = useState(false)
     const [userList, setUserList] = useState<IUser[]>([])
     const [addUserDialogIsOpen, setAddUserDialogIsOpen] = useState(false)
+    const [selectedUser, setSelectedUser] = useState<IUser>()
+    const [confirmRemoveUserDialogIsOpen, setConfirmRemoveUserDialogIsOpen] =
+        useState(false)
 
     const handleChangePublicPrivate = async (
         event: React.ChangeEvent<HTMLInputElement>
@@ -93,7 +99,25 @@ export const ShareSongDialog = (props: {
         setAddUserDialogIsOpen(false)
     }
 
-    const handleAddUser = (userId: string) => {}
+    const handleCloseConfirmRemoveUserDialog = () => {
+        setConfirmRemoveUserDialogIsOpen(false)
+    }
+
+    const handleAddUser = async (userId: string) => {
+        const { error, result } = await shareSong.run(null, `/${userId}`)
+        if (!error && result) {
+            handleCloseAddUserDialog()
+        }
+    }
+
+    const handleRemoveUser = async () => {
+        const { error, result } = await unshareSong.run(
+            `/${selectedUser?.userId}`
+        )
+        if (!error && result) {
+            handleCloseConfirmRemoveUserDialog()
+        }
+    }
 
     useEffect(() => {
         if (songShareInfo) {
@@ -138,8 +162,10 @@ export const ShareSongDialog = (props: {
                                     />
                                     <ListItemSecondaryAction
                                         onClick={() => {
-                                            /*setSelectedUser(user)
-                                        handleOpenConfirmationDialog()*/
+                                            setSelectedUser(user)
+                                            setConfirmRemoveUserDialogIsOpen(
+                                                true
+                                            )
                                         }}
                                     >
                                         <IconButton
@@ -245,6 +271,20 @@ export const ShareSongDialog = (props: {
                     saveText={"Add"}
                     headerText={"Add user"}
                     labelText={"User email"}
+                />
+            </Dialog>
+            <Dialog
+                open={confirmRemoveUserDialogIsOpen}
+                onClose={handleCloseConfirmRemoveUserDialog}
+                aria-label={"Unshare with new user dialog"}
+            >
+                <ChoiceDialog
+                    handleOnSaveClick={handleRemoveUser}
+                    handleOnCancelClick={handleCloseConfirmRemoveUserDialog}
+                    ackText={"Save"}
+                    cancelText={"Cancel"}
+                    descriptionText={"Remove person"}
+                    headerText={"Remove person"}
                 />
             </Dialog>
         </>

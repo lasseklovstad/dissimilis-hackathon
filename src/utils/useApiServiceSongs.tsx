@@ -452,11 +452,12 @@ export const useSetOrganisationTags = (songId: number) => {
  * @param songId song's id
  * @param userId userId of user recieving write permission
  */
-export const useShareSong = (songId: number, userId: number) => {
-    const url = `song/${songId}/shareSong/User/${userId}`
+export const useShareSong = (songId: number) => {
+    const url = `song/${songId}/shareSong/User`
     const headers = getHeaders()
 
-    const api = useApiService<ISong>(url, { headers })
+    const appendUrl = `/`
+    const api = useApiService<ISong>(url, { headers, appendUrl })
 
     return {
         shareSong: { run: api.postData, ...api.state },
@@ -468,11 +469,12 @@ export const useShareSong = (songId: number, userId: number) => {
  * @param songId song's id
  * @param userId userId of user losing write permission
  */
-export const useUnshareSong = (songId: number, userId: number) => {
-    const url = `song/${songId}/shareSong/User/${userId}`
+export const useUnshareSong = (songId: number) => {
+    const url = `song/${songId}/shareSong/User`
     const headers = getHeaders()
 
-    const api = useApiService<ISong>(url, { headers })
+    const appendUrl = `/`
+    const api = useApiService<ISong>(url, { headers, appendUrl })
 
     return {
         unshareSong: { run: api.deleteData, ...api.state },
