@@ -23,6 +23,7 @@ import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { EditSongInfoDialog } from "../CustomDialog/EditSongInfoDialog.component"
 import { TransposeDialog } from "../CustomDialog/TransposeDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
+import { ShareSongDialog } from "../CustomDialog/ShareSongDialog.component"
 
 export const MenuButton = (props: {
     voiceId: number
@@ -40,6 +41,7 @@ export const MenuButton = (props: {
     const [duplicateSongDialogIsOpen, setDuplicateSongDialogIsOpen] =
         useState(false)
     const [songInfoDialogIsOpen, setSongInfoDialogIsOpen] = useState(false)
+    const [shareSongDialogIsOpen, setShareSongDialogIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
     const { songId, title, transpose } = useParams<{
@@ -92,6 +94,13 @@ export const MenuButton = (props: {
         setSongInfoDialogIsOpen(false)
     }
 
+    const handleOpenShareSongDialog = () => {
+        setShareSongDialogIsOpen(true)
+    }
+    const handleCloseShareSongDialog = () => {
+        setShareSongDialogIsOpen(false)
+    }
+
     const handleClose = async (
         method?:
             | "transpose"
@@ -100,6 +109,7 @@ export const MenuButton = (props: {
             | "duplicate"
             | "editBars"
             | "info"
+            | "share"
     ) => {
         setAnchorEl(null)
         setDeleteSongDialogIsOpen(false)
@@ -122,6 +132,9 @@ export const MenuButton = (props: {
                 break
             case "info":
                 handleOpenSongInfoDialog()
+                break
+            case "share":
+                handleOpenShareSongDialog()
                 break
             default:
                 break
@@ -203,6 +216,9 @@ export const MenuButton = (props: {
                     <MenuItem onClick={() => handleClose("info")}>
                         {t("Dialog.details")}
                     </MenuItem>
+                    <MenuItem onClick={() => handleClose("share")}>
+                        {t("Dialog.share")}
+                    </MenuItem>
                     {props.showName ? (
                         <>
                             <Divider variant="middle" />
@@ -271,6 +287,18 @@ export const MenuButton = (props: {
                         headerText={t("DashboardView.duplicateText")}
                         labelText={t("Dialog.newVoiceName")}
                         isLoading={duplicateSong.loading}
+                    />
+                </Dialog>
+                <Dialog
+                    open={shareSongDialogIsOpen}
+                    onClose={handleCloseShareSongDialog}
+                    aria-label={"Dialog.ShareSong"}
+                    maxWidth="xs"
+                    fullWidth
+                >
+                    <ShareSongDialog
+                        handleOnCloseClick={handleCloseShareSongDialog}
+                        songId={parseInt(songId)}
                     />
                 </Dialog>
             </div>
