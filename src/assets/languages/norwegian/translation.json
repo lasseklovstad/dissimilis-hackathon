@@ -145,7 +145,8 @@
         "duplicateCustomSong": "Egendefinert",
         "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme",
         "loading": "Laster",
-        "details": "Informasjon om partitur"
+        "details": "Informasjon om partitur",
+        "close": "Lukk"
     },
     "Song": {
         "arranger": "Arrangør",

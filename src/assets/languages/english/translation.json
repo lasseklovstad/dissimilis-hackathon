@@ -147,7 +147,8 @@
         "newVoiceError": "An error occured while creating new voice",
         "loading": "Loading",
         "saveSongMetadataError": "An error occured while saving information",
-        "details": "Information about song"
+        "details": "Information about song",
+        "close": "Close"
     },
     "Song": {
         "arranger": "Arranger",
