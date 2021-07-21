@@ -78,11 +78,12 @@ export const AccordionComponent = (props: {
     const [organisationInfoDialogIsOpen, setOrganisationInfoDialogIsOpen] =
         useState(false)
     const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
+    const [deleteCountryDialogIsOpen, setDeleteCountryDialogIsOpen] =
+        useState(false)
+
     const { getOrganisation, organisationFetched } =
         useGetOrganisation(organisationId)
     const { addOrganisationMember } = useAddOrganisationMember(organisationId)
-    const [deleteCountryDialogIsOpen, setDeleteCountryDialogIsOpen] =
-        useState(false)
 
     const handleOpenEditAdminsDialog = () => {
         setEditAdminsDialogIsOpen(true)
@@ -117,6 +118,9 @@ export const AccordionComponent = (props: {
             if (!error && result) {
                 setAddMemberDialogIsOpen(false)
             }
+        } else {
+            // User does not exist
+            // handle this
         }
     }
 

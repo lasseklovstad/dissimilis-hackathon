@@ -18,8 +18,6 @@ import EditIcon from "@material-ui/icons/Edit"
 import { colors } from "../../utils/colors"
 import { InviteUserToSystemDialog } from "../../components/CustomDialog/InviteUserToSystemDialog.components"
 import { AddOrganisationDialog } from "../../components/CustomDialog/AddOrganisationDialog.component"
-import { AddGroupDialog } from "../../components/CustomDialog/AddGroupDialog.component"
-import { IUser } from "../../models/IUser"
 import { EditAdminsDialog } from "../../components/CustomDialog/EditAdminsDialog.component"
 import {
     OrganisationFilter,
@@ -53,7 +51,6 @@ export const AdminView = () => {
     const { postOrganisation } = usePostOrganisation()
 
     const { getUser, userInit } = useGetUser()
-    const userId = userInit?.userId
 
     const userIsSystemAdmin = () => {
         return true // FJERN

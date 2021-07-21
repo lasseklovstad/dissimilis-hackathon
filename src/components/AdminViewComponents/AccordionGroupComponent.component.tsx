@@ -17,7 +17,7 @@ import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCo
 import { IGroup } from "../../models/IGroup"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
-import { useGetGroup } from "../../utils/useApiServiceGroups"
+import { useAddGroupMember, useGetGroup } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 
 const useStyles = makeStyles({
@@ -70,13 +70,25 @@ export const AccordionGroupComponent = (props: {
 
     const [addMemberDialogIsOpen, setAddMemberDialogIsOpen] = useState(false)
     const { getGroup, groupFetched } = useGetGroup(groupId)
+    const { addGroupMember } = useAddGroupMember(groupId)
 
     const handleAddMemberClose = () => {
         setAddMemberDialogIsOpen(false)
     }
 
-    const handleAddMember = (user: IUser | undefined) => {
-        //Legg til medlem til gruppe
+    const handleAddMember = async (user: IUser | undefined) => {
+        if (user) {
+            const { error, result } = await addGroupMember.run({
+                newMemberUserId: user.userId,
+                newMemberRole: 10, // 10=member, 20=admin
+            })
+            if (!error && result) {
+                setAddMemberDialogIsOpen(false)
+            }
+        } else {
+            // User does not exist
+            // handle this
+        }
     }
 
     const [groupInfoDialogIsOpen, setGroupInfoDialogIsOpen] = useState(false)
