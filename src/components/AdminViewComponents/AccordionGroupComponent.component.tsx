@@ -18,6 +18,7 @@ import { IGroup } from "../../models/IGroup"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
 import { useGetGroup } from "../../utils/useApiServiceGroups"
+import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -50,6 +51,12 @@ const useStyles = makeStyles({
     buttonText: {
         paddingLeft: "8px",
     },
+    deleteButton: {
+        backgroundColor: colors.gray_300,
+        "&:hover": {
+            backgroundColor: colors.gray_400,
+        },
+    },
 })
 
 export const AccordionGroupComponent = (props: {
@@ -73,6 +80,8 @@ export const AccordionGroupComponent = (props: {
 
     const [groupInfoDialogIsOpen, setGroupInfoDialogIsOpen] = useState(false)
     const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
+    const [deleteGroupDialogIsOpen, setDeleteGroupDialogIsOpen] =
+        useState(false)
 
     const handleOpenEditAdminsDialog = () => {
         setEditAdminsDialogIsOpen(true)
@@ -88,6 +97,14 @@ export const AccordionGroupComponent = (props: {
 
     const handleCloseGroupInfoDialog = () => {
         setGroupInfoDialogIsOpen(false)
+    }
+
+    const handleDeleteGroupDialogClose = () => {
+        setDeleteGroupDialogIsOpen(false)
+    }
+
+    const handleDeleteGroupDialogSave = () => {
+        //delete
     }
 
     return (
@@ -175,6 +192,21 @@ export const AccordionGroupComponent = (props: {
                                 </div>
                             </Button>
                         </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <Button
+                                disableFocusRipple
+                                className={
+                                    classes.button + " " + classes.deleteButton
+                                }
+                                onClick={() => {
+                                    setDeleteGroupDialogIsOpen(true)
+                                }}
+                            >
+                                <div className={classes.buttonText}>
+                                    {t("AdminView.deleteGroup")}
+                                </div>
+                            </Button>
+                        </Grid>
                     </Grid>
                 </AccordionDetails>
             </Accordion>
@@ -218,6 +250,20 @@ export const AccordionGroupComponent = (props: {
                     groupId={groupId}
                     group={groupFetched}
                     handleOnCloseClick={handleCloseEditAdminsDialog}
+                />
+            </Dialog>
+            <Dialog
+                open={deleteGroupDialogIsOpen}
+                onClose={handleDeleteGroupDialogClose}
+                aria-label={t("AdminView.deleteGroup")}
+            >
+                <ChoiceDialog
+                    handleOnCancelClick={handleDeleteGroupDialogClose}
+                    handleOnSaveClick={handleDeleteGroupDialogSave}
+                    ackText={t("Dialog.deleteGroup")}
+                    cancelText={t("Dialog.cancel")}
+                    headerText={t("Dialog.deleteGroup")}
+                    descriptionText={t("Dialog.deleteGroupDescription")}
                 />
             </Dialog>
         </div>
