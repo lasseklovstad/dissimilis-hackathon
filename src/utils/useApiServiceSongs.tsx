@@ -382,7 +382,7 @@ export const useUpdateBar = (
 
 /**
  * Duplicate song
- * @param songId songs id
+ * @param songId song's id
  */
 export const useDuplicateSong = (songId: number) => {
     const url = `song/${songId}/duplicateSong`
@@ -392,5 +392,88 @@ export const useDuplicateSong = (songId: number) => {
 
     return {
         duplicateSong: { run: api.postData, ...api.state },
+    }
+}
+
+/**
+ * Add group tag to song
+ * @param songId song's id
+ * @param groupId group's id
+ */
+export const useAddGroupTag = (songId: number, groupId: number) => {
+    const url = `song/${songId}/AddTag/Group/${groupId}`
+    const headers = getHeaders()
+
+    const api = useApiService<ISong>(url, { headers })
+
+    return {
+        addGroupTag: { run: api.postData, ...api.state },
+    }
+}
+
+/**
+ * Add group tag to song
+ * @param songId song's id
+ * @param organisationId organisation's id
+ */
+export const useAddOrganisationTag = (
+    songId: number,
+    organisationId: number
+) => {
+    const url = `song/${songId}/AddTag/Organisation/${organisationId}`
+    const headers = getHeaders()
+
+    const api = useApiService<ISong>(url, { headers })
+
+    return {
+        addOrganisationTag: { run: api.postData, ...api.state },
+    }
+}
+
+/**
+ * Share song with user
+ * @param songId song's id
+ * @param userId userId of user recieving write permission
+ */
+export const useShareSong = (songId: number, userId: number) => {
+    const url = `song/${songId}/shareSong/User/${userId}`
+    const headers = getHeaders()
+
+    const api = useApiService<ISong>(url, { headers })
+
+    return {
+        shareSong: { run: api.postData, ...api.state },
+    }
+}
+
+/**
+ * Unshare song with user
+ * @param songId song's id
+ * @param userId userId of user losing write permission
+ */
+export const useUnshareSong = (songId: number, userId: number) => {
+    const url = `song/${songId}/shareSong/User/${userId}`
+    const headers = getHeaders()
+
+    const api = useApiService<ISong>(url, { headers })
+
+    return {
+        unshareSong: { run: api.deleteData, ...api.state },
+    }
+}
+
+/**
+ * Change song protection level (public/private)
+ * @param songId song's id
+ */
+export const useChangeSongProtectionLevel = (songId: number) => {
+    const url = `song/${songId}/changeProtectionLevel`
+    const headers = getHeaders()
+    const body = {}
+
+    const api = useApiService<ISong>(url, { headers, body })
+
+    return {
+        changeSongProtectionLevel: { run: api.postData, ...api.state },
     }
 }
