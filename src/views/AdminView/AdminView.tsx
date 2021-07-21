@@ -204,6 +204,7 @@ export const AdminView = () => {
                                               title={
                                                   organisation.organisationName
                                               }
+                                              userIsSysAdm={userIsSystemAdmin()}
                                               buttonsIsDisabled={false}
                                           />
                                       </Grid>
@@ -227,6 +228,7 @@ export const AdminView = () => {
                                                   title={
                                                       organisation.organisationName
                                                   }
+                                                  userIsSysAdm={userIsSystemAdmin()}
                                               />
                                           </Grid>
                                       )

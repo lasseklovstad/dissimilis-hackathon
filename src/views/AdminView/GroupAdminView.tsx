@@ -85,7 +85,7 @@ export const GroupAdminView = () => {
         return userInit && organisationFetched?.admins
             ? organisationFetched?.admins.filter((admin) => {
                   return admin.userId === userId
-              })
+              }).length > 0
             : false || userIsSystemAdmin()
     }
 
@@ -195,6 +195,7 @@ export const GroupAdminView = () => {
                                           <AccordionGroupComponent
                                               title={group.groupName}
                                               groupId={group.groupId}
+                                              userIsOrgAdmin={userIsAdminInCurrentOrganisation()}
                                           />
                                       </Grid>
                                   )

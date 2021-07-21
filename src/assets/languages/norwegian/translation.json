@@ -48,7 +48,9 @@
         "add": "Legg til",
         "phoneNumber": "Telefon",
         "address": "Adresse",
-        "system": "systemet"
+        "system": "systemet",
+        "deleteCountry": "Slett land",
+        "deleteGroup": "Slett gruppe"
     },
     "LibraryView": {
         "defaultHeading": "Bibliotek",
@@ -198,7 +200,9 @@
         "removeAdminDescription": "Er du sikker på at du vil fjerne",
         "asAdmin": "som administrator?",
         "cannotUndo": "Denne handlingen kan ikke angres.",
-        "thisUser": "denne brukeren"
+        "thisUser": "denne brukeren",
+        "deleteCountryDescription": "Denne handlingen vil slette landet, og er irreversibel",        
+        "deleteGroupDescription": "Denne handlingen vil slette gruppen, og er irreversibel"
     },
     "Song": {
         "arranger": "Arrangør",

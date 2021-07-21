@@ -62,8 +62,9 @@ const useStyles = makeStyles({
 export const AccordionGroupComponent = (props: {
     groupId: number
     title: string
+    userIsOrgAdmin: boolean
 }) => {
-    const { title, groupId } = props
+    const { title, groupId, userIsOrgAdmin } = props
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -192,21 +193,27 @@ export const AccordionGroupComponent = (props: {
                                 </div>
                             </Button>
                         </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={
-                                    classes.button + " " + classes.deleteButton
-                                }
-                                onClick={() => {
-                                    setDeleteGroupDialogIsOpen(true)
-                                }}
-                            >
-                                <div className={classes.buttonText}>
-                                    {t("AdminView.deleteGroup")}
-                                </div>
-                            </Button>
-                        </Grid>
+                        {userIsOrgAdmin ? (
+                            <Grid item xs={12} sm={4}>
+                                <Button
+                                    disableFocusRipple
+                                    className={
+                                        classes.button +
+                                        " " +
+                                        classes.deleteButton
+                                    }
+                                    onClick={() => {
+                                        setDeleteGroupDialogIsOpen(true)
+                                    }}
+                                >
+                                    <div className={classes.buttonText}>
+                                        {t("AdminView.deleteGroup")}
+                                    </div>
+                                </Button>
+                            </Grid>
+                        ) : (
+                            ""
+                        )}
                     </Grid>
                 </AccordionDetails>
             </Accordion>
@@ -260,9 +267,9 @@ export const AccordionGroupComponent = (props: {
                 <ChoiceDialog
                     handleOnCancelClick={handleDeleteGroupDialogClose}
                     handleOnSaveClick={handleDeleteGroupDialogSave}
-                    ackText={t("Dialog.deleteGroup")}
+                    ackText={t("AdminView.deleteGroup")}
                     cancelText={t("Dialog.cancel")}
-                    headerText={t("Dialog.deleteGroup")}
+                    headerText={t("AdminView.deleteGroup")}
                     descriptionText={t("Dialog.deleteGroupDescription")}
                 />
             </Dialog>

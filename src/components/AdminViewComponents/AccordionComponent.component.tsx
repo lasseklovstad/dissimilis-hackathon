@@ -60,9 +60,15 @@ const useStyles = makeStyles({
 export const AccordionComponent = (props: {
     organisationId: number
     title: string
+    userIsSysAdm: boolean
     buttonsIsDisabled?: boolean
 }) => {
-    const { title, organisationId, buttonsIsDisabled = true } = props
+    const {
+        title,
+        organisationId,
+        buttonsIsDisabled = true,
+        userIsSysAdm,
+    } = props
     const classes = useStyles()
     const { t } = useTranslation()
     const [organisationInfoDialogIsOpen, setOrganisationInfoDialogIsOpen] =
@@ -217,22 +223,31 @@ export const AccordionComponent = (props: {
                                 </div>
                             </Button>
                         </Grid>
-                        <Grid item sm={8} />
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={
-                                    classes.button + " " + classes.deleteButton
-                                }
-                                onClick={() => {
-                                    setDeleteCountryDialogIsOpen(true)
-                                }}
-                            >
-                                <div className={classes.buttonText}>
-                                    {t("AdminView.deleteCountry")}
-                                </div>
-                            </Button>
-                        </Grid>
+                        {userIsSysAdm ? (
+                            <>
+                                {" "}
+                                <Grid item sm={8} />
+                                <Grid item xs={12} sm={4}>
+                                    <Button
+                                        disableFocusRipple
+                                        className={
+                                            classes.button +
+                                            " " +
+                                            classes.deleteButton
+                                        }
+                                        onClick={() => {
+                                            setDeleteCountryDialogIsOpen(true)
+                                        }}
+                                    >
+                                        <div className={classes.buttonText}>
+                                            {t("AdminView.deleteCountry")}
+                                        </div>
+                                    </Button>
+                                </Grid>{" "}
+                            </>
+                        ) : (
+                            ""
+                        )}
                     </Grid>
                 </AccordionDetails>
             </Accordion>
@@ -286,9 +301,9 @@ export const AccordionComponent = (props: {
                 <ChoiceDialog
                     handleOnCancelClick={handleDeleteCountryDialogClose}
                     handleOnSaveClick={handleDeleteCountryDialogSave}
-                    ackText={t("Dialog.deleteCountry")}
+                    ackText={t("AdminView.deleteCountry")}
                     cancelText={t("Dialog.cancel")}
-                    headerText={t("Dialog.deleteCountry")}
+                    headerText={t("AdminView.deleteCountry")}
                     descriptionText={t("Dialog.deleteCountryDescription")}
                 />
             </Dialog>

@@ -50,7 +50,9 @@
         "add": "Add",
         "phoneNumber": "Telephone",
         "address": "Address",
-        "system": "the system"
+        "system": "the system",
+        "deleteCountry": "Delete country",
+        "deleteGroup": "Delete group"
     },
     "LibraryView": {
         "defaultHeading": "Library",
@@ -201,7 +203,9 @@
         "removeAdminDescription": "Are you sure you want to remove",
         "asAdmin": "as administrator?",
         "cannotUndo": "This action can not be undone.",
-        "thisUser": "this user"
+        "thisUser": "this user",
+        "deleteCountryDescription": "This action will delete the country, this action is irreversible.",        
+        "deleteGroupDescription": "This action will delete the group, this action is irreversible."
     },
     "Song": {
         "arranger": "Arranger",
