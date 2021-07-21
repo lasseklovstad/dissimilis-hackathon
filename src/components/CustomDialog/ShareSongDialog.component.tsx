@@ -13,9 +13,10 @@ import {
     ListItemText,
     makeStyles,
     DialogActions,
+    Dialog,
 } from "@material-ui/core"
 import { Autocomplete } from "@material-ui/lab"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { IUser } from "../../models/IUser"
 import DeleteIcon from "@material-ui/icons/Delete"
@@ -25,7 +26,10 @@ import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import {
     SongProtectionLevel,
     useChangeSongProtectionLevel,
+    useGetSongShareInfo,
+    useShareSong,
 } from "../../utils/useApiServiceSongs"
+import { InputDialog } from "./InputDialog.component"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -63,75 +67,12 @@ export const ShareSongDialog = (props: {
     const classes = useStyles()
     const { handleOnCloseClick, isLoading = false, songId } = props
     const { changeSongProtectionLevel } = useChangeSongProtectionLevel(songId)
+    const { getSongShareInfo, songShareInfo } = useGetSongShareInfo(songId)
+    const { shareSong } = useShareSong(songId, 2)
 
     const [publicSong, setPublicSong] = useState(false)
-
-    const userList: IUser[] = [
-        {
-            // FJERN
-            name: "Håkon",
-            email: "håkon@fdsf",
-            userId: 2,
-        },
-        {
-            // FJERN
-            name: "Håkon",
-            email: "håkon@fdsf",
-            userId: 2,
-        },
-        {
-            // FJERN
-            name: "Håkon",
-            email: "håkon@fdsf",
-            userId: 2,
-        },
-        {
-            // FJERN
-            name: "Håkon",
-            email: "håkon@fdsf",
-            userId: 2,
-        },
-        {
-            // FJERN
-            name: "Håkon",
-            email: "håkon@fdsf",
-            userId: 2,
-        },
-        {
-            // FJERN
-            name: "Håkon",
-            email: "håkon@fdsf",
-            userId: 2,
-        },
-        {
-            // FJERN
-            name: "Håkon",
-            email: "håkon@fdsf",
-            userId: 2,
-        },
-        {
-            // FJERN
-            name: "Håkon",
-            email: "håkon@fdsf",
-            userId: 2,
-        },
-        {
-            // FJERN
-            name: "Håkon",
-            email: "håkon@fdsf",
-            userId: 2,
-        },
-        {
-            // FJERN
-            name: "Håkon",
-            email: "håkon@fdsf",
-            userId: 2,
-        },
-    ]
-
-    const getSharedWith = () => {
-        return userList //ENDRE
-    }
+    const [userList, setUserList] = useState<IUser[]>([])
+    const [addUserDialogIsOpen, setAddUserDialogIsOpen] = useState(false)
 
     const handleChangePublicPrivate = async (
         event: React.ChangeEvent<HTMLInputElement>
@@ -148,6 +89,25 @@ export const ShareSongDialog = (props: {
         console.log(value)
     }
 
+    const handleCloseAddUserDialog = () => {
+        setAddUserDialogIsOpen(false)
+    }
+
+    const handleAddUser = (userId: string) => {}
+
+    useEffect(() => {
+        if (songShareInfo) {
+            const {
+                groupTags,
+                organisationTags,
+                protectionLevel,
+                sharedUsers,
+            } = songShareInfo
+            setPublicSong(protectionLevel == SongProtectionLevel.Public)
+            setUserList(sharedUsers)
+        }
+    }, [songShareInfo])
+
     return (
         <>
             <DialogTitle>{"Del Sang"}</DialogTitle>
@@ -158,44 +118,49 @@ export const ShareSongDialog = (props: {
                 <Typography variant="caption">
                     {"Personer sangen er delt med og som kan redigere"}
                 </Typography>
-                <List
-                    dense={false}
-                    className={classes.item}
-                    style={{ maxHeight: 150, overflow: "auto" }}
-                >
-                    {getSharedWith().map((user) => {
-                        return (
-                            <ListItem key={user.email + "-list-item"}>
-                                <ListItemText
-                                    primary={user.name}
-                                    secondary={user.email}
-                                    className={classes.iconButton}
-                                    secondaryTypographyProps={{
-                                        className: classes.secondaryTypography,
-                                    }}
-                                />
-                                <ListItemSecondaryAction
-                                    onClick={() => {
-                                        /*setSelectedUser(user)
+                {userList && userList.length > 0 ? (
+                    <List
+                        dense={false}
+                        className={classes.item}
+                        style={{ maxHeight: 150, overflow: "auto" }}
+                    >
+                        {userList.map((user) => {
+                            return (
+                                <ListItem key={user.email + "-list-item"}>
+                                    <ListItemText
+                                        primary={user.name}
+                                        secondary={user.email}
+                                        className={classes.iconButton}
+                                        secondaryTypographyProps={{
+                                            className:
+                                                classes.secondaryTypography,
+                                        }}
+                                    />
+                                    <ListItemSecondaryAction
+                                        onClick={() => {
+                                            /*setSelectedUser(user)
                                         handleOpenConfirmationDialog()*/
-                                    }}
-                                >
-                                    <IconButton edge="end" aria-label="delete">
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        )
-                    })}
-                </List>
-
+                                        }}
+                                    >
+                                        <IconButton
+                                            edge="end"
+                                            aria-label="delete"
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            )
+                        })}
+                    </List>
+                ) : (
+                    ""
+                )}
                 <Button
                     disableFocusRipple
                     className={classes.button + " " + classes.item}
                     variant="outlined"
-                    onClick={
-                        () => console.log("test") /*handleOpenAddUserDialog*/
-                    }
+                    onClick={() => setAddUserDialogIsOpen(true)}
                 >
                     <AddIcon />
                     <div className={classes.buttonText}>
@@ -268,6 +233,20 @@ export const ShareSongDialog = (props: {
                     {t("Dialog.close")}
                 </DialogButton>
             </DialogActions>
+            <Dialog
+                open={addUserDialogIsOpen}
+                onClose={handleCloseAddUserDialog}
+                aria-label={"Share with new user dialog"}
+            >
+                <InputDialog
+                    handleOnSaveClick={handleAddUser}
+                    handleOnCancelClick={handleCloseAddUserDialog}
+                    cancelText={"Cancel"}
+                    saveText={"Add"}
+                    headerText={"Add user"}
+                    labelText={"User email"}
+                />
+            </Dialog>
         </>
     )
 }

@@ -1,8 +1,15 @@
 import { useEffect } from "react"
 import { useApiService } from "./useApiService"
-import { ISong, ISongIndex, ISongMetadata } from "../models/ISong"
+import {
+    ISong,
+    ISongIndex,
+    ISongMetadata,
+    ISongShareData,
+} from "../models/ISong"
 import { IBar } from "../models/IBar"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../models/IVoice"
+import { IGroupIndex } from "../models/IGroup"
+import { IOrganisationIndex } from "../models/IOrganisation"
 
 export enum SongProtectionLevel {
     Public = "Public",
@@ -401,37 +408,42 @@ export const useDuplicateSong = (songId: number) => {
 }
 
 /**
- * Add group tag to song
+ * Set group tags for song
  * @param songId song's id
- * @param groupId group's id
  */
-export const useAddGroupTag = (songId: number, groupId: number) => {
-    const url = `song/${songId}/AddTag/Group/${groupId}`
+export const useSetGroupTags = (songId: number) => {
+    const url = `song/${songId}/groupTags`
     const headers = getHeaders()
 
-    const api = useApiService<ISong>(url, { headers })
+    const emptyGroupTags: IGroupIndex[] = []
+    const body = {
+        groupTags: emptyGroupTags,
+    }
+
+    const api = useApiService<ISong>(url, { headers, body })
 
     return {
-        addGroupTag: { run: api.postData, ...api.state },
+        setGroupTags: { run: api.putData, ...api.state },
     }
 }
 
 /**
- * Add group tag to song
+ * Set organisation tags for song
  * @param songId song's id
- * @param organisationId organisation's id
  */
-export const useAddOrganisationTag = (
-    songId: number,
-    organisationId: number
-) => {
-    const url = `song/${songId}/AddTag/Organisation/${organisationId}`
+export const useSetOrganisationTags = (songId: number) => {
+    const url = `song/${songId}/organisationTags`
     const headers = getHeaders()
+
+    const emptyOrganisationTags: IOrganisationIndex[] = []
+    const body = {
+        organisationTags: emptyOrganisationTags,
+    }
 
     const api = useApiService<ISong>(url, { headers })
 
     return {
-        addOrganisationTag: { run: api.postData, ...api.state },
+        setOrganisationTags: { run: api.putData, ...api.state },
     }
 }
 
@@ -480,5 +492,26 @@ export const useChangeSongProtectionLevel = (songId: number) => {
 
     return {
         changeSongProtectionLevel: { run: api.postData, ...api.state },
+    }
+}
+
+/**
+ * Get share info about song
+ * @param songId song's id
+ */
+export const useGetSongShareInfo = (songId: number) => {
+    const url = `song/${songId}/getProtectionLevelSharedWithAndTags`
+    const headers = getHeaders()
+    const { getData, state, data } = useApiService<ISongShareData>(url, {
+        headers,
+    })
+
+    useEffect(() => {
+        getData()
+    }, [getData])
+
+    return {
+        getSongShareInfo: { run: getData, ...state },
+        songShareInfo: data,
     }
 }
