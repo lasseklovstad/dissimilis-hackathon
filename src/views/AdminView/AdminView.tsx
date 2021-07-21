@@ -48,7 +48,6 @@ const useStyles = makeStyles({
 export const AdminView = () => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const [searchTerm, setSearchTerm] = useState("")
     const history = useHistory()
 
     const { postOrganisation } = usePostOrganisation()
@@ -81,12 +80,6 @@ export const AdminView = () => {
 
     const renderedAdminOrganisationIds: number[] = []
 
-    const handleOnChangeSearch = (searchTermParam: string) => {
-        // Temporary placeholder
-        setSearchTerm(searchTermParam)
-        history.push(`/library`)
-    }
-
     const userIsOrganisationAdmin = () => {
         return (
             (adminOrganisationsFetched
@@ -113,6 +106,7 @@ export const AdminView = () => {
     const handleAddOrganisationDialogClose = () => {
         setAddOrganisationIsOpen(false)
     }
+
     const handleAddOrganisationDialogSave = async (
         name: string,
         firstAdminId: number

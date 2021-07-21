@@ -75,7 +75,7 @@ export const AccordionGroupComponent = (props: {
         setAddMemberDialogIsOpen(false)
     }
 
-    const handleAddMember = () => {
+    const handleAddMember = (user: IUser | undefined) => {
         //Legg til medlem til gruppe
     }
 

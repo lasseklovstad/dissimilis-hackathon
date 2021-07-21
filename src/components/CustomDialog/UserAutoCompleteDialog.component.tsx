@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export const UserAutoCompleteDialog = (props: {
-    handleOnSaveClick: (value: string) => void
+    handleOnSaveClick: (user: IUser | undefined) => void
     handleOnCancelClick: () => void
     isLoading?: boolean
     userList: IUser[]
@@ -62,13 +62,24 @@ export const UserAutoCompleteDialog = (props: {
         <form
             onSubmit={(event) => {
                 event.preventDefault()
-                handleOnSaveClick("")
+                handleOnSaveClick(
+                    // Return corresponding IUser matching entered email
+                    // userList.find((user) => user.email === userInput) // need getUsers-apiCall
+                    {
+                        // FJERN
+                        userId: 2,
+                        name: "Håkon",
+                        email: "hakon.anders.stromsodd@ciber.no",
+                        isSystemAdmin: true,
+                    }
+                )
             }}
         >
             <DialogTitle>{title}</DialogTitle>
             <DialogContent>
                 <Typography variant="caption">{descriptionText}</Typography>
                 <Autocomplete
+                    freeSolo // DEVELOPMENT
                     {...adminListProps}
                     inputValue={userInput}
                     onInputChange={(event, newInputValue) => {

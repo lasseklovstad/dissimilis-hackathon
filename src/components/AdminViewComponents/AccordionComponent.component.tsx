@@ -18,7 +18,11 @@ import { useHistory } from "react-router"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
 import { IOrganisation } from "../../models/IOrganisation"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
-import { useGetOrganisation } from "../../utils/useApiServiceGroups"
+import {
+    useAddOrganisationMember,
+    useGetOrganisation,
+    useRemoveOrganisationMember,
+} from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 
 const useStyles = makeStyles({
@@ -76,6 +80,7 @@ export const AccordionComponent = (props: {
     const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
     const { getOrganisation, organisationFetched } =
         useGetOrganisation(organisationId)
+    const { addOrganisationMember } = useAddOrganisationMember(organisationId)
     const [deleteCountryDialogIsOpen, setDeleteCountryDialogIsOpen] =
         useState(false)
 
@@ -103,8 +108,16 @@ export const AccordionComponent = (props: {
         setAddMemberDialogIsOpen(false)
     }
 
-    const handleAddMember = () => {
-        //Legg til medlem til gruppe
+    const handleAddMember = async (user: IUser | undefined) => {
+        if (user) {
+            const { error, result } = await addOrganisationMember.run({
+                newMemberUserId: user.userId,
+                newMemberRole: 10, // 10=member, 20=admin
+            })
+            if (!error && result) {
+                setAddMemberDialogIsOpen(false)
+            }
+        }
     }
 
     const handleDeleteCountryDialogClose = () => {
@@ -135,7 +148,9 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {organisationFetched?.admins[0].name || ""}
+                                {organisationFetched?.admins
+                                    ? organisationFetched?.admins[0].name
+                                    : ""}
                                 <br />
                                 {t("AdminView.address") + ": "}
                                 {organisationFetched?.address || ""}
