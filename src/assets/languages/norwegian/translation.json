@@ -160,7 +160,8 @@
         "unshare": "Slutt å dele sang",
         "removePerson": "Fjern person",
         "shareWithPerson": "Del med person",
-        "removePersonShareDescription": "Fjern redigeringsrettighetene til "
+        "removePersonShareDescription": "Fjern redigeringsrettighetene til ",
+        "email": "E-post"
     },
     "Song": {
         "arranger": "Arrangør",

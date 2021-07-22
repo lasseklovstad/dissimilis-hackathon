@@ -162,7 +162,8 @@
         "unshare": "Unshare song",
         "removePersonShare": "Remove person from shared song",
         "shareWithPerson": "Share with person",
-        "removePersonShareDescription": "Remove the edit rights from "
+        "removePersonShareDescription": "Remove the edit rights from ",
+        "email": "Email"
 
     },
     "Song": {

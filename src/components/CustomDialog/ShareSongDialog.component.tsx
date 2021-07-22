@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react"
 import {
     Typography,
     Grid,
@@ -15,11 +16,9 @@ import {
     Dialog,
     TextField,
 } from "@material-ui/core"
-import React, { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { IUser } from "../../models/IUser"
-import DeleteIcon from "@material-ui/icons/Delete"
-import AddIcon from "@material-ui/icons/Add"
+import { Delete as DeleteIcon, Add as AddIcon } from "@material-ui/icons"
 import { colors } from "../../utils/colors"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import {
@@ -31,11 +30,9 @@ import {
     useShareSong,
     useUnshareSong,
 } from "../../utils/useApiServiceSongs"
-import { InputDialog } from "./InputDialog.component"
 import { ChoiceDialog } from "./ChoiceDialog.component"
 import { IGroupIndex } from "../../models/IGroup"
 import { IOrganisationIndex } from "../../models/IOrganisation"
-import { SearchFilterAutocomplete } from "../songGrid/SearchFilterAutocomplete.component"
 import {
     useGetGroups,
     GroupFilter,
@@ -43,6 +40,8 @@ import {
     OrganisationFilter,
 } from "../../utils/useApiServiceGroups"
 import { Autocomplete } from "@material-ui/lab"
+import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
+import { useGetUser, useGetUsers } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -73,121 +72,61 @@ const useStyles = makeStyles((theme) => {
 
 export const ShareSongDialog = (props: {
     handleOnCloseClick: () => void
-    isLoading?: boolean
     songId: number
 }) => {
-    const { t } = useTranslation()
     const classes = useStyles()
-    const { handleOnCloseClick, isLoading = false, songId } = props
+    const { t } = useTranslation()
+
+    const { handleOnCloseClick, songId } = props
+
     const { changeSongProtectionLevel } = useChangeSongProtectionLevel(songId)
     const { songShareInfo } = useGetSongShareInfo(songId)
     const { shareSong } = useShareSong(songId)
     const { unshareSong } = useUnshareSong(songId)
     const { setGroupTags } = useSetGroupTags(songId)
+    const { userInit } = useGetUser()
     const { setOrganisationTags } = useSetOrganisationTags(songId)
-    const [publicSong, setPublicSong] = useState(false)
-    const [userList, setUserList] = useState<IUser[]>([])
-    const [addUserDialogIsOpen, setAddUserDialogIsOpen] = useState(false)
+    const { users } = useGetUsers()
+    const { organisationsFetched } = useGetOrganisations(
+        OrganisationFilter.User
+    )
+    const { allGroupsFetched } = useGetGroups(GroupFilter.User)
+
+    const [sharedWithUserList, setSharedWithUserList] = useState<IUser[]>([])
     const [selectedUser, setSelectedUser] = useState<IUser>()
     const [confirmRemoveUserDialogIsOpen, setConfirmRemoveUserDialogIsOpen] =
         useState(false)
-    const { allGroupsFetched } = useGetGroups(GroupFilter.User)
+    const [addUserDialogIsOpen, setAddUserDialogIsOpen] = useState(false)
+    const [filteredUserList, setFilteredUserList] = useState<IUser[]>()
+
+    const [publicSong, setPublicSong] = useState(false)
+
     const [groups, setGroups] = useState<IGroupIndex[] | undefined>()
+    const [organisations, setorganisations] = useState<
+        IOrganisationIndex[] | undefined
+    >()
+    const [defaultGroupTagIds, setDefaultGroupTagIds] = useState<number[]>()
+    const [defaultOrgTagIds, setDefaultOrgTagIds] = useState<number[]>()
+    const [filteredGroupTags, setFilteredGroupTags] = useState<IGroupIndex[]>()
+    const [filteredOrgTags, setFilteredOrgTags] =
+        useState<IOrganisationIndex[]>()
+    const [tags, setTags] = useState<(IGroupIndex | IOrganisationIndex)[]>()
+    const options = [
+        ...(groups ? groups : []),
+        ...(organisations ? organisations : []),
+    ]
+
     useEffect(() => {
         if (allGroupsFetched) {
             setGroups(allGroupsFetched)
         }
     }, [allGroupsFetched])
 
-    const { organisationsFetched } = useGetOrganisations(
-        OrganisationFilter.User
-    )
-    const [organisations, setorganisations] = useState<
-        IOrganisationIndex[] | undefined
-    >()
     useEffect(() => {
         if (organisationsFetched) {
             setorganisations(organisationsFetched)
         }
     }, [organisationsFetched])
-    const [defaultGroupTagIds, setDefaultGroupTagIds] = useState<number[]>()
-    const [defaultOrgTagIds, setDefaultOrgTagIds] = useState<number[]>()
-
-    const options = [
-        ...(groups ? groups : []),
-        ...(organisations ? organisations : []),
-    ]
-
-    const [filteredGroupTags, setFilteredGroupTags] = useState<IGroupIndex[]>()
-    const [filteredOrgTags, setFilteredOrgTags] =
-        useState<IOrganisationIndex[]>()
-
-    const [tags, setTags] = useState<(IGroupIndex | IOrganisationIndex)[]>()
-
-    const handleChangePublicPrivate = async (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        setPublicSong(event.target.checked)
-        const { error, result } = await changeSongProtectionLevel.run({
-            protectionLevel: event.target.checked
-                ? SongProtectionLevel.Public
-                : SongProtectionLevel.Private,
-        })
-    }
-
-    const onTagChange = async (
-        event: any,
-        value: (IGroupIndex | IOrganisationIndex)[]
-    ) => {
-        setTags(value)
-        const orgTagList: number[] = []
-        const groupTagList: number[] = []
-        value.map((group) => {
-            "groupName" in group
-                ? groupTagList.push(group.groupId)
-                : orgTagList.push(group.organisationId)
-            return ""
-        })
-        console.log(orgTagList)
-        console.log(groupTagList)
-        const { error: groupError, result: groupResult } =
-            await setGroupTags.run({
-                tagIds: groupTagList,
-            })
-
-        const { error: orgError, result: orgResult } =
-            await setOrganisationTags.run({
-                tagIds: orgTagList,
-            })
-    }
-
-    const handleCloseAddUserDialog = () => {
-        setAddUserDialogIsOpen(false)
-    }
-
-    const handleCloseConfirmRemoveUserDialog = () => {
-        setConfirmRemoveUserDialogIsOpen(false)
-    }
-
-    const handleAddUser = async (userId: string) => {
-        const { error, result } = await shareSong.run(null, `/${userId}`)
-        if (!error && result) {
-            setUserList(result.data)
-            handleCloseAddUserDialog()
-        }
-    }
-
-    const handleRemoveUser = async () => {
-        const { error, result } = await unshareSong.run(
-            `/${selectedUser?.userId}`
-        )
-        if (!error && result) {
-            setUserList(
-                userList.filter((user) => user.userId !== selectedUser?.userId)
-            )
-            handleCloseConfirmRemoveUserDialog()
-        }
-    }
 
     useEffect(() => {
         if (songShareInfo) {
@@ -198,7 +137,7 @@ export const ShareSongDialog = (props: {
                 sharedWithUsers,
             } = songShareInfo
             setPublicSong(protectionLevel === SongProtectionLevel.Public)
-            setUserList(sharedWithUsers)
+            setSharedWithUserList(sharedWithUsers)
             setDefaultGroupTagIds(
                 groupTags.map((group) => {
                     return group.groupId
@@ -249,6 +188,94 @@ export const ShareSongDialog = (props: {
         ])
     }, [filteredOrgTags, filteredGroupTags])
 
+    useEffect(() => {
+        if (userInit && users) {
+            setFilteredUserList(
+                users.filter(
+                    (user) =>
+                        !(
+                            user.userId === userInit.userId ||
+                            sharedWithUserList.some(
+                                (sharedUser) =>
+                                    user.userId === sharedUser.userId
+                            )
+                        )
+                )
+            )
+        }
+    }, [userInit, users, sharedWithUserList])
+
+    const handleCloseAddUserDialog = () => {
+        setAddUserDialogIsOpen(false)
+    }
+
+    const handleCloseConfirmRemoveUserDialog = () => {
+        setConfirmRemoveUserDialogIsOpen(false)
+    }
+
+    const handleAddUser = async (userEmail: string) => {
+        if (users) {
+            const userId = users.filter((user) => user.email == userEmail)[0]
+                .userId
+            const { error, result } = await shareSong.run(null, `/${userId}`)
+            if (!error && result) {
+                setSharedWithUserList(result.data)
+                handleCloseAddUserDialog()
+            }
+        }
+    }
+
+    const handleRemoveUser = async () => {
+        const { error, result } = await unshareSong.run(
+            `/${selectedUser?.userId}`
+        )
+        if (!error && result) {
+            setSharedWithUserList(
+                sharedWithUserList.filter(
+                    (user) => user.userId !== selectedUser?.userId
+                )
+            )
+            handleCloseConfirmRemoveUserDialog()
+        }
+    }
+
+    const handleChangePublicPrivate = async (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setPublicSong(event.target.checked)
+        const { error, result } = await changeSongProtectionLevel.run({
+            protectionLevel: event.target.checked
+                ? SongProtectionLevel.Public
+                : SongProtectionLevel.Private,
+        })
+    }
+
+    const onTagChange = async (
+        event: any,
+        value: (IGroupIndex | IOrganisationIndex)[]
+    ) => {
+        setTags(value)
+        const orgTagList: number[] = []
+        const groupTagList: number[] = []
+        value.map((group) => {
+            "groupName" in group
+                ? groupTagList.push(group.groupId)
+                : orgTagList.push(group.organisationId)
+            return ""
+        })
+        console.log(orgTagList)
+        console.log(groupTagList)
+        const { error: groupError, result: groupResult } =
+            await setGroupTags.run({
+                tagIds: groupTagList,
+            })
+
+        const { error: orgError, result: orgResult } =
+            await setOrganisationTags.run({
+                tagIds: orgTagList,
+            })
+    }
+
     return (
         <>
             <DialogTitle>{t("Dialog.shareSong")}</DialogTitle>
@@ -259,13 +286,15 @@ export const ShareSongDialog = (props: {
                 <Typography variant="caption">
                     {t("Dialog.editRightsDescription")}
                 </Typography>
-                {userList && userList !== undefined && userList.length > 0 ? (
+                {sharedWithUserList &&
+                sharedWithUserList !== undefined &&
+                sharedWithUserList.length > 0 ? (
                     <List
                         dense={false}
                         className={classes.item}
                         style={{ maxHeight: 150, overflow: "auto" }}
                     >
-                        {userList.map((user) => {
+                        {sharedWithUserList.map((user) => {
                             return (
                                 <ListItem key={user.email + "-list-item"}>
                                     <ListItemText
@@ -382,13 +411,12 @@ export const ShareSongDialog = (props: {
                 onClose={handleCloseAddUserDialog}
                 aria-label={t("Dialog.shareWithPerson")}
             >
-                <InputDialog
+                <UserAutoCompleteDialog
                     handleOnSaveClick={handleAddUser}
                     handleOnCancelClick={handleCloseAddUserDialog}
-                    cancelText={t("Dialog.cancel")}
+                    userList={filteredUserList ? filteredUserList : []}
+                    title={t("Dialog.shareWithPerson")}
                     saveText={t("Dialog.addPerson")}
-                    headerText={t("Dialog.shareWithPerson")}
-                    labelText={t("Dialog.email")}
                 />
             </Dialog>
             <Dialog
