@@ -6,9 +6,9 @@ import {
     SortingButtons,
 } from "../DashboardButtons/DashboardButtons"
 import { Loading } from "../loading/Loading.component"
-import { SearchFilterAutocomplete } from "./SearchFilterAutocomplete.component"
 import { IGroup } from "../../models/IGroup"
 import { IOrganisation } from "../../models/IOrganisation"
+import { SearchFilterAutocomplete } from "./SearchFilterAutocomplete.component"
 
 type SongGridProps = {
     title: string | undefined
@@ -21,25 +21,10 @@ type SongGridProps = {
     changeOrderTerm?: (term: "date" | "song" | "user") => void
     orderDescending?: boolean
     searchFilter?: boolean
-    filterValue?: (IGroup | IOrganisation)[]
-    setFilterValue?: React.Dispatch<
+    filterTerm?: (IGroup | IOrganisation)[]
+    setFilterTerm?: React.Dispatch<
         React.SetStateAction<(IGroup | IOrganisation)[]>
     >
-}
-
-const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
-    if (props.isSong) {
-        return (
-            <Grid item xs={12}>
-                {props.children}
-            </Grid>
-        )
-    }
-    return (
-        <Grid item xs={12} sm={4} lg={3}>
-            {props.children}
-        </Grid>
-    )
 }
 
 export const SongGrid = (props: SongGridProps) => {
@@ -52,37 +37,30 @@ export const SongGrid = (props: SongGridProps) => {
         changeOrderTerm,
         orderDescending,
         searchFilter,
-        filterValue,
-        setFilterValue,
+        filterTerm,
+        setFilterTerm,
     } = props
 
-    const getChildren = () => {
-        if (children) {
-            if (Array.isArray(children)) {
-                return (
-                    <>
-                        {children.map((child, i) => {
-                            return (
-                                <GridItem key={i} isSong={false}>
-                                    {child}
-                                </GridItem>
-                            )
-                        })}
-                    </>
-                )
-            }
-            return <GridItem isSong={false}>{children}</GridItem>
-        }
-        return undefined
-    }
-
-    const getItems = () => {
-        if (!isLoading) {
-            return (
-                <>
-                    {getSorting()}
+    return (
+        <Grid item xs={12} sm={10}>
+            <Box mb={4}>
+                <Box m={2}>
+                    <Typography variant="h1">{title}</Typography>
+                </Box>
+                {searchFilter ? (
+                    <SearchFilterAutocomplete
+                        filterTerm={filterTerm}
+                        setFilterTerm={setFilterTerm}
+                        orderTerm={orderTerm}
+                        changeOrderTerm={changeOrderTerm}
+                        orderDescending={orderDescending}
+                    />
+                ) : (
+                    ""
+                )}
+                <Grid container spacing={3}>
                     {songs?.map((song) => (
-                        <GridItem key={song.songId} isSong>
+                        <Grid item xs={12}>
                             <DashboardButton
                                 title={song.title}
                                 arrangerEmail={song.arrangerEmail}
@@ -92,60 +70,14 @@ export const SongGrid = (props: SongGridProps) => {
                                 renameSong={props.renameSong}
                                 link={`/song/${song.songId}`}
                             />
-                        </GridItem>
+                        </Grid>
                     ))}
-                    {getChildren()}
-                </>
-            )
-        }
-        return undefined
-    }
-
-    const getHeader = () => {
-        if (title !== undefined) {
-            return (
-                <Box m={2}>
-                    <Typography variant="h1">{title}</Typography>
-                </Box>
-            )
-        }
-        return undefined
-    }
-
-    const getSorting = () => {
-        if (orderTerm && changeOrderTerm && orderDescending !== undefined) {
-            return (
-                <Grid item xs={12} role="row">
-                    <SortingButtons
-                        orderTerm={orderTerm}
-                        changeOrderTerm={changeOrderTerm}
-                        orderDescending={orderDescending}
-                    />
-                </Grid>
-            )
-        }
-        return undefined
-    }
-
-    return (
-        <Grid item xs={12} sm={10}>
-            <Box mb={4}>
-                {getHeader()}
-                {searchFilter ? (
-                    <Grid item xs={12} md={6}>
-                        <SearchFilterAutocomplete
-                            filterValue={filterValue}
-                            setFilterValue={setFilterValue}
-                        />
+                    <Grid item xs={12} sm={4} lg={3}>
+                        {props.children}
                     </Grid>
-                ) : (
-                    ""
-                )}
-                <Grid container spacing={3}>
-                    {getItems()}
-                    <GridItem isSong={false}>
+                    <Grid item xs={12} sm={4} lg={3}>
                         <Loading isLoading={isLoading} />
-                    </GridItem>
+                    </Grid>
                 </Grid>
             </Box>
         </Grid>

@@ -3,6 +3,8 @@ import { useApiService } from "./useApiService"
 import { ISong, ISongIndex, ISongMetadata } from "../models/ISong"
 import { IBar } from "../models/IBar"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../models/IVoice"
+import { IOrganisation } from "../models/IOrganisation"
+import { IGroup } from "../models/IGroup"
 
 const getArrangerId = () => {
     return sessionStorage.getItem("userId") || ""
@@ -111,10 +113,27 @@ export const useGetAllSongs = (orderTerm: string, orderDescending: boolean) => {
  */
 export const useGetFilteredSongs = (
     title: string,
+    filterTerm: (IGroup | IOrganisation)[],
     orderTerm: string,
     orderDescending: boolean,
-    numberOfResults?: string
+    numberOfResults?: string,
+    groupId?: number,
+    organisationId?: number
 ) => {
+    /* const includedGroupIdArray = [
+        ...filterTerm
+            .filter((item) => "groupId" in item)
+            .map((group) => group.groupId),
+    ] */
+    const includedOrganisationIdArray = [
+        ...filterTerm
+            .filter((item) => "organisationId" in item)
+            .map((organisation) => organisation.organisationId),
+    ]
+
+    console.log(filterTerm)
+
+    /*     const includedOrganisationIdArray = [...filterTerm.filter] */
     const url = "song/search"
     const initialData: ISongIndex[] = []
     const headers = getHeaders()
@@ -123,6 +142,7 @@ export const useGetFilteredSongs = (
         title,
         orderBy: orderTerm,
         orderDescending,
+        includedOrganisationIdArray,
     }
     const { postData, state, data } = useApiService<ISongIndex[]>(url, {
         initialData,

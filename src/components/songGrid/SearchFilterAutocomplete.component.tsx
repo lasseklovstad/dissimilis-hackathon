@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from "react"
-import { TextField } from "@material-ui/core"
+import { Grid, TextField } from "@material-ui/core"
 
 import { useTranslation } from "react-i18next"
 import { Autocomplete } from "@material-ui/lab"
@@ -12,13 +12,27 @@ import {
 } from "../../utils/useApiServiceGroups"
 import { useHistory, useLocation } from "react-router"
 import { IOrganisation } from "../../models/IOrganisation"
+import { SortingButtons } from "../DashboardButtons/DashboardButtons"
 export const SearchFilterAutocomplete = (props: {
-    filterValue: (IGroup | IOrganisation)[]
-    setFilterValue: React.Dispatch<
+    filterTerm?: (IGroup | IOrganisation)[]
+    setFilterTerm?: React.Dispatch<
         React.SetStateAction<(IGroup | IOrganisation)[]>
     >
+    orderTerm?: string
+    changeOrderTerm?: (term: "date" | "song" | "user") => void
+    orderDescending?: boolean
+    groupId?: number
+    organisationId?: number
 }) => {
-    const { filterValue, setFilterValue } = props
+    const {
+        filterTerm,
+        setFilterTerm,
+        orderTerm,
+        changeOrderTerm,
+        orderDescending,
+        groupId,
+        organisationId,
+    } = props
     const { t } = useTranslation()
     const { getAllGroups, allGroupsFetched } = useGetGroups(GroupFilter.Admin)
     const [groups, setGroups] = useState<IGroup[] | undefined>()
@@ -59,7 +73,9 @@ export const SearchFilterAutocomplete = (props: {
             ...(valueGroups ? valueGroups : []),
             ...(valueOrganisations ? valueOrganisations : []),
         ]
-        setFilterValue(valuesFromIds)
+        if (setFilterTerm) {
+            setFilterTerm(valuesFromIds)
+        }
     }, [organisations, groups])
 
     const filterOptions = [
@@ -71,23 +87,38 @@ export const SearchFilterAutocomplete = (props: {
         event: any,
         newValue: (IGroup | IOrganisation)[]
     ) => {
-        setFilterValue(newValue)
-        history.push(
-            `library?${newValue
-                .map((item) =>
-                    "groupName" in item
-                        ? "groupId=" + item.groupId
-                        : "organisationId=" + item.organisationId
-                )
-                .join("&")}`
-        )
+        if (setFilterTerm) {
+            setFilterTerm(newValue)
+            history.push(
+                `library?${newValue
+                    .map((item) =>
+                        "groupName" in item
+                            ? "groupId=" + item.groupId
+                            : "organisationId=" + item.organisationId
+                    )
+                    .join("&")}`
+            )
+        }
     }
 
     return (
         <>
+            {orderTerm && changeOrderTerm && orderDescending !== undefined ? (
+                <Grid item xs={12} role="row">
+                    <SortingButtons
+                        orderTerm={orderTerm}
+                        changeOrderTerm={changeOrderTerm}
+                        orderDescending={orderDescending}
+                        groupId={""} //groupId}
+                        organisationId={""} //organisationId}
+                    />
+                </Grid>
+            ) : (
+                <></>
+            )}
             <Autocomplete
                 style={{ marginBottom: "1.5em" }}
-                value={filterValue}
+                value={filterTerm}
                 multiple
                 id="tags-outlined"
                 options={filterOptions}

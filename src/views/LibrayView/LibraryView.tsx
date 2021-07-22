@@ -5,12 +5,13 @@ import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBa
 import { useGetFilteredSongs } from "../../utils/useApiServiceSongs"
 import { ISongIndex } from "../../models/ISong"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
-import { SongGrid } from "../../components/songGrid/SongGrid.component"
 import { useLocation } from "react-router"
 import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
 import { useHistory } from "react-router"
 import { IOrganisation } from "../../models/IOrganisation"
 import { IGroup } from "../../models/IGroup"
+import { SongGrid } from "../../components/SongGrid/SongGrid.component"
+import { SearchFilterAutocomplete } from "../../components/SongGrid/SearchFilterAutocomplete.component"
 
 const useStyles = makeStyles({
     container: {
@@ -33,12 +34,11 @@ export const LibraryView = () => {
     const searchTerm = searchTermUrl ? searchTermUrl : ""
     const groupIdsFromUrl = url.getAll("groupId")
     const organisationIdsFromUrl = url.getAll("organisationId")
-    const [filterValue, setfilterValue] = useState<(IGroup | IOrganisation)[]>(
-        []
-    )
+    const [filterTerm, setFilterTerm] = useState<(IGroup | IOrganisation)[]>([])
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
+        filterTerm,
         orderTerm,
         orderDescending,
         numberOfResults
@@ -73,7 +73,7 @@ export const LibraryView = () => {
         }
         setOrderTerm(term)
     }
-
+    console.log("descending" + orderDescending + " orderterm" + orderTerm)
     return (
         <>
             <ErrorDialog
@@ -91,7 +91,6 @@ export const LibraryView = () => {
                             <DashboardTopBar searchTerm={searchTerm} />
                         </Box>
                     </Grid>
-
                     <SongGrid
                         title={
                             searchTerm
@@ -106,8 +105,8 @@ export const LibraryView = () => {
                         changeOrderTerm={handleChangeOrderTerm}
                         orderDescending={orderDescending}
                         searchFilter={true}
-                        filterValue={filterValue}
-                        setFilterValue={setFilterValue}
+                        filterTerm={filterTerm}
+                        setFilterTerm={setFilterTerm}
                     />
                 </Grid>
             </Box>

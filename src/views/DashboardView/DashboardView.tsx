@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Box, Dialog, Grid, makeStyles } from "@material-ui/core"
+import { Box, Dialog, Grid, makeStyles, Typography } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import {
@@ -9,7 +9,7 @@ import {
 } from "../../components/DashboardButtons/DashboardButtons"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useGetRecentSongs, usePostSong } from "../../utils/useApiServiceSongs"
-import { SongGrid } from "../../components/songGrid/SongGrid.component"
+import { SongGrid } from "../../components/SongGrid/SongGrid.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
 import { getTimeSignatureText } from "../../utils/bar.util"
@@ -25,6 +25,7 @@ import {
 import { IGroup } from "../../models/IGroup"
 import { IOrganisation } from "../../models/IOrganisation"
 import { InputDialog } from "../../components/CustomDialog/InputDialog.component"
+import { ButtonGrid } from "../../components/ButtonGrid/ButtonGrid.component"
 
 const useStyles = makeStyles({
     container: {
@@ -166,13 +167,8 @@ export const DashboardView = () => {
                             <DashboardTopBar />
                         </Box>
                     </Grid>
-                    <SongGrid
-                        title={t("DashboardView.newSongLabel")}
-                        songs={undefined}
-                        removeSong={() => undefined}
-                        renameSong={() => undefined}
-                        isLoading={false}
-                    >
+
+                    <ButtonGrid title={t("DashboardView.newSongLabel")}>
                         {musicTacts.map((song) => (
                             <DashboardButtonWithAddIconNoLink
                                 key={song.id}
@@ -182,15 +178,9 @@ export const DashboardView = () => {
                                 )}-${measureText}`}
                             />
                         ))}
-                    </SongGrid>
+                    </ButtonGrid>
 
-                    <SongGrid
-                        title={t("DashboardView.songSearchFilter")}
-                        songs={undefined}
-                        removeSong={() => undefined}
-                        renameSong={() => undefined}
-                        isLoading={false}
-                    >
+                    <ButtonGrid title={t("DashboardView.songSearchFilter")}>
                         {groupsAndOrganisations.map((item, i) =>
                             "groupId" in item ? (
                                 <DashboardButtonSearch
@@ -214,7 +204,7 @@ export const DashboardView = () => {
                                 />
                             )
                         )}
-                    </SongGrid>
+                    </ButtonGrid>
 
                     <SongGrid
                         title={t("DashboardView.recentSongLabel")}
