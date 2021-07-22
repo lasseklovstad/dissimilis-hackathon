@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     Box,
     Button,
@@ -26,6 +26,7 @@ import {
     useGetOrganisations,
     usePostOrganisation,
 } from "../../utils/useApiServiceGroups"
+import { IOrganisationIndex } from "../../models/IOrganisation"
 
 const useStyles = makeStyles({
     container: {
@@ -73,6 +74,25 @@ export const AdminView = () => {
         organisationsFetched: groupAdminOrganisationsFetched,
     } = useGetOrganisations(OrganisationFilter.GroupAdmin)
 
+    const [adminOrganisations, setAdminOrganisations] = useState<
+        IOrganisationIndex[] | undefined
+    >()
+    const [groupAdminOrganisations, setGroupAdminOrganisations] = useState<
+        IOrganisationIndex[] | undefined
+    >()
+
+    useEffect(() => {
+        if (adminOrganisationsFetched) {
+            setAdminOrganisations(adminOrganisationsFetched)
+        }
+    }, [adminOrganisationsFetched])
+
+    useEffect(() => {
+        if (groupAdminOrganisationsFetched) {
+            setGroupAdminOrganisations(groupAdminOrganisationsFetched)
+        }
+    }, [groupAdminOrganisationsFetched])
+
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addOrganisationIsOpen, setAddOrganisationIsOpen] = useState(false)
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
@@ -100,6 +120,19 @@ export const AdminView = () => {
             (groupAdminOrganisationsFetched
                 ? groupAdminOrganisationsFetched?.length > 0
                 : false) || userIsOrganisationAdmin()
+        )
+    }
+
+    const removeOrganisationAccordion = (organisationId: number) => {
+        setAdminOrganisations(
+            adminOrganisations?.filter((organisation) => {
+                return organisation.organisationId !== organisationId
+            })
+        )
+        setGroupAdminOrganisations(
+            groupAdminOrganisations?.filter((organisation) => {
+                return organisation.organisationId !== organisationId
+            })
         )
     }
 
@@ -205,6 +238,9 @@ export const AdminView = () => {
                                                   organisation.organisationName
                                               }
                                               userIsSysAdm={userIsSystemAdmin()}
+                                              removeOrganisation={
+                                                  removeOrganisationAccordion
+                                              }
                                               buttonsIsDisabled={false}
                                           />
                                       </Grid>
@@ -229,6 +265,9 @@ export const AdminView = () => {
                                                       organisation.organisationName
                                                   }
                                                   userIsSysAdm={userIsSystemAdmin()}
+                                                  removeOrganisation={
+                                                      removeOrganisationAccordion
+                                                  }
                                               />
                                           </Grid>
                                       )

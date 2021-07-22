@@ -91,6 +91,10 @@ export const useGetOrganisations = (organisationFilter: OrganisationFilter) => {
     }
 }
 
+/**
+ * Get one group and its metadata
+ * @param groupId group's id
+ */
 export const useGetGroup = (groupId: number) => {
     const url = `groups/${groupId}`
     const headers = getHeaders()
@@ -108,6 +112,9 @@ export const useGetGroup = (groupId: number) => {
     }
 }
 
+/**
+ * Create a new group
+ */
 export const usePostGroup = () => {
     const url = `group/`
     const headers = getHeaders()
@@ -127,6 +134,24 @@ export const usePostGroup = () => {
     }
 }
 
+/**
+ * Delete one group
+ * @param groupId id of the group to delete
+ */
+export const useDeleteGroup = (groupId: number) => {
+    const url = `group/${groupId}`
+    const headers = getHeaders()
+
+    const { deleteData, state, data } = useApiService<IGroup>(url, { headers })
+
+    return {
+        deleteGroup: { run: deleteData, ...state },
+    }
+}
+
+/**
+ * Create one organisation
+ */
 export const usePostOrganisation = () => {
     const url = `organisation/`
     const headers = getHeaders()
@@ -146,6 +171,27 @@ export const usePostOrganisation = () => {
     }
 }
 
+/**
+ * Delete one organisation
+ * @param organisationId id of the organisation to delete
+ */
+export const useDeleteOrganisation = (organisationId: number) => {
+    const url = `organisation/${organisationId}`
+    const headers = getHeaders()
+
+    const { deleteData, state, data } = useApiService<IOrganisation>(url, {
+        headers,
+    })
+
+    return {
+        deleteOrganisation: { run: deleteData, ...state },
+    }
+}
+
+/**
+ * Get one organisation and its metadata
+ * @param organisationId organisation's id
+ */
 export const useGetOrganisation = (organisationId: number) => {
     const url = `organisations/${organisationId}`
     const headers = getHeaders()

@@ -12,13 +12,14 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
-import { IUser } from "../../models/IUser"
 import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCompleteDialog.component"
 import { useHistory } from "react-router"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
-import { IOrganisation } from "../../models/IOrganisation"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
-import { useGetOrganisation } from "../../utils/useApiServiceGroups"
+import {
+    useDeleteOrganisation,
+    useGetOrganisation,
+} from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 
 const useStyles = makeStyles({
@@ -62,20 +63,25 @@ export const AccordionComponent = (props: {
     title: string
     userIsSysAdm: boolean
     buttonsIsDisabled?: boolean
+    removeOrganisation: (organisationId: number) => void
 }) => {
     const {
         title,
         organisationId,
         buttonsIsDisabled = true,
         userIsSysAdm,
+        removeOrganisation,
     } = props
     const classes = useStyles()
     const { t } = useTranslation()
+
+    const { getOrganisation, organisationFetched } =
+        useGetOrganisation(organisationId)
+    const { deleteOrganisation } = useDeleteOrganisation(organisationId)
+
     const [organisationInfoDialogIsOpen, setOrganisationInfoDialogIsOpen] =
         useState(false)
     const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
-    const { getOrganisation, organisationFetched } =
-        useGetOrganisation(organisationId)
     const [deleteCountryDialogIsOpen, setDeleteCountryDialogIsOpen] =
         useState(false)
 
@@ -111,8 +117,11 @@ export const AccordionComponent = (props: {
         setDeleteCountryDialogIsOpen(false)
     }
 
-    const handleDeleteCountryDialogSave = () => {
-        //delete
+    const handleDeleteCountry = async () => {
+        const { error, result } = await deleteOrganisation.run()
+        if (!error && result) {
+            removeOrganisation(organisationId)
+        }
     }
 
     return (
@@ -300,7 +309,7 @@ export const AccordionComponent = (props: {
             >
                 <ChoiceDialog
                     handleOnCancelClick={handleDeleteCountryDialogClose}
-                    handleOnSaveClick={handleDeleteCountryDialogSave}
+                    handleOnSaveClick={handleDeleteCountry}
                     ackText={t("AdminView.deleteCountry")}
                     cancelText={t("Dialog.cancel")}
                     headerText={t("AdminView.deleteCountry")}

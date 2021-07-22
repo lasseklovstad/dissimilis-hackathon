@@ -17,7 +17,7 @@ import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCo
 import { IGroup } from "../../models/IGroup"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
-import { useGetGroup } from "../../utils/useApiServiceGroups"
+import { useDeleteGroup, useGetGroup } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 
 const useStyles = makeStyles({
@@ -63,13 +63,15 @@ export const AccordionGroupComponent = (props: {
     groupId: number
     title: string
     userIsOrgAdmin: boolean
+    removeGroup: (groupId: number) => void
 }) => {
-    const { title, groupId, userIsOrgAdmin } = props
+    const { title, groupId, userIsOrgAdmin, removeGroup } = props
     const classes = useStyles()
     const { t } = useTranslation()
 
     const [addMemberDialogIsOpen, setAddMemberDialogIsOpen] = useState(false)
     const { getGroup, groupFetched } = useGetGroup(groupId)
+    const { deleteGroup } = useDeleteGroup(groupId)
 
     const handleAddMemberClose = () => {
         setAddMemberDialogIsOpen(false)
@@ -104,8 +106,11 @@ export const AccordionGroupComponent = (props: {
         setDeleteGroupDialogIsOpen(false)
     }
 
-    const handleDeleteGroupDialogSave = () => {
-        //delete
+    const handleDeleteGroup = async () => {
+        const { error, result } = await deleteGroup.run()
+        if (!error && result) {
+            removeGroup(groupId)
+        }
     }
 
     return (
@@ -266,7 +271,7 @@ export const AccordionGroupComponent = (props: {
             >
                 <ChoiceDialog
                     handleOnCancelClick={handleDeleteGroupDialogClose}
-                    handleOnSaveClick={handleDeleteGroupDialogSave}
+                    handleOnSaveClick={handleDeleteGroup}
                     ackText={t("AdminView.deleteGroup")}
                     cancelText={t("Dialog.cancel")}
                     headerText={t("AdminView.deleteGroup")}

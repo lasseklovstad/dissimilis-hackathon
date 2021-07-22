@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     Box,
     Button,
@@ -19,7 +19,7 @@ import { AddGroupDialog } from "../../components/CustomDialog/AddGroupDialog.com
 import { IUser } from "../../models/IUser"
 import { AccordionGroupComponent } from "../../components/AdminViewComponents/AccordionGroupComponent.component"
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
-import { IGroup } from "../../models/IGroup"
+import { IGroup, IGroupIndex } from "../../models/IGroup"
 import {
     GroupFilter,
     OrganisationFilter,
@@ -96,6 +96,14 @@ export const GroupAdminView = () => {
         parseInt(organisationId)
     )
 
+    const [groups, setGroups] = useState<IGroupIndex[] | undefined>()
+
+    useEffect(() => {
+        if (groupsFetched) {
+            setGroups(groupsFetched)
+        }
+    }, [groupsFetched])
+
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
 
@@ -109,6 +117,14 @@ export const GroupAdminView = () => {
         return (
             (groupsFetched ? groupsFetched?.length > 0 : false) ||
             userIsAdminInCurrentOrganisation()
+        )
+    }
+
+    const removeGroupAccordion = (groupId: number) => {
+        setGroups(
+            groups?.filter((group) => {
+                return group.groupId !== groupId
+            })
         )
     }
 
@@ -196,6 +212,7 @@ export const GroupAdminView = () => {
                                               title={group.groupName}
                                               groupId={group.groupId}
                                               userIsOrgAdmin={userIsAdminInCurrentOrganisation()}
+                                              removeGroup={removeGroupAccordion}
                                           />
                                       </Grid>
                                   )
