@@ -33,6 +33,12 @@ const useStyles = makeStyles((theme) => ({
             boxShadow: `0 0 0 4px ${colors.focus}`,
         },
     },
+    searchButton: {
+        "&:focus-within": {
+            boxShadow: `0 0 0 4px ${colors.focus}`,
+        },
+        //marginBottom: "1em",
+    },
     songButton: {
         border: `4px solid ${colors.white}`,
         "&:focus": {
@@ -126,6 +132,24 @@ export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (
             >
                 <Box className={styles.container} py={2} pl={1}>
                     <AddIcon />
+                    <Box pl={1} pr={2}>
+                        <Typography>{props.text}</Typography>
+                    </Box>
+                </Box>
+            </CardActionArea>
+        </Card>
+    )
+}
+
+export const DashboardButtonSearch: FC<ButtonNoLinkProps> = (props) => {
+    const styles = useStyles()
+    return (
+        <Card className={`${styles.button} ${styles.searchButton}`}>
+            <CardActionArea
+                onClick={() => props.func && props.func()}
+                disableRipple
+            >
+                <Box className={styles.container} py={2} pl={1}>
                     <Box pl={1} pr={2}>
                         <Typography>{props.text}</Typography>
                     </Box>

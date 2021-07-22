@@ -9,7 +9,7 @@ export enum GroupFilter {
     All = "ALL",
 }
 
-enum OrganisationFilter {
+export enum OrganisationFilter {
     Admin = "ADMIN",
     GroupAdmin = "GROUPADMIN",
     User = "USER",
@@ -73,7 +73,7 @@ export const useGetGroupsInOrganisation = (
  * Get organisations based on different parameters
  * */
 export const useGetOrganisations = (organisationFilter: OrganisationFilter) => {
-    const url = "organization/search"
+    const url = `organisations?filter="${organisationFilter}"`
     const body = {
         filter: organisationFilter,
     }

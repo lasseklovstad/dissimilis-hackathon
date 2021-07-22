@@ -82,6 +82,7 @@ export const LibraryView = () => {
                             <DashboardTopBar searchTerm={searchTerm} />
                         </Box>
                     </Grid>
+
                     <SongGrid
                         title={
                             searchTerm
@@ -95,6 +96,7 @@ export const LibraryView = () => {
                         orderTerm={orderTerm}
                         changeOrderTerm={handleChangeOrderTerm}
                         orderDescending={orderDescending}
+                        searchFilter={true}
                     />
                 </Grid>
             </Box>

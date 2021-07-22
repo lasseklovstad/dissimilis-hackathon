@@ -1,6 +1,7 @@
 {
     "DashboardView": {
         "newSongLabel": "New song",
+        "songSearchFilter": "Songs in your groups",
         "recentSongLabel": "Your last five songs",
         "allSongLabel": "All songs",
         "measure": "measure",

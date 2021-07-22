@@ -1,6 +1,7 @@
 {
     "DashboardView": {
         "newSongLabel": "Nytt partitur",
+        "songSearchFilter": "Sanger i dine grupper",
         "recentSongLabel": "Dine siste fem sanger",
         "allSongLabel": "Alle sanger",
         "measure": "takt",

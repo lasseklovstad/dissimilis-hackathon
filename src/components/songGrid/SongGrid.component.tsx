@@ -6,6 +6,7 @@ import {
     SortingButtons,
 } from "../DashboardButtons/DashboardButtons"
 import { Loading } from "../loading/Loading.component"
+import { SearchFilterAutocomplete } from "./SongFilter.component"
 
 type SongGridProps = {
     title: string | undefined
@@ -17,6 +18,7 @@ type SongGridProps = {
     orderTerm?: string
     changeOrderTerm?: (term: "date" | "song" | "user") => void
     orderDescending?: boolean
+    searchFilter?: boolean
 }
 
 const GridItem = (props: { children: ReactNode; isSong: boolean }) => {
@@ -43,6 +45,7 @@ export const SongGrid = (props: SongGridProps) => {
         orderTerm,
         changeOrderTerm,
         orderDescending,
+        searchFilter,
     } = props
 
     const getChildren = () => {
@@ -120,6 +123,7 @@ export const SongGrid = (props: SongGridProps) => {
         <Grid item xs={12} sm={10}>
             <Box mb={4}>
                 {getHeader()}
+                {searchFilter ? <SearchFilterAutocomplete /> : ""}
                 <Grid container spacing={3}>
                     {getItems()}
                     <GridItem isSong={false}>

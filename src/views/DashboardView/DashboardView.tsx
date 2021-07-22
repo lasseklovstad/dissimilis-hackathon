@@ -3,6 +3,7 @@ import { Box, Dialog, Grid, makeStyles } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import {
+    DashboardButtonSearch,
     DashboardButtonWithAddIconNoLink,
     DashboardLibraryButton,
 } from "../../components/DashboardButtons/DashboardButtons"
@@ -16,6 +17,15 @@ import { getTimeSignatureText } from "../../utils/bar.util"
 import { ISongIndex } from "../../models/ISong"
 import { Loading } from "../../components/loading/Loading.component"
 import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
+import {
+    GroupFilter,
+    OrganisationFilter,
+    useGetGroups,
+    useGetOrganisations,
+} from "../../utils/useApiServiceGroups"
+import { IGroup } from "../../models/IGroup"
+import { IOrganisation } from "../../models/IOrganisation"
+import { GroupOutlined } from "@material-ui/icons"
 
 const useStyles = makeStyles({
     container: {
@@ -116,9 +126,35 @@ export const DashboardView = () => {
         setAddSongDialogIsOpen(false)
     }
 
+    const { getAllGroups, allGroupsFetched } = useGetGroups(GroupFilter.Admin)
+    const [groups, setGroups] = useState<IGroup[] | undefined>()
+    useEffect(() => {
+        if (allGroupsFetched) {
+            setGroups(allGroupsFetched)
+        }
+    }, [allGroupsFetched])
+    const { getOrganisations, organisationsFetched } = useGetOrganisations(
+        OrganisationFilter.Admin
+    )
+    const [organisations, setorganisations] = useState<
+        IOrganisation[] | undefined
+    >()
+    useEffect(() => {
+        if (organisationsFetched) {
+            setorganisations(organisationsFetched)
+        }
+    }, [organisationsFetched])
+    /*      const returnValues = [
+        ...(grous ? groups : []),
+        ...(organisations ? organisations : []),
+    ] */
+
     return (
         <>
-            <Loading isLoading={postSong.loading} fullScreen />
+            <Loading
+                isLoading={postSong.loading || getAllGroups.loading}
+                fullScreen
+            />
             <Box mx={2}>
                 <Grid container justify="center" className={styles.container}>
                     <Grid item xs={12}>
@@ -142,6 +178,43 @@ export const DashboardView = () => {
                                 )}-${measureText}`}
                             />
                         ))}
+                    </SongGrid>
+
+                    <SongGrid
+                        title={t("DashboardView.songSearchFilter")}
+                        songs={undefined}
+                        removeSong={() => undefined}
+                        renameSong={() => undefined}
+                        isLoading={false}
+                    >
+                        {[
+                            ...(groups
+                                ? groups?.map((group, i) => (
+                                      <DashboardButtonSearch
+                                          key={i}
+                                          func={() =>
+                                              history.push(
+                                                  `/library?groupId=${group.groupId}`
+                                              )
+                                          }
+                                          text={group.groupName}
+                                      />
+                                  ))
+                                : []),
+                            ...(organisations
+                                ? organisations.map((organisation, i) => (
+                                      <DashboardButtonSearch
+                                          key={i}
+                                          func={() =>
+                                              history.push(
+                                                  `/library?organisationId=${organisation.organisationId}`
+                                              )
+                                          }
+                                          text={organisation.organisationName}
+                                      />
+                                  ))
+                                : []),
+                        ]}
                     </SongGrid>
 
                     <SongGrid
