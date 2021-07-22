@@ -2,10 +2,9 @@
     "DashboardView": {
         "newSongLabel": "New song",
         "recentSongLabel": "Your last five songs",
-        "searchSongLabel": "Search",
         "allSongLabel": "All songs",
         "measure": "measure",
-        "search": "Search for songs or arrangers",
+        "search": "Search",
         "altButterflyButtonProp": "Image of Dissimilis' butterfly-logo",
         "ariaButterflyButtonProp": "Go to start",
         "deleteSong": "Delete song",
@@ -18,6 +17,10 @@
         "date": "Date changed",
         "user": "User",
         "song": "Song"
+    },
+    "LibraryView": {
+        "defaultHeading": "Library",
+        "searchHeading": "Search: "
     },
     "BarContainer": {
         "deleteBar": "Delete bar",
@@ -162,7 +165,8 @@
         "languageNorwegian": "Norsk",
         "languageEnglish": "English",
         "languageSelect": "Select language",
-        "settings": "Settings"
+        "settings": "Settings",
+        "clear": "Clear"
     },
     "Snackbar": {
         "undoError": "There is nothing left to undo"
