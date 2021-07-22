@@ -70,7 +70,6 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
         async (method, body?: unknown, appendUrl?: string) => {
             // Add params to the url
             const baseUrl = process.env.REACT_APP_API_URL as string
-            console.log(appendUrl)
             let finalUrl = baseUrl + url + (appendUrl || "")
             if (params) {
                 finalUrl += `?${new URLSearchParams(params).toString()}`

@@ -106,6 +106,7 @@ export const ShareSongDialog = (props: {
     const handleAddUser = async (userId: string) => {
         const { error, result } = await shareSong.run(null, `/${userId}`)
         if (!error && result) {
+            setUserList(userList.concat(result.data[0]))
             handleCloseAddUserDialog()
         }
     }
@@ -115,6 +116,9 @@ export const ShareSongDialog = (props: {
             `/${selectedUser?.userId}`
         )
         if (!error && result) {
+            setUserList(
+                userList.filter((user) => user.userId != selectedUser?.userId)
+            )
             handleCloseConfirmRemoveUserDialog()
         }
     }
@@ -125,10 +129,11 @@ export const ShareSongDialog = (props: {
                 groupTags,
                 organisationTags,
                 protectionLevel,
-                sharedUsers,
+                sharedWithUsers,
             } = songShareInfo
             setPublicSong(protectionLevel == SongProtectionLevel.Public)
-            setUserList(sharedUsers)
+            console.log("1" + sharedWithUsers)
+            setUserList(sharedWithUsers)
         }
     }, [songShareInfo])
 

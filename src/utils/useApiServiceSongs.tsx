@@ -10,6 +10,7 @@ import { IBar } from "../models/IBar"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../models/IVoice"
 import { IGroupIndex } from "../models/IGroup"
 import { IOrganisationIndex } from "../models/IOrganisation"
+import { IUser } from "../models/IUser"
 
 export enum SongProtectionLevel {
     Public = "Public",
@@ -457,7 +458,7 @@ export const useShareSong = (songId: number) => {
     const headers = getHeaders()
 
     const appendUrl = `/`
-    const api = useApiService<ISong>(url, { headers, appendUrl })
+    const api = useApiService<IUser[]>(url, { headers, appendUrl })
 
     return {
         shareSong: { run: api.postData, ...api.state },
@@ -474,7 +475,7 @@ export const useUnshareSong = (songId: number) => {
     const headers = getHeaders()
 
     const appendUrl = `/`
-    const api = useApiService<ISong>(url, { headers, appendUrl })
+    const api = useApiService<IUser[]>(url, { headers, appendUrl })
 
     return {
         unshareSong: { run: api.deleteData, ...api.state },

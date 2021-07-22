@@ -47,6 +47,6 @@ export interface ISongShareData {
     songId: number
     organisationTags: IOrganisationIndex[]
     groupTags: IGroupIndex[]
-    sharedUsers: IUser[]
+    sharedWithUsers: IUser[]
     protectionLevel: SongProtectionLevel
 }
