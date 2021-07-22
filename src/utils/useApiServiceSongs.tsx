@@ -413,15 +413,15 @@ export const useDuplicateSong = (songId: number) => {
  * @param songId song's id
  */
 export const useSetGroupTags = (songId: number) => {
-    const url = `song/${songId}/groupTags`
+    const url = `song/${songId}/Tag/Group`
     const headers = getHeaders()
 
-    const emptyGroupTags: IGroupIndex[] = []
+    const emptyGroupTags: number[] = []
     const body = {
-        groupTags: emptyGroupTags,
+        tagIds: emptyGroupTags,
     }
 
-    const api = useApiService<ISong>(url, { headers, body })
+    const api = useApiService<IGroupIndex>(url, { headers, body })
 
     return {
         setGroupTags: { run: api.putData, ...api.state },
@@ -433,15 +433,15 @@ export const useSetGroupTags = (songId: number) => {
  * @param songId song's id
  */
 export const useSetOrganisationTags = (songId: number) => {
-    const url = `song/${songId}/organisationTags`
+    const url = `song/${songId}/Tag/Organisation`
     const headers = getHeaders()
 
-    const emptyOrganisationTags: IOrganisationIndex[] = []
+    const emptyOrganisationTags: number[] = []
     const body = {
-        organisationTags: emptyOrganisationTags,
+        tagIds: emptyOrganisationTags,
     }
 
-    const api = useApiService<ISong>(url, { headers })
+    const api = useApiService<IOrganisationIndex>(url, { headers, body })
 
     return {
         setOrganisationTags: { run: api.putData, ...api.state },

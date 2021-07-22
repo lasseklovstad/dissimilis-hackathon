@@ -158,7 +158,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
 
     const deleteData = useCallback(
         async (appendUrl?: string) => {
-            return fetchData("delete", appendUrl)
+            return fetchData("delete", null, appendUrl)
         },
         [fetchData]
     )

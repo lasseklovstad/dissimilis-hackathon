@@ -148,7 +148,22 @@
         "loading": "Loading",
         "saveSongMetadataError": "An error occured while saving information",
         "details": "Information about song",
-        "close": "Close"
+        "close": "Close",
+        "share": "Share",
+        "shareSong": "Share song",
+        "editRights": "Edit rights",
+        "editRightsDescription": "People the song is shared with who have edit rights",
+        "addPerson": "Add person",
+        "readRights": "Read rights",
+        "readRightsDescription": "Who should be able to view the song, other than the spesific people it's shared with?",
+        "noOne": "No one",
+        "everyone": "Everyone",
+        "tagsDescription": "Make it easier to people to find the song by adding tags",
+        "unshare": "Unshare song",
+        "removePersonShare": "Remove person from shared song",
+        "shareWithPerson": "Share with person",
+        "removePersonShareDescription": "Remove the edit rights from "
+
     },
     "Song": {
         "arranger": "Arranger",

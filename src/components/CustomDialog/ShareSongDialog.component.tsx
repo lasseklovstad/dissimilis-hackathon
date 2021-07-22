@@ -2,7 +2,6 @@ import {
     Typography,
     Grid,
     Switch,
-    TextField,
     Button,
     DialogContent,
     DialogTitle,
@@ -14,8 +13,8 @@ import {
     makeStyles,
     DialogActions,
     Dialog,
+    TextField,
 } from "@material-ui/core"
-import { Autocomplete } from "@material-ui/lab"
 import React, { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { IUser } from "../../models/IUser"
@@ -27,11 +26,23 @@ import {
     SongProtectionLevel,
     useChangeSongProtectionLevel,
     useGetSongShareInfo,
+    useSetGroupTags,
+    useSetOrganisationTags,
     useShareSong,
     useUnshareSong,
 } from "../../utils/useApiServiceSongs"
 import { InputDialog } from "./InputDialog.component"
 import { ChoiceDialog } from "./ChoiceDialog.component"
+import { IGroupIndex } from "../../models/IGroup"
+import { IOrganisationIndex } from "../../models/IOrganisation"
+import { SearchFilterAutocomplete } from "../songGrid/SearchFilterAutocomplete.component"
+import {
+    useGetGroups,
+    GroupFilter,
+    useGetOrganisations,
+    OrganisationFilter,
+} from "../../utils/useApiServiceGroups"
+import { Autocomplete } from "@material-ui/lab"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -69,16 +80,49 @@ export const ShareSongDialog = (props: {
     const classes = useStyles()
     const { handleOnCloseClick, isLoading = false, songId } = props
     const { changeSongProtectionLevel } = useChangeSongProtectionLevel(songId)
-    const { getSongShareInfo, songShareInfo } = useGetSongShareInfo(songId)
+    const { songShareInfo } = useGetSongShareInfo(songId)
     const { shareSong } = useShareSong(songId)
     const { unshareSong } = useUnshareSong(songId)
-
+    const { setGroupTags } = useSetGroupTags(songId)
+    const { setOrganisationTags } = useSetOrganisationTags(songId)
     const [publicSong, setPublicSong] = useState(false)
     const [userList, setUserList] = useState<IUser[]>([])
     const [addUserDialogIsOpen, setAddUserDialogIsOpen] = useState(false)
     const [selectedUser, setSelectedUser] = useState<IUser>()
     const [confirmRemoveUserDialogIsOpen, setConfirmRemoveUserDialogIsOpen] =
         useState(false)
+    const { allGroupsFetched } = useGetGroups(GroupFilter.User)
+    const [groups, setGroups] = useState<IGroupIndex[] | undefined>()
+    useEffect(() => {
+        if (allGroupsFetched) {
+            setGroups(allGroupsFetched)
+        }
+    }, [allGroupsFetched])
+
+    const { organisationsFetched } = useGetOrganisations(
+        OrganisationFilter.User
+    )
+    const [organisations, setorganisations] = useState<
+        IOrganisationIndex[] | undefined
+    >()
+    useEffect(() => {
+        if (organisationsFetched) {
+            setorganisations(organisationsFetched)
+        }
+    }, [organisationsFetched])
+    const [defaultGroupTagIds, setDefaultGroupTagIds] = useState<number[]>()
+    const [defaultOrgTagIds, setDefaultOrgTagIds] = useState<number[]>()
+
+    const options = [
+        ...(groups ? groups : []),
+        ...(organisations ? organisations : []),
+    ]
+
+    const [filteredGroupTags, setFilteredGroupTags] = useState<IGroupIndex[]>()
+    const [filteredOrgTags, setFilteredOrgTags] =
+        useState<IOrganisationIndex[]>()
+
+    const [tags, setTags] = useState<(IGroupIndex | IOrganisationIndex)[]>()
 
     const handleChangePublicPrivate = async (
         event: React.ChangeEvent<HTMLInputElement>
@@ -91,8 +135,30 @@ export const ShareSongDialog = (props: {
         })
     }
 
-    const onTagChange = (event: any, value: any) => {
-        console.log(value)
+    const onTagChange = async (
+        event: any,
+        value: (IGroupIndex | IOrganisationIndex)[]
+    ) => {
+        setTags(value)
+        const orgTagList: number[] = []
+        const groupTagList: number[] = []
+        value.map((group) => {
+            "groupName" in group
+                ? groupTagList.push(group.groupId)
+                : orgTagList.push(group.organisationId)
+            return ""
+        })
+        console.log(orgTagList)
+        console.log(groupTagList)
+        const { error: groupError, result: groupResult } =
+            await setGroupTags.run({
+                tagIds: groupTagList,
+            })
+
+        const { error: orgError, result: orgResult } =
+            await setOrganisationTags.run({
+                tagIds: orgTagList,
+            })
     }
 
     const handleCloseAddUserDialog = () => {
@@ -106,7 +172,7 @@ export const ShareSongDialog = (props: {
     const handleAddUser = async (userId: string) => {
         const { error, result } = await shareSong.run(null, `/${userId}`)
         if (!error && result) {
-            setUserList(userList.concat(result.data[0]))
+            setUserList(result.data)
             handleCloseAddUserDialog()
         }
     }
@@ -117,7 +183,7 @@ export const ShareSongDialog = (props: {
         )
         if (!error && result) {
             setUserList(
-                userList.filter((user) => user.userId != selectedUser?.userId)
+                userList.filter((user) => user.userId !== selectedUser?.userId)
             )
             handleCloseConfirmRemoveUserDialog()
         }
@@ -131,23 +197,69 @@ export const ShareSongDialog = (props: {
                 protectionLevel,
                 sharedWithUsers,
             } = songShareInfo
-            setPublicSong(protectionLevel == SongProtectionLevel.Public)
-            console.log("1" + sharedWithUsers)
+            setPublicSong(protectionLevel === SongProtectionLevel.Public)
             setUserList(sharedWithUsers)
+            setDefaultGroupTagIds(
+                groupTags.map((group) => {
+                    return group.groupId
+                })
+            )
+            setDefaultOrgTagIds(
+                organisationTags.map((organisation) => {
+                    return organisation.organisationId
+                })
+            )
         }
     }, [songShareInfo])
 
+    useEffect(() => {
+        if (defaultGroupTagIds && groups) {
+            setFilteredGroupTags(
+                groups.filter(
+                    (group) => defaultGroupTagIds.indexOf(group.groupId) > -1
+                )
+            )
+            console.log("DefaultGroupTagsIds: " + defaultGroupTagIds)
+            console.log(
+                "Groups: " +
+                    groups.filter(
+                        (group) =>
+                            defaultGroupTagIds.indexOf(group.groupId) > -1
+                    )
+            )
+        }
+    }, [defaultGroupTagIds, groups])
+
+    useEffect(() => {
+        if (defaultOrgTagIds && organisations) {
+            setFilteredOrgTags(
+                organisations.filter(
+                    (organisations) =>
+                        defaultOrgTagIds.indexOf(organisations.organisationId) >
+                        -1
+                )
+            )
+        }
+    }, [defaultOrgTagIds, organisations])
+
+    useEffect(() => {
+        setTags([
+            ...(filteredGroupTags ? filteredGroupTags : []),
+            ...(filteredOrgTags ? filteredOrgTags : []),
+        ])
+    }, [filteredOrgTags, filteredGroupTags])
+
     return (
         <>
-            <DialogTitle>{"Del Sang"}</DialogTitle>
+            <DialogTitle>{t("Dialog.shareSong")}</DialogTitle>
             <DialogContent>
                 <Typography variant="body1" className={classes.item}>
-                    Redigeringstilganger
+                    {t("Dialog.editRights")}
                 </Typography>
                 <Typography variant="caption">
-                    {"Personer sangen er delt med og som kan redigere"}
+                    {t("Dialog.editRightsDescription")}
                 </Typography>
-                {userList && userList.length > 0 ? (
+                {userList && userList !== undefined && userList.length > 0 ? (
                     <List
                         dense={false}
                         className={classes.item}
@@ -175,7 +287,9 @@ export const ShareSongDialog = (props: {
                                     >
                                         <IconButton
                                             edge="end"
-                                            aria-label="delete"
+                                            aria-label={t(
+                                                "Dialog.removePerson"
+                                            )}
                                         >
                                             <DeleteIcon />
                                         </IconButton>
@@ -195,17 +309,15 @@ export const ShareSongDialog = (props: {
                 >
                     <AddIcon />
                     <div className={classes.buttonText}>
-                        {"Legg til bruker"}
+                        {t("Dialog.addPerson")}
                     </div>
                 </Button>
 
                 <Typography variant="body1" className={classes.item}>
-                    Lesetilganger
+                    {t("Dialog.readRights")}
                 </Typography>
                 <Typography variant="caption">
-                    {
-                        "Hvem skal sangen være synlig for annet en de den er delt med?"
-                    }
+                    {t("Dialog.readRightsDescription")}
                 </Typography>
                 <Typography component="div" className={classes.item}>
                     <Grid
@@ -214,7 +326,7 @@ export const ShareSongDialog = (props: {
                         alignItems="center"
                         spacing={1}
                     >
-                        <Grid item>Ingen</Grid>
+                        <Grid item>{t("Dialog.noOne")}</Grid>
                         <Grid item>
                             <Switch
                                 checked={publicSong}
@@ -222,31 +334,32 @@ export const ShareSongDialog = (props: {
                                 name="publicSongState"
                             />
                         </Grid>
-                        <Grid item>Alle</Grid>
+                        <Grid item>{t("Dialog.everyone")}</Grid>
                     </Grid>
                 </Typography>
                 {publicSong ? (
                     <>
                         <Typography variant="caption">
-                            {
-                                "Gjør det enklere for folk å finne sangen ved å legge på tags"
-                            }
+                            {t("Dialog.tagsDescription")}
                         </Typography>
                         <Autocomplete
+                            style={{ marginBottom: "1.5em" }}
                             multiple
-                            className={classes.item}
                             id="tags-outlined"
-                            options={[]}
-                            disabled={!publicSong}
-                            onChange={onTagChange}
-                            //getOptionLabel={(option) => option.title}
+                            options={options}
+                            value={tags}
+                            getOptionLabel={(option) =>
+                                "groupName" in option
+                                    ? option.groupName
+                                    : option.organisationName
+                            }
                             filterSelectedOptions
+                            onChange={onTagChange}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
                                     variant="outlined"
-                                    label="Søketags"
-                                    placeholder="Tags"
+                                    placeholder="Choose a group"
                                 />
                             )}
                         />
@@ -267,29 +380,32 @@ export const ShareSongDialog = (props: {
             <Dialog
                 open={addUserDialogIsOpen}
                 onClose={handleCloseAddUserDialog}
-                aria-label={"Share with new user dialog"}
+                aria-label={t("Dialog.shareWithPerson")}
             >
                 <InputDialog
                     handleOnSaveClick={handleAddUser}
                     handleOnCancelClick={handleCloseAddUserDialog}
-                    cancelText={"Cancel"}
-                    saveText={"Add"}
-                    headerText={"Add user"}
-                    labelText={"User email"}
+                    cancelText={t("Dialog.cancel")}
+                    saveText={t("Dialog.addPerson")}
+                    headerText={t("Dialog.shareWithPerson")}
+                    labelText={t("Dialog.email")}
                 />
             </Dialog>
             <Dialog
                 open={confirmRemoveUserDialogIsOpen}
                 onClose={handleCloseConfirmRemoveUserDialog}
-                aria-label={"Unshare with new user dialog"}
+                aria-label={t("Dialog.unshare")}
             >
                 <ChoiceDialog
                     handleOnSaveClick={handleRemoveUser}
                     handleOnCancelClick={handleCloseConfirmRemoveUserDialog}
-                    ackText={"Save"}
-                    cancelText={"Cancel"}
-                    descriptionText={"Remove person"}
-                    headerText={"Remove person"}
+                    ackText={t("Dialog.unshare")}
+                    cancelText={t("Dialog.cancel")}
+                    descriptionText={
+                        t("Dialog.removePersonShareDescription") +
+                        selectedUser?.name
+                    }
+                    headerText={t("Dialog.removePerson")}
                 />
             </Dialog>
         </>
