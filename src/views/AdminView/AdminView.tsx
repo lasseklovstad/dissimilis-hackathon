@@ -242,9 +242,9 @@ export const AdminView = () => {
                         {userIsGroupAdmin()
                             ? groupAdminOrganisations?.map((organisation) => {
                                   console.log(organisation.organisationName)
-                                  return renderedAdminOrganisationIds.includes(
+                                  return renderedAdminOrganisationIds.indexOf(
                                       organisation.organisationId
-                                  ) ? (
+                                  ) > -1 ? (
                                       ""
                                   ) : (
                                       <Grid item xs={12}>

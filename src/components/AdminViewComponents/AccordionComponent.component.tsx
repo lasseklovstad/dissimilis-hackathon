@@ -24,6 +24,7 @@ import {
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { IUser } from "../../models/IUser"
+import { EditMembersDialog } from "../CustomDialog/EditMembersDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -87,6 +88,12 @@ export const AccordionComponent = (props: {
     const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
     const [deleteCountryDialogIsOpen, setDeleteCountryDialogIsOpen] =
         useState(false)
+    const [editMembersDialogIsOpen, setEditMembersDialogIsOpen] =
+        useState(false)
+
+    const handleEditMembersDialogClose = () => {
+        setEditMembersDialogIsOpen(false)
+    }
 
     const handleOpenEditAdminsDialog = () => {
         setEditAdminsDialogIsOpen(true)
@@ -177,6 +184,9 @@ export const AccordionComponent = (props: {
                                 disableFocusRipple
                                 disabled={buttonsIsDisabled}
                                 className={classes.button}
+                                onClick={() => {
+                                    setEditMembersDialogIsOpen(true)
+                                }}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.seeAllMembers")}
@@ -302,6 +312,20 @@ export const AccordionComponent = (props: {
                     group={organisationFetched}
                     handleOnSaveClick={handleCloseOrganisationInfoDialog}
                     handleOnCancelClick={handleCloseOrganisationInfoDialog}
+                    isGroup={false}
+                />
+            </Dialog>
+            <Dialog
+                open={editMembersDialogIsOpen}
+                onClose={handleEditMembersDialogClose}
+                aria-label={t("Dialog.editMembers")}
+                maxWidth="sm"
+                fullWidth
+            >
+                <EditMembersDialog
+                    handleOnCloseClick={handleEditMembersDialogClose}
+                    groupId={organisationId}
+                    groupName={organisationFetched?.organisationName || title}
                     isGroup={false}
                 />
             </Dialog>

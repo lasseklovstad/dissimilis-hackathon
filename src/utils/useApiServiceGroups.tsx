@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { IGroup, IGroupIndex } from "../models/IGroup"
 import { IOrganisation, IOrganisationIndex } from "../models/IOrganisation"
+import { IUser } from "../models/IUser"
 import { useApiService } from "./useApiService"
 
 export enum GroupFilter {
@@ -279,5 +280,29 @@ export const useRemoveOrganisationMember = (
 
     return {
         removeOrganisationMember: { run: deleteData, ...state },
+    }
+}
+
+/**
+ * Get members of a group or an organisation in the form of an array of IUsers
+ * @param groupId id of the group or organisation containing the members
+ */
+export const useGetGroupOrOrganisationMembers = (
+    isGroup: boolean,
+    groupId: number
+) => {
+    const urlStart = isGroup ? `group` : `organisation`
+    const url = `${urlStart}/${groupId}/users`
+    const headers = getHeaders()
+
+    const { getData, state, data } = useApiService<IUser[]>(url, { headers })
+
+    useEffect(() => {
+        getData()
+    }, [getData])
+
+    return {
+        getGroupMembers: { run: getData, ...state },
+        groupMembers: data,
     }
 }

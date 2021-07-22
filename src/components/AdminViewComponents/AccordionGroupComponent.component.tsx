@@ -22,6 +22,7 @@ import {
     useGetGroup,
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
+import { EditMembersDialog } from "../CustomDialog/EditMembersDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -100,6 +101,12 @@ export const AccordionGroupComponent = (props: {
     const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
     const [deleteGroupDialogIsOpen, setDeleteGroupDialogIsOpen] =
         useState(false)
+    const [editMembersDialogIsOpen, setEditMembersDialogIsOpen] =
+        useState(false)
+
+    const handleEditMembersDialogClose = () => {
+        setEditMembersDialogIsOpen(false)
+    }
 
     const handleOpenEditAdminsDialog = () => {
         setEditAdminsDialogIsOpen(true)
@@ -162,6 +169,9 @@ export const AccordionGroupComponent = (props: {
                             <Button
                                 disableFocusRipple
                                 className={classes.button}
+                                onClick={() => {
+                                    setEditAdminsDialogIsOpen(true)
+                                }}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.seeAllMembers")}
@@ -264,6 +274,20 @@ export const AccordionGroupComponent = (props: {
                     handleOnSaveClick={handleCloseGroupInfoDialog}
                     handleOnCancelClick={handleCloseGroupInfoDialog}
                     isGroup
+                />
+            </Dialog>
+            <Dialog
+                open={editMembersDialogIsOpen}
+                onClose={handleEditMembersDialogClose}
+                aria-label={t("Dialog.editMembers")}
+                maxWidth="sm"
+                fullWidth
+            >
+                <EditMembersDialog
+                    handleOnCloseClick={handleEditMembersDialogClose}
+                    groupId={groupId}
+                    groupName={groupFetched?.organisationName || title}
+                    isGroup={true}
                 />
             </Dialog>
             <Dialog
