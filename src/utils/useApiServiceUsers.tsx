@@ -44,3 +44,22 @@ export const useLogout = () => {
         logout: { run: logout, ...state },
     }
 }
+
+/**
+ * Get admin statuses of current user
+ */
+export const useGetAdminStatuses = () => {
+    const url = "user/currentUser/adminStatuses"
+    const headers = getHeaders()
+
+    const { getData, state, data } = useApiService<IUser>(url, { headers })
+
+    useEffect(() => {
+        getData()
+    }, [getData])
+
+    return {
+        getAdminStatuses: { run: getData, ...state },
+        adminStatuses: data,
+    }
+}
