@@ -26,7 +26,7 @@ const getHeaders = () => {
  * Get all groups based on different parameters
  * */
 export const useGetGroups = (groupFilter: GroupFilter) => {
-    const url = `organisations/groups?filterBy="${groupFilter}"`
+    const url = `organisations/groups?filterBy=${groupFilter}`
     const initialData: IGroupIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
@@ -51,7 +51,7 @@ export const useGetGroupsInOrganisation = (
     groupFilter: GroupFilter,
     organisationId: number
 ) => {
-    const url = `organisations/${organisationId}/groups?filterBy="${groupFilter}"`
+    const url = `organisations/${organisationId}/groups?filterBy=${groupFilter}`
     const initialData: IGroupIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
@@ -73,7 +73,7 @@ export const useGetGroupsInOrganisation = (
  * Get organisations based on different parameters
  * */
 export const useGetOrganisations = (organisationFilter: OrganisationFilter) => {
-    const url = `organisation?filterBy="${organisationFilter}"`
+    const url = `organisations?filterBy=${organisationFilter}`
     const initialData: IOrganisationIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IOrganisationIndex[]>(url, {
@@ -124,7 +124,7 @@ export const usePostGroup = () => {
         description: "",
         phoneNumber: "",
     }
-    const { postData, state, data } = useApiService<IGroup>(url, {
+    const { postData, state } = useApiService<IGroup>(url, {
         body,
         headers,
     })
@@ -142,7 +142,7 @@ export const useDeleteGroup = (groupId: number) => {
     const url = `group/${groupId}`
     const headers = getHeaders()
 
-    const { deleteData, state, data } = useApiService<IGroup>(url, { headers })
+    const { deleteData, state } = useApiService<IGroup>(url, { headers })
 
     return {
         deleteGroup: { run: deleteData, ...state },
@@ -161,7 +161,7 @@ export const usePostOrganisation = () => {
         description: "",
         phoneNumber: "",
     }
-    const { postData, state, data } = useApiService<IOrganisation>(url, {
+    const { postData, state } = useApiService<IOrganisation>(url, {
         body,
         headers,
     })
@@ -179,7 +179,7 @@ export const useDeleteOrganisation = (organisationId: number) => {
     const url = `organisation/${organisationId}`
     const headers = getHeaders()
 
-    const { deleteData, state, data } = useApiService<IOrganisation>(url, {
+    const { deleteData, state } = useApiService<IOrganisation>(url, {
         headers,
     })
 
@@ -206,5 +206,78 @@ export const useGetOrganisation = (organisationId: number) => {
     return {
         getOrganisation: { run: getData, ...state },
         organisationFetched: data,
+    }
+}
+
+/**
+ *  Add user to group
+ *  memeber: 10, admin: 20
+ */
+export const useAddGroupMember = (groupId: number) => {
+    const url = `groups/${groupId}/addMember`
+    const headers = getHeaders()
+    const body = {}
+    const { postData, state } = useApiService<void>(url, {
+        body,
+        headers,
+    })
+
+    return {
+        addGroupMember: { run: postData, ...state },
+    }
+}
+
+/**
+ *  Remove user from group
+ */
+export const useRemoveGroupMember = (groupId: number, userId: number) => {
+    const url = `groups/${groupId}/removeMember/${userId}`
+    const headers = getHeaders()
+    const body = {}
+    const { deleteData, state } = useApiService<void>(url, {
+        body,
+        headers,
+    })
+
+    return {
+        removeGroupMember: { run: deleteData, ...state },
+    }
+}
+
+/**
+ *  Add user to organisation
+ *  memeber: 10, admin: 20
+ */
+export const useAddOrganisationMember = (organisationId: number) => {
+    const url = `organisations/${organisationId}/addMember`
+    const headers = getHeaders()
+    const body = {}
+    const { postData, state } = useApiService<void>(url, {
+        body,
+        headers,
+    })
+
+    return {
+        addOrganisationMember: { run: postData, ...state },
+    }
+}
+
+/**
+ *  Remove user from group
+ */
+export const useRemoveOrganisationMember = (
+    organisationId: number,
+    userId: number
+) => {
+    const url = `groups/${organisationId}/removeMember/${userId}`
+    const headers = getHeaders()
+    const body = {}
+    const { deleteData, state } = useApiService<void>(url, {
+        body,
+        headers,
+    })
+
+    return {
+        removeOrganisationMember: { run: deleteData, ...state },
     }
 }

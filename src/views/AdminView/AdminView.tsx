@@ -18,8 +18,6 @@ import EditIcon from "@material-ui/icons/Edit"
 import { colors } from "../../utils/colors"
 import { InviteUserToSystemDialog } from "../../components/CustomDialog/InviteUserToSystemDialog.components"
 import { AddOrganisationDialog } from "../../components/CustomDialog/AddOrganisationDialog.component"
-import { AddGroupDialog } from "../../components/CustomDialog/AddGroupDialog.component"
-import { IUser } from "../../models/IUser"
 import { EditAdminsDialog } from "../../components/CustomDialog/EditAdminsDialog.component"
 import {
     OrganisationFilter,
@@ -49,13 +47,11 @@ const useStyles = makeStyles({
 export const AdminView = () => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const [searchTerm, setSearchTerm] = useState("")
     const history = useHistory()
 
     const { postOrganisation } = usePostOrganisation()
 
     const { getUser, userInit } = useGetUser()
-    const userId = userInit?.userId
 
     const userIsSystemAdmin = () => {
         return true // FJERN
@@ -101,12 +97,6 @@ export const AdminView = () => {
 
     const renderedAdminOrganisationIds: number[] = []
 
-    const handleOnChangeSearch = (searchTermParam: string) => {
-        // Temporary placeholder
-        setSearchTerm(searchTermParam)
-        history.push(`/library`)
-    }
-
     const userIsOrganisationAdmin = () => {
         return (
             (adminOrganisationsFetched
@@ -146,6 +136,7 @@ export const AdminView = () => {
     const handleAddOrganisationDialogClose = () => {
         setAddOrganisationIsOpen(false)
     }
+
     const handleAddOrganisationDialogSave = async (
         name: string,
         firstAdminId: number

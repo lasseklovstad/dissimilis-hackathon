@@ -88,7 +88,7 @@ export const EditAdminsDialog = (props: {
         }
     }
 
-    const handleAddAdmin = /* async */ (email: string) => {
+    const handleAddAdmin = /* async */ (user: IUser | undefined) => {
         //console.log("Should now add " + email + " as admin in " + group.name)
         setAddAdminDialogIsOpen(false)
     }

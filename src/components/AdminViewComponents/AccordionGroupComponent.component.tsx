@@ -14,10 +14,13 @@ import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
 import { IUser } from "../../models/IUser"
 import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCompleteDialog.component"
-import { IGroup } from "../../models/IGroup"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
-import { useDeleteGroup, useGetGroup } from "../../utils/useApiServiceGroups"
+import {
+    useAddGroupMember,
+    useDeleteGroup,
+    useGetGroup,
+} from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 
 const useStyles = makeStyles({
@@ -72,13 +75,25 @@ export const AccordionGroupComponent = (props: {
     const [addMemberDialogIsOpen, setAddMemberDialogIsOpen] = useState(false)
     const { getGroup, groupFetched } = useGetGroup(groupId)
     const { deleteGroup } = useDeleteGroup(groupId)
+    const { addGroupMember } = useAddGroupMember(groupId)
 
     const handleAddMemberClose = () => {
         setAddMemberDialogIsOpen(false)
     }
 
-    const handleAddMember = () => {
-        //Legg til medlem til gruppe
+    const handleAddMember = async (user: IUser | undefined) => {
+        if (user) {
+            const { error, result } = await addGroupMember.run({
+                newMemberUserId: user.userId,
+                newMemberRole: 10, // 10=member, 20=admin
+            })
+            if (!error && result) {
+                setAddMemberDialogIsOpen(false)
+            }
+        } else {
+            // User does not exist
+            // handle this
+        }
     }
 
     const [groupInfoDialogIsOpen, setGroupInfoDialogIsOpen] = useState(false)

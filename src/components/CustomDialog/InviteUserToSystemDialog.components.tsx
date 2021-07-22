@@ -15,11 +15,7 @@ import {
 
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { useTranslation } from "react-i18next"
-import {
-    OrganisationFilter,
-    useGetOrganisations,
-} from "../../utils/useApiServiceGroups"
-import { IOrganisation, IOrganisationIndex } from "../../models/IOrganisation"
+import { IOrganisationIndex } from "../../models/IOrganisation"
 import { IGroupIndex } from "../../models/IGroup"
 
 const useStyles = makeStyles((theme) => {

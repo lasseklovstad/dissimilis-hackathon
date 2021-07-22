@@ -16,17 +16,13 @@ import AddIcon from "@material-ui/icons/Add"
 import { colors } from "../../utils/colors"
 import { InviteUserToSystemDialog } from "../../components/CustomDialog/InviteUserToSystemDialog.components"
 import { AddGroupDialog } from "../../components/CustomDialog/AddGroupDialog.component"
-import { IUser } from "../../models/IUser"
 import { AccordionGroupComponent } from "../../components/AdminViewComponents/AccordionGroupComponent.component"
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
-import { IGroup, IGroupIndex } from "../../models/IGroup"
+import { IGroupIndex } from "../../models/IGroup"
 import {
     GroupFilter,
-    OrganisationFilter,
-    useGetGroups,
     useGetGroupsInOrganisation,
     useGetOrganisation,
-    useGetOrganisations,
     usePostGroup,
 } from "../../utils/useApiServiceGroups"
 
@@ -63,7 +59,6 @@ const useStyles = makeStyles({
 export const GroupAdminView = () => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const [searchTerm, setSearchTerm] = useState("")
     const history = useHistory()
     const { organisationId } = useParams<{ organisationId: string }>()
 
@@ -72,9 +67,7 @@ export const GroupAdminView = () => {
     const { getUser, userInit } = useGetUser()
     const userId = userInit?.userId
 
-    const { getOrganisation, organisationFetched } = useGetOrganisation(
-        parseInt(organisationId)
-    )
+    const { organisationFetched } = useGetOrganisation(parseInt(organisationId))
 
     const userIsSystemAdmin = () => {
         return true // FJERN
@@ -89,7 +82,7 @@ export const GroupAdminView = () => {
             : false || userIsSystemAdmin()
     }
 
-    const { getGroups, groupsFetched } = useGetGroupsInOrganisation(
+    const { groupsFetched } = useGetGroupsInOrganisation(
         userIsAdminInCurrentOrganisation()
             ? GroupFilter.All
             : GroupFilter.Admin,
@@ -106,12 +99,6 @@ export const GroupAdminView = () => {
 
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
-
-    const handleOnChangeSearch = (searchTermParam: string) => {
-        // Temporary placeholder
-        setSearchTerm(searchTermParam)
-        history.push(`/library`)
-    }
 
     const userIsGroupAdmin = () => {
         return (
