@@ -8,6 +8,9 @@ import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
 import { useLocation } from "react-router"
 import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
+import { useHistory } from "react-router"
+import { IOrganisation } from "../../models/IOrganisation"
+import { IGroup } from "../../models/IGroup"
 
 const useStyles = makeStyles({
     container: {
@@ -22,11 +25,17 @@ export const LibraryView = () => {
     const [orderTerm, setOrderTerm] = useState<"date" | "song" | "user">("date")
     const [orderDescending, setOrderDescending] = useState<boolean>(true)
     const numberOfResults = "50"
-
+    const history = useHistory()
     const location = useLocation()
     const url = new URLSearchParams(location.search)
     const searchTermUrl = url.get("search")
+
     const searchTerm = searchTermUrl ? searchTermUrl : ""
+    const groupIdsFromUrl = url.getAll("groupId")
+    const organisationIdsFromUrl = url.getAll("organisationId")
+    const [filterValue, setfilterValue] = useState<(IGroup | IOrganisation)[]>(
+        []
+    )
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
@@ -97,6 +106,8 @@ export const LibraryView = () => {
                         changeOrderTerm={handleChangeOrderTerm}
                         orderDescending={orderDescending}
                         searchFilter={true}
+                        filterValue={filterValue}
+                        setFilterValue={setFilterValue}
                     />
                 </Grid>
             </Box>

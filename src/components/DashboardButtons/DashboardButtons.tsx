@@ -33,12 +33,6 @@ const useStyles = makeStyles((theme) => ({
             boxShadow: `0 0 0 4px ${colors.focus}`,
         },
     },
-    searchButton: {
-        "&:focus-within": {
-            boxShadow: `0 0 0 4px ${colors.focus}`,
-        },
-        //marginBottom: "1em",
-    },
     songButton: {
         border: `4px solid ${colors.white}`,
         "&:focus": {
@@ -144,7 +138,7 @@ export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (
 export const DashboardButtonSearch: FC<ButtonNoLinkProps> = (props) => {
     const styles = useStyles()
     return (
-        <Card className={`${styles.button} ${styles.searchButton}`}>
+        <Card className={`${styles.button} ${styles.newSongButton}`}>
             <CardActionArea
                 onClick={() => props.func && props.func()}
                 disableRipple

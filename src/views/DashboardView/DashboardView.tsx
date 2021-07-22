@@ -9,7 +9,6 @@ import {
 } from "../../components/DashboardButtons/DashboardButtons"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useGetRecentSongs, usePostSong } from "../../utils/useApiServiceSongs"
-import { InputDialog } from "../../components/CustomDialog/InputDialog.component"
 import { SongGrid } from "../../components/songGrid/SongGrid.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
@@ -25,7 +24,7 @@ import {
 } from "../../utils/useApiServiceGroups"
 import { IGroup } from "../../models/IGroup"
 import { IOrganisation } from "../../models/IOrganisation"
-import { GroupOutlined } from "@material-ui/icons"
+import { InputDialog } from "../../components/CustomDialog/InputDialog.component"
 
 const useStyles = makeStyles({
     container: {
@@ -144,15 +143,20 @@ export const DashboardView = () => {
             setorganisations(organisationsFetched)
         }
     }, [organisationsFetched])
-    /*      const returnValues = [
-        ...(grous ? groups : []),
+
+    const groupsAndOrganisations = [
+        ...(groups ? groups : []),
         ...(organisations ? organisations : []),
-    ] */
+    ]
 
     return (
         <>
             <Loading
-                isLoading={postSong.loading || getAllGroups.loading}
+                isLoading={
+                    postSong.loading ||
+                    getAllGroups.loading ||
+                    getOrganisations.loading
+                }
                 fullScreen
             />
             <Box mx={2}>
@@ -187,34 +191,29 @@ export const DashboardView = () => {
                         renameSong={() => undefined}
                         isLoading={false}
                     >
-                        {[
-                            ...(groups
-                                ? groups?.map((group, i) => (
-                                      <DashboardButtonSearch
-                                          key={i}
-                                          func={() =>
-                                              history.push(
-                                                  `/library?groupId=${group.groupId}`
-                                              )
-                                          }
-                                          text={group.groupName}
-                                      />
-                                  ))
-                                : []),
-                            ...(organisations
-                                ? organisations.map((organisation, i) => (
-                                      <DashboardButtonSearch
-                                          key={i}
-                                          func={() =>
-                                              history.push(
-                                                  `/library?organisationId=${organisation.organisationId}`
-                                              )
-                                          }
-                                          text={organisation.organisationName}
-                                      />
-                                  ))
-                                : []),
-                        ]}
+                        {groupsAndOrganisations.map((item, i) =>
+                            "groupId" in item ? (
+                                <DashboardButtonSearch
+                                    key={"group" + i}
+                                    func={() =>
+                                        history.push(
+                                            `/library?groupId=${item.groupId}`
+                                        )
+                                    }
+                                    text={item.groupName}
+                                />
+                            ) : (
+                                <DashboardButtonSearch
+                                    key={"organisation" + i}
+                                    func={() =>
+                                        history.push(
+                                            `/library?organisationId=${item.organisationId}`
+                                        )
+                                    }
+                                    text={item.organisationName}
+                                />
+                            )
+                        )}
                     </SongGrid>
 
                     <SongGrid
