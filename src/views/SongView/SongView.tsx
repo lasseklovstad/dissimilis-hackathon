@@ -206,7 +206,7 @@ export const SongView = () => {
                     addBar={(song) =>
                         dispatchSong({ type: "UPDATE_SONG", song })
                     }
-                    songId={songId}
+                    songId={Number(songId)}
                     voiceId={selectedVoiceId}
                     chordDropdownContent={
                         chordMenuOptions.chordType === ChordType.NOTE

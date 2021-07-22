@@ -145,7 +145,7 @@ const noteLengths = [
 export const BottomBar = (props: {
     timeSignature: { numerator: number; denominator: number }
     addBar: (song: ISong) => void
-    songId: string
+    songId: number
     voiceId: number
     onChordChange: (chord: string) => void
     onChordLengthChange: (length: number) => void
@@ -175,7 +175,7 @@ export const BottomBar = (props: {
     const { chordMenuOptions, selectedChordId } = useSongContext()
     const container = useRef(null)
 
-    const { postBar } = useAddBar(songId, voiceId)
+    const { postBar } = useAddBar(songId.toString(), voiceId)
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         onChordLengthChange(event.target.value as number)
@@ -306,6 +306,7 @@ export const BottomBar = (props: {
                                 <ChordOptions
                                     chord={chordMenuOptions.chord}
                                     onChordNotesChange={onChordNotesChange}
+                                    alwaysShow={false}
                                 />
                             </div>
                         </RootRef>
