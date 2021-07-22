@@ -16,6 +16,11 @@ export enum OrganisationFilter {
     All = "ALL",
 }
 
+export enum UserRole {
+    Admin = "Admin",
+    Member = "Member",
+}
+
 const getHeaders = () => {
     const apiKey = sessionStorage.getItem("apiKey") || ""
     const userId = sessionStorage.getItem("userId") || ""
@@ -279,5 +284,44 @@ export const useRemoveOrganisationMember = (
 
     return {
         removeOrganisationMember: { run: deleteData, ...state },
+    }
+}
+
+/**
+ *  Set a user's role in a group
+ *  Role is set to either 'Member' or 'Admin'
+ */
+export const useSetUserRoleInGroup = (groupId: number, userId: number) => {
+    const url = `groups/${groupId}/setUserRole/${userId}`
+    const headers = getHeaders()
+    const body = {}
+    const { postData, state } = useApiService<void>(url, {
+        body,
+        headers,
+    })
+
+    return {
+        setUserRoleInGroup: { run: postData, ...state },
+    }
+}
+
+/**
+ *  Set a user's role in an organisation
+ *  Role is set to either 'Member' or 'Admin'
+ */
+export const useSetUserRoleInOrganisation = (
+    organisationId: number,
+    userId: number
+) => {
+    const url = `organisations/${organisationId}/setUserRole/${userId}`
+    const headers = getHeaders()
+    const body = {}
+    const { postData, state } = useApiService<void>(url, {
+        body,
+        headers,
+    })
+
+    return {
+        setUserRoleInOrganisation: { run: postData, ...state },
     }
 }
