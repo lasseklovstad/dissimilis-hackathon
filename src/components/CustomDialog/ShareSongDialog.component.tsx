@@ -15,6 +15,7 @@ import {
     DialogActions,
     Dialog,
     TextField,
+    CircularProgress,
 } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { IUser } from "../../models/IUser"
@@ -80,7 +81,7 @@ export const ShareSongDialog = (props: {
     const { handleOnCloseClick, songId } = props
 
     const { changeSongProtectionLevel } = useChangeSongProtectionLevel(songId)
-    const { songShareInfo } = useGetSongShareInfo(songId)
+    const { getSongShareInfo, songShareInfo } = useGetSongShareInfo(songId)
     const { shareSong } = useShareSong(songId)
     const { unshareSong } = useUnshareSong(songId)
     const { setGroupTags } = useSetGroupTags(songId)
@@ -111,7 +112,7 @@ export const ShareSongDialog = (props: {
     const [filteredOrgTags, setFilteredOrgTags] =
         useState<IOrganisationIndex[]>()
     const [tags, setTags] = useState<(IGroupIndex | IOrganisationIndex)[]>()
-    const options = [
+    const tagOptions = [
         ...(groups ? groups : []),
         ...(organisations ? organisations : []),
     ]
@@ -157,14 +158,6 @@ export const ShareSongDialog = (props: {
                 groups.filter(
                     (group) => defaultGroupTagIds.indexOf(group.groupId) > -1
                 )
-            )
-            console.log("DefaultGroupTagsIds: " + defaultGroupTagIds)
-            console.log(
-                "Groups: " +
-                    groups.filter(
-                        (group) =>
-                            defaultGroupTagIds.indexOf(group.groupId) > -1
-                    )
             )
         }
     }, [defaultGroupTagIds, groups])
@@ -222,6 +215,9 @@ export const ShareSongDialog = (props: {
                 setSharedWithUserList(result.data)
                 handleCloseAddUserDialog()
             }
+            if (error) {
+                //Launch snackbar
+            }
         }
     }
 
@@ -237,17 +233,23 @@ export const ShareSongDialog = (props: {
             )
             handleCloseConfirmRemoveUserDialog()
         }
+        if (error) {
+            //Launch snackbar
+        }
     }
 
     const handleChangePublicPrivate = async (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         setPublicSong(event.target.checked)
-        const { error, result } = await changeSongProtectionLevel.run({
+        const { error } = await changeSongProtectionLevel.run({
             protectionLevel: event.target.checked
                 ? SongProtectionLevel.Public
                 : SongProtectionLevel.Private,
         })
+        if (error) {
+            //Launch snackbar
+        }
     }
 
     const onTagChange = async (
@@ -263,17 +265,17 @@ export const ShareSongDialog = (props: {
                 : orgTagList.push(group.organisationId)
             return ""
         })
-        console.log(orgTagList)
-        console.log(groupTagList)
-        const { error: groupError, result: groupResult } =
-            await setGroupTags.run({
-                tagIds: groupTagList,
-            })
+        const { error: groupError } = await setGroupTags.run({
+            tagIds: groupTagList,
+        })
 
-        const { error: orgError, result: orgResult } =
-            await setOrganisationTags.run({
-                tagIds: orgTagList,
-            })
+        const { error: orgError } = await setOrganisationTags.run({
+            tagIds: orgTagList,
+        })
+
+        if (groupError || orgError) {
+            //Launch snackbar
+        }
     }
 
     return (
@@ -286,9 +288,17 @@ export const ShareSongDialog = (props: {
                 <Typography variant="caption">
                     {t("Dialog.editRightsDescription")}
                 </Typography>
-                {sharedWithUserList &&
-                sharedWithUserList !== undefined &&
-                sharedWithUserList.length > 0 ? (
+                {getSongShareInfo.loading ? (
+                    <Grid xs={12}>
+                        <CircularProgress
+                            aria-label="Loading"
+                            size={50}
+                            style={{ margin: "30px" }}
+                        />
+                    </Grid>
+                ) : sharedWithUserList &&
+                  sharedWithUserList !== undefined &&
+                  sharedWithUserList.length > 0 ? (
                     <List
                         dense={false}
                         className={classes.item}
@@ -349,22 +359,35 @@ export const ShareSongDialog = (props: {
                     {t("Dialog.readRightsDescription")}
                 </Typography>
                 <Typography component="div" className={classes.item}>
-                    <Grid
-                        component="label"
-                        container
-                        alignItems="center"
-                        spacing={1}
-                    >
-                        <Grid item>{t("Dialog.noOne")}</Grid>
-                        <Grid item>
-                            <Switch
-                                checked={publicSong}
-                                onChange={handleChangePublicPrivate}
-                                name="publicSongState"
+                    {getSongShareInfo.loading ? (
+                        <Grid xs={12}>
+                            <CircularProgress
+                                aria-label="Loading"
+                                size={30}
+                                style={{
+                                    marginTop: "20px",
+                                    marginLeft: "20px",
+                                }}
                             />
                         </Grid>
-                        <Grid item>{t("Dialog.everyone")}</Grid>
-                    </Grid>
+                    ) : (
+                        <Grid
+                            component="label"
+                            container
+                            alignItems="center"
+                            spacing={1}
+                        >
+                            <Grid item>{t("Dialog.noOne")}</Grid>
+                            <Grid item>
+                                <Switch
+                                    checked={publicSong}
+                                    onChange={handleChangePublicPrivate}
+                                    name="publicSongState"
+                                />
+                            </Grid>
+                            <Grid item>{t("Dialog.everyone")}</Grid>
+                        </Grid>
+                    )}
                 </Typography>
                 {publicSong ? (
                     <>
@@ -375,7 +398,7 @@ export const ShareSongDialog = (props: {
                             style={{ marginBottom: "1.5em" }}
                             multiple
                             id="tags-outlined"
-                            options={options}
+                            options={tagOptions}
                             value={tags}
                             getOptionLabel={(option) =>
                                 "groupName" in option
