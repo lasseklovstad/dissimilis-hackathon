@@ -124,6 +124,7 @@ export const AdminView = () => {
                 return organisation.organisationId !== organisationId
             })
         )
+        renderedAdminOrganisationIds.length = 0 // Clear the array
     }
 
     const handleInviteUserDialogClose = () => {
@@ -215,7 +216,7 @@ export const AdminView = () => {
                             </Button>
                         </Grid>
                         {userIsOrganisationAdmin()
-                            ? adminOrganisationsFetched?.map((organisation) => {
+                            ? adminOrganisations?.map((organisation) => {
                                   renderedAdminOrganisationIds.push(
                                       organisation.organisationId
                                   )
@@ -239,31 +240,29 @@ export const AdminView = () => {
                               })
                             : ""}
                         {userIsGroupAdmin()
-                            ? groupAdminOrganisationsFetched?.map(
-                                  (organisation) => {
-                                      console.log(organisation.organisationName)
-                                      return renderedAdminOrganisationIds.includes(
-                                          organisation.organisationId
-                                      ) ? (
-                                          ""
-                                      ) : (
-                                          <Grid item xs={12}>
-                                              <AccordionComponent
-                                                  organisationId={
-                                                      organisation.organisationId
-                                                  }
-                                                  title={
-                                                      organisation.organisationName
-                                                  }
-                                                  userIsSysAdm={userIsSystemAdmin()}
-                                                  removeOrganisation={
-                                                      removeOrganisationAccordion
-                                                  }
-                                              />
-                                          </Grid>
-                                      )
-                                  }
-                              )
+                            ? groupAdminOrganisations?.map((organisation) => {
+                                  console.log(organisation.organisationName)
+                                  return renderedAdminOrganisationIds.includes(
+                                      organisation.organisationId
+                                  ) ? (
+                                      ""
+                                  ) : (
+                                      <Grid item xs={12}>
+                                          <AccordionComponent
+                                              organisationId={
+                                                  organisation.organisationId
+                                              }
+                                              title={
+                                                  organisation.organisationName
+                                              }
+                                              userIsSysAdm={userIsSystemAdmin()}
+                                              removeOrganisation={
+                                                  removeOrganisationAccordion
+                                              }
+                                          />
+                                      </Grid>
+                                  )
+                              })
                             : ""}
                     </Grid>
 
