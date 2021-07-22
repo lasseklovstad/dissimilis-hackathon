@@ -130,7 +130,8 @@ export const ExportView = () => {
     const [selectedRowsPerSheetConfig, setSelectedRowsPerSheetConfig] =
         useState(rowsPerSheetConfig[3])
     const [amountOfPages, setAmountOfPages] = useState<number>(1)
-    const { songId } = useParams<{ songId: string }>()
+    const { songId: songIdString } = useParams<{ songId: string }>()
+    const songId = Number(songIdString)
     const { songInit, getSong } = useGetSong(songId)
     const selectedVoiceId = useVoice(songInit?.voices)
     const selectedVoice = songInit?.voices.find(

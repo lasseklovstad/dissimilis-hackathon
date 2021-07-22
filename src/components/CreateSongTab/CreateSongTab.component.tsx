@@ -24,6 +24,7 @@ import { colors } from "../../utils/colors"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 
 const useStyles = makeStyles({
     root: {
@@ -60,21 +61,11 @@ const useStyles = makeStyles({
 })
 
 export const CreateSongTab = (props: {
-    voices: IVoice[]
     selectedVoiceId: number
-    songId: string
-    onAddVoice: (voice: IVoice) => void
-    onUpdateVoice: (voice: IVoice) => void
-    onDeleteVoice: (voice: IVoice) => void
+    songId: number
 }) => {
-    const {
-        voices,
-        selectedVoiceId,
-        songId,
-        onAddVoice,
-        onUpdateVoice,
-        onDeleteVoice,
-    } = props
+    const { voices, selectedVoiceId, song, dispatchSong } = useSongContext()
+    const { songId } = song
     const [newVoiceDialogIsOpen, setNewVoiceDialogIsOpen] = useState(false)
     const [renameDialogIsOpen, setRenameDialogIsOpen] = useState(false)
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false)
@@ -94,6 +85,23 @@ export const CreateSongTab = (props: {
     const classes = useStyles()
     const history = useHistory()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+    const onAddVoice = (voice: IVoice) => {
+        dispatchSong({ type: "ADD_VOICE", voice })
+        history.push(`?voice=${voice.songVoiceId}`)
+    }
+
+    const onDeleteVoice = (voice: IVoice) => {
+        dispatchSong({ type: "DELETE_VOICE", songVoiceId: voice.songVoiceId })
+
+        if (voice.songVoiceId === selectedVoiceId) {
+            history.push(`/song/${songId}`)
+        }
+    }
+
+    const onUpdateVoice = (voice: IVoice) => {
+        dispatchSong({ type: "UPDATE_VOICE_NAME", voice })
+    }
 
     const handleAddVoice = async (title: string, option: string) => {
         const voiceNumber = Math.max(

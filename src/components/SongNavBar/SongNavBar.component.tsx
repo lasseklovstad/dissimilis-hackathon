@@ -12,10 +12,12 @@ import { MenuButton } from "../MenuButton/MenuButton.component"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 import { colors } from "../../utils/colors"
 import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
-import { useLogout } from "../../utils/useApiServiceUsers"
+import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { useTranslation } from "react-i18next"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useUpdateSong } from "../../utils/useApiServiceSongs"
 
 const useStyles = makeStyles({
     root: {
@@ -62,24 +64,30 @@ const useStyles = makeStyles({
     },
 })
 
-export const SongNavBar = (props: {
-    title: string
-    voiceId: number
-    onTitleBlur: (title: string) => void
-    user?: string
-    setBarEditMode: () => void
-    barEditMode: boolean
-}) => {
+export const SongNavBar = () => {
+    const { song, dispatchSong } = useSongContext()
     const classes = useStyles()
     const matches = useMediaQuery("(max-width:600px)")
-    const [title, setTitle] = useState(props.title)
+
+    //TODO: Should title stuff be moved to SongContext?
+    const [title, setTitle] = useState(song.title)
     const { t } = useTranslation()
+    const { putSong } = useUpdateSong(song.songId)
+    const { logout } = useLogout()
+    const { userInit } = useGetUser()
 
     useEffect(() => {
-        setTitle(props.title)
-    }, [props.title])
+        setTitle(song.title)
+    }, [song.title])
 
-    const { logout } = useLogout()
+    const handleTitleBlur = async (title: string) => {
+        if (title !== song.title) {
+            const { error, result } = await putSong.run({ title })
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_SONG", song: result.data })
+            }
+        }
+    }
 
     return (
         <Box className={classes.root} mb={matches ? 2 : 4}>
@@ -105,7 +113,7 @@ export const SongNavBar = (props: {
                                 },
                             }}
                             value={title}
-                            onBlur={(ev) => props.onTitleBlur(ev.target.value)}
+                            onBlur={(ev) => handleTitleBlur(ev.target.value)}
                             onChange={(ev) => setTitle(ev.target.value)}
                             fullWidth
                         />
@@ -113,7 +121,7 @@ export const SongNavBar = (props: {
                     {!matches ? (
                         <>
                             <Box ml={4} mr={1}>
-                                <Typography>{props.user}</Typography>
+                                <Typography>{userInit?.email}</Typography>
                             </Box>
                             <Box mr={4}>
                                 <IconButton
@@ -126,16 +134,7 @@ export const SongNavBar = (props: {
                             </Box>
                         </>
                     ) : undefined}
-                    <MenuButton
-                        songTitle={title}
-                        voiceId={props.voiceId}
-                        showName={matches}
-                        user={props.user}
-                        setBarEditMode={props.setBarEditMode}
-                        barEditMode={props.barEditMode}
-                        updateSongTitle={setTitle}
-                        onLogout={logout.run}
-                    />
+                    <MenuButton showName={matches} updateSongTitle={setTitle} />
                 </Box>
             </AppBar>
             <Loading isLoading={logout.loading} fullScreen />

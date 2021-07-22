@@ -18,7 +18,7 @@ export const useChords = () => {
         setValuesForSelectedChord,
     } = useSongContext()
     const { updateChord } = useUpdateChord(
-        song.songId.toString(),
+        song.songId,
         selectedVoiceId,
         selectedBarId,
         selectedChordId

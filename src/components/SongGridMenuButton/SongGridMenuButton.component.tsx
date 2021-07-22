@@ -28,9 +28,9 @@ export const SongGridMenuButton = (props: {
     const { t } = useTranslation()
     const history = useHistory()
     const { songId } = props
-    const { deleteSong } = useDeleteSong(songId.toString())
+    const { deleteSong } = useDeleteSong(songId)
     const { duplicateSong } = useDuplicateSong(songId)
-    const { putSong } = useUpdateSong(songId.toString())
+    const { putSong } = useUpdateSong(songId)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)

@@ -145,7 +145,7 @@ const noteLengths = [
 export const BottomBar = (props: {
     timeSignature: { numerator: number; denominator: number }
     addBar: (song: ISong) => void
-    songId: string
+    songId: number
     voiceId: number
     onChordChange: (chord: string) => void
     onChordLengthChange: (length: number) => void

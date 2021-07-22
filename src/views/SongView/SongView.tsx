@@ -1,18 +1,16 @@
 import React, { MutableRefObject, useEffect, useRef } from "react"
 import { Grid, makeStyles, Slide, useScrollTrigger } from "@material-ui/core"
-import { useHistory, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.component"
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
 import { useBarsPerRow, useBars } from "../../utils/useBars"
 import { Song } from "../../components/Song/Song.component"
 import { useChords } from "../../utils/useChords"
-import { useGetSong, useUpdateSong } from "../../utils/useApiServiceSongs"
-import { useGetUser } from "../../utils/useApiServiceUsers"
+import { useGetSong } from "../../utils/useApiServiceSongs"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { useSongContext } from "./SongContextProvider.component"
-import { IVoice } from "../../models/IVoice"
 import { chords, notes } from "../../models/chords"
 import { colors } from "../../utils/colors"
 import { ChordType } from "../../models/IChordMenuOptions"
@@ -46,12 +44,10 @@ const heightOfBar = 185
 export const SongView = () => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const history = useHistory()
-    const { songId } = useParams<{ songId: string }>()
+    const { songId: songIdString } = useParams<{ songId: string }>()
+    const songId = Number(songIdString)
     const { getSong, songInit } = useGetSong(songId)
     const barsPerRow = useBarsPerRow()
-    const { putSong } = useUpdateSong(songId)
-    const { userInit } = useGetUser()
     const trigger = useScrollTrigger()
     const chordOptionsRef = useRef() as MutableRefObject<HTMLAnchorElement>
 
@@ -61,10 +57,6 @@ export const SongView = () => {
         chordMenuOptions,
         selectedVoice,
         selectedVoiceId,
-        setBarsClipboard,
-        setSelectedBars,
-        barEditMode,
-        setBarEditMode,
     } = useSongContext()
 
     const { denominator, numerator, voices } = song
@@ -108,32 +100,6 @@ export const SongView = () => {
         }
     }, [songInit, dispatchSong])
 
-    const handleTitleBlur = async (title: string) => {
-        if (title !== song.title) {
-            const { error, result } = await putSong.run({ title })
-            if (!error && result) {
-                dispatchSong({ type: "UPDATE_SONG", song: result.data })
-            }
-        }
-    }
-
-    const handleAddVoice = (voice: IVoice) => {
-        dispatchSong({ type: "ADD_VOICE", voice })
-        history.push(`?voice=${voice.songVoiceId}`)
-    }
-
-    const handleDeleteVoice = (voice: IVoice) => {
-        dispatchSong({ type: "DELETE_VOICE", songVoiceId: voice.songVoiceId })
-
-        if (voice.songVoiceId === selectedVoiceId) {
-            history.push(`/song/${songId}`)
-        }
-    }
-
-    const handleUpdateVoice = (voice: IVoice) => {
-        dispatchSong({ type: "UPDATE_VOICE_NAME", voice })
-    }
-
     if (getSong.loading) {
         return <LoadingLogo />
     }
@@ -151,26 +117,11 @@ export const SongView = () => {
                     <Slide appear={false} direction="down" in={!trigger}>
                         <Grid container className={classes.header}>
                             <Grid item xs={12}>
-                                <SongNavBar
-                                    title={song.title}
-                                    onTitleBlur={handleTitleBlur}
-                                    voiceId={selectedVoiceId}
-                                    user={userInit?.email}
-                                    setBarEditMode={() => {
-                                        setBarEditMode(!barEditMode)
-                                        setSelectedBars(undefined)
-                                        setBarsClipboard(undefined)
-                                    }}
-                                    barEditMode={barEditMode}
-                                />
+                                <SongNavBar />
                             </Grid>
                             <Grid item xs={12}>
                                 <CreateSongTab
-                                    onDeleteVoice={handleDeleteVoice}
-                                    onUpdateVoice={handleUpdateVoice}
-                                    onAddVoice={handleAddVoice}
                                     songId={songId}
-                                    voices={song.voices}
                                     selectedVoiceId={selectedVoiceId}
                                 />
                             </Grid>

@@ -56,9 +56,7 @@ export const EditSongInfoDialog = (props: {
     const [speedTextFieldInput, setSpeedTextFieldInput] = useState<number>(0)
     const { t } = useTranslation()
 
-    const { getSongMetadata, songMetadataFetched } = useGetSongMetadata(
-        songId.toString()
-    )
+    const { getSongMetadata, songMetadataFetched } = useGetSongMetadata(songId)
 
     const isLoadingGet = getSongMetadata.loading
 

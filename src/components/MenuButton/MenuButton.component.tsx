@@ -23,18 +23,25 @@ import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { EditSongInfoDialog } from "../CustomDialog/EditSongInfoDialog.component"
 import { TransposeDialog } from "../CustomDialog/TransposeDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
 
 export const MenuButton = (props: {
-    voiceId: number
     showName: boolean
-    user?: string
-    setBarEditMode: () => void
-    barEditMode: boolean
-    onLogout: () => void
     updateSongTitle: (title: string) => void
-    songTitle: string
 }) => {
-    const { songTitle } = props
+    const {
+        song,
+        selectedVoiceId: voiceId,
+        setBarEditMode,
+        barEditMode,
+        setSelectedBars,
+        setBarsClipboard,
+    } = useSongContext()
+    const { title: songTitle } = song
+    const { userInit } = useGetUser()
+    const { logout } = useLogout()
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongDialogIsOpen, setDeleteSongDialogIsOpen] = useState(false)
     const [duplicateSongDialogIsOpen, setDuplicateSongDialogIsOpen] =
@@ -42,17 +49,22 @@ export const MenuButton = (props: {
     const [songInfoDialogIsOpen, setSongInfoDialogIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
-    const { songId, title, transpose } = useParams<{
+    const {
+        songId: songIdString,
+        title,
+        transpose,
+    } = useParams<{
         songId: string
         title: string
         transpose: string
     }>()
+    const songId = Number(songIdString)
     const { deleteSong } = useDeleteSong(songId)
     const [transposeSongDialogIsOpen, setTransposeSongDialogIsOpen] =
         useState(false)
     const { transposeSong } = useTransposeSong(songId, title, transpose)
-    const { duplicateSong } = useDuplicateSong(Number(songId))
-    const { putSong } = useUpdateSong(songId.toString())
+    const { duplicateSong } = useDuplicateSong(songId)
+    const { putSong } = useUpdateSong(songId)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -67,7 +79,7 @@ export const MenuButton = (props: {
     }
 
     const exportSong = async () => {
-        history.push(`/song/${songId}/export?voice=${props.voiceId}`)
+        history.push(`/song/${songId}/export?voice=${voiceId}`)
     }
 
     const handleOpenTransposeSongDialog = async () => {
@@ -118,7 +130,9 @@ export const MenuButton = (props: {
                 setDuplicateSongDialogIsOpen(true)
                 break
             case "editBars":
-                props.setBarEditMode()
+                setBarEditMode(!barEditMode)
+                setSelectedBars(undefined)
+                setBarsClipboard(undefined)
                 break
             case "info":
                 handleOpenSongInfoDialog()
@@ -196,7 +210,7 @@ export const MenuButton = (props: {
                         {t("MenuButton.delete")}
                     </MenuItem>
                     <MenuItem onClick={() => handleClose("editBars")}>
-                        {props.barEditMode
+                        {barEditMode
                             ? t("MenuButton.cancelEditBars")
                             : t("MenuButton.editBars")}
                     </MenuItem>
@@ -207,9 +221,9 @@ export const MenuButton = (props: {
                         <>
                             <Divider variant="middle" />
                             <MenuItem disabled>
-                                <Typography>{props.user}</Typography>
+                                <Typography>{userInit?.email}</Typography>
                             </MenuItem>
-                            <MenuItem onClick={props.onLogout}>
+                            <MenuItem onClick={logout.run}>
                                 <Typography>{t("LoginView.logout")}</Typography>
                             </MenuItem>
                         </>
@@ -220,7 +234,7 @@ export const MenuButton = (props: {
                     onClose={() => handleCloseSongInfoDialog()}
                 >
                     <EditSongInfoDialog
-                        songId={parseInt(songId)}
+                        songId={songId}
                         handleOnCancelClick={() => handleCloseSongInfoDialog()}
                         handleOnSaveClick={handleSaveSongInfo}
                         isLoadingPatch={putSong.loading}
