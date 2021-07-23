@@ -307,11 +307,6 @@ export const AdminView = () => {
                             ? "You do not have permissions to view this page"
                             : ""}
                     </Typography>
-                    <ErrorDialog
-                        error={getUser.error}
-                        isError={getUser.isError}
-                        title="There was an error fetching the user access level"
-                    />
                 </Grid>
             </Box>
         </>
