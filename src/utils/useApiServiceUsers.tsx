@@ -44,3 +44,20 @@ export const useLogout = () => {
         logout: { run: logout, ...state },
     }
 }
+
+export const useGetUsers = () => {
+    const url = "user"
+    const headers = getHeaders()
+    const initialData: IUser[] = []
+    const { getData, state, data } = useApiService<IUser[]>(url, {
+        headers,
+        initialData,
+    })
+    useEffect(() => {
+        getData()
+    }, [getData])
+    return {
+        getUsers: { run: getData, ...state },
+        users: data,
+    }
+}
