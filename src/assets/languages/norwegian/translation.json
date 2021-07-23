@@ -161,7 +161,8 @@
         "removePerson": "Fjern person",
         "shareWithPerson": "Del med person",
         "removePersonShareDescription": "Fjern redigeringsrettighetene til ",
-        "email": "E-post"
+        "email": "E-post",
+        "tags": "Tags"
     },
     "Song": {
         "arranger": "Arrangør",

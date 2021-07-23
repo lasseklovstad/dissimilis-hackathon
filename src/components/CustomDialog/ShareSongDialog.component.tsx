@@ -103,7 +103,7 @@ export const ShareSongDialog = (props: {
     const [publicSong, setPublicSong] = useState(false)
 
     const [groups, setGroups] = useState<IGroupIndex[] | undefined>()
-    const [organisations, setorganisations] = useState<
+    const [organisations, setOrganisations] = useState<
         IOrganisationIndex[] | undefined
     >()
     const [defaultGroupTagIds, setDefaultGroupTagIds] = useState<number[]>()
@@ -125,7 +125,7 @@ export const ShareSongDialog = (props: {
 
     useEffect(() => {
         if (organisationsFetched) {
-            setorganisations(organisationsFetched)
+            setOrganisations(organisationsFetched)
         }
     }, [organisationsFetched])
 
@@ -206,18 +206,14 @@ export const ShareSongDialog = (props: {
         setConfirmRemoveUserDialogIsOpen(false)
     }
 
-    const handleAddUser = async (userEmail: string) => {
-        if (users) {
-            const userId = users.filter((user) => user.email == userEmail)[0]
-                .userId
-            const { error, result } = await shareSong.run(null, `/${userId}`)
-            if (!error && result) {
-                setSharedWithUserList(result.data)
-                handleCloseAddUserDialog()
-            }
-            if (error) {
-                //Launch snackbar
-            }
+    const handleAddUser = async (user: IUser) => {
+        const { error, result } = await shareSong.run(null, `/${user.userId}`)
+        if (!error && result) {
+            setSharedWithUserList(result.data)
+            handleCloseAddUserDialog()
+        }
+        if (error) {
+            //Launch snackbar
         }
     }
 
@@ -259,11 +255,10 @@ export const ShareSongDialog = (props: {
         setTags(value)
         const orgTagList: number[] = []
         const groupTagList: number[] = []
-        value.map((group) => {
+        value.forEach(function (group) {
             "groupName" in group
                 ? groupTagList.push(group.groupId)
                 : orgTagList.push(group.organisationId)
-            return ""
         })
         const { error: groupError } = await setGroupTags.run({
             tagIds: groupTagList,
@@ -411,7 +406,7 @@ export const ShareSongDialog = (props: {
                                 <TextField
                                     {...params}
                                     variant="outlined"
-                                    placeholder="Choose a group"
+                                    placeholder={t("Dialog.tags")}
                                 />
                             )}
                         />

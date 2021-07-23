@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export const UserAutoCompleteDialog = (props: {
-    handleOnSaveClick: (value: string) => void
+    handleOnSaveClick: (value: IUser) => void
     handleOnCancelClick: () => void
     isLoading?: boolean
     userList: IUser[]
@@ -62,7 +62,9 @@ export const UserAutoCompleteDialog = (props: {
         <form
             onSubmit={(event) => {
                 event.preventDefault()
-                handleOnSaveClick(userInput)
+                handleOnSaveClick(
+                    userList.filter((user) => user.email === userInput)[0]
+                )
             }}
         >
             <DialogTitle>{title}</DialogTitle>

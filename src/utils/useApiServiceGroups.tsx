@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { IGroup, IGroupIndex } from "../models/IGroup"
-import { IOrganisation, IOrganisationIndex } from "../models/IOrganisation"
+import { IOrganisationIndex } from "../models/IOrganisation"
 import { useApiService } from "./useApiService"
 
 export enum GroupFilter {
