@@ -88,6 +88,9 @@ export const theme = createMuiTheme({
         primary: {
             main: colors.gray_400,
         },
+        secondary: {
+            main: colors.gray_500_dark,
+        },
         background: {
             default: colors.gray_100,
         },

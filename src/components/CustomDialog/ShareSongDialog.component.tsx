@@ -347,44 +347,42 @@ export const ShareSongDialog = (props: {
                 <Typography variant="caption">
                     {t("Dialog.readRightsDescription")}
                 </Typography>
-                <Typography component="div" className={classes.item}>
-                    {getSongShareInfo.loading ? (
-                        <Grid xs={12}>
-                            <CircularProgress
-                                aria-label="Loading"
-                                size={30}
-                                style={{
-                                    marginTop: "20px",
-                                    marginLeft: "20px",
-                                }}
+                {getSongShareInfo.loading ? (
+                    <Grid xs={12}>
+                        <CircularProgress
+                            aria-label="Loading"
+                            size={30}
+                            style={{
+                                marginTop: "20px",
+                                marginLeft: "20px",
+                            }}
+                        />
+                    </Grid>
+                ) : (
+                    <Grid container alignItems="center" spacing={1}>
+                        <Grid item>{t("Dialog.noOne")}</Grid>
+                        <Grid item>
+                            <Switch
+                                checked={publicSong}
+                                onChange={handleChangePublicPrivate}
+                                name="publicSongState"
+                                color={"secondary"}
                             />
                         </Grid>
-                    ) : (
-                        <Grid
-                            component="label"
-                            container
-                            alignItems="center"
-                            spacing={1}
-                        >
-                            <Grid item>{t("Dialog.noOne")}</Grid>
-                            <Grid item>
-                                <Switch
-                                    checked={publicSong}
-                                    onChange={handleChangePublicPrivate}
-                                    name="publicSongState"
-                                />
-                            </Grid>
-                            <Grid item>{t("Dialog.everyone")}</Grid>
-                        </Grid>
-                    )}
-                </Typography>
+                        <Grid item>{t("Dialog.everyone")}</Grid>
+                    </Grid>
+                )}
                 {publicSong ? (
                     <>
                         <Typography variant="caption">
                             {t("Dialog.tagsDescription")}
                         </Typography>
                         <Autocomplete
-                            style={{ marginBottom: "1.5em" }}
+                            style={{
+                                marginBottom: "1.5em",
+                                maxHeight: 150,
+                                overflow: "auto",
+                            }}
                             multiple
                             id="tags-outlined"
                             options={tagOptions}
