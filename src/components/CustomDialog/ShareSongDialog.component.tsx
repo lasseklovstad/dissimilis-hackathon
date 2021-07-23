@@ -42,7 +42,7 @@ import {
 } from "../../utils/useApiServiceGroups"
 import { Autocomplete } from "@material-ui/lab"
 import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
-import { useGetUser, useGetUsers } from "../../utils/useApiServiceUsers"
+import { useGetUsers } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -85,13 +85,13 @@ export const ShareSongDialog = (props: {
     const { shareSong } = useShareSong(songId)
     const { unshareSong } = useUnshareSong(songId)
     const { setGroupTags } = useSetGroupTags(songId)
-    const { userInit } = useGetUser()
     const { setOrganisationTags } = useSetOrganisationTags(songId)
     const { users } = useGetUsers()
     const { organisationsFetched } = useGetOrganisations(
         OrganisationFilter.User
     )
     const { allGroupsFetched } = useGetGroups(GroupFilter.User)
+    const userId = sessionStorage.getItem("userId") || undefined
 
     const [sharedWithUserList, setSharedWithUserList] = useState<IUser[]>([])
     const [selectedUser, setSelectedUser] = useState<IUser>()
@@ -182,12 +182,12 @@ export const ShareSongDialog = (props: {
     }, [filteredOrgTags, filteredGroupTags])
 
     useEffect(() => {
-        if (userInit && users) {
+        if (userId && users) {
             setFilteredUserList(
                 users.filter(
                     (user) =>
                         !(
-                            user.userId === userInit.userId ||
+                            user.userId === Number(userId) ||
                             sharedWithUserList.some(
                                 (sharedUser) =>
                                     user.userId === sharedUser.userId
@@ -196,7 +196,7 @@ export const ShareSongDialog = (props: {
                 )
             )
         }
-    }, [userInit, users, sharedWithUserList])
+    }, [userId, users, sharedWithUserList])
 
     const handleCloseAddUserDialog = () => {
         setAddUserDialogIsOpen(false)
