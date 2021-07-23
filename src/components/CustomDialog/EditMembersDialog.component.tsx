@@ -131,10 +131,10 @@ export const EditMembersDialog = (props: {
 
     return (
         <>
-            <DialogTitle>{t("Dialog.editAdmins")}</DialogTitle>
+            <DialogTitle>{t("Dialog.editGroupMembers")}</DialogTitle>
             <DialogContent>
                 <Typography variant="caption">
-                    {t("Dialog.adminsIn") + " "}
+                    {t("Dialog.membersIn") + " "}
                     {groupName}:
                 </Typography>
                 {getMembers()}
@@ -151,7 +151,7 @@ export const EditMembersDialog = (props: {
             <Dialog
                 open={confirmationDialogIsOpen}
                 onClose={handleCloseConfirmationDialog}
-                aria-label={t("Dialog.addAdmin")}
+                aria-label={t("Dialog.removeMember")}
             >
                 <ChoiceDialog
                     handleOnCancelClick={handleCloseConfirmationDialog}
@@ -160,7 +160,7 @@ export const EditMembersDialog = (props: {
                     cancelText={t("Dialog.cancel")}
                     headerText={t("Dialog.removeMember")}
                     descriptionText={
-                        t("Dialog.removeMemberDescription") +
+                        t("Dialog.removeAdminDescription") +
                         " " +
                         (selectedMember?.name || t("Dialog.thisUser")) +
                         " " +

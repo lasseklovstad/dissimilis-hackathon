@@ -50,7 +50,8 @@
         "address": "Adresse",
         "system": "systemet",
         "deleteCountry": "Slett land",
-        "deleteGroup": "Slett gruppe"
+        "deleteGroup": "Slett gruppe",
+        "addUser": "Legg til bruker"
     },
     "LibraryView": {
         "defaultHeading": "Bibliotek",
@@ -202,7 +203,11 @@
         "cannotUndo": "Denne handlingen kan ikke angres.",
         "thisUser": "denne brukeren",
         "deleteCountryDescription": "Denne handlingen vil slette landet, og er irreversibel",        
-        "deleteGroupDescription": "Denne handlingen vil slette gruppen, og er irreversibel"
+        "deleteGroupDescription": "Denne handlingen vil slette gruppen, og er irreversibel",
+        "editGroupMembers": "Rediger gruppemedlemer",
+        "membersIn": "Medlemmer i ",
+        "removeMember": "Fjern gruppemedlem",
+        "asMember": "som medlem?"
     },
     "Song": {
         "arranger": "Arrangør",

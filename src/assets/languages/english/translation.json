@@ -52,7 +52,8 @@
         "address": "Address",
         "system": "the system",
         "deleteCountry": "Delete country",
-        "deleteGroup": "Delete group"
+        "deleteGroup": "Delete group",
+        "addUser": "Add user"
     },
     "LibraryView": {
         "defaultHeading": "Library",
@@ -205,7 +206,11 @@
         "cannotUndo": "This action can not be undone.",
         "thisUser": "this user",
         "deleteCountryDescription": "This action will delete the country, this action is irreversible.",        
-        "deleteGroupDescription": "This action will delete the group, this action is irreversible."
+        "deleteGroupDescription": "This action will delete the group, this action is irreversible.",
+        "editGroupMembers": "Edit group members",
+        "membersIn": "Members in ",
+        "removeMember": "Remove member",
+        "asMember": "as member?"
     },
     "Song": {
         "arranger": "Arranger",
