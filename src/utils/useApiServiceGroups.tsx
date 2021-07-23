@@ -26,7 +26,7 @@ const getHeaders = () => {
  * Get all groups based on different parameters
  * */
 export const useGetGroups = (groupFilter: GroupFilter) => {
-    const url = `organisations/groups?filter="${groupFilter}"`
+    const url = `organisations/groups?filter=${groupFilter}`
     const initialData: IGroupIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
@@ -51,7 +51,7 @@ export const useGetGroupsInOrganisation = (
     groupFilter: GroupFilter,
     organisationId: number
 ) => {
-    const url = `organisations/${organisationId}/groups?filter="${groupFilter}"`
+    const url = `organisations/${organisationId}/groups?filter=${groupFilter}`
     const initialData: IGroup[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IGroup[]>(url, {
@@ -73,7 +73,7 @@ export const useGetGroupsInOrganisation = (
  * Get organisations based on different parameters
  * */
 export const useGetOrganisations = (organisationFilter: OrganisationFilter) => {
-    const url = `organisations?filter="${organisationFilter}"`
+    const url = `organisations?filter=${organisationFilter}`
     const body = {
         filter: organisationFilter,
     }
