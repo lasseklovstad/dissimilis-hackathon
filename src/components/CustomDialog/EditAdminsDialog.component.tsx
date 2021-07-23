@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     Button,
     Dialog,
@@ -65,18 +65,10 @@ export const EditAdminsDialog = (props: {
         useState(false)
     const [selectedAdmin, setSelectedAdmin] = useState<IUser>()
 
-    const getAdmins = () => {
-        if (group !== undefined && !editSysAdmins) {
-            return group.admins
-        }
-        if (editSysAdmins) {
-            return [] //RETURNER SYSTEMADMINS
-        }
-        return []
-    }
+    const [adminList, setAdminsList] = useState<IUser[]>(group?.admins || [])
 
     const handleDeleteAdmin = /* async */ () => {
-        if (getAdmins().length > 1) {
+        if (adminList.length > 1) {
             if (selectedAdmin) {
                 console.log(
                     "Should now delete " + selectedAdmin.name + " from admins"
@@ -121,7 +113,7 @@ export const EditAdminsDialog = (props: {
                     :
                 </Typography>
                 <List dense={false}>
-                    {getAdmins().map((admin) => {
+                    {adminList.map((admin) => {
                         return (
                             <ListItem key={admin.email + "-list-item"}>
                                 <ListItemText

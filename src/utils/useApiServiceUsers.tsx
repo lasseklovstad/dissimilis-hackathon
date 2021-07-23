@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useApiService } from "./useApiService"
-import { IUser } from "../models/IUser"
+import { IAdminStatuses, IUser } from "../models/IUser"
 import { useHistory } from "react-router"
 
 const getHeaders = () => {
@@ -52,7 +52,9 @@ export const useGetAdminStatuses = () => {
     const url = "user/currentUser/adminStatuses"
     const headers = getHeaders()
 
-    const { getData, state, data } = useApiService<IUser>(url, { headers })
+    const { getData, state, data } = useApiService<IAdminStatuses>(url, {
+        headers,
+    })
 
     useEffect(() => {
         getData()

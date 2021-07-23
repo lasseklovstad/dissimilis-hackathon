@@ -10,7 +10,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useHistory } from "react-router"
-import { useGetUser } from "../../utils/useApiServiceUsers"
+import { useGetAdminStatuses, useGetUser } from "../../utils/useApiServiceUsers"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { AccordionComponent } from "../../components/AdminViewComponents/AccordionComponent.component"
 import AddIcon from "@material-ui/icons/Add"
@@ -52,10 +52,10 @@ export const AdminView = () => {
     const { postOrganisation } = usePostOrganisation()
 
     const { getUser, userInit } = useGetUser()
+    const { adminStatuses } = useGetAdminStatuses()
 
     const userIsSystemAdmin = () => {
-        return true // FJERN
-        //return userInit ? userInit?.isSystemAdmin : false
+        return adminStatuses?.systemAdmin || false
     }
 
     const {

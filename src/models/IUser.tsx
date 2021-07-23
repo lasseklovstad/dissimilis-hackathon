@@ -4,3 +4,9 @@ export interface IUser {
     email: string
     isSystemAdmin: boolean
 }
+
+export interface IAdminStatuses {
+    systemAdmin: boolean
+    organisationAdmin: boolean
+    groupAdmin: boolean
+}
