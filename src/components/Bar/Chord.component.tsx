@@ -331,7 +331,6 @@ export const Chord = (props: ChordProps) => {
                                         {showNoteLetters || Number(tangent)
                                             ? tangent
                                             : undefined}
-                                        {console.log(Bar)}
                                     </ButtonBase>
                                 </>
                             )
