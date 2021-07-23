@@ -10,8 +10,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useHistory } from "react-router"
-import { useGetAdminStatuses, useGetUser } from "../../utils/useApiServiceUsers"
-import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
+import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 import { AccordionComponent } from "../../components/AdminViewComponents/AccordionComponent.component"
 import AddIcon from "@material-ui/icons/Add"
 import EditIcon from "@material-ui/icons/Edit"
@@ -57,17 +56,15 @@ export const AdminView = () => {
         return adminStatuses?.systemAdmin || false
     }
 
-    const {
-        getOrganisations: getAdminOrganisations,
-        organisationsFetched: adminOrganisationsFetched,
-    } = useGetOrganisations(
-        userIsSystemAdmin() ? OrganisationFilter.All : OrganisationFilter.Admin
-    )
+    const { organisationsFetched: adminOrganisationsFetched } =
+        useGetOrganisations(
+            userIsSystemAdmin()
+                ? OrganisationFilter.All
+                : OrganisationFilter.Admin
+        )
 
-    const {
-        getOrganisations: getGroupAdminOrganisations,
-        organisationsFetched: groupAdminOrganisationsFetched,
-    } = useGetOrganisations(OrganisationFilter.GroupAdmin)
+    const { organisationsFetched: groupAdminOrganisationsFetched } =
+        useGetOrganisations(OrganisationFilter.GroupAdmin)
 
     const [adminOrganisations, setAdminOrganisations] = useState<
         IOrganisationIndex[] | undefined

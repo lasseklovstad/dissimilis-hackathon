@@ -60,12 +60,12 @@ export const AddGroupDialog = (props: {
     const { t } = useTranslation()
     const classes = useStyles()
 
-    const {
-        getOrganisations: getAdminOrganisations,
-        organisationsFetched: adminOrganisationsFetched,
-    } = useGetOrganisations(
-        userIsSystemAdmin ? OrganisationFilter.All : OrganisationFilter.Admin
-    )
+    const { organisationsFetched: adminOrganisationsFetched } =
+        useGetOrganisations(
+            userIsSystemAdmin
+                ? OrganisationFilter.All
+                : OrganisationFilter.Admin
+        )
 
     const [groupNameInput, setGroupNameInput] = useState("")
     const [organisationInput, setOrganisationInput] = useState<IOrganisation>()

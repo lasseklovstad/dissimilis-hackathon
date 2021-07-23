@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import {
     Accordion,
     AccordionDetails,
@@ -20,7 +20,6 @@ import {
     useDeleteOrganisation,
     useGetOrganisation,
     useAddOrganisationMember,
-    useRemoveOrganisationMember,
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { IUser } from "../../models/IUser"

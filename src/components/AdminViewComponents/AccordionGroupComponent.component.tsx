@@ -73,7 +73,7 @@ export const AccordionGroupComponent = (props: {
     const { t } = useTranslation()
 
     const [addMemberDialogIsOpen, setAddMemberDialogIsOpen] = useState(false)
-    const { getGroup, groupFetched } = useGetGroup(groupId)
+    const { groupFetched } = useGetGroup(groupId)
     const { deleteGroup } = useDeleteGroup(groupId)
     const { addGroupMember } = useAddGroupMember(groupId)
 

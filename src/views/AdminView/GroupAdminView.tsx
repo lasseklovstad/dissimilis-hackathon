@@ -10,8 +10,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useHistory, useParams } from "react-router"
-import { useGetAdminStatuses, useGetUser } from "../../utils/useApiServiceUsers"
-import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
+import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 import AddIcon from "@material-ui/icons/Add"
 import { colors } from "../../utils/colors"
 import { InviteUserToSystemDialog } from "../../components/CustomDialog/InviteUserToSystemDialog.components"
@@ -75,9 +74,9 @@ export const GroupAdminView = () => {
 
     const userIsAdminInCurrentOrganisation = () => {
         return userId && organisationFetched?.admins
-            ? organisationFetched?.admins.filter((admin) => {
-                  return admin.userId.toString() === userId
-              }).length > 0
+            ? organisationFetched?.admins.some(
+                  (admin) => admin.userId.toString() === userId
+              )
             : false || userIsSystemAdmin()
     }
 

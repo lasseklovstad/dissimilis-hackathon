@@ -13,7 +13,6 @@ import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { useTranslation } from "react-i18next"
 import { Autocomplete } from "@material-ui/lab"
 import { IUser } from "../../models/IUser"
-import { usePostOrganisation } from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles((theme) => {
     return {
