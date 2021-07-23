@@ -70,7 +70,6 @@ export const UserAutoCompleteDialog = (props: {
                         userId: 2,
                         name: "Håkon",
                         email: "hakon.anders.stromsodd@ciber.no",
-                        isSystemAdmin: true,
                     }
                 )
             }}

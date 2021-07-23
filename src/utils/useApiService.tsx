@@ -17,7 +17,11 @@ const useDeepCompareMemoize = (value: DependencyList) => {
 }
 
 const useDeepCallback = <T extends unknown>(
-    cb: (method: HTTPMethod, body?: unknown) => Promise<FetchReturn<T>>,
+    cb: (
+        method: HTTPMethod,
+        body?: unknown,
+        appendUrl?: string
+    ) => Promise<FetchReturn<T>>,
     deps: DependencyList
     // eslint-disable-next-line react-hooks/exhaustive-deps
 ) => useCallback(cb, useDeepCompareMemoize(deps))
@@ -29,6 +33,7 @@ const useDeepCallback = <T extends unknown>(
 export type ApiServiceOptions<T, R> = {
     body?: R
     initialData?: T
+    appendUrl?: string
     params?: Record<string, string>
     headers?: Record<string, string>
 }
@@ -62,10 +67,10 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
     }
 
     const fetchData = useDeepCallback<T>(
-        async (method, body?: unknown) => {
+        async (method, body?: unknown, appendUrl?: string) => {
             // Add params to the url
             const baseUrl = process.env.REACT_APP_API_URL as string
-            let finalUrl = baseUrl + url
+            let finalUrl = baseUrl + url + (appendUrl || "")
             if (params) {
                 finalUrl += `?${new URLSearchParams(params).toString()}`
             }
@@ -145,8 +150,8 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
     )
 
     const putData = useCallback(
-        async (body?: unknown) => {
-            return fetchData("patch", body)
+        async (body?: unknown, appendUrl?: string) => {
+            return fetchData("patch", body, appendUrl)
         },
         [fetchData]
     )

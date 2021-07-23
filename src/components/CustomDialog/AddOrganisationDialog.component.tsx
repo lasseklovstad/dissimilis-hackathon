@@ -40,7 +40,6 @@ export const AddOrganisationDialog = (props: {
             name: "Håkon",
             email: "håkon@fdsf",
             userId: 2,
-            isSystemAdmin: true,
         },
     ]
 

@@ -78,7 +78,6 @@ export const AddGroupDialog = (props: {
             name: "Håkon",
             email: "håkon@fdsf",
             userId: 2,
-            isSystemAdmin: true,
         },
     ]
 

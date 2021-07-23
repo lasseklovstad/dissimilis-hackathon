@@ -10,7 +10,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useHistory, useParams } from "react-router"
-import { useGetUser } from "../../utils/useApiServiceUsers"
+import { useGetAdminStatuses, useGetUser } from "../../utils/useApiServiceUsers"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import AddIcon from "@material-ui/icons/Add"
 import { colors } from "../../utils/colors"
@@ -64,20 +64,19 @@ export const GroupAdminView = () => {
 
     const { postGroup } = usePostGroup()
 
-    const { getUser, userInit } = useGetUser()
-    const userId = userInit?.userId
+    const { adminStatuses } = useGetAdminStatuses()
+    const userId = sessionStorage.getItem("userId") || ""
 
     const { organisationFetched } = useGetOrganisation(parseInt(organisationId))
 
     const userIsSystemAdmin = () => {
-        return true // FJERN
-        //return userInit ? userInit?.isSystemAdmin : false
+        return adminStatuses?.systemAdmin || false
     }
 
     const userIsAdminInCurrentOrganisation = () => {
-        return userInit && organisationFetched?.admins
+        return userId && organisationFetched?.admins
             ? organisationFetched?.admins.filter((admin) => {
-                  return admin.userId === userId
+                  return admin.userId.toString() === userId
               }).length > 0
             : false || userIsSystemAdmin()
     }
@@ -240,11 +239,6 @@ export const GroupAdminView = () => {
                             ? "You do not have permissions to view this page"
                             : ""}
                     </Typography>
-                    <ErrorDialog
-                        error={getUser.error}
-                        isError={getUser.isError}
-                        title="There was an error fetching the user access level"
-                    />
                 </Grid>
             </Box>
         </>

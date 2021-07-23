@@ -23,6 +23,11 @@ import AddIcon from "@material-ui/icons/Add"
 import { ChoiceDialog } from "./ChoiceDialog.component"
 import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
 import { IGroup } from "../../models/IGroup"
+import {
+    UserRole,
+    useSetUserRoleInGroup,
+    useSetUserRoleInOrganisation,
+} from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -53,12 +58,24 @@ export const EditAdminsDialog = (props: {
     groupId?: number
     group?: IOrganisation | IGroup // Temporary
     editSysAdmins?: boolean
+    isGroup?: boolean
     handleOnCloseClick: () => void
 }) => {
-    const { groupId, group, handleOnCloseClick, editSysAdmins = false } = props
+    const {
+        groupId,
+        group,
+        handleOnCloseClick,
+        isGroup,
+        editSysAdmins = false,
+    } = props
     const classes = useStyles()
     const { t } = useTranslation()
     const secondary = true
+
+    const { setUserRoleInGroup } = useSetUserRoleInGroup(groupId || 0)
+    const { setUserRoleInOrganisation } = useSetUserRoleInOrganisation(
+        groupId || 0
+    )
 
     const [addAdminDialogIsOpen, setAddAdminDialogIsOpen] = useState(false)
     const [confirmationDialogIsOpen, setConfirmationDialogIsOpen] =
@@ -67,22 +84,50 @@ export const EditAdminsDialog = (props: {
 
     const [adminList, setAdminsList] = useState<IUser[]>(group?.admins || [])
 
-    const handleDeleteAdmin = /* async */ () => {
+    const handleUpdateRole = async (role: UserRole) => {
         if (adminList.length > 1) {
             if (selectedAdmin) {
-                console.log(
-                    "Should now delete " + selectedAdmin.name + " from admins"
+                const { error } = await (isGroup
+                    ? setUserRoleInGroup
+                    : setUserRoleInOrganisation
+                ).run(
+                    {
+                        userRole: UserRole.Member,
+                    },
+                    selectedAdmin.userId.toString()
                 )
+                return !!error
             }
-            setConfirmationDialogIsOpen(false)
+            return false
         } else {
             console.log("There must be at least one admin in a group!")
+            // Snackbar
+            return false
         }
     }
 
-    const handleAddAdmin = /* async */ (user: IUser | undefined) => {
-        //console.log("Should now add " + email + " as admin in " + group.name)
-        setAddAdminDialogIsOpen(false)
+    const handleDeleteAdmin = async () => {
+        const isError = await handleUpdateRole(UserRole.Member)
+        if (!isError && selectedAdmin) {
+            setAdminsList(
+                adminList.filter((user) => user.userId !== selectedAdmin.userId)
+            )
+            setConfirmationDialogIsOpen(false)
+        } else {
+            // An error occured
+            // Snackbar
+        }
+    }
+
+    const handleAddAdmin = async (user: IUser | undefined) => {
+        const isError = await handleUpdateRole(UserRole.Admin)
+        if (!isError && selectedAdmin) {
+            setAdminsList([...adminList, selectedAdmin])
+            setAddAdminDialogIsOpen(false)
+        } else {
+            // An error occured
+            // Snackbar
+        }
     }
 
     const handleOpenAddAdminDialog = () => {

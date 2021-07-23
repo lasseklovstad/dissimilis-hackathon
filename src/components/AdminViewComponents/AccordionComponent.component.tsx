@@ -315,6 +315,7 @@ export const AccordionComponent = (props: {
                 <EditAdminsDialog
                     groupId={organisationId}
                     group={organisationFetched}
+                    isGroup={false}
                     handleOnCloseClick={handleCloseEditAdminsDialog}
                 />
             </Dialog>

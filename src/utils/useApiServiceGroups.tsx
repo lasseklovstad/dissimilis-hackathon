@@ -291,17 +291,19 @@ export const useRemoveOrganisationMember = (
  *  Set a user's role in a group
  *  Role is set to either 'Member' or 'Admin'
  */
-export const useSetUserRoleInGroup = (groupId: number, userId: number) => {
-    const url = `groups/${groupId}/setUserRole/${userId}`
+export const useSetUserRoleInGroup = (groupId: number) => {
+    const url = `group/${groupId}/setUserRole`
     const headers = getHeaders()
     const body = {}
-    const { postData, state } = useApiService<void>(url, {
-        body,
+    const appendUrl = `/`
+    const { putData, state } = useApiService<void>(url, {
         headers,
+        body,
+        appendUrl,
     })
 
     return {
-        setUserRoleInGroup: { run: postData, ...state },
+        setUserRoleInGroup: { run: putData, ...state },
     }
 }
 
@@ -309,19 +311,18 @@ export const useSetUserRoleInGroup = (groupId: number, userId: number) => {
  *  Set a user's role in an organisation
  *  Role is set to either 'Member' or 'Admin'
  */
-export const useSetUserRoleInOrganisation = (
-    organisationId: number,
-    userId: number
-) => {
-    const url = `organisations/${organisationId}/setUserRole/${userId}`
+export const useSetUserRoleInOrganisation = (groupId: number) => {
+    const url = `organisation/${groupId}/setUserRole`
     const headers = getHeaders()
     const body = {}
-    const { postData, state } = useApiService<void>(url, {
-        body,
+    const appendUrl = `/`
+    const { putData, state } = useApiService<void>(url, {
         headers,
+        body,
+        appendUrl,
     })
 
     return {
-        setUserRoleInOrganisation: { run: postData, ...state },
+        setUserRoleInOrganisation: { run: putData, ...state },
     }
 }

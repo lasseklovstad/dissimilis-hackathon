@@ -51,7 +51,6 @@ export const AdminView = () => {
 
     const { postOrganisation } = usePostOrganisation()
 
-    const { getUser, userInit } = useGetUser()
     const { adminStatuses } = useGetAdminStatuses()
 
     const userIsSystemAdmin = () => {
