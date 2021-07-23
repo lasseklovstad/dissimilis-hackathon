@@ -94,13 +94,6 @@ export const MenuButton = (props: {
         setSongInfoDialogIsOpen(false)
     }
 
-    const handleOpenShareSongDialog = () => {
-        setShareSongDialogIsOpen(true)
-    }
-    const handleCloseShareSongDialog = () => {
-        setShareSongDialogIsOpen(false)
-    }
-
     const handleClose = async (
         method?:
             | "transpose"
@@ -134,7 +127,7 @@ export const MenuButton = (props: {
                 handleOpenSongInfoDialog()
                 break
             case "share":
-                handleOpenShareSongDialog()
+                setShareSongDialogIsOpen(true)
                 break
             default:
                 break
@@ -291,13 +284,15 @@ export const MenuButton = (props: {
                 </Dialog>
                 <Dialog
                     open={shareSongDialogIsOpen}
-                    onClose={handleCloseShareSongDialog}
+                    onClose={() => setShareSongDialogIsOpen(false)}
                     aria-label={"Dialog.ShareSong"}
                     maxWidth="xs"
                     fullWidth
                 >
                     <ShareSongDialog
-                        handleOnCloseClick={handleCloseShareSongDialog}
+                        handleOnCloseClick={() =>
+                            setShareSongDialogIsOpen(false)
+                        }
                         songId={parseInt(songId)}
                     />
                 </Dialog>

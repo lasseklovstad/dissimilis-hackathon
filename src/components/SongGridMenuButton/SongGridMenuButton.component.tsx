@@ -102,13 +102,6 @@ export const SongGridMenuButton = (props: {
         setSongInfoDialogIsOpen(false)
     }
 
-    const handleOpenShareSongDialog = () => {
-        setShareSongDialogIsOpen(true)
-    }
-    const handleCloseShareSongDialog = () => {
-        setShareSongDialogIsOpen(false)
-    }
-
     const handleClose = async (
         method?: "delete" | "info" | "copy" | "open" | "share"
     ) => {
@@ -128,7 +121,7 @@ export const SongGridMenuButton = (props: {
                 handleOpenSong()
                 break
             case "share":
-                handleOpenShareSongDialog()
+                setShareSongDialogIsOpen(true)
                 break
             default:
                 break
@@ -216,13 +209,13 @@ export const SongGridMenuButton = (props: {
             </Dialog>
             <Dialog
                 open={shareSongDialogIsOpen}
-                onClose={handleCloseShareSongDialog}
+                onClose={() => setShareSongDialogIsOpen(false)}
                 aria-label={"Dialog.ShareSong"}
                 maxWidth="xs"
                 fullWidth
             >
                 <ShareSongDialog
-                    handleOnCloseClick={handleCloseShareSongDialog}
+                    handleOnCloseClick={() => setShareSongDialogIsOpen(false)}
                     songId={songId}
                 />
             </Dialog>

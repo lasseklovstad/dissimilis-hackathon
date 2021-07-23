@@ -112,10 +112,7 @@ export const ShareSongDialog = (props: {
     const [filteredOrgTags, setFilteredOrgTags] =
         useState<IOrganisationIndex[]>()
     const [tags, setTags] = useState<(IGroupIndex | IOrganisationIndex)[]>()
-    const tagOptions = [
-        ...(groups ? groups : []),
-        ...(organisations ? organisations : []),
-    ]
+    const tagOptions = [...(groups || []), ...(organisations || [])]
 
     useEffect(() => {
         if (allGroupsFetched) {
@@ -175,10 +172,7 @@ export const ShareSongDialog = (props: {
     }, [defaultOrgTagIds, organisations])
 
     useEffect(() => {
-        setTags([
-            ...(filteredGroupTags ? filteredGroupTags : []),
-            ...(filteredOrgTags ? filteredOrgTags : []),
-        ])
+        setTags([...(filteredGroupTags || []), ...(filteredOrgTags || [])])
     }, [filteredOrgTags, filteredGroupTags])
 
     useEffect(() => {
@@ -255,7 +249,7 @@ export const ShareSongDialog = (props: {
         setTags(value)
         const orgTagList: number[] = []
         const groupTagList: number[] = []
-        value.forEach(function (group) {
+        value.forEach((group) => {
             "groupName" in group
                 ? groupTagList.push(group.groupId)
                 : orgTagList.push(group.organisationId)
@@ -432,7 +426,7 @@ export const ShareSongDialog = (props: {
                 <UserAutoCompleteDialog
                     handleOnSaveClick={handleAddUser}
                     handleOnCancelClick={handleCloseAddUserDialog}
-                    userList={filteredUserList ? filteredUserList : []}
+                    userList={filteredUserList || []}
                     title={t("Dialog.shareWithPerson")}
                     saveText={t("Dialog.addPerson")}
                 />

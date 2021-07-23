@@ -138,28 +138,21 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
         [url, bodyInit, params, source, headers]
     )
 
-    const getData = useCallback(async () => {
-        return fetchData("get")
-    }, [fetchData])
+    const getData = useCallback(async () => fetchData("get"), [fetchData])
 
     const postData = useCallback(
-        async (body?: unknown, appendUrl?: string) => {
-            return fetchData("post", body, appendUrl)
-        },
+        async (body?: unknown, appendUrl?: string) =>
+            fetchData("post", body, appendUrl),
         [fetchData]
     )
 
     const putData = useCallback(
-        async (body?: unknown) => {
-            return fetchData("patch", body)
-        },
+        async (body?: unknown) => fetchData("patch", body),
         [fetchData]
     )
 
     const deleteData = useCallback(
-        async (appendUrl?: string) => {
-            return fetchData("delete", null, appendUrl)
-        },
+        async (appendUrl?: string) => fetchData("delete", null, appendUrl),
         [fetchData]
     )
 
