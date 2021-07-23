@@ -113,27 +113,12 @@ export const useGetAllSongs = (orderTerm: string, orderDescending: boolean) => {
  */
 export const useGetFilteredSongs = (
     title: string,
-    filterTerm: (IGroup | IOrganisation)[],
+    includedOrganisationIdArray: (number | null)[],
+    includedGroupIdArray: (number | null)[],
     orderTerm: string,
     orderDescending: boolean,
-    numberOfResults?: string,
-    groupId?: number,
-    organisationId?: number
+    numberOfResults?: string
 ) => {
-    /* const includedGroupIdArray = [
-        ...filterTerm
-            .filter((item) => "groupId" in item)
-            .map((group) => group.groupId),
-    ] */
-    const includedOrganisationIdArray = [
-        ...filterTerm
-            .filter((item) => "organisationId" in item)
-            .map((organisation) => organisation.organisationId),
-    ]
-
-    console.log(filterTerm)
-
-    /*     const includedOrganisationIdArray = [...filterTerm.filter] */
     const url = "song/search"
     const initialData: ISongIndex[] = []
     const headers = getHeaders()
@@ -143,7 +128,10 @@ export const useGetFilteredSongs = (
         orderBy: orderTerm,
         orderDescending,
         includedOrganisationIdArray,
+        includedGroupIdArray,
+        includeAll: false,
     }
+
     const { postData, state, data } = useApiService<ISongIndex[]>(url, {
         initialData,
         headers,

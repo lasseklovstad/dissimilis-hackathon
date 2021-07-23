@@ -34,7 +34,7 @@ export const SearchFilterAutocomplete = (props: {
         organisationId,
     } = props
     const { t } = useTranslation()
-    const { getAllGroups, allGroupsFetched } = useGetGroups(GroupFilter.Admin)
+    const { getAllGroups, allGroupsFetched } = useGetGroups()
     const [groups, setGroups] = useState<IGroup[] | undefined>()
 
     const history = useHistory()
@@ -43,9 +43,7 @@ export const SearchFilterAutocomplete = (props: {
     const groupIdsFromUrl = url.getAll("groupId")
     const organisationIdsFromUrl = url.getAll("organisationId")
 
-    const { getOrganisations, organisationsFetched } = useGetOrganisations(
-        OrganisationFilter.Admin
-    )
+    const { getOrganisations, organisationsFetched } = useGetOrganisations()
     const [organisations, setorganisations] = useState<
         IOrganisation[] | undefined
     >()

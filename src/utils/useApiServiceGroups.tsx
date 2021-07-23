@@ -5,15 +5,13 @@ import { useApiService } from "./useApiService"
 
 export enum GroupFilter {
     Admin = "ADMIN",
-    User = "USER",
-    All = "ALL",
+    Member = "MEMBER",
 }
 
 export enum OrganisationFilter {
     Admin = "ADMIN",
     GroupAdmin = "GROUPADMIN",
-    User = "USER",
-    All = "ALL",
+    Member = "MEMBER",
 }
 
 const getHeaders = () => {
@@ -25,8 +23,10 @@ const getHeaders = () => {
 /**
  * Get all groups based on different parameters
  * */
-export const useGetGroups = (groupFilter: GroupFilter) => {
-    const url = `organisations/groups?filter="${groupFilter}"`
+export const useGetGroups = (groupFilter?: GroupFilter) => {
+    const url = `organisations/groups?filterBy="${
+        groupFilter ? groupFilter : "all"
+    }"`
     const initialData: IGroup[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IGroup[]>(url, {
@@ -48,10 +48,12 @@ export const useGetGroups = (groupFilter: GroupFilter) => {
  * Get all groups in an organisation, based on different parameters
  * */
 export const useGetGroupsInOrganisation = (
-    groupFilter: GroupFilter,
-    organisationId: number
+    organisationId: number,
+    groupFilter?: GroupFilter
 ) => {
-    const url = `organisations/${organisationId}/groups?filter="${groupFilter}"`
+    const url = `organisations/${organisationId}/groups?filterBy="${
+        groupFilter ? groupFilter : "all"
+    }"`
     const initialData: IGroup[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IGroup[]>(url, {
@@ -72,15 +74,16 @@ export const useGetGroupsInOrganisation = (
 /**
  * Get organisations based on different parameters
  * */
-export const useGetOrganisations = (organisationFilter: OrganisationFilter) => {
-    const url = `organisations?filter="${organisationFilter}"`
-    const body = {
-        filter: organisationFilter,
-    }
+export const useGetOrganisations = (
+    organisationFilter?: OrganisationFilter
+) => {
+    const url = `organisations?filterBy="${
+        organisationFilter ? organisationFilter : "all"
+    }"`
+
     const initialData: IOrganisation[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IOrganisation[]>(url, {
-        body,
         initialData,
         headers,
     })

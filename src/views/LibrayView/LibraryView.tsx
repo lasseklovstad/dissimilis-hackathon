@@ -35,10 +35,16 @@ export const LibraryView = () => {
     const groupIdsFromUrl = url.getAll("groupId")
     const organisationIdsFromUrl = url.getAll("organisationId")
     const [filterTerm, setFilterTerm] = useState<(IGroup | IOrganisation)[]>([])
+    const [includedOrganisationIdArray, setIncludedOrganisationIdArray] =
+        useState<(number | null)[]>([])
+    const [includedGroupIdArray, setIncludedGroupIdArray] = useState<
+        (number | null)[]
+    >([])
 
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
-        filterTerm,
+        includedOrganisationIdArray,
+        includedGroupIdArray,
         orderTerm,
         orderDescending,
         numberOfResults
@@ -52,6 +58,26 @@ export const LibraryView = () => {
             setFilteredSongs(filteredSongsFetched)
         }
     }, [filteredSongsFetched])
+
+    useEffect(() => {
+        setIncludedGroupIdArray([
+            ...filterTerm
+                .map((group) =>
+                    "groupId" in group ? Number(group.groupId) : null
+                )
+                .filter((group) => group !== null),
+        ])
+
+        setIncludedOrganisationIdArray([
+            ...filterTerm
+                .map((organisation) =>
+                    !("groupId" in organisation)
+                        ? Number(organisation.organisationId)
+                        : null
+                )
+                .filter((organisation) => organisation !== null),
+        ])
+    }, [filterTerm])
 
     const removeSongFromFilteredSongs = (songId: number) => {
         setFilteredSongs(

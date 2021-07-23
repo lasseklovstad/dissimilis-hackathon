@@ -126,7 +126,7 @@ export const DashboardView = () => {
         setAddSongDialogIsOpen(false)
     }
 
-    const { getAllGroups, allGroupsFetched } = useGetGroups(GroupFilter.Admin)
+    const { getAllGroups, allGroupsFetched } = useGetGroups(GroupFilter.Member)
     const [groups, setGroups] = useState<IGroup[] | undefined>()
     useEffect(() => {
         if (allGroupsFetched) {
@@ -134,7 +134,7 @@ export const DashboardView = () => {
         }
     }, [allGroupsFetched])
     const { getOrganisations, organisationsFetched } = useGetOrganisations(
-        OrganisationFilter.Admin
+        OrganisationFilter.Member
     )
     const [organisations, setorganisations] = useState<
         IOrganisation[] | undefined
