@@ -163,9 +163,6 @@ export const AdminView = () => {
     const handleEditSysAdminsDialogClose = () => {
         setEditSysAdminsDialogIsOpen(false)
     }
-    const handleEditSysAdminsDialogSave = () => {
-        //??
-    }
 
     return (
         <>
@@ -230,7 +227,6 @@ export const AdminView = () => {
                                 onClick={() => {
                                     setEditMembersDialogIsOpen(true)
                                 }}
-                                //startIcon={<AddIcon />}
                                 disabled={!userIsSystemAdmin()}
                             >
                                 <div
