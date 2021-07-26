@@ -1,6 +1,7 @@
 import React from "react"
 import {
     Box,
+    Button,
     CircularProgress,
     DialogActions,
     Grid,
@@ -24,6 +25,7 @@ import { useSongContext } from "../../views/SongView/SongContextProvider.compone
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { Song } from "../Song/Song.component"
 import { ChordOptions } from "../BottomMenuButtons/BottomMenuButtons"
+import { DashboardLibraryButton } from "../DashboardButtons/DashboardButtons"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -69,7 +71,6 @@ const useStyles = makeStyles((theme) => {
                 boxShadow: `0 0 0 4px ${colors.focus}`,
             },
         },
-
         outercontainer: {
             width: "100%",
             display: "flex",
@@ -83,7 +84,6 @@ const useStyles = makeStyles((theme) => {
                 marginBottom: "16px",
             },
         },
-
         positioningContainer: {
             width: "100%",
             position: "fixed",
@@ -106,6 +106,14 @@ const useStyles = makeStyles((theme) => {
         },
         selectIcon: {
             right: 14,
+        },
+        confirmOrCancelButtons: {
+            height: "56px",
+            //boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
+        },
+        confirmButton: {
+            backgroundColor: colors.teal_100,
+            marginRight: 8,
         },
     }
 })
@@ -192,18 +200,20 @@ export const CustomVoiceDialog = (props: {
                                 </div>
                             ) : (
                                 <DialogButton
+                                    className={`${classes.confirmOrCancelButtons} ${classes.confirmButton}`}
                                     onClick={handleOnSave}
                                     variant="contained"
                                 >
-                                    LAGRE
+                                    {t("Dialog.save")}
                                 </DialogButton>
                             )}
 
                             <DialogButton
+                                className={classes.confirmOrCancelButtons}
                                 onClick={handleOnCancel}
                                 variant="contained"
                             >
-                                AVBRYT
+                                {t("Dialog.cancel")}
                             </DialogButton>
                         </DialogActions>
                     </Grid>

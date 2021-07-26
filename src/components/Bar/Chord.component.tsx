@@ -252,23 +252,6 @@ export const Chord = (props: ChordProps) => {
             )}
             {customMode ? (
                 <Box
-                    /* id="chordButton"
-                    disabled={exportMode}
-                    onClick={onClick}
-                    onContextMenu={onContextMenu}
-                    onMouseEnter={onMouseEnter}
-                    onMouseLeave={onMouseLeave}
-                    disableRipple={barEditMode}
-                    className={`${
-                        barEditMode
-                            ? ""
-                            : chord.notes[0] === "Z"
-                            ? classes.emptyChordContainer
-                            : classes.buttonBase
-                    } ${isSelected ? classes.selected : ""}`}
-                    focusVisibleClassName={classes.buttonBase}
-                    
-                    onFocus={handleChordFocus} */
                     style={{
                         display: "flex",
                         flexDirection: "column",
