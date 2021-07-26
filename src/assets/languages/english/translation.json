@@ -29,12 +29,12 @@
         "removeRepBefore": "Remove left repeat",
         "addRepAfter": "Add right repeat",
         "removeRepAfter": "Remove rigth repeat",
-        "addvoltaBracket": "Add 1st and 2nd repeat",
-        "removeVoltaBracket": "Remove 1st and 2nd repeat",
-        "addvoltaBracketOne": "Add 1th repeat",
-        "addvoltaBracketTwo": "Add 2nd repeat",
-        "removeVoltaBracketOne": "Remove 1th repeat",
-        "removeVoltaBracketTwo": "Remove 2nd repeat"
+        "addvoltaBracket": "Add 1st and 2nd volta bracket",
+        "removeVoltaBracket": "Remove 1st and 2nd volta bracket",
+        "addvoltaBracketOne": "Add 1st volta bracket",
+        "addvoltaBracketTwo": "Add 2nd volta bracket",
+        "removeVoltaBracketOne": "Remove 1th volta bracket",
+        "removeVoltaBracketTwo": "Remove 2nd volta bracket"
     },
     "BottomBar": {
         "chord": "Chord",
