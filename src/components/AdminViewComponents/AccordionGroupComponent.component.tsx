@@ -20,6 +20,7 @@ import {
     useAddGroupMember,
     useDeleteGroup,
     useGetGroup,
+    useUpdateGroup,
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 
@@ -76,6 +77,7 @@ export const AccordionGroupComponent = (props: {
     const { getGroup, groupFetched } = useGetGroup(groupId)
     const { deleteGroup } = useDeleteGroup(groupId)
     const { addGroupMember } = useAddGroupMember(groupId)
+    const { updateGroup } = useUpdateGroup(groupId)
 
     const handleAddMemberClose = () => {
         setAddMemberDialogIsOpen(false)

@@ -21,6 +21,7 @@ import {
     useGetOrganisation,
     useAddOrganisationMember,
     useRemoveOrganisationMember,
+    useUpdateOrganisation,
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { IUser } from "../../models/IUser"
@@ -81,6 +82,7 @@ export const AccordionComponent = (props: {
     const { organisationFetched } = useGetOrganisation(organisationId)
     const { deleteOrganisation } = useDeleteOrganisation(organisationId)
     const { addOrganisationMember } = useAddOrganisationMember(organisationId)
+    const { updateOrganisation } = useUpdateOrganisation(organisationId)
 
     const [organisationInfoDialogIsOpen, setOrganisationInfoDialogIsOpen] =
         useState(false)
@@ -135,6 +137,25 @@ export const AccordionComponent = (props: {
         const { error, result } = await deleteOrganisation.run()
         if (!error && result) {
             removeOrganisation(organisationId)
+        }
+    }
+
+    const handleUpdateDetails = async (
+        name: string,
+        address: string,
+        emailAddress: string,
+        description: string,
+        phoneNumber: string
+    ) => {
+        const { error, result } = await updateOrganisation.run({
+            address,
+            emailAddress,
+            description,
+            phoneNumber,
+        })
+
+        if (!error && result) {
+            handleCloseOrganisationInfoDialog()
         }
     }
 
@@ -300,7 +321,7 @@ export const AccordionComponent = (props: {
                 <EditGroupInfoDialog
                     groupId={organisationId}
                     group={organisationFetched}
-                    handleOnSaveClick={handleCloseOrganisationInfoDialog}
+                    handleOnSaveClick={handleUpdateDetails}
                     handleOnCancelClick={handleCloseOrganisationInfoDialog}
                     isGroup={false}
                 />

@@ -26,7 +26,13 @@ export const EditGroupInfoDialog = (props: {
     groupId: number
     group: IOrganisation | IGroup | undefined
     isGroup: boolean
-    handleOnSaveClick: () => void
+    handleOnSaveClick: (
+        name: string,
+        address: string,
+        emailAddress: string,
+        description: string,
+        phoneNumber: string
+    ) => void
     handleOnCancelClick: () => void
     characterLimit?: number
     isLoadingPatch?: boolean
@@ -42,13 +48,23 @@ export const EditGroupInfoDialog = (props: {
     } = props
     const classes = useStyles()
     const { t } = useTranslation()
-    const [groupNameTextFieldInput, setGroupNameTextFieldInput] = useState("")
+    const [groupNameTextFieldInput, setGroupNameTextFieldInput] = useState(
+        group
+            ? "groupName" in group
+                ? group.groupName
+                : group.organisationName
+            : ""
+    )
     const [groupAddressTextFieldInput, setGroupAddressTextFieldInput] =
-        useState("")
+        useState(group ? group.address : "")
     const [groupPhoneNumberTextFieldInput, setGroupPhoneNumberTextFieldInput] =
-        useState("")
-    const [groupEmailTextFieldInput, setGroupEmailTextFieldInput] = useState("")
-    const [groupNotesTextFieldInput, setGroupNotesTextFieldInput] = useState("")
+        useState(group ? group.phoneNumber : "")
+    const [groupEmailTextFieldInput, setGroupEmailTextFieldInput] = useState(
+        group ? group.email : ""
+    )
+    const [groupNotesTextFieldInput, setGroupNotesTextFieldInput] = useState(
+        group ? group.notes : ""
+    )
 
     useEffect(() => {
         if (group) {
@@ -71,7 +87,13 @@ export const EditGroupInfoDialog = (props: {
         <form
             onSubmit={(event) => {
                 event.preventDefault()
-                handleOnSaveClick()
+                handleOnSaveClick(
+                    groupNameTextFieldInput,
+                    groupAddressTextFieldInput,
+                    groupPhoneNumberTextFieldInput,
+                    groupEmailTextFieldInput,
+                    groupNotesTextFieldInput
+                )
             }}
         >
             <DialogTitle>
@@ -108,7 +130,6 @@ export const EditGroupInfoDialog = (props: {
                     }}
                     helperText={`${groupAddressTextFieldInput.length}/${characterLimit}`}
                     className={classes.textFields}
-                    autoFocus
                     variant="filled"
                     value={groupAddressTextFieldInput}
                     onChange={(e) => {
@@ -124,7 +145,6 @@ export const EditGroupInfoDialog = (props: {
                     }}
                     helperText={`${groupPhoneNumberTextFieldInput.length}/${characterLimit}`}
                     className={classes.textFields}
-                    autoFocus
                     variant="filled"
                     value={groupPhoneNumberTextFieldInput}
                     onChange={(e) => {
@@ -141,7 +161,6 @@ export const EditGroupInfoDialog = (props: {
                     }}
                     helperText={`${groupEmailTextFieldInput.length}/${characterLimit}`}
                     className={classes.textFields}
-                    autoFocus
                     variant="filled"
                     value={groupEmailTextFieldInput}
                     onChange={(e) => {
@@ -158,7 +177,6 @@ export const EditGroupInfoDialog = (props: {
                     }}
                     helperText={`${groupNotesTextFieldInput.length}/${characterLimit}`}
                     className={classes.textFields}
-                    autoFocus
                     variant="filled"
                     value={groupNotesTextFieldInput}
                     onChange={(e) => {

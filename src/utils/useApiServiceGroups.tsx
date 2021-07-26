@@ -135,6 +135,24 @@ export const usePostGroup = () => {
 }
 
 /**
+ * Update group details
+ */
+export const useUpdateGroup = (groupId: number) => {
+    const url = `group/${groupId}`
+    const headers = getHeaders()
+    const body = {
+        address: "",
+        emailAddress: "",
+        description: "",
+        phoneNumber: "",
+    }
+    const { putData, state } = useApiService<IGroup>(url, { body, headers })
+    return {
+        updateGroup: { run: putData, ...state },
+    }
+}
+
+/**
  * Delete one group
  * @param groupId id of the group to delete
  */
@@ -156,6 +174,7 @@ export const usePostOrganisation = () => {
     const url = `organisation/`
     const headers = getHeaders()
     const body = {
+        name: "",
         address: "",
         emailAddress: "",
         description: "",
@@ -206,6 +225,25 @@ export const useGetOrganisation = (organisationId: number) => {
     return {
         getOrganisation: { run: getData, ...state },
         organisationFetched: data,
+    }
+}
+
+/**
+ * Update organisatoion details
+ */
+export const useUpdateOrganisation = (organisationId: number) => {
+    const url = `organisation/${organisationId}`
+    const headers = getHeaders()
+    const body = {
+        name: "",
+        address: "",
+        emailAddress: "",
+        description: "",
+        phoneNumber: "",
+    }
+    const { putData, state } = useApiService<IGroup>(url, { body, headers })
+    return {
+        updateOrganisation: { run: putData, ...state },
     }
 }
 
