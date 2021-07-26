@@ -82,10 +82,9 @@ export const CustomVoiceDialog = (props: {
     newVoice: IVoice | undefined
 }) => {
     const { t } = useTranslation()
-    const { chordMenuOptions } = useSongContext()
     const classes = useStyles()
     const { handleOnCancel, handleOnSave, songId, baseVoice, newVoice } = props
-    const { songInit /* , getSong  */ } = useGetSong(songId)
+    const { songInit } = useGetSong(songId)
 
     const getChordNameFromMainVoice = (
         barPosition: number,

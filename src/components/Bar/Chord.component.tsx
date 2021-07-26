@@ -350,7 +350,7 @@ export const Chord = (props: ChordProps) => {
                     {chord.notes
                         .map((note, i) => {
                             const tangent = tangentToNumber(note)
-                            return (
+                            return note !== "X" ? (
                                 <>
                                     <div
                                         id="singleChord"
@@ -374,6 +374,8 @@ export const Chord = (props: ChordProps) => {
                                             : undefined}
                                     </div>
                                 </>
+                            ) : (
+                                ""
                             )
                         })
                         .reverse()}
