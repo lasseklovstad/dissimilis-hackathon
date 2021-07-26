@@ -206,8 +206,6 @@ export const CustomVoiceDialog = (props: {
                                 AVBRYT
                             </DialogButton>
                         </DialogActions>
-                        //
-                        {/*  </div> */}
                     </Grid>
                 </Grid>
             </Grid>

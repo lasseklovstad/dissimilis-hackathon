@@ -8,7 +8,7 @@ import {
 } from "../../utils/useApiServiceSongs"
 import { ISongIndex } from "../../models/ISong"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
-import { SongGrid } from "../../components/songGrid/SongGrid.component"
+import { SongGrid } from "../../components/SongGrid/SongGrid.component"
 import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
 
 const useStyles = makeStyles({

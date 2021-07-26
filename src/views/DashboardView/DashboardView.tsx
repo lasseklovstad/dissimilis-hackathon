@@ -13,7 +13,7 @@ import {
     usePostSong,
 } from "../../utils/useApiServiceSongs"
 import { InputDialog } from "../../components/CustomDialog/InputDialog.component"
-import { SongGrid } from "../../components/songGrid/SongGrid.component"
+import { SongGrid } from "../../components/SongGrid/SongGrid.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
 import { getTimeSignatureText } from "../../utils/bar.util"
