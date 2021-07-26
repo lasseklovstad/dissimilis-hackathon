@@ -132,7 +132,7 @@ export const useGetFilteredSongs = (
     const initialData: ISongIndex[] = []
     const headers = getHeaders()
     const body = {
-        num: numberOfResults,
+        maxNumberOfSongs: numberOfResults,
         title,
         orderBy: orderTerm,
         orderDescending,
@@ -162,7 +162,7 @@ export const useGetRecentSongs = (
 ) => {
     const url = "song/search"
     const body = {
-        num: "5",
+        maxNumberOfSongs: "5",
         orderBy: orderTerm,
         orderDescending,
         arrangerId: getArrangerId(),
