@@ -40,31 +40,15 @@ const useStyles = makeStyles((theme) => {
             marginLeft: "3.5vw",
             marginRight: "3.5vw",
         },
-        loading: {
-            margin: theme.spacing(1),
-            marginRight: theme.spacing(2),
-            justifyContent: "center",
-            alignContent: "center",
-            minWidth: "64px",
-            maxWidth: "64px",
-        },
         container: {
             boxShadow: "0 1px 3px 1px rgba(0, 0, 0, 0.1)",
-            display: "flex",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
             backgroundColor: colors.white,
             marginBottom: "8px",
-            marginLeft: "24px",
-            marginRight: "24px",
+            margin: theme.spacing(1),
         },
-        flexelement: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            flex: 1,
-            "& .Mui-selected": {
-                color: colors.black,
-            },
+        buttonContainer: {
+            marginBottom: "8px",
+            margin: theme.spacing(1),
         },
         focusElement: {
             "&:focus": {
@@ -91,25 +75,14 @@ const useStyles = makeStyles((theme) => {
             left: 0,
             marginBottom: "24px",
         },
-
-        input: {
-            padding: "18px 10px 10px 18px",
-            height: "28px",
-            "&:focus": {
-                outline: "none !important",
-            },
-        },
         removeDefaultStyling: {
             "& .MuiOutlinedInput-notchedOutline": {
                 border: "0",
             },
         },
-        selectIcon: {
-            right: 14,
-        },
         confirmOrCancelButtons: {
             height: "56px",
-            //boxShadow: "3px 2px 4px rgba(66,66,66,0.06)",
+            margin: 0,
         },
         confirmButton: {
             backgroundColor: colors.teal_100,
@@ -186,19 +159,15 @@ export const CustomVoiceDialog = (props: {
                         sm={10}
                         className={classes.outercontainer}
                     >
-                        <div className={classes.container}>
+                        <Box className={classes.container}>
                             <ChordOptions
                                 chord={"Em"}
                                 onChordNotesChange={() => {}}
                                 alwaysShow={true}
                             />
-                        </div>
-                        <DialogActions>
-                            {false ? (
-                                <div className={classes.loading}>
-                                    <CircularProgress size={24} />
-                                </div>
-                            ) : (
+                        </Box>
+                        <Box className={classes.buttonContainer}>
+                            <DialogActions>
                                 <DialogButton
                                     className={`${classes.confirmOrCancelButtons} ${classes.confirmButton}`}
                                     onClick={handleOnSave}
@@ -206,16 +175,15 @@ export const CustomVoiceDialog = (props: {
                                 >
                                     {t("Dialog.save")}
                                 </DialogButton>
-                            )}
-
-                            <DialogButton
-                                className={classes.confirmOrCancelButtons}
-                                onClick={handleOnCancel}
-                                variant="contained"
-                            >
-                                {t("Dialog.cancel")}
-                            </DialogButton>
-                        </DialogActions>
+                                <DialogButton
+                                    className={classes.confirmOrCancelButtons}
+                                    onClick={handleOnCancel}
+                                    variant="contained"
+                                >
+                                    {t("Dialog.cancel")}
+                                </DialogButton>
+                            </DialogActions>
+                        </Box>
                     </Grid>
                 </Grid>
             </Grid>
