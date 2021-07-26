@@ -26,7 +26,7 @@ const getHeaders = () => {
  * Get all groups based on different parameters
  * */
 export const useGetGroups = (groupFilter: GroupFilter) => {
-    const url = `organisations/groups?filterBy=${groupFilter}`
+    const url = `organisation/groups?filterBy=${groupFilter}`
     const initialData: IGroupIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IGroupIndex[]>(url, {

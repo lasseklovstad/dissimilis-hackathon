@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export const UserAutoCompleteDialog = (props: {
-    handleOnSaveClick: (user: IUser | undefined) => void
+    handleOnSaveClick: (value: IUser) => void
     handleOnCancelClick: () => void
     isLoading?: boolean
     userList: IUser[]
@@ -53,7 +53,7 @@ export const UserAutoCompleteDialog = (props: {
 
     const [userInput, setUserInput] = useState("")
 
-    const adminListProps = {
+    const userListProps = {
         options: userList,
         getOptionLabel: (user: IUser) => user.email,
     }
@@ -63,15 +63,7 @@ export const UserAutoCompleteDialog = (props: {
             onSubmit={(event) => {
                 event.preventDefault()
                 handleOnSaveClick(
-                    // Return corresponding IUser matching entered email
-                    // userList.find((user) => user.email === userInput) // need getUsers-apiCall
-                    {
-                        // FJERN
-                        userId: 2,
-                        name: "Håkon",
-                        email: "hakon.anders.stromsodd@ciber.no",
-                        isSystemAdmin: true,
-                    }
+                    userList.filter((user) => user.email === userInput)[0]
                 )
             }}
         >
@@ -79,8 +71,7 @@ export const UserAutoCompleteDialog = (props: {
             <DialogContent>
                 <Typography variant="caption">{descriptionText}</Typography>
                 <Autocomplete
-                    freeSolo // DEVELOPMENT
-                    {...adminListProps}
+                    {...userListProps}
                     inputValue={userInput}
                     onInputChange={(event, newInputValue) => {
                         setUserInput(newInputValue)
@@ -92,7 +83,7 @@ export const UserAutoCompleteDialog = (props: {
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            label={t("AdminView.email")}
+                            label={t("Dialog.email")}
                             margin="normal"
                             variant="filled"
                             className={classes.inputElements}
