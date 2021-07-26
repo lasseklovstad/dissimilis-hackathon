@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Box, useMediaQuery } from "@material-ui/core"
 import { RepetitionSign } from "./RepetitionSign.component"
-import { House } from "./House.component"
+import { VoltaBracket } from "./VoltaBracket.component"
 import { IBar, IChord } from "../../models/IBar"
 import { Chord } from "./Chord.component"
 import { ChordMenu } from "./ChordMenu.component"
@@ -48,7 +48,7 @@ export const Bar = (props: {
         chordPosition: number
     ) => string | undefined | null
     masterSheet: boolean
-    showHouseNumber: boolean
+    showVoltaBracketNumber: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
     deleteBars?: () => void
 }) => {
@@ -59,12 +59,12 @@ export const Bar = (props: {
         getChordNameFromMainVoice,
         onMenuClick,
         masterSheet,
-        showHouseNumber,
+        showVoltaBracketNumber,
         bar: {
             chords,
             repAfter,
             repBefore,
-            house,
+            voltaBracket,
             barId,
             songId,
             songVoiceId,
@@ -260,7 +260,10 @@ export const Bar = (props: {
                 m="2px"
                 aria-label={t("Song.bar")}
             >
-                <House houseOrder={house} showHouseNumber={showHouseNumber} />
+                <VoltaBracket
+                    voltaBracketOrder={voltaBracket}
+                    showVoltaBracketNumber={showVoltaBracketNumber}
+                />
 
                 <div
                     id="barContainer"

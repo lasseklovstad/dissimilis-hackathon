@@ -45,7 +45,7 @@ export const BarMenu = (props: BarMenuProps) => {
             const { error, result } = await putBar.run({
                 repBefore: !bar.repBefore,
                 repAfter: bar.repAfter,
-                house: bar.house,
+                voltaBracket: bar.voltaBracket,
             })
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
@@ -55,37 +55,40 @@ export const BarMenu = (props: BarMenuProps) => {
             const { error, result } = await putBar.run({
                 repBefore: bar.repBefore,
                 repAfter: !bar.repAfter,
-                house: bar.house,
+                voltaBracket: bar.voltaBracket,
             })
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
             }
         }
-        if (method === "addHouseOne") {
+        if (method === "addvoltaBracketOne") {
             const { error, result } = await putBar.run({
                 repBefore: bar.repBefore,
                 repAfter: bar.repAfter,
-                house: 1,
+                voltaBracket: 1,
             })
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
             }
         }
-        if (method === "addHouseTwo") {
+        if (method === "addvoltaBracketTwo") {
             const { error, result } = await putBar.run({
                 repBefore: bar.repBefore,
                 repAfter: bar.repAfter,
-                house: 2,
+                voltaBracket: 2,
             })
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
             }
         }
-        if (method === "removeHouseOne" || method === "removeHouseTwo") {
+        if (
+            method === "removeVoltaBracketOne" ||
+            method === "removeVoltaBracketTwo"
+        ) {
             const { error, result } = await putBar.run({
                 repBefore: bar.repBefore,
                 repAfter: bar.repAfter,
-                house: 0,
+                voltaBracket: 0,
             })
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
@@ -121,24 +124,28 @@ export const BarMenu = (props: BarMenuProps) => {
             <MenuItem
                 onClick={() =>
                     handleClose(
-                        bar.house === 1 ? "removeHouseOne" : "addHouseOne"
+                        bar.voltaBracket === 1
+                            ? "removeVoltaBracketOne"
+                            : "addvoltaBracketOne"
                     )
                 }
             >
-                {bar.house === 1
-                    ? t("BarContainer.removeHouseOne")
-                    : t("BarContainer.addHouseOne")}
+                {bar.voltaBracket === 1
+                    ? t("BarContainer.removeVoltaBracketOne")
+                    : t("BarContainer.addvoltaBracketOne")}
             </MenuItem>
             <MenuItem
                 onClick={() =>
                     handleClose(
-                        bar.house === 2 ? "removeHouseTwo" : "addHouseTwo"
+                        bar.voltaBracket === 2
+                            ? "removeVoltaBracketTwo"
+                            : "addvoltaBracketTwo"
                     )
                 }
             >
-                {bar.house === 2
-                    ? t("BarContainer.removeHouseTwo")
-                    : t("BarContainer.addHouseTwo")}
+                {bar.voltaBracket === 2
+                    ? t("BarContainer.removeVoltaBracketTwo")
+                    : t("BarContainer.addvoltaBracketTwo")}
             </MenuItem>
         </Menu>
     )
