@@ -88,12 +88,12 @@ const useStyle = makeStyles((theme) => ({
     D: {
         color: colors.D.text,
         "&.main": { backgroundColor: colors.D.main },
-        "&.opaque": { backgroundColor: colors.D.opaque },
+        "&.opaque": { backgroundColor: colors.D.opaque, color: colors.black },
     },
     E: {
         color: colors.E.text,
         "&.main": { backgroundColor: colors.E.main },
-        "&.opaque": { backgroundColor: colors.E.opaque },
+        "&.opaque": { backgroundColor: colors.E.opaque, color: colors.black },
     },
     F: {
         color: colors.F.text,
@@ -108,7 +108,7 @@ const useStyle = makeStyles((theme) => ({
     A: {
         color: colors.A.text,
         "&.main": { backgroundColor: colors.A.main },
-        "&.opaque": { backgroundColor: colors.A.opaque },
+        "&.opaque": { backgroundColor: colors.A.opaque, color: colors.black },
     },
     H: {
         color: colors.H.text,
@@ -116,27 +116,22 @@ const useStyle = makeStyles((theme) => ({
         "&.opaque": { backgroundColor: colors.H.opaque },
     },
     "C#": {
-        color: colors.C.text,
         "&.main": { backgroundColor: colors.gray_500 },
         "&.opaque": { backgroundColor: colors.gray_300 },
     },
     "D#": {
-        color: colors.C.text,
         "&.main": { backgroundColor: colors.gray_500 },
         "&.opaque": { backgroundColor: colors.gray_300 },
     },
     "F#": {
-        color: colors.C.text,
         "&.main": { backgroundColor: colors.gray_500 },
         "&.opaque": { backgroundColor: colors.gray_300 },
     },
     "G#": {
-        color: colors.C.text,
         "&.main": { backgroundColor: colors.gray_500 },
         "&.opaque": { backgroundColor: colors.gray_300 },
     },
     "A#": {
-        color: colors.C.text,
         "&.main": { backgroundColor: colors.gray_500 },
         "&.opaque": { backgroundColor: colors.gray_300 },
     },
