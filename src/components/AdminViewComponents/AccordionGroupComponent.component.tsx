@@ -153,7 +153,7 @@ export const AccordionGroupComponent = (props: {
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {groupFetched?.admins[0].name || ""}
+                                {groupFetched?.admins[0]?.name || ""}
                                 <br />
                                 {t("AdminView.address") + ": "}
                                 {groupFetched?.address || ""}
@@ -170,7 +170,7 @@ export const AccordionGroupComponent = (props: {
                                 disableFocusRipple
                                 className={classes.button}
                                 onClick={() => {
-                                    setEditAdminsDialogIsOpen(true)
+                                    setEditMembersDialogIsOpen(true)
                                 }}
                             >
                                 <div className={classes.buttonText}>
@@ -286,7 +286,7 @@ export const AccordionGroupComponent = (props: {
                 <EditMembersDialog
                     handleOnCloseClick={handleEditMembersDialogClose}
                     groupId={groupId}
-                    groupName={groupFetched?.organisationName || title}
+                    groupName={groupFetched?.groupName || title}
                     isGroup={true}
                 />
             </Dialog>
