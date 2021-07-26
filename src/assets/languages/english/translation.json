@@ -33,7 +33,7 @@
         "removeVoltaBracket": "Remove 1st and 2nd volta bracket",
         "addvoltaBracketOne": "Add 1st volta bracket",
         "addvoltaBracketTwo": "Add 2nd volta bracket",
-        "removeVoltaBracketOne": "Remove 1th volta bracket",
+        "removeVoltaBracketOne": "Remove 1st volta bracket",
         "removeVoltaBracketTwo": "Remove 2nd volta bracket"
     },
     "BottomBar": {
