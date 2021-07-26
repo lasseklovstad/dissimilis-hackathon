@@ -127,13 +127,8 @@ export const EditSystemMembersDialog = (props: {
 
     return (
         <>
-            <DialogTitle>{t("Dialog.editGroupMembers")}</DialogTitle>
-            <DialogContent>
-                <Typography variant="caption">
-                    {t("Dialog.usersInSystem")}
-                </Typography>
-                {getMembers()}
-            </DialogContent>
+            <DialogTitle>{t("Dialog.usersInSystem")}</DialogTitle>
+            <DialogContent>{getMembers()}</DialogContent>
             <DialogActions>
                 <DialogButton
                     onClick={() => {
