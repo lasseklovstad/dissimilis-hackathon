@@ -5,11 +5,15 @@ import SearchIcon from "@material-ui/icons/Search"
 import ClearIcon from "@material-ui/icons/Clear"
 import { useHistory } from "react-router-dom"
 
-export const SearchField = (props: { searchTermInit?: string }) => {
+export const SearchField = (props: {
+    searchTermInit?: string
+    handleOnSubmit: (searchTerm: string) => void
+}) => {
     const { t } = useTranslation()
     const searchPlaceholder = t("DashboardView.search")
     const history = useHistory()
-    const [searchTerm, setSeachTerm] = useState(props.searchTermInit || "")
+    const { searchTermInit, handleOnSubmit } = props
+    const [searchTerm, setSeachTerm] = useState(searchTermInit || "")
 
     const handleOnClick = () => {
         history.push(`library?search=${searchTerm}`)
@@ -28,7 +32,7 @@ export const SearchField = (props: { searchTermInit?: string }) => {
             }}
             onKeyPress={(ev) => {
                 if (ev.key === "Enter") {
-                    handleOnClick()
+                    handleOnSubmit(searchTerm)
                     ev.preventDefault()
                 }
             }}

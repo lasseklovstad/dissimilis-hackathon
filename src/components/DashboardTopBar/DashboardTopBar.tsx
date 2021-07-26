@@ -27,10 +27,11 @@ const useStyles = makeStyles(() => ({
 export const DashboardTopBar = (props: {
     onGoHome?: () => void
     searchTerm?: string
+    handleOnSubmitSearch: (searchTerm: string) => void
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const { onGoHome, searchTerm } = props
+    const { onGoHome, searchTerm, handleOnSubmitSearch } = props
     const { logout } = useLogout()
     const { userInit, getUser } = useGetUser()
 
@@ -94,7 +95,10 @@ export const DashboardTopBar = (props: {
                             <Grid item sm={1} />
                         </Hidden>
                         <Grid item xs={12} sm={10} md={3}>
-                            <SearchField searchTermInit={searchTerm} />
+                            <SearchField
+                                searchTermInit={searchTerm}
+                                handleOnSubmit={handleOnSubmitSearch}
+                            />
                         </Grid>
                         <Hidden only={[`xs`, `sm`]}>
                             <Grid

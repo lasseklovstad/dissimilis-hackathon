@@ -164,7 +164,7 @@ export const DashboardView = () => {
                 <Grid container justify="center" className={styles.container}>
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
-                            <DashboardTopBar />
+                            <DashboardTopBar handleOnSubmitSearch={} />
                         </Box>
                     </Grid>
 

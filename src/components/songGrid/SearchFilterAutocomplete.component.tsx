@@ -13,6 +13,7 @@ import {
 import { useHistory, useLocation } from "react-router"
 import { IOrganisation } from "../../models/IOrganisation"
 import { SortingButtons } from "../DashboardButtons/DashboardButtons"
+
 export const SearchFilterAutocomplete = (props: {
     filterTerm?: (IGroup | IOrganisation)[]
     setFilterTerm?: React.Dispatch<
@@ -23,6 +24,7 @@ export const SearchFilterAutocomplete = (props: {
     orderDescending?: boolean
     groupId?: number
     organisationId?: number
+    onSubmit?: (newValue: string) => void
 }) => {
     const {
         filterTerm,
@@ -32,6 +34,7 @@ export const SearchFilterAutocomplete = (props: {
         orderDescending,
         groupId,
         organisationId,
+        onSubmit,
     } = props
     const { t } = useTranslation()
     const { getAllGroups, allGroupsFetched } = useGetGroups()
@@ -85,17 +88,17 @@ export const SearchFilterAutocomplete = (props: {
         event: any,
         newValue: (IGroup | IOrganisation)[]
     ) => {
-        if (setFilterTerm) {
+        if (setFilterTerm && onSubmit) {
+            const newValueString = newValue
+                .map((item) =>
+                    "groupName" in item
+                        ? "groupId=" + item.groupId
+                        : "organisationId=" + item.organisationId
+                )
+                .join("&")
+
             setFilterTerm(newValue)
-            history.push(
-                `library?${newValue
-                    .map((item) =>
-                        "groupName" in item
-                            ? "groupId=" + item.groupId
-                            : "organisationId=" + item.organisationId
-                    )
-                    .join("&")}`
-            )
+            onSubmit(newValueString)
         }
     }
 

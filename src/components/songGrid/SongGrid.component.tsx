@@ -25,6 +25,7 @@ type SongGridProps = {
     setFilterTerm?: React.Dispatch<
         React.SetStateAction<(IGroup | IOrganisation)[]>
     >
+    onSubmitAutocomplete?: (newValue: string) => void
 }
 
 export const SongGrid = (props: SongGridProps) => {
@@ -39,6 +40,7 @@ export const SongGrid = (props: SongGridProps) => {
         searchFilter,
         filterTerm,
         setFilterTerm,
+        onSubmitAutocomplete,
     } = props
 
     return (
@@ -54,6 +56,7 @@ export const SongGrid = (props: SongGridProps) => {
                         orderTerm={orderTerm}
                         changeOrderTerm={changeOrderTerm}
                         orderDescending={orderDescending}
+                        onSubmit={onSubmitAutocomplete}
                     />
                 ) : (
                     ""

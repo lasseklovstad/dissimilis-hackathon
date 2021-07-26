@@ -99,7 +99,11 @@ export const LibraryView = () => {
         }
         setOrderTerm(term)
     }
-    console.log("descending" + orderDescending + " orderterm" + orderTerm)
+
+    /*     const changeUrl = (groupIdsFromUrl: string[], organisationIdsFromUrl: string[]) => {
+        history.push(`/library?groupId=${groupIdsFromUrl.map((group) => {group.})}`)
+    } */
+
     return (
         <>
             <ErrorDialog
@@ -114,7 +118,10 @@ export const LibraryView = () => {
                 <Grid container justify="center" className={styles.container}>
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
-                            <DashboardTopBar searchTerm={searchTerm} />
+                            <DashboardTopBar
+                                searchTerm={searchTerm}
+                                handleOnSubmitSearch={changeUrl}
+                            />
                         </Box>
                     </Grid>
                     <SongGrid
@@ -133,6 +140,7 @@ export const LibraryView = () => {
                         searchFilter={true}
                         filterTerm={filterTerm}
                         setFilterTerm={setFilterTerm}
+                        onSubmitAutocomplete={on}
                     />
                 </Grid>
             </Box>
