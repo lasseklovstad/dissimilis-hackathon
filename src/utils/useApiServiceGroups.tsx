@@ -297,6 +297,10 @@ export const useGetGroupOrOrganisationMembers = (
 
     const { getData, state, data } = useApiService<IUser[]>(url, { headers })
 
+    useEffect(() => {
+        getData()
+    }, [getData])
+
     return {
         getGroupMembers: { run: getData, ...state },
         groupMembers: data,

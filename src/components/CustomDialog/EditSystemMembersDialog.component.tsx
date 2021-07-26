@@ -19,6 +19,7 @@ import { IUser } from "../../models/IUser"
 import { colors } from "../../utils/colors"
 import { ChoiceDialog } from "./ChoiceDialog.component"
 import { useGetGroupOrOrganisationMembers } from "../../utils/useApiServiceGroups"
+import { useGetUsers } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -45,13 +46,10 @@ const useStyles = makeStyles((theme) => {
     }
 })
 
-export const EditMembersDialog = (props: {
-    groupId: number
-    groupName: string
-    isGroup: boolean
+export const EditSystemMembersDialog = (props: {
     handleOnCloseClick: () => void
 }) => {
-    const { groupId, isGroup, groupName, handleOnCloseClick } = props
+    const { handleOnCloseClick } = props
     const classes = useStyles()
     const { t } = useTranslation()
     const secondary = true
@@ -61,16 +59,13 @@ export const EditMembersDialog = (props: {
     const [selectedMember, setSelectedMember] = useState<IUser>()
     const [members, setMembers] = useState<IUser[]>()
 
-    const { getGroupMembers, groupMembers } = useGetGroupOrOrganisationMembers(
-        isGroup,
-        groupId
-    )
+    const { getUsers, users } = useGetUsers()
 
     useEffect(() => {
-        if (groupMembers) {
-            setMembers(groupMembers)
+        if (users) {
+            setMembers(users)
         }
-    }, [groupMembers])
+    }, [users])
 
     const handleOpenConfirmationDialog = () => {
         setConfirmationDialogIsOpen(true)
@@ -85,7 +80,7 @@ export const EditMembersDialog = (props: {
     }
 
     const getMembers = () => {
-        if (!getGroupMembers.loading) {
+        if (!getUsers.loading) {
             return (
                 <>
                     {members ? (
@@ -135,8 +130,7 @@ export const EditMembersDialog = (props: {
             <DialogTitle>{t("Dialog.editGroupMembers")}</DialogTitle>
             <DialogContent>
                 <Typography variant="caption">
-                    {t("Dialog.membersIn") + " "}
-                    {groupName}:
+                    {t("Dialog.usersInSystem")}
                 </Typography>
                 {getMembers()}
             </DialogContent>
@@ -152,20 +146,20 @@ export const EditMembersDialog = (props: {
             <Dialog
                 open={confirmationDialogIsOpen}
                 onClose={handleCloseConfirmationDialog}
-                aria-label={t("Dialog.removeMember")}
+                aria-label={t("Dialog.removeUser")}
             >
                 <ChoiceDialog
                     handleOnCancelClick={handleCloseConfirmationDialog}
                     handleOnSaveClick={handleRemoveMember}
-                    ackText={t("Dialog.removeMember")}
+                    ackText={t("Dialog.removeUser")}
                     cancelText={t("Dialog.cancel")}
-                    headerText={t("Dialog.removeMember")}
+                    headerText={t("Dialog.removeUser")}
                     descriptionText={
-                        t("Dialog.removeAdminDescription") +
+                        t("Dialog.removeUserDescription") +
                         " " +
                         (selectedMember?.name || t("Dialog.thisUser")) +
                         " " +
-                        t("Dialog.asMember") +
+                        t("Dialog.fromTheSystem") +
                         " " + // <== Would have been nice with line break right here but I cannot find a way to do it...
                         t("Dialog.cannotUndo")
                     }

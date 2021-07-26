@@ -26,6 +26,7 @@ import {
 } from "../../utils/useApiServiceGroups"
 import { IOrganisationIndex } from "../../models/IOrganisation"
 import { EditMembersDialog } from "../../components/CustomDialog/EditMembersDialog.component"
+import { EditSystemMembersDialog } from "../../components/CustomDialog/EditSystemMembersDialog.component"
 
 const useStyles = makeStyles({
     container: {
@@ -321,11 +322,8 @@ export const AdminView = () => {
                         onClose={handleEditMembersDialogClose}
                         aria-labelledby={t("AdminView.seeAllMembers")}
                     >
-                        <EditMembersDialog
+                        <EditSystemMembersDialog
                             handleOnCloseClick={handleEditMembersDialogClose}
-                            groupName={t("AdminView.system")}
-                            isGroup={false}
-                            isSystem={true}
                         />
                     </Dialog>
                     <Dialog

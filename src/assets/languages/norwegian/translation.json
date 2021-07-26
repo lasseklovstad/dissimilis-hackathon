@@ -223,7 +223,11 @@
         "shareWithPerson": "Del med person",
         "removePersonShareDescription": "Fjern redigeringsrettighetene til ",
         "email": "E-post",
-        "tags": "Tags"
+        "tags": "Tags",
+        "usersInSystem": "Brukere i systemet",
+        "removeUser": "Slett bruker",
+        "removeUserDescription": "Er du sikker på at du vil slette",
+        "fromTheSystem": "fra systemet?"
     },
     "Song": {
         "arranger": "Arrangør",
