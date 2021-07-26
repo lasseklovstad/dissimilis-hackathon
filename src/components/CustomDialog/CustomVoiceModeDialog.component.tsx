@@ -1,20 +1,13 @@
 import React from "react"
 import {
     Box,
-    Button,
-    CircularProgress,
     DialogActions,
     Grid,
     makeStyles,
     Typography,
-    withStyles,
 } from "@material-ui/core"
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup"
-import { Delete } from "@material-ui/icons"
 
-import ToggleButton from "@material-ui/lab/ToggleButton"
 import { useTranslation } from "react-i18next"
-import { ChordType } from "../../models/IChordMenuOptions"
 
 import { IVoice } from "../../models/IVoice"
 import { colors } from "../../utils/colors"
@@ -25,17 +18,9 @@ import { useSongContext } from "../../views/SongView/SongContextProvider.compone
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { Song } from "../Song/Song.component"
 import { ChordOptions } from "../BottomMenuButtons/BottomMenuButtons"
-import { DashboardLibraryButton } from "../DashboardButtons/DashboardButtons"
 
 const useStyles = makeStyles((theme) => {
     return {
-        root: {
-            marginBottom: "200px",
-            "@media (max-width: 1080px)": {
-                marginBottom: "250px",
-            },
-            width: "auto",
-        },
         body: {
             marginLeft: "3.5vw",
             marginRight: "3.5vw",
@@ -44,11 +29,10 @@ const useStyles = makeStyles((theme) => {
             boxShadow: "0 1px 3px 1px rgba(0, 0, 0, 0.1)",
             backgroundColor: colors.white,
             marginBottom: "8px",
-            margin: theme.spacing(1),
         },
         buttonContainer: {
             marginBottom: "8px",
-            margin: theme.spacing(1),
+            padding: "0",
         },
         focusElement: {
             "&:focus": {
@@ -82,7 +66,6 @@ const useStyles = makeStyles((theme) => {
         },
         confirmOrCancelButtons: {
             height: "56px",
-            margin: 0,
         },
         confirmButton: {
             backgroundColor: colors.teal_100,
@@ -90,20 +73,6 @@ const useStyles = makeStyles((theme) => {
         },
     }
 })
-
-const StyledToggleButtonGroup = withStyles((theme) => ({
-    grouped: {
-        color: colors.black,
-        margin: theme.spacing(1),
-        border: "none",
-        "&:not(:first-child)": {
-            borderRadius: theme.shape.borderRadius,
-        },
-        "&:first-child": {
-            borderRadius: theme.shape.borderRadius,
-        },
-    },
-}))(ToggleButtonGroup)
 
 export const CustomVoiceDialog = (props: {
     handleOnSave: () => void
@@ -166,24 +135,22 @@ export const CustomVoiceDialog = (props: {
                                 alwaysShow={true}
                             />
                         </Box>
-                        <Box className={classes.buttonContainer}>
-                            <DialogActions>
-                                <DialogButton
-                                    className={`${classes.confirmOrCancelButtons} ${classes.confirmButton}`}
-                                    onClick={handleOnSave}
-                                    variant="contained"
-                                >
-                                    {t("Dialog.save")}
-                                </DialogButton>
-                                <DialogButton
-                                    className={classes.confirmOrCancelButtons}
-                                    onClick={handleOnCancel}
-                                    variant="contained"
-                                >
-                                    {t("Dialog.cancel")}
-                                </DialogButton>
-                            </DialogActions>
-                        </Box>
+                        <DialogActions className={classes.buttonContainer}>
+                            <DialogButton
+                                className={`${classes.confirmOrCancelButtons} ${classes.confirmButton}`}
+                                onClick={handleOnSave}
+                                variant="contained"
+                            >
+                                {t("Dialog.save")}
+                            </DialogButton>
+                            <DialogButton
+                                className={classes.confirmOrCancelButtons}
+                                onClick={handleOnCancel}
+                                variant="contained"
+                            >
+                                {t("Dialog.cancel")}
+                            </DialogButton>
+                        </DialogActions>
                     </Grid>
                 </Grid>
             </Grid>
