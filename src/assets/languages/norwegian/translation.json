@@ -2,10 +2,9 @@
     "DashboardView": {
         "newSongLabel": "Nytt partitur",
         "recentSongLabel": "Dine siste fem sanger",
-        "searchSongLabel": "Søk",
         "allSongLabel": "Alle sanger",
         "measure": "takt",
-        "search": "Søk etter sanger eller brukere",
+        "search": "Søk",
         "altButterflyButtonProp": "Bilde av Dissimilis' sommerfugl",
         "ariaButterflyButtonProp": "Gå til startskjermen",
         "updatedOn": "Sist redigert",
@@ -16,6 +15,10 @@
         "date": "Dato endret",
         "user": "Bruker",
         "song": "Sang"
+    },
+    "LibraryView": {
+        "defaultHeading": "Bibliotek",
+        "searchHeading": "Søk: "
     },
     "BarContainer": {
         "deleteBar": "Slett takt",
@@ -142,7 +145,24 @@
         "duplicateCustomVoice": "Egendefinert",
         "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme",
         "loading": "Laster",
-        "details": "Informasjon om partitur"
+        "details": "Informasjon om partitur",
+        "close": "Lukk",
+        "share": "Del",
+        "shareSong": "Del sang",
+        "editRights": "Redigeringsrettingheter",
+        "editRightsDescription": "Personer sangen er delt med, som kan redigere",
+        "addPerson": "Legg til person",
+        "readRights": "Leserettigheter",
+        "readRightsDescription": "Hvem skal kunne se sangen, annet enn personer den er delt med?",
+        "noOne": "Ingen",
+        "everyone": "Alle",
+        "tagsDescription": "Gjør det enklere for folk å finne sangen ved å legge til tags",
+        "unshare": "Slutt å dele sang",
+        "removePerson": "Fjern person",
+        "shareWithPerson": "Del med person",
+        "removePersonShareDescription": "Fjern redigeringsrettighetene til ",
+        "email": "E-post",
+        "tags": "Tags"
     },
     "Song": {
         "arranger": "Arrangør",
@@ -159,7 +179,7 @@
         "languageNorwegian": "Norsk",
         "languageEnglish": "English",
         "languageSelect": "Språkvalg",
-        "settings": "Innstillinger"
-
+        "settings": "Innstillinger",
+        "clear": "Tøm søkefelt"
     }
 }

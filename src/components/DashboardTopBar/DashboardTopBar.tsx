@@ -1,13 +1,11 @@
-import React, { useState } from "react"
+import React from "react"
 import {
     AppBar,
     Box,
     Grid,
     Hidden,
     makeStyles,
-    TextField,
     Typography,
-    useMediaQuery,
     IconButton,
 } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
@@ -16,6 +14,7 @@ import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg
 import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
+import { SearchField } from "./SearchField"
 import { DashboardMenu } from "../DashboardTopBar/DashboardMenu.component"
 
 const useStyles = makeStyles(() => ({
@@ -26,16 +25,12 @@ const useStyles = makeStyles(() => ({
 }))
 
 export const DashboardTopBar = (props: {
-    onChange: (txt: string) => void
     onGoHome?: () => void
     searchTerm?: string
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const searchPlaceholder = t("DashboardView.search")
-    const [searchBarFocus, setSearchBarFocus] = useState(false)
     const { onGoHome, searchTerm } = props
-    const sm = useMediaQuery("(min-width: 600px)")
     const { logout } = useLogout()
     const { userInit, getUser } = useGetUser()
 
@@ -50,19 +45,10 @@ export const DashboardTopBar = (props: {
                         <Grid item xs={1}>
                             <DashboardTopBarIcon onGoHome={onGoHome} />
                         </Grid>
-                        {searchBarFocus ? undefined : (
-                            <Hidden smDown>
-                                <Grid item md={1} />
-                            </Hidden>
-                        )}
-
-                        <Grid
-                            item
-                            xs={10}
-                            sm={5}
-                            md={4}
-                            style={{ paddingRight: sm ? 32 : 8 }}
-                        >
+                        <Hidden mdDown>
+                            <Grid item md={1} />
+                        </Hidden>
+                        <Grid item xs={10} sm={7} md={5} lg={4}>
                             <Grid
                                 container
                                 direction="row"
@@ -77,46 +63,51 @@ export const DashboardTopBar = (props: {
                                     <Loading isLoading={getUser.loading} />
                                     {userInit?.email}
                                 </Typography>
+                                <IconButton
+                                    disableFocusRipple
+                                    onClick={logout.run}
+                                    aria-label={t("LoginView.logout")}
+                                >
+                                    <LogoutIcon />
+                                </IconButton>
                             </Grid>
                         </Grid>
-                        <Grid item xs={1}>
-                            <IconButton
-                                disableFocusRipple
-                                onClick={logout.run}
-                                aria-label={t("LoginView.logout")}
+                        <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
+                            <Grid item sm={1} />
+                        </Hidden>
+                        <Hidden only={[`md`, `lg`, `xl`]}>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="flex-end"
+                                alignItems="center"
+                                item
+                                xs={1}
                             >
-                                <LogoutIcon />
-                            </IconButton>
+                                <DashboardMenu />
+                            </Grid>
+                        </Hidden>
+                        <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
+                            <Grid item sm={1} />
+                        </Hidden>
+                        <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
+                            <Grid item sm={1} />
+                        </Hidden>
+                        <Grid item xs={12} sm={10} md={3}>
+                            <SearchField searchTermInit={searchTerm} />
                         </Grid>
-                        <Grid item xs={12} sm={3} md={searchBarFocus ? 4 : 3}>
-                            <TextField
-                                id="standard-basic"
-                                label={searchPlaceholder}
-                                variant="outlined"
-                                type="search"
-                                fullWidth
-                                onFocus={() => {
-                                    setSearchBarFocus(true)
-                                }}
-                                onBlur={() => {
-                                    setSearchBarFocus(false)
-                                }}
-                                onChange={(event) =>
-                                    props.onChange(event.target.value)
-                                }
-                                value={searchTerm}
-                            />
-                        </Grid>
-                        <Grid
-                            container
-                            direction="row"
-                            justify="flex-end"
-                            alignItems="center"
-                            item
-                            xs={1}
-                        >
-                            <DashboardMenu />
-                        </Grid>
+                        <Hidden only={[`xs`, `sm`]}>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="flex-end"
+                                alignItems="center"
+                                item
+                                xs={1}
+                            >
+                                <DashboardMenu />
+                            </Grid>
+                        </Hidden>
                     </Grid>
                 </Box>
             </AppBar>
