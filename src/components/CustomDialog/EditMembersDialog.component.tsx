@@ -46,12 +46,19 @@ const useStyles = makeStyles((theme) => {
 })
 
 export const EditMembersDialog = (props: {
-    groupId: number
+    groupId?: number
     groupName: string
     isGroup: boolean
+    isSystem?: boolean
     handleOnCloseClick: () => void
 }) => {
-    const { groupId, isGroup, groupName, handleOnCloseClick } = props
+    const {
+        groupId = 0,
+        isGroup,
+        isSystem = false,
+        groupName,
+        handleOnCloseClick,
+    } = props
     const classes = useStyles()
     const { t } = useTranslation()
     const secondary = true
@@ -65,6 +72,15 @@ export const EditMembersDialog = (props: {
         isGroup,
         groupId
     )
+
+    useEffect(() => {
+        if (isSystem) {
+            console.log("hei")
+        } else {
+            getGroupMembers.run()
+        }
+    }, [])
+
     useEffect(() => {
         if (groupMembers) {
             setMembers(groupMembers)

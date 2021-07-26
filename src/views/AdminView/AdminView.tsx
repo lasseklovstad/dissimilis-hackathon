@@ -25,6 +25,7 @@ import {
     usePostOrganisation,
 } from "../../utils/useApiServiceGroups"
 import { IOrganisationIndex } from "../../models/IOrganisation"
+import { EditMembersDialog } from "../../components/CustomDialog/EditMembersDialog.component"
 
 const useStyles = makeStyles({
     container: {
@@ -94,6 +95,8 @@ export const AdminView = () => {
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
     const [editSysAdminsDialogIsOpen, setEditSysAdminsDialogIsOpen] =
         useState(false)
+    const [editMembersDialogIsOpen, setEditMembersDialogIsOpen] =
+        useState(false)
 
     const renderedAdminOrganisationIds: number[] = []
 
@@ -136,6 +139,10 @@ export const AdminView = () => {
 
     const handleAddOrganisationDialogClose = () => {
         setAddOrganisationIsOpen(false)
+    }
+
+    const handleEditMembersDialogClose = () => {
+        setEditMembersDialogIsOpen(false)
     }
 
     const handleAddOrganisationDialogSave = async (
@@ -215,6 +222,25 @@ export const AdminView = () => {
                                 {t("AdminView.editAdmins")}
                             </Button>
                         </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <Button
+                                disableFocusRipple
+                                className={classes.button}
+                                onClick={() => {
+                                    setEditMembersDialogIsOpen(true)
+                                }}
+                                //startIcon={<AddIcon />}
+                                disabled={!userIsSystemAdmin()}
+                            >
+                                <div
+                                    style={{
+                                        paddingLeft: "8px",
+                                    }}
+                                >
+                                    {t("AdminView.seeAllMembers")}
+                                </div>
+                            </Button>
+                        </Grid>
                         {userIsOrganisationAdmin()
                             ? adminOrganisations?.map((organisation) => {
                                   renderedAdminOrganisationIds.push(
@@ -288,6 +314,18 @@ export const AdminView = () => {
                             handleOnCancelClick={
                                 handleAddOrganisationDialogClose
                             }
+                        />
+                    </Dialog>
+                    <Dialog
+                        open={editMembersDialogIsOpen}
+                        onClose={handleEditMembersDialogClose}
+                        aria-labelledby={t("AdminView.seeAllMembers")}
+                    >
+                        <EditMembersDialog
+                            handleOnCloseClick={handleEditMembersDialogClose}
+                            groupName={t("AdminView.system")}
+                            isGroup={false}
+                            isSystem={true}
                         />
                     </Dialog>
                     <Dialog
