@@ -86,6 +86,8 @@ export const AccordionComponent = (props: {
     const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
     const [deleteCountryDialogIsOpen, setDeleteCountryDialogIsOpen] =
         useState(false)
+    const [editSysAdminsDialogIsOpen, setEditSysAdminsDialogIsOpen] =
+        useState(false)
 
     const handleOpenEditAdminsDialog = () => {
         setEditAdminsDialogIsOpen(true)

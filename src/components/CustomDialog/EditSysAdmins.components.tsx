@@ -14,7 +14,6 @@ import {
     Typography,
 } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
-import { IOrganisation } from "../../models/IOrganisation"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import DeleteIcon from "@material-ui/icons/Delete"
 import { IUser } from "../../models/IUser"
@@ -22,12 +21,7 @@ import { colors } from "../../utils/colors"
 import AddIcon from "@material-ui/icons/Add"
 import { ChoiceDialog } from "./ChoiceDialog.component"
 import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
-import { IGroup } from "../../models/IGroup"
-import {
-    UserRole,
-    useSetUserRoleInGroup,
-    useSetUserRoleInOrganisation,
-} from "../../utils/useApiServiceGroups"
+import { UserRole } from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -54,43 +48,33 @@ const useStyles = makeStyles((theme) => {
     }
 })
 
-export const EditAdminsDialog = (props: {
-    groupId: number
-    group?: IOrganisation | IGroup // Temporary
-    isGroup: boolean
+export const EditSysAdminsDialog = (props: {
     handleOnCloseClick: () => void
 }) => {
-    const { groupId, group, handleOnCloseClick, isGroup } = props
+    const { handleOnCloseClick } = props
     const classes = useStyles()
     const { t } = useTranslation()
     const secondary = true
-
-    const { setUserRoleInGroup } = useSetUserRoleInGroup(groupId || 0)
-    const { setUserRoleInOrganisation } = useSetUserRoleInOrganisation(
-        groupId || 0
-    )
 
     const [addAdminDialogIsOpen, setAddAdminDialogIsOpen] = useState(false)
     const [confirmationDialogIsOpen, setConfirmationDialogIsOpen] =
         useState(false)
     const [selectedAdmin, setSelectedAdmin] = useState<IUser>()
 
-    const [adminList, setAdminsList] = useState<IUser[]>(group?.admins || [])
+    const [adminList, setAdminsList] = useState<IUser[]>([])
     const [userList, setUserList] = useState<IUser[]>()
 
     const handleUpdateRole = async (role: UserRole) => {
         if (adminList.length > 1) {
             if (selectedAdmin) {
-                const { error } = await (isGroup
-                    ? setUserRoleInGroup
-                    : setUserRoleInOrganisation
+                /*const { error } = await (
                 ).run(
                     {
-                        userRole: role,
+                        userRole: UserRole.Member,
                     },
                     selectedAdmin.userId.toString()
                 )
-                return !!error
+                return !!error*/
             }
             return false
         } else {
@@ -146,13 +130,7 @@ export const EditAdminsDialog = (props: {
             <DialogTitle>{t("Dialog.editAdmins")}</DialogTitle>
             <DialogContent>
                 <Typography variant="caption">
-                    {t("Dialog.adminsIn")}{" "}
-                    {group
-                        ? "groupName" in group
-                            ? group.groupName
-                            : group.organisationName
-                        : ""}
-                    :
+                    {t("Dialog.adminsIn")} {t("AdminView.system")}
                 </Typography>
                 <List dense={false}>
                     {adminList.map((admin) => {

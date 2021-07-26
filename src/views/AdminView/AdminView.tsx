@@ -24,6 +24,7 @@ import {
     usePostOrganisation,
 } from "../../utils/useApiServiceGroups"
 import { IOrganisationIndex } from "../../models/IOrganisation"
+import { EditSysAdminsDialog } from "../../components/CustomDialog/EditSysAdmins.components"
 
 const useStyles = makeStyles({
     container: {
@@ -146,13 +147,6 @@ export const AdminView = () => {
             setAddOrganisationIsOpen(false)
             history.push(`/admin`)
         }
-    }
-
-    const handleEditSysAdminsDialogClose = () => {
-        setEditSysAdminsDialogIsOpen(false)
-    }
-    const handleEditSysAdminsDialogSave = () => {
-        //??
     }
 
     return (
@@ -288,14 +282,15 @@ export const AdminView = () => {
                     </Dialog>
                     <Dialog
                         open={editSysAdminsDialogIsOpen}
-                        onClose={handleEditSysAdminsDialogClose}
+                        onClose={() => setEditSysAdminsDialogIsOpen(false)}
                         aria-label={t("Dialog.editAdmins")}
                         maxWidth="xs"
                         fullWidth
                     >
-                        <EditAdminsDialog
-                            editSysAdmins
-                            handleOnCloseClick={handleEditSysAdminsDialogClose}
+                        <EditSysAdminsDialog
+                            handleOnCloseClick={() =>
+                                setEditSysAdminsDialogIsOpen(false)
+                            }
                         />
                     </Dialog>
 
