@@ -20,11 +20,12 @@ import {
     useDeleteOrganisation,
     useGetOrganisation,
     useAddOrganisationMember,
-    useRemoveOrganisationMember,
+    UserLevel,
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { IUser } from "../../models/IUser"
 import { EditMembersDialog } from "../CustomDialog/EditMembersDialog.component"
+import { AddGroupMemberDialog } from "../CustomDialog/AddGroupMemberDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -123,7 +124,7 @@ export const AccordionComponent = (props: {
         if (user) {
             const { error, result } = await addOrganisationMember.run({
                 newMemberUserId: user.userId,
-                newMemberRole: 10, // 10=member, 20=admin
+                newMemberRole: UserLevel.Member,
             })
             if (!error && result) {
                 setAddMemberDialogIsOpen(false)
@@ -293,10 +294,11 @@ export const AccordionComponent = (props: {
                 maxWidth="sm"
                 fullWidth
             >
-                <UserAutoCompleteDialog
+                <AddGroupMemberDialog
                     handleOnCancelClick={handleAddMemberClose}
                     handleOnSaveClick={handleAddMember}
-                    userList={[]}
+                    isGroup={false}
+                    groupId={organisationId}
                     title={t("AdminView.addMemberTo") + " " + title}
                     descriptionText={t("AdminView.emailNewGroupMember")}
                     saveText={t("AdminView.add")}

@@ -17,6 +17,11 @@ export enum OrganisationFilter {
     All = "ALL",
 }
 
+export enum UserLevel {
+    Admin = 20,
+    Member = 10,
+}
+
 const getHeaders = () => {
     const apiKey = sessionStorage.getItem("apiKey") || ""
     const userId = sessionStorage.getItem("userId") || ""

@@ -23,6 +23,7 @@ import {
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { EditMembersDialog } from "../CustomDialog/EditMembersDialog.component"
+import { AddGroupMemberDialog } from "../CustomDialog/AddGroupMemberDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -254,10 +255,11 @@ export const AccordionGroupComponent = (props: {
                 maxWidth="sm"
                 fullWidth
             >
-                <UserAutoCompleteDialog
+                <AddGroupMemberDialog
                     handleOnCancelClick={handleAddMemberClose}
                     handleOnSaveClick={handleAddMember}
-                    userList={[]} // Not in sprint 5
+                    isGroup={true}
+                    groupId={groupId}
                     title={t("AdminView.addMemberTo") + " " + title}
                     descriptionText={t("AdminView.emailNewGroupMember")}
                     saveText={t("AdminView.add")}
