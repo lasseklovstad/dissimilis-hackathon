@@ -10,7 +10,6 @@ import {
     ListItemSecondaryAction,
     ListItemText,
     makeStyles,
-    Typography,
 } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
@@ -18,7 +17,6 @@ import DeleteIcon from "@material-ui/icons/Delete"
 import { IUser } from "../../models/IUser"
 import { colors } from "../../utils/colors"
 import { ChoiceDialog } from "./ChoiceDialog.component"
-import { useGetGroupOrOrganisationMembers } from "../../utils/useApiServiceGroups"
 import { useGetUsers } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles((theme) => {

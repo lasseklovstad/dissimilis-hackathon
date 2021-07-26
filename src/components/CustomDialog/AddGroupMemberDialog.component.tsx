@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import { makeStyles } from "@material-ui/core"
 
 import { IUser } from "../../models/IUser"
 import { useGetUsers } from "../../utils/useApiServiceUsers"
@@ -19,7 +18,6 @@ export const AddGroupMemberDialog = (props: {
     const {
         handleOnSaveClick,
         handleOnCancelClick,
-        isLoading,
         isGroup,
         groupId,
         title,
