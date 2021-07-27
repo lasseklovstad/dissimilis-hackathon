@@ -24,8 +24,8 @@ import {
 } from "../../utils/useApiServiceGroups"
 import { IGroup } from "../../models/IGroup"
 import { IOrganisation } from "../../models/IOrganisation"
+import { ButtonGrid } from "../../components/buttonGrid/buttonGrid.component"
 import { InputDialog } from "../../components/CustomDialog/InputDialog.component"
-import { ButtonGrid } from "../../components/ButtonGrid/ButtonGrid.component"
 
 const useStyles = makeStyles({
     container: {
@@ -164,7 +164,7 @@ export const DashboardView = () => {
                 <Grid container justify="center" className={styles.container}>
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
-                            <DashboardTopBar handleOnSubmitSearch={} />
+                            <DashboardTopBar handleOnSubmitSearch={() => {}} />
                         </Box>
                     </Grid>
 

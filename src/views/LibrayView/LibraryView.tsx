@@ -30,7 +30,6 @@ export const LibraryView = () => {
     const location = useLocation()
     const url = new URLSearchParams(location.search)
     const searchTermUrl = url.get("search")
-
     const searchTerm = searchTermUrl ? searchTermUrl : ""
     const groupIdsFromUrl = url.getAll("groupId")
     const organisationIdsFromUrl = url.getAll("organisationId")
@@ -100,9 +99,10 @@ export const LibraryView = () => {
         setOrderTerm(term)
     }
 
-    /*     const changeUrl = (groupIdsFromUrl: string[], organisationIdsFromUrl: string[]) => {
-        history.push(`/library?groupId=${groupIdsFromUrl.map((group) => {group.})}`)
-    } */
+    const changeUrl = (values: string) => {
+        console.log(history)
+        history.push(`/library?${values}`)
+    }
 
     return (
         <>
@@ -140,7 +140,7 @@ export const LibraryView = () => {
                         searchFilter={true}
                         filterTerm={filterTerm}
                         setFilterTerm={setFilterTerm}
-                        onSubmitAutocomplete={on}
+                        onSubmitAutocomplete={changeUrl}
                     />
                 </Grid>
             </Box>

@@ -1,10 +1,7 @@
 import React, { ReactNode } from "react"
 import { Box, Grid, Typography } from "@material-ui/core"
 import { ISongIndex } from "../../models/ISong"
-import {
-    DashboardButton,
-    SortingButtons,
-} from "../DashboardButtons/DashboardButtons"
+import { DashboardButton } from "../DashboardButtons/DashboardButtons"
 import { Loading } from "../loading/Loading.component"
 import { IGroup } from "../../models/IGroup"
 import { IOrganisation } from "../../models/IOrganisation"
@@ -33,7 +30,6 @@ export const SongGrid = (props: SongGridProps) => {
         songs,
         title,
         isLoading,
-        children,
         orderTerm,
         changeOrderTerm,
         orderDescending,
