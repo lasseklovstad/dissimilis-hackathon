@@ -63,14 +63,7 @@ export const UserAutoCompleteDialog = (props: {
             onSubmit={(event) => {
                 event.preventDefault()
                 handleOnSaveClick(
-                    // Return corresponding IUser matching entered email
-                    // userList.find((user) => user.email === userInput) // need getUsers-apiCall
-                    {
-                        // FJERN
-                        userId: 2,
-                        name: "Håkon",
-                        email: "hakon.anders.stromsodd@ciber.no",
-                    }
+                    userList.find((user) => user.email === userInput)
                 )
             }}
         >

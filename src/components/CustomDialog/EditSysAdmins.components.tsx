@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     Button,
     Dialog,
@@ -22,6 +22,7 @@ import AddIcon from "@material-ui/icons/Add"
 import { ChoiceDialog } from "./ChoiceDialog.component"
 import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
 import { UserRole } from "../../utils/useApiServiceGroups"
+import { useGetUsers } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -56,6 +57,8 @@ export const EditSysAdminsDialog = (props: {
     const { t } = useTranslation()
     const secondary = true
 
+    const { users } = useGetUsers()
+
     const [addAdminDialogIsOpen, setAddAdminDialogIsOpen] = useState(false)
     const [confirmationDialogIsOpen, setConfirmationDialogIsOpen] =
         useState(false)
@@ -64,47 +67,54 @@ export const EditSysAdminsDialog = (props: {
     const [adminList, setAdminsList] = useState<IUser[]>([])
     const [userList, setUserList] = useState<IUser[]>()
 
-    const handleUpdateRole = async (role: UserRole) => {
-        if (adminList.length > 1) {
-            if (selectedAdmin) {
-                /*const { error } = await (
-                ).run(
-                    {
-                        userRole: UserRole.Member,
-                    },
-                    selectedAdmin.userId.toString()
-                )
-                return !!error*/
-            }
-            return false
-        } else {
-            console.log("There must be at least one admin in a group!")
-            // Snackbar
-            return false
-        }
+    const handleUpdateRole = async (role: UserRole, user: IUser) => {
+        /*const { error } = await updateSysAdmins.run(
+            {
+                roleToSet: role,
+            },
+            user.userId.toString() + "/changeUserRole"
+        )
+        return !!error */
+        return false
     }
 
     const handleDeleteAdmin = async () => {
-        const isError = await handleUpdateRole(UserRole.Member)
-        if (!isError && selectedAdmin) {
-            setAdminsList(
-                adminList.filter((user) => user.userId !== selectedAdmin.userId)
-            )
-            setConfirmationDialogIsOpen(false)
+        if (adminList.length > 1) {
+            if (selectedAdmin) {
+                const isError = await handleUpdateRole(
+                    UserRole.Member,
+                    selectedAdmin
+                )
+                if (!isError && selectedAdmin) {
+                    setAdminsList(
+                        adminList.filter(
+                            (user) => user.userId !== selectedAdmin.userId
+                        )
+                    )
+                    setConfirmationDialogIsOpen(false)
+                } else {
+                    // An error occured
+                    // Snackbar
+                }
+            }
+            return false
         } else {
-            // An error occured
+            console.log("There must be at least one admin in the system!")
             // Snackbar
+            return false
         }
     }
 
     const handleAddAdmin = async (user: IUser | undefined) => {
-        const isError = await handleUpdateRole(UserRole.Admin)
-        if (!isError && selectedAdmin) {
-            setAdminsList([...adminList, selectedAdmin])
-            setAddAdminDialogIsOpen(false)
-        } else {
-            // An error occured
-            // Snackbar
+        if (user) {
+            const isError = await handleUpdateRole(UserRole.Admin, user)
+            if (!isError && user) {
+                setAdminsList([...adminList, user])
+                setAddAdminDialogIsOpen(false)
+            } else {
+                // An error occured
+                // Snackbar
+            }
         }
     }
 
@@ -116,6 +126,12 @@ export const EditSysAdminsDialog = (props: {
             ) || []
         )
     }
+
+    useEffect(() => {
+        if (users) {
+            setUserList(users)
+        }
+    }, [users])
 
     const handleCloseAddAdminDialog = () => {
         setAddAdminDialogIsOpen(false)
@@ -213,15 +229,12 @@ export const EditSysAdminsDialog = (props: {
                     ackText={t("Dialog.removeAdmin")}
                     cancelText={t("Dialog.cancel")}
                     headerText={t("Dialog.removeAdmin")}
-                    descriptionText={
-                        t("Dialog.removeAdminDescription") +
-                        " " +
-                        (selectedAdmin?.name || t("Dialog.thisUser")) +
-                        " " +
-                        t("Dialog.asAdmin") +
-                        " " + // <== Would have been nice with line break right here but I cannot find a way to do it...
-                        t("Dialog.cannotUndo")
-                    }
+                    descriptionText={`
+                        ${t("Dialog.removeAdminDescription")} 
+                        ${selectedAdmin?.name || t("Dialog.thisUser")} 
+                        ${t("Dialog.asAdmin")} 
+                        ${t("Dialog.cannotUndo")}
+                    `}
                 />
             </Dialog>
         </>

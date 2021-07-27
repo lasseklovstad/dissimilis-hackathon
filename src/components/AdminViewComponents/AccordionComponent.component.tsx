@@ -153,13 +153,13 @@ export const AccordionComponent = (props: {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Typography>
-                                {organisationFetched?.notes}
+                                {organisationFetched?.description}
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {organisationFetched?.admins
+                                {organisationFetched?.admins[0] != undefined
                                     ? organisationFetched?.admins[0].name
                                     : ""}
                                 <br />
@@ -317,6 +317,7 @@ export const AccordionComponent = (props: {
                     groupId={organisationId}
                     group={organisationFetched}
                     isGroup={false}
+                    //Get Members, send in
                     handleOnCloseClick={handleCloseEditAdminsDialog}
                 />
             </Dialog>

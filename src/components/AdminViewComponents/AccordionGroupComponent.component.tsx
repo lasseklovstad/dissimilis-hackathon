@@ -141,12 +141,14 @@ export const AccordionGroupComponent = (props: {
                 <AccordionDetails>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography>{groupFetched?.notes}</Typography>
+                            <Typography>{groupFetched?.description}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {groupFetched?.admins[0].name || ""}
+                                {groupFetched?.admins[0] != undefined
+                                    ? groupFetched?.admins[0].name
+                                    : ""}
                                 <br />
                                 {t("AdminView.address") + ": "}
                                 {groupFetched?.address || ""}
@@ -277,6 +279,7 @@ export const AccordionGroupComponent = (props: {
                     groupId={groupId}
                     group={groupFetched}
                     isGroup={true}
+                    //Get Members, send in
                     handleOnCloseClick={handleCloseEditAdminsDialog}
                 />
             </Dialog>

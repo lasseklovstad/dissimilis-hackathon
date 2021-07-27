@@ -57,13 +57,13 @@ export const EditGroupInfoDialog = (props: {
                 address,
                 phoneNumber,
                 email,
-                notes,
+                description,
             } = group
             setGroupNameTextFieldInput(name || "")
             setGroupAddressTextFieldInput(address || "")
             setGroupPhoneNumberTextFieldInput(phoneNumber || "")
             setGroupEmailTextFieldInput(email || "")
-            setGroupNotesTextFieldInput(notes || "")
+            setGroupNotesTextFieldInput(description || "")
         }
     }, [group])
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     Button,
     Dialog,
@@ -28,6 +28,7 @@ import {
     useSetUserRoleInGroup,
     useSetUserRoleInOrganisation,
 } from "../../utils/useApiServiceGroups"
+import { useGetUsers } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -56,11 +57,12 @@ const useStyles = makeStyles((theme) => {
 
 export const EditAdminsDialog = (props: {
     groupId: number
-    group?: IOrganisation | IGroup // Temporary
+    group?: IOrganisation | IGroup
     isGroup: boolean
+    memberList?: IUser[]
     handleOnCloseClick: () => void
 }) => {
-    const { groupId, group, handleOnCloseClick, isGroup } = props
+    const { groupId, group, handleOnCloseClick, isGroup, memberList } = props
     const classes = useStyles()
     const { t } = useTranslation()
     const secondary = true
@@ -76,21 +78,39 @@ export const EditAdminsDialog = (props: {
     const [selectedAdmin, setSelectedAdmin] = useState<IUser>()
 
     const [adminList, setAdminsList] = useState<IUser[]>(group?.admins || [])
-    const [userList, setUserList] = useState<IUser[]>()
+    const [userList, setUserList] = useState<IUser[] | undefined>(memberList)
 
-    const handleUpdateRole = async (role: UserRole) => {
+    const handleUpdateRole = async (role: UserRole, user: IUser) => {
+        const { error } = await (isGroup
+            ? setUserRoleInGroup
+            : setUserRoleInOrganisation
+        ).run(
+            {
+                roleToSet: role,
+            },
+            user.userId.toString() + "/changeUserRole"
+        )
+        return !!error
+    }
+
+    const handleDeleteAdmin = async () => {
         if (adminList.length > 1) {
             if (selectedAdmin) {
-                const { error } = await (isGroup
-                    ? setUserRoleInGroup
-                    : setUserRoleInOrganisation
-                ).run(
-                    {
-                        userRole: role,
-                    },
-                    selectedAdmin.userId.toString()
+                const isError = await handleUpdateRole(
+                    UserRole.Member,
+                    selectedAdmin
                 )
-                return !!error
+                if (!isError && selectedAdmin) {
+                    setAdminsList(
+                        adminList.filter(
+                            (user) => user.userId !== selectedAdmin.userId
+                        )
+                    )
+                    setConfirmationDialogIsOpen(false)
+                } else {
+                    // An error occured
+                    // Snackbar
+                }
             }
             return false
         } else {
@@ -100,27 +120,16 @@ export const EditAdminsDialog = (props: {
         }
     }
 
-    const handleDeleteAdmin = async () => {
-        const isError = await handleUpdateRole(UserRole.Member)
-        if (!isError && selectedAdmin) {
-            setAdminsList(
-                adminList.filter((user) => user.userId !== selectedAdmin.userId)
-            )
-            setConfirmationDialogIsOpen(false)
-        } else {
-            // An error occured
-            // Snackbar
-        }
-    }
-
     const handleAddAdmin = async (user: IUser | undefined) => {
-        const isError = await handleUpdateRole(UserRole.Admin)
-        if (!isError && selectedAdmin) {
-            setAdminsList([...adminList, selectedAdmin])
-            setAddAdminDialogIsOpen(false)
-        } else {
-            // An error occured
-            // Snackbar
+        if (user) {
+            const isError = await handleUpdateRole(UserRole.Admin, user)
+            if (!isError && user) {
+                setAdminsList([...adminList, user])
+                setAddAdminDialogIsOpen(false)
+            } else {
+                // An error occured
+                // Snackbar
+            }
         }
     }
 
