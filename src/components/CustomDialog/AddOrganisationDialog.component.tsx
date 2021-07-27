@@ -59,9 +59,8 @@ export const AddOrganisationDialog = (props: {
                 event.preventDefault()
                 handleOnSaveClick(
                     organisationNameInput,
-                    userList?.filter(
-                        (user) => user.email === adminEmailInput
-                    )[0].userId
+                    userList?.find((user) => user.email === adminEmailInput)
+                        ?.userId
                 )
             }}
         >

@@ -139,7 +139,11 @@ export const GroupAdminView = () => {
             if (!error && result) {
                 setAddGroupIsOpen(false)
                 updateGroups()
+            } else {
+                //Launch snackbar
             }
+        } else {
+            //Launch snackbar
         }
     }
 

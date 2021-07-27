@@ -156,7 +156,11 @@ export const AdminView = () => {
             if (!error && result) {
                 setAddOrganisationIsOpen(false)
                 updateOrganisation()
+            } else {
+                //Launch snackbar
             }
+        } else {
+            //Launch snackbar
         }
     }
 
