@@ -17,11 +17,12 @@ import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { useTranslation } from "react-i18next"
 import { Autocomplete } from "@material-ui/lab"
 import { IUser } from "../../models/IUser"
-import { IOrganisation } from "../../models/IOrganisation"
+import { IOrganisation, IOrganisationIndex } from "../../models/IOrganisation"
 import {
     useGetOrganisations,
     OrganisationFilter,
 } from "../../utils/useApiServiceGroups"
+import { useGetUsers } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -41,11 +42,10 @@ const useStyles = makeStyles((theme) => {
 export const AddGroupDialog = (props: {
     handleOnSaveClick: (
         name: string,
-        firstAdminId: number,
-        organisationId: number
+        organisationId: number | undefined,
+        firstAdminId: number | undefined
     ) => void
     handleOnCancelClick: () => void
-    defaultOrganisation?: IOrganisation
     isLoading?: boolean
     userIsSystemAdmin: boolean
 }) => {
@@ -53,7 +53,6 @@ export const AddGroupDialog = (props: {
         handleOnSaveClick,
         handleOnCancelClick,
         isLoading,
-        defaultOrganisation,
         userIsSystemAdmin,
     } = props
 
@@ -67,37 +66,37 @@ export const AddGroupDialog = (props: {
         userIsSystemAdmin ? OrganisationFilter.All : OrganisationFilter.Admin
     )
 
+    const { users } = useGetUsers()
+
     const [groupNameInput, setGroupNameInput] = useState("")
-    const [organisationInput, setOrganisationInput] = useState<IOrganisation>()
+    const [organisationInput, setOrganisationInput] = useState<number>()
 
     const [adminEmailInput, setAdminEmailInput] = useState("")
 
-    const userList: IUser[] = [
-        {
-            // FJERN
-            name: "Håkon",
-            email: "håkon@fdsf",
-            userId: 2,
-            isSystemAdmin: true,
-        },
-    ]
+    const [userList, setUserList] = useState<IUser[]>()
 
     const adminListProps = {
-        options: userList,
+        options: userList || [],
         getOptionLabel: (user: IUser) => user.email,
     }
 
     useEffect(() => {
-        if (defaultOrganisation) {
-            setOrganisationInput(defaultOrganisation)
+        if (users) {
+            setUserList(users)
         }
-    }, [defaultOrganisation])
+    }, [users])
 
     return (
         <form
             onSubmit={(event) => {
                 event.preventDefault()
-                handleOnSaveClick(groupNameInput, 2, 1)
+                handleOnSaveClick(
+                    groupNameInput,
+                    organisationInput,
+                    userList?.filter(
+                        (user) => user.email === adminEmailInput
+                    )[0].userId
+                )
             }}
         >
             <DialogTitle> {t("AdminView.addGroup")} </DialogTitle>
@@ -124,6 +123,7 @@ export const AddGroupDialog = (props: {
                 </Typography>
                 <FormControl variant="outlined" className={classes.formControl}>
                     <InputLabel>{t("AdminView.countries")}</InputLabel>
+                    {console.log(organisationInput)}
                     <Select
                         value={organisationInput}
                         onChange={(e: React.ChangeEvent<{ value: any }>) => {

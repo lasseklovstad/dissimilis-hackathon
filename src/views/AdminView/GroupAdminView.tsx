@@ -127,16 +127,20 @@ export const GroupAdminView = () => {
     }
     const handleAddGroupDialogSave = async (
         name: string,
-        firstAdminId: number,
-        organisationId: number
+        organisationId: number | undefined,
+        firstAdminId: number | undefined
     ) => {
-        const { error, result } = await postGroup.run({
-            name,
-            firstAdminId,
-            organisationId,
-        })
-        if (!error && result) {
-            setAddGroupIsOpen(false)
+        console.log(organisationId)
+        if (firstAdminId && organisationId) {
+            console.log("test")
+            const { error, result } = await postGroup.run({
+                name,
+                organisationId,
+                firstAdminId,
+            })
+            if (!error && result) {
+                setAddGroupIsOpen(false)
+            }
         }
     }
 
@@ -230,7 +234,6 @@ export const GroupAdminView = () => {
                         <AddGroupDialog
                             handleOnSaveClick={handleAddGroupDialogSave}
                             handleOnCancelClick={handleAddGroupDialogClose}
-                            defaultOrganisation={organisationFetched}
                             userIsSystemAdmin={userIsSystemAdmin()}
                         />
                     </Dialog>
