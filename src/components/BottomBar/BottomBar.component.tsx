@@ -208,7 +208,7 @@ export const BottomBar = (props: {
             <Select
                 labelId={"selectChordLengthLabel"}
                 id={"selectChordLength"}
-                value={chordMenuOptions.chordLength}
+                value={chordMenuOptions?.chordLength}
                 onChange={handleChange}
                 inputProps={{ className: classes.input }}
                 classes={{ icon: classes.selectIcon }}
@@ -254,9 +254,9 @@ export const BottomBar = (props: {
                             <div className={classes.flexelement}>
                                 <DropdownAutocomplete
                                     selectedChordType={
-                                        chordMenuOptions.chordType
+                                        chordMenuOptions?.chordType
                                     }
-                                    selectedChord={chordMenuOptions.chord}
+                                    selectedChord={chordMenuOptions?.chord}
                                     onChordChange={onChordChange}
                                     icon={<MusicNoteIcon fontSize="small" />}
                                     chordDropdownContent={chordDropdownContent}
@@ -264,7 +264,7 @@ export const BottomBar = (props: {
                                 />
                             </div>
                             <StyledToggleButtonGroup
-                                value={chordMenuOptions.chordType}
+                                value={chordMenuOptions?.chordType}
                                 exclusive
                                 onChange={handleToggle}
                                 className={classes.flexelement}
@@ -299,12 +299,12 @@ export const BottomBar = (props: {
                         </div>
                     </ClickAwayListener>
 
-                    {chordMenuOptions.chordType === ChordType.CHORD &&
+                    {chordMenuOptions?.chordType === ChordType.CHORD &&
                     selectedChordId ? (
                         <RootRef rootRef={chordOptionsRef}>
                             <div className={classes.container}>
                                 <ChordOptions
-                                    chord={chordMenuOptions.chord}
+                                    chord={chordMenuOptions?.chord}
                                     onChordNotesChange={onChordNotesChange}
                                 />
                             </div>

@@ -15,6 +15,7 @@ import { chords, notes } from "../../models/chords"
 import { colors } from "../../utils/colors"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { SongNavBar } from "../../components/SongNavBar/SongNavBar.component"
+import { useVoice } from "../../utils/useVoice"
 
 const useStyles = makeStyles({
     root: {
@@ -51,25 +52,10 @@ export const SongView = () => {
     const trigger = useScrollTrigger()
     const chordOptionsRef = useRef() as MutableRefObject<HTMLAnchorElement>
 
-    const {
-        song,
-        dispatchSong,
-        chordMenuOptions,
-        selectedVoice,
-        selectedVoiceId,
-    } = useSongContext()
-
-    const { denominator, numerator, voices } = song
+    const { song, dispatchSong, chordMenuOptions } = useSongContext()
+    const { denominator, numerator, voices } = song!!
 
     const { pasteBars, deleteBars } = useBars()
-    const {
-        setValuesForSelectedChord,
-        handleChangeChord,
-        handleChangeChordLength,
-        handleChordNotesChange,
-        handleDeleteSelectedChord,
-        handleNoteSelectedChange,
-    } = useChords()
 
     const mainVoice = voices.find((voice) => voice.isMain)
     const getChordNameFromMainVoice = (
@@ -82,6 +68,28 @@ export const SongView = () => {
             ?.chordName
     }
 
+    useEffect(() => {
+        if (songInit) {
+            console.log("Jepp")
+            dispatchSong({ type: "UPDATE_SONG", song: songInit })
+        }
+    }, [songInit, dispatchSong])
+
+    console.log("Song: ", song, "Voices: ", voices)
+
+    const selectedVoice = useVoice(song!!.voices)
+
+    const { songVoiceId: selectedVoiceId } = selectedVoice || {}
+
+    const {
+        setValuesForSelectedChord,
+        handleChangeChord,
+        handleChangeChordLength,
+        handleChordNotesChange,
+        handleDeleteSelectedChord,
+        handleNoteSelectedChange,
+    } = useChords()
+
     const clickOutsideOfBottomBarListener = (e: any) => {
         if (
             e.target.id !== "chordButton" &&
@@ -93,12 +101,6 @@ export const SongView = () => {
             setValuesForSelectedChord(undefined, undefined, 0)
         }
     }
-
-    useEffect(() => {
-        if (songInit) {
-            dispatchSong({ type: "UPDATE_SONG", song: songInit })
-        }
-    }, [songInit, dispatchSong])
 
     if (getSong.loading) {
         return <LoadingLogo />
@@ -160,7 +162,7 @@ export const SongView = () => {
                     songId={songId}
                     voiceId={selectedVoiceId}
                     chordDropdownContent={
-                        chordMenuOptions.chordType === ChordType.NOTE
+                        chordMenuOptions?.chordType === ChordType.NOTE
                             ? notes
                             : chords
                     }

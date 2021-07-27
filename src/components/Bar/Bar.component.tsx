@@ -164,7 +164,7 @@ export const Bar = (props: {
     }
 
     const handleChordClick = async (chord: IChord) => {
-        if (chord.notes[0] === "Z") {
+        if (chord.notes[0] === "Z" && chordMenuOptions) {
             const notes =
                 chordMenuOptions.chordType === ChordType.NOTE
                     ? [chordMenuOptions.chord]
@@ -222,7 +222,7 @@ export const Bar = (props: {
         indexOfChord: number,
         allChords: IChord[]
     ) => {
-        if (xl && chord.notes[0] === "Z") {
+        if (xl && chord.notes[0] === "Z" && chordMenuOptions) {
             let i = 0
             while (i <= chordMenuOptions.chordLength) {
                 const start = indexOfChord - i

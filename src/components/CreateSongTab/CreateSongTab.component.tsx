@@ -25,6 +25,7 @@ import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useVoice } from "../../utils/useVoice"
 
 const useStyles = makeStyles({
     root: {
@@ -64,17 +65,19 @@ export const CreateSongTab = (props: {
     selectedVoiceId: number
     songId: number
 }) => {
-    const { voices, selectedVoiceId, song, dispatchSong } = useSongContext()
-    const { songId } = song
+    const { song, dispatchSong } = useSongContext()
+    const selectedVoice = useVoice(song?.voices)
+    const { songVoiceId: selectedVoiceId } = selectedVoice || {}
+    const { songId, voices } = song!!
     const [newVoiceDialogIsOpen, setNewVoiceDialogIsOpen] = useState(false)
     const [renameDialogIsOpen, setRenameDialogIsOpen] = useState(false)
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false)
     const { t } = useTranslation()
     const [clickedId, setClickedId] = useState<undefined | number>()
-    const clickedVoice = voices.find((voice) => voice.songVoiceId === clickedId)
-    const selectedVoice = voices.find(
-        (voice) => voice.songVoiceId === selectedVoiceId
+    const clickedVoice = voices?.find(
+        (voice) => voice.songVoiceId === clickedId
     )
+
     const [rightClickMenuPosition, setRightClickMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()

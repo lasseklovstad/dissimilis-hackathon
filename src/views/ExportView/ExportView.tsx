@@ -133,10 +133,7 @@ export const ExportView = () => {
     const { songId: songIdString } = useParams<{ songId: string }>()
     const songId = Number(songIdString)
     const { songInit, getSong } = useGetSong(songId)
-    const selectedVoiceId = useVoice(songInit?.voices)
-    const selectedVoice = songInit?.voices.find(
-        (voice) => voice.songVoiceId === selectedVoiceId
-    )
+    const selectedVoice = useVoice(songInit?.voices)
     const mainVoice = songInit?.voices.find((voice) => voice.isMain)
     const getChordNameFromMainVoice = (
         barPosition: number,
@@ -272,7 +269,9 @@ export const ExportView = () => {
                             </InputLabel>
                             <Select
                                 labelId="voice"
-                                value={songInit ? selectedVoiceId : ""}
+                                value={
+                                    songInit ? selectedVoice?.songVoiceId : ""
+                                }
                                 onChange={(ev) => {
                                     history.push(
                                         `/song/${songId}/export?voice=${ev.target.value}`

@@ -70,18 +70,19 @@ export const SongNavBar = () => {
     const matches = useMediaQuery("(max-width:600px)")
 
     //TODO: Should title stuff be moved to SongContext?
-    const [title, setTitle] = useState(song.title)
+    const { title: songTitle, songId } = song!!
+    const [title, setTitle] = useState(songTitle)
     const { t } = useTranslation()
-    const { putSong } = useUpdateSong(song.songId)
+    const { putSong } = useUpdateSong(songId)
     const { logout } = useLogout()
     const { userInit } = useGetUser()
 
     useEffect(() => {
-        setTitle(song.title)
-    }, [song.title])
+        setTitle(title)
+    }, [title])
 
     const handleTitleBlur = async (title: string) => {
-        if (title !== song.title) {
+        if (title !== title) {
             const { error, result } = await putSong.run({ title })
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_SONG", song: result.data })

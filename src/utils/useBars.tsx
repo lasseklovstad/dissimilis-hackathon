@@ -31,7 +31,7 @@ export const useBars = () => {
         selectedBars,
         setSelectedBars,
     } = useSongContext()
-    const { postCopyBars } = useCopyBars(song.songId)
+    const { postCopyBars } = useCopyBars(song!!.songId)
     const pasteBars = async (type: "pasteBefore" | "pasteAfter", bar: IBar) => {
         if (barsClipboard) {
             let body
@@ -62,7 +62,7 @@ export const useBars = () => {
         }
     }
 
-    const { postDeleteBars } = useDeleteBarsApi(song.songId)
+    const { postDeleteBars } = useDeleteBarsApi(song!!.songId)
 
     const deleteBars = async () => {
         if (selectedBars) {

@@ -25,6 +25,7 @@ import { TransposeDialog } from "../CustomDialog/TransposeDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
+import { useVoice } from "../../utils/useVoice"
 
 export const MenuButton = (props: {
     showName: boolean
@@ -32,13 +33,14 @@ export const MenuButton = (props: {
 }) => {
     const {
         song,
-        selectedVoiceId: voiceId,
         setBarEditMode,
         barEditMode,
         setSelectedBars,
         setBarsClipboard,
     } = useSongContext()
-    const { title: songTitle } = song
+    const selectedVoice = useVoice(song?.voices)
+    const { songVoiceId: voiceId } = selectedVoice || {}
+    const { title: songTitle } = song!!
     const { userInit } = useGetUser()
     const { logout } = useLogout()
 

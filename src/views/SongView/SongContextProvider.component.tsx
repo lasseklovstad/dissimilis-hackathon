@@ -10,7 +10,6 @@ import { IBar } from "../../models/IBar"
 import { IVoice } from "../../models/IVoice"
 import { ChordType, IChordMenuOptions } from "../../models/IChordMenuOptions"
 import { ChordMenuAction, chordMenuReducer } from "./ChordMenuOptions.component"
-import { useVoice } from "../../utils/useVoice"
 
 export type SongAction =
     | { type: "ADD_BAR"; bar: IBar }
@@ -109,9 +108,9 @@ export const songReducer = (song: ISong, action: SongAction) => {
 }
 
 interface ISongContext {
-    song: ISong
+    song: ISong | undefined
     dispatchSong: React.Dispatch<SongAction>
-    chordMenuOptions: IChordMenuOptions
+    chordMenuOptions: IChordMenuOptions | undefined
     dispatchChordMenuOptions: React.Dispatch<ChordMenuAction>
     barEditMode: boolean
     setBarEditMode: React.Dispatch<React.SetStateAction<boolean>>
@@ -145,13 +144,11 @@ interface ISongContext {
             | undefined
         >
     >
-    voices: IVoice[]
-    selectedVoiceId: number | undefined
     selectedVoice: IVoice | undefined
     setSelectedVoice: React.Dispatch<React.SetStateAction<IVoice | undefined>>
     selectedBarId: number | undefined
     selectedChordId: number | undefined | null
-    selectedChordPosition: number
+    selectedChordPosition: number | undefined
     setValuesForSelectedChord: (
         chordId: number | undefined | null,
         barId: number | undefined,
@@ -159,7 +156,39 @@ interface ISongContext {
     ) => void
 }
 
-const SongContext = React.createContext<ISongContext | undefined>(undefined)
+const SongContext = React.createContext<ISongContext>({
+    song: undefined,
+    dispatchSong: () => {
+        throw new Error("dispatchSong is not implemented")
+    },
+    chordMenuOptions: undefined,
+    dispatchChordMenuOptions: () => {
+        throw new Error("dispatchChordMenuOptions is not implemented")
+    },
+    barEditMode: false,
+    setBarEditMode: () => {
+        throw new Error("setBarEditMode is not implemented")
+    },
+    barsClipboard: undefined,
+    setBarsClipboard: () => {
+        throw new Error("setBarsClipboard is not implemented")
+    },
+    selectedBars: undefined,
+    setSelectedBars: () => {
+        throw new Error("setSelectedBars is not implemented")
+    },
+    //selectedVoiceId: undefined,
+    selectedVoice: undefined,
+    setSelectedVoice: () => {
+        throw new Error("setSelectedVoiceId is not implemented")
+    },
+    selectedBarId: undefined,
+    selectedChordId: undefined,
+    selectedChordPosition: undefined,
+    setValuesForSelectedChord: () => {
+        throw new Error("setValuesForSelectedChord is not implemented")
+    },
+})
 
 export const SongContextProvider = (props: { children: ReactNode }) => {
     const { children } = props
@@ -199,9 +228,9 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
     >(undefined)
 
     const { voices } = song
-    const selectedVoiceId = useVoice(voices)
+    console.log(song)
     const [selectedVoice, setSelectedVoice] = useState<IVoice | undefined>(
-        voices.find((voice) => voice.songVoiceId === selectedVoiceId)
+        undefined
     )
     const [selectedBarId, setSelectedBarId] = useState<number | undefined>(
         undefined
@@ -221,13 +250,6 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
         setSelectedBarId(barId)
         setSelectedChordPosition(position)
     }
-
-    useEffect(() => {
-        setSelectedVoice(
-            song.voices.find((voice) => voice.songVoiceId === selectedVoiceId)
-        )
-    }, [song, selectedVoiceId])
-
     return (
         <SongContext.Provider
             value={{
@@ -241,8 +263,6 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
                 setBarsClipboard,
                 selectedBars,
                 setSelectedBars,
-                voices,
-                selectedVoiceId,
                 selectedVoice,
                 setSelectedVoice,
                 selectedBarId,

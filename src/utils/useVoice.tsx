@@ -1,7 +1,10 @@
+import { useEffect } from "react"
 import { useHistory } from "react-router-dom"
 import { IVoice } from "../models/IVoice"
+import { useSongContext } from "../views/SongView/SongContextProvider.component"
 
 export const useVoice = (voices: IVoice[] | undefined) => {
+    console.log("RUNNING1")
     const history = useHistory()
     const voiceIdString = new URLSearchParams(history.location.search).get(
         "voice"
@@ -10,9 +13,10 @@ export const useVoice = (voices: IVoice[] | undefined) => {
 
     const voiceExists = voices?.find((voice) => voice.songVoiceId === voiceId)
 
-    if (!voiceExists && voices && voices?.length > 0) {
-        return voices[0].songVoiceId
-    }
+    const voice =
+        !voiceExists && voices && voices?.length > 0
+            ? voices[0]
+            : voices?.find((voice) => voice.songVoiceId === voiceId)
 
-    return voiceId
+    return voice
 }

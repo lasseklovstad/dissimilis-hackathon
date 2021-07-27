@@ -3,29 +3,31 @@ import { IBar, IChord } from "../models/IBar"
 import { ChordType } from "../models/IChordMenuOptions"
 import { useSongContext } from "../views/SongView/SongContextProvider.component"
 import { useDeleteChord, useUpdateChord } from "./useApiServiceSongs"
+import { useVoice } from "./useVoice"
 
 export const useChords = () => {
     const {
         song,
-        selectedVoiceId,
         selectedBarId,
         selectedChordId,
-        selectedVoice,
         selectedChordPosition,
         chordMenuOptions,
         dispatchChordMenuOptions,
         dispatchSong,
         setValuesForSelectedChord,
     } = useSongContext()
+    const { songId } = song!!
+    const selectedVoice = useVoice(song!!.voices)
+    const { songVoiceId: selectedVoiceId } = selectedVoice || {}
     const { updateChord } = useUpdateChord(
-        song.songId,
+        songId,
         selectedVoiceId,
         selectedBarId,
         selectedChordId
     )
 
     const { deleteChord } = useDeleteChord(
-        Number(song.songId),
+        Number(songId),
         selectedVoiceId === undefined ? 0 : selectedVoiceId,
         selectedBarId === undefined ? 0 : selectedBarId,
         selectedChordId === undefined ? 0 : selectedChordId
@@ -35,9 +37,9 @@ export const useChords = () => {
         if (selectedChordId && selectedVoiceId && selectedBarId) {
             makeChordUpdate(
                 chord,
-                chordMenuOptions.chordLength,
-                selectedChordPosition,
-                chordMenuOptions.chordType
+                chordMenuOptions!!.chordLength,
+                selectedChordPosition!!,
+                chordMenuOptions!!.chordType
             )
         } else {
             const notes = getNotesFromChord(chord)
@@ -99,10 +101,10 @@ export const useChords = () => {
             )
             if (selectedBar && note && note.length > updatedChordLength) {
                 makeChordUpdate(
-                    chordMenuOptions.chord,
+                    chordMenuOptions!!.chord,
                     updatedChordLength,
                     note.position,
-                    chordMenuOptions.chordType
+                    chordMenuOptions!!.chordType
                 )
             } else if (selectedBar) {
                 updateChordLengthIfPossible(
@@ -163,10 +165,10 @@ export const useChords = () => {
                 ) === -1
             if (isOnlyRests && interval.length === updatedChordLength) {
                 makeChordUpdate(
-                    chordMenuOptions.chord,
+                    chordMenuOptions!!.chord,
                     updatedChordLength,
                     start,
-                    chordMenuOptions.chordType
+                    chordMenuOptions!!.chordType
                 )
                 break
             }
@@ -177,17 +179,17 @@ export const useChords = () => {
     const handleNoteSelectedChange = (chordType: ChordType) => {
         let chord
         if (chordType === ChordType.NOTE) {
-            chord = chordMenuOptions.chord?.includes("#")
-                ? chordMenuOptions.chord.substring(0, 2)
-                : chordMenuOptions.chord?.charAt(0) || null
+            chord = chordMenuOptions!!.chord?.includes("#")
+                ? chordMenuOptions!!.chord.substring(0, 2)
+                : chordMenuOptions!!.chord?.charAt(0) || null
         } else {
-            chord = chordMenuOptions.chord
+            chord = chordMenuOptions!!.chord
         }
         if (selectedChordId && selectedVoiceId) {
             makeChordUpdate(
                 chord,
-                chordMenuOptions.chordLength,
-                selectedChordPosition,
+                chordMenuOptions!!.chordLength,
+                selectedChordPosition!!,
                 chordType
             )
         } else {
@@ -198,7 +200,7 @@ export const useChords = () => {
             dispatchChordMenuOptions({
                 type: "UPDATE_OPTIONS",
                 menuOptions: {
-                    chordLength: chordMenuOptions.chordLength,
+                    chordLength: chordMenuOptions!!.chordLength,
                     chord: chord,
                     chordType: chordType,
                     chordNotes: notes as string[],
@@ -208,20 +210,20 @@ export const useChords = () => {
     }
 
     const handleChordNotesChange = (clickedNote: string, checked: boolean) => {
-        if (!checked && chordMenuOptions.chordNotes.length > 1) {
-            const updatedChordNotes = chordMenuOptions.chordNotes.filter(
+        if (!checked && chordMenuOptions!!.chordNotes.length > 1) {
+            const updatedChordNotes = chordMenuOptions!!.chordNotes.filter(
                 (note) => note !== clickedNote
             )
             makeChordUpdate(
-                chordMenuOptions.chord,
-                chordMenuOptions.chordLength,
-                selectedChordPosition,
+                chordMenuOptions!!.chord,
+                chordMenuOptions!!.chordLength,
+                selectedChordPosition!!,
                 ChordType.CHORD,
                 updatedChordNotes
             )
         }
         if (checked) {
-            const activeChordNotes = getNotesFromChord(chordMenuOptions.chord)
+            const activeChordNotes = getNotesFromChord(chordMenuOptions!!.chord)
             let activeChordIndex = 0
             let insertIndex = 0
 
@@ -231,20 +233,20 @@ export const useChords = () => {
                 }
                 if (
                     activeChordNotes[activeChordIndex] ===
-                    chordMenuOptions.chordNotes[insertIndex]
+                    chordMenuOptions!!.chordNotes[insertIndex]
                 ) {
                     insertIndex++
                 }
                 activeChordIndex++
             }
 
-            let updatedChordNotes = [...chordMenuOptions.chordNotes]
+            let updatedChordNotes = [...chordMenuOptions!!.chordNotes]
             updatedChordNotes.splice(insertIndex, 0, clickedNote)
 
             makeChordUpdate(
-                chordMenuOptions.chord,
-                chordMenuOptions.chordLength,
-                selectedChordPosition,
+                chordMenuOptions!!.chord,
+                chordMenuOptions!!.chordLength,
+                selectedChordPosition!!,
                 ChordType.CHORD,
                 updatedChordNotes
             )
