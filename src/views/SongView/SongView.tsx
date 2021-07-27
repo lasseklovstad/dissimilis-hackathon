@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.component"
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
-import { useBarsPerRow, useBars } from "../../utils/useBars"
+import { useBarsPerRow } from "../../utils/useBars"
 import { Song } from "../../components/Song/Song.component"
 import { useChords } from "../../utils/useChords"
 import { useGetSong } from "../../utils/useApiServiceSongs"
@@ -54,9 +54,6 @@ export const SongView = () => {
 
     const { song, dispatchSong, chordMenuOptions } = useSongContext()
     const { denominator, numerator, voices } = song!!
-
-    const { pasteBars, deleteBars } = useBars()
-
     const mainVoice = voices.find((voice) => voice.isMain)
     const getChordNameFromMainVoice = (
         barPosition: number,
@@ -80,27 +77,6 @@ export const SongView = () => {
     const selectedVoice = useVoice(song!!.voices)
 
     const { songVoiceId: selectedVoiceId } = selectedVoice || {}
-
-    const {
-        setValuesForSelectedChord,
-        handleChangeChord,
-        handleChangeChordLength,
-        handleChordNotesChange,
-        handleDeleteSelectedChord,
-        handleNoteSelectedChange,
-    } = useChords()
-
-    const clickOutsideOfBottomBarListener = (e: any) => {
-        if (
-            e.target.id !== "chordButton" &&
-            e.target.id !== "singleChord" &&
-            ((chordOptionsRef.current &&
-                !chordOptionsRef.current.contains(e.target)) ||
-                !chordOptionsRef.current)
-        ) {
-            setValuesForSelectedChord(undefined, undefined, 0)
-        }
-    }
 
     if (getSong.loading) {
         return <LoadingLogo />
@@ -139,8 +115,6 @@ export const SongView = () => {
                             timeSignature={{ denominator, numerator }}
                             heightOfBar={heightOfBar}
                             exportMode={false}
-                            pasteBars={pasteBars}
-                            deleteBars={deleteBars}
                             lastPage={true}
                         />
                     </Grid>
@@ -148,27 +122,12 @@ export const SongView = () => {
             )}
             {selectedVoiceId && (
                 <BottomBar
-                    onNoteSelectedChange={(chordType) =>
-                        handleNoteSelectedChange(chordType)
-                    }
-                    onChordChange={(chord) => handleChangeChord(chord)}
-                    onChordLengthChange={(length) =>
-                        handleChangeChordLength(length)
-                    }
-                    timeSignature={{ denominator, numerator }}
-                    addBar={(song) =>
-                        dispatchSong({ type: "UPDATE_SONG", song })
-                    }
-                    songId={songId}
                     voiceId={selectedVoiceId}
                     chordDropdownContent={
                         chordMenuOptions?.chordType === ChordType.NOTE
                             ? notes
                             : chords
                     }
-                    clickOutsideListener={clickOutsideOfBottomBarListener}
-                    onChordNotesChange={handleChordNotesChange}
-                    deleteSelectedChord={handleDeleteSelectedChord}
                     chordOptionsRef={chordOptionsRef}
                 />
             )}

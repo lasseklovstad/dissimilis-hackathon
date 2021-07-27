@@ -263,7 +263,7 @@ export const useCreateChord = (
     }
 }
 
-export const useCopyBars = (songId: number) => {
+export const useCopyBars = (songId: number | undefined) => {
     const url = `song/${songId}/copyBars`
     const headers = getHeaders()
 

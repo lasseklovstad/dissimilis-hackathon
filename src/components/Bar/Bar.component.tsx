@@ -49,8 +49,6 @@ export const Bar = (props: {
     ) => string | undefined | null
     masterSheet: boolean
     showHouseNumber: boolean
-    pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
-    deleteBars?: () => void
 }) => {
     const {
         exportMode,
@@ -91,10 +89,19 @@ export const Bar = (props: {
         dispatchChordMenuOptions,
         selectedChordId,
         barEditMode,
+        setBarsClipboard,
         barsClipboard,
         selectedBars,
+        setSelectedBars,
     } = useSongContext()
-    const { copySelectedBars, barClicked } = useBars()
+    const { copySelectedBars, barClicked, pasteBars, deleteBars } = useBars(
+        songId,
+        dispatchSong,
+        selectedBars,
+        setSelectedBars,
+        barsClipboard,
+        setBarsClipboard
+    )
     const { postChord } = useCreateChord(songId, songVoiceId, barId)
     const { deleteChord } = useDeleteChord(
         songId,
@@ -139,11 +146,11 @@ export const Bar = (props: {
         if (method === "copy") {
             copySelectedBars()
         } else if (method === "pasteBefore") {
-            props.pasteBars && props.pasteBars("pasteBefore", props.bar)
+            pasteBars && pasteBars("pasteBefore", props.bar)
         } else if (method === "pasteAfter") {
-            props.pasteBars && props.pasteBars("pasteAfter", props.bar)
+            pasteBars && pasteBars("pasteAfter", props.bar)
         } else if (method === "delete") {
-            props.deleteBars && props.deleteBars()
+            deleteBars && deleteBars()
         }
     }
 

@@ -1,6 +1,9 @@
 import { useMediaQuery } from "@material-ui/core"
 import { IBar } from "./../models/IBar"
-import { useSongContext } from "./../views/SongView/SongContextProvider.component"
+import {
+    SongAction,
+    useSongContext,
+} from "./../views/SongView/SongContextProvider.component"
 import {
     useCopyBars,
     useDeleteBars as useDeleteBarsApi,
@@ -22,16 +25,42 @@ export const useBarsPerRow = () => {
     return getBarPerRow()
 }
 
-export const useBars = () => {
-    const {
-        song,
-        barsClipboard,
-        setBarsClipboard,
-        dispatchSong,
-        selectedBars,
-        setSelectedBars,
-    } = useSongContext()
-    const { postCopyBars } = useCopyBars(song!!.songId)
+export const useBars = (
+    songId: number,
+    dispatchSong: React.Dispatch<SongAction>,
+    selectedBars:
+        | {
+              fromPosition: number
+              toPosition: number
+          }
+        | undefined,
+    setSelectedBars: React.Dispatch<
+        React.SetStateAction<
+            | {
+                  fromPosition: number
+                  toPosition: number
+              }
+            | undefined
+        >
+    >,
+    barsClipboard:
+        | {
+              fromPosition: number
+              toPosition: number
+          }
+        | undefined,
+    setBarsClipboard: React.Dispatch<
+        React.SetStateAction<
+            | {
+                  fromPosition: number
+                  toPosition: number
+              }
+            | undefined
+        >
+    >
+) => {
+    const { postCopyBars } = useCopyBars(songId)
+
     const pasteBars = async (type: "pasteBefore" | "pasteAfter", bar: IBar) => {
         if (barsClipboard) {
             let body
@@ -61,8 +90,7 @@ export const useBars = () => {
             }
         }
     }
-
-    const { postDeleteBars } = useDeleteBarsApi(song!!.songId)
+    const { postDeleteBars } = useDeleteBarsApi(songId)
 
     const deleteBars = async () => {
         if (selectedBars) {
