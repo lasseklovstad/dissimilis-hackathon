@@ -92,7 +92,6 @@ export const AdminView = () => {
 
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addOrganisationIsOpen, setAddOrganisationIsOpen] = useState(false)
-    const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
     const [editSysAdminsDialogIsOpen, setEditSysAdminsDialogIsOpen] =
         useState(false)
     const [editMembersDialogIsOpen, setEditMembersDialogIsOpen] =
@@ -147,20 +146,36 @@ export const AdminView = () => {
 
     const handleAddOrganisationDialogSave = async (
         name: string,
-        firstAdminId: number
+        firstAdminId?: number
     ) => {
-        const { error, result } = await postOrganisation.run({
-            name,
-            firstAdminId,
-        })
-        if (!error && result) {
-            setAddOrganisationIsOpen(false)
-            history.push(`/admin`)
+        if (firstAdminId) {
+            const { error, result } = await postOrganisation.run({
+                name,
+                firstAdminId,
+            })
+            if (!error && result) {
+                setAddOrganisationIsOpen(false)
+                updateOrganisation()
+            }
         }
     }
 
     const handleEditSysAdminsDialogClose = () => {
         setEditSysAdminsDialogIsOpen(false)
+    }
+
+    const updateOrganisation = async () => {
+        const { error: adminOrgError, result: adminOrgResult } =
+            await getAdminOrganisations.run()
+        if (!adminOrgError && adminOrgResult) {
+            setAdminOrganisations(adminOrgResult.data)
+            renderedAdminOrganisationIds.length = 0
+        }
+        const { error: groupAdminError, result: groupAdminResult } =
+            await getGroupAdminOrganisations.run()
+        if (!groupAdminError && groupAdminResult) {
+            setGroupAdminOrganisations(groupAdminResult.data)
+        }
     }
 
     return (
