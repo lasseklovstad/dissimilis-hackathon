@@ -287,6 +287,7 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                         link={props.link}
                         removeSong={props.removeSong}
                         renameSong={props.renameSong}
+                        //canEdit
                     />
                 </Box>
             </Grid>

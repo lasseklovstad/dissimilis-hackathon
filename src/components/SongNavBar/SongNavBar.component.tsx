@@ -135,6 +135,7 @@ export const SongNavBar = (props: {
                         barEditMode={props.barEditMode}
                         updateSongTitle={setTitle}
                         onLogout={logout.run}
+                        //CanEdit
                     />
                 </Box>
             </AppBar>

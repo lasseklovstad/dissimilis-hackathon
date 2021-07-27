@@ -162,6 +162,7 @@ export const SongView = () => {
                                         setBarsClipboard(undefined)
                                     }}
                                     barEditMode={barEditMode}
+                                    //song.canEdit
                                 />
                             </Grid>
                             <Grid item xs={12}>
