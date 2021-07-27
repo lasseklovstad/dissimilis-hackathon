@@ -235,15 +235,12 @@ export const EditAdminsDialog = (props: {
                     ackText={t("Dialog.removeAdmin")}
                     cancelText={t("Dialog.cancel")}
                     headerText={t("Dialog.removeAdmin")}
-                    descriptionText={
-                        t("Dialog.removeAdminDescription") +
-                        " " +
-                        (selectedAdmin?.name || t("Dialog.thisUser")) +
-                        " " +
-                        t("Dialog.asAdmin") +
-                        " " + // <== Would have been nice with line break right here but I cannot find a way to do it...
-                        t("Dialog.cannotUndo")
-                    }
+                    descriptionText={`
+                        ${t("Dialog.removeAdminDescription")} 
+                        ${selectedAdmin?.name || t("Dialog.thisUser")} 
+                        ${t("Dialog.asAdmin")} 
+                        ${t("Dialog.cannotUndo")}
+                    `}
                 />
             </Dialog>
         </>
