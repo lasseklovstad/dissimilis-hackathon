@@ -16,6 +16,11 @@ export const colors = {
     G: { main: "#EF5350", opaque: "#EF535033", text: "#212121" },
     A: { main: "#1E88E5", opaque: "#1E88E533", text: "#FFFFFF" },
     H: { main: "#FB8C00", opaque: "#FB8C0033", text: "#212121" },
+    blackKeys: {
+        main: "#757575",
+        opaque: "#BDBDBD",
+        text: "#FFFFFF",
+    },
     semitone: "#616161",
     teal_100: "#B2DFDB",
 }

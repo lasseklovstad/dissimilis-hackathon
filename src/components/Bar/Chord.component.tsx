@@ -8,7 +8,7 @@ import { useAddNote } from "../../utils/useApiServiceSongs"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded"
 import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUncheckedRounded"
-import { Bar } from "./Bar.component"
+//import { Bar } from "./Bar.component"
 
 type ChordProps = {
     chord: IChord
@@ -56,29 +56,41 @@ const useStyle = makeStyles((theme) => ({
         fontSize: "1.25rem",
     },
     noteContainer: {
-        marginTop: "1px",
-        borderColor: "rgb(0 0 0 / 12%)",
+        marginTop: "0px",
+        /* borderColor: "rgb(0 0 0 / 12%)", */
+        borderColor: "rgb(0 0 0 / 50%)",
         borderRadius: "3px",
         display: "flex",
         flex: "1",
         justifyContent: "center",
         alignItems: "center",
-        color: "white",
+        /* color: "white", */
         border: "1px solid",
     },
     noteFont: {
         ...theme.typography.body1,
-        "@media(max-width:600px)": {},
+        "@media(max-width:600px)": {
+            // fontSize: "0.9rem",
+        },
     },
     circleIconChecked: {
         color: colors.focus,
         fontSize: "1.25rem",
         marginRight: "0.1rem",
+        "@media(max-width:768px)": {
+            fontSize: "0.8rem",
+            marginRight: "0",
+        },
     },
     circleIconUnChecked: {
         color: colors.gray_400,
         fontSize: "1.25rem",
         marginRight: "0.1rem",
+        verticalAlign: "middle",
+        "@media(max-width:768px)": {
+            fontSize: "0.8rem",
+            margin: "0",
+        },
     },
     C: {
         color: colors.C.text,
@@ -116,27 +128,29 @@ const useStyle = makeStyles((theme) => ({
         "&.opaque": { backgroundColor: colors.H.opaque },
     },
     "C#": {
-        "&.main": { backgroundColor: colors.gray_500 },
-        "&.opaque": { backgroundColor: colors.gray_300 },
+        color: colors.white,
+        "&.main": { backgroundColor: colors.blackKeys.main },
+        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
     },
     "D#": {
-        "&.main": { backgroundColor: colors.gray_500 },
-        "&.opaque": { backgroundColor: colors.gray_300 },
+        color: colors.blackKeys.text,
+        "&.main": { backgroundColor: colors.blackKeys.main },
+        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
     },
     "F#": {
-        "&.main": { backgroundColor: colors.gray_500 },
-        "&.opaque": { backgroundColor: colors.gray_300 },
+        color: colors.blackKeys.text,
+        "&.main": { backgroundColor: colors.blackKeys.main },
+        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
     },
     "G#": {
-        "&.main": { backgroundColor: colors.gray_500 },
-        "&.opaque": { backgroundColor: colors.gray_300 },
+        color: colors.blackKeys.text,
+        "&.main": { backgroundColor: colors.blackKeys.main },
+        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
     },
     "A#": {
-        "&.main": { backgroundColor: colors.gray_500 },
-        "&.opaque": { backgroundColor: colors.gray_300 },
-    },
-    unselected: {
-        // opacity: "0.1",
+        color: colors.blackKeys.text,
+        "&.main": { backgroundColor: colors.blackKeys.main },
+        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
     },
     disabled: {
         border: 0,
@@ -183,7 +197,6 @@ export const Chord = (props: ChordProps) => {
         isSelected,
         handleChordFocus,
         barEditMode,
-        barId,
     } = props
     const classes = useStyle()
 
@@ -279,11 +292,7 @@ export const Chord = (props: ChordProps) => {
                                             Number(tangent) && exportMode
                                                 ? classes.exportNumberSize
                                                 : classes.noteFont
-                                        } ${
-                                            customVoiceNoteStates[i]
-                                                ? ""
-                                                : classes.unselected
-                                        }  `}
+                                        }`}
                                         key={note + i}
                                         onClick={() =>
                                             handleCustomVoiceAddClick(i)

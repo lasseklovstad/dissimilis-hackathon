@@ -100,7 +100,7 @@ export const CustomVoiceDialog = (props: {
 
     return (
         <>
-            <Box m={2}>
+            <Box pl={6}>
                 <Typography variant="h1">{newVoice?.voiceName}</Typography>
             </Box>
             <Grid item xs={12} className={classes.body}>
@@ -121,12 +121,7 @@ export const CustomVoiceDialog = (props: {
                 className={`mui-fixed ${classes.positioningContainer}`}
             >
                 <Grid container justify="center">
-                    <Grid
-                        item
-                        xs={12}
-                        sm={10}
-                        className={classes.outercontainer}
-                    >
+                    <Grid item xs={10} className={classes.outercontainer}>
                         <Box className={classes.container}>
                             <ChordOptions
                                 chord={"Em"}
