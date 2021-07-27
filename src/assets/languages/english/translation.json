@@ -52,7 +52,8 @@
         "address": "Address",
         "system": "the system",
         "deleteCountry": "Delete country",
-        "deleteGroup": "Delete group"
+        "deleteGroup": "Delete group",
+        "addUser": "Add user"
     },
     "LibraryView": {
         "defaultHeading": "Library",
@@ -206,6 +207,10 @@
         "thisUser": "this user",
         "deleteCountryDescription": "This action will delete the country, this action is irreversible.",        
         "deleteGroupDescription": "This action will delete the group, this action is irreversible.",
+        "editGroupMembers": "Edit group members",
+        "membersIn": "Members in ",
+        "removeMember": "Remove member",
+        "asMember": "as member?",
         "share": "Share",
         "shareSong": "Share song",
         "editRights": "Edit rights",
@@ -221,8 +226,15 @@
         "shareWithPerson": "Share with person",
         "removePersonShareDescription": "Remove the edit rights from ",
         "email": "Email",
-        "tags": "Tags"
-
+        "tags": "Tags",
+        "usersInSystem": "Users in the system",
+        "removeUser": "Delete user",
+        "removeUserDescription": "Are you sure you want to remove",
+        "fromTheSystem": "from the system?",
+        "cannotRemoveUserFrom": "User can not be removed from",
+        "theOrganisation": "the organisation.",
+        "theGroup": "the group.",
+        "errorOrLastAdmin": "An error occured or the user is the only admin in"
     },
     "Song": {
         "arranger": "Arranger",

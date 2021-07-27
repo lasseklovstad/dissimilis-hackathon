@@ -45,6 +45,9 @@ export const useLogout = () => {
     }
 }
 
+/**
+ * Get all users in the system
+ */
 export const useGetUsers = () => {
     const url = "user"
     const headers = getHeaders()
