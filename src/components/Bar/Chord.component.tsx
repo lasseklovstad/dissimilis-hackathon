@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { tangentToNumber } from "../../utils/bar.util"
-import { useAddNote } from "../../utils/useApiServiceSongs"
+import { useAddNote, useRemoveNote } from "../../utils/useApiServiceSongs"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded"
 import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUncheckedRounded"
@@ -244,12 +244,31 @@ export const Chord = (props: ChordProps) => {
             intervalPosition: index,
             notes: chord.notes,
         })
-
         if (!error && result) {
             const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
-            newCustomVoiceNoteStates[index] = !newCustomVoiceNoteStates[index]
+            newCustomVoiceNoteStates[index] = true
             setCustomVoiceNoteStates(newCustomVoiceNoteStates)
-            console.log(customVoiceNoteStates[index])
+            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+        }
+    }
+
+    const { removeNote } = useRemoveNote(
+        song.songId.toString(),
+        selectedVoiceId,
+        barPosition
+    )
+    const handleCustomVoiceRemoveClick = async (index: number) => {
+        const { error, result } = await removeNote.run({
+            chordName: chord.chordName,
+            notePosition: chord.position,
+            length: chord.length,
+            intervalPosition: index,
+            notes: chord.notes,
+        })
+        if (!error && result) {
+            const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
+            newCustomVoiceNoteStates[index] = false
+            setCustomVoiceNoteStates(newCustomVoiceNoteStates)
             dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
@@ -309,7 +328,11 @@ export const Chord = (props: ChordProps) => {
                                         }`}
                                         key={note + i}
                                         onClick={() =>
-                                            handleCustomVoiceAddClick(i)
+                                            customVoiceNoteStates[i]
+                                                ? handleCustomVoiceRemoveClick(
+                                                      i
+                                                  )
+                                                : handleCustomVoiceAddClick(i)
                                         }
                                     >
                                         {note[0] !== "Z" ? (
