@@ -8,7 +8,6 @@ import { useAddNote, useRemoveNote } from "../../utils/useApiServiceSongs"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded"
 import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUncheckedRounded"
-//import { Bar } from "./Bar.component"
 
 type ChordProps = {
     chord: IChord
@@ -234,7 +233,7 @@ const ChordText = (props: { chordName: string }) => {
 
 export const Chord = (props: ChordProps) => {
     const {
-        chord: chord,
+        chord,
         barPosition,
         onClick,
         onContextMenu,
@@ -253,15 +252,7 @@ export const Chord = (props: ChordProps) => {
 
     const chordName = getChordNameFromMainVoice(barPosition, chord.position)
 
-    const {
-        song,
-        selectedVoiceId,
-        selectedBarId,
-        selectedChordId,
-        dispatchSong,
-        dispatchChordMenuOptions,
-        setValuesForSelectedChord,
-    } = useSongContext()
+    const { song, selectedVoiceId, dispatchSong } = useSongContext()
 
     const [customVoiceNoteStates, setCustomVoiceNoteStates] = useState<
         Boolean[]
