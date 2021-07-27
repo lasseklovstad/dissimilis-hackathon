@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { IGroup, IGroupIndex } from "../models/IGroup"
 import { IOrganisation, IOrganisationIndex } from "../models/IOrganisation"
+import { IUser } from "../models/IUser"
 import { useApiService } from "./useApiService"
 
 export enum GroupFilter {
@@ -14,6 +15,11 @@ export enum OrganisationFilter {
     GroupAdmin = "GROUPADMIN",
     User = "USER",
     All = "ALL",
+}
+
+export enum UserLevel {
+    Admin = "Admin",
+    Member = "Member",
 }
 
 const getHeaders = () => {
@@ -271,13 +277,15 @@ export const useAddGroupMember = (groupId: number) => {
 /**
  *  Remove user from group
  */
-export const useRemoveGroupMember = (groupId: number, userId: number) => {
-    const url = `organisations/groups/${groupId}/users/${userId}`
+export const useRemoveGroupMember = (groupId: number) => {
+    const url = `organisations/groups/${groupId}/users`
     const headers = getHeaders()
     const body = {}
+    const appendUrl = `/`
     const { deleteData, state } = useApiService<void>(url, {
         body,
         headers,
+        appendUrl,
     })
 
     return {
@@ -306,19 +314,42 @@ export const useAddOrganisationMember = (organisationId: number) => {
 /**
  *  Remove user from group
  */
-export const useRemoveOrganisationMember = (
-    organisationId: number,
-    userId: number
-) => {
-    const url = `groups/${organisationId}/users/${userId}`
+export const useRemoveOrganisationMember = (organisationId: number) => {
+    const url = `organisations/${organisationId}/users`
     const headers = getHeaders()
     const body = {}
+    const appendUrl = `/`
     const { deleteData, state } = useApiService<void>(url, {
         body,
         headers,
+        appendUrl,
     })
 
     return {
         removeOrganisationMember: { run: deleteData, ...state },
+    }
+}
+
+/**
+ * Get members of a group or an organisation in the form of an array of IUsers
+ * @param groupId id of the group or organisation containing the members
+ */
+export const useGetGroupOrOrganisationMembers = (
+    isGroup: boolean,
+    groupId: number
+) => {
+    const urlStart = isGroup ? `organisations/groups` : `organisations`
+    const url = `${urlStart}/${groupId}/users`
+    const headers = getHeaders()
+
+    const { getData, state, data } = useApiService<IUser[]>(url, { headers })
+
+    useEffect(() => {
+        getData()
+    }, [getData])
+
+    return {
+        getGroupMembers: { run: getData, ...state },
+        groupMembers: data,
     }
 }

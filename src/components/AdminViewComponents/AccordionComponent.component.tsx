@@ -12,7 +12,6 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
-import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCompleteDialog.component"
 import { useHistory } from "react-router"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
@@ -20,11 +19,13 @@ import {
     useDeleteOrganisation,
     useGetOrganisation,
     useAddOrganisationMember,
-    useRemoveOrganisationMember,
+    UserLevel,
     useUpdateOrganisation,
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { IUser } from "../../models/IUser"
+import { EditMembersDialog } from "../CustomDialog/EditMembersDialog.component"
+import { AddGroupMemberDialog } from "../CustomDialog/AddGroupMemberDialog.component"
 import { IOrganisation } from "../../models/IOrganisation"
 
 const useStyles = makeStyles({
@@ -90,6 +91,12 @@ export const AccordionComponent = (props: {
     const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
     const [deleteCountryDialogIsOpen, setDeleteCountryDialogIsOpen] =
         useState(false)
+    const [editMembersDialogIsOpen, setEditMembersDialogIsOpen] =
+        useState(false)
+
+    const handleEditMembersDialogClose = () => {
+        setEditMembersDialogIsOpen(false)
+    }
 
     const [organisation, setOrganisation] = useState<IOrganisation | undefined>(
         organisationFetched
@@ -122,8 +129,8 @@ export const AccordionComponent = (props: {
     const handleAddMember = async (user: IUser | undefined) => {
         if (user) {
             const { error, result } = await addOrganisationMember.run({
-                newMemberUserId: user.userId,
-                newMemberRole: 10, // 10=member, 20=admin
+                newUserId: user.userId,
+                newUserRole: UserLevel.Member,
             })
             if (!error && result) {
                 setAddMemberDialogIsOpen(false)
@@ -209,6 +216,9 @@ export const AccordionComponent = (props: {
                                 disableFocusRipple
                                 disabled={buttonsIsDisabled}
                                 className={classes.button}
+                                onClick={() => {
+                                    setEditMembersDialogIsOpen(true)
+                                }}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.seeAllMembers")}
@@ -315,10 +325,11 @@ export const AccordionComponent = (props: {
                 maxWidth="sm"
                 fullWidth
             >
-                <UserAutoCompleteDialog
+                <AddGroupMemberDialog
                     handleOnCancelClick={handleAddMemberClose}
                     handleOnSaveClick={handleAddMember}
-                    userList={[]}
+                    isGroup={false}
+                    groupId={organisationId}
                     title={t("AdminView.addMemberTo") + " " + title}
                     descriptionText={t("AdminView.emailNewGroupMember")}
                     saveText={t("AdminView.add")}
@@ -334,6 +345,20 @@ export const AccordionComponent = (props: {
                     group={organisation}
                     handleOnSaveClick={handleUpdateDetails}
                     handleOnCancelClick={handleCloseOrganisationInfoDialog}
+                    isGroup={false}
+                />
+            </Dialog>
+            <Dialog
+                open={editMembersDialogIsOpen}
+                onClose={handleEditMembersDialogClose}
+                aria-label={t("Dialog.editMembers")}
+                maxWidth="sm"
+                fullWidth
+            >
+                <EditMembersDialog
+                    handleOnCloseClick={handleEditMembersDialogClose}
+                    groupId={organisationId}
+                    groupName={organisationFetched?.organisationName || title}
                     isGroup={false}
                 />
             </Dialog>

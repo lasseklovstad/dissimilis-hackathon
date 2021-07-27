@@ -50,7 +50,8 @@
         "address": "Adresse",
         "system": "systemet",
         "deleteCountry": "Slett land",
-        "deleteGroup": "Slett gruppe"
+        "deleteGroup": "Slett gruppe",
+        "addUser": "Legg til bruker"
     },
     "LibraryView": {
         "defaultHeading": "Bibliotek",
@@ -203,6 +204,10 @@
         "thisUser": "denne brukeren",
         "deleteCountryDescription": "Denne handlingen vil slette landet, og er irreversibel",        
         "deleteGroupDescription": "Denne handlingen vil slette gruppen, og er irreversibel",
+        "editGroupMembers": "Rediger gruppemedlemmer",
+        "membersIn": "Medlemmer i ",
+        "removeMember": "Fjern gruppemedlem",
+        "asMember": "som medlem?",
         "share": "Del",
         "shareSong": "Del sang",
         "editRights": "Redigeringsrettingheter",
@@ -218,7 +223,15 @@
         "shareWithPerson": "Del med person",
         "removePersonShareDescription": "Fjern redigeringsrettighetene til ",
         "email": "E-post",
-        "tags": "Tags"
+        "tags": "Tags",
+        "usersInSystem": "Brukere i systemet",
+        "removeUser": "Slett bruker",
+        "removeUserDescription": "Er du sikker på at du vil slette",
+        "fromTheSystem": "fra systemet?",
+        "cannotRemoveUserFrom": "Brukeren kan ikke fjernes fra",
+        "theOrganisation": "organisasjonen.",
+        "theGroup": "gruppen.",
+        "errorOrLastAdmin": "Det skjedde en feil eller brukeren er den eneste administratoren i"
     },
     "Song": {
         "arranger": "Arrangør",
