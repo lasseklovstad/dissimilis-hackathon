@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     Accordion,
     AccordionDetails,
@@ -25,6 +25,7 @@ import {
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { IUser } from "../../models/IUser"
+import { IOrganisation } from "../../models/IOrganisation"
 
 const useStyles = makeStyles({
     root: {
@@ -90,6 +91,10 @@ export const AccordionComponent = (props: {
     const [deleteCountryDialogIsOpen, setDeleteCountryDialogIsOpen] =
         useState(false)
 
+    const [organisation, setOrganisation] = useState<IOrganisation | undefined>(
+        organisationFetched
+    )
+
     const handleOpenEditAdminsDialog = () => {
         setEditAdminsDialogIsOpen(true)
     }
@@ -143,21 +148,29 @@ export const AccordionComponent = (props: {
     const handleUpdateDetails = async (
         name: string,
         address: string,
-        emailAddress: string,
-        description: string,
-        phoneNumber: string
+        phoneNumber: string,
+        email: string,
+        description: string
     ) => {
         const { error, result } = await updateOrganisation.run({
+            name,
             address,
-            emailAddress,
-            description,
             phoneNumber,
+            email,
+            description,
         })
 
         if (!error && result) {
             handleCloseOrganisationInfoDialog()
+            setOrganisation(result.data)
         }
     }
+
+    useEffect(() => {
+        if (organisationFetched) {
+            setOrganisation(organisationFetched)
+        }
+    }, [organisationFetched])
 
     return (
         <div className={classes.root}>
@@ -167,30 +180,30 @@ export const AccordionComponent = (props: {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography className={classes.heading}>{title}</Typography>
+                    <Typography className={classes.heading}>
+                        {organisation?.organisationName}
+                    </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography>
-                                {organisationFetched?.notes}
-                            </Typography>
+                            <Typography>{organisation?.description}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {organisationFetched?.admins
-                                    ? organisationFetched?.admins[0].name
+                                {organisation?.admins[0] != undefined
+                                    ? organisation?.admins[0].name
                                     : ""}
                                 <br />
                                 {t("AdminView.address") + ": "}
-                                {organisationFetched?.address || ""}
+                                {organisation?.address || ""}
                                 <br />
                                 {t("AdminView.phoneNumber") + ": "}
-                                {organisationFetched?.phoneNumber || ""}
+                                {organisation?.phoneNumber || ""}
                                 <br />
                                 {t("AdminView.email") + ": "}
-                                {organisationFetched?.email || ""}
+                                {organisation?.email || ""}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -320,7 +333,7 @@ export const AccordionComponent = (props: {
             >
                 <EditGroupInfoDialog
                     groupId={organisationId}
-                    group={organisationFetched}
+                    group={organisation}
                     handleOnSaveClick={handleUpdateDetails}
                     handleOnCancelClick={handleCloseOrganisationInfoDialog}
                     isGroup={false}
@@ -335,7 +348,7 @@ export const AccordionComponent = (props: {
             >
                 <EditAdminsDialog
                     groupId={organisationId}
-                    group={organisationFetched}
+                    group={organisation}
                     handleOnCloseClick={handleCloseEditAdminsDialog}
                 />
             </Dialog>

@@ -38,7 +38,6 @@ export const EditGroupInfoDialog = (props: {
     isLoadingPatch?: boolean
 }) => {
     const {
-        groupId,
         group,
         isGroup,
         handleOnSaveClick,
@@ -56,30 +55,23 @@ export const EditGroupInfoDialog = (props: {
             : ""
     )
     const [groupAddressTextFieldInput, setGroupAddressTextFieldInput] =
-        useState(group ? group.address : "")
+        useState(group?.address ? group.address : "")
     const [groupPhoneNumberTextFieldInput, setGroupPhoneNumberTextFieldInput] =
-        useState(group ? group.phoneNumber : "")
+        useState(group?.phoneNumber ? group.phoneNumber : "")
     const [groupEmailTextFieldInput, setGroupEmailTextFieldInput] = useState(
-        group ? group.email : ""
+        group?.email ? group.email : ""
     )
     const [groupNotesTextFieldInput, setGroupNotesTextFieldInput] = useState(
-        group ? group.notes : ""
+        group?.description ? group.description : ""
     )
 
     useEffect(() => {
         if (group) {
-            const {
-                organisationName: name,
-                address,
-                phoneNumber,
-                email,
-                notes,
-            } = group
-            setGroupNameTextFieldInput(name || "")
+            const { address, phoneNumber, email, description } = group
             setGroupAddressTextFieldInput(address || "")
             setGroupPhoneNumberTextFieldInput(phoneNumber || "")
             setGroupEmailTextFieldInput(email || "")
-            setGroupNotesTextFieldInput(notes || "")
+            setGroupNotesTextFieldInput(description || "")
         }
     }, [group])
 
