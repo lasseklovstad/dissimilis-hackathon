@@ -123,7 +123,6 @@ export const AddGroupDialog = (props: {
                 </Typography>
                 <FormControl variant="outlined" className={classes.formControl}>
                     <InputLabel>{t("AdminView.countries")}</InputLabel>
-                    {console.log(organisationInput)}
                     <Select
                         value={organisationInput}
                         onChange={(e: React.ChangeEvent<{ value: any }>) => {

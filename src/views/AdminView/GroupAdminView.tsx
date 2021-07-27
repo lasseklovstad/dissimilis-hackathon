@@ -82,7 +82,7 @@ export const GroupAdminView = () => {
             : false || userIsSystemAdmin()
     }
 
-    const { groupsFetched } = useGetGroupsInOrganisation(
+    const { getGroups, groupsFetched } = useGetGroupsInOrganisation(
         userIsAdminInCurrentOrganisation()
             ? GroupFilter.All
             : GroupFilter.Admin,
@@ -130,9 +130,7 @@ export const GroupAdminView = () => {
         organisationId: number | undefined,
         firstAdminId: number | undefined
     ) => {
-        console.log(organisationId)
         if (firstAdminId && organisationId) {
-            console.log("test")
             const { error, result } = await postGroup.run({
                 name,
                 organisationId,
@@ -140,7 +138,15 @@ export const GroupAdminView = () => {
             })
             if (!error && result) {
                 setAddGroupIsOpen(false)
+                updateGroups()
             }
+        }
+    }
+
+    const updateGroups = async () => {
+        const { error, result } = await getGroups.run()
+        if (!error && result) {
+            setGroups(result.data)
         }
     }
 

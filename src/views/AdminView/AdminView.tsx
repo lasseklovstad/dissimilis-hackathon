@@ -241,7 +241,6 @@ export const AdminView = () => {
                             : ""}
                         {userIsGroupAdmin()
                             ? groupAdminOrganisations?.map((organisation) => {
-                                  console.log(organisation.organisationName)
                                   return renderedAdminOrganisationIds.includes(
                                       organisation.organisationId
                                   ) ? (
