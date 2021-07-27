@@ -192,9 +192,7 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {organisation?.admins[0] != undefined
-                                    ? organisation?.admins[0].name
-                                    : ""}
+                                {organisation?.admins?.[0]?.name || ""}
                                 <br />
                                 {t("AdminView.address") + ": "}
                                 {organisation?.address || ""}

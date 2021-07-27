@@ -116,7 +116,7 @@ export const useGetGroup = (groupId: number) => {
  * Create a new group
  */
 export const usePostGroup = () => {
-    const url = `organisations/groups/`
+    const url = "organisations/groups/"
     const headers = getHeaders()
     const body = {
         address: "",
@@ -171,7 +171,7 @@ export const useDeleteGroup = (groupId: number) => {
  * Create one organisation
  */
 export const usePostOrganisation = () => {
-    const url = `organisations/`
+    const url = "organisations/"
     const headers = getHeaders()
     const body = {
         name: "",

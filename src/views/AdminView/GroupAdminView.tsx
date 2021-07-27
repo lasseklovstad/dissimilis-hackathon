@@ -162,9 +162,8 @@ export const GroupAdminView = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="h1">
-                                {organisationFetched?.organisationName +
-                                    "-" +
-                                    t("AdminView.groups")}
+                                {`${organisationFetched?.organisationName}-
+                                    ${t("AdminView.groups")}`}
                             </Typography>
                         </Grid>
                         {/**
