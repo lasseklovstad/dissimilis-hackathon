@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     Accordion,
     AccordionDetails,
@@ -20,8 +20,10 @@ import {
     useAddGroupMember,
     useDeleteGroup,
     useGetGroup,
+    useUpdateGroup,
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
+import { IGroup } from "../../models/IGroup"
 
 const useStyles = makeStyles({
     root: {
@@ -76,6 +78,7 @@ export const AccordionGroupComponent = (props: {
     const { getGroup, groupFetched } = useGetGroup(groupId)
     const { deleteGroup } = useDeleteGroup(groupId)
     const { addGroupMember } = useAddGroupMember(groupId)
+    const { updateGroup } = useUpdateGroup(groupId)
 
     const handleAddMemberClose = () => {
         setAddMemberDialogIsOpen(false)
@@ -96,6 +99,7 @@ export const AccordionGroupComponent = (props: {
         }
     }
 
+    const [group, setGroup] = useState<IGroup | undefined>(groupFetched)
     const [groupInfoDialogIsOpen, setGroupInfoDialogIsOpen] = useState(false)
     const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
     const [deleteGroupDialogIsOpen, setDeleteGroupDialogIsOpen] =
@@ -128,6 +132,33 @@ export const AccordionGroupComponent = (props: {
         }
     }
 
+    const handleUpdateDetails = async (
+        name: string,
+        address: string,
+        phoneNumber: string,
+        email: string,
+        description: string
+    ) => {
+        const { error, result } = await updateGroup.run({
+            name,
+            address,
+            phoneNumber,
+            email,
+            description,
+        })
+
+        if (!error && result) {
+            handleCloseGroupInfoDialog()
+            setGroup(result.data)
+        }
+    }
+
+    useEffect(() => {
+        if (groupFetched) {
+            setGroup(groupFetched)
+        }
+    }, [groupFetched])
+
     return (
         <div className={classes.root}>
             <Accordion className={classes.accordion}>
@@ -136,26 +167,28 @@ export const AccordionGroupComponent = (props: {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography className={classes.heading}>{title}</Typography>
+                    <Typography className={classes.heading}>
+                        {group?.groupName}
+                    </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography>{groupFetched?.notes}</Typography>
+                            <Typography>{group?.description}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {groupFetched?.admins[0].name || ""}
+                                {group?.admins?.[0]?.name || ""}
                                 <br />
                                 {t("AdminView.address") + ": "}
-                                {groupFetched?.address || ""}
+                                {group?.address || ""}
                                 <br />
                                 {t("AdminView.phoneNumber") + ": "}
-                                {groupFetched?.phoneNumber || ""}
+                                {group?.phoneNumber || ""}
                                 <br />
                                 {t("AdminView.email") + ": "}
-                                {groupFetched?.email || ""}
+                                {group?.email || ""}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -260,8 +293,8 @@ export const AccordionGroupComponent = (props: {
             >
                 <EditGroupInfoDialog
                     groupId={groupId}
-                    group={groupFetched}
-                    handleOnSaveClick={handleCloseGroupInfoDialog}
+                    group={group}
+                    handleOnSaveClick={handleUpdateDetails}
                     handleOnCancelClick={handleCloseGroupInfoDialog}
                     isGroup
                 />
