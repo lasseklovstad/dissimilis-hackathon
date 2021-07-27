@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export const UserAutoCompleteDialog = (props: {
-    handleOnSaveClick: (user: IUser | undefined) => void
+    handleOnSaveClick: (value: IUser | undefined) => void
     handleOnCancelClick: () => void
     isLoading?: boolean
     userList: IUser[]
@@ -53,7 +53,7 @@ export const UserAutoCompleteDialog = (props: {
 
     const [userInput, setUserInput] = useState("")
 
-    const adminListProps = {
+    const userListProps = {
         options: userList,
         getOptionLabel: (user: IUser) => user.email,
     }
@@ -71,8 +71,7 @@ export const UserAutoCompleteDialog = (props: {
             <DialogContent>
                 <Typography variant="caption">{descriptionText}</Typography>
                 <Autocomplete
-                    freeSolo // DEVELOPMENT
-                    {...adminListProps}
+                    {...userListProps}
                     inputValue={userInput}
                     onInputChange={(event, newInputValue) => {
                         setUserInput(newInputValue)
@@ -84,7 +83,7 @@ export const UserAutoCompleteDialog = (props: {
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            label={t("AdminView.email")}
+                            label={t("Dialog.email")}
                             margin="normal"
                             variant="filled"
                             className={classes.inputElements}

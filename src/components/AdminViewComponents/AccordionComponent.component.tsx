@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     Accordion,
     AccordionDetails,
@@ -12,7 +12,6 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
-import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCompleteDialog.component"
 import { useHistory } from "react-router"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
@@ -20,9 +19,14 @@ import {
     useDeleteOrganisation,
     useGetOrganisation,
     useAddOrganisationMember,
+    UserRole,
+    useUpdateOrganisation,
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { IUser } from "../../models/IUser"
+import { EditMembersDialog } from "../CustomDialog/EditMembersDialog.component"
+import { AddGroupMemberDialog } from "../CustomDialog/AddGroupMemberDialog.component"
+import { IOrganisation } from "../../models/IOrganisation"
 
 const useStyles = makeStyles({
     root: {
@@ -80,6 +84,7 @@ export const AccordionComponent = (props: {
     const { organisationFetched } = useGetOrganisation(organisationId)
     const { deleteOrganisation } = useDeleteOrganisation(organisationId)
     const { addOrganisationMember } = useAddOrganisationMember(organisationId)
+    const { updateOrganisation } = useUpdateOrganisation(organisationId)
 
     const [organisationInfoDialogIsOpen, setOrganisationInfoDialogIsOpen] =
         useState(false)
@@ -88,6 +93,16 @@ export const AccordionComponent = (props: {
         useState(false)
     const [editSysAdminsDialogIsOpen, setEditSysAdminsDialogIsOpen] =
         useState(false)
+    const [editMembersDialogIsOpen, setEditMembersDialogIsOpen] =
+        useState(false)
+
+    const handleEditMembersDialogClose = () => {
+        setEditMembersDialogIsOpen(false)
+    }
+
+    const [organisation, setOrganisation] = useState<IOrganisation | undefined>(
+        organisationFetched
+    )
 
     const handleOpenEditAdminsDialog = () => {
         setEditAdminsDialogIsOpen(true)
@@ -116,8 +131,8 @@ export const AccordionComponent = (props: {
     const handleAddMember = async (user: IUser | undefined) => {
         if (user) {
             const { error, result } = await addOrganisationMember.run({
-                newMemberUserId: user.userId,
-                newMemberRole: 10, // 10=member, 20=admin
+                newUserId: user.userId,
+                newUserRole: UserRole.Member,
             })
             if (!error && result) {
                 setAddMemberDialogIsOpen(false)
@@ -139,6 +154,33 @@ export const AccordionComponent = (props: {
         }
     }
 
+    const handleUpdateDetails = async (
+        name: string,
+        address: string,
+        phoneNumber: string,
+        email: string,
+        description: string
+    ) => {
+        const { error, result } = await updateOrganisation.run({
+            name,
+            address,
+            phoneNumber,
+            email,
+            description,
+        })
+
+        if (!error && result) {
+            handleCloseOrganisationInfoDialog()
+            setOrganisation(result.data)
+        }
+    }
+
+    useEffect(() => {
+        if (organisationFetched) {
+            setOrganisation(organisationFetched)
+        }
+    }, [organisationFetched])
+
     return (
         <div className={classes.root}>
             <Accordion className={classes.accordion}>
@@ -147,30 +189,28 @@ export const AccordionComponent = (props: {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography className={classes.heading}>{title}</Typography>
+                    <Typography className={classes.heading}>
+                        {organisation?.organisationName}
+                    </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography>
-                                {organisationFetched?.description}
-                            </Typography>
+                            <Typography>{organisation?.description}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {organisationFetched?.admins[0] != undefined
-                                    ? organisationFetched?.admins[0].name
-                                    : ""}
+                                {organisation?.admins?.[0]?.name || ""}
                                 <br />
                                 {t("AdminView.address") + ": "}
-                                {organisationFetched?.address || ""}
+                                {organisation?.address || ""}
                                 <br />
                                 {t("AdminView.phoneNumber") + ": "}
-                                {organisationFetched?.phoneNumber || ""}
+                                {organisation?.phoneNumber || ""}
                                 <br />
                                 {t("AdminView.email") + ": "}
-                                {organisationFetched?.email || ""}
+                                {organisation?.email || ""}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -178,6 +218,9 @@ export const AccordionComponent = (props: {
                                 disableFocusRipple
                                 disabled={buttonsIsDisabled}
                                 className={classes.button}
+                                onClick={() => {
+                                    setEditMembersDialogIsOpen(true)
+                                }}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.seeAllMembers")}
@@ -284,10 +327,11 @@ export const AccordionComponent = (props: {
                 maxWidth="sm"
                 fullWidth
             >
-                <UserAutoCompleteDialog
+                <AddGroupMemberDialog
                     handleOnCancelClick={handleAddMemberClose}
                     handleOnSaveClick={handleAddMember}
-                    userList={[]}
+                    isGroup={false}
+                    groupId={organisationId}
                     title={t("AdminView.addMemberTo") + " " + title}
                     descriptionText={t("AdminView.emailNewGroupMember")}
                     saveText={t("AdminView.add")}
@@ -300,9 +344,23 @@ export const AccordionComponent = (props: {
             >
                 <EditGroupInfoDialog
                     groupId={organisationId}
-                    group={organisationFetched}
-                    handleOnSaveClick={handleCloseOrganisationInfoDialog}
+                    group={organisation}
+                    handleOnSaveClick={handleUpdateDetails}
                     handleOnCancelClick={handleCloseOrganisationInfoDialog}
+                    isGroup={false}
+                />
+            </Dialog>
+            <Dialog
+                open={editMembersDialogIsOpen}
+                onClose={handleEditMembersDialogClose}
+                aria-label={t("Dialog.editMembers")}
+                maxWidth="sm"
+                fullWidth
+            >
+                <EditMembersDialog
+                    handleOnCloseClick={handleEditMembersDialogClose}
+                    groupId={organisationId}
+                    groupName={organisationFetched?.organisationName || title}
                     isGroup={false}
                 />
             </Dialog>
@@ -315,9 +373,9 @@ export const AccordionComponent = (props: {
             >
                 <EditAdminsDialog
                     groupId={organisationId}
-                    group={organisationFetched}
                     isGroup={false}
                     //Get Members, send in
+                    group={organisation}
                     handleOnCloseClick={handleCloseEditAdminsDialog}
                 />
             </Dialog>

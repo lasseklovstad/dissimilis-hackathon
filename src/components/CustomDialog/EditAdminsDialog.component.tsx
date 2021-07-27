@@ -200,7 +200,7 @@ export const EditAdminsDialog = (props: {
                                 >
                                     <AddIcon />
                                     <div className={classes.buttonText}>
-                                        {t("AdminView.inviteUser")}
+                                        {t("AdminView.addUser")}
                                     </div>
                                 </Button>
                             }

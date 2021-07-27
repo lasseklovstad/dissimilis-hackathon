@@ -138,14 +138,11 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
         [url, bodyInit, params, source, headers]
     )
 
-    const getData = useCallback(async () => {
-        return fetchData("get")
-    }, [fetchData])
+    const getData = useCallback(async () => fetchData("get"), [fetchData])
 
     const postData = useCallback(
-        async (body?: unknown) => {
-            return fetchData("post", body)
-        },
+        async (body?: unknown, appendUrl?: string) =>
+            fetchData("post", body, appendUrl),
         [fetchData]
     )
 
@@ -156,9 +153,10 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
         [fetchData]
     )
 
-    const deleteData = useCallback(async () => {
-        return fetchData("delete")
-    }, [fetchData])
+    const deleteData = useCallback(
+        async (appendUrl?: string) => fetchData("delete", null, appendUrl),
+        [fetchData]
+    )
 
     useEffect(() => {
         return () => {

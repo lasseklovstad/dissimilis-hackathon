@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     Accordion,
     AccordionDetails,
@@ -20,8 +20,13 @@ import {
     useAddGroupMember,
     useDeleteGroup,
     useGetGroup,
+    UserRole,
+    useUpdateGroup,
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
+import { EditMembersDialog } from "../CustomDialog/EditMembersDialog.component"
+import { AddGroupMemberDialog } from "../CustomDialog/AddGroupMemberDialog.component"
+import { IGroup } from "../../models/IGroup"
 
 const useStyles = makeStyles({
     root: {
@@ -76,6 +81,7 @@ export const AccordionGroupComponent = (props: {
     const { groupFetched } = useGetGroup(groupId)
     const { deleteGroup } = useDeleteGroup(groupId)
     const { addGroupMember } = useAddGroupMember(groupId)
+    const { updateGroup } = useUpdateGroup(groupId)
 
     const handleAddMemberClose = () => {
         setAddMemberDialogIsOpen(false)
@@ -85,7 +91,7 @@ export const AccordionGroupComponent = (props: {
         if (user) {
             const { error, result } = await addGroupMember.run({
                 newMemberUserId: user.userId,
-                newMemberRole: 10, // 10=member, 20=admin
+                newMemberRole: UserRole.Member,
             })
             if (!error && result) {
                 setAddMemberDialogIsOpen(false)
@@ -96,10 +102,17 @@ export const AccordionGroupComponent = (props: {
         }
     }
 
+    const [group, setGroup] = useState<IGroup | undefined>(groupFetched)
     const [groupInfoDialogIsOpen, setGroupInfoDialogIsOpen] = useState(false)
     const [editAdminsDialogIsOpen, setEditAdminsDialogIsOpen] = useState(false)
     const [deleteGroupDialogIsOpen, setDeleteGroupDialogIsOpen] =
         useState(false)
+    const [editMembersDialogIsOpen, setEditMembersDialogIsOpen] =
+        useState(false)
+
+    const handleEditMembersDialogClose = () => {
+        setEditMembersDialogIsOpen(false)
+    }
 
     const handleOpenEditAdminsDialog = () => {
         setEditAdminsDialogIsOpen(true)
@@ -128,6 +141,33 @@ export const AccordionGroupComponent = (props: {
         }
     }
 
+    const handleUpdateDetails = async (
+        name: string,
+        address: string,
+        phoneNumber: string,
+        email: string,
+        description: string
+    ) => {
+        const { error, result } = await updateGroup.run({
+            name,
+            address,
+            phoneNumber,
+            email,
+            description,
+        })
+
+        if (!error && result) {
+            handleCloseGroupInfoDialog()
+            setGroup(result.data)
+        }
+    }
+
+    useEffect(() => {
+        if (groupFetched) {
+            setGroup(groupFetched)
+        }
+    }, [groupFetched])
+
     return (
         <div className={classes.root}>
             <Accordion className={classes.accordion}>
@@ -136,34 +176,37 @@ export const AccordionGroupComponent = (props: {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography className={classes.heading}>{title}</Typography>
+                    <Typography className={classes.heading}>
+                        {group?.groupName}
+                    </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography>{groupFetched?.description}</Typography>
+                            <Typography>{group?.description}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {groupFetched?.admins[0] != undefined
-                                    ? groupFetched?.admins[0].name
-                                    : ""}
+                                {group?.admins?.[0]?.name || ""}
                                 <br />
                                 {t("AdminView.address") + ": "}
-                                {groupFetched?.address || ""}
+                                {group?.address || ""}
                                 <br />
                                 {t("AdminView.phoneNumber") + ": "}
-                                {groupFetched?.phoneNumber || ""}
+                                {group?.phoneNumber || ""}
                                 <br />
                                 {t("AdminView.email") + ": "}
-                                {groupFetched?.email || ""}
+                                {group?.email || ""}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
                                 className={classes.button}
+                                onClick={() => {
+                                    setEditMembersDialogIsOpen(true)
+                                }}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.seeAllMembers")}
@@ -246,10 +289,11 @@ export const AccordionGroupComponent = (props: {
                 maxWidth="sm"
                 fullWidth
             >
-                <UserAutoCompleteDialog
+                <AddGroupMemberDialog
                     handleOnCancelClick={handleAddMemberClose}
                     handleOnSaveClick={handleAddMember}
-                    userList={[]} // Not in sprint 5
+                    isGroup={true}
+                    groupId={groupId}
                     title={t("AdminView.addMemberTo") + " " + title}
                     descriptionText={t("AdminView.emailNewGroupMember")}
                     saveText={t("AdminView.add")}
@@ -262,10 +306,24 @@ export const AccordionGroupComponent = (props: {
             >
                 <EditGroupInfoDialog
                     groupId={groupId}
-                    group={groupFetched}
-                    handleOnSaveClick={handleCloseGroupInfoDialog}
+                    group={group}
+                    handleOnSaveClick={handleUpdateDetails}
                     handleOnCancelClick={handleCloseGroupInfoDialog}
                     isGroup
+                />
+            </Dialog>
+            <Dialog
+                open={editMembersDialogIsOpen}
+                onClose={handleEditMembersDialogClose}
+                aria-label={t("Dialog.editMembers")}
+                maxWidth="sm"
+                fullWidth
+            >
+                <EditMembersDialog
+                    handleOnCloseClick={handleEditMembersDialogClose}
+                    groupId={groupId}
+                    groupName={groupFetched?.groupName || title}
+                    isGroup={true}
                 />
             </Dialog>
             <Dialog
