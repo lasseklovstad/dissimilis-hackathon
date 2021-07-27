@@ -56,8 +56,20 @@ const useStyle = makeStyles((theme) => ({
         fontSize: "1.25rem",
     },
     noteContainer: {
+        marginTop: "1px",
+        borderColor: "rgb(0 0 0 / 12%)",
+
+        borderRadius: "3px",
+        display: "flex",
+        flex: "1",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "white",
+        border: "1px solid",
+    },
+    noteContainerCustomMode: {
         marginTop: "0px",
-        /* borderColor: "rgb(0 0 0 / 12%)", */
+
         borderColor: "rgb(0 0 0 / 50%)",
         borderRadius: "3px",
         display: "flex",
@@ -70,7 +82,7 @@ const useStyle = makeStyles((theme) => ({
     noteFont: {
         ...theme.typography.body1,
         "@media(max-width:600px)": {
-            // fontSize: "0.9rem",
+            fontSize: "0.95rem",
         },
     },
     circleIconChecked: {
@@ -78,8 +90,8 @@ const useStyle = makeStyles((theme) => ({
         fontSize: "1.25rem",
         marginRight: "0.1rem",
         "@media(max-width:768px)": {
-            fontSize: "0.8rem",
-            marginRight: "0",
+            fontSize: "0.9rem",
+            marginRight: "0.05rem",
         },
     },
     circleIconUnChecked: {
@@ -88,8 +100,8 @@ const useStyle = makeStyles((theme) => ({
         marginRight: "0.1rem",
         verticalAlign: "middle",
         "@media(max-width:768px)": {
-            fontSize: "0.8rem",
-            margin: "0",
+            fontSize: "0.9rem",
+            marginRight: "0.05rem",
         },
     },
     C: {
@@ -237,7 +249,7 @@ export const Chord = (props: ChordProps) => {
             const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
             newCustomVoiceNoteStates[index] = !newCustomVoiceNoteStates[index]
             setCustomVoiceNoteStates(newCustomVoiceNoteStates)
-
+            console.log(customVoiceNoteStates[index])
             dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
@@ -276,7 +288,9 @@ export const Chord = (props: ChordProps) => {
                                 <>
                                     <ButtonBase
                                         id="singleChord"
-                                        className={`${classes.noteContainer} 
+                                        className={`${
+                                            classes.noteContainerCustomMode
+                                        } 
                                         ${(classes as any)[note]} ${
                                             customMode
                                                 ? customVoiceNoteStates[i]
