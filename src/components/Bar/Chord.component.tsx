@@ -76,7 +76,7 @@ const useStyle = makeStyles((theme) => ({
         alignItems: "center",
         color: "white",
 
-        boxShadow: "inset 0px 0px 0px 2px #212121",
+        boxShadow: `inset 0px 0px 0px 1px ${colors.gray_200}`,
     },
     noteFont: {
         ...theme.typography.body1,
