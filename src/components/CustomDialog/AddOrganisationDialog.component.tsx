@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     CircularProgress,
     DialogActions,
@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next"
 import { Autocomplete } from "@material-ui/lab"
 import { IUser } from "../../models/IUser"
 import { usePostOrganisation } from "../../utils/useApiServiceGroups"
+import { useGetUsers } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export const AddOrganisationDialog = (props: {
-    handleOnSaveClick: (name: string, firstAdminId: number) => void
+    handleOnSaveClick: (name: string, firstAdminId?: number) => void
     handleOnCancelClick: () => void
     isLoading?: boolean
 }) => {
@@ -34,29 +35,33 @@ export const AddOrganisationDialog = (props: {
     const { t } = useTranslation()
     const classes = useStyles()
 
-    const userList: IUser[] = [
-        {
-            // FJERN
-            name: "Håkon",
-            email: "håkon@fdsf",
-            userId: 2,
-            isSystemAdmin: true,
-        },
-    ]
+    const { users } = useGetUsers()
 
     const [organisationNameInput, setOrganisationNameInput] = useState("")
     const [adminEmailInput, setAdminEmailInput] = useState("")
 
+    const [userList, setUserList] = useState<IUser[]>()
+
     const adminListProps = {
-        options: userList,
+        options: userList || [],
         getOptionLabel: (user: IUser) => user.email,
     }
+
+    useEffect(() => {
+        if (users) {
+            setUserList(users)
+        }
+    }, [users])
 
     return (
         <form
             onSubmit={(event) => {
                 event.preventDefault()
-                handleOnSaveClick(organisationNameInput, 2)
+                handleOnSaveClick(
+                    organisationNameInput,
+                    userList?.find((user) => user.email === adminEmailInput)
+                        ?.userId
+                )
             }}
         >
             <DialogTitle> {t("AdminView.addCountry")} </DialogTitle>
