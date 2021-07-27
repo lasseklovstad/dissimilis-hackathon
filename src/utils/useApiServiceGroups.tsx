@@ -32,7 +32,7 @@ const getHeaders = () => {
  * Get all groups based on different parameters
  * */
 export const useGetGroups = (groupFilter: GroupFilter) => {
-    const url = `organisations/groups/groups?filterBy=${groupFilter}`
+    const url = `organisations/groups?filterBy=${groupFilter}`
     const initialData: IGroupIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
@@ -122,7 +122,7 @@ export const useGetGroup = (groupId: number) => {
  * Create a new group
  */
 export const usePostGroup = () => {
-    const url = `organisations/groups/`
+    const url = "organisations/groups/"
     const headers = getHeaders()
     const body = {
         address: "",
@@ -137,6 +137,24 @@ export const usePostGroup = () => {
 
     return {
         postGroup: { run: postData, ...state },
+    }
+}
+
+/**
+ * Update group details
+ */
+export const useUpdateGroup = (groupId: number) => {
+    const url = `organisations/groups/${groupId}`
+    const headers = getHeaders()
+    const body = {
+        address: "",
+        emailAddress: "",
+        description: "",
+        phoneNumber: "",
+    }
+    const { putData, state } = useApiService<IGroup>(url, { body, headers })
+    return {
+        updateGroup: { run: putData, ...state },
     }
 }
 
@@ -159,9 +177,10 @@ export const useDeleteGroup = (groupId: number) => {
  * Create one organisation
  */
 export const usePostOrganisation = () => {
-    const url = `organisations/`
+    const url = "organisations/"
     const headers = getHeaders()
     const body = {
+        name: "",
         address: "",
         emailAddress: "",
         description: "",
@@ -212,6 +231,28 @@ export const useGetOrganisation = (organisationId: number) => {
     return {
         getOrganisation: { run: getData, ...state },
         organisationFetched: data,
+    }
+}
+
+/**
+ * Update organisatoion details
+ */
+export const useUpdateOrganisation = (organisationId: number) => {
+    const url = `organisations/${organisationId}`
+    const headers = getHeaders()
+    const body = {
+        name: "",
+        address: "",
+        email: "",
+        description: "",
+        phoneNumber: "",
+    }
+    const { putData, state } = useApiService<IOrganisation>(url, {
+        body,
+        headers,
+    })
+    return {
+        updateOrganisation: { run: putData, ...state },
     }
 }
 

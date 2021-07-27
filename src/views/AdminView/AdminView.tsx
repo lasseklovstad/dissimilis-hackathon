@@ -25,7 +25,6 @@ import {
     usePostOrganisation,
 } from "../../utils/useApiServiceGroups"
 import { IOrganisationIndex } from "../../models/IOrganisation"
-import { EditMembersDialog } from "../../components/CustomDialog/EditMembersDialog.component"
 import { EditSystemMembersDialog } from "../../components/CustomDialog/EditSystemMembersDialog.component"
 
 const useStyles = makeStyles({
