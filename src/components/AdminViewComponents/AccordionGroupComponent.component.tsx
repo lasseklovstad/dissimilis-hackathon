@@ -13,7 +13,6 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
 import { IUser } from "../../models/IUser"
-import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCompleteDialog.component"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
 import {

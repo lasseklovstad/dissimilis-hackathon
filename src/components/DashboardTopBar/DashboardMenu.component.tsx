@@ -4,6 +4,7 @@ import SettingsIcon from "@material-ui/icons/Settings"
 import { useTranslation } from "react-i18next"
 import { LanguageDialog } from "../CustomDialog/LanguageDialog.component"
 import { useHistory } from "react-router"
+import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 
 export const DashboardMenu = (props: {}) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -11,6 +12,15 @@ export const DashboardMenu = (props: {}) => {
         useState(false)
     const { t } = useTranslation()
     const history = useHistory()
+    const { adminStatuses } = useGetAdminStatuses()
+
+    const userIsAnyAdmin = () => {
+        return (
+            adminStatuses?.systemAdmin ||
+            adminStatuses?.organisationAdmin ||
+            adminStatuses?.groupAdmin
+        )
+    }
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -58,9 +68,13 @@ export const DashboardMenu = (props: {}) => {
                 <MenuItem onClick={() => handleClose("language")}>
                     {t("MenuButton.changeLanguage")}
                 </MenuItem>
-                <MenuItem onClick={() => handleClose("admin")}>
-                    {t("AdminView.adminPanel")}
-                </MenuItem>
+                {userIsAnyAdmin() ? (
+                    <MenuItem onClick={() => handleClose("admin")}>
+                        {t("AdminView.adminPanel")}
+                    </MenuItem>
+                ) : (
+                    ""
+                )}
             </Menu>
             <Dialog
                 open={changeLanguageDialogIsOpen}

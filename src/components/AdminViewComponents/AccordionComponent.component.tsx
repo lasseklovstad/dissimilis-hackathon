@@ -181,6 +181,8 @@ export const AccordionComponent = (props: {
         }
     }, [organisationFetched])
 
+    console.log("Disable: " + buttonsIsDisabled)
+
     return (
         <div className={classes.root}>
             <Accordion className={classes.accordion}>
@@ -242,7 +244,6 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
-                                disabled={buttonsIsDisabled}
                                 className={classes.button}
                                 onClick={() =>
                                     history.push(
@@ -284,7 +285,6 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
-                                disabled={buttonsIsDisabled}
                                 className={classes.button}
                             >
                                 <div className={classes.buttonText}>

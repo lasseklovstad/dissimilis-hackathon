@@ -79,7 +79,7 @@ export const useGetGroupsInOrganisation = (
  * Get organisations based on different parameters
  * */
 export const useGetOrganisations = (organisationFilter: OrganisationFilter) => {
-    const url = `organisations?filterBy=${organisationFilter}`
+    const url = `organisations?filterByRole=${organisationFilter}`
     const initialData: IOrganisationIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IOrganisationIndex[]>(url, {

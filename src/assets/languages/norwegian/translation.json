@@ -51,7 +51,8 @@
         "system": "systemet",
         "deleteCountry": "Slett land",
         "deleteGroup": "Slett gruppe",
-        "addUser": "Legg til bruker"
+        "addUser": "Legg til bruker",
+        "noPermissions": "Du har ikke tilgang til se denne siden"
     },
     "LibraryView": {
         "defaultHeading": "Bibliotek",

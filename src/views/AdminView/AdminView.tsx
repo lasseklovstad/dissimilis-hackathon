@@ -17,7 +17,6 @@ import EditIcon from "@material-ui/icons/Edit"
 import { colors } from "../../utils/colors"
 import { InviteUserToSystemDialog } from "../../components/CustomDialog/InviteUserToSystemDialog.components"
 import { AddOrganisationDialog } from "../../components/CustomDialog/AddOrganisationDialog.component"
-import { EditAdminsDialog } from "../../components/CustomDialog/EditAdminsDialog.component"
 import {
     OrganisationFilter,
     useGetOrganisations,
@@ -190,55 +189,62 @@ export const AdminView = () => {
                             </Button>
                         </Grid>
                          */}
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={classes.button}
-                                onClick={() => {
-                                    setAddOrganisationIsOpen(true)
-                                }}
-                                startIcon={<AddIcon />}
-                                disabled={!userIsSystemAdmin()}
-                            >
-                                {t("AdminView.addCountry")}
-                            </Button>
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={classes.button}
-                                onClick={() => {
-                                    setEditSysAdminsDialogIsOpen(true)
-                                }}
-                                startIcon={<EditIcon />}
-                                disabled={!userIsSystemAdmin()}
-                            >
-                                {t("AdminView.editAdmins")}
-                            </Button>
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={classes.button}
-                                onClick={() => {
-                                    setEditMembersDialogIsOpen(true)
-                                }}
-                                disabled={!userIsSystemAdmin()}
-                            >
-                                <div
-                                    style={{
-                                        paddingLeft: "8px",
-                                    }}
-                                >
-                                    {t("AdminView.seeAllMembers")}
-                                </div>
-                            </Button>
-                        </Grid>
+                        {userIsSystemAdmin() ? (
+                            <>
+                                <Grid item xs={12} sm={4}>
+                                    <Button
+                                        disableFocusRipple
+                                        className={classes.button}
+                                        onClick={() => {
+                                            setAddOrganisationIsOpen(true)
+                                        }}
+                                        startIcon={<AddIcon />}
+                                        disabled={!userIsSystemAdmin()}
+                                    >
+                                        {t("AdminView.addCountry")}
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <Button
+                                        disableFocusRipple
+                                        className={classes.button}
+                                        onClick={() => {
+                                            setEditSysAdminsDialogIsOpen(true)
+                                        }}
+                                        startIcon={<EditIcon />}
+                                        disabled={!userIsSystemAdmin()}
+                                    >
+                                        {t("AdminView.editAdmins")}
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <Button
+                                        disableFocusRipple
+                                        className={classes.button}
+                                        onClick={() => {
+                                            setEditMembersDialogIsOpen(true)
+                                        }}
+                                        disabled={!userIsSystemAdmin()}
+                                    >
+                                        <div
+                                            style={{
+                                                paddingLeft: "8px",
+                                            }}
+                                        >
+                                            {t("AdminView.seeAllMembers")}
+                                        </div>
+                                    </Button>
+                                </Grid>
+                            </>
+                        ) : (
+                            ""
+                        )}
                         {userIsOrganisationAdmin()
                             ? adminOrganisations?.map((organisation) => {
                                   renderedAdminOrganisationIds.push(
                                       organisation.organisationId
                                   )
+                                  console.log(organisation.organisationName)
                                   return (
                                       <Grid item xs={12}>
                                           <AccordionComponent
@@ -260,7 +266,6 @@ export const AdminView = () => {
                             : ""}
                         {userIsGroupAdmin()
                             ? groupAdminOrganisations?.map((organisation) => {
-                                  console.log(organisation.organisationName)
                                   return renderedAdminOrganisationIds.indexOf(
                                       organisation.organisationId
                                   ) > -1 ? (
@@ -278,6 +283,7 @@ export const AdminView = () => {
                                               removeOrganisation={
                                                   removeOrganisationAccordion
                                               }
+                                              buttonsIsDisabled={true}
                                           />
                                       </Grid>
                                   )
@@ -334,7 +340,7 @@ export const AdminView = () => {
 
                     <Typography variant="h2">
                         {!userIsGroupAdmin()
-                            ? "You do not have permissions to view this page"
+                            ? t("AdminView.noPermissions")
                             : ""}
                     </Typography>
                 </Grid>

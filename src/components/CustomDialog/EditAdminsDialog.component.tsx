@@ -24,11 +24,11 @@ import { ChoiceDialog } from "./ChoiceDialog.component"
 import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
 import { IGroup } from "../../models/IGroup"
 import {
+    useGetGroupOrOrganisationMembers,
     UserRole,
     useSetUserRoleInGroup,
     useSetUserRoleInOrganisation,
 } from "../../utils/useApiServiceGroups"
-import { useGetUsers } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -59,10 +59,9 @@ export const EditAdminsDialog = (props: {
     groupId: number
     group?: IOrganisation | IGroup
     isGroup: boolean
-    memberList?: IUser[]
     handleOnCloseClick: () => void
 }) => {
-    const { groupId, group, handleOnCloseClick, isGroup, memberList } = props
+    const { groupId, group, handleOnCloseClick, isGroup } = props
     const classes = useStyles()
     const { t } = useTranslation()
     const secondary = true
@@ -71,6 +70,7 @@ export const EditAdminsDialog = (props: {
     const { setUserRoleInOrganisation } = useSetUserRoleInOrganisation(
         groupId || 0
     )
+    const { groupMembers } = useGetGroupOrOrganisationMembers(isGroup, groupId)
 
     const [addAdminDialogIsOpen, setAddAdminDialogIsOpen] = useState(false)
     const [confirmationDialogIsOpen, setConfirmationDialogIsOpen] =
@@ -78,7 +78,13 @@ export const EditAdminsDialog = (props: {
     const [selectedAdmin, setSelectedAdmin] = useState<IUser>()
 
     const [adminList, setAdminsList] = useState<IUser[]>(group?.admins || [])
-    const [userList, setUserList] = useState<IUser[] | undefined>(memberList)
+    const [userList, setUserList] = useState<IUser[] | undefined>()
+
+    useEffect(() => {
+        if (groupMembers) {
+            setUserList(groupMembers)
+        }
+    }, [groupMembers])
 
     const handleUpdateRole = async (role: UserRole, user: IUser) => {
         const { error } = await (isGroup
