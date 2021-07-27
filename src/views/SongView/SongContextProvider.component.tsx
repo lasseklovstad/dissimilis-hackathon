@@ -74,7 +74,7 @@ export const songReducer = (song: ISong, action: SongAction) => {
                             const actionBar = action.voice.bars[index]
                             return {
                                 ...bar,
-                                house: actionBar.house,
+                                voltaBracket: actionBar.voltaBracket,
                                 repAfter: actionBar.repAfter,
                                 repBefore: actionBar.repBefore,
                             }
