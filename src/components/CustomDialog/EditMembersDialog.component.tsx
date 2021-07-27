@@ -18,7 +18,12 @@ import DeleteIcon from "@material-ui/icons/Delete"
 import { IUser } from "../../models/IUser"
 import { colors } from "../../utils/colors"
 import { ChoiceDialog } from "./ChoiceDialog.component"
-import { useGetGroupOrOrganisationMembers } from "../../utils/useApiServiceGroups"
+import {
+    useGetGroupOrOrganisationMembers,
+    useRemoveGroupMember,
+    useRemoveOrganisationMember,
+} from "../../utils/useApiServiceGroups"
+import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -66,6 +71,9 @@ export const EditMembersDialog = (props: {
         groupId
     )
 
+    const { removeGroupMember } = useRemoveGroupMember(groupId)
+    const { removeOrganisationMember } = useRemoveOrganisationMember(groupId)
+
     useEffect(() => {
         if (groupMembers) {
             setMembers(groupMembers)
@@ -80,8 +88,29 @@ export const EditMembersDialog = (props: {
         setConfirmationDialogIsOpen(false)
     }
 
-    const handleRemoveMember = () => {
-        // do stuff with selectedMember
+    const handleRemoveMember = async () => {
+        let error
+        if (isGroup) {
+            const result = await removeGroupMember.run(
+                `/${selectedMember?.userId}`
+            )
+            error = result.error
+        } else {
+            const result = await removeOrganisationMember.run(
+                `/${selectedMember?.userId}`
+            )
+            error = result.error
+        }
+        if (!error) {
+            setMembers(
+                members?.filter(
+                    (user) => user.userId !== selectedMember?.userId
+                )
+            )
+            handleCloseConfirmationDialog()
+        } else {
+            console.log(error)
+        }
     }
 
     const getMembers = () => {
@@ -158,9 +187,35 @@ export const EditMembersDialog = (props: {
                         ${t("Dialog.removeAdminDescription")}
                         ${selectedMember?.name || t("Dialog.thisUser")}
                         ${t("Dialog.asMember")}
-                        ${t("Dialog.cannotUndo")}`}
+                        ${t("Dialog.cannotUndo")}
+                    `}
                 />
             </Dialog>
+            <ErrorDialog
+                error={
+                    isGroup
+                        ? removeGroupMember.error
+                        : removeOrganisationMember.error
+                }
+                isError={
+                    removeGroupMember.isError ||
+                    removeOrganisationMember.isError
+                }
+                title={`
+                    ${t("Dialog.cannotRemoveUserFrom")}
+                    ${
+                        isGroup
+                            ? t("Dialog.theGroup")
+                            : t("Dialog.theOrganisation")
+                    }
+                    ${t("Dialog.errorOrLastAdmin")}
+                    ${
+                        isGroup
+                            ? t("Dialog.theGroup")
+                            : t("Dialog.theOrganisation")
+                    }
+                `}
+            />
         </>
     )
 }

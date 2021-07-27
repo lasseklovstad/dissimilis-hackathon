@@ -123,8 +123,8 @@ export const AccordionComponent = (props: {
     const handleAddMember = async (user: IUser | undefined) => {
         if (user) {
             const { error, result } = await addOrganisationMember.run({
-                newMemberUserId: user.userId,
-                newMemberRole: UserLevel.Member,
+                newUserId: user.userId,
+                newUserRole: UserLevel.Member,
             })
             if (!error && result) {
                 setAddMemberDialogIsOpen(false)

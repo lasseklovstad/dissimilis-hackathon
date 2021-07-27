@@ -227,7 +227,11 @@
         "usersInSystem": "Brukere i systemet",
         "removeUser": "Slett bruker",
         "removeUserDescription": "Er du sikker på at du vil slette",
-        "fromTheSystem": "fra systemet?"
+        "fromTheSystem": "fra systemet?",
+        "cannotRemoveUserFrom": "Brukeren kan ikke fjernes fra",
+        "theOrganisation": "organisasjonen.",
+        "theGroup": "gruppen.",
+        "errorOrLastAdmin": "Det skjedde en feil eller brukeren er den eneste administratoren i"
     },
     "Song": {
         "arranger": "Arrangør",

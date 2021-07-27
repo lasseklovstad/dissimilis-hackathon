@@ -230,8 +230,11 @@
         "usersInSystem": "Users in the system",
         "removeUser": "Delete user",
         "removeUserDescription": "Are you sure you want to remove",
-        "fromTheSystem": "from the system?"
-
+        "fromTheSystem": "from the system?",
+        "cannotRemoveUserFrom": "User can not be removed from",
+        "theOrganisation": "the organisation.",
+        "theGroup": "the group.",
+        "errorOrLastAdmin": "An error occured or the user is the only admin in"
     },
     "Song": {
         "arranger": "Arranger",

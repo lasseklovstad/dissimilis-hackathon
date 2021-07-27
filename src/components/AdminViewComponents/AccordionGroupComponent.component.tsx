@@ -20,6 +20,7 @@ import {
     useAddGroupMember,
     useDeleteGroup,
     useGetGroup,
+    UserLevel,
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { EditMembersDialog } from "../CustomDialog/EditMembersDialog.component"
@@ -87,7 +88,7 @@ export const AccordionGroupComponent = (props: {
         if (user) {
             const { error, result } = await addGroupMember.run({
                 newMemberUserId: user.userId,
-                newMemberRole: 10, // 10=member, 20=admin
+                newMemberRole: UserLevel.Member,
             })
             if (!error && result) {
                 setAddMemberDialogIsOpen(false)

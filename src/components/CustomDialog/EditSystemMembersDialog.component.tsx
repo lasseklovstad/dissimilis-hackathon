@@ -141,10 +141,12 @@ export const EditSystemMembersDialog = (props: {
                     ackText={t("Dialog.removeUser")}
                     cancelText={t("Dialog.cancel")}
                     headerText={t("Dialog.removeUser")}
-                    descriptionText={`${t("Dialog.removeUserDescription")} 
+                    descriptionText={`
+                        ${t("Dialog.removeUserDescription")} 
                         ${selectedMember?.name || t("Dialog.thisUser")} 
                         ${t("Dialog.fromTheSystem")}
-                        ${t("Dialog.cannotUndo")}`}
+                        ${t("Dialog.cannotUndo")}
+                    `}
                 />
             </Dialog>
         </>
