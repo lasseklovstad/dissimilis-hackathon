@@ -68,16 +68,15 @@ const useStyle = makeStyles((theme) => ({
         border: "1px solid",
     },
     noteContainerCustomMode: {
-        marginTop: "0px",
-
-        borderColor: "rgb(0 0 0 / 50%)",
+        marginTop: "1px",
         borderRadius: "3px",
         display: "flex",
         flex: "1",
         justifyContent: "center",
         alignItems: "center",
-        /* color: "white", */
-        border: "1px solid",
+        color: "white",
+
+        boxShadow: "inset 0px 0px 0px 2px #212121",
     },
     noteFont: {
         ...theme.typography.body1,
@@ -88,7 +87,7 @@ const useStyle = makeStyles((theme) => ({
     circleIconChecked: {
         color: colors.focus,
         fontSize: "1.25rem",
-        marginRight: "0.1rem",
+        marginRight: "0.15rem",
         "@media(max-width:768px)": {
             fontSize: "0.9rem",
             marginRight: "0.05rem",
@@ -97,7 +96,7 @@ const useStyle = makeStyles((theme) => ({
     circleIconUnChecked: {
         color: colors.gray_400,
         fontSize: "1.25rem",
-        marginRight: "0.1rem",
+        marginRight: "0.15rem",
         verticalAlign: "middle",
         "@media(max-width:768px)": {
             fontSize: "0.9rem",
@@ -140,29 +139,39 @@ const useStyle = makeStyles((theme) => ({
         "&.opaque": { backgroundColor: colors.H.opaque },
     },
     "C#": {
-        color: colors.white,
         "&.main": { backgroundColor: colors.blackKeys.main },
-        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     "D#": {
-        color: colors.blackKeys.text,
         "&.main": { backgroundColor: colors.blackKeys.main },
-        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     "F#": {
-        color: colors.blackKeys.text,
         "&.main": { backgroundColor: colors.blackKeys.main },
-        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     "G#": {
-        color: colors.blackKeys.text,
         "&.main": { backgroundColor: colors.blackKeys.main },
-        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     "A#": {
-        color: colors.blackKeys.text,
         "&.main": { backgroundColor: colors.blackKeys.main },
-        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     disabled: {
         border: 0,
@@ -235,7 +244,6 @@ export const Chord = (props: ChordProps) => {
         selectedVoiceId,
         barPosition
     )
-
     const handleCustomVoiceAddClick = async (index: number) => {
         const { error, result } = await addNote.run({
             chordName: chord.chordName,
