@@ -85,7 +85,7 @@ const useStyle = makeStyles((theme) => ({
         },
     },
     circleIconChecked: {
-        color: colors.focus,
+        color: colors.black,
         fontSize: "1.25rem",
         marginRight: "0.15rem",
         "@media(max-width:768px)": {
@@ -105,40 +105,66 @@ const useStyle = makeStyles((theme) => ({
     },
     C: {
         color: colors.C.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.C.main}`,
         "&.main": { backgroundColor: colors.C.main },
-        "&.opaque": { backgroundColor: colors.C.opaque },
+        "&.opaque": {
+            backgroundColor: colors.C.opaque,
+            boxShadow: `inset 0px 0px 0px 2px ${colors.C.main}`,
+        },
     },
     D: {
         color: colors.D.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.D.main}`,
         "&.main": { backgroundColor: colors.D.main },
-        "&.opaque": { backgroundColor: colors.D.opaque, color: colors.black },
+        "&.opaque": {
+            backgroundColor: colors.D.opaque,
+            color: colors.D.text,
+        },
     },
     E: {
         color: colors.E.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.E.main}`,
         "&.main": { backgroundColor: colors.E.main },
-        "&.opaque": { backgroundColor: colors.E.opaque, color: colors.black },
+        "&.opaque": {
+            backgroundColor: colors.E.opaque,
+            color: colors.black,
+        },
     },
     F: {
         color: colors.F.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.F.main}`,
         "&.main": { backgroundColor: colors.F.main },
-        "&.opaque": { backgroundColor: colors.F.opaque },
+        "&.opaque": {
+            backgroundColor: colors.F.opaque,
+        },
     },
     G: {
         color: colors.G.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.G.main}`,
         "&.main": { backgroundColor: colors.G.main },
-        "&.opaque": { backgroundColor: colors.G.opaque },
+        "&.opaque": {
+            backgroundColor: colors.G.opaque,
+        },
     },
     A: {
         color: colors.A.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.A.main}`,
         "&.main": { backgroundColor: colors.A.main },
-        "&.opaque": { backgroundColor: colors.A.opaque, color: colors.black },
+        "&.opaque": {
+            backgroundColor: colors.A.opaque,
+            color: colors.black,
+        },
     },
     H: {
         color: colors.H.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.H.main}`,
         "&.main": { backgroundColor: colors.H.main },
-        "&.opaque": { backgroundColor: colors.H.opaque },
+        "&.opaque": {
+            backgroundColor: colors.H.opaque,
+        },
     },
     "C#": {
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
         "&.main": { backgroundColor: colors.blackKeys.main },
         "&.opaque": {
             backgroundColor: colors.blackKeys.opaque,
@@ -146,6 +172,7 @@ const useStyle = makeStyles((theme) => ({
         },
     },
     "D#": {
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
         "&.main": { backgroundColor: colors.blackKeys.main },
         "&.opaque": {
             backgroundColor: colors.blackKeys.opaque,
@@ -153,6 +180,7 @@ const useStyle = makeStyles((theme) => ({
         },
     },
     "F#": {
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
         "&.main": { backgroundColor: colors.blackKeys.main },
         "&.opaque": {
             backgroundColor: colors.blackKeys.opaque,
@@ -160,6 +188,7 @@ const useStyle = makeStyles((theme) => ({
         },
     },
     "G#": {
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
         "&.main": { backgroundColor: colors.blackKeys.main },
         "&.opaque": {
             backgroundColor: colors.blackKeys.opaque,
@@ -167,6 +196,7 @@ const useStyle = makeStyles((theme) => ({
         },
     },
     "A#": {
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
         "&.main": { backgroundColor: colors.blackKeys.main },
         "&.opaque": {
             backgroundColor: colors.blackKeys.opaque,
@@ -267,6 +297,7 @@ export const Chord = (props: ChordProps) => {
     )
     const handleCustomVoiceRemoveClick = async (index: number) => {
         const { error, result } = await removeNote.run({
+            deleteOnLastIntervalRemoved: true,
             chordName: chord.chordName,
             notePosition: chord.position,
             length: chord.length,
