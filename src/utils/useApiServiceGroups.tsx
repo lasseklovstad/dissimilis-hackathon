@@ -18,8 +18,8 @@ export enum OrganisationFilter {
 }
 
 export enum UserLevel {
-    Admin = 20,
-    Member = 10,
+    Admin = "Admin",
+    Member = "Member",
 }
 
 const getHeaders = () => {

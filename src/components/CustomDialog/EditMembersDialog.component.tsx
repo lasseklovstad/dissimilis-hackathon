@@ -90,36 +90,34 @@ export const EditMembersDialog = (props: {
                 <>
                     {members ? (
                         <List dense={false}>
-                            {members.map((user: IUser) => {
-                                return (
-                                    <ListItem key={user.email + "-list-item"}>
-                                        <ListItemText
-                                            primary={user.name}
-                                            secondary={
-                                                secondary ? user.email : null
-                                            }
-                                            className={classes.iconButton}
-                                            secondaryTypographyProps={{
-                                                className:
-                                                    classes.secondaryTypography,
-                                            }}
-                                        />
-                                        <ListItemSecondaryAction
-                                            onClick={() => {
-                                                setSelectedMember(user)
-                                                handleOpenConfirmationDialog()
-                                            }}
+                            {members.map((user: IUser) => (
+                                <ListItem key={user.email + "-list-item"}>
+                                    <ListItemText
+                                        primary={user.name}
+                                        secondary={
+                                            secondary ? user.email : null
+                                        }
+                                        className={classes.iconButton}
+                                        secondaryTypographyProps={{
+                                            className:
+                                                classes.secondaryTypography,
+                                        }}
+                                    />
+                                    <ListItemSecondaryAction
+                                        onClick={() => {
+                                            setSelectedMember(user)
+                                            handleOpenConfirmationDialog()
+                                        }}
+                                    >
+                                        <IconButton
+                                            edge="end"
+                                            aria-label="delete"
                                         >
-                                            <IconButton
-                                                edge="end"
-                                                aria-label="delete"
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                )
-                            })}
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            ))}
                         </List>
                     ) : (
                         ""
@@ -141,11 +139,7 @@ export const EditMembersDialog = (props: {
                 {getMembers()}
             </DialogContent>
             <DialogActions>
-                <DialogButton
-                    onClick={() => {
-                        handleOnCloseClick()
-                    }}
-                >
+                <DialogButton onClick={handleOnCloseClick}>
                     {t("Dialog.close")}
                 </DialogButton>
             </DialogActions>
@@ -160,15 +154,11 @@ export const EditMembersDialog = (props: {
                     ackText={t("Dialog.removeMember")}
                     cancelText={t("Dialog.cancel")}
                     headerText={t("Dialog.removeMember")}
-                    descriptionText={
-                        t("Dialog.removeAdminDescription") +
-                        " " +
-                        (selectedMember?.name || t("Dialog.thisUser")) +
-                        " " +
-                        t("Dialog.asMember") +
-                        " " + // <== Would have been nice with line break right here but I cannot find a way to do it...
-                        t("Dialog.cannotUndo")
-                    }
+                    descriptionText={`
+                        ${t("Dialog.removeAdminDescription")}
+                        ${selectedMember?.name || t("Dialog.thisUser")}
+                        ${t("Dialog.asMember")}
+                        ${t("Dialog.cannotUndo")}`}
                 />
             </Dialog>
         </>
