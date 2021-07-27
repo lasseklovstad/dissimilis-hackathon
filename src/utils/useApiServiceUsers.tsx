@@ -85,3 +85,45 @@ export const useGetUsers = () => {
         users: data,
     }
 }
+
+/*
+ * Get all system administrators in the system
+ */
+export const useGetSysAdmins = () => {
+    const url = "user/sysAdmins"
+    const headers = getHeaders()
+    const initialData: IUser[] = []
+    const { getData, state, data } = useApiService<IUser[]>(url, {
+        headers,
+        initialData,
+    })
+
+    useEffect(() => {
+        getData()
+    }, [getData])
+
+    return {
+        getSysAdmins: { run: getData, ...state },
+        sysAdmins: data,
+    }
+}
+
+/**
+ *  Set whether a user is a system administrator or not
+ *  sysAdmin status on user is set to either true or false
+ */
+export const useSetSysAdminStatus = () => {
+    const url = `user/`
+    const headers = getHeaders()
+    const body = {}
+    const appendUrl = `/`
+    const { putData, state } = useApiService<void>(url, {
+        headers,
+        body,
+        appendUrl,
+    })
+
+    return {
+        setSysAdminStatus: { run: putData, ...state },
+    }
+}

@@ -73,11 +73,13 @@ export const GroupAdminView = () => {
     }
 
     const userIsAdminInCurrentOrganisation = () => {
-        return userId && organisationFetched?.admins
-            ? organisationFetched?.admins.some(
-                  (admin) => admin.userId.toString() === userId
-              )
-            : false || userIsSystemAdmin()
+        return (
+            (userId && organisationFetched?.admins
+                ? organisationFetched?.admins.some(
+                      (admin) => admin.userId.toString() === userId
+                  )
+                : false) || userIsSystemAdmin()
+        )
     }
 
     const { groupsFetched } = useGetGroupsInOrganisation(

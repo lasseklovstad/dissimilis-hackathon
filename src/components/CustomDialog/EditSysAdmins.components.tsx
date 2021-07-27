@@ -22,7 +22,11 @@ import AddIcon from "@material-ui/icons/Add"
 import { ChoiceDialog } from "./ChoiceDialog.component"
 import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
 import { UserRole } from "../../utils/useApiServiceGroups"
-import { useGetUsers } from "../../utils/useApiServiceUsers"
+import {
+    useGetSysAdmins,
+    useGetUsers,
+    useSetSysAdminStatus,
+} from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -58,6 +62,8 @@ export const EditSysAdminsDialog = (props: {
     const secondary = true
 
     const { users } = useGetUsers()
+    const { sysAdmins } = useGetSysAdmins()
+    const { setSysAdminStatus } = useSetSysAdminStatus()
 
     const [addAdminDialogIsOpen, setAddAdminDialogIsOpen] = useState(false)
     const [confirmationDialogIsOpen, setConfirmationDialogIsOpen] =
@@ -67,24 +73,20 @@ export const EditSysAdminsDialog = (props: {
     const [adminList, setAdminsList] = useState<IUser[]>([])
     const [userList, setUserList] = useState<IUser[]>()
 
-    const handleUpdateRole = async (role: UserRole, user: IUser) => {
-        /*const { error } = await updateSysAdmins.run(
+    const handleUpdateRole = async (sysAdmin: boolean, user: IUser) => {
+        const { error } = await setSysAdminStatus.run(
             {
-                roleToSet: role,
+                isSystemAdmin: sysAdmin,
             },
-            user.userId.toString() + "/changeUserRole"
+            `${user.userId}/updateSysAdminStatus`
         )
-        return !!error */
-        return false
+        return !!error
     }
 
     const handleDeleteAdmin = async () => {
         if (adminList.length > 1) {
             if (selectedAdmin) {
-                const isError = await handleUpdateRole(
-                    UserRole.Member,
-                    selectedAdmin
-                )
+                const isError = await handleUpdateRole(false, selectedAdmin)
                 if (!isError && selectedAdmin) {
                     setAdminsList(
                         adminList.filter(
@@ -107,7 +109,7 @@ export const EditSysAdminsDialog = (props: {
 
     const handleAddAdmin = async (user: IUser | undefined) => {
         if (user) {
-            const isError = await handleUpdateRole(UserRole.Admin, user)
+            const isError = await handleUpdateRole(true, user)
             if (!isError && user) {
                 setAdminsList([...adminList, user])
                 setAddAdminDialogIsOpen(false)
@@ -132,6 +134,12 @@ export const EditSysAdminsDialog = (props: {
             setUserList(users)
         }
     }, [users])
+
+    useEffect(() => {
+        if (sysAdmins) {
+            setAdminsList(sysAdmins)
+        }
+    }, [sysAdmins])
 
     const handleCloseAddAdminDialog = () => {
         setAddAdminDialogIsOpen(false)
