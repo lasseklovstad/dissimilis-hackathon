@@ -36,20 +36,17 @@ export const VoltaBracket = (props: {
     const classes = useStyle()
 
     if (!props.voltaBracketOrder) {
-        return <></>
+        return null
     }
 
-    const getvoltaBracketNumber = () => {
-        if (props.showVoltaBracketNumber) {
-            return `${props.voltaBracketOrder}.`
-        }
-        return ""
-    }
+    const getVoltaBracketNumber = () => props.showVoltaBracketNumber 
+            ? `${props.voltaBracketOrder}.`
+            : ""
 
     return (
         <Box position="relative" top="-5px" height={0}>
             <Typography variant="body1" component="div">
-                {props.voltaBracketOrder === undefined ? null : (
+                {props.voltaBracketOrder !== undefined && 
                     <Box className={classes.voltaBracketContainer}>
                         <Box
                             className={`${classes.voltaBracketLine} ${
@@ -61,11 +58,11 @@ export const VoltaBracket = (props: {
                             <span
                                 style={{ position: "relative", top: "-10px" }}
                             >
-                                {getvoltaBracketNumber()}
+                                {getVoltaBracketNumber()}
                             </span>
                         </Box>
                     </Box>
-                )}
+                }
             </Typography>
         </Box>
     )

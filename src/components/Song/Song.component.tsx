@@ -111,7 +111,6 @@ export const Song = (props: SongProps) => {
                         >
                             {barsInRow.map((bar, i, bars) => {
                                 const showVoltaBracketNumber =
-                                    // eslint-disable-next-line
                                     i === 0 || bars[i - 1].voltaBracket !== bar.voltaBracket
                                 return (
                                     <React.Fragment key={i}>

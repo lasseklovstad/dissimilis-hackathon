@@ -61,7 +61,7 @@ export const BarMenu = (props: BarMenuProps) => {
                 dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
             }
         }
-        if (method === "addvoltaBracketOne") {
+        if (method === "addVoltaBracketOne") {
             const { error, result } = await putBar.run({
                 repBefore: bar.repBefore,
                 repAfter: bar.repAfter,
@@ -71,7 +71,7 @@ export const BarMenu = (props: BarMenuProps) => {
                 dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
             }
         }
-        if (method === "addvoltaBracketTwo") {
+        if (method === "addVoltaBracketTwo") {
             const { error, result } = await putBar.run({
                 repBefore: bar.repBefore,
                 repAfter: bar.repAfter,
@@ -126,26 +126,26 @@ export const BarMenu = (props: BarMenuProps) => {
                     handleClose(
                         bar.voltaBracket === 1
                             ? "removeVoltaBracketOne"
-                            : "addvoltaBracketOne"
+                            : "addVoltaBracketOne"
                     )
                 }
             >
                 {bar.voltaBracket === 1
                     ? t("BarContainer.removeVoltaBracketOne")
-                    : t("BarContainer.addvoltaBracketOne")}
+                    : t("BarContainer.addVoltaBracketOne")}
             </MenuItem>
             <MenuItem
                 onClick={() =>
                     handleClose(
                         bar.voltaBracket === 2
                             ? "removeVoltaBracketTwo"
-                            : "addvoltaBracketTwo"
+                            : "addVoltaBracketTwo"
                     )
                 }
             >
                 {bar.voltaBracket === 2
                     ? t("BarContainer.removeVoltaBracketTwo")
-                    : t("BarContainer.addvoltaBracketTwo")}
+                    : t("BarContainer.addVoltaBracketTwo")}
             </MenuItem>
         </Menu>
     )
