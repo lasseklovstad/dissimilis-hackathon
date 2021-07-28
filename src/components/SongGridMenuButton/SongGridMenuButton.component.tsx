@@ -21,6 +21,7 @@ export const SongGridMenuButton = (props: {
     link: string
     removeSong: (songId: number) => void
     renameSong: (songId: number, title: string) => void
+    currentUserHasWriteAccess?: boolean
 }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [duplicateSongDialogIsOpen, setDuplicateSongDialogIsOpen] =
@@ -160,18 +161,24 @@ export const SongGridMenuButton = (props: {
                     <MenuItem onClick={() => handleClose("copy")}>
                         {t("DashboardView.duplicate")}
                     </MenuItem>
-                    <MenuItem onClick={() => handleClose("delete")}>
-                        {t("DashboardView.delete")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("info")}>
-                        {t("Dialog.details")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("infoShow")}>
-                        {t("Dialog.details")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("share")}>
-                        {t("Dialog.share")}
-                    </MenuItem>
+
+                    {props.currentUserHasWriteAccess ? (
+                        <>
+                            <MenuItem onClick={() => handleClose("delete")}>
+                                {t("DashboardView.delete")}
+                            </MenuItem>
+                            <MenuItem onClick={() => handleClose("info")}>
+                                {t("Dialog.details")}
+                            </MenuItem>{" "}
+                            <MenuItem onClick={() => handleClose("share")}>
+                                {t("Dialog.share")}
+                            </MenuItem>{" "}
+                        </>
+                    ) : (
+                        <MenuItem onClick={() => handleClose("infoShow")}>
+                            {t("Dialog.details")}
+                        </MenuItem>
+                    )}
                 </Menu>
                 <Dialog
                     open={deleteSongDialogIsOpen}

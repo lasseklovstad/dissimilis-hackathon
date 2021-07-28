@@ -35,6 +35,7 @@ export const MenuButton = (props: {
     onLogout: () => void
     updateSongTitle: (title: string) => void
     songTitle: string
+    currentUserHasWriteAccess?: boolean
 }) => {
     const { songTitle } = props
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -205,23 +206,29 @@ export const MenuButton = (props: {
                     <MenuItem disabled onClick={() => handleClose()}>
                         {t("MenuButton.hide")}
                     </MenuItem>
-                    <MenuItem onClick={() => handleClose("delete")}>
-                        {t("MenuButton.delete")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("editBars")}>
-                        {props.barEditMode
-                            ? t("MenuButton.cancelEditBars")
-                            : t("MenuButton.editBars")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("info")}>
-                        {t("Dialog.details")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("share")}>
-                        {t("Dialog.share")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("infoShow")}>
-                        {t("Dialog.details")}
-                    </MenuItem>
+
+                    {props.currentUserHasWriteAccess ? (
+                        <>
+                            <MenuItem onClick={() => handleClose("delete")}>
+                                {t("MenuButton.delete")}
+                            </MenuItem>
+                            <MenuItem onClick={() => handleClose("editBars")}>
+                                {props.barEditMode
+                                    ? t("MenuButton.cancelEditBars")
+                                    : t("MenuButton.editBars")}
+                            </MenuItem>
+                            <MenuItem onClick={() => handleClose("info")}>
+                                {t("Dialog.details")}
+                            </MenuItem>{" "}
+                            <MenuItem onClick={() => handleClose("share")}>
+                                {t("Dialog.share")}
+                            </MenuItem>{" "}
+                        </>
+                    ) : (
+                        <MenuItem onClick={() => handleClose("infoShow")}>
+                            {t("Dialog.details")}
+                        </MenuItem>
+                    )}
                     {props.showName ? (
                         <>
                             <Divider variant="middle" />
