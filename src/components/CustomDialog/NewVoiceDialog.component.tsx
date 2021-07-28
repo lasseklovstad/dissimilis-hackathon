@@ -54,7 +54,7 @@ export const NewVoiceDialog = (props: {
     }, [defaultValue])
 
     const [radioButtonValue, setRadioButtonValue] = React.useState(
-        "Dialog.duplicateFullSong"
+        "Dialog.duplicateFullVoice"
     )
 
     const handleChange = (event: {
@@ -89,9 +89,9 @@ export const NewVoiceDialog = (props: {
                 <RadioButtons
                     radioButtonLabel={t("Dialog.customNewVoice")}
                     radioButtonOptions={[
-                        "Dialog.duplicateFullSong",
-                        "Dialog.duplicateEmptySong",
-                        "Dialog.duplicateCustomSong",
+                        "Dialog.duplicateFullVoice",
+                        "Dialog.duplicateEmptyVoice",
+                        "Dialog.duplicateCustomVoice",
                     ]}
                     radioButtonValue={radioButtonValue}
                     handleChange={handleChange}

@@ -54,16 +54,19 @@ const useStyles = makeStyles({
 export const ChordOptions = (props: {
     chord: string | null
     onChordNotesChange: (clickedNote: string, checked: boolean) => void
+    alwaysShow: boolean
 }) => {
+    const { alwaysShow } = props
     const styles = useStyles()
     const { chordMenuOptions } = useSongContext()
     const { t } = useTranslation()
 
-    if (chordMenuOptions.chordType === ChordType.NOTE) {
+    if (!alwaysShow && chordMenuOptions.chordType === ChordType.NOTE) {
         return <></>
     }
 
     const allNotes = getNotesFromChord(props.chord)
+
     return (
         <Box id="chordOptionsContainer" className={styles.root}>
             <FormGroup id="chordOptions" row>
