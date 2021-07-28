@@ -200,8 +200,6 @@ export const CreateSongTab = (props: {
         setCustomMode(false)
     }
 
-    //const handleOpenCustomVoiceDialog = async () => {}
-
     return (
         <>
             <Box display="flex" flexWrap="wrap" alignItems="center">

@@ -19,7 +19,7 @@ import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { Song } from "../Song/Song.component"
 import { ChordOptions } from "../BottomMenuButtons/BottomMenuButtons"
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles(() => {
     return {
         body: {
             marginLeft: "3.5vw",
