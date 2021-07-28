@@ -16,6 +16,7 @@ export const generateNewSong = (song: ISongPost): ISong => {
         songId: 1000,
         arrangerName: "Test Testesen",
         updatedOn: "2021-06-18T18:02:25.1719881+00:00",
+        currentUserHasWriteAccess:true,
         voices: [
             {
                 songVoiceId: 2000,
