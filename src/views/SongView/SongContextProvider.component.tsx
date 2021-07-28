@@ -1,10 +1,4 @@
-import React, {
-    ReactNode,
-    useContext,
-    useEffect,
-    useReducer,
-    useState,
-} from "react"
+import React, { ReactNode, useContext, useReducer, useState } from "react"
 import { ISong } from "../../models/ISong"
 import { IBar } from "../../models/IBar"
 import { IVoice } from "../../models/IVoice"
@@ -226,9 +220,6 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
           }
         | undefined
     >(undefined)
-
-    const { voices } = song
-    console.log(song)
     const [selectedVoice, setSelectedVoice] = useState<IVoice | undefined>(
         undefined
     )

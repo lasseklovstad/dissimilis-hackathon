@@ -6,7 +6,6 @@ import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.comp
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
 import { useBarsPerRow } from "../../utils/useBars"
 import { Song } from "../../components/Song/Song.component"
-import { useChords } from "../../utils/useChords"
 import { useGetSong } from "../../utils/useApiServiceSongs"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
@@ -67,13 +66,9 @@ export const SongView = () => {
 
     useEffect(() => {
         if (songInit) {
-            console.log("Jepp")
             dispatchSong({ type: "UPDATE_SONG", song: songInit })
         }
     }, [songInit, dispatchSong])
-
-    console.log("Song: ", song, "Voices: ", voices)
-
     const selectedVoice = useVoice(song!!.voices)
 
     const { songVoiceId: selectedVoiceId } = selectedVoice || {}

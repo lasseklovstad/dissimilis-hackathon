@@ -81,9 +81,9 @@ export const SongNavBar = () => {
         setTitle(title)
     }, [title])
 
-    const handleTitleBlur = async (title: string) => {
-        if (title !== title) {
-            const { error, result } = await putSong.run({ title })
+    const handleTitleBlur = async (newTitle: string) => {
+        if (newTitle !== title) {
+            const { error, result } = await putSong.run({ newTitle })
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_SONG", song: result.data })
             }

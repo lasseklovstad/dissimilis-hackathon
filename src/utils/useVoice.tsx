@@ -1,7 +1,5 @@
-import { useEffect } from "react"
 import { useHistory } from "react-router-dom"
 import { IVoice } from "../models/IVoice"
-import { useSongContext } from "../views/SongView/SongContextProvider.component"
 
 export const useVoice = (voices: IVoice[] | undefined) => {
     console.log("RUNNING1")

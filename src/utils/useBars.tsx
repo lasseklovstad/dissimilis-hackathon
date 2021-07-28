@@ -1,9 +1,6 @@
 import { useMediaQuery } from "@material-ui/core"
 import { IBar } from "./../models/IBar"
-import {
-    SongAction,
-    useSongContext,
-} from "./../views/SongView/SongContextProvider.component"
+import { SongAction } from "./../views/SongView/SongContextProvider.component"
 import {
     useCopyBars,
     useDeleteBars as useDeleteBarsApi,
