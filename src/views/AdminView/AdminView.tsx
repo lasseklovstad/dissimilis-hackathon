@@ -17,7 +17,6 @@ import {
     List as ListIcon,
 } from "@material-ui/icons"
 import { colors } from "../../utils/colors"
-import { InviteUserToSystemDialog } from "../../components/CustomDialog/InviteUserToSystemDialog.components"
 import { AddOrganisationDialog } from "../../components/CustomDialog/AddOrganisationDialog.component"
 import {
     OrganisationFilter,
@@ -117,7 +116,6 @@ export const AdminView = () => {
         }
     }, [groupAdminOrganisationsFetched])
 
-    const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addOrganisationIsOpen, setAddOrganisationIsOpen] = useState(false)
     const [editSysAdminsDialogIsOpen, setEditSysAdminsDialogIsOpen] =
         useState(false)
@@ -148,13 +146,6 @@ export const AdminView = () => {
             )
         )
         renderedAdminOrganisationIds.length = 0 // Clear the array
-    }
-
-    const handleInviteUserDialogClose = () => {
-        setInviteUserDialogIsOpen(false)
-    }
-    const handleInviteUserDialogSave = () => {
-        //Inviter bruker
     }
 
     const handleAddOrganisationDialogClose = () => {
@@ -339,19 +330,6 @@ export const AdminView = () => {
                                 )
                             })}
                     </Grid>
-
-                    <Dialog
-                        open={inviteUserDialogIsOpen}
-                        onClose={handleInviteUserDialogClose}
-                        aria-labelledby={t("AdminView.inviteUser")}
-                    >
-                        <InviteUserToSystemDialog
-                            handleOnSaveClick={handleInviteUserDialogSave}
-                            handleOnCancelClick={handleInviteUserDialogClose}
-                            userIsSystemAdmin={userIsSystemAdmin()}
-                        />
-                    </Dialog>
-
                     <Dialog
                         open={addOrganisationIsOpen}
                         onClose={handleAddOrganisationDialogClose}

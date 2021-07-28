@@ -13,7 +13,6 @@ import { useHistory, useParams } from "react-router"
 import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 import { Add as AddIcon } from "@material-ui/icons"
 import { colors } from "../../utils/colors"
-import { InviteUserToSystemDialog } from "../../components/CustomDialog/InviteUserToSystemDialog.components"
 import { AddGroupDialog } from "../../components/CustomDialog/AddGroupDialog.component"
 import { AccordionGroupComponent } from "../../components/AdminViewComponents/AccordionGroupComponent.component"
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
@@ -123,7 +122,6 @@ export const GroupAdminView = () => {
         }
     }, [groupsFetched])
 
-    const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
 
     const userIsGroupAdmin = () =>
@@ -132,13 +130,6 @@ export const GroupAdminView = () => {
 
     const removeGroupAccordion = (groupId: number) => {
         setGroups(groups?.filter((group) => group.groupId !== groupId))
-    }
-
-    const handleInviteUserDialogClose = () => {
-        setInviteUserDialogIsOpen(false)
-    }
-    const handleInviteUserDialogSave = () => {
-        //Inviter bruker
     }
 
     const handleAddGroupDialogClose = () => {
@@ -265,21 +256,6 @@ export const GroupAdminView = () => {
                             {t("AdminView.noPermissions")}
                         </Typography>
                     )}
-                    <Dialog
-                        open={inviteUserDialogIsOpen}
-                        onClose={handleInviteUserDialogClose}
-                        aria-labelledby={t("AdminView.inviteUser")}
-                    >
-                        <InviteUserToSystemDialog
-                            handleOnSaveClick={handleInviteUserDialogSave}
-                            handleOnCancelClick={handleInviteUserDialogClose}
-                            defaultOrganisationId={
-                                organisationFetched?.organisationId
-                            }
-                            userIsSystemAdmin={userIsSystemAdmin()}
-                        />
-                    </Dialog>
-
                     <Dialog
                         open={addGroupIsOpen}
                         onClose={handleAddGroupDialogClose}
