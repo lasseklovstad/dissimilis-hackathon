@@ -1,3 +1,7 @@
+import { SongProtectionLevel } from "../utils/useApiServiceSongs"
+import { IGroupIndex } from "./IGroup"
+import { IOrganisationIndex } from "./IOrganisation"
+import { IUser } from "./IUser"
 import { IVoice } from "./IVoice"
 
 export interface ISong {
@@ -37,4 +41,12 @@ export interface ISongMetadata {
     composer: string | null
     songNotes: string | null
     speed: number
+}
+
+export interface ISongShareData {
+    songId: number
+    organisationTags: IOrganisationIndex[]
+    groupTags: IGroupIndex[]
+    sharedWithUsers: IUser[]
+    protectionLevel: SongProtectionLevel
 }

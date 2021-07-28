@@ -3,7 +3,6 @@ import { TextField, IconButton, InputAdornment } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import SearchIcon from "@material-ui/icons/Search"
 import ClearIcon from "@material-ui/icons/Clear"
-import { useHistory } from "react-router-dom"
 
 export const SearchField = (props: {
     searchTermInit?: string
@@ -11,7 +10,6 @@ export const SearchField = (props: {
 }) => {
     const { t } = useTranslation()
     const searchPlaceholder = t("DashboardView.search")
-    const history = useHistory()
     const { searchTermInit, handleOnSubmit } = props
     const [searchTerm, setSeachTerm] = useState(searchTermInit || "")
 

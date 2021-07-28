@@ -8,10 +8,13 @@ import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { useLocation } from "react-router"
 import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
 import { useHistory } from "react-router"
-import { IOrganisation } from "../../models/IOrganisation"
-import { IGroup } from "../../models/IGroup"
+import { IOrganisationIndex } from "../../models/IOrganisation"
+import { IGroupIndex } from "../../models/IGroup"
 import { SongGrid } from "../../components/SongGrid/SongGrid.component"
-import { SearchFilterAutocomplete } from "../../components/SongGrid/SearchFilterAutocomplete.component"
+import {
+    useGetGroups,
+    useGetOrganisations,
+} from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles({
     container: {
@@ -31,13 +34,8 @@ export const LibraryView = () => {
     const url = new URLSearchParams(location.search)
     const searchTermUrl = url.get("search")
     const searchTerm = searchTermUrl ? searchTermUrl : ""
-    const [filterTerm, setFilterTerm] = useState<(IGroup | IOrganisation)[]>([])
-    const [includedOrganisationIdArray, setIncludedOrganisationIdArray] =
-        useState<(number | null)[]>([])
-    const [includedGroupIdArray, setIncludedGroupIdArray] = useState<
-        (number | null)[]
-    >([])
-
+    const includedOrganisationIdArray = url.getAll("organisationId")
+    const includedGroupIdArray = url.getAll("groupId")
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
         includedOrganisationIdArray,
@@ -51,30 +49,12 @@ export const LibraryView = () => {
     >()
 
     useEffect(() => {
+        console.log("use effect filteredSongs")
         if (filteredSongsFetched) {
+            console.log("setFilteredSongs")
             setFilteredSongs(filteredSongsFetched)
         }
     }, [filteredSongsFetched])
-
-    useEffect(() => {
-        setIncludedGroupIdArray([
-            ...filterTerm
-                .map((group) =>
-                    "groupId" in group ? Number(group.groupId) : null
-                )
-                .filter((group) => group !== null),
-        ])
-
-        setIncludedOrganisationIdArray([
-            ...filterTerm
-                .map((organisation) =>
-                    !("groupId" in organisation)
-                        ? Number(organisation.organisationId)
-                        : null
-                )
-                .filter((organisation) => organisation !== null),
-        ])
-    }, [filterTerm])
 
     const removeSongFromFilteredSongs = (songId: number) => {
         setFilteredSongs(
@@ -102,24 +82,24 @@ export const LibraryView = () => {
         const url = new URLSearchParams(location.search)
         const groupIdsFromUrl = url.getAll("groupId")
         const organisationIdsFromUrl = url.getAll("organisationId")
-        const groupValues =
-            "&" +
-            groupIdsFromUrl.map((groupId) => "groupId=" + groupId).join("&")
-        const organisationValues =
-            "&" +
-            organisationIdsFromUrl
-                .map((organisationId) => "organisationId=" + organisationId)
-                .join("&")
+        const groupValues = groupIdsFromUrl
+            .map((groupId) => "groupId=" + groupId)
+            .join("&")
+        const organisationValues = organisationIdsFromUrl
+            .map((organisationId) => "organisationId=" + organisationId)
+            .join("&")
+        const params = [searchTerm, groupValues, organisationValues].join("&")
 
-        history.push(
-            `/library?search=${searchTerm}${groupValues}${organisationValues}`
-        )
+        history.push(`/library?search=${params}`)
     }
+    console.log("Render library")
 
-    const handleAddFilterUrl = (newValues: (IGroup | IOrganisation)[]) => {
+    const handleAddFilterUrl = (
+        newValues: (IGroupIndex | IOrganisationIndex)[]
+    ) => {
         console.log(location)
         const url = new URLSearchParams(location.search)
-        const searchTerm = "search=" + url.get("search") + "&"
+        const searchTerm = url.get("search")
 
         const newValueString = newValues
             .map((item) =>
@@ -128,7 +108,10 @@ export const LibraryView = () => {
                     : "organisationId=" + item.organisationId
             )
             .join("&")
-        history.push(`/library?${searchTerm}${newValueString}`)
+
+        searchTerm
+            ? history.push(`/library?search=${searchTerm}&${newValueString}`)
+            : history.push(`/library?${newValueString}`)
     }
 
     return (
@@ -165,8 +148,8 @@ export const LibraryView = () => {
                         changeOrderTerm={handleChangeOrderTerm}
                         orderDescending={orderDescending}
                         searchFilter={true}
-                        filterTerm={filterTerm}
-                        setFilterTerm={setFilterTerm}
+                        initialGroupIds={includedGroupIdArray}
+                        initialOrganisationIds={includedOrganisationIdArray}
                         onSubmitAutocomplete={handleAddFilterUrl}
                     />
                 </Grid>

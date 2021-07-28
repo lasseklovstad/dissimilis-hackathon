@@ -1,6 +1,5 @@
 import { Box, Grid, Typography } from "@material-ui/core"
 import React from "react"
-import { SortingButtons } from "../DashboardButtons/DashboardButtons"
 
 export const ButtonGrid = (props: { title: string; children: any }) => {
     const { children, title } = props

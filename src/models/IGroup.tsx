@@ -1,5 +1,12 @@
 import { IUser } from "./IUser"
 
+export interface IGroupIndex {
+    groupId: number
+    groupName: string
+    organisationId?: number
+    organisationName?: string
+}
+
 export interface IGroup {
     groupId: number
     groupName: string

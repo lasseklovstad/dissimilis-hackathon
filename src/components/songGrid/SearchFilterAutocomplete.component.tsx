@@ -1,83 +1,74 @@
-import React, { ChangeEvent, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Grid, TextField } from "@material-ui/core"
 
 import { useTranslation } from "react-i18next"
 import { Autocomplete } from "@material-ui/lab"
-import { IGroup } from "../../models/IGroup"
+import { IGroupIndex } from "../../models/IGroup"
+import { IOrganisationIndex } from "../../models/IOrganisation"
+
 import {
-    GroupFilter,
-    OrganisationFilter,
     useGetGroups,
     useGetOrganisations,
 } from "../../utils/useApiServiceGroups"
-import { useHistory, useLocation } from "react-router"
-import { IOrganisation } from "../../models/IOrganisation"
+import { useLocation } from "react-router"
 import { SortingButtons } from "../DashboardButtons/DashboardButtons"
 
 export const SearchFilterAutocomplete = (props: {
-    filterTerm?: (IGroup | IOrganisation)[]
-    setFilterTerm?: React.Dispatch<
-        React.SetStateAction<(IGroup | IOrganisation)[]>
-    >
+    initialGroupIds?: string[]
+    initialOrganisationIds?: string[]
     orderTerm?: string
     changeOrderTerm?: (term: "date" | "song" | "user") => void
     orderDescending?: boolean
     groupId?: number
     organisationId?: number
-    onSubmit?: (value: (IGroup | IOrganisation)[]) => void
+    onSubmit?: (value: (IGroupIndex | IOrganisationIndex)[]) => void
 }) => {
     const {
-        filterTerm,
-        setFilterTerm,
+        initialGroupIds,
+        initialOrganisationIds,
         orderTerm,
         changeOrderTerm,
         orderDescending,
-        groupId,
-        organisationId,
         onSubmit,
     } = props
+    console.log("searchFilter")
     const { t } = useTranslation()
-    const { getAllGroups, allGroupsFetched } = useGetGroups()
-    const [groups, setGroups] = useState<IGroup[] | undefined>()
-
-    const history = useHistory()
     const location = useLocation()
     const url = new URLSearchParams(location.search)
-    const groupIdsFromUrl = url.getAll("groupId")
-    const organisationIdsFromUrl = url.getAll("organisationId")
 
-    const { getOrganisations, organisationsFetched } = useGetOrganisations()
+    const [groups, setGroups] = useState<IGroupIndex[] | undefined>()
     const [organisations, setorganisations] = useState<
-        IOrganisation[] | undefined
+        IOrganisationIndex[] | undefined
     >()
+    const { allGroupsFetched } = useGetGroups()
+    const { organisationsFetched } = useGetOrganisations()
 
     useEffect(() => {
-        if (organisationsFetched) {
-            setorganisations(organisationsFetched)
-        }
+        console.log("Useeffect groups")
         if (allGroupsFetched) {
             setGroups(allGroupsFetched)
         }
-    }, [organisationsFetched, allGroupsFetched])
-
+    }, [allGroupsFetched])
     useEffect(() => {
-        const valueGroups = groups?.filter(
-            (group) => groupIdsFromUrl.indexOf(group.groupId.toString()) > -1
-        )
-        const valueOrganisations = organisations?.filter(
-            (organisation) =>
-                organisationIdsFromUrl.indexOf(
-                    organisation.organisationId.toString()
-                ) > -1
-        )
-        const valuesFromIds = [
-            ...(valueGroups ? valueGroups : []),
-            ...(valueOrganisations ? valueOrganisations : []),
-        ]
-        if (setFilterTerm) {
-            setFilterTerm(valuesFromIds)
+        console.log("Useeffect filter orgs")
+        if (organisationsFetched) {
+            setorganisations(organisationsFetched)
         }
-    }, [organisations, groups])
+    }, [organisationsFetched])
+
+    const initialGroups = groups?.filter(
+        (group) => initialGroupIds!!.indexOf(group.groupId.toString()) > -1
+    )
+    const initialOrganisations = organisations?.filter(
+        (organisation) =>
+            initialOrganisationIds!!.indexOf(
+                organisation.organisationId.toString()
+            ) > -1
+    )
+    const valuesFromIds = [
+        ...(initialGroups ? initialGroups : []),
+        ...(initialOrganisations ? initialOrganisations : []),
+    ]
 
     const filterOptions = [
         ...(groups ? groups : []),
@@ -86,10 +77,9 @@ export const SearchFilterAutocomplete = (props: {
 
     const handleOnChange = (
         event: any,
-        newValue: (IGroup | IOrganisation)[]
+        newValue: (IGroupIndex | IOrganisationIndex)[]
     ) => {
-        if (setFilterTerm && onSubmit) {
-            setFilterTerm(newValue)
+        if (onSubmit) {
             onSubmit(newValue)
         }
     }
@@ -111,7 +101,7 @@ export const SearchFilterAutocomplete = (props: {
             )}
             <Autocomplete
                 style={{ marginBottom: "1.5em" }}
-                value={filterTerm}
+                value={valuesFromIds}
                 multiple
                 id="tags-outlined"
                 options={filterOptions}

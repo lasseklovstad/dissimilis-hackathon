@@ -3,8 +3,8 @@ import { Box, Grid, Typography } from "@material-ui/core"
 import { ISongIndex } from "../../models/ISong"
 import { DashboardButton } from "../DashboardButtons/DashboardButtons"
 import { Loading } from "../loading/Loading.component"
-import { IGroup } from "../../models/IGroup"
-import { IOrganisation } from "../../models/IOrganisation"
+import { IGroupIndex } from "../../models/IGroup"
+import { IOrganisationIndex } from "../../models/IOrganisation"
 import { SearchFilterAutocomplete } from "./SearchFilterAutocomplete.component"
 
 type SongGridProps = {
@@ -18,11 +18,15 @@ type SongGridProps = {
     changeOrderTerm?: (term: "date" | "song" | "user") => void
     orderDescending?: boolean
     searchFilter?: boolean
-    filterTerm?: (IGroup | IOrganisation)[]
+    filterTerm?: (IGroupIndex | IOrganisationIndex)[]
     setFilterTerm?: React.Dispatch<
-        React.SetStateAction<(IGroup | IOrganisation)[]>
+        React.SetStateAction<(IGroupIndex | IOrganisationIndex)[]>
     >
-    onSubmitAutocomplete?: (newValue: (IGroup | IOrganisation)[]) => void
+    initialGroupIds?: string[]
+    initialOrganisationIds?: string[]
+    onSubmitAutocomplete?: (
+        newValue: (IGroupIndex | IOrganisationIndex)[]
+    ) => void
 }
 
 export const SongGrid = (props: SongGridProps) => {
@@ -34,8 +38,8 @@ export const SongGrid = (props: SongGridProps) => {
         changeOrderTerm,
         orderDescending,
         searchFilter,
-        filterTerm,
-        setFilterTerm,
+        initialGroupIds,
+        initialOrganisationIds,
         onSubmitAutocomplete,
     } = props
 
@@ -47,8 +51,8 @@ export const SongGrid = (props: SongGridProps) => {
                 </Box>
                 {searchFilter ? (
                     <SearchFilterAutocomplete
-                        filterTerm={filterTerm}
-                        setFilterTerm={setFilterTerm}
+                        initialGroupIds={initialGroupIds}
+                        initialOrganisationIds={initialOrganisationIds}
                         orderTerm={orderTerm}
                         changeOrderTerm={changeOrderTerm}
                         orderDescending={orderDescending}

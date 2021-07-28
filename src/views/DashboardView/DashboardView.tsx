@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Box, Dialog, Grid, makeStyles, Typography } from "@material-ui/core"
+import { Box, Dialog, Grid, makeStyles } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import {
@@ -22,8 +22,8 @@ import {
     useGetGroups,
     useGetOrganisations,
 } from "../../utils/useApiServiceGroups"
-import { IGroup } from "../../models/IGroup"
-import { IOrganisation } from "../../models/IOrganisation"
+import { IGroupIndex } from "../../models/IGroup"
+import { IOrganisationIndex } from "../../models/IOrganisation"
 import { ButtonGrid } from "../../components/buttonGrid/buttonGrid.component"
 import { InputDialog } from "../../components/CustomDialog/InputDialog.component"
 
@@ -127,7 +127,7 @@ export const DashboardView = () => {
     }
 
     const { getAllGroups, allGroupsFetched } = useGetGroups(GroupFilter.Member)
-    const [groups, setGroups] = useState<IGroup[] | undefined>()
+    const [groups, setGroups] = useState<IGroupIndex[] | undefined>()
     useEffect(() => {
         if (allGroupsFetched) {
             setGroups(allGroupsFetched)
@@ -137,7 +137,7 @@ export const DashboardView = () => {
         OrganisationFilter.Member
     )
     const [organisations, setorganisations] = useState<
-        IOrganisation[] | undefined
+        IOrganisationIndex[] | undefined
     >()
     useEffect(() => {
         if (organisationsFetched) {

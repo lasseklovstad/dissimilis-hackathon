@@ -31,7 +31,7 @@ export const generateNewSong = (song: ISongPost): ISong => {
                         position: 1,
                         repBefore: false,
                         repAfter: false,
-                        house: null,
+                        voltaBracket: null,
                         chords: [
                             {
                                 chordId: null,
@@ -64,7 +64,7 @@ export const generateNewVoice = (song: ISong, voice: IVoicePost): IVoice => {
                         position: 1,
                         repBefore: false,
                         repAfter: false,
-                        house: null,
+                        voltaBracket: null,
                         chords: [
                             {
                                 chordId: null,

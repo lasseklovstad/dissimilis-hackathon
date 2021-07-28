@@ -1,6 +1,6 @@
 import { useEffect } from "react"
-import { IGroup } from "../models/IGroup"
-import { IOrganisation } from "../models/IOrganisation"
+import { IGroupIndex } from "../models/IGroup"
+import { IOrganisationIndex } from "../models/IOrganisation"
 import { useApiService } from "./useApiService"
 
 export enum GroupFilter {
@@ -25,11 +25,11 @@ const getHeaders = () => {
  * */
 export const useGetGroups = (groupFilter?: GroupFilter) => {
     const url = groupFilter
-        ? `organisations/groups? ${groupFilter}}"`
+        ? `organisations/groups?filterBy=${groupFilter}}"`
         : "organisations/groups"
-    const initialData: IGroup[] = []
+    const initialData: IGroupIndex[] = []
     const headers = getHeaders()
-    const { getData, state, data } = useApiService<IGroup[]>(url, {
+    const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
         initialData,
         headers,
     })
@@ -52,12 +52,12 @@ export const useGetGroupsInOrganisation = (
     groupFilter?: GroupFilter
 ) => {
     const url = groupFilter
-        ? `organisations/groups? ${groupFilter}}"`
+        ? `organisations/groups?filterBy=${groupFilter}}"`
         : "organisations/groups"
 
-    const initialData: IGroup[] = []
+    const initialData: IGroupIndex[] = []
     const headers = getHeaders()
-    const { getData, state, data } = useApiService<IGroup[]>(url, {
+    const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
         initialData,
         headers,
     })
@@ -79,12 +79,12 @@ export const useGetOrganisations = (
     organisationFilter?: OrganisationFilter
 ) => {
     const url = organisationFilter
-        ? `organisations? ${organisationFilter}}"`
+        ? `organisations?filterBy=${organisationFilter}}"`
         : "organisations"
 
-    const initialData: IOrganisation[] = []
+    const initialData: IOrganisationIndex[] = []
     const headers = getHeaders()
-    const { getData, state, data } = useApiService<IOrganisation[]>(url, {
+    const { getData, state, data } = useApiService<IOrganisationIndex[]>(url, {
         initialData,
         headers,
     })
