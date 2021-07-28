@@ -4,18 +4,18 @@ import { makeStyles } from "@material-ui/core"
 
 const useStyle = makeStyles((theme: Theme) => {
     return {
-        houseContainer: {
+        voltaBracketContainer: {
             display: "flex",
             justifyContent: "flex-end",
             lineHeight: "0",
         },
-        houseLine: {
+        voltaBracketLine: {
             textAlign: "left",
             borderBottom: "2px solid black",
             width: "100%",
             lineHeight: 0,
         },
-        houseBefore: {
+        voltaBracketBefore: {
             "&:before": {
                 width: "30px",
                 content: "' '",
@@ -29,37 +29,35 @@ const useStyle = makeStyles((theme: Theme) => {
     }
 })
 
-export const House = (props: {
-    houseOrder: number | undefined | null
-    showHouseNumber: boolean
+export const VoltaBracket = (props: {
+    voltaBracketOrder: number | undefined | null
+    showVoltaBracketNumber: boolean
 }) => {
     const classes = useStyle()
 
-    if (!props.houseOrder) {
-        return <></>
+    if (!props.voltaBracketOrder) {
+        return null
     }
 
-    const getHouseNumber = () => {
-        if (props.showHouseNumber) {
-            return `${props.houseOrder}.`
-        }
-        return ""
-    }
+    const getVoltaBracketNumber = () =>
+        props.showVoltaBracketNumber ? `${props.voltaBracketOrder}.` : ""
 
     return (
         <Box position="relative" top="-5px" height={0}>
             <Typography variant="body1" component="div">
-                {props.houseOrder === undefined ? null : (
-                    <Box className={classes.houseContainer}>
+                {props.voltaBracketOrder !== undefined && (
+                    <Box className={classes.voltaBracketContainer}>
                         <Box
-                            className={`${classes.houseLine} ${
-                                props.showHouseNumber ? "" : classes.houseBefore
+                            className={`${classes.voltaBracketLine} ${
+                                props.showVoltaBracketNumber
+                                    ? ""
+                                    : classes.voltaBracketBefore
                             }`}
                         >
                             <span
                                 style={{ position: "relative", top: "-10px" }}
                             >
-                                {getHouseNumber()}
+                                {getVoltaBracketNumber()}
                             </span>
                         </Box>
                     </Box>

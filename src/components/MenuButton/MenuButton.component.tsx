@@ -26,6 +26,7 @@ import { InputDialog } from "../CustomDialog/InputDialog.component"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
 import { useVoice } from "../../utils/useVoice"
+import { ShareSongDialog } from "../CustomDialog/ShareSongDialog.component"
 
 export const MenuButton = (props: {
     showName: boolean
@@ -49,6 +50,7 @@ export const MenuButton = (props: {
     const [duplicateSongDialogIsOpen, setDuplicateSongDialogIsOpen] =
         useState(false)
     const [songInfoDialogIsOpen, setSongInfoDialogIsOpen] = useState(false)
+    const [shareSongDialogIsOpen, setShareSongDialogIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
     const {
@@ -114,6 +116,7 @@ export const MenuButton = (props: {
             | "duplicate"
             | "editBars"
             | "info"
+            | "share"
     ) => {
         setAnchorEl(null)
         setDeleteSongDialogIsOpen(false)
@@ -138,6 +141,9 @@ export const MenuButton = (props: {
                 break
             case "info":
                 handleOpenSongInfoDialog()
+                break
+            case "share":
+                setShareSongDialogIsOpen(true)
                 break
             default:
                 break
@@ -219,6 +225,9 @@ export const MenuButton = (props: {
                     <MenuItem onClick={() => handleClose("info")}>
                         {t("Dialog.details")}
                     </MenuItem>
+                    <MenuItem onClick={() => handleClose("share")}>
+                        {t("Dialog.share")}
+                    </MenuItem>
                     {props.showName ? (
                         <>
                             <Divider variant="middle" />
@@ -287,6 +296,20 @@ export const MenuButton = (props: {
                         headerText={t("DashboardView.duplicateText")}
                         labelText={t("Dialog.newVoiceName")}
                         isLoading={duplicateSong.loading}
+                    />
+                </Dialog>
+                <Dialog
+                    open={shareSongDialogIsOpen}
+                    onClose={() => setShareSongDialogIsOpen(false)}
+                    aria-label={"Dialog.ShareSong"}
+                    maxWidth="xs"
+                    fullWidth
+                >
+                    <ShareSongDialog
+                        handleOnCloseClick={() =>
+                            setShareSongDialogIsOpen(false)
+                        }
+                        songId={songId}
                     />
                 </Dialog>
             </div>

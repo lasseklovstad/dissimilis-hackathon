@@ -22,7 +22,7 @@ export const emptySong: ISong = {
                     position: 1,
                     repBefore: false,
                     repAfter: false,
-                    house: null,
+                    voltaBracket: null,
                     chords: [
                         {
                             chordId: null,
@@ -60,7 +60,7 @@ export const songWithChords: ISong = {
                     position: 1,
                     repBefore: false,
                     repAfter: false,
-                    house: null,
+                    voltaBracket: null,
                     chords: [
                         {
                             chordId: 10,
@@ -99,7 +99,7 @@ export const songWithChords: ISong = {
                     position: 2,
                     repBefore: false,
                     repAfter: false,
-                    house: 0,
+                    voltaBracket: 0,
                     chords: [
                         {
                             chordId: 12,
@@ -159,7 +159,7 @@ export const songWithChords: ISong = {
                     position: 3,
                     repBefore: false,
                     repAfter: false,
-                    house: null,
+                    voltaBracket: null,
                     chords: [
                         {
                             chordId: 16,
@@ -198,7 +198,7 @@ export const songWithChords: ISong = {
                     position: 4,
                     repBefore: false,
                     repAfter: false,
-                    house: 0,
+                    voltaBracket: 0,
                     chords: [
                         {
                             chordId: 18,

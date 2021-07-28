@@ -203,25 +203,27 @@ export const Chord = (props: ChordProps) => {
                     .map((note, i) => {
                         const tangent = tangentToNumber(note)
                         return (
-                            <div
-                                id="singleChord"
-                                className={`${classes.noteContainer} ${
-                                    (classes as any)[note]
-                                } ${exportMode ? "disabled" : ""} ${
-                                    note === "Z" && highlight
-                                        ? classes.highlight
-                                        : ""
-                                } ${
-                                    Number(tangent) && exportMode
-                                        ? classes.exportNumberSize
-                                        : classes.noteFont
-                                }`}
-                                key={note + i}
-                            >
-                                {showNoteLetters || Number(tangent)
-                                    ? tangent
-                                    : undefined}
-                            </div>
+                            note !== "X" && (
+                                <div
+                                    id="singleChord"
+                                    className={`${classes.noteContainer} ${
+                                        (classes as any)[note]
+                                    } ${exportMode ? "disabled" : ""} ${
+                                        note === "Z" && highlight
+                                            ? classes.highlight
+                                            : ""
+                                    } ${
+                                        Number(tangent) && exportMode
+                                            ? classes.exportNumberSize
+                                            : classes.noteFont
+                                    }`}
+                                    key={note + i}
+                                >
+                                    {showNoteLetters || Number(tangent)
+                                        ? tangent
+                                        : undefined}
+                                </div>
+                            )
                         )
                     })
                     .reverse()}
