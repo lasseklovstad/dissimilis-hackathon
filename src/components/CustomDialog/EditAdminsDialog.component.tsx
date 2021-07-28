@@ -60,8 +60,17 @@ export const EditAdminsDialog = (props: {
     group?: IOrganisation | IGroup
     isGroup: boolean
     handleOnCloseClick: () => void
+    handleAddAdminInGroupObject: (user: IUser) => void
+    handleRemoveAdminFromGroupObject: (userId: number) => void
 }) => {
-    const { groupId, group, handleOnCloseClick, isGroup } = props
+    const {
+        groupId,
+        group,
+        handleOnCloseClick,
+        isGroup,
+        handleAddAdminInGroupObject,
+        handleRemoveAdminFromGroupObject,
+    } = props
     const classes = useStyles()
     const { t } = useTranslation()
     const secondary = true
@@ -99,7 +108,7 @@ export const EditAdminsDialog = (props: {
         return !!error
     }
 
-    const handleDeleteAdmin = async () => {
+    const handleRemoveAdmin = async () => {
         if (adminList.length > 1) {
             if (selectedAdmin) {
                 const isError = await handleUpdateRole(
@@ -112,6 +121,7 @@ export const EditAdminsDialog = (props: {
                             (user) => user.userId !== selectedAdmin.userId
                         )
                     )
+                    handleRemoveAdminFromGroupObject(selectedAdmin.userId)
                     setConfirmationDialogIsOpen(false)
                 } else {
                     // An error occured
@@ -131,6 +141,7 @@ export const EditAdminsDialog = (props: {
             const isError = await handleUpdateRole(UserRole.Admin, user)
             if (!isError && user) {
                 setAdminsList([...adminList, user])
+                handleAddAdminInGroupObject(user)
                 setAddAdminDialogIsOpen(false)
             } else {
                 // An error occured
@@ -246,7 +257,7 @@ export const EditAdminsDialog = (props: {
             >
                 <ChoiceDialog
                     handleOnCancelClick={handleCloseConfirmationDialog}
-                    handleOnSaveClick={handleDeleteAdmin}
+                    handleOnSaveClick={handleRemoveAdmin}
                     ackText={t("Dialog.removeAdmin")}
                     cancelText={t("Dialog.cancel")}
                     headerText={t("Dialog.removeAdmin")}

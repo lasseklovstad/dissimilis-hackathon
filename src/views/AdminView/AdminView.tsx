@@ -332,9 +332,7 @@ export const AdminView = () => {
                         fullWidth
                     >
                         <EditSysAdminsDialog
-                            handleOnCloseClick={() =>
-                                setEditSysAdminsDialogIsOpen(false)
-                            }
+                            handleOnCloseClick={handleEditSysAdminsDialogClose}
                         />
                     </Dialog>
 

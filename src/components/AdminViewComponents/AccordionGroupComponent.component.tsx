@@ -161,6 +161,24 @@ export const AccordionGroupComponent = (props: {
         }
     }
 
+    const handleAddAdmin = (user: IUser) => {
+        const updatedGroup = group
+        if (updatedGroup && updatedGroup.admins) {
+            updatedGroup.admins = [...updatedGroup.admins, user]
+        }
+        setGroup(updatedGroup)
+    }
+
+    const handleRemoveAdmin = (userId: number) => {
+        const updatedGroup = group
+        if (updatedGroup && updatedGroup.admins) {
+            updatedGroup.admins = updatedGroup?.admins.filter(
+                (user) => user.userId !== userId
+            )
+        }
+        setGroup(updatedGroup)
+    }
+
     useEffect(() => {
         if (groupFetched) {
             setGroup(groupFetched)
@@ -336,8 +354,9 @@ export const AccordionGroupComponent = (props: {
                     groupId={groupId}
                     group={groupFetched}
                     isGroup={true}
-                    //Get Members, send in
                     handleOnCloseClick={handleCloseEditAdminsDialog}
+                    handleAddAdminInGroupObject={handleAddAdmin}
+                    handleRemoveAdminFromGroupObject={handleRemoveAdmin}
                 />
             </Dialog>
             <Dialog

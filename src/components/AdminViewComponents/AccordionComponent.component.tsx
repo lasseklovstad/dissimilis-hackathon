@@ -175,6 +175,24 @@ export const AccordionComponent = (props: {
         }
     }
 
+    const handleAddAdmin = (user: IUser) => {
+        const updatedOrganisation = organisation
+        if (updatedOrganisation && updatedOrganisation.admins) {
+            updatedOrganisation.admins = [...updatedOrganisation.admins, user]
+        }
+        setOrganisation(updatedOrganisation)
+    }
+
+    const handleRemoveAdmin = (userId: number) => {
+        const updatedOrganisation = organisation
+        if (updatedOrganisation && updatedOrganisation.admins) {
+            updatedOrganisation.admins = updatedOrganisation?.admins.filter(
+                (user) => user.userId !== userId
+            )
+        }
+        setOrganisation(updatedOrganisation)
+    }
+
     useEffect(() => {
         if (organisationFetched) {
             setOrganisation(organisationFetched)
@@ -374,9 +392,10 @@ export const AccordionComponent = (props: {
                 <EditAdminsDialog
                     groupId={organisationId}
                     isGroup={false}
-                    //Get Members, send in
                     group={organisation}
                     handleOnCloseClick={handleCloseEditAdminsDialog}
+                    handleAddAdminInGroupObject={handleAddAdmin}
+                    handleRemoveAdminFromGroupObject={handleRemoveAdmin}
                 />
             </Dialog>
             <Dialog

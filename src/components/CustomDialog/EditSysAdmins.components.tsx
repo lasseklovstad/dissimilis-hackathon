@@ -21,7 +21,6 @@ import { colors } from "../../utils/colors"
 import AddIcon from "@material-ui/icons/Add"
 import { ChoiceDialog } from "./ChoiceDialog.component"
 import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
-import { UserRole } from "../../utils/useApiServiceGroups"
 import {
     useGetSysAdmins,
     useGetUsers,
