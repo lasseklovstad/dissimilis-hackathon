@@ -117,7 +117,7 @@ export const SongNavBar = (props: {
                             <Typography
                                 style={{ fontSize: 24 }}
                                 className={classes.titleRoot}
-                                aria-Label={t("Dialog.nameOfSong")}
+                                aria-label={t("Dialog.nameOfSong")}
                             >
                                 {title}
                             </Typography>
