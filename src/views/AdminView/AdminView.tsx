@@ -263,7 +263,6 @@ export const AdminView = () => {
                                   renderedAdminOrganisationIds.push(
                                       organisation.organisationId
                                   )
-                                  console.log(organisation.organisationName)
                                   return (
                                       <Grid item xs={12}>
                                           <AccordionComponent

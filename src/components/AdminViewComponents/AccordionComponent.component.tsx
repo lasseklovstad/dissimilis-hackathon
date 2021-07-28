@@ -175,7 +175,7 @@ export const AccordionComponent = (props: {
 
     const handleAddAdmin = (user: IUser) => {
         const updatedOrganisation = organisation
-        if (updatedOrganisation && updatedOrganisation.admins) {
+        if (updatedOrganisation?.admins) {
             updatedOrganisation.admins = [...updatedOrganisation.admins, user]
         }
         setOrganisation(updatedOrganisation)
@@ -183,7 +183,7 @@ export const AccordionComponent = (props: {
 
     const handleRemoveAdmin = (userId: number) => {
         const updatedOrganisation = organisation
-        if (updatedOrganisation && updatedOrganisation.admins) {
+        if (updatedOrganisation?.admins) {
             updatedOrganisation.admins = updatedOrganisation?.admins.filter(
                 (user) => user.userId !== userId
             )
@@ -196,8 +196,6 @@ export const AccordionComponent = (props: {
             setOrganisation(organisationFetched)
         }
     }, [organisationFetched])
-
-    console.log("Disable: " + buttonsIsDisabled)
 
     return (
         <div className={classes.root}>
