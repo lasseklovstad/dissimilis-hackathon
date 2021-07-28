@@ -233,7 +233,7 @@ export const AdminView = () => {
                                         startIcon={<EditIcon />}
                                         disabled={!userIsSystemAdmin()}
                                     >
-                                        {t("AdminView.editAdmins")}
+                                        {t("Dialog.editSysAdmins")}
                                     </Button>
                                 </Grid>
                                 <Grid item xs={12} sm={4}>
@@ -346,7 +346,7 @@ export const AdminView = () => {
                     <Dialog
                         open={editSysAdminsDialogIsOpen}
                         onClose={() => setEditSysAdminsDialogIsOpen(false)}
-                        aria-label={t("Dialog.editAdmins")}
+                        aria-label={t("Dialog.editSysAdmins")}
                         maxWidth="xs"
                         fullWidth
                     >

@@ -150,7 +150,7 @@ export const EditSysAdminsDialog = (props: {
 
     return (
         <>
-            <DialogTitle>{t("Dialog.editAdmins")}</DialogTitle>
+            <DialogTitle>{t("Dialog.editSysAdmins")}</DialogTitle>
             <DialogContent>
                 <Typography variant="caption">
                     {t("Dialog.adminsIn")} {t("AdminView.system")}
@@ -192,7 +192,7 @@ export const EditSysAdminsDialog = (props: {
                                 >
                                     <AddIcon />
                                     <div className={classes.buttonText}>
-                                        {t("AdminView.inviteUser")}
+                                        {t("Dialog.addSysAdmin")}
                                     </div>
                                 </Button>
                             }
@@ -212,7 +212,7 @@ export const EditSysAdminsDialog = (props: {
             <Dialog
                 open={addAdminDialogIsOpen}
                 onClose={handleCloseAddAdminDialog}
-                aria-label={t("Dialog.addAdmin")}
+                aria-label={t("Dialog.addSysAdmin")}
                 maxWidth="xs"
                 fullWidth
             >
@@ -220,7 +220,7 @@ export const EditSysAdminsDialog = (props: {
                     handleOnCancelClick={handleCloseAddAdminDialog}
                     handleOnSaveClick={handleAddAdmin}
                     saveText={t("Dialog.add")}
-                    title={t("Dialog.addAdmin")}
+                    title={t("Dialog.addSysAdmin")}
                     descriptionText={t("Dialog.emailOfNewAdmin")}
                     userList={filterAdmins()}
                 />
@@ -228,18 +228,18 @@ export const EditSysAdminsDialog = (props: {
             <Dialog
                 open={confirmationDialogIsOpen}
                 onClose={handleCloseConfirmationDialog}
-                aria-label={t("Dialog.addAdmin")}
+                aria-label={t("Dialog.removeSysAdmin")}
             >
                 <ChoiceDialog
                     handleOnCancelClick={handleCloseConfirmationDialog}
                     handleOnSaveClick={handleDeleteAdmin}
-                    ackText={t("Dialog.removeAdmin")}
+                    ackText={t("Dialog.removeSysAdmin")}
                     cancelText={t("Dialog.cancel")}
-                    headerText={t("Dialog.removeAdmin")}
+                    headerText={t("Dialog.removeSysAdmin")}
                     descriptionText={`
                         ${t("Dialog.removeAdminDescription")} 
                         ${selectedAdmin?.name || t("Dialog.thisUser")} 
-                        ${t("Dialog.asAdmin")} 
+                        ${t("Dialog.asSysAdmin")} 
                         ${t("Dialog.cannotUndo")}
                     `}
                 />
