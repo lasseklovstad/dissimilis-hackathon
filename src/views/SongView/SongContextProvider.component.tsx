@@ -185,7 +185,7 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
     )
     const [barEditMode, setBarEditMode] = useState(false)
     const [barsClipboard, setBarsClipboard] = useState<
-        | {
+         {
               fromPosition: number
               toPosition: number
           }
@@ -193,7 +193,7 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
     >(undefined)
 
     const [selectedBars, setSelectedBars] = useState<
-        | {
+         {
               fromPosition: number
               toPosition: number
           }

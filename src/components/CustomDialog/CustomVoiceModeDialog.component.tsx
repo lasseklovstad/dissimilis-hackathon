@@ -95,6 +95,7 @@ export const CustomVoiceDialog = (props: {
             ?.chords.find((mainChord) => mainChord.position === chordPosition)
             ?.chordName
     }
+
     const { song } = useSongContext()
     const barsPerRow = useBarsPerRow()
 
@@ -128,6 +129,10 @@ export const CustomVoiceDialog = (props: {
                                 onChordNotesChange={() => {}}
                                 alwaysShow={true}
                             />
+                            {//console.log(baseVoice.bars.filter(bars => bars.chords.some(chord => chord.chordName !== null)).length)
+                            }
+                            {//console.table(baseVoice.bars[0])
+                            }
                         </Box>
                         <DialogActions className={classes.buttonContainer}>
                             <DialogButton

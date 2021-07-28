@@ -83,6 +83,7 @@ export const DashboardView = () => {
 
     useEffect(() => {
         if (recentSongsFetched) {
+            console.table(recentSongsFetched.length)
             setRecentSongs(recentSongsFetched)
         }
     }, [recentSongsFetched])
@@ -118,7 +119,8 @@ export const DashboardView = () => {
 
     return (
         <>
-            <Loading isLoading={postSong.loading} fullScreen />
+            <Loading isLoading={postSong.loading && getRecentSongs.loading
+            } fullScreen />
             <Box mx={2}>
                 <Grid container justify="center" className={styles.container}>
                     <Grid item xs={12}>
@@ -126,6 +128,7 @@ export const DashboardView = () => {
                             <DashboardTopBar />
                         </Box>
                     </Grid>
+                    {console.log("DASHBIRRRASD")}
                     <SongGrid
                         title={t("DashboardView.newSongLabel")}
                         songs={undefined}
