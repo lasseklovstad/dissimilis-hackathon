@@ -108,9 +108,9 @@ export const ShowSongInfoDialog = (props: {
                                 {t("Song.songSpeed") + ": "}
                             </Grid>
                             <Grid item xs={12} sm={8} className={classes.data}>
-                                {speedTextFieldInput}{" "}
+                                {speedTextFieldInput}
                             </Grid>
-                        </Grid>{" "}
+                        </Grid>
                         <Grid container className={classes.row} xs={12} sm={12}>
                             <Grid item xs={12} sm={4} className={classes.info}>
                                 {t("Song.songNotes") + ": "}
@@ -123,11 +123,7 @@ export const ShowSongInfoDialog = (props: {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <DialogButton
-                    onClick={() => {
-                        handleOnCancelClick()
-                    }}
-                >
+                <DialogButton onClick={handleOnCancelClick}>
                     {t("Dialog.close")}
                 </DialogButton>
             </DialogActions>

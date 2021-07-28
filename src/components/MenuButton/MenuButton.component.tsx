@@ -219,10 +219,10 @@ export const MenuButton = (props: {
                             </MenuItem>
                             <MenuItem onClick={() => handleClose("info")}>
                                 {t("Dialog.details")}
-                            </MenuItem>{" "}
+                            </MenuItem>
                             <MenuItem onClick={() => handleClose("share")}>
                                 {t("Dialog.share")}
-                            </MenuItem>{" "}
+                            </MenuItem>
                         </>
                     ) : (
                         <MenuItem onClick={() => handleClose("infoShow")}>

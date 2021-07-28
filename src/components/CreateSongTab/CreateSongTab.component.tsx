@@ -218,7 +218,7 @@ export const CreateSongTab = (props: {
                     })}
                 </Tabs>
 
-                {currentUserHasWriteAccess ? (
+                {currentUserHasWriteAccess && (
                     <IconButton
                         aria-haspopup="true"
                         aria-controls="voiceTabMenu"
@@ -228,7 +228,7 @@ export const CreateSongTab = (props: {
                     >
                         <MoreVertIcon />
                     </IconButton>
-                ) : null}
+                )}
             </Box>
 
             <Menu

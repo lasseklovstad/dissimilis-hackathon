@@ -118,8 +118,7 @@ export const SongNavBar = (props: {
                                 style={{ fontSize: 24 }}
                                 className={classes.titleRoot}
                             >
-                                {" "}
-                                {title}{" "}
+                                {title}
                             </Typography>
                         )}
                     </Box>
