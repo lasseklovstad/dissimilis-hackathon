@@ -2,7 +2,6 @@ import { useHistory } from "react-router-dom"
 import { IVoice } from "../models/IVoice"
 
 export const useVoice = (voices: IVoice[] | undefined) => {
-    console.log("RUNNING1")
     const history = useHistory()
     const voiceIdString = new URLSearchParams(history.location.search).get(
         "voice"

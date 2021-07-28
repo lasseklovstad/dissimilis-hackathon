@@ -1,31 +1,36 @@
 import { getNotesFromChord } from "../models/chords"
 import { IBar, IChord } from "../models/IBar"
-import { ChordType } from "../models/IChordMenuOptions"
-import { useSongContext } from "../views/SongView/SongContextProvider.component"
+import { ChordType, IChordMenuOptions } from "../models/IChordMenuOptions"
+import { ISong } from "../models/ISong"
+import { ChordMenuAction } from "../views/SongView/ChordMenuOptions.component"
+import { SongAction } from "../views/SongView/SongContextProvider.component"
 import { useDeleteChord, useUpdateChord } from "./useApiServiceSongs"
 import { useVoice } from "./useVoice"
 
-export const useChords = () => {
-    const {
-        song,
-        selectedBarId,
-        selectedChordId,
-        selectedChordPosition,
-        chordMenuOptions,
-        dispatchChordMenuOptions,
-        dispatchSong,
-        setValuesForSelectedChord,
-    } = useSongContext()
+export const useChords = (
+    song: ISong | undefined,
+    selectedBarId: number | undefined,
+    selectedChordId: number | null | undefined,
+    selectedChordPosition: number | null | undefined,
+    chordMenuOptions: IChordMenuOptions | undefined,
+    dispatchChordMenuOptions: React.Dispatch<ChordMenuAction>,
+    dispatchSong: React.Dispatch<SongAction>,
+    setValuesForSelectedChord: (
+        chordId: number | null | undefined,
+        barId: number | undefined,
+        position: number
+    ) => void
+) => {
     const { songId } = song!!
     const selectedVoice = useVoice(song!!.voices)
     const { songVoiceId: selectedVoiceId } = selectedVoice || {}
+
     const { updateChord } = useUpdateChord(
         songId,
         selectedVoiceId,
         selectedBarId,
         selectedChordId
     )
-
     const { deleteChord } = useDeleteChord(
         Number(songId),
         selectedVoiceId === undefined ? 0 : selectedVoiceId,
@@ -263,7 +268,6 @@ export const useChords = () => {
     }
 
     return {
-        setValuesForSelectedChord,
         handleChangeChord,
         handleChangeChordLength,
         handleChordNotesChange,

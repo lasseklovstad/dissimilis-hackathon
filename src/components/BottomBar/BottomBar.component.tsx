@@ -148,23 +148,38 @@ export const BottomBar = (props: {
     chordOptionsRef: RefObject<any>
 }) => {
     const { voiceId, chordDropdownContent, chordOptionsRef } = props
-
     const {
         setValuesForSelectedChord,
+        song,
+        dispatchSong,
+        selectedBarId,
+        selectedChordId,
+        selectedChordPosition,
+        chordMenuOptions,
+        dispatchChordMenuOptions,
+    } = useSongContext()
+    const { songId, numerator, denominator } = song!!
+    const { t } = useTranslation()
+    const classes = useStyles()
+    const container = useRef(null)
+    const { postBar } = useAddBar(songId, voiceId)
+
+    const {
         handleChangeChord,
         handleChangeChordLength,
         handleChordNotesChange,
         handleDeleteSelectedChord,
         handleNoteSelectedChange,
-    } = useChords()
-
-    const { song, dispatchSong } = useSongContext()
-    const { songId, numerator, denominator } = song!!
-    const { t } = useTranslation()
-    const classes = useStyles()
-    const { chordMenuOptions, selectedChordId } = useSongContext()
-    const container = useRef(null)
-    const { postBar } = useAddBar(songId, voiceId)
+    } = useChords(
+        song,
+        selectedBarId,
+        selectedChordId,
+        selectedChordPosition,
+        chordMenuOptions,
+        dispatchChordMenuOptions,
+        dispatchSong,
+        setValuesForSelectedChord
+    )
 
     const scrollToBottom = () => {
         window.scrollTo(0, document.body.scrollHeight)
