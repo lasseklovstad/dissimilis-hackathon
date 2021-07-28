@@ -24,7 +24,7 @@ export const SearchFilterAutocomplete = (props: {
     orderDescending?: boolean
     groupId?: number
     organisationId?: number
-    onSubmit?: (newValue: string) => void
+    onSubmit?: (value: (IGroup | IOrganisation)[]) => void
 }) => {
     const {
         filterTerm,
@@ -89,16 +89,8 @@ export const SearchFilterAutocomplete = (props: {
         newValue: (IGroup | IOrganisation)[]
     ) => {
         if (setFilterTerm && onSubmit) {
-            const newValueString = newValue
-                .map((item) =>
-                    "groupName" in item
-                        ? "groupId=" + item.groupId
-                        : "organisationId=" + item.organisationId
-                )
-                .join("&")
-
             setFilterTerm(newValue)
-            onSubmit(newValueString)
+            onSubmit(newValue)
         }
     }
 

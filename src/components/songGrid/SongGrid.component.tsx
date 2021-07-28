@@ -22,7 +22,7 @@ type SongGridProps = {
     setFilterTerm?: React.Dispatch<
         React.SetStateAction<(IGroup | IOrganisation)[]>
     >
-    onSubmitAutocomplete?: (newValue: string) => void
+    onSubmitAutocomplete?: (newValue: (IGroup | IOrganisation)[]) => void
 }
 
 export const SongGrid = (props: SongGridProps) => {

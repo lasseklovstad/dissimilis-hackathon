@@ -31,8 +31,6 @@ export const LibraryView = () => {
     const url = new URLSearchParams(location.search)
     const searchTermUrl = url.get("search")
     const searchTerm = searchTermUrl ? searchTermUrl : ""
-    const groupIdsFromUrl = url.getAll("groupId")
-    const organisationIdsFromUrl = url.getAll("organisationId")
     const [filterTerm, setFilterTerm] = useState<(IGroup | IOrganisation)[]>([])
     const [includedOrganisationIdArray, setIncludedOrganisationIdArray] =
         useState<(number | null)[]>([])
@@ -99,11 +97,38 @@ export const LibraryView = () => {
         setOrderTerm(term)
     }
 
-    const changeUrl = (values: string) => {
-        console.log(history)
-        searchTerm
-            ? history.push(`/library?search=${searchTerm}&${values}`)
-            : history.push(`/library?${values}`)
+    const handleAddSearchUrl = (searchTerm: string) => {
+        console.log(location)
+        const url = new URLSearchParams(location.search)
+        const groupIdsFromUrl = url.getAll("groupId")
+        const organisationIdsFromUrl = url.getAll("organisationId")
+        const groupValues =
+            "&" +
+            groupIdsFromUrl.map((groupId) => "groupId=" + groupId).join("&")
+        const organisationValues =
+            "&" +
+            organisationIdsFromUrl
+                .map((organisationId) => "organisationId=" + organisationId)
+                .join("&")
+
+        history.push(
+            `/library?search=${searchTerm}${groupValues}${organisationValues}`
+        )
+    }
+
+    const handleAddFilterUrl = (newValues: (IGroup | IOrganisation)[]) => {
+        console.log(location)
+        const url = new URLSearchParams(location.search)
+        const searchTerm = "search=" + url.get("search") + "&"
+
+        const newValueString = newValues
+            .map((item) =>
+                "groupName" in item
+                    ? "groupId=" + item.groupId
+                    : "organisationId=" + item.organisationId
+            )
+            .join("&")
+        history.push(`/library?${searchTerm}${newValueString}`)
     }
 
     return (
@@ -122,7 +147,7 @@ export const LibraryView = () => {
                         <Box mb={marginBottom}>
                             <DashboardTopBar
                                 searchTerm={searchTerm}
-                                handleOnSubmitSearch={changeUrl}
+                                handleOnSubmitSearch={handleAddSearchUrl}
                             />
                         </Box>
                     </Grid>
@@ -142,7 +167,7 @@ export const LibraryView = () => {
                         searchFilter={true}
                         filterTerm={filterTerm}
                         setFilterTerm={setFilterTerm}
-                        onSubmitAutocomplete={changeUrl}
+                        onSubmitAutocomplete={handleAddFilterUrl}
                     />
                 </Grid>
             </Box>

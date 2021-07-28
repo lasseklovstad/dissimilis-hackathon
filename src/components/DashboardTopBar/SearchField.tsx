@@ -15,10 +15,6 @@ export const SearchField = (props: {
     const { searchTermInit, handleOnSubmit } = props
     const [searchTerm, setSeachTerm] = useState(searchTermInit || "")
 
-    const handleOnClick = () => {
-        history.push(`library?search=${searchTerm}`)
-    }
-
     return (
         <TextField
             id="standard-basic"
@@ -45,7 +41,9 @@ export const SearchField = (props: {
                         <IconButton
                             type="submit"
                             aria-label={searchPlaceholder}
-                            onClick={handleOnClick}
+                            onClick={() => {
+                                handleOnSubmit(searchTerm)
+                            }}
                         >
                             <SearchIcon />
                         </IconButton>
