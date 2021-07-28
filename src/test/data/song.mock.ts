@@ -36,6 +36,7 @@ export const emptySong: ISong = {
             ],
         },
     ],
+    currentUserHasWriteAccess:true,
 }
 
 export const songWithChords: ISong = {
@@ -254,4 +255,5 @@ export const songWithChords: ISong = {
             ],
         },
     ],
+    currentUserHasWriteAccess:true,
 }
