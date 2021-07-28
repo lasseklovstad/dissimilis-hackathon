@@ -337,7 +337,7 @@ export const CreateSongTab = (props: {
             <Dialog
                 fullScreen
                 open={customVoiceDialogIsOpen}
-                onClose={() => handleCustomVoiceDialogCancel}
+                onClose={handleCustomVoiceDialogCancel}
                 aria-labelledby={t("Modal.CustomNewVoice")}
             >
                 <CustomVoiceDialog

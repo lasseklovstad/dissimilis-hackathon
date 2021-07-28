@@ -381,9 +381,8 @@ export const Chord = (props: ChordProps) => {
                                         ) : (
                                             ""
                                         )}
-                                        {showNoteLetters || Number(tangent)
-                                            ? tangent
-                                            : undefined}
+                                        {(showNoteLetters || Number(tangent)) &&
+                                            tangent}
                                     </ButtonBase>
                                 </>
                             )
@@ -412,32 +411,34 @@ export const Chord = (props: ChordProps) => {
                     {chord.notes
                         .map((note, i) => {
                             const tangent = tangentToNumber(note)
-                            return note !== "X" ? (
-                                <>
-                                    <div
-                                        id="singleChord"
-                                        className={`${classes.noteContainer} ${
-                                            (classes as any)[note]
-                                        } ${"main"} ${
-                                            exportMode ? "disabled" : ""
-                                        } ${
-                                            note === "Z" && highlight
-                                                ? classes.highlight
-                                                : ""
-                                        } ${
-                                            Number(tangent) && exportMode
-                                                ? classes.exportNumberSize
-                                                : classes.noteFont
-                                        }`}
-                                        key={note + i}
-                                    >
-                                        {showNoteLetters || Number(tangent)
-                                            ? tangent
-                                            : undefined}
-                                    </div>
-                                </>
-                            ) : (
-                                ""
+                            return (
+                                note !== "X" && (
+                                    <>
+                                        <div
+                                            id="singleChord"
+                                            className={`${
+                                                classes.noteContainer
+                                            } ${
+                                                (classes as any)[note]
+                                            } ${"main"} ${
+                                                exportMode ? "disabled" : ""
+                                            } ${
+                                                note === "Z" && highlight
+                                                    ? classes.highlight
+                                                    : ""
+                                            } ${
+                                                Number(tangent) && exportMode
+                                                    ? classes.exportNumberSize
+                                                    : classes.noteFont
+                                            }`}
+                                            key={note + i}
+                                        >
+                                            {(showNoteLetters ||
+                                                Number(tangent)) &&
+                                                tangent}
+                                        </div>
+                                    </>
+                                )
                             )
                         })
                         .reverse()}
