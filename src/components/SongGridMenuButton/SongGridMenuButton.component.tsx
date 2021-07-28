@@ -162,23 +162,37 @@ export const SongGridMenuButton = (props: {
                         {t("DashboardView.duplicate")}
                     </MenuItem>
 
-                    {props.currentUserHasWriteAccess ? (
-                        <>
-                            <MenuItem onClick={() => handleClose("delete")}>
-                                {t("DashboardView.delete")}
-                            </MenuItem>
-                            <MenuItem onClick={() => handleClose("info")}>
-                                {t("Dialog.details")}
-                            </MenuItem>
-                            <MenuItem onClick={() => handleClose("share")}>
-                                {t("Dialog.share")}
-                            </MenuItem>
-                        </>
-                    ) : (
-                        <MenuItem onClick={() => handleClose("infoShow")}>
-                            {t("Dialog.details")}
-                        </MenuItem>
-                    )}
+                    {props.currentUserHasWriteAccess
+                        ? [
+                              <>
+                                  <MenuItem
+                                      onClick={() => handleClose("delete")}
+                                      key={"delete"}
+                                  >
+                                      {t("DashboardView.delete")}
+                                  </MenuItem>
+                                  <MenuItem
+                                      onClick={() => handleClose("info")}
+                                      key={"info"}
+                                  >
+                                      {t("Dialog.details")}
+                                  </MenuItem>
+                                  <MenuItem
+                                      onClick={() => handleClose("share")}
+                                      key={"share"}
+                                  >
+                                      {t("Dialog.share")}
+                                  </MenuItem>
+                              </>,
+                          ]
+                        : [
+                              <MenuItem
+                                  onClick={() => handleClose("infoShow")}
+                                  key={"infoShow"}
+                              >
+                                  {t("Dialog.details")}
+                              </MenuItem>,
+                          ]}
                 </Menu>
                 <Dialog
                     open={deleteSongDialogIsOpen}
