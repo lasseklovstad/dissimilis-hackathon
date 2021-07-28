@@ -62,8 +62,8 @@ export const SongGrid = (props: SongGridProps) => {
                     ""
                 )}
                 <Grid container spacing={3}>
-                    {songs?.map((song) => (
-                        <Grid item xs={12}>
+                    {songs?.map((song, i) => (
+                        <Grid key={i} item xs={12}>
                             <DashboardButton
                                 title={song.title}
                                 arrangerEmail={song.arrangerEmail}

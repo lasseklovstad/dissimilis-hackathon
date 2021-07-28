@@ -11,8 +11,8 @@ export const ButtonGrid = (props: { title: string; children: any }) => {
                     <Typography variant="h1">{title}</Typography>
                 </Box>
                 <Grid container spacing={3}>
-                    {children.map((button: any) => (
-                        <Grid item xs={12} sm={4} lg={3}>
+                    {children.map((button: any, i: number) => (
+                        <Grid key={i} item xs={12} sm={4} lg={3}>
                             {button}
                         </Grid>
                     ))}
