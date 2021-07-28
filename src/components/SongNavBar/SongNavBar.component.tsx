@@ -64,26 +64,26 @@ const useStyles = makeStyles({
     },
 })
 
-export const SongNavBar = () => {
+export const SongNavBar = (props: { currentUserHasWriteAccess?: boolean }) => {
     const { song, dispatchSong } = useSongContext()
+    const { currentUserHasWriteAccess } = props
     const classes = useStyles()
     const matches = useMediaQuery("(max-width:600px)")
 
     //TODO: Should title stuff be moved to SongContext?
-    const { title: songTitle, songId } = song!!
-    const [title, setTitle] = useState(songTitle)
+    const [title, setTitle] = useState(song?.title)
     const { t } = useTranslation()
-    const { putSong } = useUpdateSong(songId)
+    const { putSong } = useUpdateSong(song!!.songId)
     const { logout } = useLogout()
     const { userInit } = useGetUser()
 
     useEffect(() => {
-        setTitle(title)
-    }, [title])
+        setTitle(song?.title)
+    }, [song?.title])
 
     const handleTitleBlur = async (newTitle: string) => {
-        if (newTitle !== title) {
-            const { error, result } = await putSong.run({ newTitle })
+        if (newTitle !== song?.title) {
+            const { error, result } = await putSong.run({ title: newTitle })
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_SONG", song: result.data })
             }
@@ -100,24 +100,36 @@ export const SongNavBar = () => {
                 >
                     <DashboardTopBarIcon />
                     <Box ml={1} mr={1} width="100%">
-                        <TextField
-                            InputProps={{
-                                style: { fontSize: 24 },
-                                classes: {
-                                    underline: classes.underline,
-                                    focused: classes.focused,
-                                    root: classes.titleRoot,
-                                },
-                                inputProps: {
-                                    maxLength: 250,
-                                    "aria-label": t("Dialog.nameOfSong"),
-                                },
-                            }}
-                            value={title}
-                            onBlur={(ev) => handleTitleBlur(ev.target.value)}
-                            onChange={(ev) => setTitle(ev.target.value)}
-                            fullWidth
-                        />
+                        {currentUserHasWriteAccess ? (
+                            <TextField
+                                InputProps={{
+                                    style: { fontSize: 24 },
+                                    classes: {
+                                        underline: classes.underline,
+                                        focused: classes.focused,
+                                        root: classes.titleRoot,
+                                    },
+                                    inputProps: {
+                                        maxLength: 250,
+                                        "aria-label": t("Dialog.nameOfSong"),
+                                    },
+                                }}
+                                value={title}
+                                onBlur={(ev) =>
+                                    handleTitleBlur(ev.target.value)
+                                }
+                                onChange={(ev) => setTitle(ev.target.value)}
+                                fullWidth
+                            />
+                        ) : (
+                            <Typography
+                                style={{ fontSize: 24 }}
+                                className={classes.titleRoot}
+                                aria-label={t("Dialog.nameOfSong")}
+                            >
+                                {title}
+                            </Typography>
+                        )}
                     </Box>
                     {!matches ? (
                         <>
@@ -135,7 +147,12 @@ export const SongNavBar = () => {
                             </Box>
                         </>
                     ) : undefined}
-                    <MenuButton showName={matches} updateSongTitle={setTitle} />
+                    <MenuButton
+                        showName={matches}
+                        updateSongTitle={handleTitleBlur}
+                        songTitle={song!!.title}
+                        currentUserHasWriteAccess={currentUserHasWriteAccess}
+                    />
                 </Box>
             </AppBar>
             <Loading isLoading={logout.loading} fullScreen />

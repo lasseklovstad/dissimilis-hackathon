@@ -108,6 +108,8 @@ interface ISongContext {
     dispatchChordMenuOptions: React.Dispatch<ChordMenuAction>
     barEditMode: boolean
     setBarEditMode: React.Dispatch<React.SetStateAction<boolean>>
+    setCustomMode: React.Dispatch<React.SetStateAction<boolean>>
+    customMode: boolean | undefined
     barsClipboard:
         | {
               fromPosition: number
@@ -182,6 +184,10 @@ const SongContext = React.createContext<ISongContext>({
     setValuesForSelectedChord: () => {
         throw new Error("setValuesForSelectedChord is not implemented")
     },
+    customMode: undefined,
+    setCustomMode: () => {
+        throw new Error("setValuesForSelectedChord is not implemented")
+    },
 })
 
 export const SongContextProvider = (props: { children: ReactNode }) => {
@@ -232,14 +238,16 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
     const [selectedChordPosition, setSelectedChordPosition] =
         useState<number>(0)
 
+    const [customMode, setCustomMode] = useState(false)
+
     const setValuesForSelectedChord = (
         chordId: number | undefined | null,
         barId: number | undefined,
         position: number
     ) => {
         setSelectedChordId(chordId)
-        setSelectedBarId(barId)
         setSelectedChordPosition(position)
+        setSelectedBarId(barId)
     }
     return (
         <SongContext.Provider
@@ -260,6 +268,8 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
                 selectedChordId,
                 selectedChordPosition,
                 setValuesForSelectedChord,
+                customMode,
+                setCustomMode,
             }}
         >
             {children}

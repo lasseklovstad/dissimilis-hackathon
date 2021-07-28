@@ -27,11 +27,16 @@ import { useSongContext } from "../../views/SongView/SongContextProvider.compone
 import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
 import { useVoice } from "../../utils/useVoice"
 import { ShareSongDialog } from "../CustomDialog/ShareSongDialog.component"
+import { ShowSongInfoDialog } from "../CustomDialog/ShowSongInfoDialog.component"
 
 export const MenuButton = (props: {
     showName: boolean
     updateSongTitle: (title: string) => void
+    songTitle: string
+    currentUserHasWriteAccess?: boolean
 }) => {
+    const { showName, updateSongTitle, songTitle, currentUserHasWriteAccess } =
+        props
     const {
         song,
         setBarEditMode,
@@ -41,7 +46,6 @@ export const MenuButton = (props: {
     } = useSongContext()
     const selectedVoice = useVoice(song?.voices)
     const { songVoiceId: voiceId } = selectedVoice || {}
-    const { title: songTitle } = song!!
     const { userInit } = useGetUser()
     const { logout } = useLogout()
 
@@ -50,6 +54,8 @@ export const MenuButton = (props: {
     const [duplicateSongDialogIsOpen, setDuplicateSongDialogIsOpen] =
         useState(false)
     const [songInfoDialogIsOpen, setSongInfoDialogIsOpen] = useState(false)
+    const [readSongInfoDialogIsOpen, setReadSongInfoDialogIsOpen] =
+        useState(false)
     const [shareSongDialogIsOpen, setShareSongDialogIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
@@ -117,6 +123,7 @@ export const MenuButton = (props: {
             | "editBars"
             | "info"
             | "share"
+            | "infoShow"
     ) => {
         setAnchorEl(null)
         setDeleteSongDialogIsOpen(false)
@@ -144,6 +151,9 @@ export const MenuButton = (props: {
                 break
             case "share":
                 setShareSongDialogIsOpen(true)
+                break
+            case "infoShow":
+                setReadSongInfoDialogIsOpen(true)
                 break
             default:
                 break
@@ -178,7 +188,7 @@ export const MenuButton = (props: {
 
         if (!error && result) {
             setSongInfoDialogIsOpen(false)
-            props.updateSongTitle(title)
+            updateSongTitle(title)
         }
     }
 
@@ -214,21 +224,47 @@ export const MenuButton = (props: {
                     <MenuItem disabled onClick={() => handleClose()}>
                         {t("MenuButton.hide")}
                     </MenuItem>
-                    <MenuItem onClick={() => handleClose("delete")}>
-                        {t("MenuButton.delete")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("editBars")}>
-                        {barEditMode
-                            ? t("MenuButton.cancelEditBars")
-                            : t("MenuButton.editBars")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("info")}>
-                        {t("Dialog.details")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("share")}>
-                        {t("Dialog.share")}
-                    </MenuItem>
-                    {props.showName ? (
+
+                    {currentUserHasWriteAccess
+                        ? [
+                              <>
+                                  <MenuItem
+                                      onClick={() => handleClose("delete")}
+                                      key="delete"
+                                  >
+                                      {t("MenuButton.delete")}
+                                  </MenuItem>
+                                  <MenuItem
+                                      onClick={() => handleClose("editBars")}
+                                      key="editBars"
+                                  >
+                                      {barEditMode
+                                          ? t("MenuButton.cancelEditBars")
+                                          : t("MenuButton.editBars")}
+                                  </MenuItem>
+                                  <MenuItem
+                                      onClick={() => handleClose("info")}
+                                      key="details"
+                                  >
+                                      {t("Dialog.details")}
+                                  </MenuItem>
+                                  <MenuItem
+                                      onClick={() => handleClose("share")}
+                                      key="share"
+                                  >
+                                      {t("Dialog.share")}
+                                  </MenuItem>
+                              </>,
+                          ]
+                        : [
+                              <MenuItem
+                                  onClick={() => handleClose("infoShow")}
+                                  key="infoShow"
+                              >
+                                  {t("Dialog.details")}
+                              </MenuItem>,
+                          ]}
+                    {showName ? (
                         <>
                             <Divider variant="middle" />
                             <MenuItem disabled>
@@ -310,6 +346,19 @@ export const MenuButton = (props: {
                             setShareSongDialogIsOpen(false)
                         }
                         songId={songId}
+                    />
+                </Dialog>
+                <Dialog
+                    open={readSongInfoDialogIsOpen}
+                    onClose={() => setReadSongInfoDialogIsOpen(false)}
+                    maxWidth="xs"
+                    fullWidth
+                >
+                    <ShowSongInfoDialog
+                        songId={songId}
+                        handleOnCancelClick={() =>
+                            setReadSongInfoDialogIsOpen(false)
+                        }
                     />
                 </Dialog>
             </div>

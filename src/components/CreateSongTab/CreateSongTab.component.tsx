@@ -26,6 +26,7 @@ import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { useVoice } from "../../utils/useVoice"
+import { CustomVoiceDialog } from "../CustomDialog/CustomVoiceModeDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -62,16 +63,21 @@ const useStyles = makeStyles({
 })
 
 export const CreateSongTab = (props: {
-    selectedVoiceId: number
-    songId: number
+    currentUserHasWriteAccess?: boolean
 }) => {
-    const { song, dispatchSong } = useSongContext()
+    const { song, dispatchSong, setCustomMode } = useSongContext()
+    const { currentUserHasWriteAccess } = props
     const selectedVoice = useVoice(song?.voices)
     const { songVoiceId: selectedVoiceId } = selectedVoice || {}
     const { songId, voices } = song!!
     const [newVoiceDialogIsOpen, setNewVoiceDialogIsOpen] = useState(false)
     const [renameDialogIsOpen, setRenameDialogIsOpen] = useState(false)
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false)
+    const [customVoiceDialogIsOpen, setCustomVoiceDialogIsOpen] =
+        useState(false)
+    const [baseVoiceCustom, setBaseVoiceCustom] = useState<IVoice | undefined>(
+        undefined
+    )
     const { t } = useTranslation()
     const [clickedId, setClickedId] = useState<undefined | number>()
     const clickedVoice = voices?.find(
@@ -112,11 +118,11 @@ export const CreateSongTab = (props: {
             0
         )
         switch (option) {
-            case "Dialog.duplicateFullSong": {
+            case "Dialog.duplicateFullVoice": {
                 handleDuplicateVoice(title)
                 break
             }
-            case "Dialog.duplicateEmptySong": {
+            case "Dialog.duplicateEmptyVoice": {
                 const { error, result } = await postVoice.run({
                     voiceName: title,
                     voiceNumber: voiceNumber + 1,
@@ -127,8 +133,19 @@ export const CreateSongTab = (props: {
                 }
                 break
             }
-            case "Dialog.duplicateCustomSong": {
-                setNewVoiceDialogIsOpen(false)
+            case "Dialog.duplicateCustomVoice": {
+                const { error, result } = await postVoice.run({
+                    voiceName: title,
+                    voiceNumber: voiceNumber + 1,
+                })
+                if (!error && result) {
+                    setNewVoiceDialogIsOpen(false)
+                    setCustomVoiceDialogIsOpen(true)
+                    onAddVoice(result.data)
+                    setBaseVoiceCustom(clickedVoice)
+                    setClickedId(result.data.songVoiceId)
+                    setCustomMode(true)
+                }
                 break
             }
         }
@@ -138,7 +155,6 @@ export const CreateSongTab = (props: {
         const { error, result } = await duplicateVoice.run({
             voiceName,
         })
-
         if (!error && result) {
             onAddVoice(result.data)
             setNewVoiceDialogIsOpen(false)
@@ -187,6 +203,17 @@ export const CreateSongTab = (props: {
         })
     }
 
+    const handleCustomVoiceDialogCancel = async () => {
+        handleDeleteVoice()
+        setCustomVoiceDialogIsOpen(false)
+        setCustomMode(false)
+    }
+
+    const handleCustomVoiceDialogSave = () => {
+        setCustomVoiceDialogIsOpen(false)
+        setCustomMode(false)
+    }
+
     return (
         <>
             <Box display="flex" flexWrap="wrap" alignItems="center">
@@ -227,15 +254,17 @@ export const CreateSongTab = (props: {
                     })}
                 </Tabs>
 
-                <IconButton
-                    aria-haspopup="true"
-                    aria-controls="voiceTabMenu"
-                    aria-label={t("CreateSongTab.menu")}
-                    onClick={handleMenuClick}
-                    disableFocusRipple
-                >
-                    <MoreVertIcon />
-                </IconButton>
+                {currentUserHasWriteAccess && (
+                    <IconButton
+                        aria-haspopup="true"
+                        aria-controls="voiceTabMenu"
+                        aria-label={t("CreateSongTab.menu")}
+                        onClick={handleMenuClick}
+                        disableFocusRipple
+                    >
+                        <MoreVertIcon />
+                    </IconButton>
+                )}
             </Box>
 
             <Menu
@@ -319,6 +348,19 @@ export const CreateSongTab = (props: {
                     headerText={t("Dialog.deleteVoice")}
                     descriptionText={t("Dialog.deleteVoiceDescription")}
                     isLoading={deleteVoice.loading}
+                />
+            </Dialog>
+            <Dialog
+                fullScreen
+                open={customVoiceDialogIsOpen}
+                onClose={handleCustomVoiceDialogCancel}
+                aria-labelledby={t("Modal.CustomNewVoice")}
+            >
+                <CustomVoiceDialog
+                    handleOnSave={handleCustomVoiceDialogSave}
+                    handleOnCancel={handleCustomVoiceDialogCancel}
+                    baseVoice={baseVoiceCustom || voices[0]}
+                    newVoice={clickedVoice}
                 />
             </Dialog>
             <Menu

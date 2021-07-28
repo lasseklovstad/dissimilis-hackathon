@@ -341,6 +341,34 @@ export const useUpdateChord = (
     }
 }
 
+export const useAddNote = (
+    songId: number,
+    voiceId: number | undefined,
+    barPosition: number
+) => {
+    const url = `song/${songId}/voice/${voiceId}/bar/${barPosition}/note/addComponentInterval`
+    const headers = getHeaders()
+    const api = useApiService<IBar>(url, { headers })
+
+    return {
+        addNote: { run: api.postData, ...api.state },
+    }
+}
+
+export const useRemoveNote = (
+    songId: number,
+    voiceId: number | undefined,
+    barPosition: number
+) => {
+    const url = `song/${songId}/voice/${voiceId}/bar/${barPosition}/note/removeComponentInterval`
+    const headers = getHeaders()
+    const api = useApiService<IBar>(url, { headers })
+
+    return {
+        removeNote: { run: api.postData, ...api.state },
+    }
+}
+
 export const useAddBar = (songId: number, voiceId: number) => {
     const url = `song/${songId}/voice/${voiceId}/bar`
     const headers = getHeaders()

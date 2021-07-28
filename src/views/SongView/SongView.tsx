@@ -69,6 +69,7 @@ export const SongView = () => {
             dispatchSong({ type: "UPDATE_SONG", song: songInit })
         }
     }, [songInit, dispatchSong])
+
     const selectedVoice = useVoice(song!!.voices)
 
     const { songVoiceId: selectedVoiceId } = selectedVoice || {}
@@ -90,12 +91,17 @@ export const SongView = () => {
                     <Slide appear={false} direction="down" in={!trigger}>
                         <Grid container className={classes.header}>
                             <Grid item xs={12}>
-                                <SongNavBar />
+                                <SongNavBar
+                                    currentUserHasWriteAccess={
+                                        song?.currentUserHasWriteAccess
+                                    }
+                                />
                             </Grid>
                             <Grid item xs={12}>
                                 <CreateSongTab
-                                    songId={songId}
-                                    selectedVoiceId={selectedVoiceId}
+                                    currentUserHasWriteAccess={
+                                        song?.currentUserHasWriteAccess
+                                    }
                                 />
                             </Grid>
                         </Grid>
@@ -111,11 +117,14 @@ export const SongView = () => {
                             heightOfBar={heightOfBar}
                             exportMode={false}
                             lastPage={true}
+                            currentUserHasWriteAccess={
+                                song?.currentUserHasWriteAccess
+                            }
                         />
                     </Grid>
                 </Grid>
             )}
-            {selectedVoiceId && (
+            {selectedVoiceId && song?.currentUserHasWriteAccess && (
                 <BottomBar
                     voiceId={selectedVoiceId}
                     chordDropdownContent={

@@ -320,6 +320,7 @@ export const BottomBar = (props: {
                                 <ChordOptions
                                     chord={chordMenuOptions?.chord}
                                     onChordNotesChange={handleChordNotesChange}
+                                    alwaysShow={false}
                                 />
                             </div>
                         </RootRef>

@@ -26,6 +26,7 @@ type SongProps = {
     lastPage: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
     deleteBars?: () => void
+    currentUserHasWriteAccess?: boolean
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
@@ -57,6 +58,7 @@ export const Song = (props: SongProps) => {
         showChordLetters,
         showNoteLetters,
         lastPage,
+        currentUserHasWriteAccess = false,
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
@@ -111,9 +113,8 @@ export const Song = (props: SongProps) => {
                         >
                             {barsInRow.map((bar, i, bars) => {
                                 const showVoltaBracketNumber =
-                                    i === 0 ||
-                                    bars[i - 1].voltaBracket !==
-                                        bar.voltaBracket
+                                    (i === 0 || bars[i - 1].voltaBracket) !==
+                                    bar.voltaBracket
                                 return (
                                     <React.Fragment key={i}>
                                         <Bar
@@ -139,6 +140,9 @@ export const Song = (props: SongProps) => {
                                             onMenuClick={openMenu(bar)}
                                             bar={bar}
                                             height={heightOfBar}
+                                            currentUserHasWriteAccess={
+                                                currentUserHasWriteAccess
+                                            }
                                         />
                                         <BarLine />
                                         {bar.position === lastBarPosition &&
@@ -157,7 +161,7 @@ export const Song = (props: SongProps) => {
                 ))}
             </Box>
 
-            {selectedBar && (
+            {selectedBar && currentUserHasWriteAccess && (
                 <BarMenu
                     bar={selectedBar}
                     anchorEl={anchorEl}

@@ -51,6 +51,7 @@ export const Bar = (props: {
     showVoltaBracketNumber: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
     deleteBars?: () => void
+    currentUserHasWriteAccess?: boolean
 }) => {
     const {
         exportMode,
@@ -71,6 +72,7 @@ export const Bar = (props: {
             position,
         },
         height,
+        currentUserHasWriteAccess,
     } = props
     const { t } = useTranslation()
     const [chordMenuPosition, setChordMenuPosition] = useState<
@@ -116,7 +118,7 @@ export const Bar = (props: {
     const handleChordRightClick =
         (chordId: number | null) => (event: React.MouseEvent) => {
             event.preventDefault()
-            if (!barEditMode && chordId !== null) {
+            if (!barEditMode && currentUserHasWriteAccess && chordId !== null) {
                 setChordMenuPosition({
                     top: event.clientY - 4,
                     left: event.clientX - 2,
@@ -173,7 +175,11 @@ export const Bar = (props: {
     }
 
     const handleChordClick = async (chord: IChord) => {
-        if (chord.notes[0] === "Z" && chordMenuOptions) {
+        if (
+            chord.notes[0] === "Z" &&
+            currentUserHasWriteAccess &&
+            chordMenuOptions
+        ) {
             const notes =
                 chordMenuOptions.chordType === ChordType.NOTE
                     ? [chordMenuOptions.chord]
@@ -259,7 +265,9 @@ export const Bar = (props: {
 
     return (
         <>
-            {masterSheet && <BarMenuButton onMenuClick={onMenuClick} />}
+            {masterSheet && currentUserHasWriteAccess && (
+                <BarMenuButton onMenuClick={onMenuClick} />
+            )}
             <Box
                 display="flex"
                 flexDirection="column"
@@ -335,13 +343,15 @@ export const Bar = (props: {
                                         }
                                         onMouseEnter={() =>
                                             !barEditMode &&
+                                            currentUserHasWriteAccess &&
                                             onMouseEnterChord(
                                                 chord,
                                                 i,
                                                 allChords
                                             )
                                         }
-                                        chords={chord}
+                                        barId={barId}
+                                        chord={chord}
                                         highlight={highlight}
                                         key={chord.position}
                                         onContextMenu={handleChordRightClick(
@@ -349,6 +359,7 @@ export const Bar = (props: {
                                         )}
                                         onClick={() =>
                                             !barEditMode &&
+                                            currentUserHasWriteAccess &&
                                             handleChordClick(chord)
                                         }
                                         isSelected={
