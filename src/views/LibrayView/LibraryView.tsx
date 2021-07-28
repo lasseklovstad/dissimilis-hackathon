@@ -101,7 +101,9 @@ export const LibraryView = () => {
 
     const changeUrl = (values: string) => {
         console.log(history)
-        history.push(`/library?${values}`)
+        searchTerm
+            ? history.push(`/library?search=${searchTerm}&${values}`)
+            : history.push(`/library?${values}`)
     }
 
     return (
