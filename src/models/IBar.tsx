@@ -11,7 +11,7 @@ export interface IBar {
     songId: number
     songVoiceId: number
     position: number
-    house?: number | undefined | null
+    voltaBracket?: number | undefined | null
     repBefore: boolean
     repAfter: boolean
     chords: IChord[]

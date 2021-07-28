@@ -375,7 +375,7 @@ export const useAddBar = (songId: string, voiceId: number) => {
     const body = {
         repBefore: false,
         repAfter: false,
-        house: 0,
+        voltaBracket: 0,
     }
     const api = useApiService<ISong>(url, { headers, body })
 
