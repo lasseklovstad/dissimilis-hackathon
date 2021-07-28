@@ -355,13 +355,27 @@ export const useAddNote = (
     }
 }
 
+export const useRemoveNote = (
+    songId: string,
+    voiceId: number | undefined,
+    barPosition: number
+) => {
+    const url = `song/${songId}/voice/${voiceId}/bar/${barPosition}/note/removeComponentInterval`
+    const headers = getHeaders()
+    const api = useApiService<IBar>(url, { headers })
+
+    return {
+        removeNote: { run: api.postData, ...api.state },
+    }
+}
+
 export const useAddBar = (songId: string, voiceId: number) => {
     const url = `song/${songId}/voice/${voiceId}/bar`
     const headers = getHeaders()
     const body = {
         repBefore: false,
         repAfter: false,
-        house: 0,
+        voltaBracket: 0,
     }
     const api = useApiService<ISong>(url, { headers, body })
 

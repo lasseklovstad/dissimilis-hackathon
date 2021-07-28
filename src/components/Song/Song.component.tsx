@@ -110,12 +110,13 @@ export const Song = (props: SongProps) => {
                             height="100%"
                         >
                             {barsInRow.map((bar, i, bars) => {
-                                const showHouseNumber =
-                                    i === 0 || bars[i - 1].house !== bar.house
+                                const showVoltaBracketNumber =
+                                    i === 0 || bars[i - 1].voltaBracket !== bar.voltaBracket
                                 return (
                                     <React.Fragment key={i}>
                                         <Bar
-                                            showHouseNumber={showHouseNumber}
+                                            // eslint-disable-next-line
+                                            showVoltaBracketNumber={showVoltaBracketNumber}
                                             exportMode={!!exportMode}
                                             showChordLetters={
                                                 showChordLetters === undefined

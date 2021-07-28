@@ -4,11 +4,10 @@ import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { tangentToNumber } from "../../utils/bar.util"
-import { useAddNote } from "../../utils/useApiServiceSongs"
+import { useAddNote, useRemoveNote } from "../../utils/useApiServiceSongs"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded"
 import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUncheckedRounded"
-//import { Bar } from "./Bar.component"
 
 type ChordProps = {
     chord: IChord
@@ -68,16 +67,15 @@ const useStyle = makeStyles((theme) => ({
         border: "1px solid",
     },
     noteContainerCustomMode: {
-        marginTop: "0px",
-
-        borderColor: "rgb(0 0 0 / 50%)",
+        marginTop: "1px",
         borderRadius: "3px",
         display: "flex",
         flex: "1",
         justifyContent: "center",
         alignItems: "center",
-        /* color: "white", */
-        border: "1px solid",
+        color: "white",
+
+        boxShadow: `inset 0px 0px 0px 1px ${colors.gray_200}`,
     },
     noteFont: {
         ...theme.typography.body1,
@@ -86,9 +84,9 @@ const useStyle = makeStyles((theme) => ({
         },
     },
     circleIconChecked: {
-        color: colors.focus,
+        color: colors.black,
         fontSize: "1.25rem",
-        marginRight: "0.1rem",
+        marginRight: "0.15rem",
         "@media(max-width:768px)": {
             fontSize: "0.9rem",
             marginRight: "0.05rem",
@@ -97,7 +95,7 @@ const useStyle = makeStyles((theme) => ({
     circleIconUnChecked: {
         color: colors.gray_400,
         fontSize: "1.25rem",
-        marginRight: "0.1rem",
+        marginRight: "0.15rem",
         verticalAlign: "middle",
         "@media(max-width:768px)": {
             fontSize: "0.9rem",
@@ -106,63 +104,103 @@ const useStyle = makeStyles((theme) => ({
     },
     C: {
         color: colors.C.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.C.main}`,
         "&.main": { backgroundColor: colors.C.main },
-        "&.opaque": { backgroundColor: colors.C.opaque },
+        "&.opaque": {
+            backgroundColor: colors.C.opaque,
+            boxShadow: `inset 0px 0px 0px 2px ${colors.C.main}`,
+        },
     },
     D: {
         color: colors.D.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.D.main}`,
         "&.main": { backgroundColor: colors.D.main },
-        "&.opaque": { backgroundColor: colors.D.opaque, color: colors.black },
+        "&.opaque": {
+            backgroundColor: colors.D.opaque,
+            color: colors.D.text,
+        },
     },
     E: {
         color: colors.E.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.E.main}`,
         "&.main": { backgroundColor: colors.E.main },
-        "&.opaque": { backgroundColor: colors.E.opaque, color: colors.black },
+        "&.opaque": {
+            backgroundColor: colors.E.opaque,
+            color: colors.black,
+        },
     },
     F: {
         color: colors.F.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.F.main}`,
         "&.main": { backgroundColor: colors.F.main },
-        "&.opaque": { backgroundColor: colors.F.opaque },
+        "&.opaque": {
+            backgroundColor: colors.F.opaque,
+        },
     },
     G: {
         color: colors.G.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.G.main}`,
         "&.main": { backgroundColor: colors.G.main },
-        "&.opaque": { backgroundColor: colors.G.opaque },
+        "&.opaque": {
+            backgroundColor: colors.G.opaque,
+        },
     },
     A: {
         color: colors.A.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.A.main}`,
         "&.main": { backgroundColor: colors.A.main },
-        "&.opaque": { backgroundColor: colors.A.opaque, color: colors.black },
+        "&.opaque": {
+            backgroundColor: colors.A.opaque,
+            color: colors.black,
+        },
     },
     H: {
         color: colors.H.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.H.main}`,
         "&.main": { backgroundColor: colors.H.main },
-        "&.opaque": { backgroundColor: colors.H.opaque },
+        "&.opaque": {
+            backgroundColor: colors.H.opaque,
+        },
     },
     "C#": {
-        color: colors.white,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
         "&.main": { backgroundColor: colors.blackKeys.main },
-        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     "D#": {
-        color: colors.blackKeys.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
         "&.main": { backgroundColor: colors.blackKeys.main },
-        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     "F#": {
-        color: colors.blackKeys.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
         "&.main": { backgroundColor: colors.blackKeys.main },
-        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     "G#": {
-        color: colors.blackKeys.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
         "&.main": { backgroundColor: colors.blackKeys.main },
-        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     "A#": {
-        color: colors.blackKeys.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
         "&.main": { backgroundColor: colors.blackKeys.main },
-        "&.opaque": { backgroundColor: colors.blackKeys.opaque },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     disabled: {
         border: 0,
@@ -195,7 +233,7 @@ const ChordText = (props: { chordName: string }) => {
 
 export const Chord = (props: ChordProps) => {
     const {
-        chord: chord,
+        chord,
         barPosition,
         onClick,
         onContextMenu,
@@ -214,15 +252,7 @@ export const Chord = (props: ChordProps) => {
 
     const chordName = getChordNameFromMainVoice(barPosition, chord.position)
 
-    const {
-        song,
-        selectedVoiceId,
-        selectedBarId,
-        selectedChordId,
-        dispatchSong,
-        dispatchChordMenuOptions,
-        setValuesForSelectedChord,
-    } = useSongContext()
+    const { song, selectedVoiceId, dispatchSong } = useSongContext()
 
     const [customVoiceNoteStates, setCustomVoiceNoteStates] = useState<
         Boolean[]
@@ -235,7 +265,6 @@ export const Chord = (props: ChordProps) => {
         selectedVoiceId,
         barPosition
     )
-
     const handleCustomVoiceAddClick = async (index: number) => {
         const { error, result } = await addNote.run({
             chordName: chord.chordName,
@@ -244,12 +273,32 @@ export const Chord = (props: ChordProps) => {
             intervalPosition: index,
             notes: chord.notes,
         })
-
         if (!error && result) {
             const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
-            newCustomVoiceNoteStates[index] = !newCustomVoiceNoteStates[index]
+            newCustomVoiceNoteStates[index] = true
             setCustomVoiceNoteStates(newCustomVoiceNoteStates)
-            console.log(customVoiceNoteStates[index])
+            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+        }
+    }
+
+    const { removeNote } = useRemoveNote(
+        song.songId.toString(),
+        selectedVoiceId,
+        barPosition
+    )
+    const handleCustomVoiceRemoveClick = async (index: number) => {
+        const { error, result } = await removeNote.run({
+            deleteOnLastIntervalRemoved: true,
+            chordName: chord.chordName,
+            notePosition: chord.position,
+            length: chord.length,
+            intervalPosition: index,
+            notes: chord.notes,
+        })
+        if (!error && result) {
+            const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
+            newCustomVoiceNoteStates[index] = false
+            setCustomVoiceNoteStates(newCustomVoiceNoteStates)
             dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
@@ -309,7 +358,11 @@ export const Chord = (props: ChordProps) => {
                                         }`}
                                         key={note + i}
                                         onClick={() =>
-                                            handleCustomVoiceAddClick(i)
+                                            customVoiceNoteStates[i]
+                                                ? handleCustomVoiceRemoveClick(
+                                                      i
+                                                  )
+                                                : handleCustomVoiceAddClick(i)
                                         }
                                     >
                                         {note[0] !== "Z" ? (

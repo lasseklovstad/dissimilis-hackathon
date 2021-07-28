@@ -200,8 +200,6 @@ export const CreateSongTab = (props: {
         setCustomMode(false)
     }
 
-    //const handleOpenCustomVoiceDialog = async () => {}
-
     return (
         <>
             <Box display="flex" flexWrap="wrap" alignItems="center">
@@ -346,7 +344,7 @@ export const CreateSongTab = (props: {
                     handleOnSave={handleCustomVoiceDialogSave}
                     handleOnCancel={handleCustomVoiceDialogCancel}
                     songId={songId.toString()}
-                    baseVoice={clickedVoice || voices[0]} //Antar at voices[0] er partitur
+                    baseVoice={clickedVoice || voices[0]}
                     newVoice={newVoice}
                 />
             </Dialog>

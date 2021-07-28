@@ -20,6 +20,7 @@ export const colors = {
         main: "#757575",
         opaque: "#BDBDBD",
         text: "#FFFFFF",
+        borderColor: "black",
     },
     semitone: "#616161",
     teal_100: "#B2DFDB",

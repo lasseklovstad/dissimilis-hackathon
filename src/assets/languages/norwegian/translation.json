@@ -27,17 +27,17 @@
         "removeRepBefore": "Fjern repetisjon foran",
         "addRepAfter": "Legg til repetisjon bak",
         "removeRepAfter": "Fjern repetisjon bak",
-        "addHouseOne": "Legg til 1. hus",
-        "addHouseTwo": "Legg til 2. hus",
-        "removeHouseOne": "Fjern 1. hus",
-        "removeHouseTwo": "Fjern 2. hus"
+        "addVoltaBracketOne": "Legg til 1. hus",
+        "addVoltaBracketTwo": "Legg til 2. hus",
+        "removeVoltaBracketOne": "Fjern 1. hus",
+        "removeVoltaBracketTwo": "Fjern 2. hus"
     },
     "BottomBar": {
         "chord": "Akkord",
         "tone": "Tone",
         "addTone": "Ny tone",
         "addBar": "Ny takt",
-        "addHouse": "Legg til hus",
+        "addVoltaBracket": "Legg til hus",
         "repetition": "Ny repetisjon",
         "note": "Note",
         "noOptions": "Ingen valg",
