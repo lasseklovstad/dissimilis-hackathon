@@ -137,6 +137,7 @@ export const AccordionGroupComponent = (props: {
         const { error, result } = await deleteGroup.run()
         if (!error && result) {
             removeGroup(groupId)
+            handleDeleteGroupDialogClose()
         }
     }
 
@@ -205,7 +206,9 @@ export const AccordionGroupComponent = (props: {
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {group?.admins?.[0]?.name || ""}
+                                {group?.admins?.[0]?.name ||
+                                    group?.admins?.[0]?.email ||
+                                    ""}
                                 <br />
                                 {t("AdminView.address") + ": "}
                                 {group?.address || ""}

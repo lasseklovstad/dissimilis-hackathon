@@ -217,7 +217,9 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12}>
                             <Typography>
                                 {t("AdminView.admin") + ": "}
-                                {organisation?.admins?.[0]?.name || ""}
+                                {organisation?.admins?.[0]?.name ||
+                                    organisation?.admins?.[0]?.email ||
+                                    ""}
                                 <br />
                                 {t("AdminView.address") + ": "}
                                 {organisation?.address || ""}
@@ -306,10 +308,8 @@ export const AccordionComponent = (props: {
                                 </div>
                             </Button>
                         </Grid>
-                        {userIsSysAdm ? (
+                        {userIsSysAdm && (
                             <>
-                                {" "}
-                                <Grid item sm={8} />
                                 <Grid item xs={12} sm={4}>
                                     <Button
                                         disableFocusRipple
@@ -326,10 +326,8 @@ export const AccordionComponent = (props: {
                                             {t("AdminView.deleteCountry")}
                                         </div>
                                     </Button>
-                                </Grid>{" "}
+                                </Grid>
                             </>
-                        ) : (
-                            ""
                         )}
                     </Grid>
                 </AccordionDetails>
