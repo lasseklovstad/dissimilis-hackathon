@@ -13,14 +13,13 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
 import { IUser } from "../../models/IUser"
-import { UserAutoCompleteDialog } from "../../components/CustomDialog/UserAutoCompleteDialog.component"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
 import {
     useAddGroupMember,
     useDeleteGroup,
     useGetGroup,
-    UserLevel,
+    UserRole,
     useUpdateGroup,
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
@@ -78,7 +77,7 @@ export const AccordionGroupComponent = (props: {
     const { t } = useTranslation()
 
     const [addMemberDialogIsOpen, setAddMemberDialogIsOpen] = useState(false)
-    const { getGroup, groupFetched } = useGetGroup(groupId)
+    const { groupFetched } = useGetGroup(groupId)
     const { deleteGroup } = useDeleteGroup(groupId)
     const { addGroupMember } = useAddGroupMember(groupId)
     const { updateGroup } = useUpdateGroup(groupId)
@@ -91,7 +90,7 @@ export const AccordionGroupComponent = (props: {
         if (user) {
             const { error, result } = await addGroupMember.run({
                 newMemberUserId: user.userId,
-                newMemberRole: UserLevel.Member,
+                newMemberRole: UserRole.Member,
             })
             if (!error && result) {
                 setAddMemberDialogIsOpen(false)
@@ -160,6 +159,24 @@ export const AccordionGroupComponent = (props: {
             handleCloseGroupInfoDialog()
             setGroup(result.data)
         }
+    }
+
+    const handleAddAdmin = (user: IUser) => {
+        const updatedGroup = group
+        if (updatedGroup?.admins) {
+            updatedGroup.admins = [...updatedGroup.admins, user]
+        }
+        setGroup(updatedGroup)
+    }
+
+    const handleRemoveAdmin = (userId: number) => {
+        const updatedGroup = group
+        if (updatedGroup?.admins) {
+            updatedGroup.admins = updatedGroup?.admins.filter(
+                (user) => user.userId !== userId
+            )
+        }
+        setGroup(updatedGroup)
     }
 
     useEffect(() => {
@@ -336,7 +353,10 @@ export const AccordionGroupComponent = (props: {
                 <EditAdminsDialog
                     groupId={groupId}
                     group={groupFetched}
+                    isGroup={true}
                     handleOnCloseClick={handleCloseEditAdminsDialog}
+                    handleAddAdminInGroupObject={handleAddAdmin}
+                    handleRemoveAdminFromGroupObject={handleRemoveAdmin}
                 />
             </Dialog>
             <Dialog

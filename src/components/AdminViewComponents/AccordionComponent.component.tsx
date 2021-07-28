@@ -19,7 +19,7 @@ import {
     useDeleteOrganisation,
     useGetOrganisation,
     useAddOrganisationMember,
-    UserLevel,
+    UserRole,
     useUpdateOrganisation,
 } from "../../utils/useApiServiceGroups"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
@@ -130,7 +130,7 @@ export const AccordionComponent = (props: {
         if (user) {
             const { error, result } = await addOrganisationMember.run({
                 newUserId: user.userId,
-                newUserRole: UserLevel.Member,
+                newUserRole: UserRole.Member,
             })
             if (!error && result) {
                 setAddMemberDialogIsOpen(false)
@@ -171,6 +171,24 @@ export const AccordionComponent = (props: {
             handleCloseOrganisationInfoDialog()
             setOrganisation(result.data)
         }
+    }
+
+    const handleAddAdmin = (user: IUser) => {
+        const updatedOrganisation = organisation
+        if (updatedOrganisation?.admins) {
+            updatedOrganisation.admins = [...updatedOrganisation.admins, user]
+        }
+        setOrganisation(updatedOrganisation)
+    }
+
+    const handleRemoveAdmin = (userId: number) => {
+        const updatedOrganisation = organisation
+        if (updatedOrganisation?.admins) {
+            updatedOrganisation.admins = updatedOrganisation?.admins.filter(
+                (user) => user.userId !== userId
+            )
+        }
+        setOrganisation(updatedOrganisation)
     }
 
     useEffect(() => {
@@ -240,7 +258,6 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
-                                disabled={buttonsIsDisabled}
                                 className={classes.button}
                                 onClick={() =>
                                     history.push(
@@ -282,7 +299,6 @@ export const AccordionComponent = (props: {
                         <Grid item xs={12} sm={4}>
                             <Button
                                 disableFocusRipple
-                                disabled={buttonsIsDisabled}
                                 className={classes.button}
                             >
                                 <div className={classes.buttonText}>
@@ -371,8 +387,11 @@ export const AccordionComponent = (props: {
             >
                 <EditAdminsDialog
                     groupId={organisationId}
+                    isGroup={false}
                     group={organisation}
                     handleOnCloseClick={handleCloseEditAdminsDialog}
+                    handleAddAdminInGroupObject={handleAddAdmin}
+                    handleRemoveAdminFromGroupObject={handleRemoveAdmin}
                 />
             </Dialog>
             <Dialog

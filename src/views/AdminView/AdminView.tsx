@@ -9,22 +9,20 @@ import {
 } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
-import { useHistory } from "react-router"
-import { useGetUser } from "../../utils/useApiServiceUsers"
-import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
+import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 import { AccordionComponent } from "../../components/AdminViewComponents/AccordionComponent.component"
 import AddIcon from "@material-ui/icons/Add"
 import EditIcon from "@material-ui/icons/Edit"
 import { colors } from "../../utils/colors"
 import { InviteUserToSystemDialog } from "../../components/CustomDialog/InviteUserToSystemDialog.components"
 import { AddOrganisationDialog } from "../../components/CustomDialog/AddOrganisationDialog.component"
-import { EditAdminsDialog } from "../../components/CustomDialog/EditAdminsDialog.component"
 import {
     OrganisationFilter,
     useGetOrganisations,
     usePostOrganisation,
 } from "../../utils/useApiServiceGroups"
 import { IOrganisationIndex } from "../../models/IOrganisation"
+import { EditSysAdminsDialog } from "../../components/CustomDialog/EditSysAdmins.components"
 import { EditSystemMembersDialog } from "../../components/CustomDialog/EditSystemMembersDialog.component"
 
 const useStyles = makeStyles({
@@ -48,16 +46,12 @@ const useStyles = makeStyles({
 export const AdminView = () => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const history = useHistory()
 
     const { postOrganisation } = usePostOrganisation()
 
-    const { getUser, userInit } = useGetUser()
+    const { adminStatuses } = useGetAdminStatuses()
 
-    const userIsSystemAdmin = () => {
-        return true // FJERN
-        //return userInit ? userInit?.isSystemAdmin : false
-    }
+    const userIsSystemAdmin = () => adminStatuses?.systemAdmin || false
 
     const {
         getOrganisations: getAdminOrganisations,
@@ -99,32 +93,26 @@ export const AdminView = () => {
 
     const renderedAdminOrganisationIds: number[] = []
 
-    const userIsOrganisationAdmin = () => {
-        return (
-            (adminOrganisationsFetched
-                ? adminOrganisationsFetched?.length > 0
-                : false) || userIsSystemAdmin()
-        )
-    }
+    const userIsOrganisationAdmin = () =>
+        (adminOrganisationsFetched
+            ? adminOrganisationsFetched?.length > 0
+            : false) || userIsSystemAdmin()
 
-    const userIsGroupAdmin = () => {
-        return (
-            (groupAdminOrganisationsFetched
-                ? groupAdminOrganisationsFetched?.length > 0
-                : false) || userIsOrganisationAdmin()
-        )
-    }
+    const userIsGroupAdmin = () =>
+        (groupAdminOrganisationsFetched
+            ? groupAdminOrganisationsFetched?.length > 0
+            : false) || userIsOrganisationAdmin()
 
     const removeOrganisationAccordion = (organisationId: number) => {
         setAdminOrganisations(
-            adminOrganisations?.filter((organisation) => {
-                return organisation.organisationId !== organisationId
-            })
+            adminOrganisations?.filter(
+                (organisation) => organisation.organisationId !== organisationId
+            )
         )
         setGroupAdminOrganisations(
-            groupAdminOrganisations?.filter((organisation) => {
-                return organisation.organisationId !== organisationId
-            })
+            groupAdminOrganisations?.filter(
+                (organisation) => organisation.organisationId !== organisationId
+            )
         )
         renderedAdminOrganisationIds.length = 0 // Clear the array
     }
@@ -212,98 +200,100 @@ export const AdminView = () => {
                             </Button>
                         </Grid>
                          */}
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={classes.button}
-                                onClick={() => {
-                                    setAddOrganisationIsOpen(true)
-                                }}
-                                startIcon={<AddIcon />}
-                                disabled={!userIsSystemAdmin()}
-                            >
-                                {t("AdminView.addCountry")}
-                            </Button>
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={classes.button}
-                                onClick={() => {
-                                    setEditSysAdminsDialogIsOpen(true)
-                                }}
-                                startIcon={<EditIcon />}
-                                disabled={!userIsSystemAdmin()}
-                            >
-                                {t("AdminView.editAdmins")}
-                            </Button>
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={classes.button}
-                                onClick={() => {
-                                    setEditMembersDialogIsOpen(true)
-                                }}
-                                disabled={!userIsSystemAdmin()}
-                            >
-                                <div
-                                    style={{
-                                        paddingLeft: "8px",
-                                    }}
-                                >
-                                    {t("AdminView.seeAllMembers")}
-                                </div>
-                            </Button>
-                        </Grid>
-                        {userIsOrganisationAdmin()
-                            ? adminOrganisations?.map((organisation) => {
-                                  renderedAdminOrganisationIds.push(
-                                      organisation.organisationId
-                                  )
-                                  return (
-                                      <Grid item xs={12}>
-                                          <AccordionComponent
-                                              organisationId={
-                                                  organisation.organisationId
-                                              }
-                                              title={
-                                                  organisation.organisationName
-                                              }
-                                              userIsSysAdm={userIsSystemAdmin()}
-                                              removeOrganisation={
-                                                  removeOrganisationAccordion
-                                              }
-                                              buttonsIsDisabled={false}
-                                          />
-                                      </Grid>
-                                  )
-                              })
-                            : ""}
-                        {userIsGroupAdmin()
-                            ? groupAdminOrganisations?.map((organisation) => {
-                                  return renderedAdminOrganisationIds.indexOf(
-                                      organisation.organisationId
-                                  ) > -1 ? (
-                                      ""
-                                  ) : (
-                                      <Grid item xs={12}>
-                                          <AccordionComponent
-                                              organisationId={
-                                                  organisation.organisationId
-                                              }
-                                              title={
-                                                  organisation.organisationName
-                                              }
-                                              userIsSysAdm={userIsSystemAdmin()}
-                                              removeOrganisation={
-                                                  removeOrganisationAccordion
-                                              }
-                                          />
-                                      </Grid>
-                                  )
-                              })
-                            : ""}
+                        {userIsSystemAdmin() && (
+                            <>
+                                <Grid item xs={12} sm={4}>
+                                    <Button
+                                        disableFocusRipple
+                                        className={classes.button}
+                                        onClick={() => {
+                                            setAddOrganisationIsOpen(true)
+                                        }}
+                                        startIcon={<AddIcon />}
+                                        disabled={!userIsSystemAdmin()}
+                                    >
+                                        {t("AdminView.addCountry")}
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <Button
+                                        disableFocusRipple
+                                        className={classes.button}
+                                        onClick={() => {
+                                            setEditSysAdminsDialogIsOpen(true)
+                                        }}
+                                        startIcon={<EditIcon />}
+                                        disabled={!userIsSystemAdmin()}
+                                    >
+                                        {t("Dialog.editSysAdmins")}
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <Button
+                                        disableFocusRipple
+                                        className={classes.button}
+                                        onClick={() => {
+                                            setEditMembersDialogIsOpen(true)
+                                        }}
+                                        disabled={!userIsSystemAdmin()}
+                                    >
+                                        <div
+                                            style={{
+                                                paddingLeft: "8px",
+                                            }}
+                                        >
+                                            {t("AdminView.seeAllMembers")}
+                                        </div>
+                                    </Button>
+                                </Grid>
+                            </>
+                        )}
+                        {userIsOrganisationAdmin() &&
+                            adminOrganisations?.map((organisation) => {
+                                renderedAdminOrganisationIds.push(
+                                    organisation.organisationId
+                                )
+                                return (
+                                    <Grid item xs={12}>
+                                        <AccordionComponent
+                                            organisationId={
+                                                organisation.organisationId
+                                            }
+                                            title={
+                                                organisation.organisationName
+                                            }
+                                            userIsSysAdm={userIsSystemAdmin()}
+                                            removeOrganisation={
+                                                removeOrganisationAccordion
+                                            }
+                                            buttonsIsDisabled={false}
+                                        />
+                                    </Grid>
+                                )
+                            })}
+                        {userIsGroupAdmin() &&
+                            groupAdminOrganisations?.map((organisation) => {
+                                return renderedAdminOrganisationIds.indexOf(
+                                    organisation.organisationId
+                                ) > -1 ? (
+                                    ""
+                                ) : (
+                                    <Grid item xs={12}>
+                                        <AccordionComponent
+                                            organisationId={
+                                                organisation.organisationId
+                                            }
+                                            title={
+                                                organisation.organisationName
+                                            }
+                                            userIsSysAdm={userIsSystemAdmin()}
+                                            removeOrganisation={
+                                                removeOrganisationAccordion
+                                            }
+                                        />
+                                    </Grid>
+                                )
+                            })}
                     </Grid>
 
                     <Dialog
@@ -341,27 +331,19 @@ export const AdminView = () => {
                     </Dialog>
                     <Dialog
                         open={editSysAdminsDialogIsOpen}
-                        onClose={handleEditSysAdminsDialogClose}
-                        aria-label={t("Dialog.editAdmins")}
+                        onClose={() => setEditSysAdminsDialogIsOpen(false)}
+                        aria-label={t("Dialog.editSysAdmins")}
                         maxWidth="xs"
                         fullWidth
                     >
-                        <EditAdminsDialog
-                            editSysAdmins
+                        <EditSysAdminsDialog
                             handleOnCloseClick={handleEditSysAdminsDialogClose}
                         />
                     </Dialog>
 
                     <Typography variant="h2">
-                        {!userIsGroupAdmin()
-                            ? "You do not have permissions to view this page"
-                            : ""}
+                        {!userIsGroupAdmin() && t("AdminView.noPermissions")}
                     </Typography>
-                    <ErrorDialog
-                        error={getUser.error}
-                        isError={getUser.isError}
-                        title="There was an error fetching the user access level"
-                    />
                 </Grid>
             </Box>
         </>

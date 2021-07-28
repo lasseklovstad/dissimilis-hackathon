@@ -10,8 +10,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useHistory, useParams } from "react-router"
-import { useGetUser } from "../../utils/useApiServiceUsers"
-import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
+import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 import AddIcon from "@material-ui/icons/Add"
 import { colors } from "../../utils/colors"
 import { InviteUserToSystemDialog } from "../../components/CustomDialog/InviteUserToSystemDialog.components"
@@ -64,23 +63,19 @@ export const GroupAdminView = () => {
 
     const { postGroup } = usePostGroup()
 
-    const { getUser, userInit } = useGetUser()
-    const userId = userInit?.userId
+    const { adminStatuses } = useGetAdminStatuses()
+    const userId = sessionStorage.getItem("userId") || ""
 
     const { organisationFetched } = useGetOrganisation(parseInt(organisationId))
 
-    const userIsSystemAdmin = () => {
-        return true // FJERN
-        //return userInit ? userInit?.isSystemAdmin : false
-    }
+    const userIsSystemAdmin = () => adminStatuses?.systemAdmin || false
 
-    const userIsAdminInCurrentOrganisation = () => {
-        return userInit && organisationFetched?.admins
-            ? organisationFetched?.admins.filter((admin) => {
-                  return admin.userId === userId
-              }).length > 0
-            : false || userIsSystemAdmin()
-    }
+    const userIsAdminInCurrentOrganisation = () =>
+        (userId && organisationFetched?.admins
+            ? organisationFetched?.admins.some(
+                  (admin) => admin.userId.toString() === userId
+              )
+            : false) || userIsSystemAdmin()
 
     const { getGroups, groupsFetched } = useGetGroupsInOrganisation(
         userIsAdminInCurrentOrganisation()
@@ -100,12 +95,9 @@ export const GroupAdminView = () => {
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
 
-    const userIsGroupAdmin = () => {
-        return (
-            (groupsFetched ? groupsFetched?.length > 0 : false) ||
-            userIsAdminInCurrentOrganisation()
-        )
-    }
+    const userIsGroupAdmin = () =>
+        (groupsFetched ? groupsFetched?.length > 0 : false) ||
+        userIsAdminInCurrentOrganisation()
 
     const removeGroupAccordion = (groupId: number) => {
         setGroups(
@@ -163,65 +155,75 @@ export const GroupAdminView = () => {
                             <DashboardTopBar />
                         </Box>
                     </Grid>
-                    <Grid container spacing={3} item xs={10} sm={10}>
-                        <Grid item xs={12}>
-                            <Button
-                                disableFocusRipple
-                                onClick={() => history.push(`/admin`)}
-                                className={classes.returnButton}
-                                startIcon={<ArrowBackIosIcon />}
-                            >
-                                {t("AdminView.backToAdminpanel")}
-                            </Button>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Typography variant="h1">
-                                {`${organisationFetched?.organisationName}-
+                    {userIsGroupAdmin() ? (
+                        <>
+                            <Grid container spacing={3} item xs={10} sm={10}>
+                                <Grid item xs={12}>
+                                    <Button
+                                        disableFocusRipple
+                                        onClick={() => history.push(`/admin`)}
+                                        className={classes.returnButton}
+                                        startIcon={<ArrowBackIosIcon />}
+                                    >
+                                        {t("AdminView.backToAdminpanel")}
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography variant="h1">
+                                        {`${
+                                            organisationFetched?.organisationName
+                                        } -
                                     ${t("AdminView.groups")}`}
-                            </Typography>
-                        </Grid>
-                        {/**
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={classes.button}
-                                onClick={() => {
-                                    setInviteUserDialogIsOpen(true)
-                                }}
-                                startIcon={<AddIcon />}
-                            >
-                                {t("AdminView.inviteUser")}
-                            </Button>
-                        </Grid>
-                         */}
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={classes.button}
-                                onClick={() => {
-                                    setAddGroupIsOpen(true)
-                                }}
-                                startIcon={<AddIcon />}
-                            >
-                                {t("AdminView.addGroup")}
-                            </Button>
-                        </Grid>
-                        {userIsGroupAdmin()
-                            ? groupsFetched?.map((group) => {
-                                  return (
-                                      <Grid item xs={12}>
-                                          <AccordionGroupComponent
-                                              title={group.groupName}
-                                              groupId={group.groupId}
-                                              userIsOrgAdmin={userIsAdminInCurrentOrganisation()}
-                                              removeGroup={removeGroupAccordion}
-                                          />
-                                      </Grid>
-                                  )
-                              })
-                            : ""}
-                    </Grid>
-
+                                    </Typography>
+                                </Grid>
+                                {/**
+                                <Grid item xs={12} sm={4}>
+                                    <Button
+                                        disableFocusRipple
+                                        className={classes.button}
+                                        onClick={() => {
+                                            setInviteUserDialogIsOpen(true)
+                                        }}
+                                        startIcon={<AddIcon />}
+                                    >
+                                        {t("AdminView.inviteUser")}
+                                    </Button>
+                                </Grid>
+                                */}
+                                {userIsAdminInCurrentOrganisation() && (
+                                    <Grid item xs={12} sm={4}>
+                                        <Button
+                                            disableFocusRipple
+                                            className={classes.button}
+                                            onClick={() => {
+                                                setAddGroupIsOpen(true)
+                                            }}
+                                            startIcon={<AddIcon />}
+                                        >
+                                            {t("AdminView.addGroup")}
+                                        </Button>
+                                    </Grid>
+                                )}
+                                {userIsGroupAdmin() &&
+                                    groupsFetched?.map((group) => (
+                                        <Grid item xs={12}>
+                                            <AccordionGroupComponent
+                                                title={group.groupName}
+                                                groupId={group.groupId}
+                                                userIsOrgAdmin={userIsAdminInCurrentOrganisation()}
+                                                removeGroup={
+                                                    removeGroupAccordion
+                                                }
+                                            />
+                                        </Grid>
+                                    ))}
+                            </Grid>
+                        </>
+                    ) : (
+                        <Typography variant="h2">
+                            {t("AdminView.noPermissions")}
+                        </Typography>
+                    )}
                     <Dialog
                         open={inviteUserDialogIsOpen}
                         onClose={handleInviteUserDialogClose}
@@ -248,17 +250,6 @@ export const GroupAdminView = () => {
                             userIsSystemAdmin={userIsSystemAdmin()}
                         />
                     </Dialog>
-
-                    <Typography variant="h2">
-                        {!userIsGroupAdmin()
-                            ? "You do not have permissions to view this page"
-                            : ""}
-                    </Typography>
-                    <ErrorDialog
-                        error={getUser.error}
-                        isError={getUser.isError}
-                        title="There was an error fetching the user access level"
-                    />
                 </Grid>
             </Box>
         </>

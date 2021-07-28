@@ -17,7 +17,7 @@ export enum OrganisationFilter {
     All = "ALL",
 }
 
-export enum UserLevel {
+export enum UserRole {
     Admin = "Admin",
     Member = "Member",
 }
@@ -79,7 +79,7 @@ export const useGetGroupsInOrganisation = (
  * Get organisations based on different parameters
  * */
 export const useGetOrganisations = (organisationFilter: OrganisationFilter) => {
-    const url = `organisations?filterBy=${organisationFilter}`
+    const url = `organisations?filterByRole=${organisationFilter}`
     const initialData: IOrganisationIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IOrganisationIndex[]>(url, {
@@ -281,7 +281,7 @@ export const useRemoveGroupMember = (groupId: number) => {
     const url = `organisations/groups/${groupId}/users`
     const headers = getHeaders()
     const body = {}
-    const appendUrl = `/`
+    const appendUrl = "/"
     const { deleteData, state } = useApiService<void>(url, {
         body,
         headers,
@@ -318,7 +318,7 @@ export const useRemoveOrganisationMember = (organisationId: number) => {
     const url = `organisations/${organisationId}/users`
     const headers = getHeaders()
     const body = {}
-    const appendUrl = `/`
+    const appendUrl = "/"
     const { deleteData, state } = useApiService<void>(url, {
         body,
         headers,
@@ -331,6 +331,46 @@ export const useRemoveOrganisationMember = (organisationId: number) => {
 }
 
 /**
+ *  Set a user's role in a group
+ *  Role is set to either 'Member' or 'Admin'
+ */
+export const useSetUserRoleInGroup = (groupId: number) => {
+    const url = `organisations/groups/${groupId}/users/`
+    const headers = getHeaders()
+    const body = {}
+    const appendUrl = "/"
+    const { putData, state } = useApiService<void>(url, {
+        headers,
+        body,
+        appendUrl,
+    })
+
+    return {
+        setUserRoleInGroup: { run: putData, ...state },
+    }
+}
+
+/**
+ *  Set a user's role in an organisation
+ *  Role is set to either 'Member' or 'Admin'
+ */
+export const useSetUserRoleInOrganisation = (organisationId: number) => {
+    const url = `organisations/${organisationId}/users/`
+    const headers = getHeaders()
+    const body = {}
+    const appendUrl = "/"
+    const { putData, state } = useApiService<void>(url, {
+        headers,
+        body,
+        appendUrl,
+    })
+
+    return {
+        setUserRoleInOrganisation: { run: putData, ...state },
+    }
+}
+
+/**
  * Get members of a group or an organisation in the form of an array of IUsers
  * @param groupId id of the group or organisation containing the members
  */
@@ -338,7 +378,7 @@ export const useGetGroupOrOrganisationMembers = (
     isGroup: boolean,
     groupId: number
 ) => {
-    const urlStart = isGroup ? `organisations/groups` : `organisations`
+    const urlStart = isGroup ? "organisations/groups" : "organisations"
     const url = `${urlStart}/${groupId}/users`
     const headers = getHeaders()
 

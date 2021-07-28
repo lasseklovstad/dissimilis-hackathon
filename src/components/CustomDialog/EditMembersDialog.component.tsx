@@ -109,7 +109,7 @@ export const EditMembersDialog = (props: {
             )
             handleCloseConfirmationDialog()
         } else {
-            console.log(error)
+            // Snackbar
         }
     }
 

@@ -14,7 +14,6 @@ import {
     Typography,
 } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
-import { IOrganisation } from "../../models/IOrganisation"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import DeleteIcon from "@material-ui/icons/Delete"
 import { IUser } from "../../models/IUser"
@@ -22,13 +21,11 @@ import { colors } from "../../utils/colors"
 import AddIcon from "@material-ui/icons/Add"
 import { ChoiceDialog } from "./ChoiceDialog.component"
 import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
-import { IGroup } from "../../models/IGroup"
 import {
-    useGetGroupOrOrganisationMembers,
-    UserRole,
-    useSetUserRoleInGroup,
-    useSetUserRoleInOrganisation,
-} from "../../utils/useApiServiceGroups"
+    useGetSysAdmins,
+    useGetUsers,
+    useSetSysAdminStatus,
+} from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -55,73 +52,46 @@ const useStyles = makeStyles((theme) => {
     }
 })
 
-export const EditAdminsDialog = (props: {
-    groupId: number
-    group?: IOrganisation | IGroup
-    isGroup: boolean
+export const EditSysAdminsDialog = (props: {
     handleOnCloseClick: () => void
-    handleAddAdminInGroupObject: (user: IUser) => void
-    handleRemoveAdminFromGroupObject: (userId: number) => void
 }) => {
-    const {
-        groupId,
-        group,
-        handleOnCloseClick,
-        isGroup,
-        handleAddAdminInGroupObject,
-        handleRemoveAdminFromGroupObject,
-    } = props
+    const { handleOnCloseClick } = props
     const classes = useStyles()
     const { t } = useTranslation()
     const secondary = true
 
-    const { setUserRoleInGroup } = useSetUserRoleInGroup(groupId || 0)
-    const { setUserRoleInOrganisation } = useSetUserRoleInOrganisation(
-        groupId || 0
-    )
-    const { groupMembers } = useGetGroupOrOrganisationMembers(isGroup, groupId)
+    const { users } = useGetUsers()
+    const { sysAdmins } = useGetSysAdmins()
+    const { setSysAdminStatus } = useSetSysAdminStatus()
 
     const [addAdminDialogIsOpen, setAddAdminDialogIsOpen] = useState(false)
     const [confirmationDialogIsOpen, setConfirmationDialogIsOpen] =
         useState(false)
     const [selectedAdmin, setSelectedAdmin] = useState<IUser>()
 
-    const [adminList, setAdminsList] = useState<IUser[]>(group?.admins || [])
-    const [userList, setUserList] = useState<IUser[] | undefined>()
+    const [adminList, setAdminsList] = useState<IUser[]>([])
+    const [userList, setUserList] = useState<IUser[]>()
 
-    useEffect(() => {
-        if (groupMembers) {
-            setUserList(groupMembers)
-        }
-    }, [groupMembers])
-
-    const handleUpdateRole = async (role: UserRole, user: IUser) => {
-        const { error } = await (isGroup
-            ? setUserRoleInGroup
-            : setUserRoleInOrganisation
-        ).run(
+    const handleUpdateRole = async (sysAdmin: boolean, user: IUser) => {
+        const { error } = await setSysAdminStatus.run(
             {
-                roleToSet: role,
+                isSystemAdmin: sysAdmin,
             },
-            user.userId.toString() + "/changeUserRole"
+            `${user.userId}/updateSysAdminStatus`
         )
         return !!error
     }
 
-    const handleRemoveAdmin = async () => {
+    const handleDeleteAdmin = async () => {
         if (adminList.length > 1) {
             if (selectedAdmin) {
-                const isError = await handleUpdateRole(
-                    UserRole.Member,
-                    selectedAdmin
-                )
+                const isError = await handleUpdateRole(false, selectedAdmin)
                 if (!isError && selectedAdmin) {
                     setAdminsList(
                         adminList.filter(
                             (user) => user.userId !== selectedAdmin.userId
                         )
                     )
-                    handleRemoveAdminFromGroupObject(selectedAdmin.userId)
                     setConfirmationDialogIsOpen(false)
                 } else {
                     // An error occured
@@ -137,10 +107,9 @@ export const EditAdminsDialog = (props: {
 
     const handleAddAdmin = async (user: IUser | undefined) => {
         if (user) {
-            const isError = await handleUpdateRole(UserRole.Admin, user)
+            const isError = await handleUpdateRole(true, user)
             if (!isError && user) {
                 setAdminsList([...adminList, user])
-                handleAddAdminInGroupObject(user)
                 setAddAdminDialogIsOpen(false)
             } else {
                 // An error occured
@@ -154,6 +123,18 @@ export const EditAdminsDialog = (props: {
             (user) => !adminList.some((admin) => admin.userId === user.userId)
         ) || []
 
+    useEffect(() => {
+        if (users) {
+            setUserList(users)
+        }
+    }, [users])
+
+    useEffect(() => {
+        if (sysAdmins) {
+            setAdminsList(sysAdmins)
+        }
+    }, [sysAdmins])
+
     const handleCloseAddAdminDialog = () => {
         setAddAdminDialogIsOpen(false)
     }
@@ -164,16 +145,10 @@ export const EditAdminsDialog = (props: {
 
     return (
         <>
-            <DialogTitle>{t("Dialog.editAdmins")}</DialogTitle>
+            <DialogTitle>{t("Dialog.editSysAdmins")}</DialogTitle>
             <DialogContent>
                 <Typography variant="caption">
-                    {t("Dialog.adminsIn")}{" "}
-                    {group
-                        ? "groupName" in group
-                            ? group.groupName
-                            : group.organisationName
-                        : ""}
-                    :
+                    {t("Dialog.adminsIn")} {t("AdminView.system")}
                 </Typography>
                 <List dense={false}>
                     {adminList.map((admin) => (
@@ -210,7 +185,7 @@ export const EditAdminsDialog = (props: {
                                 >
                                     <AddIcon />
                                     <div className={classes.buttonText}>
-                                        {t("AdminView.addUser")}
+                                        {t("Dialog.addSysAdmin")}
                                     </div>
                                 </Button>
                             }
@@ -226,7 +201,7 @@ export const EditAdminsDialog = (props: {
             <Dialog
                 open={addAdminDialogIsOpen}
                 onClose={handleCloseAddAdminDialog}
-                aria-label={t("Dialog.addAdmin")}
+                aria-label={t("Dialog.addSysAdmin")}
                 maxWidth="xs"
                 fullWidth
             >
@@ -234,7 +209,7 @@ export const EditAdminsDialog = (props: {
                     handleOnCancelClick={handleCloseAddAdminDialog}
                     handleOnSaveClick={handleAddAdmin}
                     saveText={t("Dialog.add")}
-                    title={t("Dialog.addAdmin")}
+                    title={t("Dialog.addSysAdmin")}
                     descriptionText={t("Dialog.emailOfNewAdmin")}
                     userList={filterAdmins()}
                 />
@@ -242,18 +217,18 @@ export const EditAdminsDialog = (props: {
             <Dialog
                 open={confirmationDialogIsOpen}
                 onClose={handleCloseConfirmationDialog}
-                aria-label={t("Dialog.addAdmin")}
+                aria-label={t("Dialog.removeSysAdmin")}
             >
                 <ChoiceDialog
                     handleOnCancelClick={handleCloseConfirmationDialog}
-                    handleOnSaveClick={handleRemoveAdmin}
-                    ackText={t("Dialog.removeAdmin")}
+                    handleOnSaveClick={handleDeleteAdmin}
+                    ackText={t("Dialog.removeSysAdmin")}
                     cancelText={t("Dialog.cancel")}
-                    headerText={t("Dialog.removeAdmin")}
+                    headerText={t("Dialog.removeSysAdmin")}
                     descriptionText={`
                         ${t("Dialog.removeAdminDescription")} 
                         ${selectedAdmin?.name || t("Dialog.thisUser")} 
-                        ${t("Dialog.asAdmin")} 
+                        ${t("Dialog.asSysAdmin")} 
                         ${t("Dialog.cannotUndo")}
                     `}
                 />

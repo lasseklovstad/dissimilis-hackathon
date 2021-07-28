@@ -200,13 +200,20 @@ export const ShareSongDialog = (props: {
         setConfirmRemoveUserDialogIsOpen(false)
     }
 
-    const handleAddUser = async (user: IUser) => {
-        const { error, result } = await shareSong.run(null, `/${user.userId}`)
-        if (!error && result) {
-            setSharedWithUserList(result.data)
-            handleCloseAddUserDialog()
-        }
-        if (error) {
+    const handleAddUser = async (user: IUser | undefined) => {
+        if (user) {
+            const { error, result } = await shareSong.run(
+                null,
+                `/${user.userId}`
+            )
+            if (!error && result) {
+                setSharedWithUserList(result.data)
+                handleCloseAddUserDialog()
+            }
+            if (error) {
+                //Launch snackbar
+            }
+        } else {
             //Launch snackbar
         }
     }

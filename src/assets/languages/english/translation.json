@@ -53,7 +53,8 @@
         "system": "the system",
         "deleteCountry": "Delete country",
         "deleteGroup": "Delete group",
-        "addUser": "Add user"
+        "addUser": "Add user",
+        "noPermissions": "You do not have permission to view this page"
     },
     "LibraryView": {
         "defaultHeading": "Library",
@@ -197,12 +198,16 @@
         "nameOfGroup": "Name of group",
         "informationAboutGroup": "Information about group",
         "editAdmins": "Edit administrators",
+        "editSysAdmins": "Edit system administrators",
+        "addSysAdmin": "Add system administrator",
         "addAdmin": "Add administrator",
         "emailOfNewAdmin": "Email of new admin",
         "adminsIn": "Administrators in",
         "removeAdmin": "Remove administrator",
+        "removeSysAdmin": "Remove system administrator",
         "removeAdminDescription": "Are you sure you want to remove",
         "asAdmin": "as administrator?",
+        "asSysAdmin": "as system administrator?",
         "cannotUndo": "This action can not be undone.",
         "thisUser": "this user",
         "deleteCountryDescription": "This action will delete the country, this action is irreversible.",        
