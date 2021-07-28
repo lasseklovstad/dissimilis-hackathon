@@ -69,6 +69,7 @@ export const SongNavBar = (props: {
     user?: string
     setBarEditMode: () => void
     barEditMode: boolean
+    currentUserHasWriteAccess?: boolean
 }) => {
     const classes = useStyles()
     const matches = useMediaQuery("(max-width:600px)")
@@ -91,24 +92,35 @@ export const SongNavBar = (props: {
                 >
                     <DashboardTopBarIcon />
                     <Box ml={1} mr={1} width="100%">
-                        <TextField
-                            InputProps={{
-                                style: { fontSize: 24 },
-                                classes: {
-                                    underline: classes.underline,
-                                    focused: classes.focused,
-                                    root: classes.titleRoot,
-                                },
-                                inputProps: {
-                                    maxLength: 250,
-                                    "aria-label": t("Dialog.nameOfSong"),
-                                },
-                            }}
-                            value={title}
-                            onBlur={(ev) => props.onTitleBlur(ev.target.value)}
-                            onChange={(ev) => setTitle(ev.target.value)}
-                            fullWidth
-                        />
+                        {props.currentUserHasWriteAccess ? (
+                            <TextField
+                                InputProps={{
+                                    style: { fontSize: 24 },
+                                    classes: {
+                                        underline: classes.underline,
+                                        focused: classes.focused,
+                                        root: classes.titleRoot,
+                                    },
+                                    inputProps: {
+                                        maxLength: 250,
+                                        "aria-label": t("Dialog.nameOfSong"),
+                                    },
+                                }}
+                                value={title}
+                                onBlur={(ev) =>
+                                    props.onTitleBlur(ev.target.value)
+                                }
+                                onChange={(ev) => setTitle(ev.target.value)}
+                                fullWidth
+                            />
+                        ) : (
+                            <Typography
+                                style={{ fontSize: 24 }}
+                                className={classes.titleRoot}
+                            >
+                                {title}
+                            </Typography>
+                        )}
                     </Box>
                     {!matches ? (
                         <>
@@ -135,6 +147,9 @@ export const SongNavBar = (props: {
                         barEditMode={props.barEditMode}
                         updateSongTitle={setTitle}
                         onLogout={logout.run}
+                        currentUserHasWriteAccess={
+                            props.currentUserHasWriteAccess
+                        }
                     />
                 </Box>
             </AppBar>
