@@ -6,13 +6,17 @@ import {
     Grid,
     makeStyles,
     Typography,
+    useMediaQuery,
 } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 import { AccordionComponent } from "../../components/AdminViewComponents/AccordionComponent.component"
-import AddIcon from "@material-ui/icons/Add"
-import EditIcon from "@material-ui/icons/Edit"
+import {
+    Add as AddIcon,
+    Edit as EditIcon,
+    List as ListIcon,
+} from "@material-ui/icons"
 import { colors } from "../../utils/colors"
 import { InviteUserToSystemDialog } from "../../components/CustomDialog/InviteUserToSystemDialog.components"
 import { AddOrganisationDialog } from "../../components/CustomDialog/AddOrganisationDialog.component"
@@ -25,7 +29,7 @@ import { IOrganisationIndex } from "../../models/IOrganisation"
 import { EditSysAdminsDialog } from "../../components/CustomDialog/EditSysAdmins.components"
 import { EditSystemMembersDialog } from "../../components/CustomDialog/EditSystemMembersDialog.component"
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     container: {
         width: "100%",
     },
@@ -39,11 +43,42 @@ const useStyles = makeStyles({
         height: "100%",
         justifyContent: "left",
         fontSize: "1rem",
-        padding: "8px",
+        padding: "16px 8px",
     },
-})
+    buttonText: {
+        padding: "0 8px 0 8px",
+        textAlign: "left",
+    },
+    adminButtons: {
+        marginBottom: theme.spacing(4),
+    },
+    buttonGridComponent: {
+        [theme.breakpoints.down("sm")]: {
+            paddingBottom: theme.spacing(2),
+        },
+        [theme.breakpoints.up("md")]: {
+            paddingRight: theme.spacing(2),
+        },
+    },
+    accordionComponent: {
+        [theme.breakpoints.down("md")]: {
+            paddingBottom: theme.spacing(2),
+            paddingRight: theme.spacing(0),
+            paddingLeft: theme.spacing(0),
+        },
+        [theme.breakpoints.up("lg")]: {
+            paddingBottom: theme.spacing(2),
+            paddingRight: theme.spacing(0),
+            paddingLeft: theme.spacing(0),
+        },
+    },
+    headers: {
+        marginBottom: theme.spacing(2),
+    },
+}))
 
 export const AdminView = () => {
+    const xs = useMediaQuery("(max-width: 600px)")
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -179,9 +214,12 @@ export const AdminView = () => {
                             <DashboardTopBar />
                         </Box>
                     </Grid>
-                    <Grid container spacing={3} item xs={12} sm={10}>
+                    <Grid container item xs={12} sm={10}>
                         <Grid item xs={12}>
-                            <Typography variant="h1">
+                            <Typography
+                                className={classes.headers}
+                                variant="h1"
+                            >
                                 {t("AdminView.adminPanel")}
                             </Typography>
                         </Grid>
@@ -201,34 +239,48 @@ export const AdminView = () => {
                         </Grid>
                          */}
                         {userIsSystemAdmin() && (
-                            <>
-                                <Grid item xs={12} sm={4}>
+                            <Grid container className={classes.adminButtons}>
+                                <Grid
+                                    item
+                                    className={classes.buttonGridComponent}
+                                    xs={12}
+                                    md={4}
+                                >
                                     <Button
                                         disableFocusRipple
                                         className={classes.button}
                                         onClick={() => {
                                             setAddOrganisationIsOpen(true)
                                         }}
-                                        startIcon={<AddIcon />}
                                         disabled={!userIsSystemAdmin()}
                                     >
-                                        {t("AdminView.addCountry")}
+                                        <AddIcon />
+                                        <div className={classes.buttonText}>
+                                            {t("AdminView.addCountry")}
+                                        </div>
                                     </Button>
                                 </Grid>
-                                <Grid item xs={12} sm={4}>
+                                <Grid
+                                    item
+                                    className={classes.buttonGridComponent}
+                                    xs={12}
+                                    md={4}
+                                >
                                     <Button
                                         disableFocusRipple
                                         className={classes.button}
                                         onClick={() => {
                                             setEditSysAdminsDialogIsOpen(true)
                                         }}
-                                        startIcon={<EditIcon />}
                                         disabled={!userIsSystemAdmin()}
                                     >
-                                        {t("Dialog.editSysAdmins")}
+                                        <EditIcon />
+                                        <div className={classes.buttonText}>
+                                            {t("Dialog.editSysAdmins")}
+                                        </div>
                                     </Button>
                                 </Grid>
-                                <Grid item xs={12} sm={4}>
+                                <Grid item xs={12} md={4}>
                                     <Button
                                         disableFocusRipple
                                         className={classes.button}
@@ -237,24 +289,33 @@ export const AdminView = () => {
                                         }}
                                         disabled={!userIsSystemAdmin()}
                                     >
-                                        <div
-                                            style={{
-                                                paddingLeft: "8px",
-                                            }}
-                                        >
+                                        <ListIcon />
+                                        <div className={classes.buttonText}>
                                             {t("AdminView.seeAllMembers")}
                                         </div>
                                     </Button>
                                 </Grid>
-                            </>
+                            </Grid>
                         )}
+                        <Grid item xs={12}>
+                            <Typography
+                                className={classes.headers}
+                                variant="h2"
+                            >
+                                {t("AdminView.countries")}
+                            </Typography>
+                        </Grid>
                         {userIsOrganisationAdmin() &&
                             adminOrganisations?.map((organisation) => {
                                 renderedAdminOrganisationIds.push(
                                     organisation.organisationId
                                 )
                                 return (
-                                    <Grid item xs={12}>
+                                    <Grid
+                                        item
+                                        className={classes.accordionComponent}
+                                        xs={12}
+                                    >
                                         <AccordionComponent
                                             organisationId={
                                                 organisation.organisationId
