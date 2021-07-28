@@ -68,19 +68,14 @@ export const GroupAdminView = () => {
 
     const { organisationFetched } = useGetOrganisation(parseInt(organisationId))
 
-    const userIsSystemAdmin = () => {
-        return adminStatuses?.systemAdmin || false
-    }
+    const userIsSystemAdmin = () => adminStatuses?.systemAdmin || false
 
-    const userIsAdminInCurrentOrganisation = () => {
-        return (
-            (userId && organisationFetched?.admins
-                ? organisationFetched?.admins.some(
-                      (admin) => admin.userId.toString() === userId
-                  )
-                : false) || userIsSystemAdmin()
-        )
-    }
+    const userIsAdminInCurrentOrganisation = () =>
+        (userId && organisationFetched?.admins
+            ? organisationFetched?.admins.some(
+                  (admin) => admin.userId.toString() === userId
+              )
+            : false) || userIsSystemAdmin()
 
     const { getGroups, groupsFetched } = useGetGroupsInOrganisation(
         userIsAdminInCurrentOrganisation()
@@ -100,12 +95,9 @@ export const GroupAdminView = () => {
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
 
-    const userIsGroupAdmin = () => {
-        return (
-            (groupsFetched ? groupsFetched?.length > 0 : false) ||
-            userIsAdminInCurrentOrganisation()
-        )
-    }
+    const userIsGroupAdmin = () =>
+        (groupsFetched ? groupsFetched?.length > 0 : false) ||
+        userIsAdminInCurrentOrganisation()
 
     const removeGroupAccordion = (groupId: number) => {
         setGroups(
@@ -198,7 +190,7 @@ export const GroupAdminView = () => {
                                     </Button>
                                 </Grid>
                                 */}
-                                {userIsAdminInCurrentOrganisation() ? (
+                                {userIsAdminInCurrentOrganisation() && (
                                     <Grid item xs={12} sm={4}>
                                         <Button
                                             disableFocusRipple
@@ -211,23 +203,20 @@ export const GroupAdminView = () => {
                                             {t("AdminView.addGroup")}
                                         </Button>
                                     </Grid>
-                                ) : (
-                                    ""
                                 )}
-                                {userIsGroupAdmin()
-                                    ? groupsFetched?.map((group) => (
-                                          <Grid item xs={12}>
-                                              <AccordionGroupComponent
-                                                  title={group.groupName}
-                                                  groupId={group.groupId}
-                                                  userIsOrgAdmin={userIsAdminInCurrentOrganisation()}
-                                                  removeGroup={
-                                                      removeGroupAccordion
-                                                  }
-                                              />
-                                          </Grid>
-                                      ))
-                                    : ""}
+                                {userIsGroupAdmin() &&
+                                    groupsFetched?.map((group) => (
+                                        <Grid item xs={12}>
+                                            <AccordionGroupComponent
+                                                title={group.groupName}
+                                                groupId={group.groupId}
+                                                userIsOrgAdmin={userIsAdminInCurrentOrganisation()}
+                                                removeGroup={
+                                                    removeGroupAccordion
+                                                }
+                                            />
+                                        </Grid>
+                                    ))}
                             </Grid>
                         </>
                     ) : (

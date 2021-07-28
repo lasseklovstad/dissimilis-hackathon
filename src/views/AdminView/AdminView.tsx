@@ -93,32 +93,26 @@ export const AdminView = () => {
 
     const renderedAdminOrganisationIds: number[] = []
 
-    const userIsOrganisationAdmin = () => {
-        return (
-            (adminOrganisationsFetched
-                ? adminOrganisationsFetched?.length > 0
-                : false) || userIsSystemAdmin()
-        )
-    }
+    const userIsOrganisationAdmin = () =>
+        (adminOrganisationsFetched
+            ? adminOrganisationsFetched?.length > 0
+            : false) || userIsSystemAdmin()
 
-    const userIsGroupAdmin = () => {
-        return (
-            (groupAdminOrganisationsFetched
-                ? groupAdminOrganisationsFetched?.length > 0
-                : false) || userIsOrganisationAdmin()
-        )
-    }
+    const userIsGroupAdmin = () =>
+        (groupAdminOrganisationsFetched
+            ? groupAdminOrganisationsFetched?.length > 0
+            : false) || userIsOrganisationAdmin()
 
     const removeOrganisationAccordion = (organisationId: number) => {
         setAdminOrganisations(
-            adminOrganisations?.filter((organisation) => {
-                return organisation.organisationId !== organisationId
-            })
+            adminOrganisations?.filter(
+                (organisation) => organisation.organisationId !== organisationId
+            )
         )
         setGroupAdminOrganisations(
-            groupAdminOrganisations?.filter((organisation) => {
-                return organisation.organisationId !== organisationId
-            })
+            groupAdminOrganisations?.filter(
+                (organisation) => organisation.organisationId !== organisationId
+            )
         )
         renderedAdminOrganisationIds.length = 0 // Clear the array
     }
@@ -206,7 +200,7 @@ export const AdminView = () => {
                             </Button>
                         </Grid>
                          */}
-                        {userIsSystemAdmin() ? (
+                        {userIsSystemAdmin() && (
                             <>
                                 <Grid item xs={12} sm={4}>
                                     <Button
@@ -253,58 +247,53 @@ export const AdminView = () => {
                                     </Button>
                                 </Grid>
                             </>
-                        ) : (
-                            ""
                         )}
-                        {userIsOrganisationAdmin()
-                            ? adminOrganisations?.map((organisation) => {
-                                  renderedAdminOrganisationIds.push(
-                                      organisation.organisationId
-                                  )
-                                  return (
-                                      <Grid item xs={12}>
-                                          <AccordionComponent
-                                              organisationId={
-                                                  organisation.organisationId
-                                              }
-                                              title={
-                                                  organisation.organisationName
-                                              }
-                                              userIsSysAdm={userIsSystemAdmin()}
-                                              removeOrganisation={
-                                                  removeOrganisationAccordion
-                                              }
-                                              buttonsIsDisabled={false}
-                                          />
-                                      </Grid>
-                                  )
-                              })
-                            : ""}
-                        {userIsGroupAdmin()
-                            ? groupAdminOrganisations?.map((organisation) => {
-                                  return renderedAdminOrganisationIds.indexOf(
-                                      organisation.organisationId
-                                  ) > -1 ? (
-                                      ""
-                                  ) : (
-                                      <Grid item xs={12}>
-                                          <AccordionComponent
-                                              organisationId={
-                                                  organisation.organisationId
-                                              }
-                                              title={
-                                                  organisation.organisationName
-                                              }
-                                              userIsSysAdm={userIsSystemAdmin()}
-                                              removeOrganisation={
-                                                  removeOrganisationAccordion
-                                              }
-                                              buttonsIsDisabled={true}
-                                          />
-                                      </Grid>
-                                  )
-                              })
-                            : ""}
+                        {userIsOrganisationAdmin() &&
+                            adminOrganisations?.map((organisation) => {
+                                renderedAdminOrganisationIds.push(
+                                    organisation.organisationId
+                                )
+                                return (
+                                    <Grid item xs={12}>
+                                        <AccordionComponent
+                                            organisationId={
+                                                organisation.organisationId
+                                            }
+                                            title={
+                                                organisation.organisationName
+                                            }
+                                            userIsSysAdm={userIsSystemAdmin()}
+                                            removeOrganisation={
+                                                removeOrganisationAccordion
+                                            }
+                                            buttonsIsDisabled={false}
+                                        />
+                                    </Grid>
+                                )
+                            })}
+                        {userIsGroupAdmin() &&
+                            groupAdminOrganisations?.map((organisation) => {
+                                return renderedAdminOrganisationIds.indexOf(
+                                    organisation.organisationId
+                                ) > -1 ? (
+                                    ""
+                                ) : (
+                                    <Grid item xs={12}>
+                                        <AccordionComponent
+                                            organisationId={
+                                                organisation.organisationId
+                                            }
+                                            title={
+                                                organisation.organisationName
+                                            }
+                                            userIsSysAdm={userIsSystemAdmin()}
+                                            removeOrganisation={
+                                                removeOrganisationAccordion
+                                            }
+                                        />
+                                    </Grid>
+                                )
+                            })}
                     </Grid>
 
                     <Dialog
@@ -353,9 +342,7 @@ export const AdminView = () => {
                     </Dialog>
 
                     <Typography variant="h2">
-                        {!userIsGroupAdmin()
-                            ? t("AdminView.noPermissions")
-                            : ""}
+                        {!userIsGroupAdmin() && t("AdminView.noPermissions")}
                     </Typography>
                 </Grid>
             </Box>
