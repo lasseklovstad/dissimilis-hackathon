@@ -82,7 +82,7 @@ export const GroupAdminView = () => {
         )
     }
 
-    const { groupsFetched } = useGetGroupsInOrganisation(
+    const { getGroups, groupsFetched } = useGetGroupsInOrganisation(
         userIsAdminInCurrentOrganisation()
             ? GroupFilter.All
             : GroupFilter.Admin,
@@ -127,16 +127,30 @@ export const GroupAdminView = () => {
     }
     const handleAddGroupDialogSave = async (
         name: string,
-        firstAdminId: number,
-        organisationId: number
+        organisationId: number | undefined,
+        firstAdminId: number | undefined
     ) => {
-        const { error, result } = await postGroup.run({
-            name,
-            firstAdminId,
-            organisationId,
-        })
+        if (firstAdminId && organisationId) {
+            const { error, result } = await postGroup.run({
+                name,
+                organisationId,
+                firstAdminId,
+            })
+            if (!error && result) {
+                setAddGroupIsOpen(false)
+                updateGroups()
+            } else {
+                //Launch snackbar
+            }
+        } else {
+            //Launch snackbar
+        }
+    }
+
+    const updateGroups = async () => {
+        const { error, result } = await getGroups.run()
         if (!error && result) {
-            setAddGroupIsOpen(false)
+            setGroups(result.data)
         }
     }
 
@@ -244,7 +258,6 @@ export const GroupAdminView = () => {
                         <AddGroupDialog
                             handleOnSaveClick={handleAddGroupDialogSave}
                             handleOnCancelClick={handleAddGroupDialogClose}
-                            defaultOrganisation={organisationFetched}
                             userIsSystemAdmin={userIsSystemAdmin()}
                         />
                     </Dialog>

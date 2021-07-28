@@ -9,7 +9,6 @@ import {
 } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
-import { useHistory } from "react-router"
 import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 import { AccordionComponent } from "../../components/AdminViewComponents/AccordionComponent.component"
 import AddIcon from "@material-ui/icons/Add"
@@ -47,7 +46,6 @@ const useStyles = makeStyles({
 export const AdminView = () => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const history = useHistory()
 
     const { postOrganisation } = usePostOrganisation()
 
@@ -57,15 +55,17 @@ export const AdminView = () => {
         return adminStatuses?.systemAdmin || false
     }
 
-    const { organisationsFetched: adminOrganisationsFetched } =
-        useGetOrganisations(
-            userIsSystemAdmin()
-                ? OrganisationFilter.All
-                : OrganisationFilter.Admin
-        )
+    const {
+        getOrganisations: getAdminOrganisations,
+        organisationsFetched: adminOrganisationsFetched,
+    } = useGetOrganisations(
+        userIsSystemAdmin() ? OrganisationFilter.All : OrganisationFilter.Admin
+    )
 
-    const { organisationsFetched: groupAdminOrganisationsFetched } =
-        useGetOrganisations(OrganisationFilter.GroupAdmin)
+    const {
+        getOrganisations: getGroupAdminOrganisations,
+        organisationsFetched: groupAdminOrganisationsFetched,
+    } = useGetOrganisations(OrganisationFilter.GroupAdmin)
 
     const [adminOrganisations, setAdminOrganisations] = useState<
         IOrganisationIndex[] | undefined
@@ -88,7 +88,6 @@ export const AdminView = () => {
 
     const [inviteUserDialogIsOpen, setInviteUserDialogIsOpen] = useState(false)
     const [addOrganisationIsOpen, setAddOrganisationIsOpen] = useState(false)
-    const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
     const [editSysAdminsDialogIsOpen, setEditSysAdminsDialogIsOpen] =
         useState(false)
     const [editMembersDialogIsOpen, setEditMembersDialogIsOpen] =
@@ -143,20 +142,40 @@ export const AdminView = () => {
 
     const handleAddOrganisationDialogSave = async (
         name: string,
-        firstAdminId: number
+        firstAdminId?: number
     ) => {
-        const { error, result } = await postOrganisation.run({
-            name,
-            firstAdminId,
-        })
-        if (!error && result) {
-            setAddOrganisationIsOpen(false)
-            history.push(`/admin`)
+        if (firstAdminId) {
+            const { error, result } = await postOrganisation.run({
+                name,
+                firstAdminId,
+            })
+            if (!error && result) {
+                setAddOrganisationIsOpen(false)
+                updateOrganisation()
+            } else {
+                //Launch snackbar
+            }
+        } else {
+            //Launch snackbar
         }
     }
 
     const handleEditSysAdminsDialogClose = () => {
         setEditSysAdminsDialogIsOpen(false)
+    }
+
+    const updateOrganisation = async () => {
+        const { error: adminOrgError, result: adminOrgResult } =
+            await getAdminOrganisations.run()
+        if (!adminOrgError && adminOrgResult) {
+            setAdminOrganisations(adminOrgResult.data)
+            renderedAdminOrganisationIds.length = 0
+        }
+        const { error: groupAdminError, result: groupAdminResult } =
+            await getGroupAdminOrganisations.run()
+        if (!groupAdminError && groupAdminResult) {
+            setGroupAdminOrganisations(groupAdminResult.data)
+        }
     }
 
     return (
