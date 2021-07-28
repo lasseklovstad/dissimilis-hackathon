@@ -163,7 +163,7 @@ export const AccordionGroupComponent = (props: {
 
     const handleAddAdmin = (user: IUser) => {
         const updatedGroup = group
-        if (updatedGroup && updatedGroup.admins) {
+        if (updatedGroup?.admins) {
             updatedGroup.admins = [...updatedGroup.admins, user]
         }
         setGroup(updatedGroup)
@@ -171,7 +171,7 @@ export const AccordionGroupComponent = (props: {
 
     const handleRemoveAdmin = (userId: number) => {
         const updatedGroup = group
-        if (updatedGroup && updatedGroup.admins) {
+        if (updatedGroup?.admins) {
             updatedGroup.admins = updatedGroup?.admins.filter(
                 (user) => user.userId !== userId
             )
