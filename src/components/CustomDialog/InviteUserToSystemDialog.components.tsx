@@ -44,13 +44,7 @@ export const InviteUserToSystemDialog = (props: {
     userIsSystemAdmin: boolean
     isLoading?: boolean
 }) => {
-    const {
-        handleOnSaveClick,
-        handleOnCancelClick,
-        isLoading,
-        defaultOrganisationId,
-        userIsSystemAdmin,
-    } = props
+    const { handleOnSaveClick, handleOnCancelClick, isLoading } = props
     const { t } = useTranslation()
     const classes = useStyles()
     const [organisations, setOrganisations] = useState<IOrganisationIndex[]>()
@@ -64,46 +58,11 @@ export const InviteUserToSystemDialog = (props: {
             organisationName: "Norge",
         },
     ])
-    /*
-    if (userIsSystemAdmin) {
-        const { getOrganisations, organisationsFetched } = useGetOrganisations(
-            OrganisationFilter.All
-        )
-        setOrganisations(organisationsFetched)
-    } else {
-        const {
-            getOrganisations: getAdminOrganisations,
-            organisationsFetched: adminOrganisationsFetched,
-        } = useGetOrganisations(OrganisationFilter.Admin)
-        const {
-            getOrganisations: getGroupAdminOrganisations,
-            organisationsFetched: groupAdminOrganisationsFetched,
-        } = useGetOrganisations(OrganisationFilter.GroupAdmin)
-        const organisationsFetched = adminOrganisationsFetched?.slice() || []
-        const orgIds =
-            adminOrganisationsFetched?.map((organisation) => {
-                return organisation.organisationId
-            }) || []
-        groupAdminOrganisationsFetched?.map((organisation) => {
-            if (!(organisation.organisationId in orgIds)) { // use .includes()
-                organisationsFetched.push(organisation)
-            }
-        })
-        setOrganisations(organisationsFetched)
-    }
-    */
 
     const [textFieldInput, setTextFieldInput] = useState("")
     const [organisationInput, setOrganisationInput] = useState<number>()
     const [groupInput, setGroupInput] = useState("")
 
-    /*
-    useEffect(() => {
-        if (defaultOrganisationId) {
-            setOrganisationInput(defaultOrganisationId)
-        }
-    }, [defaultOrganisationId])
-    */
     return (
         <form
             onSubmit={(event) => {

@@ -6,7 +6,6 @@ import {
     Grid,
     makeStyles,
     Typography,
-    useMediaQuery,
 } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
@@ -78,7 +77,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const AdminView = () => {
-    const xs = useMediaQuery("(max-width: 600px)")
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -223,21 +221,6 @@ export const AdminView = () => {
                                 {t("AdminView.adminPanel")}
                             </Typography>
                         </Grid>
-                        {/**
-                        <Grid item xs={12} sm={4}>
-                            <Button
-                                disableFocusRipple
-                                className={classes.button}
-                                onClick={() => {
-                                    setInviteUserDialogIsOpen(true)
-                                }}
-                                startIcon={<AddIcon />}
-                                disabled={!userIsGroupAdmin()}
-                            >
-                                {t("AdminView.inviteUser")}
-                            </Button>
-                        </Grid>
-                         */}
                         {userIsSystemAdmin() && (
                             <Grid container className={classes.adminButtons}>
                                 <Grid

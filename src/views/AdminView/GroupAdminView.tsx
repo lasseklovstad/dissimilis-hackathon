@@ -205,20 +205,6 @@ export const GroupAdminView = () => {
                                         {`${organisationFetched?.organisationName}`}
                                     </Typography>
                                 </Grid>
-                                {/**
-                                <Grid item xs={12} sm={4}>
-                                    <Button
-                                        disableFocusRipple
-                                        className={classes.button}
-                                        onClick={() => {
-                                            setInviteUserDialogIsOpen(true)
-                                        }}
-                                        startIcon={<AddIcon />}
-                                    >
-                                        {t("AdminView.inviteUser")}
-                                    </Button>
-                                </Grid>
-                                */}
                                 {userIsAdminInCurrentOrganisation() && (
                                     <Grid
                                         container
