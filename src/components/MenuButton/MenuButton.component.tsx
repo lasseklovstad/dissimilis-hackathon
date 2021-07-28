@@ -23,6 +23,8 @@ import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { EditSongInfoDialog } from "../CustomDialog/EditSongInfoDialog.component"
 import { TransposeDialog } from "../CustomDialog/TransposeDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
+import { ShareSongDialog } from "../CustomDialog/ShareSongDialog.component"
+import { ShowSongInfoDialog } from "../CustomDialog/ShowSongInfoDialog.component"
 
 export const MenuButton = (props: {
     voiceId: number
@@ -33,6 +35,7 @@ export const MenuButton = (props: {
     onLogout: () => void
     updateSongTitle: (title: string) => void
     songTitle: string
+    currentUserHasWriteAccess?: boolean
 }) => {
     const { songTitle } = props
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -40,6 +43,9 @@ export const MenuButton = (props: {
     const [duplicateSongDialogIsOpen, setDuplicateSongDialogIsOpen] =
         useState(false)
     const [songInfoDialogIsOpen, setSongInfoDialogIsOpen] = useState(false)
+    const [readSongInfoDialogIsOpen, setReadSongInfoDialogIsOpen] =
+        useState(false)
+    const [shareSongDialogIsOpen, setShareSongDialogIsOpen] = useState(false)
     const { t } = useTranslation()
     const history = useHistory()
     const { songId, title, transpose } = useParams<{
@@ -100,6 +106,8 @@ export const MenuButton = (props: {
             | "duplicate"
             | "editBars"
             | "info"
+            | "share"
+            | "infoShow"
     ) => {
         setAnchorEl(null)
         setDeleteSongDialogIsOpen(false)
@@ -122,6 +130,12 @@ export const MenuButton = (props: {
                 break
             case "info":
                 handleOpenSongInfoDialog()
+                break
+            case "share":
+                setShareSongDialogIsOpen(true)
+                break
+            case "infoShow":
+                setReadSongInfoDialogIsOpen(true)
                 break
             default:
                 break
@@ -192,17 +206,46 @@ export const MenuButton = (props: {
                     <MenuItem disabled onClick={() => handleClose()}>
                         {t("MenuButton.hide")}
                     </MenuItem>
-                    <MenuItem onClick={() => handleClose("delete")}>
-                        {t("MenuButton.delete")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("editBars")}>
-                        {props.barEditMode
-                            ? t("MenuButton.cancelEditBars")
-                            : t("MenuButton.editBars")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("info")}>
-                        {t("Dialog.details")}
-                    </MenuItem>
+
+                    {props.currentUserHasWriteAccess
+                        ? [
+                              <>
+                                  <MenuItem
+                                      onClick={() => handleClose("delete")}
+                                      key="delete"
+                                  >
+                                      {t("MenuButton.delete")}
+                                  </MenuItem>
+                                  <MenuItem
+                                      onClick={() => handleClose("editBars")}
+                                      key="editBars"
+                                  >
+                                      {props.barEditMode
+                                          ? t("MenuButton.cancelEditBars")
+                                          : t("MenuButton.editBars")}
+                                  </MenuItem>
+                                  <MenuItem
+                                      onClick={() => handleClose("info")}
+                                      key="details"
+                                  >
+                                      {t("Dialog.details")}
+                                  </MenuItem>
+                                  <MenuItem
+                                      onClick={() => handleClose("share")}
+                                      key="share"
+                                  >
+                                      {t("Dialog.share")}
+                                  </MenuItem>
+                              </>,
+                          ]
+                        : [
+                              <MenuItem
+                                  onClick={() => handleClose("infoShow")}
+                                  key="infoShow"
+                              >
+                                  {t("Dialog.details")}
+                              </MenuItem>,
+                          ]}
                     {props.showName ? (
                         <>
                             <Divider variant="middle" />
@@ -271,6 +314,33 @@ export const MenuButton = (props: {
                         headerText={t("DashboardView.duplicateText")}
                         labelText={t("Dialog.newVoiceName")}
                         isLoading={duplicateSong.loading}
+                    />
+                </Dialog>
+                <Dialog
+                    open={shareSongDialogIsOpen}
+                    onClose={() => setShareSongDialogIsOpen(false)}
+                    aria-label={"Dialog.ShareSong"}
+                    maxWidth="xs"
+                    fullWidth
+                >
+                    <ShareSongDialog
+                        handleOnCloseClick={() =>
+                            setShareSongDialogIsOpen(false)
+                        }
+                        songId={parseInt(songId)}
+                    />
+                </Dialog>
+                <Dialog
+                    open={readSongInfoDialogIsOpen}
+                    onClose={() => setReadSongInfoDialogIsOpen(false)}
+                    maxWidth="xs"
+                    fullWidth
+                >
+                    <ShowSongInfoDialog
+                        songId={parseInt(songId)}
+                        handleOnCancelClick={() =>
+                            setReadSongInfoDialogIsOpen(false)
+                        }
                     />
                 </Dialog>
             </div>

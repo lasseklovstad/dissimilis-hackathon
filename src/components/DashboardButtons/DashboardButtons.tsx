@@ -99,6 +99,7 @@ type ButtonSongProps = {
     func?: () => void
     selected?: boolean
     onContextMenu?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
+    currentUserHasWriteAccess?: boolean
 }
 
 type ButtonNoLinkProps = {
@@ -287,6 +288,9 @@ export const DashboardButton: FC<ButtonSongProps> = (props) => {
                         link={props.link}
                         removeSong={props.removeSong}
                         renameSong={props.renameSong}
+                        currentUserHasWriteAccess={
+                            props.currentUserHasWriteAccess
+                        }
                     />
                 </Box>
             </Grid>

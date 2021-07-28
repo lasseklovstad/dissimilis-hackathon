@@ -74,7 +74,7 @@ export const songReducer = (song: ISong, action: SongAction) => {
                             const actionBar = action.voice.bars[index]
                             return {
                                 ...bar,
-                                house: actionBar.house,
+                                voltaBracket: actionBar.voltaBracket,
                                 repAfter: actionBar.repAfter,
                                 repBefore: actionBar.repBefore,
                             }
@@ -115,6 +115,8 @@ interface ISongContext {
     dispatchChordMenuOptions: React.Dispatch<ChordMenuAction>
     barEditMode: boolean
     setBarEditMode: React.Dispatch<React.SetStateAction<boolean>>
+    setCustomMode: React.Dispatch<React.SetStateAction<boolean>>
+    customMode: boolean
     barsClipboard:
         | {
               fromPosition: number
@@ -212,14 +214,16 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
     const [selectedChordPosition, setSelectedChordPosition] =
         useState<number>(0)
 
+    const [customMode, setCustomMode] = useState(false)
+
     const setValuesForSelectedChord = (
         chordId: number | undefined | null,
         barId: number | undefined,
         position: number
     ) => {
         setSelectedChordId(chordId)
-        setSelectedBarId(barId)
         setSelectedChordPosition(position)
+        setSelectedBarId(barId)
     }
 
     useEffect(() => {
@@ -249,6 +253,8 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
                 selectedChordId,
                 selectedChordPosition,
                 setValuesForSelectedChord,
+                customMode,
+                setCustomMode,
             }}
         >
             {children}

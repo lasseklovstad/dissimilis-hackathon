@@ -1,3 +1,7 @@
+import { SongProtectionLevel } from "../utils/useApiServiceSongs"
+import { IGroupIndex } from "./IGroup"
+import { IOrganisationIndex } from "./IOrganisation"
+import { IUser } from "./IUser"
 import { IVoice } from "./IVoice"
 
 export interface ISong {
@@ -8,6 +12,7 @@ export interface ISong {
     numerator: number
     updatedOn: string
     arrangerName: string | null
+    currentUserHasWriteAccess?: boolean
 }
 
 export interface ISongIndex {
@@ -17,6 +22,7 @@ export interface ISongIndex {
     denominator: number
     arrangerEmail: string
     updatedOn: string
+    currentUserHasWriteAccess?: boolean
 }
 
 export interface ISongPost {
@@ -37,4 +43,12 @@ export interface ISongMetadata {
     composer: string | null
     songNotes: string | null
     speed: number
+}
+
+export interface ISongShareData {
+    songId: number
+    organisationTags: IOrganisationIndex[]
+    groupTags: IGroupIndex[]
+    sharedWithUsers: IUser[]
+    protectionLevel: SongProtectionLevel
 }

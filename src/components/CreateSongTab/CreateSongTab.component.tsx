@@ -14,7 +14,6 @@ import {
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { IVoice } from "../../models/IVoice"
-import { InputDialog } from "../CustomDialog/InputDialog.component"
 import {
     useCreateVoice,
     useDeleteVoice,
@@ -22,10 +21,13 @@ import {
     useUpdateVoice,
 } from "../../utils/useApiServiceSongs"
 import { colors } from "../../utils/colors"
-import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
-import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { Undo as UndoIcon, MoreVert as MoreVertIcon } from "@material-ui/icons"
+import { CustomVoiceDialog } from "../CustomDialog/CustomVoiceModeDialog.component"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
+import { InputDialog } from "../CustomDialog/InputDialog.component"
+import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -71,20 +73,26 @@ export const CreateSongTab = (props: {
     onUpdateVoice: (voice: IVoice) => void
     onDeleteVoice: (voice: IVoice) => void
     onUndo: () => void
+    currentUserHasWriteAccess?: boolean
 }) => {
     const {
         voices,
-        selectedVoiceId,
-        songId,
-        undoIsLoading,
         onAddVoice,
         onUpdateVoice,
         onDeleteVoice,
         onUndo,
+        undoIsLoading,
+        currentUserHasWriteAccess = false,
     } = props
+    const { song, selectedVoiceId } = useSongContext()
+    const { songId } = song
     const [newVoiceDialogIsOpen, setNewVoiceDialogIsOpen] = useState(false)
     const [renameDialogIsOpen, setRenameDialogIsOpen] = useState(false)
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false)
+    const [customVoiceDialogIsOpen, setCustomVoiceDialogIsOpen] =
+        useState(false)
+    const [newVoice, setNewVoice] = useState<IVoice>()
+
     const { t } = useTranslation()
     const [clickedId, setClickedId] = useState<undefined | number>()
     const clickedVoice = voices.find((voice) => voice.songVoiceId === clickedId)
@@ -94,13 +102,15 @@ export const CreateSongTab = (props: {
     const [rightClickMenuPosition, setRightClickMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()
-    const { postVoice } = useCreateVoice(songId)
-    const { putVoice } = useUpdateVoice(songId, clickedId)
-    const { deleteVoice } = useDeleteVoice(songId, clickedId)
-    const { duplicateVoice } = useDuplicateVoice(songId, clickedId)
+    const { postVoice } = useCreateVoice(songId.toString())
+    const { putVoice } = useUpdateVoice(songId.toString(), clickedId)
+    const { deleteVoice } = useDeleteVoice(songId.toString(), clickedId)
+    const { duplicateVoice } = useDuplicateVoice(songId.toString(), clickedId)
     const classes = useStyles()
     const history = useHistory()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+    const { setCustomMode } = useSongContext()
 
     const handleAddVoice = async (title: string, option: string) => {
         const voiceNumber = Math.max(
@@ -108,11 +118,11 @@ export const CreateSongTab = (props: {
             0
         )
         switch (option) {
-            case "Dialog.duplicateFullSong": {
+            case "Dialog.duplicateFullVoice": {
                 handleDuplicateVoice(title)
                 break
             }
-            case "Dialog.duplicateEmptySong": {
+            case "Dialog.duplicateEmptyVoice": {
                 const { error, result } = await postVoice.run({
                     voiceName: title,
                     voiceNumber: voiceNumber + 1,
@@ -123,8 +133,19 @@ export const CreateSongTab = (props: {
                 }
                 break
             }
-            case "Dialog.duplicateCustomSong": {
-                setNewVoiceDialogIsOpen(false)
+            case "Dialog.duplicateCustomVoice": {
+                const { error, result } = await postVoice.run({
+                    voiceName: title,
+                    voiceNumber: voiceNumber + 1,
+                })
+                if (!error && result) {
+                    setNewVoiceDialogIsOpen(false)
+                    setCustomVoiceDialogIsOpen(true)
+                    setNewVoice(result.data)
+                    onAddVoice(result.data)
+                    setClickedId(result.data.songVoiceId)
+                    setCustomMode(true)
+                }
                 break
             }
         }
@@ -134,7 +155,6 @@ export const CreateSongTab = (props: {
         const { error, result } = await duplicateVoice.run({
             voiceName,
         })
-
         if (!error && result) {
             onAddVoice(result.data)
             setNewVoiceDialogIsOpen(false)
@@ -183,6 +203,17 @@ export const CreateSongTab = (props: {
         })
     }
 
+    const handleCustomVoiceDialogCancel = async () => {
+        handleDeleteVoice()
+        setCustomVoiceDialogIsOpen(false)
+        setCustomMode(false)
+    }
+
+    const handleCustomVoiceDialogSave = () => {
+        setCustomVoiceDialogIsOpen(false)
+        setCustomMode(false)
+    }
+
     return (
         <>
             <Box display="flex" flexWrap="wrap" alignItems="center">
@@ -223,40 +254,44 @@ export const CreateSongTab = (props: {
                     })}
                 </Tabs>
 
-                <IconButton
-                    aria-haspopup="true"
-                    aria-controls="voiceTabMenu"
-                    aria-label={t("CreateSongTab.menu")}
-                    onClick={handleMenuClick}
-                    disableFocusRipple
-                >
-                    <MoreVertIcon />
-                </IconButton>
-                <Box ml="auto">
-                    {undoIsLoading ? (
-                        <Button
-                            startIcon={
-                                <CircularProgress
-                                    aria-label="Loading"
-                                    size={22}
-                                />
-                            }
-                            className={classes.buttonsstyle}
-                            onClick={onUndo}
-                            disabled
+                {currentUserHasWriteAccess && (
+                    <>
+                        <IconButton
+                            aria-haspopup="true"
+                            aria-controls="voiceTabMenu"
+                            aria-label={t("CreateSongTab.menu")}
+                            onClick={handleMenuClick}
+                            disableFocusRipple
                         >
-                            {t("Song.undo")}
-                        </Button>
-                    ) : (
-                        <Button
-                            startIcon={<UndoIcon />}
-                            className={classes.buttonsstyle}
-                            onClick={onUndo}
-                        >
-                            {t("Song.undo")}
-                        </Button>
-                    )}
-                </Box>
+                            <MoreVertIcon />
+                        </IconButton>
+                        <Box ml="auto">
+                            {undoIsLoading ? (
+                                <Button
+                                    startIcon={
+                                        <CircularProgress
+                                            aria-label="Loading"
+                                            size={22}
+                                        />
+                                    }
+                                    className={classes.buttonsstyle}
+                                    onClick={onUndo}
+                                    disabled
+                                >
+                                    {t("Song.undo")}
+                                </Button>
+                            ) : (
+                                <Button
+                                    startIcon={<UndoIcon />}
+                                    className={classes.buttonsstyle}
+                                    onClick={onUndo}
+                                >
+                                    {t("Song.undo")}
+                                </Button>
+                            )}
+                        </Box>
+                    </>
+                )}
             </Box>
 
             <Menu
@@ -340,6 +375,20 @@ export const CreateSongTab = (props: {
                     headerText={t("Dialog.deleteVoice")}
                     descriptionText={t("Dialog.deleteVoiceDescription")}
                     isLoading={deleteVoice.loading}
+                />
+            </Dialog>
+            <Dialog
+                fullScreen
+                open={customVoiceDialogIsOpen}
+                onClose={handleCustomVoiceDialogCancel}
+                aria-labelledby={t("Modal.CustomNewVoice")}
+            >
+                <CustomVoiceDialog
+                    handleOnSave={handleCustomVoiceDialogSave}
+                    handleOnCancel={handleCustomVoiceDialogCancel}
+                    songId={songId.toString()}
+                    baseVoice={clickedVoice || voices[0]}
+                    newVoice={newVoice}
                 />
             </Dialog>
             <Menu

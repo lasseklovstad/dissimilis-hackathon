@@ -26,6 +26,7 @@ type SongProps = {
     lastPage: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
     deleteBars?: () => void
+    currentUserHasWriteAccess?: boolean
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
@@ -57,6 +58,7 @@ export const Song = (props: SongProps) => {
         showChordLetters,
         showNoteLetters,
         lastPage,
+        currentUserHasWriteAccess = false,
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
@@ -110,12 +112,16 @@ export const Song = (props: SongProps) => {
                             height="100%"
                         >
                             {barsInRow.map((bar, i, bars) => {
-                                const showHouseNumber =
-                                    i === 0 || bars[i - 1].house !== bar.house
+                                const showVoltaBracketNumber =
+                                    (i === 0 || bars[i - 1].voltaBracket) !==
+                                    bar.voltaBracket
                                 return (
                                     <React.Fragment key={i}>
                                         <Bar
-                                            showHouseNumber={showHouseNumber}
+                                            // eslint-disable-next-line
+                                            showVoltaBracketNumber={
+                                                showVoltaBracketNumber
+                                            }
                                             exportMode={!!exportMode}
                                             showChordLetters={
                                                 showChordLetters === undefined
@@ -136,6 +142,9 @@ export const Song = (props: SongProps) => {
                                             height={heightOfBar}
                                             pasteBars={props.pasteBars}
                                             deleteBars={props.deleteBars}
+                                            currentUserHasWriteAccess={
+                                                currentUserHasWriteAccess
+                                            }
                                         />
                                         <BarLine />
                                         {bar.position === lastBarPosition &&
@@ -154,7 +163,7 @@ export const Song = (props: SongProps) => {
                 ))}
             </Box>
 
-            {selectedBar && (
+            {selectedBar && currentUserHasWriteAccess && (
                 <BarMenu
                     bar={selectedBar}
                     anchorEl={anchorEl}

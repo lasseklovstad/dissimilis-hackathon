@@ -1,12 +1,16 @@
-import React from "react"
+import React, { useState } from "react"
 import { Box, ButtonBase, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { tangentToNumber } from "../../utils/bar.util"
+import { useAddNote, useRemoveNote } from "../../utils/useApiServiceSongs"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded"
+import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUncheckedRounded"
 
 type ChordProps = {
-    chords: IChord
+    chord: IChord
     barPosition: number
     onContextMenu: (event: React.MouseEvent) => void
     onClick: (event: React.MouseEvent) => void
@@ -23,6 +27,7 @@ type ChordProps = {
         chordPosition: number
     ) => string | null | undefined
     barEditMode: boolean
+    barId: number
 }
 
 const useStyle = makeStyles((theme) => ({
@@ -52,6 +57,7 @@ const useStyle = makeStyles((theme) => ({
     noteContainer: {
         marginTop: "1px",
         borderColor: "rgb(0 0 0 / 12%)",
+
         borderRadius: "3px",
         display: "flex",
         flex: "1",
@@ -60,52 +66,141 @@ const useStyle = makeStyles((theme) => ({
         color: "white",
         border: "1px solid",
     },
+    noteContainerCustomMode: {
+        marginTop: "1px",
+        borderRadius: "3px",
+        display: "flex",
+        flex: "1",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "white",
+
+        boxShadow: `inset 0px 0px 0px 1px ${colors.gray_200}`,
+    },
     noteFont: {
         ...theme.typography.body1,
-        "@media(max-width:600px)": {},
+        "@media(max-width:600px)": {
+            fontSize: "0.95rem",
+        },
+    },
+    circleIconChecked: {
+        color: colors.black,
+        fontSize: "1.25rem",
+        marginRight: "0.15rem",
+        "@media(max-width:768px)": {
+            fontSize: "0.9rem",
+            marginRight: "0.05rem",
+        },
+    },
+    circleIconUnChecked: {
+        color: colors.gray_400,
+        fontSize: "1.25rem",
+        marginRight: "0.15rem",
+        verticalAlign: "middle",
+        "@media(max-width:768px)": {
+            fontSize: "0.9rem",
+            marginRight: "0.05rem",
+        },
     },
     C: {
-        backgroundColor: colors.C.main,
         color: colors.C.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.C.main}`,
+        "&.main": { backgroundColor: colors.C.main },
+        "&.opaque": {
+            backgroundColor: colors.C.opaque,
+            boxShadow: `inset 0px 0px 0px 2px ${colors.C.main}`,
+        },
     },
     D: {
-        backgroundColor: colors.D.main,
         color: colors.D.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.D.main}`,
+        "&.main": { backgroundColor: colors.D.main },
+        "&.opaque": {
+            backgroundColor: colors.D.opaque,
+            color: colors.D.text,
+        },
     },
     E: {
-        backgroundColor: colors.E.main,
         color: colors.E.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.E.main}`,
+        "&.main": { backgroundColor: colors.E.main },
+        "&.opaque": {
+            backgroundColor: colors.E.opaque,
+            color: colors.black,
+        },
     },
     F: {
-        backgroundColor: colors.F.main,
         color: colors.F.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.F.main}`,
+        "&.main": { backgroundColor: colors.F.main },
+        "&.opaque": {
+            backgroundColor: colors.F.opaque,
+        },
     },
     G: {
-        backgroundColor: colors.G.main,
         color: colors.G.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.G.main}`,
+        "&.main": { backgroundColor: colors.G.main },
+        "&.opaque": {
+            backgroundColor: colors.G.opaque,
+        },
     },
     A: {
-        backgroundColor: colors.A.main,
         color: colors.A.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.A.main}`,
+        "&.main": { backgroundColor: colors.A.main },
+        "&.opaque": {
+            backgroundColor: colors.A.opaque,
+            color: colors.black,
+        },
     },
     H: {
-        backgroundColor: colors.H.main,
         color: colors.H.text,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.H.main}`,
+        "&.main": { backgroundColor: colors.H.main },
+        "&.opaque": {
+            backgroundColor: colors.H.opaque,
+        },
     },
     "C#": {
-        backgroundColor: colors.gray_500,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
+        "&.main": { backgroundColor: colors.blackKeys.main },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     "D#": {
-        backgroundColor: colors.gray_500,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
+        "&.main": { backgroundColor: colors.blackKeys.main },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     "F#": {
-        backgroundColor: colors.gray_500,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
+        "&.main": { backgroundColor: colors.blackKeys.main },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     "G#": {
-        backgroundColor: colors.gray_500,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
+        "&.main": { backgroundColor: colors.blackKeys.main },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     "A#": {
-        backgroundColor: colors.gray_500,
+        boxShadow: `inset 0px 0px 0px 2px ${colors.blackKeys.main}`,
+        "&.main": { backgroundColor: colors.blackKeys.main },
+        "&.opaque": {
+            backgroundColor: colors.blackKeys.opaque,
+            color: colors.black,
+        },
     },
     disabled: {
         border: 0,
@@ -116,6 +211,14 @@ const useStyle = makeStyles((theme) => ({
     },
     selected: {
         boxShadow: `0 0 0 4px ${colors.focus}`,
+    },
+    buttonBox: {
+        display: "flex",
+        flexDirection: "column",
+        height: "calc(100% - 25px)",
+        width: "100%",
+        minWidth: 0,
+        alignItems: "stretch",
     },
 }))
 
@@ -138,7 +241,7 @@ const ChordText = (props: { chordName: string }) => {
 
 export const Chord = (props: ChordProps) => {
     const {
-        chords,
+        chord,
         barPosition,
         onClick,
         onContextMenu,
@@ -155,11 +258,62 @@ export const Chord = (props: ChordProps) => {
     } = props
     const classes = useStyle()
 
-    const chordName = getChordNameFromMainVoice(barPosition, chords.position)
+    const chordName = getChordNameFromMainVoice(barPosition, chord.position)
+
+    const { song, selectedVoiceId, dispatchSong } = useSongContext()
+
+    const [customVoiceNoteStates, setCustomVoiceNoteStates] = useState<
+        Boolean[]
+    >(chord.notes.map(() => false))
+
+    const { customMode } = useSongContext()
+
+    const { addNote } = useAddNote(
+        song.songId.toString(),
+        selectedVoiceId,
+        barPosition
+    )
+    const handleCustomVoiceAddClick = async (index: number) => {
+        const { error, result } = await addNote.run({
+            chordName: chord.chordName,
+            notePosition: chord.position,
+            length: chord.length,
+            intervalPosition: index,
+            notes: chord.notes,
+        })
+        if (!error && result) {
+            const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
+            newCustomVoiceNoteStates[index] = true
+            setCustomVoiceNoteStates(newCustomVoiceNoteStates)
+            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+        }
+    }
+
+    const { removeNote } = useRemoveNote(
+        song.songId.toString(),
+        selectedVoiceId,
+        barPosition
+    )
+    const handleCustomVoiceRemoveClick = async (index: number) => {
+        const { error, result } = await removeNote.run({
+            deleteOnLastIntervalRemoved: true,
+            chordName: chord.chordName,
+            notePosition: chord.position,
+            length: chord.length,
+            intervalPosition: index,
+            notes: chord.notes,
+        })
+        if (!error && result) {
+            const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
+            newCustomVoiceNoteStates[index] = false
+            setCustomVoiceNoteStates(newCustomVoiceNoteStates)
+            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+        }
+    }
 
     return (
         <Box
-            flexGrow={chords.length}
+            flexGrow={chord.length}
             display="flex"
             flexDirection="column"
             position="relative"
@@ -173,59 +327,123 @@ export const Chord = (props: ChordProps) => {
             {chordName && showChordLetters && (
                 <ChordText chordName={chordName} />
             )}
-            <ButtonBase
-                id="chordButton"
-                disabled={exportMode}
-                onClick={onClick}
-                onContextMenu={onContextMenu}
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-                disableRipple={barEditMode}
-                className={`${
-                    barEditMode
-                        ? ""
-                        : chords.notes[0] === "Z"
-                        ? classes.emptyChordContainer
-                        : classes.buttonBase
-                } ${isSelected ? classes.selected : ""}`}
-                focusVisibleClassName={classes.buttonBase}
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "calc(100% - 25px)",
-                    width: "100%",
-                    minWidth: 0,
-                    alignItems: "stretch",
-                }}
-                onFocus={handleChordFocus}
-            >
-                {chords.notes
-                    .map((note, i) => {
-                        const tangent = tangentToNumber(note)
-                        return (
-                            <div
-                                id="singleChord"
-                                className={`${classes.noteContainer} ${
-                                    (classes as any)[note]
-                                } ${exportMode ? "disabled" : ""} ${
-                                    note === "Z" && highlight
-                                        ? classes.highlight
-                                        : ""
-                                } ${
-                                    Number(tangent) && exportMode
-                                        ? classes.exportNumberSize
-                                        : classes.noteFont
-                                }`}
-                                key={note + i}
-                            >
-                                {showNoteLetters || Number(tangent)
-                                    ? tangent
-                                    : undefined}
-                            </div>
-                        )
-                    })
-                    .reverse()}
-            </ButtonBase>
+            {customMode ? (
+                <Box className={classes.buttonBox}>
+                    {chord.notes
+                        .map((note, i) => {
+                            const tangent = tangentToNumber(note)
+                            return (
+                                <>
+                                    <ButtonBase
+                                        id="singleChord"
+                                        className={`${
+                                            classes.noteContainerCustomMode
+                                        } 
+                                        ${(classes as any)[note]} ${
+                                            customMode
+                                                ? customVoiceNoteStates[i]
+                                                    ? "main"
+                                                    : "opaque"
+                                                : "main"
+                                        }
+                                        } ${exportMode ? "disabled" : ""} ${
+                                            note === "Z" && highlight
+                                                ? classes.highlight
+                                                : ""
+                                        } ${
+                                            Number(tangent) && exportMode
+                                                ? classes.exportNumberSize
+                                                : classes.noteFont
+                                        }`}
+                                        key={note + i}
+                                        onClick={() =>
+                                            customVoiceNoteStates[i]
+                                                ? handleCustomVoiceRemoveClick(
+                                                      i
+                                                  )
+                                                : handleCustomVoiceAddClick(i)
+                                        }
+                                    >
+                                        {note[0] !== "Z" ? (
+                                            customVoiceNoteStates[i] ? (
+                                                <CheckCircleRoundedIcon
+                                                    className={
+                                                        classes.circleIconChecked
+                                                    }
+                                                />
+                                            ) : (
+                                                <RadioButtonUncheckedRoundedIcon
+                                                    className={
+                                                        classes.circleIconUnChecked
+                                                    }
+                                                />
+                                            )
+                                        ) : (
+                                            ""
+                                        )}
+                                        {(showNoteLetters || Number(tangent)) &&
+                                            tangent}
+                                    </ButtonBase>
+                                </>
+                            )
+                        })
+                        .reverse()}
+                </Box>
+            ) : (
+                <ButtonBase
+                    id="chordButton"
+                    disabled={exportMode}
+                    onClick={onClick}
+                    onContextMenu={onContextMenu}
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                    disableRipple={barEditMode}
+                    className={`${classes.buttonBox} ${
+                        barEditMode
+                            ? ""
+                            : chord.notes[0] === "Z"
+                            ? classes.emptyChordContainer
+                            : classes.buttonBase
+                    } ${isSelected ? classes.selected : ""}`}
+                    focusVisibleClassName={classes.buttonBase}
+                    onFocus={handleChordFocus}
+                >
+                    {chord.notes
+                        .map((note, i) => {
+                            const tangent = tangentToNumber(note)
+                            return (
+                                note !== "X" && (
+                                    <>
+                                        <div
+                                            id="singleChord"
+                                            className={`${
+                                                classes.noteContainer
+                                            } ${
+                                                (classes as any)[note]
+                                            } ${"main"} ${
+                                                exportMode ? "disabled" : ""
+                                            } ${
+                                                note === "Z" && highlight
+                                                    ? classes.highlight
+                                                    : ""
+                                            } ${
+                                                Number(tangent) && exportMode
+                                                    ? classes.exportNumberSize
+                                                    : classes.noteFont
+                                            }`}
+                                            key={note + i}
+                                        >
+                                            {(showNoteLetters ||
+                                                Number(tangent)) &&
+                                                tangent}
+                                        </div>
+                                    </>
+                                )
+                            )
+                        })
+                        .reverse()}
+                </ButtonBase>
+            )}
         </Box>
     )
 }

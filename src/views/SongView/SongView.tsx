@@ -4,14 +4,12 @@ import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.component"
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
-import { useBarsPerRow, useBars } from "../../utils/useBars"
 import { Song } from "../../components/Song/Song.component"
 import {
     useGetSong,
     useUndoSong,
     useUpdateSong,
 } from "../../utils/useApiServiceSongs"
-import { useChords } from "../../utils/useChords"
 import { useGetUser } from "../../utils/useApiServiceUsers"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
@@ -23,6 +21,8 @@ import { ChordType } from "../../models/IChordMenuOptions"
 import { SongNavBar } from "../../components/SongNavBar/SongNavBar.component"
 import { useHotkeys } from "react-hotkeys-hook"
 import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
+import { useBarsPerRow, useBars } from "../../utils/useBars"
+import { useChords } from "../../utils/useChords"
 
 const useStyles = makeStyles({
     root: {
@@ -183,6 +183,9 @@ export const SongView = () => {
                                         setBarsClipboard(undefined)
                                     }}
                                     barEditMode={barEditMode}
+                                    currentUserHasWriteAccess={
+                                        song.currentUserHasWriteAccess
+                                    }
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -195,6 +198,9 @@ export const SongView = () => {
                                     selectedVoiceId={selectedVoiceId}
                                     onUndo={undo}
                                     undoIsLoading={undoSong.loading}
+                                    currentUserHasWriteAccess={
+                                        song.currentUserHasWriteAccess
+                                    }
                                 />
                             </Grid>
                         </Grid>
@@ -212,11 +218,14 @@ export const SongView = () => {
                             pasteBars={pasteBars}
                             deleteBars={deleteBars}
                             lastPage={true}
+                            currentUserHasWriteAccess={
+                                song.currentUserHasWriteAccess
+                            }
                         />
                     </Grid>
                 </Grid>
             )}
-            {selectedVoiceId && (
+            {selectedVoiceId && song.currentUserHasWriteAccess && (
                 <BottomBar
                     onNoteSelectedChange={(chordType) =>
                         handleNoteSelectedChange(chordType)
@@ -229,7 +238,7 @@ export const SongView = () => {
                     addBar={(song) =>
                         dispatchSong({ type: "UPDATE_SONG", song })
                     }
-                    songId={songId}
+                    songId={Number(songId)}
                     voiceId={selectedVoiceId}
                     chordDropdownContent={
                         chordMenuOptions.chordType === ChordType.NOTE

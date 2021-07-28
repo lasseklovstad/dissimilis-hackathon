@@ -1,8 +1,21 @@
 import { useEffect } from "react"
 import { useApiService } from "./useApiService"
-import { ISong, ISongIndex, ISongMetadata } from "../models/ISong"
+import {
+    ISong,
+    ISongIndex,
+    ISongMetadata,
+    ISongShareData,
+} from "../models/ISong"
 import { IBar } from "../models/IBar"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../models/IVoice"
+import { IUser } from "../models/IUser"
+import { IGroupIndex } from "../models/IGroup"
+import { IOrganisationIndex } from "../models/IOrganisation"
+
+export enum SongProtectionLevel {
+    Public = "Public",
+    Private = "Private",
+}
 
 const getArrangerId = () => {
     return sessionStorage.getItem("userId") || ""
@@ -119,7 +132,7 @@ export const useGetFilteredSongs = (
     const initialData: ISongIndex[] = []
     const headers = getHeaders()
     const body = {
-        num: numberOfResults,
+        maxNumberOfSongs: numberOfResults,
         title,
         orderBy: orderTerm,
         orderDescending,
@@ -149,7 +162,7 @@ export const useGetRecentSongs = (
 ) => {
     const url = "song/search"
     const body = {
-        num: "5",
+        maxNumberOfSongs: "5",
         orderBy: orderTerm,
         orderDescending,
         arrangerId: getArrangerId(),
@@ -328,13 +341,41 @@ export const useUpdateChord = (
     }
 }
 
+export const useAddNote = (
+    songId: string,
+    voiceId: number | undefined,
+    barPosition: number
+) => {
+    const url = `song/${songId}/voice/${voiceId}/bar/${barPosition}/note/addComponentInterval`
+    const headers = getHeaders()
+    const api = useApiService<IBar>(url, { headers })
+
+    return {
+        addNote: { run: api.postData, ...api.state },
+    }
+}
+
+export const useRemoveNote = (
+    songId: string,
+    voiceId: number | undefined,
+    barPosition: number
+) => {
+    const url = `song/${songId}/voice/${voiceId}/bar/${barPosition}/note/removeComponentInterval`
+    const headers = getHeaders()
+    const api = useApiService<IBar>(url, { headers })
+
+    return {
+        removeNote: { run: api.postData, ...api.state },
+    }
+}
+
 export const useAddBar = (songId: string, voiceId: number) => {
     const url = `song/${songId}/voice/${voiceId}/bar`
     const headers = getHeaders()
     const body = {
         repBefore: false,
         repAfter: false,
-        house: 0,
+        voltaBracket: 0,
     }
     const api = useApiService<ISong>(url, { headers, body })
 
@@ -382,7 +423,7 @@ export const useUpdateBar = (
 
 /**
  * Duplicate song
- * @param songId songs id
+ * @param songId song's id
  */
 export const useDuplicateSong = (songId: number) => {
     const url = `song/${songId}/duplicateSong`
@@ -403,5 +444,115 @@ export const useUndoSong = (songId: string) => {
 
     return {
         undoSong: { run: api.putData, ...api.state },
+    }
+}
+/**
+ * Set group tags for song
+ * @param songId song's id
+ */
+export const useSetGroupTags = (songId: number) => {
+    const url = `song/${songId}/Tag/Group`
+    const headers = getHeaders()
+
+    const emptyGroupTags: number[] = []
+    const body = {
+        tagIds: emptyGroupTags,
+    }
+
+    const api = useApiService<IGroupIndex>(url, { headers, body })
+
+    return {
+        setGroupTags: { run: api.putData, ...api.state },
+    }
+}
+
+/**
+ * Set organisation tags for song
+ * @param songId song's id
+ */
+export const useSetOrganisationTags = (songId: number) => {
+    const url = `song/${songId}/Tag/Organisation`
+    const headers = getHeaders()
+
+    const emptyOrganisationTags: number[] = []
+    const body = {
+        tagIds: emptyOrganisationTags,
+    }
+
+    const api = useApiService<IOrganisationIndex>(url, { headers, body })
+
+    return {
+        setOrganisationTags: { run: api.putData, ...api.state },
+    }
+}
+
+/**
+ * Share song with user
+ * @param songId song's id
+ * @param userId userId of user recieving write permission
+ */
+export const useShareSong = (songId: number) => {
+    const url = `song/${songId}/shareSong/User`
+    const headers = getHeaders()
+
+    const appendUrl = `/`
+    const api = useApiService<IUser[]>(url, { headers, appendUrl })
+
+    return {
+        shareSong: { run: api.postData, ...api.state },
+    }
+}
+
+/**
+ * Unshare song with user
+ * @param songId song's id
+ * @param userId userId of user losing write permission
+ */
+export const useUnshareSong = (songId: number) => {
+    const url = `song/${songId}/shareSong/User`
+    const headers = getHeaders()
+
+    const appendUrl = `/`
+    const api = useApiService<IUser[]>(url, { headers, appendUrl })
+
+    return {
+        unshareSong: { run: api.deleteData, ...api.state },
+    }
+}
+
+/**
+ * Change song protection level (public/private)
+ * @param songId song's id
+ */
+export const useChangeSongProtectionLevel = (songId: number) => {
+    const url = `song/${songId}/changeProtectionLevel`
+    const headers = getHeaders()
+    const body = {}
+
+    const api = useApiService<void>(url, { headers, body })
+
+    return {
+        changeSongProtectionLevel: { run: api.postData, ...api.state },
+    }
+}
+
+/**
+ * Get share info about song
+ * @param songId song's id
+ */
+export const useGetSongShareInfo = (songId: number) => {
+    const url = `song/${songId}/getProtectionLevelSharedWithAndTags`
+    const headers = getHeaders()
+    const { getData, state, data } = useApiService<ISongShareData>(url, {
+        headers,
+    })
+
+    useEffect(() => {
+        getData()
+    }, [getData])
+
+    return {
+        getSongShareInfo: { run: getData, ...state },
+        songShareInfo: data,
     }
 }
