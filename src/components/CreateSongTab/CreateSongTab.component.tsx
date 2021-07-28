@@ -346,7 +346,7 @@ export const CreateSongTab = (props: {
                     handleOnSave={handleCustomVoiceDialogSave}
                     handleOnCancel={handleCustomVoiceDialogCancel}
                     songId={songId.toString()}
-                    baseVoice={clickedVoice || voices[0]} //Antar at voices[0] er partitur
+                    baseVoice={clickedVoice || voices[0]}
                     newVoice={newVoice}
                 />
             </Dialog>
