@@ -51,9 +51,7 @@ export const AdminView = () => {
 
     const { adminStatuses } = useGetAdminStatuses()
 
-    const userIsSystemAdmin = () => {
-        return adminStatuses?.systemAdmin || false
-    }
+    const userIsSystemAdmin = () => adminStatuses?.systemAdmin || false
 
     const {
         getOrganisations: getAdminOrganisations,

@@ -68,12 +68,10 @@ export const DashboardMenu = (props: {}) => {
                 <MenuItem onClick={() => handleClose("language")}>
                     {t("MenuButton.changeLanguage")}
                 </MenuItem>
-                {userIsAnyAdmin() ? (
+                {userIsAnyAdmin() && (
                     <MenuItem onClick={() => handleClose("admin")}>
                         {t("AdminView.adminPanel")}
                     </MenuItem>
-                ) : (
-                    ""
                 )}
             </Menu>
             <Dialog

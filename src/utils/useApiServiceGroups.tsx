@@ -281,7 +281,7 @@ export const useRemoveGroupMember = (groupId: number) => {
     const url = `organisations/groups/${groupId}/users`
     const headers = getHeaders()
     const body = {}
-    const appendUrl = `/`
+    const appendUrl = "/"
     const { deleteData, state } = useApiService<void>(url, {
         body,
         headers,
@@ -318,7 +318,7 @@ export const useRemoveOrganisationMember = (organisationId: number) => {
     const url = `organisations/${organisationId}/users`
     const headers = getHeaders()
     const body = {}
-    const appendUrl = `/`
+    const appendUrl = "/"
     const { deleteData, state } = useApiService<void>(url, {
         body,
         headers,
@@ -338,7 +338,7 @@ export const useSetUserRoleInGroup = (groupId: number) => {
     const url = `organisations/groups/${groupId}/users/`
     const headers = getHeaders()
     const body = {}
-    const appendUrl = `/`
+    const appendUrl = "/"
     const { putData, state } = useApiService<void>(url, {
         headers,
         body,
@@ -358,7 +358,7 @@ export const useSetUserRoleInOrganisation = (organisationId: number) => {
     const url = `organisations/${organisationId}/users/`
     const headers = getHeaders()
     const body = {}
-    const appendUrl = `/`
+    const appendUrl = "/"
     const { putData, state } = useApiService<void>(url, {
         headers,
         body,
@@ -378,7 +378,7 @@ export const useGetGroupOrOrganisationMembers = (
     isGroup: boolean,
     groupId: number
 ) => {
-    const urlStart = isGroup ? `organisations/groups` : `organisations`
+    const urlStart = isGroup ? "organisations/groups" : "organisations"
     const url = `${urlStart}/${groupId}/users`
     const headers = getHeaders()
 

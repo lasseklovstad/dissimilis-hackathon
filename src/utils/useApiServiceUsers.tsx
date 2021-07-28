@@ -113,10 +113,10 @@ export const useGetSysAdmins = () => {
  *  sysAdmin status on user is set to either true or false
  */
 export const useSetSysAdminStatus = () => {
-    const url = `user/`
+    const url = "user/"
     const headers = getHeaders()
     const body = {}
-    const appendUrl = `/`
+    const appendUrl = "/"
     const { putData, state } = useApiService<void>(url, {
         headers,
         body,

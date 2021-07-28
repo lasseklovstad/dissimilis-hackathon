@@ -100,7 +100,6 @@ export const EditSysAdminsDialog = (props: {
             }
             return false
         } else {
-            console.log("There must be at least one admin in the system!")
             // Snackbar
             return false
         }
@@ -119,14 +118,10 @@ export const EditSysAdminsDialog = (props: {
         }
     }
 
-    const filterAdmins = () => {
-        return (
-            userList?.filter(
-                (user) =>
-                    !adminList.some((admin) => admin.userId === user.userId)
-            ) || []
-        )
-    }
+    const filterAdmins = () =>
+        userList?.filter(
+            (user) => !adminList.some((admin) => admin.userId === user.userId)
+        ) || []
 
     useEffect(() => {
         if (users) {
@@ -156,30 +151,28 @@ export const EditSysAdminsDialog = (props: {
                     {t("Dialog.adminsIn")} {t("AdminView.system")}
                 </Typography>
                 <List dense={false}>
-                    {adminList.map((admin) => {
-                        return (
-                            <ListItem key={admin.email + "-list-item"}>
-                                <ListItemText
-                                    primary={admin.name}
-                                    secondary={secondary ? admin.email : null}
-                                    className={classes.iconButton}
-                                    secondaryTypographyProps={{
-                                        className: classes.secondaryTypography,
-                                    }}
-                                />
-                                <ListItemSecondaryAction
-                                    onClick={() => {
-                                        setSelectedAdmin(admin)
-                                        setConfirmationDialogIsOpen(true)
-                                    }}
-                                >
-                                    <IconButton edge="end" aria-label="delete">
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        )
-                    })}
+                    {adminList.map((admin) => (
+                        <ListItem key={`${admin.email}-list-item`}>
+                            <ListItemText
+                                primary={admin.name}
+                                secondary={secondary ? admin.email : null}
+                                className={classes.iconButton}
+                                secondaryTypographyProps={{
+                                    className: classes.secondaryTypography,
+                                }}
+                            />
+                            <ListItemSecondaryAction
+                                onClick={() => {
+                                    setSelectedAdmin(admin)
+                                    setConfirmationDialogIsOpen(true)
+                                }}
+                            >
+                                <IconButton edge="end" aria-label="delete">
+                                    <DeleteIcon />
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    ))}
                     <ListItem>
                         <ListItemText
                             primary={
@@ -201,11 +194,7 @@ export const EditSysAdminsDialog = (props: {
                 </List>
             </DialogContent>
             <DialogActions>
-                <DialogButton
-                    onClick={() => {
-                        handleOnCloseClick()
-                    }}
-                >
+                <DialogButton onClick={handleOnCloseClick}>
                     {t("Dialog.close")}
                 </DialogButton>
             </DialogActions>
