@@ -265,6 +265,7 @@ export const Chord = (props: ChordProps) => {
         selectedVoiceId,
         barPosition
     )
+    
     const handleCustomVoiceAddClick = async (index: number) => {
         const { error, result } = await addNote.run({
             chordName: chord.chordName,

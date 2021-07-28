@@ -494,6 +494,52 @@ export const useShareSong = (songId: number) => {
 }
 
 /**
+ * add component interval voice
+ * @param songId
+ * @param voiceId
+ */
+ export const useAddComponentInterval = (songId: string, voiceId: string, intervalPosition: string) => {
+    {
+        const url = `song/${songId}/voice/${voiceId}/addComponentInterval`
+        const body = {
+            intervalPosition
+        }
+        const headers = getHeaders()
+        const { postData, state, data } = useApiService<IVoice>(url, {
+            body,
+            headers,
+        })
+    
+        return {
+            addInterval: { run: postData, ...state },
+        }
+    }
+}
+/**
+ * remove component interval voice
+ * @param songId
+ * @param voiceId
+ */
+ export const useRemoveComponentInterval = (songId: string, voiceId: string, intervalPosition: string) => {
+    {
+        const url = `song/${songId}/voice/${voiceId}/removeComponentInterval`
+        const body = {
+            intervalPosition
+        }
+        const headers = getHeaders()
+        const { postData, state, data } = useApiService<ISong>(url, {
+            body,
+            headers,
+        })
+    
+        return {
+            removeInterval: { run: postData, ...state },
+        }
+    }
+}
+
+
+/**
  * Unshare song with user
  * @param songId song's id
  * @param userId userId of user losing write permission

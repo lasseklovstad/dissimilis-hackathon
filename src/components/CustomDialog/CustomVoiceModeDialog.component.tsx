@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import {
     Box,
     DialogActions,
@@ -85,6 +85,7 @@ export const CustomVoiceDialog = (props: {
     const classes = useStyles()
     const { handleOnCancel, handleOnSave, songId, baseVoice, newVoice } = props
     const { songInit } = useGetSong(songId)
+    const [indexArray, setindexArray] = useState<("checked"|"notChecked"|"indeterminiate")[]>([]);
 
     const getChordNameFromMainVoice = (
         barPosition: number,
@@ -95,9 +96,39 @@ export const CustomVoiceDialog = (props: {
             ?.chords.find((mainChord) => mainChord.position === chordPosition)
             ?.chordName
     }
+    useEffect(() => {
+        if(getBiggestChordInSong().showMenu){
+            setindexArray(new Array(getBiggestChordInSong().value).fill("notChecked"))
+
+        }
+    }, []);
 
     const { song } = useSongContext()
     const barsPerRow = useBarsPerRow()
+    console.log(indexArray)
+    const getBiggestChordInSong = useCallback(
+        () =>{
+            var biggestChordLength = 0
+            var chordName ="";
+            baseVoice.bars.forEach(bar => {
+                bar.chords.forEach(chord => {
+                    if (biggestChordLength < chord.notes.length && chord.chordName!== null) {
+                        biggestChordLength = chord.notes.length;
+                        chordName = chord.chordName;
+                    }
+                })
+            });
+            console.log(chordName)
+            return {showMenu: biggestChordLength!= 0 , biggestChordName: chordName, value: biggestChordLength}
+        }, []
+        );
+
+    const changeComponentInterval = (index: number)=>{
+        var array = indexArray
+        array[index] = "checked";
+        setindexArray(array);
+        console.log(index)
+    }
 
     return (
         <>
@@ -125,14 +156,16 @@ export const CustomVoiceDialog = (props: {
                     <Grid item xs={10} className={classes.outercontainer}>
                         <Box className={classes.container}>
                             <ChordOptions
-                                chord={"Em"}
-                                onChordNotesChange={() => {}}
-                                alwaysShow={true}
+                                chord={getBiggestChordInSong().biggestChordName}
+                                customMode= {true}
+                                onChordNotesChange={()=> {}}
+                                alwaysShow={getBiggestChordInSong().showMenu}
+                                indexArray={indexArray}
+                                changeComponentInterval={changeComponentInterval}
                             />
                             {//console.log(baseVoice.bars.filter(bars => bars.chords.some(chord => chord.chordName !== null)).length)
                             }
-                            {//console.table(baseVoice.bars[0])
-                            }
+                            
                         </Box>
                         <DialogActions className={classes.buttonContainer}>
                             <DialogButton

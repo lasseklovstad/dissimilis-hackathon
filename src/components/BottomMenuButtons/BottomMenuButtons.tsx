@@ -54,9 +54,13 @@ const useStyles = makeStyles({
 export const ChordOptions = (props: {
     chord: string | null
     onChordNotesChange: (clickedNote: string, checked: boolean) => void
+    changeComponentInterval?: (index: number) => void
     alwaysShow: boolean
+    customMode?: boolean
+    indexArray?: ("checked"|"notChecked"|"indeterminiate")[]
+
 }) => {
-    const { alwaysShow } = props
+    const { alwaysShow, customMode = false, indexArray = [], changeComponentInterval=()=>{} } = props
     const styles = useStyles()
     const { chordMenuOptions } = useSongContext()
     const { t } = useTranslation()
@@ -82,10 +86,16 @@ export const ChordOptions = (props: {
                                     color="default"
                                     disabled={
                                         chordContainsNote &&
-                                        chordMenuOptions.chordNotes.length === 1
+                                        chordMenuOptions.chordNotes.length === 1 && !customMode
                                     }
-                                    checked={chordContainsNote}
+                                    checked={(customMode && indexArray.length>0 && indexArray[i] == "checked")|| (chordContainsNote&& !customMode)}
+                                    indeterminate ={customMode && indexArray.length>0 && indexArray[i] == "indeterminiate" }
                                     onChange={(e) =>
+                                        customMode ?
+                                        changeComponentInterval(
+                                            i
+                                        )
+                                        :
                                         props.onChordNotesChange(
                                             e.target.name,
                                             e.target.checked

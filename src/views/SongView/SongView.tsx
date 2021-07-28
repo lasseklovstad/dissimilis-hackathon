@@ -146,7 +146,6 @@ export const SongView = () => {
                 error={getSong.error}
                 title={t("Dialog.getSongError")}
             />
-             {console.log("HEIEHIEHE songview")}   
             {selectedVoiceId !== undefined && selectedVoice && (
                 <Grid container className={classes.root}>
                     <Slide appear={false} direction="down" in={!trigger}>
