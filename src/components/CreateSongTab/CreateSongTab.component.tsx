@@ -66,6 +66,7 @@ export const CreateSongTab = (props: {
     onAddVoice: (voice: IVoice) => void
     onUpdateVoice: (voice: IVoice) => void
     onDeleteVoice: (voice: IVoice) => void
+    currentUserHasWriteAccess?: boolean
 }) => {
     const {
         voices,
@@ -74,6 +75,7 @@ export const CreateSongTab = (props: {
         onAddVoice,
         onUpdateVoice,
         onDeleteVoice,
+        currentUserHasWriteAccess = false,
     } = props
     const [newVoiceDialogIsOpen, setNewVoiceDialogIsOpen] = useState(false)
     const [renameDialogIsOpen, setRenameDialogIsOpen] = useState(false)
@@ -216,15 +218,17 @@ export const CreateSongTab = (props: {
                     })}
                 </Tabs>
 
-                <IconButton
-                    aria-haspopup="true"
-                    aria-controls="voiceTabMenu"
-                    aria-label={t("CreateSongTab.menu")}
-                    onClick={handleMenuClick}
-                    disableFocusRipple
-                >
-                    <MoreVertIcon />
-                </IconButton>
+                {currentUserHasWriteAccess && (
+                    <IconButton
+                        aria-haspopup="true"
+                        aria-controls="voiceTabMenu"
+                        aria-label={t("CreateSongTab.menu")}
+                        onClick={handleMenuClick}
+                        disableFocusRipple
+                    >
+                        <MoreVertIcon />
+                    </IconButton>
+                )}
             </Box>
 
             <Menu
