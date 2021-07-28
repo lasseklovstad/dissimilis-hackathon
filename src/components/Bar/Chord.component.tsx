@@ -212,6 +212,14 @@ const useStyle = makeStyles((theme) => ({
     selected: {
         boxShadow: `0 0 0 4px ${colors.focus}`,
     },
+    buttonBox: {
+        display: "flex",
+        flexDirection: "column",
+        height: "calc(100% - 25px)",
+        width: "100%",
+        minWidth: 0,
+        alignItems: "stretch",
+    },
 }))
 
 const ChordText = (props: { chordName: string }) => {
@@ -321,16 +329,7 @@ export const Chord = (props: ChordProps) => {
                 <ChordText chordName={chordName} />
             )}
             {customMode ? (
-                <Box
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        height: "calc(100% - 25px)",
-                        width: "100%",
-                        minWidth: 0,
-                        alignItems: "stretch",
-                    }}
-                >
+                <Box className={classes.buttonBox}>
                     {chord.notes
                         .map((note, i) => {
                             const tangent = tangentToNumber(note)
@@ -383,9 +382,8 @@ export const Chord = (props: ChordProps) => {
                                         ) : (
                                             ""
                                         )}
-                                        {showNoteLetters || Number(tangent)
-                                            ? tangent
-                                            : undefined}
+                                        {(showNoteLetters || Number(tangent)) &&
+                                            tangent}
                                     </ButtonBase>
                                 </>
                             )
@@ -401,7 +399,7 @@ export const Chord = (props: ChordProps) => {
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                     disableRipple={barEditMode}
-                    className={`${
+                    className={`${classes.buttonBox} ${
                         barEditMode
                             ? ""
                             : chord.notes[0] === "Z"
@@ -409,45 +407,39 @@ export const Chord = (props: ChordProps) => {
                             : classes.buttonBase
                     } ${isSelected ? classes.selected : ""}`}
                     focusVisibleClassName={classes.buttonBase}
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        height: "calc(100% - 25px)",
-                        width: "100%",
-                        minWidth: 0,
-                        alignItems: "stretch",
-                    }}
                     onFocus={handleChordFocus}
                 >
                     {chord.notes
                         .map((note, i) => {
                             const tangent = tangentToNumber(note)
-                            return note !== "X" ? (
-                                <>
-                                    <div
-                                        id="singleChord"
-                                        className={`${classes.noteContainer} ${
-                                            (classes as any)[note]
-                                        } ${"main"} ${
-                                            exportMode ? "disabled" : ""
-                                        } ${
-                                            note === "Z" && highlight
-                                                ? classes.highlight
-                                                : ""
-                                        } ${
-                                            Number(tangent) && exportMode
-                                                ? classes.exportNumberSize
-                                                : classes.noteFont
-                                        }`}
-                                        key={note + i}
-                                    >
-                                        {showNoteLetters || Number(tangent)
-                                            ? tangent
-                                            : undefined}
-                                    </div>
-                                </>
-                            ) : (
-                                ""
+                            return (
+                                note !== "X" && (
+                                    <>
+                                        <div
+                                            id="singleChord"
+                                            className={`${
+                                                classes.noteContainer
+                                            } ${
+                                                (classes as any)[note]
+                                            } ${"main"} ${
+                                                exportMode ? "disabled" : ""
+                                            } ${
+                                                note === "Z" && highlight
+                                                    ? classes.highlight
+                                                    : ""
+                                            } ${
+                                                Number(tangent) && exportMode
+                                                    ? classes.exportNumberSize
+                                                    : classes.noteFont
+                                            }`}
+                                            key={note + i}
+                                        >
+                                            {(showNoteLetters ||
+                                                Number(tangent)) &&
+                                                tangent}
+                                        </div>
+                                    </>
+                                )
                             )
                         })
                         .reverse()}

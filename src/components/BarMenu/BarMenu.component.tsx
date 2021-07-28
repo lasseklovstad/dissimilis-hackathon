@@ -106,20 +106,20 @@ export const BarMenu = (props: BarMenuProps) => {
             role="menu"
         >
             <MenuItem onClick={() => handleClose("delete")}>
-                {t("BarContainer.deleteBar")}{" "}
+                {t("BarContainer.deleteBar")}
             </MenuItem>
             <MenuItem onClick={() => handleClose("duplicate")}>
-                {t("BarContainer.duplicateBar")}{" "}
+                {t("BarContainer.duplicateBar")}
             </MenuItem>
             <MenuItem onClick={() => handleClose("toggleRepBefore")}>
                 {bar.repBefore
                     ? t("BarContainer.removeRepBefore")
-                    : t("BarContainer.addRepBefore")}{" "}
+                    : t("BarContainer.addRepBefore")}
             </MenuItem>
             <MenuItem onClick={() => handleClose("toggleRepAfter")}>
                 {bar.repAfter
                     ? t("BarContainer.removeRepAfter")
-                    : t("BarContainer.addRepAfter")}{" "}
+                    : t("BarContainer.addRepAfter")}
             </MenuItem>
             <MenuItem
                 onClick={() =>

@@ -12,6 +12,7 @@ export interface ISong {
     numerator: number
     updatedOn: string
     arrangerName: string | null
+    currentUserHasWriteAccess?: boolean
 }
 
 export interface ISongIndex {
@@ -21,6 +22,7 @@ export interface ISongIndex {
     denominator: number
     arrangerEmail: string
     updatedOn: string
+    currentUserHasWriteAccess?: boolean
 }
 
 export interface ISongPost {
