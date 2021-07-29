@@ -90,7 +90,7 @@ export const ShareSongDialog = (props: {
     const { organisationsFetched } = useGetOrganisations(
         OrganisationFilter.User
     )
-    const { allGroupsFetched } = useGetGroups(GroupFilter.User)
+    const { groupsFetched } = useGetGroups(GroupFilter.User)
     const userId = sessionStorage.getItem("userId") || undefined
 
     const [sharedWithUserList, setSharedWithUserList] = useState<IUser[]>([])
@@ -115,10 +115,10 @@ export const ShareSongDialog = (props: {
     const tagOptions = [...(groups || []), ...(organisations || [])]
 
     useEffect(() => {
-        if (allGroupsFetched) {
-            setGroups(allGroupsFetched)
+        if (groupsFetched) {
+            setGroups(groupsFetched)
         }
-    }, [allGroupsFetched])
+    }, [groupsFetched])
 
     useEffect(() => {
         if (organisationsFetched) {
@@ -200,13 +200,20 @@ export const ShareSongDialog = (props: {
         setConfirmRemoveUserDialogIsOpen(false)
     }
 
-    const handleAddUser = async (user: IUser) => {
-        const { error, result } = await shareSong.run(null, `/${user.userId}`)
-        if (!error && result) {
-            setSharedWithUserList(result.data)
-            handleCloseAddUserDialog()
-        }
-        if (error) {
+    const handleAddUser = async (user: IUser | undefined) => {
+        if (user) {
+            const { error, result } = await shareSong.run(
+                null,
+                `/${user.userId}`
+            )
+            if (!error && result) {
+                setSharedWithUserList(result.data)
+                handleCloseAddUserDialog()
+            }
+            if (error) {
+                //Launch snackbar
+            }
+        } else {
             //Launch snackbar
         }
     }

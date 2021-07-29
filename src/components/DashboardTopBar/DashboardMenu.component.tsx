@@ -3,12 +3,21 @@ import { Dialog, IconButton, Menu, MenuItem } from "@material-ui/core"
 import SettingsIcon from "@material-ui/icons/Settings"
 import { useTranslation } from "react-i18next"
 import { LanguageDialog } from "../CustomDialog/LanguageDialog.component"
+import { useHistory } from "react-router"
+import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 
 export const DashboardMenu = (props: {}) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [changeLanguageDialogIsOpen, setChangeLanguageDialogIsOpen] =
         useState(false)
     const { t } = useTranslation()
+    const history = useHistory()
+    const { adminStatuses } = useGetAdminStatuses()
+
+    const userIsAnyAdmin = () =>
+        adminStatuses?.systemAdmin ||
+        adminStatuses?.organisationAdmin ||
+        adminStatuses?.groupAdmin
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -21,12 +30,15 @@ export const DashboardMenu = (props: {}) => {
         setChangeLanguageDialogIsOpen(false)
     }
 
-    const handleClose = async (method?: "language" | "profile") => {
+    const handleClose = async (method?: "language" | "admin" | "profile") => {
         setAnchorEl(null)
         setChangeLanguageDialogIsOpen(false)
         switch (method) {
             case "language":
                 handleOpenChangeLanguageDialog()
+                break
+            case "admin":
+                history.push("/admin")
                 break
             default:
                 break
@@ -53,6 +65,11 @@ export const DashboardMenu = (props: {}) => {
                 <MenuItem onClick={() => handleClose("language")}>
                     {t("MenuButton.changeLanguage")}
                 </MenuItem>
+                {userIsAnyAdmin() && (
+                    <MenuItem onClick={() => handleClose("admin")}>
+                        {t("AdminView.adminPanel")}
+                    </MenuItem>
+                )}
             </Menu>
             <Dialog
                 open={changeLanguageDialogIsOpen}
