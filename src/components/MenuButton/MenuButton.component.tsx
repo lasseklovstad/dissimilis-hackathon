@@ -209,34 +209,32 @@ export const MenuButton = (props: {
 
                     {props.currentUserHasWriteAccess
                         ? [
-                              <>
-                                  <MenuItem
-                                      onClick={() => handleClose("delete")}
-                                      key="delete"
-                                  >
-                                      {t("MenuButton.delete")}
-                                  </MenuItem>
-                                  <MenuItem
-                                      onClick={() => handleClose("editBars")}
-                                      key="editBars"
-                                  >
-                                      {props.barEditMode
-                                          ? t("MenuButton.cancelEditBars")
-                                          : t("MenuButton.editBars")}
-                                  </MenuItem>
-                                  <MenuItem
-                                      onClick={() => handleClose("info")}
-                                      key="details"
-                                  >
-                                      {t("Dialog.details")}
-                                  </MenuItem>
-                                  <MenuItem
-                                      onClick={() => handleClose("share")}
-                                      key="share"
-                                  >
-                                      {t("Dialog.share")}
-                                  </MenuItem>
-                              </>,
+                              <MenuItem
+                                  onClick={() => handleClose("delete")}
+                                  key="delete"
+                              >
+                                  {t("MenuButton.delete")}
+                              </MenuItem>,
+                              <MenuItem
+                                  onClick={() => handleClose("editBars")}
+                                  key="editBars"
+                              >
+                                  {props.barEditMode
+                                      ? t("MenuButton.cancelEditBars")
+                                      : t("MenuButton.editBars")}
+                              </MenuItem>,
+                              <MenuItem
+                                  onClick={() => handleClose("info")}
+                                  key="details"
+                              >
+                                  {t("Dialog.details")}
+                              </MenuItem>,
+                              <MenuItem
+                                  onClick={() => handleClose("share")}
+                                  key="share"
+                              >
+                                  {t("Dialog.share")}
+                              </MenuItem>,
                           ]
                         : [
                               <MenuItem
