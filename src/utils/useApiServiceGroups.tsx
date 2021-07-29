@@ -6,14 +6,14 @@ import { useApiService } from "./useApiService"
 
 export enum GroupFilter {
     Admin = "ADMIN",
-    User = "USER",
+    Member = "MEMBER",
     All = "ALL",
 }
 
 export enum OrganisationFilter {
     Admin = "ADMIN",
     GroupAdmin = "GROUPADMIN",
-    User = "USER",
+    Member = "MEMBER",
     All = "ALL",
 }
 
