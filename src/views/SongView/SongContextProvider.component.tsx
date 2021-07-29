@@ -37,27 +37,27 @@ export const songReducer = (song: ISong, action: SongAction) => {
                         ...voice,
                         bars: voice.bars.filter(
                             (bar) => bar.position !== action.barPosition
-                        ),
+                            ),
+                        }
+                    }),
+                }
+                case "UPDATE_BAR":
+                    return {
+                        ...song,
+                        voices: song.voices.map((voice) => {
+                            return voice.songVoiceId === action.bar.songVoiceId
+                            ? {
+                                ...voice,
+                                bars: voice.bars.map((bar) => {
+                                    return bar.barId === action.bar.barId
+                                    ? action.bar
+                                    : bar
+                                }),
+                            }
+                            : voice
+                        }),
                     }
-                }),
-            }
-        case "UPDATE_BAR":
-            return {
-                ...song,
-                voices: song.voices.map((voice) => {
-                    return voice.songVoiceId === action.bar.songVoiceId
-                        ? {
-                              ...voice,
-                              bars: voice.bars.map((bar) => {
-                                  return bar.barId === action.bar.barId
-                                      ? action.bar
-                                      : bar
-                              }),
-                          }
-                        : voice
-                }),
-            }
-        case "UPDATE_VOICE":
+                    case "UPDATE_VOICE":
             return {
                 ...song,
                 voices: song.voices.map((voice) => {

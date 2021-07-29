@@ -13,6 +13,8 @@ import { IVoice } from "../../models/IVoice"
 
 type SongProps = {
     barsPerRow: number
+    updatedVoice?: boolean[][][]
+    updateAll: (newValues: boolean[], barIndex: number, noteIndex: number) => void
     voice: IVoice
     getChordNameFromMainVoice: (
         barPosition: number,
@@ -50,8 +52,10 @@ const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
 export const Song = (props: SongProps) => {
     const {
         barsPerRow,
+        updatedVoice,
+        updateAll,
         voice: { bars, isMain },
-        getChordNameFromMainVoice, //her må du leggge inn en dobbel liste med true false, denne må loopes igjennom slik at hver bar får riktig liste til seg selv så de kan oppdatere dette 
+        getChordNameFromMainVoice,
         timeSignature,
         heightOfBar,
         exportMode,
@@ -118,6 +122,8 @@ export const Song = (props: SongProps) => {
                                 return (
                                     <React.Fragment key={i}>
                                         <Bar
+                                            updateAll ={updateAll}
+                                            updatedBar={updatedVoice? updatedVoice[i]: undefined}
                                             // eslint-disable-next-line
                                             showVoltaBracketNumber={
                                                 showVoltaBracketNumber

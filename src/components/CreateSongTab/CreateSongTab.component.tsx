@@ -63,8 +63,10 @@ const useStyles = makeStyles({
 })
 
 export const CreateSongTab = (props: {
-    currentUserHasWriteAccess?: boolean
+    currentUserHasWriteAccess?: boolean,
+    updateSong: () => void
 }) => {
+
     const { song, dispatchSong, setCustomMode } = useSongContext()
     const { currentUserHasWriteAccess } = props
     const selectedVoice = useVoice(song?.voices)
@@ -210,6 +212,7 @@ export const CreateSongTab = (props: {
     const handleCustomVoiceDialogSave = () => {
         setCustomVoiceDialogIsOpen(false)
         setCustomMode(false)
+        props.updateSong()
     }
 
     return (

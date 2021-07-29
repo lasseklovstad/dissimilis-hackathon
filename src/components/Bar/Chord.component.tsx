@@ -9,28 +9,9 @@ import { useSongContext } from "../../views/SongView/SongContextProvider.compone
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded"
 import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUncheckedRounded"
 import { useVoice } from "../../utils/useVoice"
+import { IVoice } from "../../models/IVoice"
 
-type ChordProps = {
-    updatedNoteValues?: boolean[]
-    chord: IChord
-    barPosition: number
-    onContextMenu: (event: React.MouseEvent) => void
-    onClick: (event: React.MouseEvent) => void
-    onMouseEnter: () => void
-    onMouseLeave: () => void
-    highlight: boolean
-    exportMode: boolean
-    showChordLetters: boolean
-    showNoteLetters: boolean
-    isSelected: boolean
-    handleChordFocus: () => void
-    getChordNameFromMainVoice: (
-        barPosition: number,
-        chordPosition: number
-    ) => string | null | undefined
-    barEditMode: boolean
-    barId: number
-}
+
 
 const useStyle = makeStyles((theme) => ({
     buttonBase: {
@@ -241,9 +222,33 @@ const ChordText = (props: { chordName: string }) => {
     )
 }
 
+type ChordProps = {
+    updatedNoteValues?: boolean[]
+    updateAll: (newValues: boolean[], noteIndex: number) => void
+    chord: IChord
+    barPosition: number
+    onContextMenu: (event: React.MouseEvent) => void
+    onClick: (event: React.MouseEvent) => void
+    onMouseEnter: () => void
+    onMouseLeave: () => void
+    highlight: boolean
+    exportMode: boolean
+    showChordLetters: boolean
+    showNoteLetters: boolean
+    isSelected: boolean
+    handleChordFocus: () => void
+    getChordNameFromMainVoice: (
+        barPosition: number,
+        chordPosition: number
+    ) => string | null | undefined
+    barEditMode: boolean
+    barId: number
+}
+
 export const Chord = (props: ChordProps) => {
     const {
         updatedNoteValues,
+        updateAll,
         chord,
         barPosition,
         onClick,
@@ -267,7 +272,7 @@ export const Chord = (props: ChordProps) => {
     const selectedVoice = useVoice(song?.voices)
 
     const [customVoiceNoteStates, setCustomVoiceNoteStates] = useState<
-        Boolean[]
+        boolean[]
     >(chord.notes.map(() => false))
 
     const { customMode } = useSongContext()
@@ -290,6 +295,7 @@ export const Chord = (props: ChordProps) => {
             const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
             newCustomVoiceNoteStates[index] = true
             setCustomVoiceNoteStates(newCustomVoiceNoteStates)
+            updateAll(customVoiceNoteStates, chord.position)
             dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
@@ -298,29 +304,29 @@ export const Chord = (props: ChordProps) => {
             setCustomVoiceNoteStates(updatedNoteValues)
         }
     }, [updatedNoteValues]);
-
+    
     const { removeNote } = useRemoveNote(
         song!!.songId,
         selectedVoice!!.songVoiceId,
         barPosition
-    )
-    const handleCustomVoiceRemoveClick = async (index: number) => {
-        const { error, result } = await removeNote.run({
-            deleteOnLastIntervalRemoved: true,
-            chordName: chord.chordName,
-            notePosition: chord.position,
-            length: chord.length,
-            intervalPosition: index,
-            notes: chord.notes,
-        })
-        if (!error && result) {
-            const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
-            newCustomVoiceNoteStates[index] = false
-            setCustomVoiceNoteStates(newCustomVoiceNoteStates)
-            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+        )
+        const handleCustomVoiceRemoveClick = async (index: number) => {
+            const { error, result } = await removeNote.run({
+                deleteOnLastIntervalRemoved: true,
+                chordName: chord.chordName,
+                notePosition: chord.position,
+                length: chord.length,
+                intervalPosition: index,
+                notes: chord.notes,
+            })
+            if (!error && result) {
+                const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
+                newCustomVoiceNoteStates[index] = false
+                setCustomVoiceNoteStates(newCustomVoiceNoteStates)
+                updateAll(customVoiceNoteStates, chord.position)
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
-
     return (
         <Box
             flexGrow={chord.length}

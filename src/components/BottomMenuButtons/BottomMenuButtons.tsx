@@ -64,7 +64,6 @@ export const ChordOptions = (props: {
     const styles = useStyles()
     const { chordMenuOptions } = useSongContext()
     const { t } = useTranslation()
-    const [indeterminate, setIndeterminate] = useState<boolean>(false);
 
     if (!alwaysShow && chordMenuOptions?.chordType === ChordType.NOTE) {
         return <></>
@@ -91,10 +90,7 @@ export const ChordOptions = (props: {
                                             1 && !customMode
                                     }
                                     checked={(customMode && indexArray.length>0 && indexArray[i])|| (chordContainsNote&& !customMode)}
-                                    indeterminate ={customMode && indexArray.length>0 && indexArray[i] && indeterminate}
                                     onChange={(e) =>{
-                                        console.log(indexArray[i])
-                                        console.log(i)
                                         return(
 
                                             customMode ?

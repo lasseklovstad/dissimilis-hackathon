@@ -528,7 +528,7 @@ export const useAddComponentInterval = (songId: number, voiceId: number) => {
         const headers = getHeaders()
         const body = {
             intervalPosition: 0,
-            sourceVoiceId: 0
+            deleteChordsOnLastIntervalRemoved: true
         }
 
         const api = useApiService<IVoice>(url, {

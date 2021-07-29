@@ -128,7 +128,6 @@ export const DashboardView = () => {
                             <DashboardTopBar />
                         </Box>
                     </Grid>
-                    {console.log("DASHBIRRRASD")}
                     <SongGrid
                         title={t("DashboardView.newSongLabel")}
                         songs={undefined}

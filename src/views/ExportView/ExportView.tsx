@@ -204,6 +204,7 @@ export const ExportView = () => {
                                             <></>
                                         ) : (
                                             <Song
+                                                updateAll={()=>{}}
                                                 barsPerRow={
                                                     selectedBarConfig.barsPerRow
                                                 }

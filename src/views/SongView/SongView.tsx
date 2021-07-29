@@ -99,6 +99,7 @@ export const SongView = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <CreateSongTab
+                                updateSong={getSong.run}
                                     currentUserHasWriteAccess={
                                         song?.currentUserHasWriteAccess
                                     }
@@ -108,6 +109,7 @@ export const SongView = () => {
                     </Slide>
                     <Grid item xs={12} className={classes.body}>
                         <Song
+                            updateAll={()=>{}}
                             barsPerRow={barsPerRow}
                             voice={selectedVoice}
                             getChordNameFromMainVoice={

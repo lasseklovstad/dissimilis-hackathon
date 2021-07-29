@@ -15,6 +15,7 @@ import { colors } from "../../utils/colors"
 import BarRightClickMenu from "./BarRightClickMenu.component"
 import { useTranslation } from "react-i18next"
 import { useBars } from "../../utils/useBars"
+import { IVoice } from "../../models/IVoice"
 
 const useStyle = makeStyles(() => ({
     barContainer: {
@@ -38,6 +39,7 @@ const useStyle = makeStyles(() => ({
 
 export const Bar = (props: {
     updatedBar?: boolean[][]
+    updateAll: (newValues: boolean[], barIndex: number, noteIndex: number) => void
     bar: IBar
     height?: number
     exportMode: boolean
@@ -56,6 +58,7 @@ export const Bar = (props: {
 }) => {
     const {
         updatedBar,
+        updateAll,
         exportMode,
         showChordLetters,
         showNoteLetters,
@@ -333,6 +336,7 @@ export const Bar = (props: {
                                 )
                                 return (
                                     <Chord
+                                        updateAll={(newValues, noteIndex) => updateAll(newValues, i, noteIndex)}
                                         updatedNoteValues={updatedBar?updatedBar[i]: undefined}
                                         barPosition={position}
                                         showChordLetters={showChordLetters}
