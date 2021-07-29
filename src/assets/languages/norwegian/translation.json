@@ -1,6 +1,7 @@
 {
     "DashboardView": {
         "newSongLabel": "Nytt partitur",
+        "songSearchFilter": "Sanger i dine grupper",
         "recentSongLabel": "Dine siste fem sanger",
         "allSongLabel": "Alle sanger",
         "measure": "takt",
@@ -14,7 +15,8 @@
         "delete": "Slett",
         "date": "Dato endret",
         "user": "Bruker",
-        "song": "Sang"
+        "song": "Sang",
+        "autoCompleteLabel": "Velg et filter"
     },
     "AdminView": {
         "adminPanel": "Adminpanel",

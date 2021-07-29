@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 import { AccordionComponent } from "../../components/AdminViewComponents/AccordionComponent.component"
+import { useHistory } from "react-router-dom"
 import {
     Add as AddIcon,
     Edit as EditIcon,
@@ -78,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
 export const AdminView = () => {
     const classes = useStyles()
     const { t } = useTranslation()
-
+    const history = useHistory()
     const { postOrganisation } = usePostOrganisation()
 
     const { adminStatuses } = useGetAdminStatuses()
@@ -89,7 +90,7 @@ export const AdminView = () => {
         getOrganisations: getAdminOrganisations,
         organisationsFetched: adminOrganisationsFetched,
     } = useGetOrganisations(
-        userIsSystemAdmin() ? OrganisationFilter.All : OrganisationFilter.Admin
+        userIsSystemAdmin() ? undefined : OrganisationFilter.Admin
     )
 
     const {
@@ -155,7 +156,9 @@ export const AdminView = () => {
     const handleEditMembersDialogClose = () => {
         setEditMembersDialogIsOpen(false)
     }
-
+    const handleSearchTerm = (searchTerm: string) => {
+        history.push(`/library?search=${searchTerm}`)
+    }
     const handleAddOrganisationDialogSave = async (
         name: string,
         firstAdminId?: number
@@ -200,7 +203,9 @@ export const AdminView = () => {
                 <Grid container justify="center" className={classes.container}>
                     <Grid item xs={12}>
                         <Box mb={4}>
-                            <DashboardTopBar />
+                            <DashboardTopBar
+                                handleOnSubmitSearch={handleSearchTerm}
+                            />
                         </Box>
                     </Grid>
                     <Grid container item xs={12} sm={10}>

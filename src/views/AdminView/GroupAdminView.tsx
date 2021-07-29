@@ -107,25 +107,23 @@ export const GroupAdminView = () => {
               )
             : false) || userIsSystemAdmin()
 
-    const { getGroups, groupsFetched } = useGetGroupsInOrganisation(
-        userIsAdminInCurrentOrganisation()
-            ? GroupFilter.All
-            : GroupFilter.Admin,
-        parseInt(organisationId)
+    const { getAllGroups, allGroupsFetched } = useGetGroupsInOrganisation(
+        parseInt(organisationId),
+        userIsAdminInCurrentOrganisation() ? undefined : GroupFilter.Admin
     )
 
     const [groups, setGroups] = useState<IGroupIndex[] | undefined>()
 
     useEffect(() => {
-        if (groupsFetched) {
-            setGroups(groupsFetched)
+        if (allGroupsFetched) {
+            setGroups(allGroupsFetched)
         }
-    }, [groupsFetched])
+    }, [allGroupsFetched])
 
     const [addGroupIsOpen, setAddGroupIsOpen] = useState(false)
 
     const userIsGroupAdmin = () =>
-        (groupsFetched ? groupsFetched?.length > 0 : false) ||
+        (allGroupsFetched ? allGroupsFetched?.length > 0 : false) ||
         userIsAdminInCurrentOrganisation()
 
     const removeGroupAccordion = (groupId: number) => {
@@ -158,10 +156,13 @@ export const GroupAdminView = () => {
     }
 
     const updateGroups = async () => {
-        const { error, result } = await getGroups.run()
+        const { error, result } = await getAllGroups.run()
         if (!error && result) {
             setGroups(result.data)
         }
+    }
+    const handleSearchTerm = (searchTerm: string) => {
+        history.push(`/library?search=${searchTerm}`)
     }
 
     return (
@@ -170,7 +171,9 @@ export const GroupAdminView = () => {
                 <Grid container justify="center" className={classes.container}>
                     <Grid item xs={12}>
                         <Box mb={4}>
-                            <DashboardTopBar />
+                            <DashboardTopBar
+                                handleOnSubmitSearch={handleSearchTerm}
+                            />
                         </Box>
                     </Grid>
                     {userIsGroupAdmin() ? (

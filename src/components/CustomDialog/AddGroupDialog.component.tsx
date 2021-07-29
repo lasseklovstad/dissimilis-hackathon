@@ -60,9 +60,7 @@ export const AddGroupDialog = (props: {
 
     const { organisationsFetched: adminOrganisationsFetched } =
         useGetOrganisations(
-            userIsSystemAdmin
-                ? OrganisationFilter.All
-                : OrganisationFilter.Admin
+            userIsSystemAdmin ? undefined : OrganisationFilter.Admin
         )
 
     const { users } = useGetUsers()
