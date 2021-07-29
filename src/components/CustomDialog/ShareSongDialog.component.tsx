@@ -41,7 +41,6 @@ import {
     OrganisationFilter,
 } from "../../utils/useApiServiceGroups"
 import { Autocomplete } from "@material-ui/lab"
-import { useGetUsers } from "../../utils/useApiServiceUsers"
 import { InputDialog } from "./InputDialog.component"
 
 const useStyles = makeStyles((theme) => {
@@ -86,7 +85,6 @@ export const ShareSongDialog = (props: {
     const { unshareSong } = useUnshareSong(songId)
     const { setGroupTags } = useSetGroupTags(songId)
     const { setOrganisationTags } = useSetOrganisationTags(songId)
-    const { users } = useGetUsers()
     const { organisationsFetched } = useGetOrganisations(
         OrganisationFilter.User
     )
@@ -182,11 +180,10 @@ export const ShareSongDialog = (props: {
     }
 
     const handleAddUser = async (userEmail: string) => {
-        const user = users?.find((user) => user.email === userEmail)
-        if (user) {
+        if (userEmail) {
             const { error, result } = await shareSong.run(
                 null,
-                `/${user.userId}`
+                `?userEmail=${userEmail}`
             )
             if (!error && result) {
                 setSharedWithUserList(result.data)
