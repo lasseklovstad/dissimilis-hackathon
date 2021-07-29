@@ -5,6 +5,7 @@ import CssBaseline from "@material-ui/core/CssBaseline"
 import * as dotenv from "dotenv"
 import { Routing } from "./Routing"
 import { theme } from "./theme"
+import { SnackbarContextProvider } from "./utils/snackbarContextProvider.component"
 
 export const App = () => {
     dotenv.config()
@@ -12,8 +13,10 @@ export const App = () => {
     return (
         <div>
             <MuiThemeProvider theme={theme}>
-                <CssBaseline />
-                <Routing />
+                <SnackbarContextProvider>
+                    <CssBaseline />
+                    <Routing />
+                </SnackbarContextProvider>
             </MuiThemeProvider>
         </div>
     )

@@ -147,13 +147,12 @@ describe("Dashboard", () => {
         expect(speedSpinbutton).toHaveValue(134)
         userEvent.clear(nameTextbox)
         userEvent.clear(composerTextbox)
-        userEvent.clear(speedSpinbutton)
+        userEvent.type(speedSpinbutton, "{backspace}{backspace}")
         const newName = "Escalator to heaven"
         const newComposer = "Bach"
-        const newSpeed = 199
+        const newSpeed = 1
         userEvent.type(nameTextbox, newName)
         userEvent.type(composerTextbox, newComposer)
-        userEvent.type(speedSpinbutton, newSpeed.toString())
         expect(nameTextbox).toHaveValue(newName)
         expect(composerTextbox).toHaveValue(newComposer)
         expect(speedSpinbutton).toHaveValue(newSpeed)
