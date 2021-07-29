@@ -140,7 +140,6 @@ export const useGetFilteredSongs = (
         orderDescending,
         includedOrganisationIdArray,
         includedGroupIdArray,
-        includeAll: false,
     }
 
     const { postData, state, data } = useApiService<ISongIndex[]>(url, {

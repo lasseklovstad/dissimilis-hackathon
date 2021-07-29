@@ -25,7 +25,7 @@ const getHeaders = () => {
  * */
 export const useGetGroups = (groupFilter?: GroupFilter) => {
     const url = groupFilter
-        ? `organisations/groups?filterBy=${groupFilter}}"`
+        ? `organisations/groups?filterBy=${groupFilter}`
         : "organisations/groups"
     const initialData: IGroupIndex[] = []
     const headers = getHeaders()
@@ -52,7 +52,7 @@ export const useGetGroupsInOrganisation = (
     groupFilter?: GroupFilter
 ) => {
     const url = groupFilter
-        ? `organisations/groups?filterBy=${groupFilter}}"`
+        ? `organisations/groups?filterBy=${groupFilter}`
         : "organisations/groups"
 
     const initialData: IGroupIndex[] = []
@@ -79,7 +79,7 @@ export const useGetOrganisations = (
     organisationFilter?: OrganisationFilter
 ) => {
     const url = organisationFilter
-        ? `organisations?filterBy=${organisationFilter}}"`
+        ? `organisations?filterBy=${organisationFilter}`
         : "organisations"
 
     const initialData: IOrganisationIndex[] = []

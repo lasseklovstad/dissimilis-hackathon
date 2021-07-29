@@ -6,12 +6,10 @@ import {
     TextField,
     Typography,
     useMediaQuery,
-    IconButton,
 } from "@material-ui/core"
 import { MenuButton } from "../MenuButton/MenuButton.component"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 import { colors } from "../../utils/colors"
-import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
 import { useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
@@ -114,15 +112,6 @@ export const SongNavBar = (props: {
                         <>
                             <Box ml={4} mr={1}>
                                 <Typography>{props.user}</Typography>
-                            </Box>
-                            <Box mr={4}>
-                                <IconButton
-                                    disableFocusRipple
-                                    onClick={logout.run}
-                                    aria-label={t("LoginView.logout")}
-                                >
-                                    <LogoutIcon />
-                                </IconButton>
                             </Box>
                         </>
                     ) : undefined}

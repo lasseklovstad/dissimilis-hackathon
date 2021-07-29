@@ -10,7 +10,7 @@ import {
     useGetGroups,
     useGetOrganisations,
 } from "../../utils/useApiServiceGroups"
-import { useLocation } from "react-router"
+/* import { useLocation } from "react-router" */
 import { SortingButtons } from "../DashboardButtons/DashboardButtons"
 
 export const SearchFilterAutocomplete = (props: {
@@ -31,10 +31,7 @@ export const SearchFilterAutocomplete = (props: {
         orderDescending,
         onSubmit,
     } = props
-    console.log("searchFilter")
     const { t } = useTranslation()
-    const location = useLocation()
-    const url = new URLSearchParams(location.search)
 
     const [groups, setGroups] = useState<IGroupIndex[] | undefined>()
     const [organisations, setorganisations] = useState<
@@ -44,13 +41,11 @@ export const SearchFilterAutocomplete = (props: {
     const { organisationsFetched } = useGetOrganisations()
 
     useEffect(() => {
-        console.log("Useeffect groups")
         if (allGroupsFetched) {
             setGroups(allGroupsFetched)
         }
     }, [allGroupsFetched])
     useEffect(() => {
-        console.log("Useeffect filter orgs")
         if (organisationsFetched) {
             setorganisations(organisationsFetched)
         }
@@ -86,19 +81,6 @@ export const SearchFilterAutocomplete = (props: {
 
     return (
         <>
-            {orderTerm && changeOrderTerm && orderDescending !== undefined ? (
-                <Grid item xs={12} role="row">
-                    <SortingButtons
-                        orderTerm={orderTerm}
-                        changeOrderTerm={changeOrderTerm}
-                        orderDescending={orderDescending}
-                        groupId={""} //groupId}
-                        organisationId={""} //organisationId}
-                    />
-                </Grid>
-            ) : (
-                <></>
-            )}
             <Autocomplete
                 style={{ marginBottom: "1.5em" }}
                 value={valuesFromIds}
@@ -120,6 +102,19 @@ export const SearchFilterAutocomplete = (props: {
                     />
                 )}
             />
+            {orderTerm && changeOrderTerm && orderDescending !== undefined ? (
+                <Grid item xs={12} role="row">
+                    <SortingButtons
+                        orderTerm={orderTerm}
+                        changeOrderTerm={changeOrderTerm}
+                        orderDescending={orderDescending}
+                        groupId={""} //groupId}
+                        organisationId={""} //organisationId}
+                    />
+                </Grid>
+            ) : (
+                <></>
+            )}
         </>
     )
 }

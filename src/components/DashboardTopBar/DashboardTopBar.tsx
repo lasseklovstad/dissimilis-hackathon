@@ -6,14 +6,11 @@ import {
     Hidden,
     makeStyles,
     Typography,
-    IconButton,
 } from "@material-ui/core"
-import { useTranslation } from "react-i18next"
+
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
-import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
-import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
+import { useGetUser } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
-import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { SearchField } from "./SearchField"
 import { DashboardMenu } from "../DashboardTopBar/DashboardMenu.component"
 
@@ -30,9 +27,7 @@ export const DashboardTopBar = (props: {
     handleOnSubmitSearch: (searchTerm: string) => void
 }) => {
     const classes = useStyles()
-    const { t } = useTranslation()
     const { onGoHome, searchTerm, handleOnSubmitSearch } = props
-    const { logout } = useLogout()
     const { userInit, getUser } = useGetUser()
 
     return (
@@ -64,13 +59,6 @@ export const DashboardTopBar = (props: {
                                     <Loading isLoading={getUser.loading} />
                                     {userInit?.email}
                                 </Typography>
-                                <IconButton
-                                    disableFocusRipple
-                                    onClick={logout.run}
-                                    aria-label={t("LoginView.logout")}
-                                >
-                                    <LogoutIcon />
-                                </IconButton>
                             </Grid>
                         </Grid>
                         <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
@@ -115,12 +103,6 @@ export const DashboardTopBar = (props: {
                     </Grid>
                 </Box>
             </AppBar>
-            <Loading isLoading={logout.loading} fullScreen />
-            <ErrorDialog
-                isError={logout.isError}
-                error={logout.error}
-                title={t("LoginView.logoutError")}
-            />
         </>
     )
 }

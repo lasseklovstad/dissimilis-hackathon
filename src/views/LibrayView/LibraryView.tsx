@@ -11,10 +11,6 @@ import { useHistory } from "react-router"
 import { IOrganisationIndex } from "../../models/IOrganisation"
 import { IGroupIndex } from "../../models/IGroup"
 import { SongGrid } from "../../components/SongGrid/SongGrid.component"
-import {
-    useGetGroups,
-    useGetOrganisations,
-} from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles({
     container: {
@@ -78,7 +74,6 @@ export const LibraryView = () => {
     }
 
     const handleAddSearchUrl = (searchTerm: string) => {
-        console.log(location)
         const url = new URLSearchParams(location.search)
         const groupIdsFromUrl = url.getAll("groupId")
         const organisationIdsFromUrl = url.getAll("organisationId")
@@ -92,7 +87,6 @@ export const LibraryView = () => {
 
         history.push(`/library?search=${params}`)
     }
-    console.log("Render library")
 
     const handleAddFilterUrl = (
         newValues: (IGroupIndex | IOrganisationIndex)[]

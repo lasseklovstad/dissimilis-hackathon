@@ -126,6 +126,10 @@ export const DashboardView = () => {
         setAddSongDialogIsOpen(false)
     }
 
+    const handleSearchTerm = (searchTerm: string) => {
+        history.push(`/library?search=${searchTerm}`)
+    }
+
     const { getAllGroups, allGroupsFetched } = useGetGroups(GroupFilter.Member)
     const [groups, setGroups] = useState<IGroupIndex[] | undefined>()
     useEffect(() => {
@@ -164,7 +168,9 @@ export const DashboardView = () => {
                 <Grid container justify="center" className={styles.container}>
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
-                            <DashboardTopBar handleOnSubmitSearch={() => {}} />
+                            <DashboardTopBar
+                                handleOnSubmitSearch={handleSearchTerm}
+                            />
                         </Box>
                     </Grid>
 

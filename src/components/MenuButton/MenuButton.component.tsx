@@ -212,14 +212,12 @@ export const MenuButton = (props: {
                     <MenuItem onClick={() => handleClose("share")}>
                         {t("Dialog.share")}
                     </MenuItem>
+
                     {props.showName ? (
                         <>
                             <Divider variant="middle" />
                             <MenuItem disabled>
                                 <Typography>{props.user}</Typography>
-                            </MenuItem>
-                            <MenuItem onClick={props.onLogout}>
-                                <Typography>{t("LoginView.logout")}</Typography>
                             </MenuItem>
                         </>
                     ) : undefined}
