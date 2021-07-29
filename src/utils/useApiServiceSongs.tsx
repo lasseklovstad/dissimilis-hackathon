@@ -485,7 +485,7 @@ export const useShareSong = (songId: number) => {
     const url = `song/${songId}/shareSong/User`
     const headers = getHeaders()
 
-    const appendUrl = `/`
+    const appendUrl = "/"
     const api = useApiService<IUser[]>(url, { headers, appendUrl })
 
     return {
@@ -502,7 +502,7 @@ export const useUnshareSong = (songId: number) => {
     const url = `song/${songId}/shareSong/User`
     const headers = getHeaders()
 
-    const appendUrl = `/`
+    const appendUrl = "/"
     const api = useApiService<IUser[]>(url, { headers, appendUrl })
 
     return {
