@@ -12,6 +12,7 @@ import { LanguageDialog } from "../CustomDialog/LanguageDialog.component"
 import { useLogout } from "../../utils/useApiServiceUsers"
 import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
 import LanguageIcon from "@material-ui/icons/Language"
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { useHistory } from "react-router"
@@ -93,9 +94,17 @@ export const DashboardMenu = (props: {}) => {
                     onClick={() => handleClose("language")}
                 >
                     {t("MenuButton.changeLanguage")}
-                    <LanguageIcon style={{ marginLeft: "16px" }} />
+                    <LanguageIcon style={{ marginLeft: "2vh" }} />
                 </MenuItem>
-
+                {userIsAnyAdmin() && (
+                    <MenuItem
+                        className={classes.menuItem}
+                        onClick={() => handleClose("admin")}
+                    >
+                        {t("AdminView.adminPanel")}
+                        <AssignmentIndIcon />
+                    </MenuItem>
+                )}
                 <MenuItem
                     className={classes.menuItem}
                     onClick={() => handleClose("logout")}
@@ -103,11 +112,6 @@ export const DashboardMenu = (props: {}) => {
                     {t("LoginView.logout")}
                     <LogoutIcon />
                 </MenuItem>
-                {userIsAnyAdmin() && (
-                    <MenuItem onClick={() => handleClose("admin")}>
-                        {t("AdminView.adminPanel")}
-                    </MenuItem>
-                )}
             </Menu>
             <Dialog
                 open={changeLanguageDialogIsOpen}
