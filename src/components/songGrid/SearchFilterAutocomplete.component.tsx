@@ -10,7 +10,6 @@ import {
     useGetGroups,
     useGetOrganisations,
 } from "../../utils/useApiServiceGroups"
-/* import { useLocation } from "react-router" */
 import { SortingButtons } from "../DashboardButtons/DashboardButtons"
 
 export const SearchFilterAutocomplete = (props: {
