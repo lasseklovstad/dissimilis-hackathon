@@ -250,7 +250,7 @@ export const useUpdateVoice = (songId: string, voiceId: number | undefined) => {
     const api = useApiService<IVoice>(url, { headers })
     return {
         putVoice: { run: api.putData, ...api.state },
-    }
+    } 
 }
 
 export const useDeleteVoice = (songId: string, voiceId: number | undefined) => {
@@ -498,20 +498,21 @@ export const useShareSong = (songId: number) => {
  * @param songId
  * @param voiceId
  */
- export const useAddComponentInterval = (songId: string, voiceId: string, intervalPosition: string) => {
+ export const useAddComponentInterval = (songId: string, voiceId: string) => {
     {
         const url = `song/${songId}/voice/${voiceId}/addComponentInterval`
-        const body = {
-            intervalPosition
-        }
         const headers = getHeaders()
-        const { postData, state, data } = useApiService<IVoice>(url, {
-            body,
-            headers,
+        const body = {
+            Position: 0
+        }
+
+        const api = useApiService<IVoice>(url, {
+            headers, body
         })
     
         return {
-            addInterval: { run: postData, ...state },
+            addInterval: { run: api.postData, ...api.state, ...api.data
+            },
         }
     }
 }
@@ -520,20 +521,22 @@ export const useShareSong = (songId: number) => {
  * @param songId
  * @param voiceId
  */
- export const useRemoveComponentInterval = (songId: string, voiceId: string, intervalPosition: string) => {
+ export const useRemoveComponentInterval = (songId: string, voiceId: string) => {
     {
-        const url = `song/${songId}/voice/${voiceId}/removeComponentInterval`
-        const body = {
-            intervalPosition
-        }
+        const url = `song/${songId}/voice/${voiceId}/RemoveComponentInterval`
         const headers = getHeaders()
-        const { postData, state, data } = useApiService<ISong>(url, {
-            body,
-            headers,
+        const body = {
+            Position: 0
+        }
+
+        const api = useApiService<IVoice>(url, {
+            headers, body
         })
     
         return {
-            removeInterval: { run: postData, ...state },
+            removeInterval: {
+                run: api.postData, ...api.state, ...api.data
+            },
         }
     }
 }

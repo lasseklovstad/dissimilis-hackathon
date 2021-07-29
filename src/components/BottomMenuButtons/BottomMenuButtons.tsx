@@ -88,19 +88,24 @@ export const ChordOptions = (props: {
                                         chordContainsNote &&
                                         chordMenuOptions.chordNotes.length === 1 && !customMode
                                     }
-                                    checked={(customMode && indexArray.length>0 && indexArray[i] == "checked")|| (chordContainsNote&& !customMode)}
+                                    checked={(customMode && indexArray.length>0 && indexArray[i] === "checked")|| (chordContainsNote&& !customMode)}
                                     indeterminate ={customMode && indexArray.length>0 && indexArray[i] == "indeterminiate" }
-                                    onChange={(e) =>
-                                        customMode ?
-                                        changeComponentInterval(
-                                            i
-                                        )
-                                        :
-                                        props.onChordNotesChange(
-                                            e.target.name,
-                                            e.target.checked
-                                        )
-                                    }
+                                    onChange={(e) =>{
+                                        console.log(indexArray[i])
+                                        console.log(i)
+                                        return(
+
+                                            customMode ?
+                                            changeComponentInterval(
+                                                i
+                                                )
+                                                :
+                                                props.onChordNotesChange(
+                                                    e.target.name,
+                                                    e.target.checked
+                                                    )
+                                                    )
+                                    }}
                                     name={note as string}
                                 />
                             }

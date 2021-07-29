@@ -164,26 +164,25 @@ export const SongGridMenuButton = (props: {
 
                     {props.currentUserHasWriteAccess
                         ? [
-                              <>
                                   <MenuItem
                                       onClick={() => handleClose("delete")}
                                       key="delete"
                                   >
                                       {t("DashboardView.delete")}
-                                  </MenuItem>
+                                  </MenuItem>,
                                   <MenuItem
                                       onClick={() => handleClose("info")}
                                       key="info"
                                   >
                                       {t("Dialog.details")}
-                                  </MenuItem>
+                                  </MenuItem>,
                                   <MenuItem
                                       onClick={() => handleClose("share")}
                                       key="share"
                                   >
                                       {t("Dialog.share")}
-                                  </MenuItem>
-                              </>,
+                                  </MenuItem>,
+                              ,
                           ]
                         : [
                               <MenuItem

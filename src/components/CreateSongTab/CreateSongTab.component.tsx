@@ -133,8 +133,8 @@ export const CreateSongTab = (props: {
                 })
                 if (!error && result) {
                     setNewVoiceDialogIsOpen(false)
-                    setCustomVoiceDialogIsOpen(true)
                     setNewVoice(result.data)
+                    setCustomVoiceDialogIsOpen(true)
                     onAddVoice(result.data)
                     setClickedId(result.data.songVoiceId)
                     setCustomMode(true)
@@ -354,7 +354,14 @@ export const CreateSongTab = (props: {
                     handleOnCancel={handleCustomVoiceDialogCancel}
                     songId={songId.toString()}
                     baseVoice={clickedVoice || voices[0]}
-                    newVoice={newVoice}
+                    newVoice={newVoice|| {
+                        voiceName: "string",
+                        partNumber: 0,
+                        bars: [],
+                        songVoiceId: 0,
+                        songId: 0,
+                        isMain: false
+                    }}
                 />
             </Dialog>
             <Menu

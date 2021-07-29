@@ -14,6 +14,7 @@ import { IVoice } from "../../models/IVoice"
 type SongProps = {
     barsPerRow: number
     voice: IVoice
+    updatedVoice?: IVoice
     getChordNameFromMainVoice: (
         barPosition: number,
         chordPosition: number
@@ -59,11 +60,16 @@ export const Song = (props: SongProps) => {
         showNoteLetters,
         lastPage,
         currentUserHasWriteAccess = false,
+        updatedVoice,
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
 
     const getBarRows = (bars: IBar[]): IBar[][] => {
+        /* if(updatedVoice){
+            console.log(updatedVoice)
+            bars = updatedVoice.bars
+        } */
         // array of N elements, where N is the number of rows needed
         const rows = [...Array(Math.ceil(bars.length / barsPerRow))]
         // chunk the bars into the array of rows

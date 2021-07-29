@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next"
 
 import { IVoice } from "../../models/IVoice"
 import { colors } from "../../utils/colors"
-import { useGetSong } from "../../utils/useApiServiceSongs"
+import { useAddComponentInterval, useGetSong } from "../../utils/useApiServiceSongs"
 import { useBarsPerRow } from "../../utils/useBars"
 
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
@@ -79,13 +79,16 @@ export const CustomVoiceDialog = (props: {
     handleOnCancel: () => void
     songId: string
     baseVoice: IVoice
-    newVoice: IVoice | undefined
+    newVoice: IVoice
 }) => {
     const { t } = useTranslation()
     const classes = useStyles()
     const { handleOnCancel, handleOnSave, songId, baseVoice, newVoice } = props
     const { songInit } = useGetSong(songId)
     const [indexArray, setindexArray] = useState<("checked"|"notChecked"|"indeterminiate")[]>([]);
+    const {addInterval} = useAddComponentInterval(songId.toString(), newVoice.songVoiceId.toString());
+    const { selectedVoiceId, dispatchSong } = useSongContext();
+
 
     const getChordNameFromMainVoice = (
         barPosition: number,
@@ -96,16 +99,15 @@ export const CustomVoiceDialog = (props: {
             ?.chords.find((mainChord) => mainChord.position === chordPosition)
             ?.chordName
     }
+
     useEffect(() => {
         if(getBiggestChordInSong().showMenu){
             setindexArray(new Array(getBiggestChordInSong().value).fill("notChecked"))
-
         }
     }, []);
 
     const { song } = useSongContext()
     const barsPerRow = useBarsPerRow()
-    console.log(indexArray)
     const getBiggestChordInSong = useCallback(
         () =>{
             var biggestChordLength = 0
@@ -123,11 +125,21 @@ export const CustomVoiceDialog = (props: {
         }, []
         );
 
-    const changeComponentInterval = (index: number)=>{
+    const changeComponentInterval = async (index: number)=>{
         var array = indexArray
-        array[index] = "checked";
+        if(array[index] ==="checked" || array[index] === "indeterminiate"){
+            array[index] = "notChecked"
+        }
+        else{
+            array[index] = "checked";
+            const {error , result} = await addInterval.run({Position: index})
+            if (!error && result) {
+                console.log(result.data);
+                dispatchSong({type: "UPDATE_VOICE", voice: result.data})
+            }
+        }
         setindexArray(array);
-        console.log(index)
+        console.log(array[index])
     }
 
     return (
@@ -163,9 +175,6 @@ export const CustomVoiceDialog = (props: {
                                 indexArray={indexArray}
                                 changeComponentInterval={changeComponentInterval}
                             />
-                            {//console.log(baseVoice.bars.filter(bars => bars.chords.some(chord => chord.chordName !== null)).length)
-                            }
-                            
                         </Box>
                         <DialogActions className={classes.buttonContainer}>
                             <DialogButton
