@@ -114,7 +114,7 @@ export const CreateSongTab = (props: {
 
     const handleAddVoice = async (title: string, option: string) => {
         const voiceNumber = Math.max(
-            ...voices.map((voice) => voice.partNumber),
+            ...voices.map((voice) => voice.voiceNumber),
             0
         )
         switch (option) {
@@ -185,7 +185,7 @@ export const CreateSongTab = (props: {
     const handleChangeVoiceName = async (voiceName: string) => {
         const { error, result } = await putVoice.run({
             voiceName: voiceName,
-            voiceNumber: clickedVoice?.partNumber,
+            voiceNumber: clickedVoice?.voiceNumber,
         })
 
         if (!error && result) {

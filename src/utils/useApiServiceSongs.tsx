@@ -124,6 +124,8 @@ export const useGetAllSongs = (orderTerm: string, orderDescending: boolean) => {
  */
 export const useGetFilteredSongs = (
     title: string,
+    includedOrganisationIdArray: string[],
+    includedGroupIdArray: string[],
     orderTerm: string,
     orderDescending: boolean,
     numberOfResults?: string
@@ -136,7 +138,10 @@ export const useGetFilteredSongs = (
         title,
         orderBy: orderTerm,
         orderDescending,
+        includedOrganisationIdArray,
+        includedGroupIdArray,
     }
+
     const { postData, state, data } = useApiService<ISongIndex[]>(url, {
         initialData,
         headers,
@@ -495,7 +500,7 @@ export const useShareSong = (songId: number) => {
     const url = `song/${songId}/shareSong/User`
     const headers = getHeaders()
 
-    const appendUrl = `/`
+    const appendUrl = "/"
     const api = useApiService<IUser[]>(url, { headers, appendUrl })
 
     return {
@@ -512,7 +517,7 @@ export const useUnshareSong = (songId: number) => {
     const url = `song/${songId}/shareSong/User`
     const headers = getHeaders()
 
-    const appendUrl = `/`
+    const appendUrl = "/"
     const api = useApiService<IUser[]>(url, { headers, appendUrl })
 
     return {

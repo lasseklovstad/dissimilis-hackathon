@@ -88,9 +88,9 @@ export const ShareSongDialog = (props: {
     const { setOrganisationTags } = useSetOrganisationTags(songId)
     const { users } = useGetUsers()
     const { organisationsFetched } = useGetOrganisations(
-        OrganisationFilter.User
+        OrganisationFilter.Member
     )
-    const { allGroupsFetched } = useGetGroups(GroupFilter.User)
+    const { allGroupsFetched } = useGetGroups(GroupFilter.Member)
     const userId = sessionStorage.getItem("userId") || undefined
 
     const [sharedWithUserList, setSharedWithUserList] = useState<IUser[]>([])
@@ -200,13 +200,20 @@ export const ShareSongDialog = (props: {
         setConfirmRemoveUserDialogIsOpen(false)
     }
 
-    const handleAddUser = async (user: IUser) => {
-        const { error, result } = await shareSong.run(null, `/${user.userId}`)
-        if (!error && result) {
-            setSharedWithUserList(result.data)
-            handleCloseAddUserDialog()
-        }
-        if (error) {
+    const handleAddUser = async (user: IUser | undefined) => {
+        if (user) {
+            const { error, result } = await shareSong.run(
+                null,
+                `/${user.userId}`
+            )
+            if (!error && result) {
+                setSharedWithUserList(result.data)
+                handleCloseAddUserDialog()
+            }
+            if (error) {
+                //Launch snackbar
+            }
+        } else {
             //Launch snackbar
         }
     }

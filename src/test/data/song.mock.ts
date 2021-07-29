@@ -13,7 +13,7 @@ export const emptySong: ISong = {
             songId: 1,
             voiceName: "Main",
             isMain: true,
-            partNumber: 1,
+            voiceNumber: 1,
             bars: [
                 {
                     barId: 1,
@@ -52,7 +52,7 @@ export const songWithChords: ISong = {
             songId: 10,
             voiceName: "Main",
             isMain: true,
-            partNumber: 1,
+            voiceNumber: 1,
             bars: [
                 {
                     barId: 10,

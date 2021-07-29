@@ -7,6 +7,8 @@ import { SongView } from "./views/SongView/SongView"
 import { PrivateRoute } from "./PrivateRoute"
 import { ExportView } from "./views/ExportView/ExportView"
 import { LibraryView } from "./views/LibrayView/LibraryView"
+import { AdminView } from "./views/AdminView/AdminView"
+import { GroupAdminView } from "./views/AdminView/GroupAdminView"
 import { SongContextProvider } from "./views/SongView/SongContextProvider.component"
 
 export const SongRouting = () => {
@@ -63,6 +65,28 @@ export const Routing = () => {
                             exact
                             path="/library"
                             component={LibraryView}
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/admin"
+                    render={() => (
+                        <PrivateRoute
+                            exact
+                            path="/admin"
+                            component={AdminView}
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/admin/organisation/:organisationId"
+                    render={() => (
+                        <PrivateRoute
+                            exact
+                            path="/admin/organisation/:organisationId"
+                            component={GroupAdminView}
                         />
                     )}
                 />

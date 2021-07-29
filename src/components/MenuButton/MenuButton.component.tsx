@@ -206,37 +206,49 @@ export const MenuButton = (props: {
                     <MenuItem disabled onClick={() => handleClose()}>
                         {t("MenuButton.hide")}
                     </MenuItem>
+                    <MenuItem onClick={() => handleClose("delete")}>
+                        {t("MenuButton.delete")}
+                    </MenuItem>
+                    <MenuItem onClick={() => handleClose("editBars")}>
+                        {props.barEditMode
+                            ? t("MenuButton.cancelEditBars")
+                            : t("MenuButton.editBars")}
+                    </MenuItem>
+                    <MenuItem onClick={() => handleClose("info")}>
+                        {t("Dialog.details")}
+                    </MenuItem>
+                    <MenuItem onClick={() => handleClose("share")}>
+                        {t("Dialog.share")}
+                    </MenuItem>
 
                     {props.currentUserHasWriteAccess
                         ? [
-                              <>
-                                  <MenuItem
-                                      onClick={() => handleClose("delete")}
-                                      key="delete"
-                                  >
-                                      {t("MenuButton.delete")}
-                                  </MenuItem>
-                                  <MenuItem
-                                      onClick={() => handleClose("editBars")}
-                                      key="editBars"
-                                  >
-                                      {props.barEditMode
-                                          ? t("MenuButton.cancelEditBars")
-                                          : t("MenuButton.editBars")}
-                                  </MenuItem>
-                                  <MenuItem
-                                      onClick={() => handleClose("info")}
-                                      key="details"
-                                  >
-                                      {t("Dialog.details")}
-                                  </MenuItem>
-                                  <MenuItem
-                                      onClick={() => handleClose("share")}
-                                      key="share"
-                                  >
-                                      {t("Dialog.share")}
-                                  </MenuItem>
-                              </>,
+                              <MenuItem
+                                  onClick={() => handleClose("delete")}
+                                  key="delete"
+                              >
+                                  {t("MenuButton.delete")}
+                              </MenuItem>,
+                              <MenuItem
+                                  onClick={() => handleClose("editBars")}
+                                  key="editBars"
+                              >
+                                  {props.barEditMode
+                                      ? t("MenuButton.cancelEditBars")
+                                      : t("MenuButton.editBars")}
+                              </MenuItem>,
+                              <MenuItem
+                                  onClick={() => handleClose("info")}
+                                  key="details"
+                              >
+                                  {t("Dialog.details")}
+                              </MenuItem>,
+                              <MenuItem
+                                  onClick={() => handleClose("share")}
+                                  key="share"
+                              >
+                                  {t("Dialog.share")}
+                              </MenuItem>,
                           ]
                         : [
                               <MenuItem
@@ -251,9 +263,6 @@ export const MenuButton = (props: {
                             <Divider variant="middle" />
                             <MenuItem disabled>
                                 <Typography>{props.user}</Typography>
-                            </MenuItem>
-                            <MenuItem onClick={props.onLogout}>
-                                <Typography>{t("LoginView.logout")}</Typography>
                             </MenuItem>
                         </>
                     ) : undefined}
