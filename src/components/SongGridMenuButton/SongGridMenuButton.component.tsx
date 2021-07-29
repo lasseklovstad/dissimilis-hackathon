@@ -14,17 +14,21 @@ import { InputDialog } from "../CustomDialog/InputDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { ShareSongDialog } from "../CustomDialog/ShareSongDialog.component"
+import { ShowSongInfoDialog } from "../CustomDialog/ShowSongInfoDialog.component"
 
 export const SongGridMenuButton = (props: {
     songId: number
     link: string
     removeSong: (songId: number) => void
     renameSong: (songId: number, title: string) => void
+    currentUserHasWriteAccess?: boolean
 }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [duplicateSongDialogIsOpen, setDuplicateSongDialogIsOpen] =
         useState(false)
     const [songInfoDialogIsOpen, setSongInfoDialogIsOpen] = useState(false)
+    const [readSongInfoDialogIsOpen, setReadSongInfoDialogIsOpen] =
+        useState(false)
     const [deleteSongDialogIsOpen, setDeleteSongDialogIsOpen] = useState(false)
     const [shareSongDialogIsOpen, setShareSongDialogIsOpen] = useState(false)
     const { t } = useTranslation()
@@ -103,7 +107,7 @@ export const SongGridMenuButton = (props: {
     }
 
     const handleClose = async (
-        method?: "delete" | "info" | "copy" | "open" | "share"
+        method?: "delete" | "info" | "copy" | "open" | "share" | "infoShow"
     ) => {
         setAnchorEl(null)
         setDeleteSongDialogIsOpen(false)
@@ -122,6 +126,9 @@ export const SongGridMenuButton = (props: {
                 break
             case "share":
                 setShareSongDialogIsOpen(true)
+                break
+            case "infoShow":
+                setReadSongInfoDialogIsOpen(true)
                 break
             default:
                 break
@@ -154,15 +161,36 @@ export const SongGridMenuButton = (props: {
                     <MenuItem onClick={() => handleClose("copy")}>
                         {t("DashboardView.duplicate")}
                     </MenuItem>
-                    <MenuItem onClick={() => handleClose("delete")}>
-                        {t("DashboardView.delete")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("info")}>
-                        {t("Dialog.details")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("share")}>
-                        {t("Dialog.share")}
-                    </MenuItem>
+
+                    {props.currentUserHasWriteAccess
+                        ? [
+                              <MenuItem
+                                  onClick={() => handleClose("delete")}
+                                  key="delete"
+                              >
+                                  {t("DashboardView.delete")}
+                              </MenuItem>,
+                              <MenuItem
+                                  onClick={() => handleClose("info")}
+                                  key="info"
+                              >
+                                  {t("Dialog.details")}
+                              </MenuItem>,
+                              <MenuItem
+                                  onClick={() => handleClose("share")}
+                                  key="share"
+                              >
+                                  {t("Dialog.share")}
+                              </MenuItem>,
+                          ]
+                        : [
+                              <MenuItem
+                                  onClick={() => handleClose("infoShow")}
+                                  key="infoShow"
+                              >
+                                  {t("Dialog.details")}
+                              </MenuItem>,
+                          ]}
                 </Menu>
                 <Dialog
                     open={deleteSongDialogIsOpen}
@@ -188,6 +216,19 @@ export const SongGridMenuButton = (props: {
                     handleOnCancelClick={() => handleCloseSongInfoDialog()}
                     handleOnSaveClick={handleSaveSongInfo}
                     isLoadingPatch={putSong.loading}
+                />
+            </Dialog>
+            <Dialog
+                open={readSongInfoDialogIsOpen}
+                onClose={() => setReadSongInfoDialogIsOpen(false)}
+                maxWidth="xs"
+                fullWidth
+            >
+                <ShowSongInfoDialog
+                    songId={songId}
+                    handleOnCancelClick={() =>
+                        setReadSongInfoDialogIsOpen(false)
+                    }
                 />
             </Dialog>
             <Dialog

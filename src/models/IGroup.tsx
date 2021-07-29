@@ -13,8 +13,8 @@ export interface IGroup {
     address: string
     phoneNumber: string
     email: string
-    notes: string
+    description: string
     admins: IUser[]
-    organisationId: string
-    organisationName: string
+    organisationId?: string
+    organisationName?: string
 }

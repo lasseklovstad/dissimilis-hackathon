@@ -162,6 +162,9 @@ export const SongView = () => {
                                         setBarsClipboard(undefined)
                                     }}
                                     barEditMode={barEditMode}
+                                    currentUserHasWriteAccess={
+                                        song.currentUserHasWriteAccess
+                                    }
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -172,6 +175,9 @@ export const SongView = () => {
                                     songId={songId}
                                     voices={song.voices}
                                     selectedVoiceId={selectedVoiceId}
+                                    currentUserHasWriteAccess={
+                                        song.currentUserHasWriteAccess
+                                    }
                                 />
                             </Grid>
                         </Grid>
@@ -189,11 +195,14 @@ export const SongView = () => {
                             pasteBars={pasteBars}
                             deleteBars={deleteBars}
                             lastPage={true}
+                            currentUserHasWriteAccess={
+                                song.currentUserHasWriteAccess
+                            }
                         />
                     </Grid>
                 </Grid>
             )}
-            {selectedVoiceId && (
+            {selectedVoiceId && song.currentUserHasWriteAccess && (
                 <BottomBar
                     onNoteSelectedChange={(chordType) =>
                         handleNoteSelectedChange(chordType)
@@ -206,7 +215,7 @@ export const SongView = () => {
                     addBar={(song) =>
                         dispatchSong({ type: "UPDATE_SONG", song })
                     }
-                    songId={songId}
+                    songId={Number(songId)}
                     voiceId={selectedVoiceId}
                     chordDropdownContent={
                         chordMenuOptions.chordType === ChordType.NOTE

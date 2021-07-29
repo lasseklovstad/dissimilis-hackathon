@@ -14,6 +14,8 @@ import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg
 import LanguageIcon from "@material-ui/icons/Language"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { Loading } from "../loading/Loading.component"
+import { useHistory } from "react-router"
+import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles({
     menuItem: {
@@ -29,6 +31,14 @@ export const DashboardMenu = (props: {}) => {
     const { t } = useTranslation()
     const classes = useStyles()
     const { logout } = useLogout()
+    const history = useHistory()
+    const { adminStatuses } = useGetAdminStatuses()
+
+    const userIsAnyAdmin = () =>
+        adminStatuses?.systemAdmin ||
+        adminStatuses?.organisationAdmin ||
+        adminStatuses?.groupAdmin
+
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
     }
@@ -38,7 +48,8 @@ export const DashboardMenu = (props: {}) => {
     const handleCloseChangeLanguageDialog = () => {
         setChangeLanguageDialogIsOpen(false)
     }
-    const handleClose = async (method?: "language" | "logout") => {
+
+    const handleClose = async (method?: "language" | "admin" | "logout") => {
         setAnchorEl(null)
         setChangeLanguageDialogIsOpen(false)
         switch (method) {
@@ -47,6 +58,9 @@ export const DashboardMenu = (props: {}) => {
                 break
             case "logout":
                 logout.run()
+                break
+            case "admin":
+                history.push("/admin")
                 break
             default:
                 break
@@ -89,6 +103,11 @@ export const DashboardMenu = (props: {}) => {
                     {t("LoginView.logout")}
                     <LogoutIcon />
                 </MenuItem>
+                {userIsAnyAdmin() && (
+                    <MenuItem onClick={() => handleClose("admin")}>
+                        {t("AdminView.adminPanel")}
+                    </MenuItem>
+                )}
             </Menu>
             <Dialog
                 open={changeLanguageDialogIsOpen}

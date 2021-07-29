@@ -5,12 +5,12 @@ import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBa
 import { useGetFilteredSongs } from "../../utils/useApiServiceSongs"
 import { ISongIndex } from "../../models/ISong"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
+import { SongGrid } from "../../components/SongGrid/SongGrid.component"
 import { useLocation } from "react-router"
 import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
 import { useHistory } from "react-router"
 import { IOrganisationIndex } from "../../models/IOrganisation"
 import { IGroupIndex } from "../../models/IGroup"
-import { SongGrid } from "../../components/SongGrid/SongGrid.component"
 
 const useStyles = makeStyles({
     container: {

@@ -72,6 +72,9 @@ export const SongGrid = (props: SongGridProps) => {
                                 removeSong={props.removeSong}
                                 renameSong={props.renameSong}
                                 link={`/song/${song.songId}`}
+                                currentUserHasWriteAccess={
+                                    song.currentUserHasWriteAccess
+                                }
                             />
                         </Grid>
                     ))}
