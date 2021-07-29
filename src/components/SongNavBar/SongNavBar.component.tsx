@@ -69,8 +69,6 @@ export const SongNavBar = (props: { currentUserHasWriteAccess?: boolean }) => {
     const { currentUserHasWriteAccess } = props
     const classes = useStyles()
     const matches = useMediaQuery("(max-width:600px)")
-
-    //TODO: Should title stuff be moved to SongContext?
     const [title, setTitle] = useState(song?.title)
     const { t } = useTranslation()
     const { putSong } = useUpdateSong(song!!.songId)

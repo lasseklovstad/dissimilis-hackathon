@@ -92,9 +92,6 @@ export const CustomVoiceDialog = (props: {
             ?.chordName
     }
     const barsPerRow = useBarsPerRow()
-
-    console.log(baseVoice)
-
     return (
         <>
             <Box pl={6}>
