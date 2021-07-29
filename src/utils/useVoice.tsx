@@ -10,9 +10,10 @@ export const useVoice = (voices: IVoice[] | undefined) => {
 
     const voiceExists = voices?.find((voice) => voice.songVoiceId === voiceId)
 
-    if (!voiceExists && voices && voices?.length > 0) {
-        return voices[0].songVoiceId
-    }
+    const voice =
+        !voiceExists && voices && voices?.length > 0
+            ? voices[0]
+            : voices?.find((voice) => voice.songVoiceId === voiceId)
 
-    return voiceId
+    return voice
 }

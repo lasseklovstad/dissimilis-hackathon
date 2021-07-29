@@ -11,7 +11,6 @@ import {
     useGetOrganisations,
 } from "../../utils/useApiServiceGroups"
 import { SortingButtons } from "../DashboardButtons/DashboardButtons"
-import { classicNameResolver } from "typescript"
 
 const useStyles = makeStyles(() => {
     return {
@@ -116,8 +115,8 @@ export const SearchFilterAutocomplete = (props: {
                         orderTerm={orderTerm}
                         changeOrderTerm={changeOrderTerm}
                         orderDescending={orderDescending}
-                        groupId=""
-                        organisationId=""
+                        /* groupId=""
+                        organisationId="" */
                     />
                 </Grid>
             ) : (

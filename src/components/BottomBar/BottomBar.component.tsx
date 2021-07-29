@@ -32,7 +32,7 @@ import { ReactComponent as QuarternoteDottedIcon } from "../../assets/images/ico
 import { useAddBar } from "../../utils/useApiServiceSongs"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { ChordType } from "../../models/IChordMenuOptions"
-import { ISong } from "../../models/ISong"
+import { useChords } from "../../utils/useChords"
 
 const useStyles = makeStyles({
     outercontainer: {
@@ -143,43 +143,43 @@ const noteLengths = [
 ]
 
 export const BottomBar = (props: {
-    timeSignature: { numerator: number; denominator: number }
-    addBar: (song: ISong) => void
-    songId: number
     voiceId: number
-    onChordChange: (chord: string) => void
-    onChordLengthChange: (length: number) => void
-    onNoteSelectedChange: (chordType: ChordType) => void
     chordDropdownContent: string[]
-    deleteSelectedChord: () => void
-    clickOutsideListener: (e: any) => void
-    onChordNotesChange: (clickedNote: string, checked: boolean) => void
     chordOptionsRef: RefObject<any>
 }) => {
+    const { voiceId, chordDropdownContent, chordOptionsRef } = props
     const {
-        timeSignature: { numerator, denominator },
-        addBar,
-        voiceId,
-        songId,
-        onChordChange,
-        onChordLengthChange,
-        onNoteSelectedChange,
-        chordDropdownContent,
-        clickOutsideListener,
-        deleteSelectedChord,
-        onChordNotesChange,
-        chordOptionsRef,
-    } = props
+        setValuesForSelectedChord,
+        song,
+        dispatchSong,
+        selectedBarId,
+        selectedChordId,
+        selectedChordPosition,
+        chordMenuOptions,
+        dispatchChordMenuOptions,
+    } = useSongContext()
+    const { songId, numerator, denominator } = song!!
     const { t } = useTranslation()
     const classes = useStyles()
-    const { chordMenuOptions, selectedChordId } = useSongContext()
     const container = useRef(null)
+    const { postBar } = useAddBar(songId, voiceId)
 
-    const { postBar } = useAddBar(songId.toString(), voiceId)
-
-    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        onChordLengthChange(event.target.value as number)
-    }
+    const {
+        handleChangeChord,
+        handleChangeChordLength,
+        handleChordNotesChange,
+        handleDeleteSelectedChord,
+        handleNoteSelectedChange,
+    } = useChords(
+        song,
+        selectedBarId,
+        selectedChordId,
+        selectedChordPosition,
+        chordMenuOptions,
+        dispatchChordMenuOptions,
+        dispatchSong,
+        setValuesForSelectedChord
+    )
 
     const scrollToBottom = () => {
         window.scrollTo(0, document.body.scrollHeight)
@@ -188,12 +188,24 @@ export const BottomBar = (props: {
     const handleAddBar = async () => {
         const { error, result } = await postBar.run()
         if (!error && result) {
-            addBar(result.data)
+            dispatchSong({ type: "UPDATE_SONG", song: result.data })
             scrollToBottom()
         }
     }
     let timeSignatureNumerator = numerator
     if (denominator === 4) timeSignatureNumerator *= 2
+
+    const clickOutsideListener = (e: any) => {
+        if (
+            e.target.id !== "chordButton" &&
+            e.target.id !== "singleChord" &&
+            ((chordOptionsRef.current &&
+                !chordOptionsRef.current.contains(e.target)) ||
+                !chordOptionsRef.current)
+        ) {
+            setValuesForSelectedChord(undefined, undefined, 0)
+        }
+    }
 
     const Menu = (
         <FormControl
@@ -208,8 +220,10 @@ export const BottomBar = (props: {
             <Select
                 labelId={"selectChordLengthLabel"}
                 id={"selectChordLength"}
-                value={chordMenuOptions.chordLength}
-                onChange={handleChange}
+                value={chordMenuOptions?.chordLength}
+                onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+                    handleChangeChordLength(event.target.value as number)
+                }}
                 inputProps={{ className: classes.input }}
                 classes={{ icon: classes.selectIcon }}
                 MenuProps={{ container: container.current }}
@@ -240,7 +254,7 @@ export const BottomBar = (props: {
         chordType: ChordType | null
     ) => {
         if (chordType) {
-            onNoteSelectedChange(chordType)
+            handleNoteSelectedChange(chordType)
         }
     }
 
@@ -254,17 +268,17 @@ export const BottomBar = (props: {
                             <div className={classes.flexelement}>
                                 <DropdownAutocomplete
                                     selectedChordType={
-                                        chordMenuOptions.chordType
+                                        chordMenuOptions?.chordType
                                     }
-                                    selectedChord={chordMenuOptions.chord}
-                                    onChordChange={onChordChange}
+                                    selectedChord={chordMenuOptions?.chord}
+                                    onChordChange={handleChangeChord}
                                     icon={<MusicNoteIcon fontSize="small" />}
                                     chordDropdownContent={chordDropdownContent}
                                     noOptionsText={t("BottomBar.noOptions")}
                                 />
                             </div>
                             <StyledToggleButtonGroup
-                                value={chordMenuOptions.chordType}
+                                value={chordMenuOptions?.chordType}
                                 exclusive
                                 onChange={handleToggle}
                                 className={classes.flexelement}
@@ -291,7 +305,7 @@ export const BottomBar = (props: {
                             </StyledToggleButtonGroup>
                             <Button
                                 disableFocusRipple
-                                onClick={deleteSelectedChord}
+                                onClick={handleDeleteSelectedChord}
                                 aria-label={t("BottomBar.deleteSelectedChord")}
                             >
                                 <Delete />
@@ -299,13 +313,13 @@ export const BottomBar = (props: {
                         </div>
                     </ClickAwayListener>
 
-                    {chordMenuOptions.chordType === ChordType.CHORD &&
+                    {chordMenuOptions?.chordType === ChordType.CHORD &&
                     selectedChordId ? (
                         <RootRef rootRef={chordOptionsRef}>
                             <div className={classes.container}>
                                 <ChordOptions
-                                    chord={chordMenuOptions.chord}
-                                    onChordNotesChange={onChordNotesChange}
+                                    chord={chordMenuOptions?.chord}
+                                    onChordNotesChange={handleChordNotesChange}
                                     alwaysShow={false}
                                 />
                             </div>

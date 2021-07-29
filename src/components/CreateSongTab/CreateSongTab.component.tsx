@@ -22,9 +22,10 @@ import {
 } from "../../utils/useApiServiceSongs"
 import { colors } from "../../utils/colors"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
-import { Undo as UndoIcon, MoreVert as MoreVertIcon } from "@material-ui/icons"
-import { CustomVoiceDialog } from "../CustomDialog/CustomVoiceModeDialog.component"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useVoice } from "../../utils/useVoice"
+import { CustomVoiceDialog } from "../CustomDialog/CustomVoiceModeDialog.component"
+import { Undo as UndoIcon, MoreVert as MoreVertIcon } from "@material-ui/icons"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
 import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
@@ -65,52 +66,57 @@ const useStyles = makeStyles({
 })
 
 export const CreateSongTab = (props: {
-    voices: IVoice[]
-    selectedVoiceId: number
-    songId: string
-    undoIsLoading?: boolean
-    onAddVoice: (voice: IVoice) => void
-    onUpdateVoice: (voice: IVoice) => void
-    onDeleteVoice: (voice: IVoice) => void
     onUndo: () => void
+    undoIsLoading?: boolean
     currentUserHasWriteAccess?: boolean
 }) => {
-    const {
-        voices,
-        onAddVoice,
-        onUpdateVoice,
-        onDeleteVoice,
-        onUndo,
-        undoIsLoading,
-        currentUserHasWriteAccess = false,
-    } = props
-    const { song, selectedVoiceId } = useSongContext()
-    const { songId } = song
+    const { song, dispatchSong, setCustomMode } = useSongContext()
+    const { currentUserHasWriteAccess, onUndo, undoIsLoading } = props
+    const selectedVoice = useVoice(song?.voices)
+    const { songVoiceId: selectedVoiceId } = selectedVoice || {}
+    const { songId, voices } = song!!
+
     const [newVoiceDialogIsOpen, setNewVoiceDialogIsOpen] = useState(false)
     const [renameDialogIsOpen, setRenameDialogIsOpen] = useState(false)
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false)
     const [customVoiceDialogIsOpen, setCustomVoiceDialogIsOpen] =
         useState(false)
-    const [newVoice, setNewVoice] = useState<IVoice>()
-
+    const [baseVoiceCustom, setBaseVoiceCustom] = useState<IVoice | undefined>(
+        undefined
+    )
     const { t } = useTranslation()
     const [clickedId, setClickedId] = useState<undefined | number>()
-    const clickedVoice = voices.find((voice) => voice.songVoiceId === clickedId)
-    const selectedVoice = voices.find(
-        (voice) => voice.songVoiceId === selectedVoiceId
+    const clickedVoice = voices?.find(
+        (voice) => voice.songVoiceId === clickedId
     )
+
     const [rightClickMenuPosition, setRightClickMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()
-    const { postVoice } = useCreateVoice(songId.toString())
-    const { putVoice } = useUpdateVoice(songId.toString(), clickedId)
-    const { deleteVoice } = useDeleteVoice(songId.toString(), clickedId)
-    const { duplicateVoice } = useDuplicateVoice(songId.toString(), clickedId)
+    const { postVoice } = useCreateVoice(songId)
+    const { putVoice } = useUpdateVoice(songId, clickedId)
+    const { deleteVoice } = useDeleteVoice(songId, clickedId)
+    const { duplicateVoice } = useDuplicateVoice(songId, clickedId)
     const classes = useStyles()
     const history = useHistory()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
-    const { setCustomMode } = useSongContext()
+    const onAddVoice = (voice: IVoice) => {
+        dispatchSong({ type: "ADD_VOICE", voice })
+        history.push(`?voice=${voice.songVoiceId}`)
+    }
+
+    const onDeleteVoice = (voice: IVoice) => {
+        dispatchSong({ type: "DELETE_VOICE", songVoiceId: voice.songVoiceId })
+
+        if (voice.songVoiceId === selectedVoiceId) {
+            history.push(`/song/${songId}`)
+        }
+    }
+
+    const onUpdateVoice = (voice: IVoice) => {
+        dispatchSong({ type: "UPDATE_VOICE_NAME", voice })
+    }
 
     const handleAddVoice = async (title: string, option: string) => {
         const voiceNumber = Math.max(
@@ -141,8 +147,8 @@ export const CreateSongTab = (props: {
                 if (!error && result) {
                     setNewVoiceDialogIsOpen(false)
                     setCustomVoiceDialogIsOpen(true)
-                    setNewVoice(result.data)
                     onAddVoice(result.data)
+                    setBaseVoiceCustom(clickedVoice)
                     setClickedId(result.data.songVoiceId)
                     setCustomMode(true)
                 }
@@ -386,9 +392,8 @@ export const CreateSongTab = (props: {
                 <CustomVoiceDialog
                     handleOnSave={handleCustomVoiceDialogSave}
                     handleOnCancel={handleCustomVoiceDialogCancel}
-                    songId={songId.toString()}
-                    baseVoice={clickedVoice || voices[0]}
-                    newVoice={newVoice}
+                    baseVoice={baseVoiceCustom || voices[0]}
+                    newVoice={clickedVoice}
                 />
             </Dialog>
             <Menu

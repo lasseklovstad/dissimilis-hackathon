@@ -140,8 +140,6 @@ export const Song = (props: SongProps) => {
                                             onMenuClick={openMenu(bar)}
                                             bar={bar}
                                             height={heightOfBar}
-                                            pasteBars={props.pasteBars}
-                                            deleteBars={props.deleteBars}
                                             currentUserHasWriteAccess={
                                                 currentUserHasWriteAccess
                                             }
