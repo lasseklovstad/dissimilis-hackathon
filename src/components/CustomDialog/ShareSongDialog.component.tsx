@@ -41,8 +41,8 @@ import {
     OrganisationFilter,
 } from "../../utils/useApiServiceGroups"
 import { Autocomplete } from "@material-ui/lab"
-import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
 import { useGetUsers } from "../../utils/useApiServiceUsers"
+import { InputDialog } from "./InputDialog.component"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -91,14 +91,12 @@ export const ShareSongDialog = (props: {
         OrganisationFilter.User
     )
     const { allGroupsFetched } = useGetGroups(GroupFilter.User)
-    const userId = sessionStorage.getItem("userId") || undefined
 
     const [sharedWithUserList, setSharedWithUserList] = useState<IUser[]>([])
     const [selectedUser, setSelectedUser] = useState<IUser>()
     const [confirmRemoveUserDialogIsOpen, setConfirmRemoveUserDialogIsOpen] =
         useState(false)
     const [addUserDialogIsOpen, setAddUserDialogIsOpen] = useState(false)
-    const [filteredUserList, setFilteredUserList] = useState<IUser[]>()
 
     const [publicSong, setPublicSong] = useState(false)
 
@@ -175,23 +173,6 @@ export const ShareSongDialog = (props: {
         setTags([...(filteredGroupTags || []), ...(filteredOrgTags || [])])
     }, [filteredOrgTags, filteredGroupTags])
 
-    useEffect(() => {
-        if (userId && users) {
-            setFilteredUserList(
-                users.filter(
-                    (user) =>
-                        !(
-                            user.userId === Number(userId) ||
-                            sharedWithUserList.some(
-                                (sharedUser) =>
-                                    user.userId === sharedUser.userId
-                            )
-                        )
-                )
-            )
-        }
-    }, [userId, users, sharedWithUserList])
-
     const handleCloseAddUserDialog = () => {
         setAddUserDialogIsOpen(false)
     }
@@ -200,14 +181,25 @@ export const ShareSongDialog = (props: {
         setConfirmRemoveUserDialogIsOpen(false)
     }
 
-    const handleAddUser = async (user: IUser) => {
-        const { error, result } = await shareSong.run(null, `/${user.userId}`)
-        if (!error && result) {
-            setSharedWithUserList(result.data)
+    const handleAddUser = async (userEmail: string) => {
+        const user = users?.find((user) => user.email === userEmail)
+        if (user) {
+            const { error, result } = await shareSong.run(
+                null,
+                `/${user.userId}`
+            )
+            if (!error && result) {
+                setSharedWithUserList(result.data)
+                handleCloseAddUserDialog()
+            }
+            if (error) {
+                // Launch snackbar
+                // "An error occured"
+            }
+        } else {
+            // Invalid user email
+            // Launch snackbar
             handleCloseAddUserDialog()
-        }
-        if (error) {
-            //Launch snackbar
         }
     }
 
@@ -421,12 +413,14 @@ export const ShareSongDialog = (props: {
                 onClose={handleCloseAddUserDialog}
                 aria-label={t("Dialog.shareWithPerson")}
             >
-                <UserAutoCompleteDialog
+                <InputDialog
                     handleOnSaveClick={handleAddUser}
                     handleOnCancelClick={handleCloseAddUserDialog}
-                    userList={filteredUserList || []}
-                    title={t("Dialog.shareWithPerson")}
+                    headerText={t("Dialog.shareWithPerson")}
                     saveText={t("Dialog.addPerson")}
+                    cancelText={t("Dialog.cancel")}
+                    labelText={t("Dialog.email")}
+                    characterLimit={250}
                 />
             </Dialog>
             <Dialog
