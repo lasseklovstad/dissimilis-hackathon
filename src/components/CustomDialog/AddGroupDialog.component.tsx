@@ -128,18 +128,12 @@ export const AddGroupDialog = (props: {
                         }}
                         label={t("AdminView.countries")}
                     >
-                        {adminOrganisationsFetched
-                            ? adminOrganisationsFetched.map((organisation) => {
-                                  return (
-                                      <MenuItem
-                                          value={organisation.organisationId}
-                                      >
-                                          {" "}
-                                          {organisation.organisationName}{" "}
-                                      </MenuItem>
-                                  )
-                              })
-                            : ""}
+                        {adminOrganisationsFetched &&
+                            adminOrganisationsFetched.map((organisation) => (
+                                <MenuItem value={organisation.organisationId}>
+                                    {organisation.organisationName}
+                                </MenuItem>
+                            ))}
                     </Select>
                 </FormControl>
                 <Typography variant="caption">

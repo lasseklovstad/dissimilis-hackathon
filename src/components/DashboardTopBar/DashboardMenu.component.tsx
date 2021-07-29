@@ -14,13 +14,10 @@ export const DashboardMenu = (props: {}) => {
     const history = useHistory()
     const { adminStatuses } = useGetAdminStatuses()
 
-    const userIsAnyAdmin = () => {
-        return (
-            adminStatuses?.systemAdmin ||
-            adminStatuses?.organisationAdmin ||
-            adminStatuses?.groupAdmin
-        )
-    }
+    const userIsAnyAdmin = () =>
+        adminStatuses?.systemAdmin ||
+        adminStatuses?.organisationAdmin ||
+        adminStatuses?.groupAdmin
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -41,7 +38,7 @@ export const DashboardMenu = (props: {}) => {
                 handleOpenChangeLanguageDialog()
                 break
             case "admin":
-                history.push(`/admin`)
+                history.push("/admin")
                 break
             default:
                 break

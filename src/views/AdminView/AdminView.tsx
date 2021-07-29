@@ -307,28 +307,27 @@ export const AdminView = () => {
                                 )
                             })}
                         {userIsGroupAdmin() &&
-                            groupAdminOrganisations?.map((organisation) => {
-                                return renderedAdminOrganisationIds.indexOf(
-                                    organisation.organisationId
-                                ) > -1 ? (
-                                    ""
-                                ) : (
-                                    <Grid item xs={12}>
-                                        <AccordionComponent
-                                            organisationId={
-                                                organisation.organisationId
-                                            }
-                                            title={
-                                                organisation.organisationName
-                                            }
-                                            userIsSysAdm={userIsSystemAdmin()}
-                                            removeOrganisation={
-                                                removeOrganisationAccordion
-                                            }
-                                        />
-                                    </Grid>
-                                )
-                            })}
+                            groupAdminOrganisations?.map(
+                                (organisation) =>
+                                    !renderedAdminOrganisationIds.includes(
+                                        organisation.organisationId
+                                    ) && (
+                                        <Grid item xs={12}>
+                                            <AccordionComponent
+                                                organisationId={
+                                                    organisation.organisationId
+                                                }
+                                                title={
+                                                    organisation.organisationName
+                                                }
+                                                userIsSysAdm={userIsSystemAdmin()}
+                                                removeOrganisation={
+                                                    removeOrganisationAccordion
+                                                }
+                                            />
+                                        </Grid>
+                                    )
+                            )}
                     </Grid>
                     <Dialog
                         open={addOrganisationIsOpen}

@@ -112,7 +112,7 @@ export const EditGroupInfoDialog = (props: {
                             ? t("Dialog.nameOfGroup")
                             : t("Dialog.nameOfCountry")
                     }
-                    fullWidth={true}
+                    fullWidth
                     required
                 />
                 <TextField
@@ -128,7 +128,7 @@ export const EditGroupInfoDialog = (props: {
                         setGroupAddressTextFieldInput(e.target.value)
                     }}
                     label={t("Dialog.addressOfCountry")}
-                    fullWidth={true}
+                    fullWidth
                 />
                 <TextField
                     id="group-info-dialog-group-phone-number-textfield"
@@ -143,7 +143,7 @@ export const EditGroupInfoDialog = (props: {
                         setGroupPhoneNumberTextFieldInput(e.target.value)
                     }}
                     label={t("Dialog.phoneNumberOfCountry")}
-                    fullWidth={true}
+                    fullWidth
                     type="tel"
                 />
                 <TextField
@@ -159,7 +159,7 @@ export const EditGroupInfoDialog = (props: {
                         setGroupEmailTextFieldInput(e.target.value)
                     }}
                     label={t("Dialog.emailOfCountry")}
-                    fullWidth={true}
+                    fullWidth
                     type="email"
                 />
                 <TextField
@@ -179,7 +179,7 @@ export const EditGroupInfoDialog = (props: {
                             ? t("Dialog.informationAboutGroup")
                             : t("Dialog.informationAboutCountry")
                     }
-                    fullWidth={true}
+                    fullWidth
                     multiline
                 />
             </DialogContent>
@@ -195,11 +195,7 @@ export const EditGroupInfoDialog = (props: {
                         {t("Dialog.save")}
                     </DialogButton>
                 )}
-                <DialogButton
-                    onClick={() => {
-                        handleOnCancelClick()
-                    }}
-                >
+                <DialogButton onClick={handleOnCancelClick}>
                     {t("Dialog.cancel")}
                 </DialogButton>
             </DialogActions>

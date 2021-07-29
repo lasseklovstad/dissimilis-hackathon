@@ -179,7 +179,7 @@ export const GroupAdminView = () => {
                                 <Grid item xs={12}>
                                     <Button
                                         disableFocusRipple
-                                        onClick={() => history.push(`/admin`)}
+                                        onClick={() => history.push("/admin")}
                                         className={classes.returnButton}
                                     >
                                         <ArrowBackIosIcon />
