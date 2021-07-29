@@ -5,9 +5,12 @@ import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBa
 import { useGetFilteredSongs } from "../../utils/useApiServiceSongs"
 import { ISongIndex } from "../../models/ISong"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
-import { SongGrid } from "../../components/songGrid/SongGrid.component"
+import { SongGrid } from "../../components/SongGrid/SongGrid.component"
 import { useLocation } from "react-router"
 import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
+import { useHistory } from "react-router"
+import { IOrganisationIndex } from "../../models/IOrganisation"
+import { IGroupIndex } from "../../models/IGroup"
 
 const useStyles = makeStyles({
     container: {
@@ -22,14 +25,17 @@ export const LibraryView = () => {
     const [orderTerm, setOrderTerm] = useState<"date" | "song" | "user">("date")
     const [orderDescending, setOrderDescending] = useState<boolean>(true)
     const numberOfResults = "50"
-
+    const history = useHistory()
     const location = useLocation()
     const url = new URLSearchParams(location.search)
     const searchTermUrl = url.get("search")
     const searchTerm = searchTermUrl ? searchTermUrl : ""
-
+    const includedOrganisationIdArray = url.getAll("organisationId")
+    const includedGroupIdArray = url.getAll("groupId")
     const { getFilteredSongs, filteredSongsFetched } = useGetFilteredSongs(
         searchTerm,
+        includedOrganisationIdArray,
+        includedGroupIdArray,
         orderTerm,
         orderDescending,
         numberOfResults
@@ -65,6 +71,40 @@ export const LibraryView = () => {
         setOrderTerm(term)
     }
 
+    const handleAddSearchUrl = (searchTerm: string) => {
+        const url = new URLSearchParams(location.search)
+        const groupIdsFromUrl = url.getAll("groupId")
+        const organisationIdsFromUrl = url.getAll("organisationId")
+        const groupValues = groupIdsFromUrl
+            .map((groupId) => "groupId=" + groupId)
+            .join("&")
+        const organisationValues = organisationIdsFromUrl
+            .map((organisationId) => "organisationId=" + organisationId)
+            .join("&")
+        const params = [searchTerm, groupValues, organisationValues].join("&")
+
+        history.push(`/library?search=${params}`)
+    }
+
+    const handleAddFilterUrl = (
+        newValues: (IGroupIndex | IOrganisationIndex)[]
+    ) => {
+        const url = new URLSearchParams(location.search)
+        const searchTerm = url.get("search")
+
+        const newValueString = newValues
+            .map((item) =>
+                "groupName" in item
+                    ? "groupId=" + item.groupId
+                    : "organisationId=" + item.organisationId
+            )
+            .join("&")
+
+        searchTerm
+            ? history.push(`/library?search=${searchTerm}&${newValueString}`)
+            : history.push(`/library?${newValueString}`)
+    }
+
     return (
         <>
             <ErrorDialog
@@ -79,7 +119,10 @@ export const LibraryView = () => {
                 <Grid container justify="center" className={styles.container}>
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
-                            <DashboardTopBar searchTerm={searchTerm} />
+                            <DashboardTopBar
+                                searchTerm={searchTerm}
+                                handleOnSubmitSearch={handleAddSearchUrl}
+                            />
                         </Box>
                     </Grid>
                     <SongGrid
@@ -95,6 +138,10 @@ export const LibraryView = () => {
                         orderTerm={orderTerm}
                         changeOrderTerm={handleChangeOrderTerm}
                         orderDescending={orderDescending}
+                        searchFilter={true}
+                        initialGroupIds={includedGroupIdArray}
+                        initialOrganisationIds={includedOrganisationIdArray}
+                        onSubmitAutocomplete={handleAddFilterUrl}
                     />
                 </Grid>
             </Box>

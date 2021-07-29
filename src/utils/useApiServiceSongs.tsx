@@ -124,6 +124,8 @@ export const useGetAllSongs = (orderTerm: string, orderDescending: boolean) => {
  */
 export const useGetFilteredSongs = (
     title: string,
+    includedOrganisationIdArray: string[],
+    includedGroupIdArray: string[],
     orderTerm: string,
     orderDescending: boolean,
     numberOfResults?: string
@@ -136,7 +138,10 @@ export const useGetFilteredSongs = (
         title,
         orderBy: orderTerm,
         orderDescending,
+        includedOrganisationIdArray,
+        includedGroupIdArray,
     }
+
     const { postData, state, data } = useApiService<ISongIndex[]>(url, {
         initialData,
         headers,
@@ -341,6 +346,34 @@ export const useUpdateChord = (
     }
 }
 
+export const useAddNote = (
+    songId: string,
+    voiceId: number | undefined,
+    barPosition: number
+) => {
+    const url = `song/${songId}/voice/${voiceId}/bar/${barPosition}/note/addComponentInterval`
+    const headers = getHeaders()
+    const api = useApiService<IBar>(url, { headers })
+
+    return {
+        addNote: { run: api.postData, ...api.state },
+    }
+}
+
+export const useRemoveNote = (
+    songId: string,
+    voiceId: number | undefined,
+    barPosition: number
+) => {
+    const url = `song/${songId}/voice/${voiceId}/bar/${barPosition}/note/removeComponentInterval`
+    const headers = getHeaders()
+    const api = useApiService<IBar>(url, { headers })
+
+    return {
+        removeNote: { run: api.postData, ...api.state },
+    }
+}
+
 export const useAddBar = (songId: string, voiceId: number) => {
     const url = `song/${songId}/voice/${voiceId}/bar`
     const headers = getHeaders()
@@ -457,7 +490,7 @@ export const useShareSong = (songId: number) => {
     const url = `song/${songId}/shareSong/User`
     const headers = getHeaders()
 
-    const appendUrl = `/`
+    const appendUrl = "/"
     const api = useApiService<IUser[]>(url, { headers, appendUrl })
 
     return {
@@ -474,7 +507,7 @@ export const useUnshareSong = (songId: number) => {
     const url = `song/${songId}/shareSong/User`
     const headers = getHeaders()
 
-    const appendUrl = `/`
+    const appendUrl = "/"
     const api = useApiService<IUser[]>(url, { headers, appendUrl })
 
     return {

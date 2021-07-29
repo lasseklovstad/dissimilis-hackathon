@@ -6,14 +6,11 @@ import {
     Hidden,
     makeStyles,
     Typography,
-    IconButton,
 } from "@material-ui/core"
-import { useTranslation } from "react-i18next"
+
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
-import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
-import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
+import { useGetUser } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
-import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { SearchField } from "./SearchField"
 import { DashboardMenu } from "../DashboardTopBar/DashboardMenu.component"
 
@@ -27,11 +24,10 @@ const useStyles = makeStyles(() => ({
 export const DashboardTopBar = (props: {
     onGoHome?: () => void
     searchTerm?: string
+    handleOnSubmitSearch: (searchTerm: string) => void
 }) => {
     const classes = useStyles()
-    const { t } = useTranslation()
-    const { onGoHome, searchTerm } = props
-    const { logout } = useLogout()
+    const { onGoHome, searchTerm, handleOnSubmitSearch } = props
     const { userInit, getUser } = useGetUser()
 
     return (
@@ -63,13 +59,6 @@ export const DashboardTopBar = (props: {
                                     <Loading isLoading={getUser.loading} />
                                     {userInit?.email}
                                 </Typography>
-                                <IconButton
-                                    disableFocusRipple
-                                    onClick={logout.run}
-                                    aria-label={t("LoginView.logout")}
-                                >
-                                    <LogoutIcon />
-                                </IconButton>
                             </Grid>
                         </Grid>
                         <Hidden only={[`xs`, `md`, `lg`, `xl`]}>
@@ -94,7 +83,10 @@ export const DashboardTopBar = (props: {
                             <Grid item sm={1} />
                         </Hidden>
                         <Grid item xs={12} sm={10} md={3}>
-                            <SearchField searchTermInit={searchTerm} />
+                            <SearchField
+                                searchTermInit={searchTerm}
+                                handleOnSubmit={handleOnSubmitSearch}
+                            />
                         </Grid>
                         <Hidden only={[`xs`, `sm`]}>
                             <Grid
@@ -111,12 +103,6 @@ export const DashboardTopBar = (props: {
                     </Grid>
                 </Box>
             </AppBar>
-            <Loading isLoading={logout.loading} fullScreen />
-            <ErrorDialog
-                isError={logout.isError}
-                error={logout.error}
-                title={t("LoginView.logoutError")}
-            />
         </>
     )
 }

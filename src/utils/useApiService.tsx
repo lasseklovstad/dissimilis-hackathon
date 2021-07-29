@@ -147,7 +147,8 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
     )
 
     const putData = useCallback(
-        async (body?: unknown) => fetchData("patch", body),
+        async (body?: unknown, appendUrl?: string) =>
+            fetchData("patch", body, appendUrl),
         [fetchData]
     )
 

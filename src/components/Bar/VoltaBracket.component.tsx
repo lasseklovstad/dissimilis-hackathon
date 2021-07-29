@@ -39,14 +39,13 @@ export const VoltaBracket = (props: {
         return null
     }
 
-    const getVoltaBracketNumber = () => props.showVoltaBracketNumber 
-            ? `${props.voltaBracketOrder}.`
-            : ""
+    const getVoltaBracketNumber = () =>
+        props.showVoltaBracketNumber ? `${props.voltaBracketOrder}.` : ""
 
     return (
         <Box position="relative" top="-5px" height={0}>
             <Typography variant="body1" component="div">
-                {props.voltaBracketOrder !== undefined && 
+                {props.voltaBracketOrder !== undefined && (
                     <Box className={classes.voltaBracketContainer}>
                         <Box
                             className={`${classes.voltaBracketLine} ${
@@ -62,7 +61,7 @@ export const VoltaBracket = (props: {
                             </span>
                         </Box>
                     </Box>
-                }
+                )}
             </Typography>
         </Box>
     )
