@@ -11,6 +11,6 @@ export interface IOrganisation {
     address: string
     phoneNumber: string
     email: string
-    notes: string
+    description: string
     admins: IUser[]
 }

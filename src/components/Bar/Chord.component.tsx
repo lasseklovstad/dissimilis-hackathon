@@ -271,8 +271,8 @@ export const Chord = (props: ChordProps) => {
     const { customMode } = useSongContext()
 
     const { addNote } = useAddNote(
-        song!!.songId,
-        selectedVoice!!.songVoiceId,
+        song?.songId,
+        selectedVoice?.songVoiceId,
         barPosition
     )
     const handleCustomVoiceAddClick = async (index: number) => {
@@ -291,8 +291,8 @@ export const Chord = (props: ChordProps) => {
         }
     }
     const { removeNote } = useRemoveNote(
-        song!!.songId,
-        selectedVoice!!.songVoiceId,
+        song?.songId,
+        selectedVoice?.songVoiceId,
         barPosition
     )
     const handleCustomVoiceRemoveClick = async (index: number) => {

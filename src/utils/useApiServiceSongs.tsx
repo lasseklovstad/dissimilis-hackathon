@@ -8,9 +8,9 @@ import {
 } from "../models/ISong"
 import { IBar } from "../models/IBar"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../models/IVoice"
+import { IUser } from "../models/IUser"
 import { IGroupIndex } from "../models/IGroup"
 import { IOrganisationIndex } from "../models/IOrganisation"
-import { IUser } from "../models/IUser"
 
 export enum SongProtectionLevel {
     Public = "Public",
@@ -124,6 +124,8 @@ export const useGetAllSongs = (orderTerm: string, orderDescending: boolean) => {
  */
 export const useGetFilteredSongs = (
     title: string,
+    includedOrganisationIdArray: string[],
+    includedGroupIdArray: string[],
     orderTerm: string,
     orderDescending: boolean,
     numberOfResults?: string
@@ -136,7 +138,10 @@ export const useGetFilteredSongs = (
         title,
         orderBy: orderTerm,
         orderDescending,
+        includedOrganisationIdArray,
+        includedGroupIdArray,
     }
+
     const { postData, state, data } = useApiService<ISongIndex[]>(url, {
         initialData,
         headers,
@@ -342,7 +347,7 @@ export const useUpdateChord = (
 }
 
 export const useAddNote = (
-    songId: number,
+    songId: number | undefined,
     voiceId: number | undefined,
     barPosition: number
 ) => {
@@ -356,7 +361,7 @@ export const useAddNote = (
 }
 
 export const useRemoveNote = (
-    songId: number,
+    songId: number | undefined,
     voiceId: number | undefined,
     barPosition: number
 ) => {
@@ -436,6 +441,16 @@ export const useDuplicateSong = (songId: number) => {
     }
 }
 
+export const useUndoSong = (songId: number) => {
+    const url = `song/${songId}/undo`
+    const headers = getHeaders()
+
+    const api = useApiService<ISong>(url, { headers })
+
+    return {
+        undoSong: { run: api.putData, ...api.state },
+    }
+}
 /**
  * Set group tags for song
  * @param songId song's id
@@ -485,7 +500,7 @@ export const useShareSong = (songId: number) => {
     const url = `song/${songId}/shareSong/User`
     const headers = getHeaders()
 
-    const appendUrl = `/`
+    const appendUrl = "/"
     const api = useApiService<IUser[]>(url, { headers, appendUrl })
 
     return {
@@ -502,7 +517,7 @@ export const useUnshareSong = (songId: number) => {
     const url = `song/${songId}/shareSong/User`
     const headers = getHeaders()
 
-    const appendUrl = `/`
+    const appendUrl = "/"
     const api = useApiService<IUser[]>(url, { headers, appendUrl })
 
     return {

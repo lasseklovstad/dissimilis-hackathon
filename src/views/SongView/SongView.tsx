@@ -4,9 +4,13 @@ import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.component"
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
-import { useBarsPerRow } from "../../utils/useBars"
 import { Song } from "../../components/Song/Song.component"
-import { useGetSong } from "../../utils/useApiServiceSongs"
+import {
+    useGetSong,
+    useUndoSong,
+    useUpdateSong,
+} from "../../utils/useApiServiceSongs"
+import { useGetUser } from "../../utils/useApiServiceUsers"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { useSongContext } from "./SongContextProvider.component"
@@ -15,6 +19,9 @@ import { colors } from "../../utils/colors"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { SongNavBar } from "../../components/SongNavBar/SongNavBar.component"
 import { useVoice } from "../../utils/useVoice"
+import { useHotkeys } from "react-hotkeys-hook"
+import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
+import { useBarsPerRow } from "../../utils/useBars"
 
 const useStyles = makeStyles({
     root: {
@@ -48,11 +55,17 @@ export const SongView = () => {
     const songId = Number(songIdString)
     const { getSong, songInit } = useGetSong(songId)
     const barsPerRow = useBarsPerRow()
-    const trigger = useScrollTrigger()
-    const chordOptionsRef = useRef() as MutableRefObject<HTMLAnchorElement>
 
     const { song, dispatchSong, chordMenuOptions } = useSongContext()
     const { denominator, numerator, voices } = song!!
+    const { putSong } = useUpdateSong(songId)
+    const { undoSong } = useUndoSong(songId)
+    const { userInit } = useGetUser()
+    const trigger = useScrollTrigger()
+    const chordOptionsRef = useRef() as MutableRefObject<HTMLAnchorElement>
+
+    const { launchSnackbar } = useSnackbarContext()
+
     const mainVoice = voices.find((voice) => voice.isMain)
     const getChordNameFromMainVoice = (
         barPosition: number,
@@ -73,6 +86,20 @@ export const SongView = () => {
     const selectedVoice = useVoice(song!!.voices)
 
     const { songVoiceId: selectedVoiceId } = selectedVoice || {}
+
+    useHotkeys("ctrl+z", () => {
+        undo()
+    })
+
+    const undo = async () => {
+        const { result, isError } = await undoSong.run()
+
+        if (!isError && result?.data) {
+            dispatchSong({ type: "UPDATE_SONG", song: result.data })
+        } else {
+            launchSnackbar(t("Snackbar.undoError"), true)
+        }
+    }
 
     if (getSong.loading) {
         return <LoadingLogo />
@@ -99,6 +126,8 @@ export const SongView = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <CreateSongTab
+                                    onUndo={undo}
+                                    undoIsLoading={undoSong.loading}
                                     currentUserHasWriteAccess={
                                         song?.currentUserHasWriteAccess
                                     }

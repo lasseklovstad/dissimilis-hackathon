@@ -113,22 +113,40 @@ type SortingButtonsProps = {
     orderTerm: string
     changeOrderTerm: (term: "date" | "song" | "user") => void
     orderDescending: boolean
+    groupId: string
+    organisationId: string
 }
 
-export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = (
-    props
-) => {
+export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = ({
+    func,
+    text,
+}) => {
     const styles = useStyles()
     return (
         <Card className={`${styles.button} ${styles.newSongButton}`}>
-            <CardActionArea
-                onClick={() => props.func && props.func()}
-                disableRipple
-            >
+            <CardActionArea onClick={() => func && func()} disableRipple>
                 <Box className={styles.container} py={2} pl={1}>
                     <AddIcon />
                     <Box pl={1} pr={2}>
-                        <Typography>{props.text}</Typography>
+                        <Typography>{text}</Typography>
+                    </Box>
+                </Box>
+            </CardActionArea>
+        </Card>
+    )
+}
+
+export const DashboardButtonSearch: FC<ButtonNoLinkProps> = ({
+    func,
+    text,
+}) => {
+    const styles = useStyles()
+    return (
+        <Card className={`${styles.button} ${styles.newSongButton}`}>
+            <CardActionArea onClick={() => func && func()} disableRipple>
+                <Box className={styles.container} py={2} pl={1}>
+                    <Box pl={1} pr={2}>
+                        <Typography>{text}</Typography>
                     </Box>
                 </Box>
             </CardActionArea>
