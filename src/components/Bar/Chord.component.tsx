@@ -8,6 +8,7 @@ import { useAddNote, useRemoveNote } from "../../utils/useApiServiceSongs"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded"
 import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUncheckedRounded"
+import { useVoice } from "../../utils/useVoice"
 
 type ChordProps = {
     chord: IChord
@@ -260,7 +261,8 @@ export const Chord = (props: ChordProps) => {
 
     const chordName = getChordNameFromMainVoice(barPosition, chord.position)
 
-    const { song, selectedVoiceId, dispatchSong } = useSongContext()
+    const { song, dispatchSong } = useSongContext()
+    const selectedVoice = useVoice(song?.voices)
 
     const [customVoiceNoteStates, setCustomVoiceNoteStates] = useState<
         Boolean[]
@@ -269,8 +271,8 @@ export const Chord = (props: ChordProps) => {
     const { customMode } = useSongContext()
 
     const { addNote } = useAddNote(
-        song.songId.toString(),
-        selectedVoiceId,
+        song?.songId,
+        selectedVoice?.songVoiceId,
         barPosition
     )
     const handleCustomVoiceAddClick = async (index: number) => {
@@ -288,10 +290,9 @@ export const Chord = (props: ChordProps) => {
             dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
-
     const { removeNote } = useRemoveNote(
-        song.songId.toString(),
-        selectedVoiceId,
+        song?.songId,
+        selectedVoice?.songVoiceId,
         barPosition
     )
     const handleCustomVoiceRemoveClick = async (index: number) => {

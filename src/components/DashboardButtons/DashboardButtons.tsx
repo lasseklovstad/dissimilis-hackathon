@@ -113,8 +113,6 @@ type SortingButtonsProps = {
     orderTerm: string
     changeOrderTerm: (term: "date" | "song" | "user") => void
     orderDescending: boolean
-    groupId: string
-    organisationId: string
 }
 
 export const DashboardButtonWithAddIconNoLink: FC<ButtonNoLinkProps> = ({

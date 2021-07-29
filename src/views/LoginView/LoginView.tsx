@@ -33,7 +33,7 @@ const useStyles = makeStyles({
         padding: "48px",
     },
     loginlogo: {
-        marginBottom: "16px",
+        marginBottom: "40px",
         width: "60%",
     },
     loginbutton: {

@@ -267,7 +267,7 @@ export const ShareSongDialog = (props: {
                     {t("Dialog.editRightsDescription")}
                 </Typography>
                 {getSongShareInfo.loading ? (
-                    <Grid xs={12}>
+                    <Grid item xs={12}>
                         <CircularProgress
                             aria-label="Loading"
                             size={50}
@@ -337,7 +337,7 @@ export const ShareSongDialog = (props: {
                     {t("Dialog.readRightsDescription")}
                 </Typography>
                 {getSongShareInfo.loading ? (
-                    <Grid xs={12}>
+                    <Grid item xs={12}>
                         <CircularProgress
                             aria-label="Loading"
                             size={30}

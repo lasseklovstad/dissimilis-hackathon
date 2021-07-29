@@ -10,10 +10,12 @@ import {
 import { MenuButton } from "../MenuButton/MenuButton.component"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 import { colors } from "../../utils/colors"
-import { useLogout } from "../../utils/useApiServiceUsers"
+import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { useTranslation } from "react-i18next"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useUpdateSong } from "../../utils/useApiServiceSongs"
 
 const useStyles = makeStyles({
     root: {
@@ -60,25 +62,29 @@ const useStyles = makeStyles({
     },
 })
 
-export const SongNavBar = (props: {
-    title: string
-    voiceId: number
-    onTitleBlur: (title: string) => void
-    user?: string
-    setBarEditMode: () => void
-    barEditMode: boolean
-    currentUserHasWriteAccess?: boolean
-}) => {
+export const SongNavBar = (props: { currentUserHasWriteAccess?: boolean }) => {
+    const { song, dispatchSong } = useSongContext()
+    const { currentUserHasWriteAccess } = props
     const classes = useStyles()
     const matches = useMediaQuery("(max-width:600px)")
-    const [title, setTitle] = useState(props.title)
+    const [title, setTitle] = useState(song?.title)
     const { t } = useTranslation()
+    const { putSong } = useUpdateSong(song!!.songId)
+    const { logout } = useLogout()
+    const { userInit } = useGetUser()
 
     useEffect(() => {
-        setTitle(props.title)
-    }, [props.title])
+        setTitle(song?.title)
+    }, [song?.title])
 
-    const { logout } = useLogout()
+    const handleTitleBlur = async (newTitle: string) => {
+        if (newTitle !== song?.title) {
+            const { error, result } = await putSong.run({ title: newTitle })
+            if (!error && result) {
+                dispatchSong({ type: "UPDATE_SONG", song: result.data })
+            }
+        }
+    }
 
     return (
         <Box className={classes.root} mb={matches ? 2 : 4}>
@@ -90,7 +96,7 @@ export const SongNavBar = (props: {
                 >
                     <DashboardTopBarIcon />
                     <Box ml={1} mr={1} width="100%">
-                        {props.currentUserHasWriteAccess ? (
+                        {currentUserHasWriteAccess ? (
                             <TextField
                                 InputProps={{
                                     style: { fontSize: 24 },
@@ -106,7 +112,7 @@ export const SongNavBar = (props: {
                                 }}
                                 value={title}
                                 onBlur={(ev) =>
-                                    props.onTitleBlur(ev.target.value)
+                                    handleTitleBlur(ev.target.value)
                                 }
                                 onChange={(ev) => setTitle(ev.target.value)}
                                 fullWidth
@@ -124,22 +130,15 @@ export const SongNavBar = (props: {
                     {!matches ? (
                         <>
                             <Box ml={4} mr={1}>
-                                <Typography>{props.user}</Typography>
+                                <Typography>{userInit?.email}</Typography>
                             </Box>
                         </>
                     ) : undefined}
                     <MenuButton
-                        songTitle={title}
-                        voiceId={props.voiceId}
                         showName={matches}
-                        user={props.user}
-                        setBarEditMode={props.setBarEditMode}
-                        barEditMode={props.barEditMode}
-                        updateSongTitle={setTitle}
-                        onLogout={logout.run}
-                        currentUserHasWriteAccess={
-                            props.currentUserHasWriteAccess
-                        }
+                        updateSongTitle={handleTitleBlur}
+                        songTitle={song!!.title}
+                        currentUserHasWriteAccess={currentUserHasWriteAccess}
                     />
                 </Box>
             </AppBar>
