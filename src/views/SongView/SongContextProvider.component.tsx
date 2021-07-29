@@ -173,7 +173,6 @@ const SongContext = React.createContext<ISongContext>({
     setSelectedBars: () => {
         throw new Error("setSelectedBars is not implemented")
     },
-    //selectedVoiceId: undefined,
     selectedVoice: undefined,
     setSelectedVoice: () => {
         throw new Error("setSelectedVoiceId is not implemented")
