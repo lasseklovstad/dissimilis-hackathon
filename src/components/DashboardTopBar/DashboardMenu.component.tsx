@@ -19,9 +19,16 @@ import { useHistory } from "react-router"
 import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles({
+    menuContainer: {
+        display: "flex",
+        justifyContent: "space-between",
+    },
     menuItem: {
         display: "flex",
         justifyContent: "space-between",
+    },
+    menuIcon: {
+        marginLeft: "2vh",
     },
 })
 
@@ -84,17 +91,14 @@ export const DashboardMenu = (props: {}) => {
                 keepMounted
                 open={!!anchorEl}
                 onClose={() => handleClose()}
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                }}
+                className={classes.menuContainer}
             >
                 <MenuItem
                     className={classes.menuItem}
                     onClick={() => handleClose("language")}
                 >
                     {t("MenuButton.changeLanguage")}
-                    <LanguageIcon style={{ marginLeft: "2vh" }} />
+                    <LanguageIcon className={classes.menuIcon} />
                 </MenuItem>
                 {userIsAnyAdmin() && (
                     <MenuItem

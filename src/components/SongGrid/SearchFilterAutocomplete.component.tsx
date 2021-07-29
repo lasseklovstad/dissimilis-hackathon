@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Grid, TextField } from "@material-ui/core"
+import { Grid, makeStyles, TextField } from "@material-ui/core"
 
 import { useTranslation } from "react-i18next"
 import { Autocomplete } from "@material-ui/lab"
@@ -11,6 +11,15 @@ import {
     useGetOrganisations,
 } from "../../utils/useApiServiceGroups"
 import { SortingButtons } from "../DashboardButtons/DashboardButtons"
+import { classicNameResolver } from "typescript"
+
+const useStyles = makeStyles(() => {
+    return {
+        autoComplete: {
+            marginBottom: "1.5em",
+        },
+    }
+})
 
 export const SearchFilterAutocomplete = (props: {
     initialGroupIds?: string[]
@@ -38,7 +47,7 @@ export const SearchFilterAutocomplete = (props: {
     >()
     const { allGroupsFetched } = useGetGroups()
     const { organisationsFetched } = useGetOrganisations()
-
+    const classes = useStyles()
     useEffect(() => {
         if (allGroupsFetched) {
             setGroups(allGroupsFetched)
@@ -81,7 +90,7 @@ export const SearchFilterAutocomplete = (props: {
     return (
         <>
             <Autocomplete
-                style={{ marginBottom: "1.5em" }}
+                className={classes.autoComplete}
                 value={valuesFromIds}
                 multiple
                 id="tags-outlined"
@@ -107,8 +116,8 @@ export const SearchFilterAutocomplete = (props: {
                         orderTerm={orderTerm}
                         changeOrderTerm={changeOrderTerm}
                         orderDescending={orderDescending}
-                        groupId={""} //groupId}
-                        organisationId={""} //organisationId}
+                        groupId=""
+                        organisationId=""
                     />
                 </Grid>
             ) : (

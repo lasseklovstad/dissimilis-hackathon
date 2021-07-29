@@ -190,7 +190,7 @@ export const DashboardView = () => {
                         {groupsAndOrganisations.map((item, i) =>
                             "groupId" in item ? (
                                 <DashboardButtonSearch
-                                    key={"group" + i}
+                                    key={item.groupId}
                                     func={() =>
                                         history.push(
                                             `/library?groupId=${item.groupId}`
@@ -200,7 +200,7 @@ export const DashboardView = () => {
                                 />
                             ) : (
                                 <DashboardButtonSearch
-                                    key={"organisation" + i}
+                                    key={item.organisationId}
                                     func={() =>
                                         history.push(
                                             `/library?organisationId=${item.organisationId}`

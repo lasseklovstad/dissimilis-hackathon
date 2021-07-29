@@ -45,9 +45,7 @@ export const LibraryView = () => {
     >()
 
     useEffect(() => {
-        console.log("use effect filteredSongs")
         if (filteredSongsFetched) {
-            console.log("setFilteredSongs")
             setFilteredSongs(filteredSongsFetched)
         }
     }, [filteredSongsFetched])
@@ -91,7 +89,6 @@ export const LibraryView = () => {
     const handleAddFilterUrl = (
         newValues: (IGroupIndex | IOrganisationIndex)[]
     ) => {
-        console.log(location)
         const url = new URLSearchParams(location.search)
         const searchTerm = url.get("search")
 
