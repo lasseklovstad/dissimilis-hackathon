@@ -88,9 +88,9 @@ export const ShareSongDialog = (props: {
     const { setOrganisationTags } = useSetOrganisationTags(songId)
     const { users } = useGetUsers()
     const { organisationsFetched } = useGetOrganisations(
-        OrganisationFilter.User
+        OrganisationFilter.Member
     )
-    const { groupsFetched } = useGetGroups(GroupFilter.User)
+    const { groupsFetched } = useGetGroups(GroupFilter.Member)
     const userId = sessionStorage.getItem("userId") || undefined
 
     const [sharedWithUserList, setSharedWithUserList] = useState<IUser[]>([])
