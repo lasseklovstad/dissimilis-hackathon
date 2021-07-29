@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
@@ -57,13 +57,14 @@ export const ChordOptions = (props: {
     changeComponentInterval?: (index: number) => void
     alwaysShow: boolean
     customMode?: boolean
-    indexArray?: ("checked"|"notChecked"|"indeterminiate")[]
+    indexArray?: boolean[]
 
 }) => {
     const { alwaysShow, customMode = false, indexArray = [], changeComponentInterval=()=>{} } = props
     const styles = useStyles()
     const { chordMenuOptions } = useSongContext()
     const { t } = useTranslation()
+    const [indeterminate, setIndeterminate] = useState<boolean>(false);
 
     if (!alwaysShow && chordMenuOptions?.chordType === ChordType.NOTE) {
         return <></>
@@ -89,8 +90,8 @@ export const ChordOptions = (props: {
                                         chordMenuOptions?.chordNotes.length ===
                                             1 && !customMode
                                     }
-                                    checked={(customMode && indexArray.length>0 && indexArray[i] === "checked")|| (chordContainsNote&& !customMode)}
-                                    indeterminate ={customMode && indexArray.length>0 && indexArray[i] == "indeterminiate" }
+                                    checked={(customMode && indexArray.length>0 && indexArray[i])|| (chordContainsNote&& !customMode)}
+                                    indeterminate ={customMode && indexArray.length>0 && indexArray[i] && indeterminate}
                                     onChange={(e) =>{
                                         console.log(indexArray[i])
                                         console.log(i)

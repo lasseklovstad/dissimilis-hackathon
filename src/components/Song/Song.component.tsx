@@ -51,7 +51,7 @@ export const Song = (props: SongProps) => {
     const {
         barsPerRow,
         voice: { bars, isMain },
-        getChordNameFromMainVoice,
+        getChordNameFromMainVoice, //her må du leggge inn en dobbel liste med true false, denne må loopes igjennom slik at hver bar får riktig liste til seg selv så de kan oppdatere dette 
         timeSignature,
         heightOfBar,
         exportMode,

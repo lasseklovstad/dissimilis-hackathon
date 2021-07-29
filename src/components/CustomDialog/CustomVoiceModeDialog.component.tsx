@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next"
 
 import { IVoice } from "../../models/IVoice"
 import { colors } from "../../utils/colors"
-import { useAddComponentInterval } from "../../utils/useApiServiceSongs"
+import { useAddComponentInterval, useRemoveComponentInterval } from "../../utils/useApiServiceSongs"
 import { useBarsPerRow } from "../../utils/useBars"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { Song } from "../Song/Song.component"
@@ -83,8 +83,9 @@ export const CustomVoiceDialog = (props: {
     const classes = useStyles()
     const { song, dispatchSong } = useSongContext();
     const { handleOnCancel, handleOnSave, baseVoice, newVoice } = props
-    const [indexArray, setindexArray] = useState<("checked"|"notChecked"|"indeterminiate")[]>([]);
+    const [indexArray, setindexArray] = useState<boolean[]>([]);
     const {addInterval} = useAddComponentInterval(song!!.songId, newVoice!!.songVoiceId);
+    const {removeInterval} = useRemoveComponentInterval(song!!.songId, newVoice!!.songVoiceId);
 
 
     const getChordNameFromMainVoice = (
@@ -99,7 +100,7 @@ export const CustomVoiceDialog = (props: {
 
     useEffect(() => {
         if(getBiggestChordInSong().showMenu){
-            setindexArray(new Array(getBiggestChordInSong().value).fill("notChecked"))
+            setindexArray(new Array(getBiggestChordInSong().value).fill(false))
         }
     }, []);
 
@@ -116,21 +117,26 @@ export const CustomVoiceDialog = (props: {
                     }
                 })
             });
-            console.log(chordName)
             return {showMenu: biggestChordLength!= 0 , biggestChordName: chordName, value: biggestChordLength}
         }, []
         );
 
     const changeComponentInterval = async (index: number)=>{
         var array = indexArray
-        if(array[index] ==="checked" || array[index] === "indeterminiate"){
-            array[index] = "notChecked"
+        console.log("index: "+ index)
+        if(array[index]){
+            const {error , result} = await removeInterval.run({intervalPosition: index, sourceVoiceId: baseVoice.songVoiceId})
+            if (!error && result) {
+                console.log(result.data)
+                array[index] = false
+                dispatchSong({type: "UPDATE_VOICE", voice: result.data})
+            }
         }
         else{
-            array[index] = "checked";
-            const {error , result} = await addInterval.run({Position: index})
+            const {error , result} = await addInterval.run({intervalPosition: index, sourceVoiceId: baseVoice.songVoiceId})
             if (!error && result) {
-                console.log(result.data);
+                console.log(result.data)
+                array[index] = true
                 dispatchSong({type: "UPDATE_VOICE", voice: result.data})
             }
         }

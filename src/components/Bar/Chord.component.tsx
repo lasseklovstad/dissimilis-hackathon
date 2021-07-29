@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, ButtonBase, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
@@ -11,6 +11,7 @@ import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUnche
 import { useVoice } from "../../utils/useVoice"
 
 type ChordProps = {
+    updatedNoteValues?: boolean[]
     chord: IChord
     barPosition: number
     onContextMenu: (event: React.MouseEvent) => void
@@ -242,6 +243,7 @@ const ChordText = (props: { chordName: string }) => {
 
 export const Chord = (props: ChordProps) => {
     const {
+        updatedNoteValues,
         chord,
         barPosition,
         onClick,
@@ -291,6 +293,12 @@ export const Chord = (props: ChordProps) => {
             dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
+    useEffect(() => {
+        if(updatedNoteValues){
+            setCustomVoiceNoteStates(updatedNoteValues)
+        }
+    }, [updatedNoteValues]);
+
     const { removeNote } = useRemoveNote(
         song!!.songId,
         selectedVoice!!.songVoiceId,

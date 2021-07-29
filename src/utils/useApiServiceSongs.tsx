@@ -503,7 +503,8 @@ export const useAddComponentInterval = (songId: number, voiceId: number) => {
         const url = `song/${songId}/voice/${voiceId}/addComponentInterval`
         const headers = getHeaders()
         const body = {
-            Position: 0
+            intervalPosition: 0,
+            sourceVoiceId: 0
         }
 
         const api = useApiService<IVoice>(url, {
@@ -526,7 +527,8 @@ export const useAddComponentInterval = (songId: number, voiceId: number) => {
         const url = `song/${songId}/voice/${voiceId}/RemoveComponentInterval`
         const headers = getHeaders()
         const body = {
-            Position: 0
+            intervalPosition: 0,
+            sourceVoiceId: 0
         }
 
         const api = useApiService<IVoice>(url, {
