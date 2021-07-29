@@ -6,15 +6,13 @@ import { useApiService } from "./useApiService"
 
 export enum GroupFilter {
     Admin = "ADMIN",
-    User = "USER",
-    All = "ALL",
+    Member = "MEMBER",
 }
 
 export enum OrganisationFilter {
     Admin = "ADMIN",
     GroupAdmin = "GROUPADMIN",
-    User = "USER",
-    All = "ALL",
+    Member = "MEMBER",
 }
 
 export enum UserRole {
@@ -31,8 +29,10 @@ const getHeaders = () => {
 /**
  * Get all groups based on different parameters
  * */
-export const useGetGroups = (groupFilter: GroupFilter) => {
-    const url = `organisations/groups?filterBy=${groupFilter}`
+export const useGetGroups = (groupFilter?: GroupFilter) => {
+    const url = groupFilter
+        ? `organisations/groups?filterBy=${groupFilter}`
+        : "organisations/groups"
     const initialData: IGroupIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
@@ -45,8 +45,8 @@ export const useGetGroups = (groupFilter: GroupFilter) => {
     }, [getData])
 
     return {
-        getGroups: { run: getData, ...state },
-        groupsFetched: data,
+        getAllGroups: { run: getData, ...state },
+        allGroupsFetched: data,
     }
 }
 
@@ -54,10 +54,13 @@ export const useGetGroups = (groupFilter: GroupFilter) => {
  * Get all groups in an organisation, based on different parameters
  * */
 export const useGetGroupsInOrganisation = (
-    groupFilter: GroupFilter,
-    organisationId: number
+    organisationId: number,
+    groupFilter?: GroupFilter
 ) => {
-    const url = `organisations/${organisationId}/groups?filterBy=${groupFilter}`
+    const url = groupFilter
+        ? `organisations/${organisationId}/groups?filterBy=${groupFilter}`
+        : `organisations/${organisationId}/groups`
+
     const initialData: IGroupIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
@@ -70,16 +73,21 @@ export const useGetGroupsInOrganisation = (
     }, [getData])
 
     return {
-        getGroups: { run: getData, ...state },
-        groupsFetched: data,
+        getAllGroups: { run: getData, ...state },
+        allGroupsFetched: data,
     }
 }
 
 /**
  * Get organisations based on different parameters
  * */
-export const useGetOrganisations = (organisationFilter: OrganisationFilter) => {
-    const url = `organisations?filterByRole=${organisationFilter}`
+export const useGetOrganisations = (
+    organisationFilter?: OrganisationFilter
+) => {
+    const url = organisationFilter
+        ? `organisations?filterByRole=${organisationFilter}`
+        : "organisations"
+
     const initialData: IOrganisationIndex[] = []
     const headers = getHeaders()
     const { getData, state, data } = useApiService<IOrganisationIndex[]>(url, {

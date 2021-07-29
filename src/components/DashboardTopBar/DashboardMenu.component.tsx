@@ -1,16 +1,44 @@
 import React, { useState } from "react"
-import { Dialog, IconButton, Menu, MenuItem } from "@material-ui/core"
+import {
+    Dialog,
+    IconButton,
+    makeStyles,
+    Menu,
+    MenuItem,
+} from "@material-ui/core"
 import SettingsIcon from "@material-ui/icons/Settings"
 import { useTranslation } from "react-i18next"
 import { LanguageDialog } from "../CustomDialog/LanguageDialog.component"
+import { useLogout } from "../../utils/useApiServiceUsers"
+import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
+import LanguageIcon from "@material-ui/icons/Language"
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd"
+import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
+import { Loading } from "../loading/Loading.component"
 import { useHistory } from "react-router"
 import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
+
+const useStyles = makeStyles({
+    menuContainer: {
+        display: "flex",
+        justifyContent: "space-between",
+    },
+    menuItem: {
+        display: "flex",
+        justifyContent: "space-between",
+    },
+    menuIcon: {
+        marginLeft: "2vh",
+    },
+})
 
 export const DashboardMenu = (props: {}) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [changeLanguageDialogIsOpen, setChangeLanguageDialogIsOpen] =
         useState(false)
     const { t } = useTranslation()
+    const classes = useStyles()
+    const { logout } = useLogout()
     const history = useHistory()
     const { adminStatuses } = useGetAdminStatuses()
 
@@ -22,7 +50,6 @@ export const DashboardMenu = (props: {}) => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
     }
-
     const handleOpenChangeLanguageDialog = () => {
         setChangeLanguageDialogIsOpen(true)
     }
@@ -30,12 +57,15 @@ export const DashboardMenu = (props: {}) => {
         setChangeLanguageDialogIsOpen(false)
     }
 
-    const handleClose = async (method?: "language" | "admin" | "profile") => {
+    const handleClose = async (method?: "language" | "admin" | "logout") => {
         setAnchorEl(null)
         setChangeLanguageDialogIsOpen(false)
         switch (method) {
             case "language":
                 handleOpenChangeLanguageDialog()
+                break
+            case "logout":
+                logout.run()
                 break
             case "admin":
                 history.push("/admin")
@@ -61,15 +91,31 @@ export const DashboardMenu = (props: {}) => {
                 keepMounted
                 open={!!anchorEl}
                 onClose={() => handleClose()}
+                className={classes.menuContainer}
             >
-                <MenuItem onClick={() => handleClose("language")}>
+                <MenuItem
+                    className={classes.menuItem}
+                    onClick={() => handleClose("language")}
+                >
                     {t("MenuButton.changeLanguage")}
+                    <LanguageIcon className={classes.menuIcon} />
                 </MenuItem>
                 {userIsAnyAdmin() && (
-                    <MenuItem onClick={() => handleClose("admin")}>
+                    <MenuItem
+                        className={classes.menuItem}
+                        onClick={() => handleClose("admin")}
+                    >
                         {t("AdminView.adminPanel")}
+                        <AssignmentIndIcon />
                     </MenuItem>
                 )}
+                <MenuItem
+                    className={classes.menuItem}
+                    onClick={() => handleClose("logout")}
+                >
+                    {t("LoginView.logout")}
+                    <LogoutIcon />
+                </MenuItem>
             </Menu>
             <Dialog
                 open={changeLanguageDialogIsOpen}
@@ -81,6 +127,12 @@ export const DashboardMenu = (props: {}) => {
                     dialogIsOpen={changeLanguageDialogIsOpen}
                 />
             </Dialog>
+            <Loading isLoading={logout.loading} fullScreen />
+            <ErrorDialog
+                isError={logout.isError}
+                error={logout.error}
+                title={t("LoginView.logoutError")}
+            />
         </>
     )
 }

@@ -86,9 +86,9 @@ export const ShareSongDialog = (props: {
     const { setGroupTags } = useSetGroupTags(songId)
     const { setOrganisationTags } = useSetOrganisationTags(songId)
     const { organisationsFetched } = useGetOrganisations(
-        OrganisationFilter.User
+        OrganisationFilter.Member
     )
-    const { groupsFetched } = useGetGroups(GroupFilter.User)
+    const { allGroupsFetched } = useGetGroups(GroupFilter.Member)
 
     const [sharedWithUserList, setSharedWithUserList] = useState<IUser[]>([])
     const [selectedUser, setSelectedUser] = useState<IUser>()
@@ -111,10 +111,10 @@ export const ShareSongDialog = (props: {
     const tagOptions = [...(groups || []), ...(organisations || [])]
 
     useEffect(() => {
-        if (groupsFetched) {
-            setGroups(groupsFetched)
+        if (allGroupsFetched) {
+            setGroups(allGroupsFetched)
         }
-    }, [groupsFetched])
+    }, [allGroupsFetched])
 
     useEffect(() => {
         if (organisationsFetched) {

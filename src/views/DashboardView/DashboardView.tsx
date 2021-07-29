@@ -3,12 +3,12 @@ import { Box, Dialog, Grid, makeStyles } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import {
+    DashboardButtonSearch,
     DashboardButtonWithAddIconNoLink,
     DashboardLibraryButton,
 } from "../../components/DashboardButtons/DashboardButtons"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useGetRecentSongs, usePostSong } from "../../utils/useApiServiceSongs"
-import { InputDialog } from "../../components/CustomDialog/InputDialog.component"
 import { SongGrid } from "../../components/SongGrid/SongGrid.component"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
@@ -16,6 +16,16 @@ import { getTimeSignatureText } from "../../utils/bar.util"
 import { ISongIndex } from "../../models/ISong"
 import { Loading } from "../../components/loading/Loading.component"
 import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
+import {
+    GroupFilter,
+    OrganisationFilter,
+    useGetGroups,
+    useGetOrganisations,
+} from "../../utils/useApiServiceGroups"
+import { IGroupIndex } from "../../models/IGroup"
+import { IOrganisationIndex } from "../../models/IOrganisation"
+import { ButtonGrid } from "../../components/buttonGrid/buttonGrid.component"
+import { InputDialog } from "../../components/CustomDialog/InputDialog.component"
 
 const useStyles = makeStyles({
     container: {
@@ -116,23 +126,55 @@ export const DashboardView = () => {
         setAddSongDialogIsOpen(false)
     }
 
+    const handleSearchTerm = (searchTerm: string) => {
+        history.push(`/library?search=${searchTerm}`)
+    }
+
+    const { getAllGroups, allGroupsFetched } = useGetGroups(GroupFilter.Member)
+    const [groups, setGroups] = useState<IGroupIndex[] | undefined>()
+    useEffect(() => {
+        if (allGroupsFetched) {
+            setGroups(allGroupsFetched)
+        }
+    }, [allGroupsFetched])
+    const { getOrganisations, organisationsFetched } = useGetOrganisations(
+        OrganisationFilter.Member
+    )
+    const [organisations, setorganisations] = useState<
+        IOrganisationIndex[] | undefined
+    >()
+    useEffect(() => {
+        if (organisationsFetched) {
+            setorganisations(organisationsFetched)
+        }
+    }, [organisationsFetched])
+
+    const groupsAndOrganisations = [
+        ...(groups ? groups : []),
+        ...(organisations ? organisations : []),
+    ]
+
     return (
         <>
-            <Loading isLoading={postSong.loading} fullScreen />
+            <Loading
+                isLoading={
+                    postSong.loading ||
+                    getAllGroups.loading ||
+                    getOrganisations.loading
+                }
+                fullScreen
+            />
             <Box mx={2}>
                 <Grid container justify="center" className={styles.container}>
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
-                            <DashboardTopBar />
+                            <DashboardTopBar
+                                handleOnSubmitSearch={handleSearchTerm}
+                            />
                         </Box>
                     </Grid>
-                    <SongGrid
-                        title={t("DashboardView.newSongLabel")}
-                        songs={undefined}
-                        removeSong={() => undefined}
-                        renameSong={() => undefined}
-                        isLoading={false}
-                    >
+
+                    <ButtonGrid title={t("DashboardView.newSongLabel")}>
                         {musicTacts.map((song) => (
                             <DashboardButtonWithAddIconNoLink
                                 key={song.id}
@@ -142,7 +184,33 @@ export const DashboardView = () => {
                                 )}-${measureText}`}
                             />
                         ))}
-                    </SongGrid>
+                    </ButtonGrid>
+
+                    <ButtonGrid title={t("DashboardView.songSearchFilter")}>
+                        {groupsAndOrganisations.map((item, i) =>
+                            "groupId" in item ? (
+                                <DashboardButtonSearch
+                                    key={item.groupId}
+                                    func={() =>
+                                        history.push(
+                                            `/library?groupId=${item.groupId}`
+                                        )
+                                    }
+                                    text={item.groupName}
+                                />
+                            ) : (
+                                <DashboardButtonSearch
+                                    key={item.organisationId}
+                                    func={() =>
+                                        history.push(
+                                            `/library?organisationId=${item.organisationId}`
+                                        )
+                                    }
+                                    text={item.organisationName}
+                                />
+                            )
+                        )}
+                    </ButtonGrid>
 
                     <SongGrid
                         title={t("DashboardView.recentSongLabel")}

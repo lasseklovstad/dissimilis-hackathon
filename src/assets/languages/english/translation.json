@@ -1,6 +1,7 @@
 {
     "DashboardView": {
         "newSongLabel": "New song",
+        "songSearchFilter": "Songs in your groups",
         "recentSongLabel": "Your last five songs",
         "allSongLabel": "All songs",
         "measure": "measure",
@@ -16,7 +17,8 @@
         "delete": "Delete",
         "date": "Date changed",
         "user": "User",
-        "song": "Song"
+        "song": "Song",
+        "autoCompleteLabel": "Select a filter"
     },
     "AdminView": {
         "adminPanel": "Admin panel",
@@ -66,7 +68,7 @@
         "addRepBefore": "Add left repeat",
         "removeRepBefore": "Remove left repeat",
         "addRepAfter": "Add right repeat",
-        "removeRepAfter": "Remove rigth repeat",
+        "removeRepAfter": "Remove right repeat",
         "addVoltaBracket": "Add 1st and 2nd volta bracket",
         "removeVoltaBracket": "Remove 1st and 2nd volta bracket",
         "addVoltaBracketOne": "Add 1st volta bracket",
@@ -250,13 +252,17 @@
         "bar": "Bar",
         "barNumber": "Bar number",
         "barMenu": "Bar menu",
+        "undo": "Undo",
         "bpm": "BPM"
     },
     "TopBar": {
         "languageNorwegian": "Norsk",
         "languageEnglish": "English",
         "languageSelect": "Select language",
-        "clear": "Clear",
-        "settings": "Settings"
+        "settings": "Settings",
+        "clear": "Clear"
+    },
+    "Snackbar": {
+        "undoError": "There is nothing left to undo"
     }
 }

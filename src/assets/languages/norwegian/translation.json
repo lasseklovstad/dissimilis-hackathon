@@ -1,6 +1,7 @@
 {
     "DashboardView": {
         "newSongLabel": "Nytt partitur",
+        "songSearchFilter": "Sanger i dine grupper",
         "recentSongLabel": "Dine siste fem sanger",
         "allSongLabel": "Alle sanger",
         "measure": "takt",
@@ -14,7 +15,8 @@
         "delete": "Slett",
         "date": "Dato endret",
         "user": "Bruker",
-        "song": "Sang"
+        "song": "Sang",
+        "autoCompleteLabel": "Velg et filter"
     },
     "AdminView": {
         "adminPanel": "Adminpanel",
@@ -144,8 +146,7 @@
         "delete": "Slett sang",
         "editBars": "Rediger takter",
         "changeLanguage": "Endre språk",
-        "showInfo": "Vis info",
-        "cancelEditBars": "Avslutt redigering av takter"
+        "showInfo": "Vis info"
     },
     "Dialog": {
         "nameOfSong": "Navn på sang",
@@ -246,6 +247,7 @@
         "timeSignature": "Taktart",
         "bar": "Takt",
         "barNumber": "Taktnummer",
+        "undo": "Angre",
         "barMenu": "Taktmeny",
         "bpm": "BPM"
     },
@@ -255,5 +257,8 @@
         "languageSelect": "Språkvalg",
         "settings": "Innstillinger",
         "clear": "Tøm søkefelt"
+    },
+    "Snackbar": {
+        "undoError": "Det er ingenting igjen å angre"
     }
 }

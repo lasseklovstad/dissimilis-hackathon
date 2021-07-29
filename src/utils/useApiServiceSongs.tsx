@@ -8,9 +8,9 @@ import {
 } from "../models/ISong"
 import { IBar } from "../models/IBar"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../models/IVoice"
+import { IUser } from "../models/IUser"
 import { IGroupIndex } from "../models/IGroup"
 import { IOrganisationIndex } from "../models/IOrganisation"
-import { IUser } from "../models/IUser"
 
 export enum SongProtectionLevel {
     Public = "Public",
@@ -124,6 +124,8 @@ export const useGetAllSongs = (orderTerm: string, orderDescending: boolean) => {
  */
 export const useGetFilteredSongs = (
     title: string,
+    includedOrganisationIdArray: string[],
+    includedGroupIdArray: string[],
     orderTerm: string,
     orderDescending: boolean,
     numberOfResults?: string
@@ -136,7 +138,10 @@ export const useGetFilteredSongs = (
         title,
         orderBy: orderTerm,
         orderDescending,
+        includedOrganisationIdArray,
+        includedGroupIdArray,
     }
+
     const { postData, state, data } = useApiService<ISongIndex[]>(url, {
         initialData,
         headers,
@@ -436,6 +441,16 @@ export const useDuplicateSong = (songId: number) => {
     }
 }
 
+export const useUndoSong = (songId: string) => {
+    const url = `song/${songId}/undo`
+    const headers = getHeaders()
+
+    const api = useApiService<ISong>(url, { headers })
+
+    return {
+        undoSong: { run: api.putData, ...api.state },
+    }
+}
 /**
  * Set group tags for song
  * @param songId song's id

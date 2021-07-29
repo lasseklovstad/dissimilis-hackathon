@@ -206,7 +206,6 @@ export const MenuButton = (props: {
                     <MenuItem disabled onClick={() => handleClose()}>
                         {t("MenuButton.hide")}
                     </MenuItem>
-
                     {props.currentUserHasWriteAccess
                         ? [
                               <MenuItem
@@ -249,9 +248,6 @@ export const MenuButton = (props: {
                             <Divider variant="middle" />
                             <MenuItem disabled>
                                 <Typography>{props.user}</Typography>
-                            </MenuItem>
-                            <MenuItem onClick={props.onLogout}>
-                                <Typography>{t("LoginView.logout")}</Typography>
                             </MenuItem>
                         </>
                     ) : undefined}
