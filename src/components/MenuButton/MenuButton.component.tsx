@@ -24,7 +24,7 @@ import { EditSongInfoDialog } from "../CustomDialog/EditSongInfoDialog.component
 import { TransposeDialog } from "../CustomDialog/TransposeDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
-import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
+import { useGetUser } from "../../utils/useApiServiceUsers"
 import { useVoice } from "../../utils/useVoice"
 import { ShareSongDialog } from "../CustomDialog/ShareSongDialog.component"
 import { ShowSongInfoDialog } from "../CustomDialog/ShowSongInfoDialog.component"
@@ -47,7 +47,6 @@ export const MenuButton = (props: {
     const selectedVoice = useVoice(song?.voices)
     const { songVoiceId: voiceId } = selectedVoice || {}
     const { userInit } = useGetUser()
-    const { logout } = useLogout()
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongDialogIsOpen, setDeleteSongDialogIsOpen] = useState(false)

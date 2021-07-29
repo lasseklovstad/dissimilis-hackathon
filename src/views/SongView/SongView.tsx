@@ -5,12 +5,7 @@ import { useTranslation } from "react-i18next"
 import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.component"
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
 import { Song } from "../../components/Song/Song.component"
-import {
-    useGetSong,
-    useUndoSong,
-    useUpdateSong,
-} from "../../utils/useApiServiceSongs"
-import { useGetUser } from "../../utils/useApiServiceUsers"
+import { useGetSong, useUndoSong } from "../../utils/useApiServiceSongs"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { useSongContext } from "./SongContextProvider.component"
@@ -58,9 +53,7 @@ export const SongView = () => {
 
     const { song, dispatchSong, chordMenuOptions } = useSongContext()
     const { denominator, numerator, voices } = song!!
-    const { putSong } = useUpdateSong(songId)
     const { undoSong } = useUndoSong(songId)
-    const { userInit } = useGetUser()
     const trigger = useScrollTrigger()
     const chordOptionsRef = useRef() as MutableRefObject<HTMLAnchorElement>
 
