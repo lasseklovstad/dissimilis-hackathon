@@ -49,7 +49,7 @@ export const ShowSongInfoDialog = (props: {
     const [speedTextFieldInput, setSpeedTextFieldInput] = useState<number>(0)
     const { t } = useTranslation()
 
-    const { songMetadataFetched } = useGetSongMetadata(songId.toString())
+    const { songMetadataFetched } = useGetSongMetadata(songId)
 
     useEffect(() => {
         if (songMetadataFetched) {

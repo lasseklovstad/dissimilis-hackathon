@@ -11,7 +11,7 @@ import { TestWrapper } from "../../TestWrapper.komponent"
 import React from "react"
 import { waitDoneLoading } from "../test-utils"
 
-const renderSongView = async (songId: string) => {
+const renderSongView = async (songId: number) => {
     window.history.pushState({}, "Test page", `/song/${songId}`)
     render(<App />, { wrapper: TestWrapper })
     await waitDoneLoading()

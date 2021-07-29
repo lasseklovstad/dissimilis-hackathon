@@ -11,13 +11,12 @@ import { useTranslation } from "react-i18next"
 
 import { IVoice } from "../../models/IVoice"
 import { colors } from "../../utils/colors"
-import { useAddComponentInterval, useGetSong } from "../../utils/useApiServiceSongs"
+import { useAddComponentInterval } from "../../utils/useApiServiceSongs"
 import { useBarsPerRow } from "../../utils/useBars"
-
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { Song } from "../Song/Song.component"
 import { ChordOptions } from "../BottomMenuButtons/BottomMenuButtons"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 
 const useStyles = makeStyles(() => {
     return {
@@ -77,17 +76,15 @@ const useStyles = makeStyles(() => {
 export const CustomVoiceDialog = (props: {
     handleOnSave: () => void
     handleOnCancel: () => void
-    songId: string
     baseVoice: IVoice
-    newVoice: IVoice
+    newVoice: IVoice | undefined
 }) => {
     const { t } = useTranslation()
     const classes = useStyles()
-    const { handleOnCancel, handleOnSave, songId, baseVoice, newVoice } = props
-    const { songInit } = useGetSong(songId)
+    const { song, dispatchSong } = useSongContext();
+    const { handleOnCancel, handleOnSave, baseVoice, newVoice } = props
     const [indexArray, setindexArray] = useState<("checked"|"notChecked"|"indeterminiate")[]>([]);
-    const {addInterval} = useAddComponentInterval(songId.toString(), newVoice.songVoiceId.toString());
-    const { selectedVoiceId, dispatchSong } = useSongContext();
+    const {addInterval} = useAddComponentInterval(song!!.songId, newVoice!!.songVoiceId);
 
 
     const getChordNameFromMainVoice = (
@@ -106,7 +103,6 @@ export const CustomVoiceDialog = (props: {
         }
     }, []);
 
-    const { song } = useSongContext()
     const barsPerRow = useBarsPerRow()
     const getBiggestChordInSong = useCallback(
         () =>{
@@ -150,11 +146,11 @@ export const CustomVoiceDialog = (props: {
             <Grid item xs={12} className={classes.body}>
                 <Song
                     barsPerRow={barsPerRow}
-                    voice={song.voices[0]}
+                    voice={baseVoice}
                     getChordNameFromMainVoice={getChordNameFromMainVoice}
                     timeSignature={{
-                        numerator: songInit?.numerator || 4,
-                        denominator: songInit?.denominator || 4,
+                        numerator: song?.numerator || 4,
+                        denominator: song?.denominator || 4,
                     }}
                     heightOfBar={185}
                     lastPage={false}

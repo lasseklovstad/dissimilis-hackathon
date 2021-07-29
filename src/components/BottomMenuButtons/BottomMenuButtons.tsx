@@ -65,7 +65,7 @@ export const ChordOptions = (props: {
     const { chordMenuOptions } = useSongContext()
     const { t } = useTranslation()
 
-    if (!alwaysShow && chordMenuOptions.chordType === ChordType.NOTE) {
+    if (!alwaysShow && chordMenuOptions?.chordType === ChordType.NOTE) {
         return <></>
     }
 
@@ -76,7 +76,7 @@ export const ChordOptions = (props: {
             <FormGroup id="chordOptions" row>
                 {allNotes.map((note, i) => {
                     const chordContainsNote =
-                        chordMenuOptions.chordNotes.includes(note as string)
+                        chordMenuOptions?.chordNotes.includes(note as string)
                     return (
                         <FormControlLabel
                             key={i}
@@ -86,7 +86,8 @@ export const ChordOptions = (props: {
                                     color="default"
                                     disabled={
                                         chordContainsNote &&
-                                        chordMenuOptions.chordNotes.length === 1 && !customMode
+                                        chordMenuOptions?.chordNotes.length ===
+                                            1 && !customMode
                                     }
                                     checked={(customMode && indexArray.length>0 && indexArray[i] === "checked")|| (chordContainsNote&& !customMode)}
                                     indeterminate ={customMode && indexArray.length>0 && indexArray[i] == "indeterminiate" }
@@ -152,9 +153,9 @@ export const DropdownAutocomplete = (props: {
     icon: React.ReactNode
     chordDropdownContent: string[]
     noOptionsText: string
-    selectedChordType: ChordType
-    selectedChord: string | null
     onChordChange: (chord: string) => void
+    selectedChordType?: ChordType
+    selectedChord?: string | null
 }) => {
     const {
         selectedChordType,

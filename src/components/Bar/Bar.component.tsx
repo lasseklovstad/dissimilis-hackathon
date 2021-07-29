@@ -93,10 +93,19 @@ export const Bar = (props: {
         dispatchChordMenuOptions,
         selectedChordId,
         barEditMode,
+        setBarsClipboard,
         barsClipboard,
         selectedBars,
+        setSelectedBars,
     } = useSongContext()
-    const { copySelectedBars, barClicked } = useBars()
+    const { copySelectedBars, barClicked, pasteBars, deleteBars } = useBars(
+        songId,
+        dispatchSong,
+        selectedBars,
+        setSelectedBars,
+        barsClipboard,
+        setBarsClipboard
+    )
     const { postChord } = useCreateChord(songId, songVoiceId, barId)
     const { deleteChord } = useDeleteChord(
         songId,
@@ -141,11 +150,11 @@ export const Bar = (props: {
         if (method === "copy") {
             copySelectedBars()
         } else if (method === "pasteBefore") {
-            props.pasteBars && props.pasteBars("pasteBefore", props.bar)
+            pasteBars && pasteBars("pasteBefore", props.bar)
         } else if (method === "pasteAfter") {
-            props.pasteBars && props.pasteBars("pasteAfter", props.bar)
+            pasteBars && pasteBars("pasteAfter", props.bar)
         } else if (method === "delete") {
-            props.deleteBars && props.deleteBars()
+            deleteBars && deleteBars()
         }
     }
 
@@ -166,7 +175,11 @@ export const Bar = (props: {
     }
 
     const handleChordClick = async (chord: IChord) => {
-        if (chord.notes[0] === "Z" && currentUserHasWriteAccess) {
+        if (
+            chord.notes[0] === "Z" &&
+            currentUserHasWriteAccess &&
+            chordMenuOptions
+        ) {
             const notes =
                 chordMenuOptions.chordType === ChordType.NOTE
                     ? [chordMenuOptions.chord]
@@ -224,7 +237,7 @@ export const Bar = (props: {
         indexOfChord: number,
         allChords: IChord[]
     ) => {
-        if (xl && chord.notes[0] === "Z") {
+        if (xl && chord.notes[0] === "Z" && chordMenuOptions) {
             let i = 0
             while (i <= chordMenuOptions.chordLength) {
                 const start = indexOfChord - i

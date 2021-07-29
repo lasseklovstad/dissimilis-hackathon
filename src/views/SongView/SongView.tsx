@@ -1,22 +1,20 @@
 import React, { MutableRefObject, useEffect, useRef } from "react"
 import { Grid, makeStyles, Slide, useScrollTrigger } from "@material-ui/core"
-import { useHistory, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.component"
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
-import { useBarsPerRow, useBars } from "../../utils/useBars"
+import { useBarsPerRow } from "../../utils/useBars"
 import { Song } from "../../components/Song/Song.component"
-import { useChords } from "../../utils/useChords"
-import { useGetSong, useUpdateSong } from "../../utils/useApiServiceSongs"
-import { useGetUser } from "../../utils/useApiServiceUsers"
+import { useGetSong } from "../../utils/useApiServiceSongs"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { useSongContext } from "./SongContextProvider.component"
-import { IVoice } from "../../models/IVoice"
 import { chords, notes } from "../../models/chords"
 import { colors } from "../../utils/colors"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { SongNavBar } from "../../components/SongNavBar/SongNavBar.component"
+import { useVoice } from "../../utils/useVoice"
 
 const useStyles = makeStyles({
     root: {
@@ -46,39 +44,15 @@ const heightOfBar = 185
 export const SongView = () => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const history = useHistory()
-    const { songId } = useParams<{ songId: string }>()
+    const { songId: songIdString } = useParams<{ songId: string }>()
+    const songId = Number(songIdString)
     const { getSong, songInit } = useGetSong(songId)
     const barsPerRow = useBarsPerRow()
-    const { putSong } = useUpdateSong(songId)
-    const { userInit } = useGetUser()
     const trigger = useScrollTrigger()
     const chordOptionsRef = useRef() as MutableRefObject<HTMLAnchorElement>
 
-    const {
-        song,
-        dispatchSong,
-        chordMenuOptions,
-        selectedVoice,
-        selectedVoiceId,
-        setBarsClipboard,
-        setSelectedBars,
-        barEditMode,
-        setBarEditMode,
-    } = useSongContext()
-
-    const { denominator, numerator, voices } = song
-
-    const { pasteBars, deleteBars } = useBars()
-    const {
-        setValuesForSelectedChord,
-        handleChangeChord,
-        handleChangeChordLength,
-        handleChordNotesChange,
-        handleDeleteSelectedChord,
-        handleNoteSelectedChange,
-    } = useChords()
-
+    const { song, dispatchSong, chordMenuOptions } = useSongContext()
+    const { denominator, numerator, voices } = song!!
     const mainVoice = voices.find((voice) => voice.isMain)
     const getChordNameFromMainVoice = (
         barPosition: number,
@@ -90,49 +64,15 @@ export const SongView = () => {
             ?.chordName
     }
 
-    const clickOutsideOfBottomBarListener = (e: any) => {
-        if (
-            e.target.id !== "chordButton" &&
-            e.target.id !== "singleChord" &&
-            ((chordOptionsRef.current &&
-                !chordOptionsRef.current.contains(e.target)) ||
-                !chordOptionsRef.current)
-        ) {
-            setValuesForSelectedChord(undefined, undefined, 0)
-        }
-    }
-
     useEffect(() => {
         if (songInit) {
             dispatchSong({ type: "UPDATE_SONG", song: songInit })
         }
     }, [songInit, dispatchSong])
 
-    const handleTitleBlur = async (title: string) => {
-        if (title !== song.title) {
-            const { error, result } = await putSong.run({ title })
-            if (!error && result) {
-                dispatchSong({ type: "UPDATE_SONG", song: result.data })
-            }
-        }
-    }
+    const selectedVoice = useVoice(song!!.voices)
 
-    const handleAddVoice = (voice: IVoice) => {
-        dispatchSong({ type: "ADD_VOICE", voice })
-        history.push(`?voice=${voice.songVoiceId}`)
-    }
-
-    const handleDeleteVoice = (voice: IVoice) => {
-        dispatchSong({ type: "DELETE_VOICE", songVoiceId: voice.songVoiceId })
-
-        if (voice.songVoiceId === selectedVoiceId) {
-            history.push(`/song/${songId}`)
-        }
-    }
-
-    const handleUpdateVoice = (voice: IVoice) => {
-        dispatchSong({ type: "UPDATE_VOICE_NAME", voice })
-    }
+    const { songVoiceId: selectedVoiceId } = selectedVoice || {}
 
     if (getSong.loading) {
         return <LoadingLogo />
@@ -152,31 +92,15 @@ export const SongView = () => {
                         <Grid container className={classes.header}>
                             <Grid item xs={12}>
                                 <SongNavBar
-                                    title={song.title}
-                                    onTitleBlur={handleTitleBlur}
-                                    voiceId={selectedVoiceId}
-                                    user={userInit?.email}
-                                    setBarEditMode={() => {
-                                        setBarEditMode(!barEditMode)
-                                        setSelectedBars(undefined)
-                                        setBarsClipboard(undefined)
-                                    }}
-                                    barEditMode={barEditMode}
                                     currentUserHasWriteAccess={
-                                        song.currentUserHasWriteAccess
+                                        song?.currentUserHasWriteAccess
                                     }
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <CreateSongTab
-                                    onDeleteVoice={handleDeleteVoice}
-                                    onUpdateVoice={handleUpdateVoice}
-                                    onAddVoice={handleAddVoice}
-                                    songId={songId}
-                                    voices={song.voices}
-                                    selectedVoiceId={selectedVoiceId}
                                     currentUserHasWriteAccess={
-                                        song.currentUserHasWriteAccess
+                                        song?.currentUserHasWriteAccess
                                     }
                                 />
                             </Grid>
@@ -192,39 +116,22 @@ export const SongView = () => {
                             timeSignature={{ denominator, numerator }}
                             heightOfBar={heightOfBar}
                             exportMode={false}
-                            pasteBars={pasteBars}
-                            deleteBars={deleteBars}
                             lastPage={true}
                             currentUserHasWriteAccess={
-                                song.currentUserHasWriteAccess
+                                song?.currentUserHasWriteAccess
                             }
                         />
                     </Grid>
                 </Grid>
             )}
-            {selectedVoiceId && song.currentUserHasWriteAccess && (
+            {selectedVoiceId && song?.currentUserHasWriteAccess && (
                 <BottomBar
-                    onNoteSelectedChange={(chordType) =>
-                        handleNoteSelectedChange(chordType)
-                    }
-                    onChordChange={(chord) => handleChangeChord(chord)}
-                    onChordLengthChange={(length) =>
-                        handleChangeChordLength(length)
-                    }
-                    timeSignature={{ denominator, numerator }}
-                    addBar={(song) =>
-                        dispatchSong({ type: "UPDATE_SONG", song })
-                    }
-                    songId={Number(songId)}
                     voiceId={selectedVoiceId}
                     chordDropdownContent={
-                        chordMenuOptions.chordType === ChordType.NOTE
+                        chordMenuOptions?.chordType === ChordType.NOTE
                             ? notes
                             : chords
                     }
-                    clickOutsideListener={clickOutsideOfBottomBarListener}
-                    onChordNotesChange={handleChordNotesChange}
-                    deleteSelectedChord={handleDeleteSelectedChord}
                     chordOptionsRef={chordOptionsRef}
                 />
             )}
