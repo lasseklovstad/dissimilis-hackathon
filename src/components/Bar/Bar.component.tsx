@@ -37,6 +37,7 @@ const useStyle = makeStyles(() => ({
 }))
 
 export const Bar = (props: {
+    updatedBar?: boolean[][]
     bar: IBar
     height?: number
     exportMode: boolean
@@ -54,6 +55,7 @@ export const Bar = (props: {
     currentUserHasWriteAccess?: boolean
 }) => {
     const {
+        updatedBar,
         exportMode,
         showChordLetters,
         showNoteLetters,
@@ -81,7 +83,9 @@ export const Bar = (props: {
     const [barMenuPosition, setBarMenuPosition] = useState<
         { top: number; left: number } | undefined
     >()
-    const xl = useMediaQuery("(min-width: 1080px)")
+    const usingTouchScreen = useMediaQuery(
+        "(@media (hover: none) and (pointer: coarse)"
+    )
     const [rightClickedChordId, setRightClickedChordId] = useState<
         number | null
     >(null)
@@ -237,7 +241,7 @@ export const Bar = (props: {
         indexOfChord: number,
         allChords: IChord[]
     ) => {
-        if (xl && chord.notes[0] === "Z" && chordMenuOptions) {
+        if (usingTouchScreen && chord.notes[0] === "Z" && chordMenuOptions) {
             let i = 0
             while (i <= chordMenuOptions.chordLength) {
                 const start = indexOfChord - i
@@ -268,6 +272,7 @@ export const Bar = (props: {
             {masterSheet && currentUserHasWriteAccess && (
                 <BarMenuButton onMenuClick={onMenuClick} />
             )}
+
             <Box
                 display="flex"
                 flexDirection="column"
@@ -331,6 +336,7 @@ export const Bar = (props: {
                                 )
                                 return (
                                     <Chord
+                                        updatedNoteValues={updatedBar ? updatedBar[i] : undefined}
                                         barPosition={position}
                                         showChordLetters={showChordLetters}
                                         getChordNameFromMainVoice={
@@ -349,6 +355,9 @@ export const Bar = (props: {
                                                 i,
                                                 allChords
                                             )
+                                        }
+                                        onTouchEnd={() =>
+                                            !barEditMode && setPositionArray([])
                                         }
                                         barId={barId}
                                         chord={chord}

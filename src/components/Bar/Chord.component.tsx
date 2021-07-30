@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, ButtonBase, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import { IChord } from "../../models/IBar"
@@ -9,27 +9,10 @@ import { useSongContext } from "../../views/SongView/SongContextProvider.compone
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded"
 import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUncheckedRounded"
 import { useVoice } from "../../utils/useVoice"
+import { IVoice } from "../../models/IVoice"
 
-type ChordProps = {
-    chord: IChord
-    barPosition: number
-    onContextMenu: (event: React.MouseEvent) => void
-    onClick: (event: React.MouseEvent) => void
-    onMouseEnter: () => void
-    onMouseLeave: () => void
-    highlight: boolean
-    exportMode: boolean
-    showChordLetters: boolean
-    showNoteLetters: boolean
-    isSelected: boolean
-    handleChordFocus: () => void
-    getChordNameFromMainVoice: (
-        barPosition: number,
-        chordPosition: number
-    ) => string | null | undefined
-    barEditMode: boolean
-    barId: number
-}
+
+import { isVoidExpression } from "typescript"
 
 const useStyle = makeStyles((theme) => ({
     buttonBase: {
@@ -240,8 +223,32 @@ const ChordText = (props: { chordName: string }) => {
     )
 }
 
+type ChordProps = {
+    updatedNoteValues?: boolean[]
+    chord: IChord
+    barPosition: number
+    onContextMenu: (event: React.MouseEvent) => void
+    onClick: (event: React.MouseEvent) => void
+    onMouseEnter: () => void
+    onMouseLeave: () => void
+    highlight: boolean
+    exportMode: boolean
+    showChordLetters: boolean
+    showNoteLetters: boolean
+    isSelected: boolean
+    handleChordFocus: () => void
+    getChordNameFromMainVoice: (
+        barPosition: number,
+        chordPosition: number
+    ) => string | null | undefined
+    barEditMode: boolean
+    barId: number
+    onTouchEnd: ()=> void
+}
+
 export const Chord = (props: ChordProps) => {
     const {
+        updatedNoteValues,
         chord,
         barPosition,
         onClick,
@@ -256,6 +263,7 @@ export const Chord = (props: ChordProps) => {
         isSelected,
         handleChordFocus,
         barEditMode,
+        onTouchEnd,
     } = props
     const classes = useStyle()
 
@@ -265,7 +273,7 @@ export const Chord = (props: ChordProps) => {
     const selectedVoice = useVoice(song?.voices)
 
     const [customVoiceNoteStates, setCustomVoiceNoteStates] = useState<
-        Boolean[]
+        boolean[]
     >(chord.notes.map(() => false))
 
     const { customMode } = useSongContext()
@@ -275,6 +283,7 @@ export const Chord = (props: ChordProps) => {
         selectedVoice?.songVoiceId,
         barPosition
     )
+    
     const handleCustomVoiceAddClick = async (index: number) => {
         const { error, result } = await addNote.run({
             chordName: chord.chordName,
@@ -290,28 +299,33 @@ export const Chord = (props: ChordProps) => {
             dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
+    useEffect(() => {
+        if(updatedNoteValues){
+            setCustomVoiceNoteStates(updatedNoteValues)
+        }
+    }, [updatedNoteValues]);
+    
     const { removeNote } = useRemoveNote(
         song?.songId,
         selectedVoice?.songVoiceId,
         barPosition
-    )
-    const handleCustomVoiceRemoveClick = async (index: number) => {
-        const { error, result } = await removeNote.run({
-            deleteOnLastIntervalRemoved: true,
-            chordName: chord.chordName,
-            notePosition: chord.position,
-            length: chord.length,
-            intervalPosition: index,
-            notes: chord.notes,
-        })
-        if (!error && result) {
-            const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
-            newCustomVoiceNoteStates[index] = false
-            setCustomVoiceNoteStates(newCustomVoiceNoteStates)
-            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+        )
+        const handleCustomVoiceRemoveClick = async (index: number) => {
+            const { error, result } = await removeNote.run({
+                deleteOnLastIntervalRemoved: true,
+                chordName: chord.chordName,
+                notePosition: chord.position,
+                length: chord.length,
+                intervalPosition: index,
+                notes: chord.notes,
+            })
+            if (!error && result) {
+                const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
+                newCustomVoiceNoteStates[index] = false
+                setCustomVoiceNoteStates(newCustomVoiceNoteStates)
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
-
     return (
         <Box
             flexGrow={chord.length}
@@ -330,7 +344,7 @@ export const Chord = (props: ChordProps) => {
             )}
             {customMode ? (
                 <Box className={classes.buttonBox}>
-                    {chord.notes
+                    {chord.notes.filter(note => note !== "X")
                         .map((note, i) => {
                             const tangent = tangentToNumber(note)
                             return (
@@ -398,6 +412,7 @@ export const Chord = (props: ChordProps) => {
                     onContextMenu={onContextMenu}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
+                    onTouchEnd={onTouchEnd}
                     disableRipple={barEditMode}
                     className={`${classes.buttonBox} ${
                         barEditMode

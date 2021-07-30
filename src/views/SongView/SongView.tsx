@@ -100,7 +100,6 @@ export const SongView = () => {
                 error={getSong.error}
                 title={t("Dialog.getSongError")}
             />
-
             {selectedVoiceId !== undefined && selectedVoice && (
                 <Grid container className={classes.root}>
                     <Slide appear={false} direction="down" in={!trigger}>
@@ -114,6 +113,7 @@ export const SongView = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <CreateSongTab
+                                    updateSong={getSong.run}
                                     onUndo={undo}
                                     undoIsLoading={undoSong.loading}
                                     currentUserHasWriteAccess={
@@ -133,7 +133,7 @@ export const SongView = () => {
                             timeSignature={{ denominator, numerator }}
                             heightOfBar={heightOfBar}
                             exportMode={false}
-                            lastPage={true}
+                            lastPage
                             currentUserHasWriteAccess={
                                 song?.currentUserHasWriteAccess
                             }

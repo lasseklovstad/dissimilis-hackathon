@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import {
     Box,
     DialogActions,
@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next"
 
 import { IVoice } from "../../models/IVoice"
 import { colors } from "../../utils/colors"
+import { useAddComponentInterval, useRemoveComponentInterval } from "../../utils/useApiServiceSongs"
 import { useBarsPerRow } from "../../utils/useBars"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { Song } from "../Song/Song.component"
@@ -80,8 +81,14 @@ export const CustomVoiceDialog = (props: {
 }) => {
     const { t } = useTranslation()
     const classes = useStyles()
+    const { song } = useSongContext();
     const { handleOnCancel, handleOnSave, baseVoice, newVoice } = props
-    const { song } = useSongContext()
+    const [indexArray, setIndexArray] = useState<boolean[]>([]);
+    const {addInterval} = useAddComponentInterval(song?.songId ?? 0, newVoice?.songVoiceId?? 0);
+    const {removeInterval} = useRemoveComponentInterval(song?.songId ?? 0, newVoice?.songVoiceId?? 0);
+    const [updatedVoice, setUpdatedVoice] = useState<boolean[][][] | undefined>(undefined);
+
+
     const getChordNameFromMainVoice = (
         barPosition: number,
         chordPosition: number
@@ -91,7 +98,64 @@ export const CustomVoiceDialog = (props: {
             ?.chords.find((mainChord) => mainChord.position === chordPosition)
             ?.chordName
     }
+
+    useEffect(() => {
+        if(getBiggestChordInSong().showMenu){
+            setIndexArray(new Array(getBiggestChordInSong().value).fill(false))
+        }
+    }, []);
+
     const barsPerRow = useBarsPerRow()
+    const getBiggestChordInSong = useCallback(
+        () =>{
+            var biggestChordLength = 0
+            var chordName ="";
+            baseVoice.bars.forEach(bar => {
+                bar.chords.forEach(chord => {
+                    if (biggestChordLength < chord.notes.filter(note => note !== "X").length && chord.chordName!== null) {
+                        biggestChordLength = chord.notes.length;
+                        chordName = chord.chordName;
+                    }
+                })
+            });
+            return {showMenu: biggestChordLength!= 0 , biggestChordName: chordName, value: biggestChordLength}
+        }, []
+        );
+
+    const changeComponentInterval = async (index: number)=>{
+        var array = indexArray
+        if(array[index]){
+            const {error , result} = await removeInterval.run({intervalPosition: index, deleteChordsOnLastIntervalRemoved: true})
+            if (!error && result) {
+                array[index] = false
+                setUpdatedVoice(convertFromNotesToBoolean(result.data))
+            }
+        }
+        else{
+            const {error , result} = await addInterval.run({intervalPosition: index, sourceVoiceId: baseVoice.songVoiceId})
+            if (!error && result) {
+                array[index] = true
+                setUpdatedVoice(convertFromNotesToBoolean(result.data))
+            }
+        }
+        setIndexArray(array);
+    }
+
+    
+
+    const convertFromNotesToBoolean = (updatedIVoice: IVoice)=> updatedIVoice.bars.map(bar => {
+            var barNotesConverted: boolean[][] = [];
+            bar.chords.forEach(chord => {
+                if(chord.notes[0] === "Z"){
+                    new Array(chord.length).fill(false).forEach(empty => barNotesConverted.push([empty]) )
+                }
+                else{
+                 barNotesConverted.push(chord.notes.map(note => !(note==="X")))
+                }})
+                return barNotesConverted
+            }
+        )
+
     return (
         <>
             <Box pl={6}>
@@ -99,6 +163,7 @@ export const CustomVoiceDialog = (props: {
             </Box>
             <Grid item xs={12} className={classes.body}>
                 <Song
+                    updatedVoice={updatedVoice}
                     barsPerRow={barsPerRow}
                     voice={baseVoice}
                     getChordNameFromMainVoice={getChordNameFromMainVoice}
@@ -118,9 +183,12 @@ export const CustomVoiceDialog = (props: {
                     <Grid item xs={10} className={classes.outercontainer}>
                         <Box className={classes.container}>
                             <ChordOptions
-                                chord={"Em"}
-                                onChordNotesChange={() => {}}
-                                alwaysShow={true}
+                                chord={getBiggestChordInSong().biggestChordName}
+                                customMode
+                                onChordNotesChange={()=> {}}
+                                alwaysShow={getBiggestChordInSong().showMenu}
+                                indexArray={indexArray}
+                                changeComponentInterval={changeComponentInterval}
                             />
                         </Box>
                         <DialogActions className={classes.buttonContainer}>

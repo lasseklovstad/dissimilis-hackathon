@@ -13,6 +13,7 @@ import { IVoice } from "../../models/IVoice"
 
 type SongProps = {
     barsPerRow: number
+    updatedVoice?: boolean[][][]
     voice: IVoice
     getChordNameFromMainVoice: (
         barPosition: number,
@@ -50,6 +51,7 @@ const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
 export const Song = (props: SongProps) => {
     const {
         barsPerRow,
+        updatedVoice,
         voice: { bars, isMain },
         getChordNameFromMainVoice,
         timeSignature,
@@ -118,6 +120,7 @@ export const Song = (props: SongProps) => {
                                 return (
                                     <React.Fragment key={i}>
                                         <Bar
+                                            updatedBar={updatedVoice ? updatedVoice[i] : undefined}
                                             // eslint-disable-next-line
                                             showVoltaBracketNumber={
                                                 showVoltaBracketNumber

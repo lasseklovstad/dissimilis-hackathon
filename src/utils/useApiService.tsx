@@ -130,8 +130,8 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
                 isError = true
                 axiosError = error
             } finally {
-                setLoading(false)
                 updateStates(result, isError, axiosError)
+                setLoading(false)
             }
             return { result, isError, error: axiosError }
         },

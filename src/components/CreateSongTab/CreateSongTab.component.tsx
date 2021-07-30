@@ -67,10 +67,12 @@ const useStyles = makeStyles({
 })
 
 export const CreateSongTab = (props: {
+    updateSong: () => void
     onUndo: () => void
     undoIsLoading?: boolean
     currentUserHasWriteAccess?: boolean
 }) => {
+
     const { song, dispatchSong, setCustomMode } = useSongContext()
     const { currentUserHasWriteAccess, onUndo, undoIsLoading } = props
     const selectedVoice = useVoice(song?.voices)
@@ -82,14 +84,9 @@ export const CreateSongTab = (props: {
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false)
     const [customVoiceDialogIsOpen, setCustomVoiceDialogIsOpen] =
         useState(false)
-    const [baseVoiceCustom, setBaseVoiceCustom] = useState<IVoice | undefined>(
-        undefined
-    )
     const { t } = useTranslation()
     const [clickedId, setClickedId] = useState<undefined | number>()
-    const clickedVoice = voices?.find(
-        (voice) => voice.songVoiceId === clickedId
-    )
+    const clickedVoice = useVoice(song?.voices)
 
     const [rightClickMenuPosition, setRightClickMenuPosition] = useState<
         { top: number; left: number } | undefined
@@ -153,7 +150,6 @@ export const CreateSongTab = (props: {
                     setNewVoiceDialogIsOpen(false)
                     setCustomVoiceDialogIsOpen(true)
                     onAddVoice(result.data)
-                    setBaseVoiceCustom(clickedVoice)
                     setClickedId(result.data.songVoiceId)
                     setCustomMode(true)
                 }
@@ -223,6 +219,7 @@ export const CreateSongTab = (props: {
     const handleCustomVoiceDialogSave = () => {
         setCustomVoiceDialogIsOpen(false)
         setCustomMode(false)
+        props.updateSong()
     }
 
     return (
@@ -397,7 +394,7 @@ export const CreateSongTab = (props: {
                 <CustomVoiceDialog
                     handleOnSave={handleCustomVoiceDialogSave}
                     handleOnCancel={handleCustomVoiceDialogCancel}
-                    baseVoice={baseVoiceCustom || voices[0]}
+                    baseVoice={voices[0]}
                     newVoice={clickedVoice}
                 />
             </Dialog>
