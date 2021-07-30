@@ -29,6 +29,7 @@ import { Undo as UndoIcon, MoreVert as MoreVertIcon } from "@material-ui/icons"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
 import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
+import { useHotkeys } from "react-hotkeys-hook"
 
 const useStyles = makeStyles({
     root: {
@@ -71,7 +72,6 @@ export const CreateSongTab = (props: {
     undoIsLoading?: boolean
     currentUserHasWriteAccess?: boolean
 }) => {
-
     const { song, dispatchSong, setCustomMode } = useSongContext()
     const { currentUserHasWriteAccess, onUndo, undoIsLoading } = props
     const selectedVoice = useVoice(song?.voices)
@@ -110,6 +110,10 @@ export const CreateSongTab = (props: {
             history.push(`/song/${songId}`)
         }
     }
+
+    useHotkeys("ctrl+z", () => {
+        onUndo()
+    })
 
     const onUpdateVoice = (voice: IVoice) => {
         dispatchSong({ type: "UPDATE_VOICE_NAME", voice })

@@ -145,6 +145,7 @@
         "save": "Lagre",
         "delete": "Slett sang",
         "editBars": "Rediger takter",
+        "cancelEditBars": "Avslutt redigering av takter",
         "changeLanguage": "Endre språk",
         "showInfo": "Vis info"
     },

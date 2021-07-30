@@ -14,7 +14,6 @@ import { colors } from "../../utils/colors"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { SongNavBar } from "../../components/SongNavBar/SongNavBar.component"
 import { useVoice } from "../../utils/useVoice"
-import { useHotkeys } from "react-hotkeys-hook"
 import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 import { useBarsPerRow } from "../../utils/useBars"
 
@@ -79,10 +78,6 @@ export const SongView = () => {
     const selectedVoice = useVoice(song!!.voices)
 
     const { songVoiceId: selectedVoiceId } = selectedVoice || {}
-
-    useHotkeys("ctrl+z", () => {
-        undo()
-    })
 
     const undo = async () => {
         const { result, isError } = await undoSong.run()

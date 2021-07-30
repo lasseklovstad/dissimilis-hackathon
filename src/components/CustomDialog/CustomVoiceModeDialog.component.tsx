@@ -11,7 +11,10 @@ import { useTranslation } from "react-i18next"
 
 import { IVoice } from "../../models/IVoice"
 import { colors } from "../../utils/colors"
-import { useAddComponentInterval, useRemoveComponentInterval } from "../../utils/useApiServiceSongs"
+import {
+    useAddComponentInterval,
+    useRemoveComponentInterval,
+} from "../../utils/useApiServiceSongs"
 import { useBarsPerRow } from "../../utils/useBars"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { Song } from "../Song/Song.component"
@@ -81,13 +84,20 @@ export const CustomVoiceDialog = (props: {
 }) => {
     const { t } = useTranslation()
     const classes = useStyles()
-    const { song } = useSongContext();
+    const { song } = useSongContext()
     const { handleOnCancel, handleOnSave, baseVoice, newVoice } = props
-    const [indexArray, setIndexArray] = useState<boolean[]>([]);
-    const {addInterval} = useAddComponentInterval(song?.songId ?? 0, newVoice?.songVoiceId?? 0);
-    const {removeInterval} = useRemoveComponentInterval(song?.songId ?? 0, newVoice?.songVoiceId?? 0);
-    const [updatedVoice, setUpdatedVoice] = useState<boolean[][][] | undefined>(undefined);
-
+    const [indexArray, setIndexArray] = useState<boolean[]>([])
+    const { addInterval } = useAddComponentInterval(
+        song?.songId ?? 0,
+        newVoice?.songVoiceId ?? 0
+    )
+    const { removeInterval } = useRemoveComponentInterval(
+        song?.songId ?? 0,
+        newVoice?.songVoiceId ?? 0
+    )
+    const [updatedVoice, setUpdatedVoice] = useState<boolean[][][] | undefined>(
+        undefined
+    )
 
     const getChordNameFromMainVoice = (
         barPosition: number,
@@ -99,62 +109,75 @@ export const CustomVoiceDialog = (props: {
             ?.chordName
     }
 
+    const barsPerRow = useBarsPerRow()
+    const getBiggestChordInSong = useCallback(() => {
+        var biggestChordLength = 0
+        var chordName = ""
+        baseVoice.bars.forEach((bar) => {
+            bar.chords.forEach((chord) => {
+                if (
+                    biggestChordLength <
+                        chord.notes.filter((note) => note !== "X").length &&
+                    chord.chordName !== null
+                ) {
+                    biggestChordLength = chord.notes.length
+                    chordName = chord.chordName
+                }
+            })
+        })
+        return {
+            showMenu: biggestChordLength !== 0,
+            biggestChordName: chordName,
+            value: biggestChordLength,
+        }
+    }, [])
+
     useEffect(() => {
-        if(getBiggestChordInSong().showMenu){
+        if (getBiggestChordInSong().showMenu) {
             setIndexArray(new Array(getBiggestChordInSong().value).fill(false))
         }
-    }, []);
+    }, [])
 
-    const barsPerRow = useBarsPerRow()
-    const getBiggestChordInSong = useCallback(
-        () =>{
-            var biggestChordLength = 0
-            var chordName ="";
-            baseVoice.bars.forEach(bar => {
-                bar.chords.forEach(chord => {
-                    if (biggestChordLength < chord.notes.filter(note => note !== "X").length && chord.chordName!== null) {
-                        biggestChordLength = chord.notes.length;
-                        chordName = chord.chordName;
-                    }
-                })
-            });
-            return {showMenu: biggestChordLength!= 0 , biggestChordName: chordName, value: biggestChordLength}
-        }, []
-        );
-
-    const changeComponentInterval = async (index: number)=>{
+    const changeComponentInterval = async (index: number) => {
         var array = indexArray
-        if(array[index]){
-            const {error , result} = await removeInterval.run({intervalPosition: index, deleteChordsOnLastIntervalRemoved: true})
+        if (array[index]) {
+            const { error, result } = await removeInterval.run({
+                intervalPosition: index,
+                deleteChordsOnLastIntervalRemoved: true,
+            })
             if (!error && result) {
                 array[index] = false
                 setUpdatedVoice(convertFromNotesToBoolean(result.data))
             }
-        }
-        else{
-            const {error , result} = await addInterval.run({intervalPosition: index, sourceVoiceId: baseVoice.songVoiceId})
+        } else {
+            const { error, result } = await addInterval.run({
+                intervalPosition: index,
+                sourceVoiceId: baseVoice.songVoiceId,
+            })
             if (!error && result) {
                 array[index] = true
                 setUpdatedVoice(convertFromNotesToBoolean(result.data))
             }
         }
-        setIndexArray(array);
+        setIndexArray(array)
     }
 
-    
-
-    const convertFromNotesToBoolean = (updatedIVoice: IVoice)=> updatedIVoice.bars.map(bar => {
-            var barNotesConverted: boolean[][] = [];
-            bar.chords.forEach(chord => {
-                if(chord.notes[0] === "Z"){
-                    new Array(chord.length).fill(false).forEach(empty => barNotesConverted.push([empty]) )
+    const convertFromNotesToBoolean = (updatedIVoice: IVoice) =>
+        updatedIVoice.bars.map((bar) => {
+            var barNotesConverted: boolean[][] = []
+            bar.chords.forEach((chord) => {
+                if (chord.notes[0] === "Z") {
+                    new Array(chord.length)
+                        .fill(false)
+                        .forEach((empty) => barNotesConverted.push([empty]))
+                } else {
+                    barNotesConverted.push(
+                        chord.notes.map((note) => !(note === "X"))
+                    )
                 }
-                else{
-                 barNotesConverted.push(chord.notes.map(note => !(note==="X")))
-                }})
-                return barNotesConverted
-            }
-        )
+            })
+            return barNotesConverted
+        })
 
     return (
         <>
@@ -185,10 +208,12 @@ export const CustomVoiceDialog = (props: {
                             <ChordOptions
                                 chord={getBiggestChordInSong().biggestChordName}
                                 customMode
-                                onChordNotesChange={()=> {}}
+                                onChordNotesChange={() => {}}
                                 alwaysShow={getBiggestChordInSong().showMenu}
                                 indexArray={indexArray}
-                                changeComponentInterval={changeComponentInterval}
+                                changeComponentInterval={
+                                    changeComponentInterval
+                                }
                             />
                         </Box>
                         <DialogActions className={classes.buttonContainer}>
