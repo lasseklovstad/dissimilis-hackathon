@@ -9,6 +9,7 @@ import { useSongContext } from "../../views/SongView/SongContextProvider.compone
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded"
 import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUncheckedRounded"
 import { useVoice } from "../../utils/useVoice"
+import { isVoidExpression } from "typescript"
 
 type ChordProps = {
     chord: IChord
@@ -29,6 +30,7 @@ type ChordProps = {
     ) => string | null | undefined
     barEditMode: boolean
     barId: number
+    onTouchEnd: () => void
 }
 
 const useStyle = makeStyles((theme) => ({
@@ -256,6 +258,7 @@ export const Chord = (props: ChordProps) => {
         isSelected,
         handleChordFocus,
         barEditMode,
+        onTouchEnd,
     } = props
     const classes = useStyle()
 
@@ -398,6 +401,7 @@ export const Chord = (props: ChordProps) => {
                     onContextMenu={onContextMenu}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
+                    onTouchEnd={onTouchEnd}
                     disableRipple={barEditMode}
                     className={`${classes.buttonBox} ${
                         barEditMode
