@@ -138,7 +138,7 @@ export const LibraryView = () => {
                         orderTerm={orderTerm}
                         changeOrderTerm={handleChangeOrderTerm}
                         orderDescending={orderDescending}
-                        searchFilter={true}
+                        searchFilter
                         initialGroupIds={includedGroupIdArray}
                         initialOrganisationIds={includedOrganisationIdArray}
                         onSubmitAutocomplete={handleAddFilterUrl}

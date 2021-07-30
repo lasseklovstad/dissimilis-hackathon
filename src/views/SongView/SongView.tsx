@@ -98,7 +98,6 @@ export const SongView = () => {
         return <LoadingLogo />
     }
 
-
     return (
         <>
             <ErrorDialog
@@ -139,7 +138,7 @@ export const SongView = () => {
                             timeSignature={{ denominator, numerator }}
                             heightOfBar={heightOfBar}
                             exportMode={false}
-                            lastPage={true}
+                            lastPage
                             currentUserHasWriteAccess={
                                 song?.currentUserHasWriteAccess
                             }

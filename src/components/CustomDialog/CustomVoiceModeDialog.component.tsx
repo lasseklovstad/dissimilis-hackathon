@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next"
 
 import { IVoice } from "../../models/IVoice"
 import { colors } from "../../utils/colors"
-import { useAddComponentInterval, useGetSong, useRemoveComponentInterval } from "../../utils/useApiServiceSongs"
+import { useAddComponentInterval, useRemoveComponentInterval } from "../../utils/useApiServiceSongs"
 import { useBarsPerRow } from "../../utils/useBars"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { Song } from "../Song/Song.component"
@@ -143,8 +143,7 @@ export const CustomVoiceDialog = (props: {
 
     
 
-    const convertFromNotesToBoolean = (updatedIVoice: IVoice)=>{
-        return updatedIVoice.bars.map(bar => {
+    const convertFromNotesToBoolean = (updatedIVoice: IVoice)=> updatedIVoice.bars.map(bar => {
             var barNotesConverted: boolean[][] = [];
             bar.chords.forEach(chord => {
                 if(chord.notes[0] === "Z"){
@@ -155,7 +154,7 @@ export const CustomVoiceDialog = (props: {
                 }})
                 return barNotesConverted
             }
-        )}
+        )
 
     return (
         <>
@@ -185,7 +184,7 @@ export const CustomVoiceDialog = (props: {
                         <Box className={classes.container}>
                             <ChordOptions
                                 chord={getBiggestChordInSong().biggestChordName}
-                                customMode= {true}
+                                customMode
                                 onChordNotesChange={()=> {}}
                                 alwaysShow={getBiggestChordInSong().showMenu}
                                 indexArray={indexArray}

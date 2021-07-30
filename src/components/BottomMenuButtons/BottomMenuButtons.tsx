@@ -60,7 +60,7 @@ export const ChordOptions = (props: {
     indexArray?: boolean[]
 
 }) => {
-    const { alwaysShow, customMode = false, indexArray = [], changeComponentInterval=()=>{} } = props
+    const { alwaysShow, customMode = false, indexArray = [], changeComponentInterval= () => {} } = props
     const styles = useStyles()
     const { chordMenuOptions } = useSongContext()
     const { t } = useTranslation()
@@ -89,21 +89,8 @@ export const ChordOptions = (props: {
                                         chordMenuOptions?.chordNotes.length ===
                                             1 && !customMode
                                     }
-                                    checked={(customMode && indexArray.length>0 && indexArray[i])|| (chordContainsNote&& !customMode)}
-                                    onChange={(e) =>{
-                                        return(
-
-                                            customMode ?
-                                            changeComponentInterval(
-                                                i
-                                                )
-                                                :
-                                                props.onChordNotesChange(
-                                                    e.target.name,
-                                                    e.target.checked
-                                                    )
-                                                    )
-                                    }}
+                                    checked={(customMode && indexArray.length > 0 && indexArray[i] ) || (chordContainsNote && !customMode)}
+                                    onChange={(e) => customMode ? changeComponentInterval(i) : props.onChordNotesChange(e.target.name, e.target.checked)}
                                     name={note as string}
                                 />
                             }

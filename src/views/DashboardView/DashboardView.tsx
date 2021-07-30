@@ -93,7 +93,6 @@ export const DashboardView = () => {
 
     useEffect(() => {
         if (recentSongsFetched) {
-            console.table(recentSongsFetched.length)
             setRecentSongs(recentSongsFetched)
         }
     }, [recentSongsFetched])

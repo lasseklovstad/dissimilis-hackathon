@@ -120,7 +120,7 @@ export const Song = (props: SongProps) => {
                                 return (
                                     <React.Fragment key={i}>
                                         <Bar
-                                            updatedBar={updatedVoice? updatedVoice[i]: undefined}
+                                            updatedBar={updatedVoice ? updatedVoice[i] : undefined}
                                             // eslint-disable-next-line
                                             showVoltaBracketNumber={
                                                 showVoltaBracketNumber
