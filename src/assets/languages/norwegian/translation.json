@@ -259,6 +259,18 @@
         "clear": "Tøm søkefelt"
     },
     "Snackbar": {
-        "undoError": "Det er ingenting igjen å angre"
+        "undoError": "Det er ingenting igjen å angre",
+        "addMemberSuccess": "Medlemmet er lagt til",
+        "addMemberError": "Noe gikk galt med å legge til medlem",
+        "removeAdmin": "Noe gikk galt i fjerningen av admin",
+        "oneAdminLeft": "Det er bare en admin igjen",
+        "addAdmin": "Noe gikk galt med å legge til admin",
+        "removeMember": "Noe gikk galt i fjerningen av medlem",
+        "addShareUser": "Noe gikk galt med å legge til bruker",
+        "removeShareUser": "Noe gikk galt i fjerningen av bruker",
+        "changeProtectionLevel": "Noe i galt i endringen",
+        "addTag": "Noe gikk galt i endringen av tags",
+        "addOrg": "Noe gikk galt i opprettelse av land",
+        "addGroup": "Noe gikk galt i opprettelse av gruppe"
     }
 }

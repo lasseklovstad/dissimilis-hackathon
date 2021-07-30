@@ -29,6 +29,7 @@ import {
     useSetUserRoleInGroup,
     useSetUserRoleInOrganisation,
 } from "../../utils/useApiServiceGroups"
+import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -89,6 +90,8 @@ export const EditAdminsDialog = (props: {
     const [adminList, setAdminsList] = useState<IUser[]>(group?.admins || [])
     const [userList, setUserList] = useState<IUser[] | undefined>()
 
+    const { launchSnackbar } = useSnackbarContext()
+
     useEffect(() => {
         if (groupMembers) {
             setUserList(groupMembers)
@@ -124,13 +127,12 @@ export const EditAdminsDialog = (props: {
                     handleRemoveAdminFromGroupObject(selectedAdmin.userId)
                     setConfirmationDialogIsOpen(false)
                 } else {
-                    // An error occured
-                    // Snackbar
+                    launchSnackbar(t("Snackbar.removeAdmin"), true)
                 }
             }
             return false
         } else {
-            // Snackbar
+            launchSnackbar(t("Snackbar.oneAdminLeft"), true)
             return false
         }
     }
@@ -143,8 +145,7 @@ export const EditAdminsDialog = (props: {
                 handleAddAdminInGroupObject(user)
                 setAddAdminDialogIsOpen(false)
             } else {
-                // An error occured
-                // Snackbar
+                launchSnackbar(t("Snackbar.addAdmin"), true)
             }
         }
     }
