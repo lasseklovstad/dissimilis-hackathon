@@ -317,7 +317,13 @@ export const AdminView = () => {
                                     !renderedAdminOrganisationIds.includes(
                                         organisation.organisationId
                                     ) && (
-                                        <Grid item xs={12}>
+                                        <Grid
+                                            className={
+                                                classes.accordionComponent
+                                            }
+                                            item
+                                            xs={12}
+                                        >
                                             <AccordionComponent
                                                 organisationId={
                                                     organisation.organisationId
