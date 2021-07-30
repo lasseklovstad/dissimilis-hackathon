@@ -41,8 +41,8 @@ import {
     OrganisationFilter,
 } from "../../utils/useApiServiceGroups"
 import { Autocomplete } from "@material-ui/lab"
-import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
-import { useGetUsers } from "../../utils/useApiServiceUsers"
+import { InputDialog } from "./InputDialog.component"
+import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -86,19 +86,16 @@ export const ShareSongDialog = (props: {
     const { unshareSong } = useUnshareSong(songId)
     const { setGroupTags } = useSetGroupTags(songId)
     const { setOrganisationTags } = useSetOrganisationTags(songId)
-    const { users } = useGetUsers()
     const { organisationsFetched } = useGetOrganisations(
-        OrganisationFilter.User
+        OrganisationFilter.Member
     )
-    const { allGroupsFetched } = useGetGroups(GroupFilter.User)
-    const userId = sessionStorage.getItem("userId") || undefined
+    const { allGroupsFetched } = useGetGroups(GroupFilter.Member)
 
     const [sharedWithUserList, setSharedWithUserList] = useState<IUser[]>([])
     const [selectedUser, setSelectedUser] = useState<IUser>()
     const [confirmRemoveUserDialogIsOpen, setConfirmRemoveUserDialogIsOpen] =
         useState(false)
     const [addUserDialogIsOpen, setAddUserDialogIsOpen] = useState(false)
-    const [filteredUserList, setFilteredUserList] = useState<IUser[]>()
 
     const [publicSong, setPublicSong] = useState(false)
 
@@ -113,6 +110,8 @@ export const ShareSongDialog = (props: {
         useState<IOrganisationIndex[]>()
     const [tags, setTags] = useState<(IGroupIndex | IOrganisationIndex)[]>()
     const tagOptions = [...(groups || []), ...(organisations || [])]
+
+    const { launchSnackbar } = useSnackbarContext()
 
     useEffect(() => {
         if (allGroupsFetched) {
@@ -175,23 +174,6 @@ export const ShareSongDialog = (props: {
         setTags([...(filteredGroupTags || []), ...(filteredOrgTags || [])])
     }, [filteredOrgTags, filteredGroupTags])
 
-    useEffect(() => {
-        if (userId && users) {
-            setFilteredUserList(
-                users.filter(
-                    (user) =>
-                        !(
-                            user.userId === Number(userId) ||
-                            sharedWithUserList.some(
-                                (sharedUser) =>
-                                    user.userId === sharedUser.userId
-                            )
-                        )
-                )
-            )
-        }
-    }, [userId, users, sharedWithUserList])
-
     const handleCloseAddUserDialog = () => {
         setAddUserDialogIsOpen(false)
     }
@@ -200,14 +182,21 @@ export const ShareSongDialog = (props: {
         setConfirmRemoveUserDialogIsOpen(false)
     }
 
-    const handleAddUser = async (user: IUser) => {
-        const { error, result } = await shareSong.run(null, `/${user.userId}`)
-        if (!error && result) {
-            setSharedWithUserList(result.data)
+    const handleAddUser = async (userEmail: string) => {
+        if (userEmail) {
+            const { error, result } = await shareSong.run(
+                null,
+                `?userEmail=${userEmail}`
+            )
+            if (!error && result) {
+                setSharedWithUserList(result.data)
+                handleCloseAddUserDialog()
+            }
+            if (error) {
+                launchSnackbar(t("Snackbar.addShareUser"), true)
+            }
+        } else {
             handleCloseAddUserDialog()
-        }
-        if (error) {
-            //Launch snackbar
         }
     }
 
@@ -224,7 +213,7 @@ export const ShareSongDialog = (props: {
             handleCloseConfirmRemoveUserDialog()
         }
         if (error) {
-            //Launch snackbar
+            launchSnackbar(t("Snackbar.removeShareUser"), true)
         }
     }
 
@@ -238,7 +227,7 @@ export const ShareSongDialog = (props: {
                 : SongProtectionLevel.Private,
         })
         if (error) {
-            //Launch snackbar
+            launchSnackbar(t("Snackbar.changeProtectionLevel"), true)
         }
     }
 
@@ -263,7 +252,7 @@ export const ShareSongDialog = (props: {
         })
 
         if (groupError || orgError) {
-            //Launch snackbar
+            launchSnackbar(t("Snackbar.addTag"), true)
         }
     }
 
@@ -278,7 +267,7 @@ export const ShareSongDialog = (props: {
                     {t("Dialog.editRightsDescription")}
                 </Typography>
                 {getSongShareInfo.loading ? (
-                    <Grid xs={12}>
+                    <Grid item xs={12}>
                         <CircularProgress
                             aria-label="Loading"
                             size={50}
@@ -348,7 +337,7 @@ export const ShareSongDialog = (props: {
                     {t("Dialog.readRightsDescription")}
                 </Typography>
                 {getSongShareInfo.loading ? (
-                    <Grid xs={12}>
+                    <Grid item xs={12}>
                         <CircularProgress
                             aria-label="Loading"
                             size={30}
@@ -421,12 +410,14 @@ export const ShareSongDialog = (props: {
                 onClose={handleCloseAddUserDialog}
                 aria-label={t("Dialog.shareWithPerson")}
             >
-                <UserAutoCompleteDialog
+                <InputDialog
                     handleOnSaveClick={handleAddUser}
                     handleOnCancelClick={handleCloseAddUserDialog}
-                    userList={filteredUserList || []}
-                    title={t("Dialog.shareWithPerson")}
+                    headerText={t("Dialog.shareWithPerson")}
                     saveText={t("Dialog.addPerson")}
+                    cancelText={t("Dialog.cancel")}
+                    labelText={t("Dialog.email")}
+                    characterLimit={250}
                 />
             </Dialog>
             <Dialog

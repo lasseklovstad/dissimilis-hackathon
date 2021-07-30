@@ -12,6 +12,7 @@ import { useVoice } from "../../utils/useVoice"
 import { IVoice } from "../../models/IVoice"
 
 
+import { isVoidExpression } from "typescript"
 
 const useStyle = makeStyles((theme) => ({
     buttonBase: {
@@ -242,6 +243,7 @@ type ChordProps = {
     ) => string | null | undefined
     barEditMode: boolean
     barId: number
+    onTouchEnd: ()=> void
 }
 
 export const Chord = (props: ChordProps) => {
@@ -261,6 +263,7 @@ export const Chord = (props: ChordProps) => {
         isSelected,
         handleChordFocus,
         barEditMode,
+        onTouchEnd,
     } = props
     const classes = useStyle()
 
@@ -276,8 +279,8 @@ export const Chord = (props: ChordProps) => {
     const { customMode } = useSongContext()
 
     const { addNote } = useAddNote(
-        song!!.songId,
-        selectedVoice!!.songVoiceId,
+        song?.songId,
+        selectedVoice?.songVoiceId,
         barPosition
     )
     
@@ -303,8 +306,8 @@ export const Chord = (props: ChordProps) => {
     }, [updatedNoteValues]);
     
     const { removeNote } = useRemoveNote(
-        song!!.songId,
-        selectedVoice!!.songVoiceId,
+        song?.songId,
+        selectedVoice?.songVoiceId,
         barPosition
         )
         const handleCustomVoiceRemoveClick = async (index: number) => {
@@ -409,6 +412,7 @@ export const Chord = (props: ChordProps) => {
                     onContextMenu={onContextMenu}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
+                    onTouchEnd={onTouchEnd}
                     disableRipple={barEditMode}
                     className={`${classes.buttonBox} ${
                         barEditMode

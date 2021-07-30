@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import {
     Box,
+    Button,
+    CircularProgress,
     Dialog,
     IconButton,
     makeStyles,
@@ -9,11 +11,9 @@ import {
     Tab,
     Tabs,
 } from "@material-ui/core"
-import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { IVoice } from "../../models/IVoice"
-import { InputDialog } from "../CustomDialog/InputDialog.component"
 import {
     useCreateVoice,
     useDeleteVoice,
@@ -21,12 +21,14 @@ import {
     useUpdateVoice,
 } from "../../utils/useApiServiceSongs"
 import { colors } from "../../utils/colors"
-import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
-import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { useVoice } from "../../utils/useVoice"
 import { CustomVoiceDialog } from "../CustomDialog/CustomVoiceModeDialog.component"
+import { Undo as UndoIcon, MoreVert as MoreVertIcon } from "@material-ui/icons"
+import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
+import { InputDialog } from "../CustomDialog/InputDialog.component"
+import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
 
 const useStyles = makeStyles({
     root: {
@@ -44,11 +46,9 @@ const useStyles = makeStyles({
             backgroundColor: colors.gray_200,
         },
     },
-
     selected: {
         backgroundColor: colors.gray_200,
     },
-
     buttonsstyle: {
         border: `1px solid ${colors.gray_200}`,
         padding: "8px 16px",
@@ -60,18 +60,24 @@ const useStyles = makeStyles({
             backgroundColor: colors.gray_200,
         },
     },
+    undoButtonContainer: {
+        marginLeft: "auto",
+    },
 })
 
 export const CreateSongTab = (props: {
-    currentUserHasWriteAccess?: boolean,
     updateSong: () => void
+    onUndo: () => void
+    undoIsLoading?: boolean
+    currentUserHasWriteAccess?: boolean
 }) => {
 
     const { song, dispatchSong, setCustomMode } = useSongContext()
-    const { currentUserHasWriteAccess } = props
+    const { currentUserHasWriteAccess, onUndo, undoIsLoading } = props
     const selectedVoice = useVoice(song?.voices)
     const { songVoiceId: selectedVoiceId } = selectedVoice || {}
     const { songId, voices } = song!!
+
     const [newVoiceDialogIsOpen, setNewVoiceDialogIsOpen] = useState(false)
     const [renameDialogIsOpen, setRenameDialogIsOpen] = useState(false)
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false)
@@ -111,7 +117,7 @@ export const CreateSongTab = (props: {
 
     const handleAddVoice = async (title: string, option: string) => {
         const voiceNumber = Math.max(
-            ...voices.map((voice) => voice.partNumber),
+            ...voices.map((voice) => voice.voiceNumber),
             0
         )
         switch (option) {
@@ -181,7 +187,7 @@ export const CreateSongTab = (props: {
     const handleChangeVoiceName = async (voiceName: string) => {
         const { error, result } = await putVoice.run({
             voiceName: voiceName,
-            voiceNumber: clickedVoice?.partNumber,
+            voiceNumber: clickedVoice?.voiceNumber,
         })
 
         if (!error && result) {
@@ -252,15 +258,42 @@ export const CreateSongTab = (props: {
                 </Tabs>
 
                 {currentUserHasWriteAccess && (
-                    <IconButton
-                        aria-haspopup="true"
-                        aria-controls="voiceTabMenu"
-                        aria-label={t("CreateSongTab.menu")}
-                        onClick={handleMenuClick}
-                        disableFocusRipple
-                    >
-                        <MoreVertIcon />
-                    </IconButton>
+                    <>
+                        <IconButton
+                            aria-haspopup="true"
+                            aria-controls="voiceTabMenu"
+                            aria-label={t("CreateSongTab.menu")}
+                            onClick={handleMenuClick}
+                            disableFocusRipple
+                        >
+                            <MoreVertIcon />
+                        </IconButton>
+                        <Box ml="auto">
+                            {undoIsLoading ? (
+                                <Button
+                                    startIcon={
+                                        <CircularProgress
+                                            aria-label="Loading"
+                                            size={22}
+                                        />
+                                    }
+                                    className={classes.buttonsstyle}
+                                    onClick={onUndo}
+                                    disabled
+                                >
+                                    {t("Song.undo")}
+                                </Button>
+                            ) : (
+                                <Button
+                                    startIcon={<UndoIcon />}
+                                    className={classes.buttonsstyle}
+                                    onClick={onUndo}
+                                >
+                                    {t("Song.undo")}
+                                </Button>
+                            )}
+                        </Box>
+                    </>
                 )}
             </Box>
 
