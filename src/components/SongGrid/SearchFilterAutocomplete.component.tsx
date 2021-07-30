@@ -115,8 +115,6 @@ export const SearchFilterAutocomplete = (props: {
                         orderTerm={orderTerm}
                         changeOrderTerm={changeOrderTerm}
                         orderDescending={orderDescending}
-                        /* groupId=""
-                        organisationId="" */
                     />
                 </Grid>
             ) : (

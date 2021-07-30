@@ -194,6 +194,10 @@ export const AccordionComponent = (props: {
         setOrganisation(updatedOrganisation)
     }
 
+    const handleSeeAllSongs = () => {
+        history.push(`/library?organisationId=${organisationId}`)
+    }
+
     useEffect(() => {
         if (organisationFetched) {
             setOrganisation(organisationFetched)
@@ -305,6 +309,7 @@ export const AccordionComponent = (props: {
                             <Button
                                 disableFocusRipple
                                 className={classes.button}
+                                onClick={handleSeeAllSongs}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.seeAllSongs")}

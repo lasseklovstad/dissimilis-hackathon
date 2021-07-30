@@ -103,6 +103,7 @@ export const EditSysAdminsDialog = (props: {
             return false
         } else {
             launchSnackbar(t("Snackbar.oneAdminLeft"), true)
+            setConfirmationDialogIsOpen(false)
             return false
         }
     }

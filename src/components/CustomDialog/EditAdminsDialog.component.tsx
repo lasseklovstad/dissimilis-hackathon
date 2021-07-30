@@ -133,6 +133,7 @@ export const EditAdminsDialog = (props: {
             return false
         } else {
             launchSnackbar(t("Snackbar.oneAdminLeft"), true)
+            setConfirmationDialogIsOpen(false)
             return false
         }
     }
