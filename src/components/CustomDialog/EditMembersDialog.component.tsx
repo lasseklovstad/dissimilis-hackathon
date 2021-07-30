@@ -24,6 +24,7 @@ import {
     useRemoveOrganisationMember,
 } from "../../utils/useApiServiceGroups"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
+import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -74,6 +75,8 @@ export const EditMembersDialog = (props: {
     const { removeGroupMember } = useRemoveGroupMember(groupId)
     const { removeOrganisationMember } = useRemoveOrganisationMember(groupId)
 
+    const { launchSnackbar } = useSnackbarContext()
+
     useEffect(() => {
         if (groupMembers) {
             setMembers(groupMembers)
@@ -109,7 +112,7 @@ export const EditMembersDialog = (props: {
             )
             handleCloseConfirmationDialog()
         } else {
-            // Snackbar
+            launchSnackbar(t("Snackbar.removeMember"), true)
         }
     }
 

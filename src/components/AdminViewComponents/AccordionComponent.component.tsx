@@ -27,6 +27,7 @@ import { IUser } from "../../models/IUser"
 import { EditMembersDialog } from "../CustomDialog/EditMembersDialog.component"
 import { AddGroupMemberDialog } from "../CustomDialog/AddGroupMemberDialog.component"
 import { IOrganisation } from "../../models/IOrganisation"
+import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 
 const useStyles = makeStyles({
     root: {
@@ -81,6 +82,8 @@ export const AccordionComponent = (props: {
     const classes = useStyles()
     const { t } = useTranslation()
 
+    const { launchSnackbar } = useSnackbarContext()
+
     const { organisationFetched } = useGetOrganisation(organisationId)
     const { deleteOrganisation } = useDeleteOrganisation(organisationId)
     const { addOrganisationMember } = useAddOrganisationMember(organisationId)
@@ -134,10 +137,10 @@ export const AccordionComponent = (props: {
             })
             if (!error && result) {
                 setAddMemberDialogIsOpen(false)
+                launchSnackbar(t("Snackbar.addMemberSuccess"), false)
             }
         } else {
-            // User does not exist
-            // handle this
+            launchSnackbar(t("Snackbar.addMemberError"), true)
         }
     }
 

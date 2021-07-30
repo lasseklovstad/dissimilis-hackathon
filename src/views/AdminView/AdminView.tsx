@@ -27,6 +27,7 @@ import {
 import { IOrganisationIndex } from "../../models/IOrganisation"
 import { EditSysAdminsDialog } from "../../components/CustomDialog/EditSysAdmins.components"
 import { EditSystemMembersDialog } from "../../components/CustomDialog/EditSystemMembersDialog.component"
+import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -80,6 +81,9 @@ export const AdminView = () => {
     const classes = useStyles()
     const { t } = useTranslation()
     const history = useHistory()
+
+    const { launchSnackbar } = useSnackbarContext()
+
     const { postOrganisation } = usePostOrganisation()
 
     const { adminStatuses } = useGetAdminStatuses()
@@ -172,10 +176,10 @@ export const AdminView = () => {
                 setAddOrganisationIsOpen(false)
                 updateOrganisation()
             } else {
-                //Launch snackbar
+                launchSnackbar(t("Snackbar.addOrg"), true)
             }
         } else {
-            //Launch snackbar
+            launchSnackbar(t("Snackbar.addOrg"), true)
         }
     }
 
