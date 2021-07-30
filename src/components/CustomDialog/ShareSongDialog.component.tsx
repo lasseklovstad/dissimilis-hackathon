@@ -42,6 +42,7 @@ import {
 } from "../../utils/useApiServiceGroups"
 import { Autocomplete } from "@material-ui/lab"
 import { InputDialog } from "./InputDialog.component"
+import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -109,6 +110,8 @@ export const ShareSongDialog = (props: {
         useState<IOrganisationIndex[]>()
     const [tags, setTags] = useState<(IGroupIndex | IOrganisationIndex)[]>()
     const tagOptions = [...(groups || []), ...(organisations || [])]
+
+    const { launchSnackbar } = useSnackbarContext()
 
     useEffect(() => {
         if (allGroupsFetched) {
@@ -190,12 +193,9 @@ export const ShareSongDialog = (props: {
                 handleCloseAddUserDialog()
             }
             if (error) {
-                // Launch snackbar
-                // "An error occured"
+                launchSnackbar(t("Snackbar.addShareUser"), true)
             }
         } else {
-            // Invalid user email
-            // Launch snackbar
             handleCloseAddUserDialog()
         }
     }
@@ -213,7 +213,7 @@ export const ShareSongDialog = (props: {
             handleCloseConfirmRemoveUserDialog()
         }
         if (error) {
-            //Launch snackbar
+            launchSnackbar(t("Snackbar.removeShareUser"), true)
         }
     }
 
@@ -227,7 +227,7 @@ export const ShareSongDialog = (props: {
                 : SongProtectionLevel.Private,
         })
         if (error) {
-            //Launch snackbar
+            launchSnackbar(t("Snackbar.changeProtectionLevel"), true)
         }
     }
 
@@ -252,7 +252,7 @@ export const ShareSongDialog = (props: {
         })
 
         if (groupError || orgError) {
-            //Launch snackbar
+            launchSnackbar(t("Snackbar.addTag"), true)
         }
     }
 

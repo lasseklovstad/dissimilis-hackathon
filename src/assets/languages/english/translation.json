@@ -263,6 +263,18 @@
         "clear": "Clear"
     },
     "Snackbar": {
-        "undoError": "There is nothing left to undo"
+        "undoError": "There is nothing left to undo",
+        "addMemberSuccess": "The member has been added",
+        "addMemberError": "Something went wrong when adding member",
+        "removeAdmin": "Something went wrong when removing admin",
+        "oneAdminLeft": "There is only one admin left",
+        "addAdmin": "Something went wrong when adding admin",
+        "removeMember": "Something went wrong when removing member",
+        "addShareUser": "Something went wrong when adding user",
+        "removeShareUser": "Something went wrong when removing user",
+        "changeProtectionLevel": "Something went wrong changing protectionlevel",
+        "addTag": "Something went wrong in adding tags",
+        "addOrg": "Something went wrong in the creation of new country",
+        "addGroup": "Something went wrong in the creation of new group"
     }
 }

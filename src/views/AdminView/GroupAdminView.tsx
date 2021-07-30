@@ -23,6 +23,7 @@ import {
     useGetOrganisation,
     usePostGroup,
 } from "../../utils/useApiServiceGroups"
+import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -89,6 +90,7 @@ export const GroupAdminView = () => {
     const classes = useStyles()
     const { t } = useTranslation()
     const history = useHistory()
+    const { launchSnackbar } = useSnackbarContext()
     const { organisationId } = useParams<{ organisationId: string }>()
 
     const { postGroup } = usePostGroup()
@@ -148,10 +150,10 @@ export const GroupAdminView = () => {
                 setAddGroupIsOpen(false)
                 updateGroups()
             } else {
-                //Launch snackbar
+                launchSnackbar(t("Snackbar.addGroup"), true)
             }
         } else {
-            //Launch snackbar
+            launchSnackbar(t("Snackbar.addGroup"), true)
         }
     }
 

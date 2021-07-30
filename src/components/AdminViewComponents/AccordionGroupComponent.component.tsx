@@ -26,6 +26,7 @@ import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { EditMembersDialog } from "../CustomDialog/EditMembersDialog.component"
 import { AddGroupMemberDialog } from "../CustomDialog/AddGroupMemberDialog.component"
 import { IGroup } from "../../models/IGroup"
+import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 
 const useStyles = makeStyles({
     root: {
@@ -76,6 +77,8 @@ export const AccordionGroupComponent = (props: {
     const classes = useStyles()
     const { t } = useTranslation()
 
+    const { launchSnackbar } = useSnackbarContext()
+
     const [addMemberDialogIsOpen, setAddMemberDialogIsOpen] = useState(false)
     const { groupFetched } = useGetGroup(groupId)
     const { deleteGroup } = useDeleteGroup(groupId)
@@ -93,11 +96,11 @@ export const AccordionGroupComponent = (props: {
                 newMemberRole: UserRole.Member,
             })
             if (!error && result) {
+                launchSnackbar(t("Snackbar.addMemberSuccess"), false)
                 setAddMemberDialogIsOpen(false)
             }
         } else {
-            // User does not exist
-            // handle this
+            launchSnackbar(t("Snackbar.addMemberError"), true)
         }
     }
 

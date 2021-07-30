@@ -26,6 +26,7 @@ import {
     useGetUsers,
     useSetSysAdminStatus,
 } from "../../utils/useApiServiceUsers"
+import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -72,6 +73,8 @@ export const EditSysAdminsDialog = (props: {
     const [adminList, setAdminsList] = useState<IUser[]>([])
     const [userList, setUserList] = useState<IUser[]>()
 
+    const { launchSnackbar } = useSnackbarContext()
+
     const handleUpdateRole = async (sysAdmin: boolean, user: IUser) => {
         const { error } = await setSysAdminStatus.run(
             {
@@ -94,13 +97,12 @@ export const EditSysAdminsDialog = (props: {
                     )
                     setConfirmationDialogIsOpen(false)
                 } else {
-                    // An error occured
-                    // Snackbar
+                    launchSnackbar(t("Snackbar.removeAdmin"), true)
                 }
             }
             return false
         } else {
-            // Snackbar
+            launchSnackbar(t("Snackbar.oneAdminLeft"), true)
             return false
         }
     }
@@ -112,8 +114,7 @@ export const EditSysAdminsDialog = (props: {
                 setAdminsList([...adminList, user])
                 setAddAdminDialogIsOpen(false)
             } else {
-                // An error occured
-                // Snackbar
+                launchSnackbar(t("Snackbar.addAdmin"), true)
             }
         }
     }
