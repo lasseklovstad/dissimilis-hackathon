@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
@@ -54,9 +54,13 @@ const useStyles = makeStyles({
 export const ChordOptions = (props: {
     chord: string | null
     onChordNotesChange: (clickedNote: string, checked: boolean) => void
+    changeComponentInterval?: (index: number) => void
     alwaysShow: boolean
+    customMode?: boolean
+    indexArray?: boolean[]
+
 }) => {
-    const { alwaysShow } = props
+    const { alwaysShow, customMode = false, indexArray = [], changeComponentInterval= () => {} } = props
     const styles = useStyles()
     const { chordMenuOptions } = useSongContext()
     const { t } = useTranslation()
@@ -83,15 +87,10 @@ export const ChordOptions = (props: {
                                     disabled={
                                         chordContainsNote &&
                                         chordMenuOptions?.chordNotes.length ===
-                                            1
+                                            1 && !customMode
                                     }
-                                    checked={chordContainsNote}
-                                    onChange={(e) =>
-                                        props.onChordNotesChange(
-                                            e.target.name,
-                                            e.target.checked
-                                        )
-                                    }
+                                    checked={(customMode && indexArray.length > 0 && indexArray[i] ) || (chordContainsNote && !customMode)}
+                                    onChange={(e) => customMode ? changeComponentInterval(i) : props.onChordNotesChange(e.target.name, e.target.checked)}
                                     name={note as string}
                                 />
                             }

@@ -321,7 +321,7 @@ export const AccordionGroupComponent = (props: {
                 <AddGroupMemberDialog
                     handleOnCancelClick={handleAddMemberClose}
                     handleOnSaveClick={handleAddMember}
-                    isGroup={true}
+                    isGroup
                     groupId={groupId}
                     title={t("AdminView.addMemberTo") + " " + title}
                     descriptionText={t("AdminView.emailNewGroupMember")}
@@ -352,7 +352,7 @@ export const AccordionGroupComponent = (props: {
                     handleOnCloseClick={handleEditMembersDialogClose}
                     groupId={groupId}
                     groupName={groupFetched?.groupName || title}
-                    isGroup={true}
+                    isGroup
                 />
             </Dialog>
             <Dialog
@@ -365,7 +365,7 @@ export const AccordionGroupComponent = (props: {
                 <EditAdminsDialog
                     groupId={groupId}
                     group={groupFetched}
-                    isGroup={true}
+                    isGroup
                     handleOnCloseClick={handleCloseEditAdminsDialog}
                     handleAddAdminInGroupObject={handleAddAdmin}
                     handleRemoveAdminFromGroupObject={handleRemoveAdmin}

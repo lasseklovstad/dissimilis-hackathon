@@ -106,7 +106,7 @@ export const EditSongInfoDialog = (props: {
                         setSongNameTextFieldInput(e.target.value)
                     }}
                     label={t("Dialog.nameOfSong")}
-                    fullWidth={true}
+                    fullWidth
                 />
                 <DialogContentText className={classes.arranger}>
                     {t("Song.arranger") + ": " + arrangerTextFieldInput}
@@ -124,7 +124,7 @@ export const EditSongInfoDialog = (props: {
                         setComposerTextFieldInput(e.target.value)
                     }}
                     label={t("Song.composer")}
-                    fullWidth={true}
+                    fullWidth
                 />
                 <TextField
                     id="song-info-dialog-song-speed-textfield"
@@ -140,7 +140,7 @@ export const EditSongInfoDialog = (props: {
                         setSpeedTextFieldInput(parseInt(e.target.value))
                     }}
                     label={t("Song.songSpeed")}
-                    fullWidth={true}
+                    fullWidth
                     type="number"
                 />
                 <TextField
@@ -157,7 +157,7 @@ export const EditSongInfoDialog = (props: {
                         setSongNotesTextFieldInput(e.target.value)
                     }}
                     label={t("Song.songNotes")}
-                    fullWidth={true}
+                    fullWidth
                 />
             </DialogContent>
             <DialogActions>
