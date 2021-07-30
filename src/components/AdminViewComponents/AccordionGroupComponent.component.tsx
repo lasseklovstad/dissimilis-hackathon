@@ -27,6 +27,7 @@ import { EditMembersDialog } from "../CustomDialog/EditMembersDialog.component"
 import { AddGroupMemberDialog } from "../CustomDialog/AddGroupMemberDialog.component"
 import { IGroup } from "../../models/IGroup"
 import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
+import { useHistory } from "react-router"
 
 const useStyles = makeStyles({
     root: {
@@ -84,7 +85,7 @@ export const AccordionGroupComponent = (props: {
     const { deleteGroup } = useDeleteGroup(groupId)
     const { addGroupMember } = useAddGroupMember(groupId)
     const { updateGroup } = useUpdateGroup(groupId)
-
+    const history = useHistory()
     const handleAddMemberClose = () => {
         setAddMemberDialogIsOpen(false)
     }
@@ -183,6 +184,10 @@ export const AccordionGroupComponent = (props: {
         setGroup(updatedGroup)
     }
 
+    const handleSeeAllSongs = () => {
+        history.push(`/library?groupId=${groupId}`)
+    }
+
     useEffect(() => {
         if (groupFetched) {
             setGroup(groupFetched)
@@ -251,6 +256,7 @@ export const AccordionGroupComponent = (props: {
                             <Button
                                 disableFocusRipple
                                 className={classes.button}
+                                onClick={handleSeeAllSongs}
                             >
                                 <div className={classes.buttonText}>
                                     {t("AdminView.seeAllSongs")}
