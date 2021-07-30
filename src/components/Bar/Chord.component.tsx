@@ -9,10 +9,6 @@ import { useSongContext } from "../../views/SongView/SongContextProvider.compone
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded"
 import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUncheckedRounded"
 import { useVoice } from "../../utils/useVoice"
-import { IVoice } from "../../models/IVoice"
-
-
-import { isVoidExpression } from "typescript"
 
 const useStyle = makeStyles((theme) => ({
     buttonBase: {
@@ -243,7 +239,7 @@ type ChordProps = {
     ) => string | null | undefined
     barEditMode: boolean
     barId: number
-    onTouchEnd: ()=> void
+    onTouchEnd: () => void
 }
 
 export const Chord = (props: ChordProps) => {
@@ -283,7 +279,7 @@ export const Chord = (props: ChordProps) => {
         selectedVoice?.songVoiceId,
         barPosition
     )
-    
+
     const handleCustomVoiceAddClick = async (index: number) => {
         const { error, result } = await addNote.run({
             chordName: chord.chordName,
@@ -300,30 +296,30 @@ export const Chord = (props: ChordProps) => {
         }
     }
     useEffect(() => {
-        if(updatedNoteValues){
+        if (updatedNoteValues) {
             setCustomVoiceNoteStates(updatedNoteValues)
         }
-    }, [updatedNoteValues]);
-    
+    }, [updatedNoteValues])
+
     const { removeNote } = useRemoveNote(
         song?.songId,
         selectedVoice?.songVoiceId,
         barPosition
-        )
-        const handleCustomVoiceRemoveClick = async (index: number) => {
-            const { error, result } = await removeNote.run({
-                deleteOnLastIntervalRemoved: true,
-                chordName: chord.chordName,
-                notePosition: chord.position,
-                length: chord.length,
-                intervalPosition: index,
-                notes: chord.notes,
-            })
-            if (!error && result) {
-                const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
-                newCustomVoiceNoteStates[index] = false
-                setCustomVoiceNoteStates(newCustomVoiceNoteStates)
-                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+    )
+    const handleCustomVoiceRemoveClick = async (index: number) => {
+        const { error, result } = await removeNote.run({
+            deleteOnLastIntervalRemoved: true,
+            chordName: chord.chordName,
+            notePosition: chord.position,
+            length: chord.length,
+            intervalPosition: index,
+            notes: chord.notes,
+        })
+        if (!error && result) {
+            const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
+            newCustomVoiceNoteStates[index] = false
+            setCustomVoiceNoteStates(newCustomVoiceNoteStates)
+            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
     return (
@@ -344,7 +340,8 @@ export const Chord = (props: ChordProps) => {
             )}
             {customMode ? (
                 <Box className={classes.buttonBox}>
-                    {chord.notes.filter(note => note !== "X")
+                    {chord.notes
+                        .filter((note) => note !== "X")
                         .map((note, i) => {
                             const tangent = tangentToNumber(note)
                             return (

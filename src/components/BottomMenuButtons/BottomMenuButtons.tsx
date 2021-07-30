@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
@@ -58,9 +58,13 @@ export const ChordOptions = (props: {
     alwaysShow: boolean
     customMode?: boolean
     indexArray?: boolean[]
-
 }) => {
-    const { alwaysShow, customMode = false, indexArray = [], changeComponentInterval= () => {} } = props
+    const {
+        alwaysShow,
+        customMode = false,
+        indexArray = [],
+        changeComponentInterval = () => {},
+    } = props
     const styles = useStyles()
     const { chordMenuOptions } = useSongContext()
     const { t } = useTranslation()
@@ -87,10 +91,23 @@ export const ChordOptions = (props: {
                                     disabled={
                                         chordContainsNote &&
                                         chordMenuOptions?.chordNotes.length ===
-                                            1 && !customMode
+                                            1 &&
+                                        !customMode
                                     }
-                                    checked={(customMode && indexArray.length > 0 && indexArray[i] ) || (chordContainsNote && !customMode)}
-                                    onChange={(e) => customMode ? changeComponentInterval(i) : props.onChordNotesChange(e.target.name, e.target.checked)}
+                                    checked={
+                                        (customMode &&
+                                            indexArray.length > 0 &&
+                                            indexArray[i]) ||
+                                        (chordContainsNote && !customMode)
+                                    }
+                                    onChange={(e) =>
+                                        customMode
+                                            ? changeComponentInterval(i)
+                                            : props.onChordNotesChange(
+                                                  e.target.name,
+                                                  e.target.checked
+                                              )
+                                    }
                                     name={note as string}
                                 />
                             }

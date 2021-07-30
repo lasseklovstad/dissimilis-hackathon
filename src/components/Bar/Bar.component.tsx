@@ -336,7 +336,11 @@ export const Bar = (props: {
                                 )
                                 return (
                                     <Chord
-                                        updatedNoteValues={updatedBar ? updatedBar[i] : undefined}
+                                        updatedNoteValues={
+                                            updatedBar
+                                                ? updatedBar[i]
+                                                : undefined
+                                        }
                                         barPosition={position}
                                         showChordLetters={showChordLetters}
                                         getChordNameFromMainVoice={

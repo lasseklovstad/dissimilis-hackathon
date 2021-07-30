@@ -72,7 +72,6 @@ export const CreateSongTab = (props: {
     undoIsLoading?: boolean
     currentUserHasWriteAccess?: boolean
 }) => {
-
     const { song, dispatchSong, setCustomMode } = useSongContext()
     const { currentUserHasWriteAccess, onUndo, undoIsLoading } = props
     const selectedVoice = useVoice(song?.voices)

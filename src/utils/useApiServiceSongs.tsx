@@ -255,7 +255,7 @@ export const useUpdateVoice = (songId: number, voiceId: number | undefined) => {
     const api = useApiService<IVoice>(url, { headers })
     return {
         putVoice: { run: api.putData, ...api.state },
-    } 
+    }
 }
 
 export const useDeleteVoice = (songId: number, voiceId: number | undefined) => {
@@ -514,22 +514,20 @@ export const useShareSong = (songId: number) => {
  * @param voiceId
  */
 export const useAddComponentInterval = (songId: number, voiceId: number) => {
-{
-        const url = `song/${songId}/voice/${voiceId}/addComponentInterval`
-        const headers = getHeaders()
-        const body = {
-            intervalPosition: 0,
-            sourceVoiceId: 0
-        }
+    const url = `song/${songId}/voice/${voiceId}/addComponentInterval`
+    const headers = getHeaders()
+    const body = {
+        intervalPosition: 0,
+        sourceVoiceId: 0,
+    }
 
-        const api = useApiService<IVoice>(url, {
-            headers, body
-        })
-    
-        return {
-            addInterval: { run: api.postData, ...api.state, ...api.data
-            },
-        }
+    const api = useApiService<IVoice>(url, {
+        headers,
+        body,
+    })
+
+    return {
+        addInterval: { run: api.postData, ...api.state, ...api.data },
     }
 }
 /**
@@ -537,27 +535,27 @@ export const useAddComponentInterval = (songId: number, voiceId: number) => {
  * @param songId
  * @param voiceId
  */
- export const useRemoveComponentInterval = (songId: number, voiceId: number) => {
-    {
-        const url = `song/${songId}/voice/${voiceId}/RemoveComponentInterval`
-        const headers = getHeaders()
-        const body = {
-            intervalPosition: 0,
-            deleteChordsOnLastIntervalRemoved: true
-        }
+export const useRemoveComponentInterval = (songId: number, voiceId: number) => {
+    const url = `song/${songId}/voice/${voiceId}/RemoveComponentInterval`
+    const headers = getHeaders()
+    const body = {
+        intervalPosition: 0,
+        deleteChordsOnLastIntervalRemoved: true,
+    }
 
-        const api = useApiService<IVoice>(url, {
-            headers, body
-        })
-    
-        return {
-            removeInterval: {
-                run: api.postData, ...api.state, ...api.data
-            },
-        }
+    const api = useApiService<IVoice>(url, {
+        headers,
+        body,
+    })
+
+    return {
+        removeInterval: {
+            run: api.postData,
+            ...api.state,
+            ...api.data,
+        },
     }
 }
-
 
 /**
  * Unshare song with user
