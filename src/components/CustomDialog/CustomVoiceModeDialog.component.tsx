@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next"
 
 import { IVoice } from "../../models/IVoice"
 import { colors } from "../../utils/colors"
-import { useAddComponentInterval, useRemoveComponentInterval } from "../../utils/useApiServiceSongs"
+import { useAddComponentInterval, useGetSong, useRemoveComponentInterval } from "../../utils/useApiServiceSongs"
 import { useBarsPerRow } from "../../utils/useBars"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { Song } from "../Song/Song.component"
@@ -82,11 +82,12 @@ export const CustomVoiceDialog = (props: {
 }) => {
     const { t } = useTranslation()
     const classes = useStyles()
-    const { song, selectedVoice } = useSongContext();
+    const { song } = useSongContext();
+    const {getSong, songInit} = useGetSong(song?.songId ?? 0);
     const { handleOnCancel, handleOnSave, baseVoice, newVoice } = props
     const [indexArray, setIndexArray] = useState<boolean[]>([]);
-    const {addInterval} = useAddComponentInterval(song!!.songId, newVoice!!.songVoiceId);
-    const {removeInterval} = useRemoveComponentInterval(song!!.songId, newVoice!!.songVoiceId);
+    const {addInterval} = useAddComponentInterval(song?.songId ?? 0, newVoice?.songVoiceId?? 0);
+    const {removeInterval} = useRemoveComponentInterval(song?.songId ?? 0, newVoice?.songVoiceId?? 0);
     const [updatedVoice, setUpdatedVoice] = useState<boolean[][][] | undefined>(undefined);
 
 
@@ -103,6 +104,9 @@ export const CustomVoiceDialog = (props: {
     useEffect(() => {
         if(getBiggestChordInSong().showMenu){
             setIndexArray(new Array(getBiggestChordInSong().value).fill(false))
+            if(baseVoice){
+                setUpdatedVoice(convertFromNotesToBoolean(baseVoice).map(bar => bar.map(chord => chord.fill(false))))
+            }
         }
     }, []);
 
@@ -141,10 +145,12 @@ export const CustomVoiceDialog = (props: {
         }
         setIndexArray(array);
     }
-    const updateAll = (updatedNote: boolean[], barIndex: number, chordIndex: number) =>
+    const updateAll = (updatedNote: boolean[], barIndex: number, chordIndex: number, position: number) =>
     {
         console.log("updateAll")
-        console.log(song)
+        console.log("Barindex: "+ barIndex + " chordIndex: "+ chordIndex + " position: " + position)
+        console.log("bArray: ")
+        console.log(updatedNote)
         if(updatedVoice){
             var updatedBooleanArray = updatedVoice
             updatedBooleanArray[barIndex][chordIndex] = updatedNote

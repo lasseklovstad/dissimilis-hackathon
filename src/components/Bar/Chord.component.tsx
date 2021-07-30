@@ -224,7 +224,7 @@ const ChordText = (props: { chordName: string }) => {
 
 type ChordProps = {
     updatedNoteValues?: boolean[]
-    updateAll: (newValues: boolean[], noteIndex: number) => void
+    updateAll: (newValues: boolean[], position: number) => void
     chord: IChord
     barPosition: number
     onContextMenu: (event: React.MouseEvent) => void
