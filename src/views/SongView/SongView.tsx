@@ -109,7 +109,6 @@ export const SongView = () => {
                     </Slide>
                     <Grid item xs={12} className={classes.body}>
                         <Song
-                            updateAll={()=>{}}
                             barsPerRow={barsPerRow}
                             voice={selectedVoice}
                             getChordNameFromMainVoice={

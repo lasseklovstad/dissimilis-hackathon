@@ -105,7 +105,6 @@
         "save": "Lagre",
         "delete": "Slett sang",
         "editBars": "Rediger takter",
-        "cancelEditBars": "Avslutt redigering av takter",
         "changeLanguage": "Endre språk",
         "showInfo": "Vis info",
         "cancelEditBars": "Avslutt redigering av takter"
@@ -142,7 +141,7 @@
         "customNewVoice": "Spesifikasjon av ny stemme",
         "duplicateFullVoice": "Duplikat av valgt stemme",
         "duplicateEmptyVoice": "Stemme med tomme takter og besifring fra partitur", 
-        "duplicateCustomVoice": "Egendefinert",
+        "duplicateCustomVoice": "Egendefinert basert på partituret",
         "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme",
         "loading": "Laster",
         "details": "Informasjon om partitur",

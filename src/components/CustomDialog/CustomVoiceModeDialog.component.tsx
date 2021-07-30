@@ -83,7 +83,6 @@ export const CustomVoiceDialog = (props: {
     const { t } = useTranslation()
     const classes = useStyles()
     const { song } = useSongContext();
-    const {getSong, songInit} = useGetSong(song?.songId ?? 0);
     const { handleOnCancel, handleOnSave, baseVoice, newVoice } = props
     const [indexArray, setIndexArray] = useState<boolean[]>([]);
     const {addInterval} = useAddComponentInterval(song?.songId ?? 0, newVoice?.songVoiceId?? 0);
@@ -104,9 +103,6 @@ export const CustomVoiceDialog = (props: {
     useEffect(() => {
         if(getBiggestChordInSong().showMenu){
             setIndexArray(new Array(getBiggestChordInSong().value).fill(false))
-            if(baseVoice){
-                setUpdatedVoice(convertFromNotesToBoolean(baseVoice).map(bar => bar.map(chord => chord.fill(false))))
-            }
         }
     }, []);
 
@@ -117,7 +113,7 @@ export const CustomVoiceDialog = (props: {
             var chordName ="";
             baseVoice.bars.forEach(bar => {
                 bar.chords.forEach(chord => {
-                    if (biggestChordLength < chord.notes.length && chord.chordName!== null) {
+                    if (biggestChordLength < chord.notes.filter(note => note !== "X").length && chord.chordName!== null) {
                         biggestChordLength = chord.notes.length;
                         chordName = chord.chordName;
                     }
@@ -145,31 +141,7 @@ export const CustomVoiceDialog = (props: {
         }
         setIndexArray(array);
     }
-    const updateAll = (updatedNote: boolean[], barIndex: number, chordIndex: number, position: number) =>
-    {
-        console.log("updateAll")
-        console.log("Barindex: "+ barIndex + " chordIndex: "+ chordIndex + " position: " + position)
-        console.log("bArray: ")
-        console.log(updatedNote)
-        if(updatedVoice){
-            var updatedBooleanArray = updatedVoice
-            updatedBooleanArray[barIndex][chordIndex] = updatedNote
-            setUpdatedVoice(updatedBooleanArray)
-            checkIfAll(updatedBooleanArray)
-        }
-    }
 
-   
-    const checkIfAll = (updatedArray: boolean[][][]) =>{
-        setIndexArray(indexArray => {
-            var newIndexArray = new Array(indexArray.length).fill(true)
-            var resultBooleanOnlyChords = updatedArray.map(bar => bar.filter(note => note.length>1 )).flat(1)
-        
-            return newIndexArray.map((_, i) => {
-                return resultBooleanOnlyChords.filter(notes => notes.length >= i + 1).every(notes => notes[i])
-            })
-        })
-    }
     
 
     const convertFromNotesToBoolean = (updatedIVoice: IVoice)=>{
@@ -194,7 +166,6 @@ export const CustomVoiceDialog = (props: {
             <Grid item xs={12} className={classes.body}>
                 <Song
                     updatedVoice={updatedVoice}
-                    updateAll = {updateAll}
                     barsPerRow={barsPerRow}
                     voice={baseVoice}
                     getChordNameFromMainVoice={getChordNameFromMainVoice}

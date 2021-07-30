@@ -77,9 +77,6 @@ export const CreateSongTab = (props: {
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false)
     const [customVoiceDialogIsOpen, setCustomVoiceDialogIsOpen] =
         useState(false)
-    const [baseVoiceCustom, setBaseVoiceCustom] = useState<IVoice | undefined>(
-        undefined
-    )
     const { t } = useTranslation()
     const [clickedId, setClickedId] = useState<undefined | number>()
     const clickedVoice = useVoice(song?.voices)
@@ -142,7 +139,6 @@ export const CreateSongTab = (props: {
                     setNewVoiceDialogIsOpen(false)
                     setCustomVoiceDialogIsOpen(true)
                     onAddVoice(result.data)
-                    setBaseVoiceCustom(clickedVoice)
                     setClickedId(result.data.songVoiceId)
                     setCustomMode(true)
                 }
@@ -360,7 +356,7 @@ export const CreateSongTab = (props: {
                 <CustomVoiceDialog
                     handleOnSave={handleCustomVoiceDialogSave}
                     handleOnCancel={handleCustomVoiceDialogCancel}
-                    baseVoice={baseVoiceCustom || voices[0]}
+                    baseVoice={voices[0]}
                     newVoice={clickedVoice}
                 />
             </Dialog>

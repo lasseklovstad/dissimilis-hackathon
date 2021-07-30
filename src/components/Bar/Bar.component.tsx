@@ -38,7 +38,6 @@ const useStyle = makeStyles(() => ({
 
 export const Bar = (props: {
     updatedBar?: boolean[][]
-    updateAll: (newValues: boolean[], noteIndex: number, position: number) => void
     bar: IBar
     height?: number
     exportMode: boolean
@@ -57,7 +56,6 @@ export const Bar = (props: {
 }) => {
     const {
         updatedBar,
-        updateAll,
         exportMode,
         showChordLetters,
         showNoteLetters,
@@ -335,7 +333,6 @@ export const Bar = (props: {
                                 )
                                 return (
                                     <Chord
-                                        updateAll={(newValues, position) => updateAll(newValues, i, position)}
                                         updatedNoteValues={updatedBar?updatedBar[i]: undefined}
                                         barPosition={position}
                                         showChordLetters={showChordLetters}

@@ -224,7 +224,6 @@ const ChordText = (props: { chordName: string }) => {
 
 type ChordProps = {
     updatedNoteValues?: boolean[]
-    updateAll: (newValues: boolean[], position: number) => void
     chord: IChord
     barPosition: number
     onContextMenu: (event: React.MouseEvent) => void
@@ -248,7 +247,6 @@ type ChordProps = {
 export const Chord = (props: ChordProps) => {
     const {
         updatedNoteValues,
-        updateAll,
         chord,
         barPosition,
         onClick,
@@ -295,7 +293,6 @@ export const Chord = (props: ChordProps) => {
             const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
             newCustomVoiceNoteStates[index] = true
             setCustomVoiceNoteStates(newCustomVoiceNoteStates)
-            updateAll(customVoiceNoteStates, chord.position)
             dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
@@ -323,7 +320,6 @@ export const Chord = (props: ChordProps) => {
                 const newCustomVoiceNoteStates = { ...customVoiceNoteStates }
                 newCustomVoiceNoteStates[index] = false
                 setCustomVoiceNoteStates(newCustomVoiceNoteStates)
-                updateAll(customVoiceNoteStates, chord.position)
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
         }
     }
@@ -345,7 +341,7 @@ export const Chord = (props: ChordProps) => {
             )}
             {customMode ? (
                 <Box className={classes.buttonBox}>
-                    {chord.notes
+                    {chord.notes.filter(note => note !== "X")
                         .map((note, i) => {
                             const tangent = tangentToNumber(note)
                             return (
