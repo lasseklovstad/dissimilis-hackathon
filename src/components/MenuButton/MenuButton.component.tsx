@@ -191,194 +191,197 @@ export const MenuButton = (props: {
         }
     }
 
-    return <>
-        <div>
-            <IconButton
-                style={{ backgroundColor: colors.gray_200 }}
-                aria-haspopup="true"
-                aria-controls="songMenu"
-                onClick={handleClick}
-                aria-label={t("MenuButton.song")}
-                size="large">
-                <MoreHorizIcon />
-            </IconButton>
-            <Menu
-                id="songMenu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={!!anchorEl}
-                onClose={() => handleClose()}
-                role="menu"
-            >
-                <MenuItem onClick={() => handleClose("duplicate")}>
-                    {t("MenuButton.duplicate")}
-                </MenuItem>
-                <MenuItem onClick={() => handleClose("transpose")}>
-                    {t("MenuButton.transpose")}
-                </MenuItem>
-                <MenuItem onClick={() => handleClose("export")}>
-                    {t("MenuButton.export")}
-                </MenuItem>
-                <MenuItem disabled onClick={() => handleClose()}>
-                    {t("MenuButton.hide")}
-                </MenuItem>
+    return (
+        <>
+            <div>
+                <IconButton
+                    style={{ backgroundColor: colors.gray_200 }}
+                    aria-haspopup="true"
+                    aria-controls="songMenu"
+                    onClick={handleClick}
+                    aria-label={t("MenuButton.song")}
+                    size="large"
+                >
+                    <MoreHorizIcon />
+                </IconButton>
+                <Menu
+                    id="songMenu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={!!anchorEl}
+                    onClose={() => handleClose()}
+                    role="menu"
+                >
+                    <MenuItem onClick={() => handleClose("duplicate")}>
+                        {t("MenuButton.duplicate")}
+                    </MenuItem>
+                    <MenuItem onClick={() => handleClose("transpose")}>
+                        {t("MenuButton.transpose")}
+                    </MenuItem>
+                    <MenuItem onClick={() => handleClose("export")}>
+                        {t("MenuButton.export")}
+                    </MenuItem>
+                    <MenuItem disabled onClick={() => handleClose()}>
+                        {t("MenuButton.hide")}
+                    </MenuItem>
 
-                {currentUserHasWriteAccess
-                    ? [
-                          <MenuItem
-                              onClick={() => handleClose("delete")}
-                              key="delete"
-                          >
-                              {t("MenuButton.delete")}
-                          </MenuItem>,
-                          <MenuItem
-                              onClick={() => handleClose("editBars")}
-                              key="editBars"
-                          >
-                              {barEditMode
-                                  ? t("MenuButton.cancelEditBars")
-                                  : t("MenuButton.editBars")}
-                          </MenuItem>,
-                          <MenuItem
-                              onClick={() => handleClose("info")}
-                              key="details"
-                          >
-                              {t("Dialog.details")}
-                          </MenuItem>,
-                          <MenuItem
-                              onClick={() => handleClose("share")}
-                              key="share"
-                          >
-                              {t("Dialog.share")}
-                          </MenuItem>,
-                      ]
-                    : [
-                          <MenuItem
-                              onClick={() => handleClose("infoShow")}
-                              key="infoShow"
-                          >
-                              {t("Dialog.details")}
-                          </MenuItem>,
-                      ]}
-                {showName ? (
-                    <>
-                        <Divider variant="middle" />
-                        <MenuItem disabled>
-                            <Typography>{userInit?.email}</Typography>
-                        </MenuItem>
-                    </>
-                ) : undefined}
-            </Menu>
-            <Dialog
-                open={songInfoDialogIsOpen}
-                onClose={() => handleCloseSongInfoDialog()}
-            >
-                <EditSongInfoDialog
-                    songId={songId}
-                    handleOnCancelClick={() => handleCloseSongInfoDialog()}
-                    handleOnSaveClick={handleSaveSongInfo}
-                    isLoadingPatch={putSong.loading}
-                />
-            </Dialog>
-            <Dialog
-                open={deleteSongDialogIsOpen}
-                onClose={() => handleClose()}
-                aria-label={t("Dialog.deleteSong")}
-            >
-                <ChoiceDialog
-                    handleOnCancelClick={handleClose}
-                    handleOnSaveClick={handleDeleteSong}
-                    ackText={t("Dialog.deleteSong")}
-                    cancelText={t("Dialog.cancel")}
-                    headerText={t("Dialog.deleteSong")}
-                    descriptionText={t("Dialog.deleteDescription")}
-                />
-            </Dialog>
-            <Dialog
-                open={transposeSongDialogIsOpen}
-                onClose={() => handleClose()}
-                aria-label={t("Dialog.transposed")}
-            >
-                <TransposeDialog
-                    defaultValue={`${songTitle} (${t(
-                        "Dialog.transposed"
-                    )})`}
-                    handleOnCancelClick={handleClose}
-                    handleOnSaveClick={handleTransposeSong}
-                />
-            </Dialog>
-            <Dialog
-                open={duplicateSongDialogIsOpen}
-                onClose={() => setDuplicateSongDialogIsOpen(false)}
-                aria-labelledby={t("DashboardView.duplicateText")}
-                maxWidth="sm"
-                fullWidth
-            >
-                <InputDialog
-                    handleOnCancelClick={() =>
-                        setDuplicateSongDialogIsOpen(false)
-                    }
-                    handleOnSaveClick={handleDuplicateSong}
-                    defaultValue={`${songTitle} (2)`}
-                    saveText={t("Dialog.create")}
-                    cancelText={t("Dialog.cancel")}
-                    headerText={t("DashboardView.duplicateText")}
-                    labelText={t("Dialog.newVoiceName")}
-                    isLoading={duplicateSong.loading}
-                />
-            </Dialog>
-            <Dialog
-                open={shareSongDialogIsOpen}
-                onClose={() => setShareSongDialogIsOpen(false)}
-                aria-label={"Dialog.ShareSong"}
-                maxWidth="xs"
-                fullWidth
-            >
-                <ShareSongDialog
-                    handleOnCloseClick={() =>
-                        setShareSongDialogIsOpen(false)
-                    }
-                    songId={songId}
-                />
-            </Dialog>
-            <Dialog
-                open={readSongInfoDialogIsOpen}
-                onClose={() => setReadSongInfoDialogIsOpen(false)}
-                maxWidth="xs"
-                fullWidth
-            >
-                <ShowSongInfoDialog
-                    songId={songId}
-                    handleOnCancelClick={() =>
-                        setReadSongInfoDialogIsOpen(false)
-                    }
-                />
-            </Dialog>
-        </div>
-        <Loading
-            isLoading={deleteSong.loading}
-            fullScreen
-            text={t("Dialog.deleteSongLoading")}
-        />
-        <Loading
-            isLoading={transposeSong.loading}
-            fullScreen
-            text={t("Dialog.transposingSong")}
-        />
-        <ErrorDialog
-            isError={deleteSong.isError}
-            error={deleteSong.error}
-            title={t("Dialog.deleteSongError")}
-        />
-        <ErrorDialog
-            isError={transposeSong.isError}
-            error={transposeSong.error}
-            title={t("Dialog.transposeSongError")}
-        />
-        <ErrorDialog
-            isError={putSong.isError}
-            error={putSong.error}
-            title={t("Dialog.saveSongMetadataError")}
-        />
-    </>;
+                    {currentUserHasWriteAccess
+                        ? [
+                              <MenuItem
+                                  onClick={() => handleClose("delete")}
+                                  key="delete"
+                              >
+                                  {t("MenuButton.delete")}
+                              </MenuItem>,
+                              <MenuItem
+                                  onClick={() => handleClose("editBars")}
+                                  key="editBars"
+                              >
+                                  {barEditMode
+                                      ? t("MenuButton.cancelEditBars")
+                                      : t("MenuButton.editBars")}
+                              </MenuItem>,
+                              <MenuItem
+                                  onClick={() => handleClose("info")}
+                                  key="details"
+                              >
+                                  {t("Dialog.details")}
+                              </MenuItem>,
+                              <MenuItem
+                                  onClick={() => handleClose("share")}
+                                  key="share"
+                              >
+                                  {t("Dialog.share")}
+                              </MenuItem>,
+                          ]
+                        : [
+                              <MenuItem
+                                  onClick={() => handleClose("infoShow")}
+                                  key="infoShow"
+                              >
+                                  {t("Dialog.details")}
+                              </MenuItem>,
+                          ]}
+                    {showName ? (
+                        <>
+                            <Divider variant="middle" />
+                            <MenuItem disabled>
+                                <Typography>{userInit?.email}</Typography>
+                            </MenuItem>
+                        </>
+                    ) : undefined}
+                </Menu>
+                <Dialog
+                    open={songInfoDialogIsOpen}
+                    onClose={() => handleCloseSongInfoDialog()}
+                >
+                    <EditSongInfoDialog
+                        songId={songId}
+                        handleOnCancelClick={() => handleCloseSongInfoDialog()}
+                        handleOnSaveClick={handleSaveSongInfo}
+                        isLoadingPatch={putSong.loading}
+                    />
+                </Dialog>
+                <Dialog
+                    open={deleteSongDialogIsOpen}
+                    onClose={() => handleClose()}
+                    aria-label={t("Dialog.deleteSong")}
+                >
+                    <ChoiceDialog
+                        handleOnCancelClick={handleClose}
+                        handleOnSaveClick={handleDeleteSong}
+                        ackText={t("Dialog.deleteSong")}
+                        cancelText={t("Dialog.cancel")}
+                        headerText={t("Dialog.deleteSong")}
+                        descriptionText={t("Dialog.deleteDescription")}
+                    />
+                </Dialog>
+                <Dialog
+                    open={transposeSongDialogIsOpen}
+                    onClose={() => handleClose()}
+                    aria-label={t("Dialog.transposed")}
+                >
+                    <TransposeDialog
+                        defaultValue={`${songTitle} (${t(
+                            "Dialog.transposed"
+                        )})`}
+                        handleOnCancelClick={handleClose}
+                        handleOnSaveClick={handleTransposeSong}
+                    />
+                </Dialog>
+                <Dialog
+                    open={duplicateSongDialogIsOpen}
+                    onClose={() => setDuplicateSongDialogIsOpen(false)}
+                    aria-labelledby={t("DashboardView.duplicateText")}
+                    maxWidth="sm"
+                    fullWidth
+                >
+                    <InputDialog
+                        handleOnCancelClick={() =>
+                            setDuplicateSongDialogIsOpen(false)
+                        }
+                        handleOnSaveClick={handleDuplicateSong}
+                        defaultValue={`${songTitle} (2)`}
+                        saveText={t("Dialog.create")}
+                        cancelText={t("Dialog.cancel")}
+                        headerText={t("DashboardView.duplicateText")}
+                        labelText={t("Dialog.newVoiceName")}
+                        isLoading={duplicateSong.loading}
+                    />
+                </Dialog>
+                <Dialog
+                    open={shareSongDialogIsOpen}
+                    onClose={() => setShareSongDialogIsOpen(false)}
+                    aria-label={"Dialog.ShareSong"}
+                    maxWidth="xs"
+                    fullWidth
+                >
+                    <ShareSongDialog
+                        handleOnCloseClick={() =>
+                            setShareSongDialogIsOpen(false)
+                        }
+                        songId={songId}
+                    />
+                </Dialog>
+                <Dialog
+                    open={readSongInfoDialogIsOpen}
+                    onClose={() => setReadSongInfoDialogIsOpen(false)}
+                    maxWidth="xs"
+                    fullWidth
+                >
+                    <ShowSongInfoDialog
+                        songId={songId}
+                        handleOnCancelClick={() =>
+                            setReadSongInfoDialogIsOpen(false)
+                        }
+                    />
+                </Dialog>
+            </div>
+            <Loading
+                isLoading={deleteSong.loading}
+                fullScreen
+                text={t("Dialog.deleteSongLoading")}
+            />
+            <Loading
+                isLoading={transposeSong.loading}
+                fullScreen
+                text={t("Dialog.transposingSong")}
+            />
+            <ErrorDialog
+                isError={deleteSong.isError}
+                error={deleteSong.error}
+                title={t("Dialog.deleteSongError")}
+            />
+            <ErrorDialog
+                isError={transposeSong.isError}
+                error={transposeSong.error}
+                title={t("Dialog.transposeSongError")}
+            />
+            <ErrorDialog
+                isError={putSong.isError}
+                error={putSong.error}
+                title={t("Dialog.saveSongMetadataError")}
+            />
+        </>
+    )
 }

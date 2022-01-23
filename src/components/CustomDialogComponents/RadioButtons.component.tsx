@@ -1,6 +1,11 @@
 import React from "react"
-import { FormControl, FormControlLabel, FormLabel, RadioGroup } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import {
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    RadioGroup,
+} from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
 import { theme } from "../../theme"

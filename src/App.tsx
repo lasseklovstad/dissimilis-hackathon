@@ -1,6 +1,10 @@
 import React from "react"
 import "./App.css"
-import { ThemeProvider, Theme, StyledEngineProvider } from "@mui/material/styles";
+import {
+    ThemeProvider,
+    Theme,
+    StyledEngineProvider,
+} from "@mui/material/styles"
 import CssBaseline from "@mui/material/CssBaseline"
 import { Routing } from "./Routing"
 import { theme } from "./theme"
@@ -16,5 +20,5 @@ export const App = () => {
                 </SnackbarContextProvider>
             </ThemeProvider>
         </StyledEngineProvider>
-    );
+    )
 }

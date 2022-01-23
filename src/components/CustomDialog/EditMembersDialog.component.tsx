@@ -10,8 +10,8 @@ import {
     ListItemSecondaryAction,
     ListItemText,
     Typography,
-} from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+} from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import DeleteIcon from "@mui/icons-material/Delete"
@@ -118,39 +118,45 @@ export const EditMembersDialog = (props: {
 
     const getMembers = () => {
         if (!getGroupMembers.loading) {
-            return <>
-                {members ? (
-                    <List dense={false}>
-                        {members.map((user: IUser) => (
-                            <ListItem key={user.email + "-list-item"}>
-                                <ListItemText
-                                    primary={user.name}
-                                    secondary={
-                                        secondary ? user.email : null
-                                    }
-                                    className={classes.iconButton}
-                                    secondaryTypographyProps={{
-                                        className:
-                                            classes.secondaryTypography,
-                                    }}
-                                />
-                                <ListItemSecondaryAction
-                                    onClick={() => {
-                                        setSelectedMember(user)
-                                        handleOpenConfirmationDialog()
-                                    }}
-                                >
-                                    <IconButton edge="end" aria-label="delete" size="large">
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        ))}
-                    </List>
-                ) : (
-                    ""
-                )}
-            </>;
+            return (
+                <>
+                    {members ? (
+                        <List dense={false}>
+                            {members.map((user: IUser) => (
+                                <ListItem key={user.email + "-list-item"}>
+                                    <ListItemText
+                                        primary={user.name}
+                                        secondary={
+                                            secondary ? user.email : null
+                                        }
+                                        className={classes.iconButton}
+                                        secondaryTypographyProps={{
+                                            className:
+                                                classes.secondaryTypography,
+                                        }}
+                                    />
+                                    <ListItemSecondaryAction
+                                        onClick={() => {
+                                            setSelectedMember(user)
+                                            handleOpenConfirmationDialog()
+                                        }}
+                                    >
+                                        <IconButton
+                                            edge="end"
+                                            aria-label="delete"
+                                            size="large"
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            ))}
+                        </List>
+                    ) : (
+                        ""
+                    )}
+                </>
+            )
         }
         return undefined
     }

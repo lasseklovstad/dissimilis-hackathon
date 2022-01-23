@@ -10,7 +10,7 @@ import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { getNotesFromChord } from "../../models/chords"
 import { ChordType } from "../../models/IChordMenuOptions"
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles"
 import { colors } from "../../utils/colors"
 import BarRightClickMenu from "./BarRightClickMenu.component"
 import { useTranslation } from "react-i18next"

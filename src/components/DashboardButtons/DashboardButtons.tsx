@@ -1,6 +1,6 @@
 import React, { FC } from "react"
 import { Link } from "react-router-dom"
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles"
 import Typography from "@mui/material/Typography"
 import AddIcon from "@mui/icons-material/Add"
 import {
@@ -343,10 +343,11 @@ export const DashboardTopBarIcon = (props: { onGoHome?: () => void }) => {
             to="/dashboard"
             onClick={onGoHome}
             aria-label={ariaProp}
-            size="large">
+            size="large"
+        >
             <Icon fontSize="large">
                 <img src={butterflyBlue} alt={altProp} />
             </Icon>
         </IconButton>
-    );
+    )
 }

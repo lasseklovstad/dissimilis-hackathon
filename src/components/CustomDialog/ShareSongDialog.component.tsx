@@ -15,8 +15,8 @@ import {
     Dialog,
     TextField,
     CircularProgress,
-} from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+} from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { IUser } from "../../models/IUser"
 import { Delete as DeleteIcon, Add as AddIcon } from "@mui/icons-material"
@@ -40,7 +40,7 @@ import {
     useGetOrganisations,
     OrganisationFilter,
 } from "../../utils/useApiServiceGroups"
-import { Autocomplete } from '@mui/material';
+import { Autocomplete } from "@mui/material"
 import { InputDialog } from "./InputDialog.component"
 import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 
@@ -256,185 +256,188 @@ export const ShareSongDialog = (props: {
         }
     }
 
-    return <>
-        <DialogTitle>{t("Dialog.shareSong")}</DialogTitle>
-        <DialogContent>
-            <Typography variant="body1" className={classes.item}>
-                {t("Dialog.editRights")}
-            </Typography>
-            <Typography variant="caption">
-                {t("Dialog.editRightsDescription")}
-            </Typography>
-            {getSongShareInfo.loading ? (
-                <Grid item xs={12}>
-                    <CircularProgress
-                        aria-label="Loading"
-                        size={50}
-                        style={{ margin: "30px" }}
-                    />
-                </Grid>
-            ) : sharedWithUserList &&
-              sharedWithUserList !== undefined &&
-              sharedWithUserList.length > 0 ? (
-                <List
-                    dense={false}
-                    className={classes.item}
-                    style={{ maxHeight: 150, overflow: "auto" }}
-                >
-                    {sharedWithUserList.map((user) => {
-                        return (
-                            <ListItem key={user.email + "-list-item"}>
-                                <ListItemText
-                                    primary={user.name}
-                                    secondary={user.email}
-                                    className={classes.iconButton}
-                                    secondaryTypographyProps={{
-                                        className:
-                                            classes.secondaryTypography,
-                                    }}
-                                />
-                                <ListItemSecondaryAction
-                                    onClick={() => {
-                                        setSelectedUser(user)
-                                        setConfirmRemoveUserDialogIsOpen(
-                                            true
-                                        )
-                                    }}
-                                >
-                                    <IconButton
-                                        edge="end"
-                                        aria-label={t(
-                                            "Dialog.removePerson"
-                                        )}
-                                        size="large">
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        );
-                    })}
-                </List>
-            ) : (
-                ""
-            )}
-            <Button
-                disableFocusRipple
-                className={classes.button + " " + classes.item}
-                variant="outlined"
-                onClick={() => setAddUserDialogIsOpen(true)}
-            >
-                <AddIcon />
-                <div className={classes.buttonText}>
-                    {t("Dialog.addPerson")}
-                </div>
-            </Button>
-
-            <Typography variant="body1" className={classes.item}>
-                {t("Dialog.readRights")}
-            </Typography>
-            <Typography variant="caption">
-                {t("Dialog.readRightsDescription")}
-            </Typography>
-            {getSongShareInfo.loading ? (
-                <Grid item xs={12}>
-                    <CircularProgress
-                        aria-label="Loading"
-                        size={30}
-                        style={{
-                            marginTop: "20px",
-                            marginLeft: "20px",
-                        }}
-                    />
-                </Grid>
-            ) : (
-                <Grid container alignItems="center" spacing={1}>
-                    <Grid item>{t("Dialog.noOne")}</Grid>
-                    <Grid item>
-                        <Switch
-                            checked={publicSong}
-                            onChange={handleChangePublicPrivate}
-                            name="publicSongState"
-                            color={"secondary"}
+    return (
+        <>
+            <DialogTitle>{t("Dialog.shareSong")}</DialogTitle>
+            <DialogContent>
+                <Typography variant="body1" className={classes.item}>
+                    {t("Dialog.editRights")}
+                </Typography>
+                <Typography variant="caption">
+                    {t("Dialog.editRightsDescription")}
+                </Typography>
+                {getSongShareInfo.loading ? (
+                    <Grid item xs={12}>
+                        <CircularProgress
+                            aria-label="Loading"
+                            size={50}
+                            style={{ margin: "30px" }}
                         />
                     </Grid>
-                    <Grid item>{t("Dialog.everyone")}</Grid>
-                </Grid>
-            )}
-            {publicSong ? (
-                <>
-                    <Typography variant="caption">
-                        {t("Dialog.tagsDescription")}
-                    </Typography>
-                    <Autocomplete
-                        style={{
-                            marginBottom: "1.5em",
-                            maxHeight: 150,
-                            overflow: "auto",
-                        }}
-                        multiple
-                        id="tags-outlined"
-                        options={tagOptions}
-                        value={tags}
-                        getOptionLabel={(option) =>
-                            "groupName" in option
-                                ? option.groupName
-                                : option.organisationName
-                        }
-                        filterSelectedOptions
-                        onChange={onTagChange}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                variant="outlined"
-                                placeholder={t("Dialog.tags")}
+                ) : sharedWithUserList &&
+                  sharedWithUserList !== undefined &&
+                  sharedWithUserList.length > 0 ? (
+                    <List
+                        dense={false}
+                        className={classes.item}
+                        style={{ maxHeight: 150, overflow: "auto" }}
+                    >
+                        {sharedWithUserList.map((user) => {
+                            return (
+                                <ListItem key={user.email + "-list-item"}>
+                                    <ListItemText
+                                        primary={user.name}
+                                        secondary={user.email}
+                                        className={classes.iconButton}
+                                        secondaryTypographyProps={{
+                                            className:
+                                                classes.secondaryTypography,
+                                        }}
+                                    />
+                                    <ListItemSecondaryAction
+                                        onClick={() => {
+                                            setSelectedUser(user)
+                                            setConfirmRemoveUserDialogIsOpen(
+                                                true
+                                            )
+                                        }}
+                                    >
+                                        <IconButton
+                                            edge="end"
+                                            aria-label={t(
+                                                "Dialog.removePerson"
+                                            )}
+                                            size="large"
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            )
+                        })}
+                    </List>
+                ) : (
+                    ""
+                )}
+                <Button
+                    disableFocusRipple
+                    className={classes.button + " " + classes.item}
+                    variant="outlined"
+                    onClick={() => setAddUserDialogIsOpen(true)}
+                >
+                    <AddIcon />
+                    <div className={classes.buttonText}>
+                        {t("Dialog.addPerson")}
+                    </div>
+                </Button>
+
+                <Typography variant="body1" className={classes.item}>
+                    {t("Dialog.readRights")}
+                </Typography>
+                <Typography variant="caption">
+                    {t("Dialog.readRightsDescription")}
+                </Typography>
+                {getSongShareInfo.loading ? (
+                    <Grid item xs={12}>
+                        <CircularProgress
+                            aria-label="Loading"
+                            size={30}
+                            style={{
+                                marginTop: "20px",
+                                marginLeft: "20px",
+                            }}
+                        />
+                    </Grid>
+                ) : (
+                    <Grid container alignItems="center" spacing={1}>
+                        <Grid item>{t("Dialog.noOne")}</Grid>
+                        <Grid item>
+                            <Switch
+                                checked={publicSong}
+                                onChange={handleChangePublicPrivate}
+                                name="publicSongState"
+                                color={"secondary"}
                             />
-                        )}
-                    />
-                </>
-            ) : (
-                ""
-            )}
-        </DialogContent>
-        <DialogActions>
-            <DialogButton
-                onClick={() => {
-                    handleOnCloseClick()
-                }}
+                        </Grid>
+                        <Grid item>{t("Dialog.everyone")}</Grid>
+                    </Grid>
+                )}
+                {publicSong ? (
+                    <>
+                        <Typography variant="caption">
+                            {t("Dialog.tagsDescription")}
+                        </Typography>
+                        <Autocomplete
+                            style={{
+                                marginBottom: "1.5em",
+                                maxHeight: 150,
+                                overflow: "auto",
+                            }}
+                            multiple
+                            id="tags-outlined"
+                            options={tagOptions}
+                            value={tags}
+                            getOptionLabel={(option) =>
+                                "groupName" in option
+                                    ? option.groupName
+                                    : option.organisationName
+                            }
+                            filterSelectedOptions
+                            onChange={onTagChange}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    variant="outlined"
+                                    placeholder={t("Dialog.tags")}
+                                />
+                            )}
+                        />
+                    </>
+                ) : (
+                    ""
+                )}
+            </DialogContent>
+            <DialogActions>
+                <DialogButton
+                    onClick={() => {
+                        handleOnCloseClick()
+                    }}
+                >
+                    {t("Dialog.close")}
+                </DialogButton>
+            </DialogActions>
+            <Dialog
+                open={addUserDialogIsOpen}
+                onClose={handleCloseAddUserDialog}
+                aria-label={t("Dialog.shareWithPerson")}
             >
-                {t("Dialog.close")}
-            </DialogButton>
-        </DialogActions>
-        <Dialog
-            open={addUserDialogIsOpen}
-            onClose={handleCloseAddUserDialog}
-            aria-label={t("Dialog.shareWithPerson")}
-        >
-            <InputDialog
-                handleOnSaveClick={handleAddUser}
-                handleOnCancelClick={handleCloseAddUserDialog}
-                headerText={t("Dialog.shareWithPerson")}
-                saveText={t("Dialog.addPerson")}
-                cancelText={t("Dialog.cancel")}
-                labelText={t("Dialog.email")}
-                characterLimit={250}
-            />
-        </Dialog>
-        <Dialog
-            open={confirmRemoveUserDialogIsOpen}
-            onClose={handleCloseConfirmRemoveUserDialog}
-            aria-label={t("Dialog.unshare")}
-        >
-            <ChoiceDialog
-                handleOnSaveClick={handleRemoveUser}
-                handleOnCancelClick={handleCloseConfirmRemoveUserDialog}
-                ackText={t("Dialog.unshare")}
-                cancelText={t("Dialog.cancel")}
-                descriptionText={
-                    t("Dialog.removePersonShareDescription") +
-                    selectedUser?.name
-                }
-                headerText={t("Dialog.removePerson")}
-            />
-        </Dialog>
-    </>;
+                <InputDialog
+                    handleOnSaveClick={handleAddUser}
+                    handleOnCancelClick={handleCloseAddUserDialog}
+                    headerText={t("Dialog.shareWithPerson")}
+                    saveText={t("Dialog.addPerson")}
+                    cancelText={t("Dialog.cancel")}
+                    labelText={t("Dialog.email")}
+                    characterLimit={250}
+                />
+            </Dialog>
+            <Dialog
+                open={confirmRemoveUserDialogIsOpen}
+                onClose={handleCloseConfirmRemoveUserDialog}
+                aria-label={t("Dialog.unshare")}
+            >
+                <ChoiceDialog
+                    handleOnSaveClick={handleRemoveUser}
+                    handleOnCancelClick={handleCloseConfirmRemoveUserDialog}
+                    ackText={t("Dialog.unshare")}
+                    cancelText={t("Dialog.cancel")}
+                    descriptionText={
+                        t("Dialog.removePersonShareDescription") +
+                        selectedUser?.name
+                    }
+                    headerText={t("Dialog.removePerson")}
+                />
+            </Dialog>
+        </>
+    )
 }

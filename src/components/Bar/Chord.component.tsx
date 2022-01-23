@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Box, ButtonBase, Typography } from "@mui/material"
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles"
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { tangentToNumber } from "../../utils/bar.util"

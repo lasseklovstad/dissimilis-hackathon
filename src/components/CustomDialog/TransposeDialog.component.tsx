@@ -8,9 +8,9 @@ import {
     MenuItem,
     Select,
     TextField,
-} from "@mui/material";
+} from "@mui/material"
 
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles"
 
 import { useTranslation } from "react-i18next"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"

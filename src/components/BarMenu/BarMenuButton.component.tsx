@@ -27,9 +27,10 @@ export const BarMenuButton = (props: BarMenuButtonProps) => {
                 onClick={handleClick}
                 aria-label={t("Song.barMenu")}
                 disableFocusRipple
-                size="large">
+                size="large"
+            >
                 <MoreHorizIcon />
             </IconButton>
         </Box>
-    );
+    )
 }

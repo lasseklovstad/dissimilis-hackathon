@@ -1,5 +1,5 @@
-import { Radio, RadioProps } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import { Radio, RadioProps } from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import React from "react"
 import { theme } from "../../theme"
 

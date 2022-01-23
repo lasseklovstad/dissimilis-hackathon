@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { Box, Dialog, Grid } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, Dialog, Grid } from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import {
@@ -155,95 +155,101 @@ export const DashboardView = () => {
         ...(organisations ? organisations : []),
     ]
 
-    return <>
-        <Loading
-            isLoading={
-                postSong.loading ||
-                getAllGroups.loading ||
-                getOrganisations.loading
-            }
-            fullScreen
-        />
-        <Box mx={2}>
-            <Grid container justifyContent="center" className={styles.container}>
-                <Grid item xs={12}>
-                    <Box mb={marginBottom}>
-                        <DashboardTopBar
-                            handleOnSubmitSearch={handleSearchTerm}
+    return (
+        <>
+            <Loading
+                isLoading={
+                    postSong.loading ||
+                    getAllGroups.loading ||
+                    getOrganisations.loading
+                }
+                fullScreen
+            />
+            <Box mx={2}>
+                <Grid
+                    container
+                    justifyContent="center"
+                    className={styles.container}
+                >
+                    <Grid item xs={12}>
+                        <Box mb={marginBottom}>
+                            <DashboardTopBar
+                                handleOnSubmitSearch={handleSearchTerm}
+                            />
+                        </Box>
+                    </Grid>
+
+                    <ButtonGrid title={t("DashboardView.newSongLabel")}>
+                        {musicTacts.map((song) => (
+                            <DashboardButtonWithAddIconNoLink
+                                key={song.id}
+                                func={() => handleOpenAddSongDialog(song)}
+                                text={`${getTimeSignatureText(
+                                    song.timeSignature
+                                )}-${measureText}`}
+                            />
+                        ))}
+                    </ButtonGrid>
+
+                    <ButtonGrid title={t("DashboardView.songSearchFilter")}>
+                        {groupsAndOrganisations.map((item, i) =>
+                            "groupId" in item ? (
+                                <DashboardButtonSearch
+                                    key={item.groupId}
+                                    func={() =>
+                                        history.push(
+                                            `/library?groupId=${item.groupId}`
+                                        )
+                                    }
+                                    text={item.groupName}
+                                />
+                            ) : (
+                                <DashboardButtonSearch
+                                    key={item.organisationId}
+                                    func={() =>
+                                        history.push(
+                                            `/library?organisationId=${item.organisationId}`
+                                        )
+                                    }
+                                    text={item.organisationName}
+                                />
+                            )
+                        )}
+                    </ButtonGrid>
+
+                    <SongGrid
+                        title={t("DashboardView.recentSongLabel")}
+                        songs={recentSongs}
+                        removeSong={removeSongFromRecentSongs}
+                        renameSong={renameSongInRecentSongs}
+                        isLoading={getRecentSongs.loading}
+                    >
+                        <DashboardLibraryButton
+                            text={t("DashboardView.allSongLabel")}
+                            link="/library"
                         />
-                    </Box>
+                    </SongGrid>
+
+                    <Dialog
+                        open={addSongDialogIsOpen}
+                        onClose={handleClose}
+                        aria-label={t("Dialog.addSong")}
+                        maxWidth="sm"
+                        fullWidth
+                    >
+                        <InputDialog
+                            handleOnCancelClick={handleClose}
+                            handleOnSaveClick={handleAddSong}
+                            saveText={t("Dialog.create")}
+                            cancelText={t("Dialog.cancel")}
+                            headerText={t("Dialog.addSong")}
+                            labelText={t("Dialog.nameOfSong")}
+                            isLoading={postSong.loading}
+                        />
+                    </Dialog>
                 </Grid>
-
-                <ButtonGrid title={t("DashboardView.newSongLabel")}>
-                    {musicTacts.map((song) => (
-                        <DashboardButtonWithAddIconNoLink
-                            key={song.id}
-                            func={() => handleOpenAddSongDialog(song)}
-                            text={`${getTimeSignatureText(
-                                song.timeSignature
-                            )}-${measureText}`}
-                        />
-                    ))}
-                </ButtonGrid>
-
-                <ButtonGrid title={t("DashboardView.songSearchFilter")}>
-                    {groupsAndOrganisations.map((item, i) =>
-                        "groupId" in item ? (
-                            <DashboardButtonSearch
-                                key={item.groupId}
-                                func={() =>
-                                    history.push(
-                                        `/library?groupId=${item.groupId}`
-                                    )
-                                }
-                                text={item.groupName}
-                            />
-                        ) : (
-                            <DashboardButtonSearch
-                                key={item.organisationId}
-                                func={() =>
-                                    history.push(
-                                        `/library?organisationId=${item.organisationId}`
-                                    )
-                                }
-                                text={item.organisationName}
-                            />
-                        )
-                    )}
-                </ButtonGrid>
-
-                <SongGrid
-                    title={t("DashboardView.recentSongLabel")}
-                    songs={recentSongs}
-                    removeSong={removeSongFromRecentSongs}
-                    renameSong={renameSongInRecentSongs}
-                    isLoading={getRecentSongs.loading}
-                >
-                    <DashboardLibraryButton
-                        text={t("DashboardView.allSongLabel")}
-                        link="/library"
-                    />
-                </SongGrid>
-
-                <Dialog
-                    open={addSongDialogIsOpen}
-                    onClose={handleClose}
-                    aria-label={t("Dialog.addSong")}
-                    maxWidth="sm"
-                    fullWidth
-                >
-                    <InputDialog
-                        handleOnCancelClick={handleClose}
-                        handleOnSaveClick={handleAddSong}
-                        saveText={t("Dialog.create")}
-                        cancelText={t("Dialog.cancel")}
-                        headerText={t("Dialog.addSong")}
-                        labelText={t("Dialog.nameOfSong")}
-                        isLoading={postSong.loading}
-                    />
-                </Dialog>
-            </Grid>
-        </Box>
-        <ErrorDialog isError={postSong.isError} error={postSong.error} />
-    </>;
+            </Box>
+            <ErrorDialog isError={postSong.isError} error={postSong.error} />
+        </>
+    )
 }

@@ -9,8 +9,8 @@ import {
     MenuItem,
     Tab,
     Tabs,
-} from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+} from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { IVoice } from "../../models/IVoice"
@@ -221,215 +221,218 @@ export const CreateSongTab = (props: {
         props.updateSong()
     }
 
-    return <>
-        <Box display="flex" flexWrap="wrap" alignItems="center">
-            <Tabs
-                value={selectedVoiceId}
-                variant="scrollable"
-                scrollButtons="auto"
-                TabIndicatorProps={{
-                    style: {
-                        display: "none",
-                    },
-                }}
-            >
-                {voices.map((voice) => {
-                    const label = voice.isMain
-                        ? t("CreateSongTab.song")
-                        : voice.voiceName
-                    return (
-                        <Tab
-                            key={voice.songVoiceId}
-                            value={voice.songVoiceId}
-                            label={label}
-                            disableFocusRipple
-                            onClick={() =>
-                                history.push(`?voice=${voice.songVoiceId}`)
-                            }
-                            onContextMenu={
-                                !voice.isMain
-                                    ? handleRightClick(voice.songVoiceId)
-                                    : undefined
-                            }
-                            classes={{
-                                root: classes.root,
-                                selected: classes.selected,
-                            }}
-                        />
-                    )
-                })}
-            </Tabs>
-
-            {currentUserHasWriteAccess && (
-                <>
-                    <IconButton
-                        aria-haspopup="true"
-                        aria-controls="voiceTabMenu"
-                        aria-label={t("CreateSongTab.menu")}
-                        onClick={handleMenuClick}
-                        disableFocusRipple
-                        size="large">
-                        <MoreVertIcon />
-                    </IconButton>
-                    <Box ml="auto">
-                        {undoIsLoading ? (
-                            <Button
-                                startIcon={
-                                    <CircularProgress
-                                        aria-label="Loading"
-                                        size={22}
-                                    />
+    return (
+        <>
+            <Box display="flex" flexWrap="wrap" alignItems="center">
+                <Tabs
+                    value={selectedVoiceId}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    TabIndicatorProps={{
+                        style: {
+                            display: "none",
+                        },
+                    }}
+                >
+                    {voices.map((voice) => {
+                        const label = voice.isMain
+                            ? t("CreateSongTab.song")
+                            : voice.voiceName
+                        return (
+                            <Tab
+                                key={voice.songVoiceId}
+                                value={voice.songVoiceId}
+                                label={label}
+                                disableFocusRipple
+                                onClick={() =>
+                                    history.push(`?voice=${voice.songVoiceId}`)
                                 }
-                                className={classes.buttonsstyle}
-                                onClick={onUndo}
-                                disabled
-                            >
-                                {t("Song.undo")}
-                            </Button>
-                        ) : (
-                            <Button
-                                startIcon={<UndoIcon />}
-                                className={classes.buttonsstyle}
-                                onClick={onUndo}
-                            >
-                                {t("Song.undo")}
-                            </Button>
-                        )}
-                    </Box>
-                </>
-            )}
-        </Box>
+                                onContextMenu={
+                                    !voice.isMain
+                                        ? handleRightClick(voice.songVoiceId)
+                                        : undefined
+                                }
+                                classes={{
+                                    root: classes.root,
+                                    selected: classes.selected,
+                                }}
+                            />
+                        )
+                    })}
+                </Tabs>
 
-        <Menu
-            id="voiceTabMenu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={!!anchorEl}
-            onClose={() => handleClose()}
-            role="menu"
-        >
-            <MenuItem
-                onClick={() => {
-                    setNewVoiceDialogIsOpen(true)
-                    setAnchorEl(null)
-                }}
-            >
-                {t("CreateSongTab.newVoice")}
-            </MenuItem>
-            <MenuItem
-                disabled={selectedVoice?.isMain}
-                onClick={() => {
-                    setRenameDialogIsOpen(true)
-                    setAnchorEl(null)
-                }}
-            >
-                {t("CreateSongTab.changeVoiceName")}
-            </MenuItem>
-            <MenuItem
-                disabled={selectedVoice?.isMain}
-                onClick={() => {
-                    setDeleteDialogIsOpen(true)
-                    setAnchorEl(null)
-                }}
-            >
-                {t("CreateSongTab.deleteVoice")}
-            </MenuItem>
-        </Menu>
+                {currentUserHasWriteAccess && (
+                    <>
+                        <IconButton
+                            aria-haspopup="true"
+                            aria-controls="voiceTabMenu"
+                            aria-label={t("CreateSongTab.menu")}
+                            onClick={handleMenuClick}
+                            disableFocusRipple
+                            size="large"
+                        >
+                            <MoreVertIcon />
+                        </IconButton>
+                        <Box ml="auto">
+                            {undoIsLoading ? (
+                                <Button
+                                    startIcon={
+                                        <CircularProgress
+                                            aria-label="Loading"
+                                            size={22}
+                                        />
+                                    }
+                                    className={classes.buttonsstyle}
+                                    onClick={onUndo}
+                                    disabled
+                                >
+                                    {t("Song.undo")}
+                                </Button>
+                            ) : (
+                                <Button
+                                    startIcon={<UndoIcon />}
+                                    className={classes.buttonsstyle}
+                                    onClick={onUndo}
+                                >
+                                    {t("Song.undo")}
+                                </Button>
+                            )}
+                        </Box>
+                    </>
+                )}
+            </Box>
 
-        <Dialog
-            open={newVoiceDialogIsOpen}
-            onClose={handleClose}
-            aria-labelledby={t("Dialog.addVoice")}
-        >
-            <NewVoiceDialog
-                handleOnCancelClick={handleClose}
-                handleOnSaveClick={handleAddVoice}
-                characterLimit={100}
-                isLoading={postVoice.loading || duplicateVoice.loading}
-            />
-        </Dialog>
+            <Menu
+                id="voiceTabMenu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={!!anchorEl}
+                onClose={() => handleClose()}
+                role="menu"
+            >
+                <MenuItem
+                    onClick={() => {
+                        setNewVoiceDialogIsOpen(true)
+                        setAnchorEl(null)
+                    }}
+                >
+                    {t("CreateSongTab.newVoice")}
+                </MenuItem>
+                <MenuItem
+                    disabled={selectedVoice?.isMain}
+                    onClick={() => {
+                        setRenameDialogIsOpen(true)
+                        setAnchorEl(null)
+                    }}
+                >
+                    {t("CreateSongTab.changeVoiceName")}
+                </MenuItem>
+                <MenuItem
+                    disabled={selectedVoice?.isMain}
+                    onClick={() => {
+                        setDeleteDialogIsOpen(true)
+                        setAnchorEl(null)
+                    }}
+                >
+                    {t("CreateSongTab.deleteVoice")}
+                </MenuItem>
+            </Menu>
 
-        <Dialog
-            open={renameDialogIsOpen}
-            onClose={handleClose}
-            aria-labelledby={t("Dialog.changeVoiceName")}
-            maxWidth="sm"
-            fullWidth
-        >
-            <InputDialog
-                defaultValue={clickedVoice?.voiceName || ""}
-                handleOnCancelClick={handleClose}
-                handleOnSaveClick={handleChangeVoiceName}
-                saveText={t("Dialog.save")}
-                cancelText={t("Dialog.cancel")}
-                headerText={t("Dialog.changeVoiceName")}
-                labelText={t("Dialog.newVoiceName")}
-                isLoading={putVoice.loading}
-                characterLimit={100}
-            />
-        </Dialog>
-        <Dialog
-            open={deleteDialogIsOpen}
-            onClose={() => handleClose()}
-            aria-label={t("Dialog.deleteVoice")}
-        >
-            <ChoiceDialog
-                handleOnCancelClick={handleClose}
-                handleOnSaveClick={handleDeleteVoice}
-                ackText={t("Dialog.deleteVoice")}
-                cancelText={t("Dialog.cancel")}
-                headerText={t("Dialog.deleteVoice")}
-                descriptionText={t("Dialog.deleteVoiceDescription")}
-                isLoading={deleteVoice.loading}
-            />
-        </Dialog>
-        <Dialog
-            fullScreen
-            open={customVoiceDialogIsOpen}
-            onClose={handleCustomVoiceDialogCancel}
-            aria-labelledby={t("Modal.CustomNewVoice")}
-        >
-            <CustomVoiceDialog
-                handleOnSave={handleCustomVoiceDialogSave}
-                handleOnCancel={handleCustomVoiceDialogCancel}
-                baseVoice={voices[0]}
-                newVoice={clickedVoice}
-            />
-        </Dialog>
-        <Menu
-            open={!!rightClickMenuPosition}
-            onClose={() => {
-                setRightClickMenuPosition(undefined)
-            }}
-            anchorReference="anchorPosition"
-            anchorPosition={rightClickMenuPosition}
-        >
-            <MenuItem
-                onClick={() => {
-                    setRenameDialogIsOpen(true)
+            <Dialog
+                open={newVoiceDialogIsOpen}
+                onClose={handleClose}
+                aria-labelledby={t("Dialog.addVoice")}
+            >
+                <NewVoiceDialog
+                    handleOnCancelClick={handleClose}
+                    handleOnSaveClick={handleAddVoice}
+                    characterLimit={100}
+                    isLoading={postVoice.loading || duplicateVoice.loading}
+                />
+            </Dialog>
+
+            <Dialog
+                open={renameDialogIsOpen}
+                onClose={handleClose}
+                aria-labelledby={t("Dialog.changeVoiceName")}
+                maxWidth="sm"
+                fullWidth
+            >
+                <InputDialog
+                    defaultValue={clickedVoice?.voiceName || ""}
+                    handleOnCancelClick={handleClose}
+                    handleOnSaveClick={handleChangeVoiceName}
+                    saveText={t("Dialog.save")}
+                    cancelText={t("Dialog.cancel")}
+                    headerText={t("Dialog.changeVoiceName")}
+                    labelText={t("Dialog.newVoiceName")}
+                    isLoading={putVoice.loading}
+                    characterLimit={100}
+                />
+            </Dialog>
+            <Dialog
+                open={deleteDialogIsOpen}
+                onClose={() => handleClose()}
+                aria-label={t("Dialog.deleteVoice")}
+            >
+                <ChoiceDialog
+                    handleOnCancelClick={handleClose}
+                    handleOnSaveClick={handleDeleteVoice}
+                    ackText={t("Dialog.deleteVoice")}
+                    cancelText={t("Dialog.cancel")}
+                    headerText={t("Dialog.deleteVoice")}
+                    descriptionText={t("Dialog.deleteVoiceDescription")}
+                    isLoading={deleteVoice.loading}
+                />
+            </Dialog>
+            <Dialog
+                fullScreen
+                open={customVoiceDialogIsOpen}
+                onClose={handleCustomVoiceDialogCancel}
+                aria-labelledby={t("Modal.CustomNewVoice")}
+            >
+                <CustomVoiceDialog
+                    handleOnSave={handleCustomVoiceDialogSave}
+                    handleOnCancel={handleCustomVoiceDialogCancel}
+                    baseVoice={voices[0]}
+                    newVoice={clickedVoice}
+                />
+            </Dialog>
+            <Menu
+                open={!!rightClickMenuPosition}
+                onClose={() => {
                     setRightClickMenuPosition(undefined)
                 }}
+                anchorReference="anchorPosition"
+                anchorPosition={rightClickMenuPosition}
             >
-                {t("CreateSongTab.changeVoiceName")}
-            </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    setDeleteDialogIsOpen(true)
-                    setRightClickMenuPosition(undefined)
-                }}
-            >
-                {t("CreateSongTab.deleteVoice")}
-            </MenuItem>
-        </Menu>
-        <ErrorDialog
-            isError={postVoice.isError}
-            error={postVoice.error}
-            title={t("Dialog.newVoiceError")}
-        />
-        <ErrorDialog
-            isError={duplicateVoice.isError}
-            error={duplicateVoice.error}
-            title={t("Dialog.newVoiceError")}
-        />
-    </>;
+                <MenuItem
+                    onClick={() => {
+                        setRenameDialogIsOpen(true)
+                        setRightClickMenuPosition(undefined)
+                    }}
+                >
+                    {t("CreateSongTab.changeVoiceName")}
+                </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        setDeleteDialogIsOpen(true)
+                        setRightClickMenuPosition(undefined)
+                    }}
+                >
+                    {t("CreateSongTab.deleteVoice")}
+                </MenuItem>
+            </Menu>
+            <ErrorDialog
+                isError={postVoice.isError}
+                error={postVoice.error}
+                title={t("Dialog.newVoiceError")}
+            />
+            <ErrorDialog
+                isError={duplicateVoice.isError}
+                error={duplicateVoice.error}
+                title={t("Dialog.newVoiceError")}
+            />
+        </>
+    )
 }

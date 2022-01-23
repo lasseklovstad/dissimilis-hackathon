@@ -6,9 +6,9 @@ import {
     TextField,
     DialogTitle,
     DialogContentText,
-} from "@mui/material";
+} from "@mui/material"
 
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles"
 
 import { useGetSongMetadata } from "../../utils/useApiServiceSongs"
 import { useTranslation } from "react-i18next"

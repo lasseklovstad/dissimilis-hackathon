@@ -7,8 +7,8 @@ import {
     Dialog,
     Grid,
     Typography,
-} from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+} from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"

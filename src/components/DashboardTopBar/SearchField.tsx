@@ -42,7 +42,8 @@ export const SearchField = (props: {
                             onClick={() => {
                                 handleOnSubmit(searchTerm)
                             }}
-                            size="large">
+                            size="large"
+                        >
                             <SearchIcon />
                         </IconButton>
                         <IconButton
@@ -50,12 +51,13 @@ export const SearchField = (props: {
                             onClick={() => {
                                 setSeachTerm("")
                             }}
-                            size="large">
+                            size="large"
+                        >
                             <ClearIcon />
                         </IconButton>
                     </InputAdornment>
                 ),
             }}
         />
-    );
+    )
 }

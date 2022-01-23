@@ -16,7 +16,7 @@ export const generateNewSong = (song: ISongPost): ISong => {
         songId: 1000,
         arrangerName: "Test Testesen",
         updatedOn: "2021-06-18T18:02:25.1719881+00:00",
-        currentUserHasWriteAccess:true,
+        currentUserHasWriteAccess: true,
         voices: [
             {
                 songVoiceId: 2000,
@@ -51,33 +51,32 @@ export const generateNewSong = (song: ISongPost): ISong => {
 
 export const generateNewVoice = (song: ISong, voice: IVoicePost): IVoice => {
     return {
-        
+        songVoiceId: 2001,
+        songId: song.songId,
+        voiceName: voice.voiceName,
+        isMain: false,
+        voiceNumber: voice.voiceId,
+        bars: [
+            {
+                barId: 3000,
                 songVoiceId: 2001,
                 songId: song.songId,
-                voiceName: voice.voiceName,
-                isMain: false,
-                voiceNumber: voice.voiceId,
-                bars: [
+                position: 1,
+                repBefore: false,
+                repAfter: false,
+                voltaBracket: null,
+                chords: [
                     {
-                        barId: 3000,
-                        songVoiceId: 2001,
-                        songId: song.songId,
-                        position: 1,
-                        repBefore: false,
-                        repAfter: false,
-                        voltaBracket: null,
-                        chords: [
-                            {
-                                chordId: null,
-                                position: 0,
-                                length: 8,
-                                chordName: null,
-                                notes: ["Z"],
-                            },
-                        ],
+                        chordId: null,
+                        position: 0,
+                        length: 8,
+                        chordName: null,
+                        notes: ["Z"],
                     },
                 ],
-            }
+            },
+        ],
+    }
 }
 
 // Sort based on position

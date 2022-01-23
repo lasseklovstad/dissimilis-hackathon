@@ -1,7 +1,13 @@
 import React from "react"
-import { CircularProgress, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
+import {
+    CircularProgress,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Typography,
+} from "@mui/material"
 
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles"
 
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 

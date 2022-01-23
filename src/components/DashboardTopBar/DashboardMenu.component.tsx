@@ -1,6 +1,6 @@
 import React, { useState } from "react"
-import { Dialog, IconButton, Menu, MenuItem } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import { Dialog, IconButton, Menu, MenuItem } from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import SettingsIcon from "@mui/icons-material/Settings"
 import { useTranslation } from "react-i18next"
 import { LanguageDialog } from "../CustomDialog/LanguageDialog.component"
@@ -70,62 +70,65 @@ export const DashboardMenu = (props: {}) => {
         }
     }
 
-    return <>
-        <IconButton
-            aria-haspopup="true"
-            aria-controls="dashboardMenu"
-            aria-label={t("TopBar.settings")}
-            onClick={handleClick}
-            size="large">
-            <SettingsIcon />
-        </IconButton>
-        <Menu
-            id="dashboardMenu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={!!anchorEl}
-            onClose={() => handleClose()}
-            className={classes.menuContainer}
-        >
-            <MenuItem
-                className={classes.menuItem}
-                onClick={() => handleClose("language")}
+    return (
+        <>
+            <IconButton
+                aria-haspopup="true"
+                aria-controls="dashboardMenu"
+                aria-label={t("TopBar.settings")}
+                onClick={handleClick}
+                size="large"
             >
-                {t("MenuButton.changeLanguage")}
-                <LanguageIcon className={classes.menuIcon} />
-            </MenuItem>
-            {userIsAnyAdmin() && (
+                <SettingsIcon />
+            </IconButton>
+            <Menu
+                id="dashboardMenu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={!!anchorEl}
+                onClose={() => handleClose()}
+                className={classes.menuContainer}
+            >
                 <MenuItem
                     className={classes.menuItem}
-                    onClick={() => handleClose("admin")}
+                    onClick={() => handleClose("language")}
                 >
-                    {t("AdminView.adminPanel")}
-                    <AssignmentIndIcon />
+                    {t("MenuButton.changeLanguage")}
+                    <LanguageIcon className={classes.menuIcon} />
                 </MenuItem>
-            )}
-            <MenuItem
-                className={classes.menuItem}
-                onClick={() => handleClose("logout")}
+                {userIsAnyAdmin() && (
+                    <MenuItem
+                        className={classes.menuItem}
+                        onClick={() => handleClose("admin")}
+                    >
+                        {t("AdminView.adminPanel")}
+                        <AssignmentIndIcon />
+                    </MenuItem>
+                )}
+                <MenuItem
+                    className={classes.menuItem}
+                    onClick={() => handleClose("logout")}
+                >
+                    {t("LoginView.logout")}
+                    <LogoutIcon />
+                </MenuItem>
+            </Menu>
+            <Dialog
+                open={changeLanguageDialogIsOpen}
+                onClose={() => handleCloseChangeLanguageDialog}
             >
-                {t("LoginView.logout")}
-                <LogoutIcon />
-            </MenuItem>
-        </Menu>
-        <Dialog
-            open={changeLanguageDialogIsOpen}
-            onClose={() => handleCloseChangeLanguageDialog}
-        >
-            <LanguageDialog
-                handleOnCancelClick={handleClose}
-                handleClosed={() => setChangeLanguageDialogIsOpen(false)}
-                dialogIsOpen={changeLanguageDialogIsOpen}
+                <LanguageDialog
+                    handleOnCancelClick={handleClose}
+                    handleClosed={() => setChangeLanguageDialogIsOpen(false)}
+                    dialogIsOpen={changeLanguageDialogIsOpen}
+                />
+            </Dialog>
+            <Loading isLoading={logout.loading} fullScreen />
+            <ErrorDialog
+                isError={logout.isError}
+                error={logout.error}
+                title={t("LoginView.logoutError")}
             />
-        </Dialog>
-        <Loading isLoading={logout.loading} fullScreen />
-        <ErrorDialog
-            isError={logout.isError}
-            error={logout.error}
-            title={t("LoginView.logoutError")}
-        />
-    </>;
+        </>
+    )
 }

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react"
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles"
 import Button from "@mui/material/Button"
 import Grid from "@mui/material/Grid"
 import { Collapse, useMediaQuery } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router"
-import Alert from '@mui/material/Alert'
+import Alert from "@mui/material/Alert"
 import IconButton from "@mui/material/IconButton"
 import CloseIcon from "@mui/icons-material/Close"
 import { useLoginPost, useLoginRedirect } from "../../utils/useApiServiceLogin"

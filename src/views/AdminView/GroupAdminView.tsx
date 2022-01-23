@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { Box, Button, Dialog, Grid, Typography } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, Button, Dialog, Grid, Typography } from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useHistory, useParams } from "react-router"
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(4),
     },
     buttonGridComponent: {
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down("md")]: {
             paddingBottom: theme.spacing(2),
         },
         [theme.breakpoints.up("md")]: {
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     accordionComponent: {
-        [theme.breakpoints.down('lg')]: {
+        [theme.breakpoints.down("lg")]: {
             paddingBottom: theme.spacing(2),
             paddingRight: theme.spacing(0),
             paddingLeft: theme.spacing(0),
@@ -161,111 +161,117 @@ export const GroupAdminView = () => {
         history.push(`/library?search=${searchTerm}`)
     }
 
-    return <>
-        <Box mx={2}>
-            <Grid container justifyContent="center" className={classes.container}>
-                <Grid item xs={12}>
-                    <Box mb={4}>
-                        <DashboardTopBar
-                            handleOnSubmitSearch={handleSearchTerm}
-                        />
-                    </Box>
-                </Grid>
-                {userIsGroupAdmin() ? (
-                    <>
-                        <Grid container item xs={12} sm={10}>
-                            <Grid item xs={12}>
-                                <Button
-                                    disableFocusRipple
-                                    onClick={() => history.push("/admin")}
-                                    className={classes.returnButton}
-                                >
-                                    <ArrowBackIosIcon />
-                                    <div className={classes.buttonText}>
-                                        {t("AdminView.backToAdminpanel")}
-                                    </div>
-                                </Button>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography
-                                    className={classes.headers}
-                                    variant="h1"
-                                >
-                                    {`${organisationFetched?.organisationName}`}
-                                </Typography>
-                            </Grid>
-                            {userIsAdminInCurrentOrganisation() && (
-                                <Grid
-                                    container
-                                    className={classes.adminButtons}
-                                >
-                                    <Grid item xs={12} md={4}>
-                                        <Button
-                                            disableFocusRipple
-                                            className={classes.button}
-                                            onClick={() => {
-                                                setAddGroupIsOpen(true)
-                                            }}
-                                        >
-                                            <AddIcon />
-
-                                            <div
-                                                className={
-                                                    classes.buttonText
-                                                }
-                                            >
-                                                {t("AdminView.addGroup")}
-                                            </div>
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            )}
-                            <Grid item xs={12}>
-                                <Typography
-                                    className={classes.headers}
-                                    variant="h2"
-                                >
-                                    {t("AdminView.groups")}
-                                </Typography>
-                            </Grid>
-                            {userIsGroupAdmin() &&
-                                groups?.map((group) => (
-                                    <Grid
-                                        item
-                                        className={
-                                            classes.accordionComponent
-                                        }
-                                        xs={12}
-                                    >
-                                        <AccordionGroupComponent
-                                            title={group.groupName}
-                                            groupId={group.groupId}
-                                            userIsOrgAdmin={userIsAdminInCurrentOrganisation()}
-                                            removeGroup={
-                                                removeGroupAccordion
-                                            }
-                                        />
-                                    </Grid>
-                                ))}
-                        </Grid>
-                    </>
-                ) : (
-                    <Typography variant="h2">
-                        {t("AdminView.noPermissions")}
-                    </Typography>
-                )}
-                <Dialog
-                    open={addGroupIsOpen}
-                    onClose={handleAddGroupDialogClose}
-                    aria-labelledby={t("AdminView.addGroup")}
+    return (
+        <>
+            <Box mx={2}>
+                <Grid
+                    container
+                    justifyContent="center"
+                    className={classes.container}
                 >
-                    <AddGroupDialog
-                        handleOnSaveClick={handleAddGroupDialogSave}
-                        handleOnCancelClick={handleAddGroupDialogClose}
-                        userIsSystemAdmin={userIsSystemAdmin()}
-                    />
-                </Dialog>
-            </Grid>
-        </Box>
-    </>;
+                    <Grid item xs={12}>
+                        <Box mb={4}>
+                            <DashboardTopBar
+                                handleOnSubmitSearch={handleSearchTerm}
+                            />
+                        </Box>
+                    </Grid>
+                    {userIsGroupAdmin() ? (
+                        <>
+                            <Grid container item xs={12} sm={10}>
+                                <Grid item xs={12}>
+                                    <Button
+                                        disableFocusRipple
+                                        onClick={() => history.push("/admin")}
+                                        className={classes.returnButton}
+                                    >
+                                        <ArrowBackIosIcon />
+                                        <div className={classes.buttonText}>
+                                            {t("AdminView.backToAdminpanel")}
+                                        </div>
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography
+                                        className={classes.headers}
+                                        variant="h1"
+                                    >
+                                        {`${organisationFetched?.organisationName}`}
+                                    </Typography>
+                                </Grid>
+                                {userIsAdminInCurrentOrganisation() && (
+                                    <Grid
+                                        container
+                                        className={classes.adminButtons}
+                                    >
+                                        <Grid item xs={12} md={4}>
+                                            <Button
+                                                disableFocusRipple
+                                                className={classes.button}
+                                                onClick={() => {
+                                                    setAddGroupIsOpen(true)
+                                                }}
+                                            >
+                                                <AddIcon />
+
+                                                <div
+                                                    className={
+                                                        classes.buttonText
+                                                    }
+                                                >
+                                                    {t("AdminView.addGroup")}
+                                                </div>
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                )}
+                                <Grid item xs={12}>
+                                    <Typography
+                                        className={classes.headers}
+                                        variant="h2"
+                                    >
+                                        {t("AdminView.groups")}
+                                    </Typography>
+                                </Grid>
+                                {userIsGroupAdmin() &&
+                                    groups?.map((group) => (
+                                        <Grid
+                                            item
+                                            className={
+                                                classes.accordionComponent
+                                            }
+                                            xs={12}
+                                        >
+                                            <AccordionGroupComponent
+                                                title={group.groupName}
+                                                groupId={group.groupId}
+                                                userIsOrgAdmin={userIsAdminInCurrentOrganisation()}
+                                                removeGroup={
+                                                    removeGroupAccordion
+                                                }
+                                            />
+                                        </Grid>
+                                    ))}
+                            </Grid>
+                        </>
+                    ) : (
+                        <Typography variant="h2">
+                            {t("AdminView.noPermissions")}
+                        </Typography>
+                    )}
+                    <Dialog
+                        open={addGroupIsOpen}
+                        onClose={handleAddGroupDialogClose}
+                        aria-labelledby={t("AdminView.addGroup")}
+                    >
+                        <AddGroupDialog
+                            handleOnSaveClick={handleAddGroupDialogSave}
+                            handleOnCancelClick={handleAddGroupDialogClose}
+                            userIsSystemAdmin={userIsSystemAdmin()}
+                        />
+                    </Dialog>
+                </Grid>
+            </Box>
+        </>
+    )
 }
