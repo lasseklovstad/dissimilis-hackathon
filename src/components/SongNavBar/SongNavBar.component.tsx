@@ -16,6 +16,7 @@ import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { useTranslation } from "react-i18next"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { useUpdateSong } from "../../utils/useApiServiceSongs"
+import { useUser } from "../UserContextProvider/UserContextProvider"
 
 const useStyles = makeStyles({
     root: {
@@ -71,7 +72,7 @@ export const SongNavBar = (props: { currentUserHasWriteAccess?: boolean }) => {
     const { t } = useTranslation()
     const { putSong } = useUpdateSong(song!!.songId)
     const { logout } = useLogout()
-    const { userInit } = useGetUser()
+    const { user } = useUser()
 
     useEffect(() => {
         setTitle(song?.title)
@@ -130,7 +131,7 @@ export const SongNavBar = (props: { currentUserHasWriteAccess?: boolean }) => {
                     {!matches ? (
                         <>
                             <Box ml={4} mr={1}>
-                                <Typography>{userInit?.email}</Typography>
+                                <Typography>{user.email}</Typography>
                             </Box>
                         </>
                     ) : undefined}

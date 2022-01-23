@@ -47,7 +47,7 @@ export const songHandlers = [
         }
     ),
     rest.patch<ISongMetadata, { songId: string }, ISongMetadata>(
-        `${apiUrl}song/:songId/`,
+        `${apiUrl}song/:songId`,
         (req, res, ctx) => {
             const songId = req.params.songId
             const { title, composer, speed, songNotes } = req.body
@@ -59,7 +59,7 @@ export const songHandlers = [
                 song.composer = composer
                 song.songNotes = songNotes
                 song.speed = speed
-                return res(ctx.json(song), ctx.status(201))
+                return res(ctx.json(song), ctx.status(200))
             }
             return res(ctx.status(404))
         }

@@ -345,58 +345,54 @@ export const Chord = (props: ChordProps) => {
                         .map((note, i) => {
                             const tangent = tangentToNumber(note)
                             return (
-                                <>
-                                    <ButtonBase
-                                        id="singleChord"
-                                        className={`${
-                                            classes.noteContainerCustomMode
-                                        } 
+                                <ButtonBase
+                                    id="singleChord"
+                                    className={`${
+                                        classes.noteContainerCustomMode
+                                    } 
                                         ${(classes as any)[note]} ${
-                                            customMode
-                                                ? customVoiceNoteStates[i]
-                                                    ? "main"
-                                                    : "opaque"
-                                                : "main"
-                                        }
+                                        customMode
+                                            ? customVoiceNoteStates[i]
+                                                ? "main"
+                                                : "opaque"
+                                            : "main"
+                                    }
                                         } ${exportMode ? "disabled" : ""} ${
-                                            note === "Z" && highlight
-                                                ? classes.highlight
-                                                : ""
-                                        } ${
-                                            Number(tangent) && exportMode
-                                                ? classes.exportNumberSize
-                                                : classes.noteFont
-                                        }`}
-                                        key={note + i}
-                                        onClick={() =>
-                                            customVoiceNoteStates[i]
-                                                ? handleCustomVoiceRemoveClick(
-                                                      i
-                                                  )
-                                                : handleCustomVoiceAddClick(i)
-                                        }
-                                    >
-                                        {note[0] !== "Z" ? (
-                                            customVoiceNoteStates[i] ? (
-                                                <CheckCircleRoundedIcon
-                                                    className={
-                                                        classes.circleIconChecked
-                                                    }
-                                                />
-                                            ) : (
-                                                <RadioButtonUncheckedRoundedIcon
-                                                    className={
-                                                        classes.circleIconUnChecked
-                                                    }
-                                                />
-                                            )
+                                        note === "Z" && highlight
+                                            ? classes.highlight
+                                            : ""
+                                    } ${
+                                        Number(tangent) && exportMode
+                                            ? classes.exportNumberSize
+                                            : classes.noteFont
+                                    }`}
+                                    key={note}
+                                    onClick={() =>
+                                        customVoiceNoteStates[i]
+                                            ? handleCustomVoiceRemoveClick(i)
+                                            : handleCustomVoiceAddClick(i)
+                                    }
+                                >
+                                    {note[0] !== "Z" ? (
+                                        customVoiceNoteStates[i] ? (
+                                            <CheckCircleRoundedIcon
+                                                className={
+                                                    classes.circleIconChecked
+                                                }
+                                            />
                                         ) : (
-                                            ""
-                                        )}
-                                        {(showNoteLetters || Number(tangent)) &&
-                                            tangent}
-                                    </ButtonBase>
-                                </>
+                                            <RadioButtonUncheckedRoundedIcon
+                                                className={
+                                                    classes.circleIconUnChecked
+                                                }
+                                            />
+                                        )
+                                    ) : (
+                                        ""
+                                    )}
+                                    {(showNoteLetters || Number(tangent)) &&
+                                        tangent}
+                                </ButtonBase>
                             )
                         })
                         .reverse()}
@@ -422,35 +418,30 @@ export const Chord = (props: ChordProps) => {
                     onFocus={handleChordFocus}
                 >
                     {chord.notes
-                        .map((note, i) => {
+                        .map((note) => {
                             const tangent = tangentToNumber(note)
                             return (
                                 note !== "X" && (
-                                    <>
-                                        <div
-                                            id="singleChord"
-                                            className={`${
-                                                classes.noteContainer
-                                            } ${
-                                                (classes as any)[note]
-                                            } ${"main"} ${
-                                                exportMode ? "disabled" : ""
-                                            } ${
-                                                note === "Z" && highlight
-                                                    ? classes.highlight
-                                                    : ""
-                                            } ${
-                                                Number(tangent) && exportMode
-                                                    ? classes.exportNumberSize
-                                                    : classes.noteFont
-                                            }`}
-                                            key={note + i}
-                                        >
-                                            {(showNoteLetters ||
-                                                Number(tangent)) &&
-                                                tangent}
-                                        </div>
-                                    </>
+                                    <div
+                                        id="singleChord"
+                                        className={`${classes.noteContainer} ${
+                                            (classes as any)[note]
+                                        } ${"main"} ${
+                                            exportMode ? "disabled" : ""
+                                        } ${
+                                            note === "Z" && highlight
+                                                ? classes.highlight
+                                                : ""
+                                        } ${
+                                            Number(tangent) && exportMode
+                                                ? classes.exportNumberSize
+                                                : classes.noteFont
+                                        }`}
+                                        key={note}
+                                    >
+                                        {(showNoteLetters || Number(tangent)) &&
+                                            tangent}
+                                    </div>
                                 )
                             )
                         })

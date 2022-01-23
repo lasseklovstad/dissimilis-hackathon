@@ -4,10 +4,9 @@ import { AppBar, Box, Grid, Hidden, Typography } from "@mui/material"
 import makeStyles from "@mui/styles/makeStyles"
 
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
-import { useGetUser } from "../../utils/useApiServiceUsers"
-import { Loading } from "../loading/Loading.component"
 import { SearchField } from "./SearchField"
 import { DashboardMenu } from "../DashboardTopBar/DashboardMenu.component"
+import { useUser } from "../UserContextProvider/UserContextProvider"
 
 const useStyles = makeStyles(() => ({
     background: {
@@ -23,7 +22,7 @@ export const DashboardTopBar = (props: {
 }) => {
     const classes = useStyles()
     const { onGoHome, searchTerm, handleOnSubmitSearch } = props
-    const { userInit, getUser } = useGetUser()
+    const { user } = useUser()
 
     return (
         <>
@@ -51,8 +50,7 @@ export const DashboardTopBar = (props: {
                                     style={{ marginRight: 8 }}
                                     component="div"
                                 >
-                                    <Loading isLoading={getUser.loading} />
-                                    {userInit?.email}
+                                    {user.email}
                                 </Typography>
                             </Grid>
                         </Grid>

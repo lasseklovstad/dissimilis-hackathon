@@ -135,7 +135,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
             }
             return { result, isError, error: axiosError }
         },
-        [url, bodyInit, params, source, headers]
+        [url, bodyInit, params, headers]
     )
 
     const getData = useCallback(async () => fetchData("get"), [fetchData])

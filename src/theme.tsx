@@ -7,75 +7,92 @@ declare module "@mui/styles/defaultTheme" {
 
 const defaultTheme = createTheme()
 
-export const theme = createTheme(
-    adaptV4Theme({
-        overrides: {
-            MuiCssBaseline: {
-                "@global": {
-                    html: {
-                        fontSize: "100%",
+export const theme = createTheme({
+    components: {
+        MuiTab: {
+            styleOverrides: {
+                root: {
+                    "&.Mui-focusVisible": {
+                        boxShadow: `0 0 0 4px ${colors.focus}`,
                     },
                 },
-            },
-            MuiTab: {
+            }
+        },
+        MuiIconButton: {
+            styleOverrides: {
                 root: {
-                    "&:focus": {
+                    "&.Mui-focusVisible": {
                         boxShadow: `0 0 0 4px ${colors.focus}`,
                     },
                 },
             },
-            MuiIconButton: {
+        },
+        MuiButton: {
+            styleOverrides: {
                 root: {
-                    "&:focus": {
+                    "&.Mui-focusVisible": {
                         boxShadow: `0 0 0 4px ${colors.focus}`,
                     },
                 },
             },
-            MuiButton: {
-                root: {
-                    "&:focus": {
-                        boxShadow: `0 0 0 4px ${colors.focus}`,
-                    },
-                },
+            defaultProps: {
+                color: "inherit"
             },
-            MuiSelect: {
+        },
+        MuiSelect: {
+            styleOverrides: {
                 select: {
-                    "&:focus": {
+                    "&.Mui-focused": {
                         boxShadow: `0 0 0 4px ${colors.focus}`,
                     },
                 },
             },
-            MuiInputBase: {
-                input: {
-                    "&:focus": {
-                        boxShadow: `0 0 0 4px ${colors.focus}`,
-                    },
-                },
-            },
-            MuiOutlinedInput: {
+        },
+        MuiInputBase: {
+            styleOverrides: {
                 root: {
-                    "&:hover:not($disabled):not($focused):not($error) $notchedOutline":
+                    "&.Mui-focused": {
+                        boxShadow: `0 0 0 4px ${colors.focus}`,
+                    },
+                },
+            },
+        },
+        MuiTextField: {
+            defaultProps: {
+                variant: "standard",
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    "&:hover:not(.MuiOutlinedInput-disabled):not(.MuiOutlinedInput-focused):not(.MuiOutlinedInput-error) .MuiOutlinedInput-notchedOutline":
                         {
                             borderColor: `${colors.gray_500_dark}`,
                         },
                 },
             },
-            MuiCardActionArea: {
+        },
+        MuiCardActionArea: {
+            styleOverrides: {
                 root: {
-                    "&:focus $focusHighlight": {
+                    "&.Mui-focused .MuiCardActionArea-focusHighlight": {
                         opacity: 0,
                     },
-                    "&:focus:hover $focusHighlight": {
+                    "&.Mui-focused:hover .MuiCardActionArea-focusHighlight": {
                         opacity: 0.04,
                     },
                 },
             },
-            MuiDialog: {
+        },
+        MuiDialog: {
+            styleOverrides: {
                 paper: {
                     padding: defaultTheme.spacing(1),
                 },
             },
-            MuiDialogActions: {
+        },
+        MuiDialogActions: {
+            styleOverrides: {
                 root: {
                     padding: `${defaultTheme.spacing(
                         1
@@ -83,59 +100,61 @@ export const theme = createTheme(
                     justifyContent: "flex-start",
                 },
             },
-            MuiDialogContentText: {
+        },
+        MuiDialogContentText: {
+            styleOverrides: {
                 root: {
                     color: colors.black,
                 },
             },
         },
-        palette: {
-            primary: {
-                main: colors.gray_400,
-            },
-            secondary: {
-                main: colors.gray_500_dark,
-            },
-            background: {
-                default: colors.gray_100,
+    },
+    palette: {
+        primary: {
+            main: colors.gray_400,
+        },
+        secondary: {
+            main: colors.gray_500_dark,
+        },
+        background: {
+            default: colors.gray_100,
+        },
+    },
+    typography: {
+        fontFamily: "Roboto",
+        h1: {
+            fontSize: "2rem",
+            lineHeight: 1.5,
+            "@media(max-width:600px)": {
+                fontSize: "1.625rem",
             },
         },
-        typography: {
-            fontFamily: "Roboto",
-            h1: {
-                fontSize: "2rem",
-                lineHeight: 1.5,
-                "@media(max-width:600px)": {
-                    fontSize: "1.625rem",
-                },
+        h2: {
+            fontSize: "1.5rem",
+            lineHeight: 1.5,
+            "@media(max-width:600px)": {
+                fontSize: "1.25rem",
             },
-            h2: {
-                fontSize: "1.5rem",
-                lineHeight: 1.5,
-                "@media(max-width:600px)": {
-                    fontSize: "1.25rem",
-                },
-            },
-            body1: {
-                // Corresponding to the parapraph in the figma sketches. Can use variant = "p" to use this, 16px
-                fontSize: "1rem",
-                lineHeight: 1.5,
-                "@media(max-width:600px)": {
-                    fontSize: "0.875rem",
-                },
-            },
-            caption: {
-                // 12px
-                fontSize: "0.75rem",
-                lineHeight: 1.5,
-            },
-            button: {
-                textTransform: "none",
-            },
-            body2: {
-                lineHeight: 0,
+        },
+        body1: {
+            // Corresponding to the parapraph in the figma sketches. Can use variant = "p" to use this, 16px
+            fontSize: "1rem",
+            lineHeight: 1.5,
+            "@media(max-width:600px)": {
                 fontSize: "0.875rem",
             },
         },
-    })
-)
+        caption: {
+            // 12px
+            fontSize: "0.75rem",
+            lineHeight: 1.5,
+        },
+        button: {
+            textTransform: "none",
+        },
+        body2: {
+            lineHeight: 0,
+            fontSize: "0.875rem",
+        },
+    },
+})
