@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Box } from "@material-ui/core"
+import { Box } from "@mui/material"
 import { BarLine } from "../barLine/BarLine.component"
 import { BarMenu } from "../BarMenu/BarMenu.component"
 import { IBar } from "../../models/IBar"

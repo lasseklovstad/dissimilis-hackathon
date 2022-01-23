@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
-import { makeStyles } from "@material-ui/core/styles"
-import Typography from "@material-ui/core/Typography"
-import AddIcon from "@material-ui/icons/Add"
+import makeStyles from "@mui/styles/makeStyles"
+import Typography from "@mui/material/Typography"
+import AddIcon from "@mui/icons-material/Add"
 import {
     Box,
     Button,
@@ -12,10 +12,8 @@ import {
     Popper,
     PopperProps,
     TextField,
-} from "@material-ui/core"
-import Autocomplete, {
-    createFilterOptions,
-} from "@material-ui/lab/Autocomplete"
+} from "@mui/material"
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import { getColor, tangentToNumber } from "../../utils/bar.util"
@@ -111,7 +109,7 @@ export const ChordOptions = (props: {
                                     name={note as string}
                                 />
                             }
-                            label={t(`BottomBar.${toneNames[i]}`)}
+                            label={t<string>(`BottomBar.${toneNames[i]}`)}
                         />
                     )
                 })}
@@ -189,7 +187,7 @@ export const DropdownAutocomplete = (props: {
             blurOnSelect="touch"
             openText={t("BottomBar.open")}
             PopperComponent={customPopperPlacement}
-            closeIcon={false}
+            clearIcon={false}
             className={styles.dropdown}
             classes={{ popupIndicator: styles.icon }}
             noOptionsText={props.noOptionsText}
@@ -214,40 +212,42 @@ export const DropdownAutocomplete = (props: {
                     }}
                 />
             )}
-            renderOption={(options) => (
-                <Grid container>
-                    <Grid item xs={9}>
-                        <Typography>{options}</Typography>
+            renderOption={(props, options) => (
+                <li {...props}>
+                    <Grid container>
+                        <Grid item xs={9}>
+                            <Typography>{options}</Typography>
+                        </Grid>
+                        <Grid item xs={3} aria-hidden>
+                            {selectedChordType === ChordType.NOTE ? (
+                                <Box
+                                    style={{
+                                        height: "24px",
+                                        width: "24px",
+                                        backgroundColor: getColor(options),
+                                        borderRadius: "5px",
+                                        verticalAlign: "center",
+                                    }}
+                                >
+                                    {tangentToNumber(options) !== 0 ? (
+                                        <Typography
+                                            style={{
+                                                color: colors.white,
+                                                textAlign: "center",
+                                            }}
+                                        >
+                                            {tangentToNumber(options)}
+                                        </Typography>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </Box>
+                            ) : (
+                                <></>
+                            )}
+                        </Grid>
                     </Grid>
-                    <Grid item xs={3} aria-hidden>
-                        {selectedChordType === ChordType.NOTE ? (
-                            <Box
-                                style={{
-                                    height: "24px",
-                                    width: "24px",
-                                    backgroundColor: getColor(options),
-                                    borderRadius: "5px",
-                                    verticalAlign: "center",
-                                }}
-                            >
-                                {tangentToNumber(options) !== 0 ? (
-                                    <Typography
-                                        style={{
-                                            color: colors.white,
-                                            textAlign: "center",
-                                        }}
-                                    >
-                                        {tangentToNumber(options)}
-                                    </Typography>
-                                ) : (
-                                    <></>
-                                )}
-                            </Box>
-                        ) : (
-                            <></>
-                        )}
-                    </Grid>
-                </Grid>
+                </li>
             )}
         />
     )

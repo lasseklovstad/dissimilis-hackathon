@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import { TextField, IconButton, InputAdornment } from "@material-ui/core"
+import { TextField, IconButton, InputAdornment } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import SearchIcon from "@material-ui/icons/Search"
-import ClearIcon from "@material-ui/icons/Clear"
+import SearchIcon from "@mui/icons-material/Search"
+import ClearIcon from "@mui/icons-material/Clear"
 
 export const SearchField = (props: {
     searchTermInit?: string
@@ -42,7 +42,7 @@ export const SearchField = (props: {
                             onClick={() => {
                                 handleOnSubmit(searchTerm)
                             }}
-                        >
+                            size="large">
                             <SearchIcon />
                         </IconButton>
                         <IconButton
@@ -50,12 +50,12 @@ export const SearchField = (props: {
                             onClick={() => {
                                 setSeachTerm("")
                             }}
-                        >
+                            size="large">
                             <ClearIcon />
                         </IconButton>
                     </InputAdornment>
                 ),
             }}
         />
-    )
+    );
 }

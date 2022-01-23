@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react"
-import { Box, ButtonBase, Typography } from "@material-ui/core"
-import { makeStyles } from "@material-ui/core/styles"
+import { Box, ButtonBase, Typography } from "@mui/material"
+import makeStyles from '@mui/styles/makeStyles';
 import { IChord } from "../../models/IBar"
 import { colors } from "../../utils/colors"
 import { tangentToNumber } from "../../utils/bar.util"
 import { useAddNote, useRemoveNote } from "../../utils/useApiServiceSongs"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
-import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded"
-import RadioButtonUncheckedRoundedIcon from "@material-ui/icons/RadioButtonUncheckedRounded"
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded"
+import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded"
 import { useVoice } from "../../utils/useVoice"
 
 const useStyle = makeStyles((theme) => ({

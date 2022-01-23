@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react"
-import {
-    Box,
-    Button,
-    Dialog,
-    Grid,
-    makeStyles,
-    Typography,
-} from "@material-ui/core"
+import { Box, Button, Dialog, Grid, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
@@ -16,7 +10,7 @@ import {
     Add as AddIcon,
     Edit as EditIcon,
     List as ListIcon,
-} from "@material-ui/icons"
+} from "@mui/icons-material"
 import { colors } from "../../utils/colors"
 import { AddOrganisationDialog } from "../../components/CustomDialog/AddOrganisationDialog.component"
 import {
@@ -53,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(4),
     },
     buttonGridComponent: {
-        [theme.breakpoints.down("sm")]: {
+        [theme.breakpoints.down('md')]: {
             paddingBottom: theme.spacing(2),
         },
         [theme.breakpoints.up("md")]: {
@@ -61,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     accordionComponent: {
-        [theme.breakpoints.down("md")]: {
+        [theme.breakpoints.down('lg')]: {
             paddingBottom: theme.spacing(2),
             paddingRight: theme.spacing(0),
             paddingLeft: theme.spacing(0),
@@ -201,102 +195,130 @@ export const AdminView = () => {
         }
     }
 
-    return (
-        <>
-            <Box mx={2}>
-                <Grid container justify="center" className={classes.container}>
+    return <>
+        <Box mx={2}>
+            <Grid container justifyContent="center" className={classes.container}>
+                <Grid item xs={12}>
+                    <Box mb={4}>
+                        <DashboardTopBar
+                            handleOnSubmitSearch={handleSearchTerm}
+                        />
+                    </Box>
+                </Grid>
+                <Grid container item xs={12} sm={10}>
                     <Grid item xs={12}>
-                        <Box mb={4}>
-                            <DashboardTopBar
-                                handleOnSubmitSearch={handleSearchTerm}
-                            />
-                        </Box>
+                        <Typography
+                            className={classes.headers}
+                            variant="h1"
+                        >
+                            {t("AdminView.adminPanel")}
+                        </Typography>
                     </Grid>
-                    <Grid container item xs={12} sm={10}>
-                        <Grid item xs={12}>
-                            <Typography
-                                className={classes.headers}
-                                variant="h1"
+                    {userIsSystemAdmin() && (
+                        <Grid container className={classes.adminButtons}>
+                            <Grid
+                                item
+                                className={classes.buttonGridComponent}
+                                xs={12}
+                                md={4}
                             >
-                                {t("AdminView.adminPanel")}
-                            </Typography>
-                        </Grid>
-                        {userIsSystemAdmin() && (
-                            <Grid container className={classes.adminButtons}>
-                                <Grid
-                                    item
-                                    className={classes.buttonGridComponent}
-                                    xs={12}
-                                    md={4}
+                                <Button
+                                    disableFocusRipple
+                                    className={classes.button}
+                                    onClick={() => {
+                                        setAddOrganisationIsOpen(true)
+                                    }}
+                                    disabled={!userIsSystemAdmin()}
                                 >
-                                    <Button
-                                        disableFocusRipple
-                                        className={classes.button}
-                                        onClick={() => {
-                                            setAddOrganisationIsOpen(true)
-                                        }}
-                                        disabled={!userIsSystemAdmin()}
-                                    >
-                                        <AddIcon />
-                                        <div className={classes.buttonText}>
-                                            {t("AdminView.addCountry")}
-                                        </div>
-                                    </Button>
-                                </Grid>
-                                <Grid
-                                    item
-                                    className={classes.buttonGridComponent}
-                                    xs={12}
-                                    md={4}
-                                >
-                                    <Button
-                                        disableFocusRipple
-                                        className={classes.button}
-                                        onClick={() => {
-                                            setEditSysAdminsDialogIsOpen(true)
-                                        }}
-                                        disabled={!userIsSystemAdmin()}
-                                    >
-                                        <EditIcon />
-                                        <div className={classes.buttonText}>
-                                            {t("Dialog.editSysAdmins")}
-                                        </div>
-                                    </Button>
-                                </Grid>
-                                <Grid item xs={12} md={4}>
-                                    <Button
-                                        disableFocusRipple
-                                        className={classes.button}
-                                        onClick={() => {
-                                            setEditMembersDialogIsOpen(true)
-                                        }}
-                                        disabled={!userIsSystemAdmin()}
-                                    >
-                                        <ListIcon />
-                                        <div className={classes.buttonText}>
-                                            {t("AdminView.seeAllMembers")}
-                                        </div>
-                                    </Button>
-                                </Grid>
+                                    <AddIcon />
+                                    <div className={classes.buttonText}>
+                                        {t("AdminView.addCountry")}
+                                    </div>
+                                </Button>
                             </Grid>
-                        )}
-                        <Grid item xs={12}>
-                            <Typography
-                                className={classes.headers}
-                                variant="h2"
+                            <Grid
+                                item
+                                className={classes.buttonGridComponent}
+                                xs={12}
+                                md={4}
                             >
-                                {t("AdminView.countries")}
-                            </Typography>
+                                <Button
+                                    disableFocusRipple
+                                    className={classes.button}
+                                    onClick={() => {
+                                        setEditSysAdminsDialogIsOpen(true)
+                                    }}
+                                    disabled={!userIsSystemAdmin()}
+                                >
+                                    <EditIcon />
+                                    <div className={classes.buttonText}>
+                                        {t("Dialog.editSysAdmins")}
+                                    </div>
+                                </Button>
+                            </Grid>
+                            <Grid item xs={12} md={4}>
+                                <Button
+                                    disableFocusRipple
+                                    className={classes.button}
+                                    onClick={() => {
+                                        setEditMembersDialogIsOpen(true)
+                                    }}
+                                    disabled={!userIsSystemAdmin()}
+                                >
+                                    <ListIcon />
+                                    <div className={classes.buttonText}>
+                                        {t("AdminView.seeAllMembers")}
+                                    </div>
+                                </Button>
+                            </Grid>
                         </Grid>
-                        {userIsOrganisationAdmin() &&
-                            adminOrganisations?.map((organisation) => {
-                                renderedAdminOrganisationIds.push(
+                    )}
+                    <Grid item xs={12}>
+                        <Typography
+                            className={classes.headers}
+                            variant="h2"
+                        >
+                            {t("AdminView.countries")}
+                        </Typography>
+                    </Grid>
+                    {userIsOrganisationAdmin() &&
+                        adminOrganisations?.map((organisation) => {
+                            renderedAdminOrganisationIds.push(
+                                organisation.organisationId
+                            )
+                            return (
+                                <Grid
+                                    item
+                                    className={classes.accordionComponent}
+                                    xs={12}
+                                >
+                                    <AccordionComponent
+                                        organisationId={
+                                            organisation.organisationId
+                                        }
+                                        title={
+                                            organisation.organisationName
+                                        }
+                                        userIsSysAdm={userIsSystemAdmin()}
+                                        removeOrganisation={
+                                            removeOrganisationAccordion
+                                        }
+                                        buttonsIsDisabled={false}
+                                    />
+                                </Grid>
+                            )
+                        })}
+                    {userIsGroupAdmin() &&
+                        groupAdminOrganisations?.map(
+                            (organisation) =>
+                                !renderedAdminOrganisationIds.includes(
                                     organisation.organisationId
-                                )
-                                return (
+                                ) && (
                                     <Grid
+                                        className={
+                                            classes.accordionComponent
+                                        }
                                         item
-                                        className={classes.accordionComponent}
                                         xs={12}
                                     >
                                         <AccordionComponent
@@ -310,78 +332,48 @@ export const AdminView = () => {
                                             removeOrganisation={
                                                 removeOrganisationAccordion
                                             }
-                                            buttonsIsDisabled={false}
                                         />
                                     </Grid>
                                 )
-                            })}
-                        {userIsGroupAdmin() &&
-                            groupAdminOrganisations?.map(
-                                (organisation) =>
-                                    !renderedAdminOrganisationIds.includes(
-                                        organisation.organisationId
-                                    ) && (
-                                        <Grid
-                                            className={
-                                                classes.accordionComponent
-                                            }
-                                            item
-                                            xs={12}
-                                        >
-                                            <AccordionComponent
-                                                organisationId={
-                                                    organisation.organisationId
-                                                }
-                                                title={
-                                                    organisation.organisationName
-                                                }
-                                                userIsSysAdm={userIsSystemAdmin()}
-                                                removeOrganisation={
-                                                    removeOrganisationAccordion
-                                                }
-                                            />
-                                        </Grid>
-                                    )
-                            )}
-                    </Grid>
-                    <Dialog
-                        open={addOrganisationIsOpen}
-                        onClose={handleAddOrganisationDialogClose}
-                        aria-labelledby={t("AdminView.addCountry")}
-                    >
-                        <AddOrganisationDialog
-                            handleOnSaveClick={handleAddOrganisationDialogSave}
-                            handleOnCancelClick={
-                                handleAddOrganisationDialogClose
-                            }
-                        />
-                    </Dialog>
-                    <Dialog
-                        open={editMembersDialogIsOpen}
-                        onClose={handleEditMembersDialogClose}
-                        aria-labelledby={t("AdminView.seeAllMembers")}
-                    >
-                        <EditSystemMembersDialog
-                            handleOnCloseClick={handleEditMembersDialogClose}
-                        />
-                    </Dialog>
-                    <Dialog
-                        open={editSysAdminsDialogIsOpen}
-                        onClose={() => setEditSysAdminsDialogIsOpen(false)}
-                        aria-label={t("Dialog.editSysAdmins")}
-                        maxWidth="xs"
-                        fullWidth
-                    >
-                        <EditSysAdminsDialog
-                            handleOnCloseClick={handleEditSysAdminsDialogClose}
-                        />
-                    </Dialog>
-
-                    <Typography variant="h2">
-                        {!userIsGroupAdmin() && t("AdminView.noPermissions")}
-                    </Typography>
+                        )}
                 </Grid>
-            </Box>
-        </>
-    )
+                <Dialog
+                    open={addOrganisationIsOpen}
+                    onClose={handleAddOrganisationDialogClose}
+                    aria-labelledby={t("AdminView.addCountry")}
+                >
+                    <AddOrganisationDialog
+                        handleOnSaveClick={handleAddOrganisationDialogSave}
+                        handleOnCancelClick={
+                            handleAddOrganisationDialogClose
+                        }
+                    />
+                </Dialog>
+                <Dialog
+                    open={editMembersDialogIsOpen}
+                    onClose={handleEditMembersDialogClose}
+                    aria-labelledby={t("AdminView.seeAllMembers")}
+                >
+                    <EditSystemMembersDialog
+                        handleOnCloseClick={handleEditMembersDialogClose}
+                    />
+                </Dialog>
+                <Dialog
+                    open={editSysAdminsDialogIsOpen}
+                    onClose={() => setEditSysAdminsDialogIsOpen(false)}
+                    aria-label={t("Dialog.editSysAdmins")}
+                    maxWidth="xs"
+                    fullWidth
+                >
+                    <EditSysAdminsDialog
+                        handleOnCloseClick={handleEditSysAdminsDialogClose}
+                    />
+                </Dialog>
+
+                <Typography variant="h2">
+                    {!userIsGroupAdmin() && t("AdminView.noPermissions")}
+                </Typography>
+            </Grid>
+        </Box>
+    </>;
 }

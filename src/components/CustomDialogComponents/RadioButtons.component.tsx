@@ -1,11 +1,6 @@
 import React from "react"
-import {
-    FormControl,
-    FormControlLabel,
-    FormLabel,
-    makeStyles,
-    RadioGroup,
-} from "@material-ui/core"
+import { FormControl, FormControlLabel, FormLabel, RadioGroup } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
 import { theme } from "../../theme"
@@ -79,7 +74,7 @@ export const RadioButtons = (props: {
                             value={option}
                             checked={option === radioButtonValue}
                             control={<StyledRadio />}
-                            label={t(option)}
+                            label={t<string>(option)}
                             aria-label={"Radio: " + t(option)}
                         />
                     ))}

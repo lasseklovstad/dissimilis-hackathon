@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react"
-import {
-    makeStyles,
-    DialogContent,
-    DialogActions,
-    DialogTitle,
-    DialogContentText,
-    Grid,
-} from "@material-ui/core"
+import { DialogContent, DialogActions, DialogTitle, DialogContentText, Grid } from "@mui/material";
+
+import makeStyles from '@mui/styles/makeStyles';
 
 import { useGetSongMetadata } from "../../utils/useApiServiceSongs"
 import { useTranslation } from "react-i18next"
@@ -69,64 +64,62 @@ export const ShowSongInfoDialog = (props: {
         }
     }, [songMetadataFetched])
 
-    return (
-        <>
-            <DialogTitle>{t("Dialog.details")}</DialogTitle>
-            <DialogContent>
-                <DialogContentText>
-                    <Grid
-                        container
-                        justify="center"
-                        className={classes.container}
-                    >
-                        <Grid container className={classes.row} xs={12} sm={12}>
-                            <Grid item xs={12} sm={4} className={classes.info}>
-                                {t("Dialog.nameOfSong") + ": "}
-                            </Grid>
-                            <Grid item xs={12} sm={8} className={classes.data}>
-                                {songNameTextFieldInput}
-                            </Grid>
+    return <>
+        <DialogTitle>{t("Dialog.details")}</DialogTitle>
+        <DialogContent>
+            <DialogContentText>
+                <Grid
+                    container
+                    justifyContent="center"
+                    className={classes.container}
+                >
+                    <Grid container className={classes.row} xs={12} sm={12}>
+                        <Grid item xs={12} sm={4} className={classes.info}>
+                            {t("Dialog.nameOfSong") + ": "}
                         </Grid>
-                        <Grid container className={classes.row} xs={12} sm={12}>
-                            <Grid item xs={12} sm={4} className={classes.info}>
-                                {t("Song.arranger") + ": "}
-                            </Grid>
-                            <Grid item xs={12} sm={8} className={classes.data}>
-                                {arrangerTextFieldInput}
-                            </Grid>
-                        </Grid>
-                        <Grid container className={classes.row} xs={12} sm={12}>
-                            <Grid item xs={12} sm={4} className={classes.info}>
-                                {t("Song.composer") + ": "}
-                            </Grid>
-                            <Grid item xs={12} sm={8} className={classes.data}>
-                                {composerTextFieldInput}
-                            </Grid>
-                        </Grid>
-                        <Grid container className={classes.row} xs={12} sm={12}>
-                            <Grid item xs={12} sm={4} className={classes.info}>
-                                {t("Song.songSpeed") + ": "}
-                            </Grid>
-                            <Grid item xs={12} sm={8} className={classes.data}>
-                                {speedTextFieldInput}
-                            </Grid>
-                        </Grid>
-                        <Grid container className={classes.row} xs={12} sm={12}>
-                            <Grid item xs={12} sm={4} className={classes.info}>
-                                {t("Song.songNotes") + ": "}
-                            </Grid>
-                            <Grid item xs={12} sm={8} className={classes.data}>
-                                {songNotesTextFieldInput}
-                            </Grid>
+                        <Grid item xs={12} sm={8} className={classes.data}>
+                            {songNameTextFieldInput}
                         </Grid>
                     </Grid>
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <DialogButton onClick={handleOnCancelClick}>
-                    {t("Dialog.close")}
-                </DialogButton>
-            </DialogActions>
-        </>
-    )
+                    <Grid container className={classes.row} xs={12} sm={12}>
+                        <Grid item xs={12} sm={4} className={classes.info}>
+                            {t("Song.arranger") + ": "}
+                        </Grid>
+                        <Grid item xs={12} sm={8} className={classes.data}>
+                            {arrangerTextFieldInput}
+                        </Grid>
+                    </Grid>
+                    <Grid container className={classes.row} xs={12} sm={12}>
+                        <Grid item xs={12} sm={4} className={classes.info}>
+                            {t("Song.composer") + ": "}
+                        </Grid>
+                        <Grid item xs={12} sm={8} className={classes.data}>
+                            {composerTextFieldInput}
+                        </Grid>
+                    </Grid>
+                    <Grid container className={classes.row} xs={12} sm={12}>
+                        <Grid item xs={12} sm={4} className={classes.info}>
+                            {t("Song.songSpeed") + ": "}
+                        </Grid>
+                        <Grid item xs={12} sm={8} className={classes.data}>
+                            {speedTextFieldInput}
+                        </Grid>
+                    </Grid>
+                    <Grid container className={classes.row} xs={12} sm={12}>
+                        <Grid item xs={12} sm={4} className={classes.info}>
+                            {t("Song.songNotes") + ": "}
+                        </Grid>
+                        <Grid item xs={12} sm={8} className={classes.data}>
+                            {songNotesTextFieldInput}
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+            <DialogButton onClick={handleOnCancelClick}>
+                {t("Dialog.close")}
+            </DialogButton>
+        </DialogActions>
+    </>;
 }

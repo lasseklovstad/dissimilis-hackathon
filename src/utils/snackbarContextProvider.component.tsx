@@ -1,6 +1,8 @@
 import React, { ReactNode, useContext, useState } from "react"
-import { makeStyles, Snackbar, Theme } from "@material-ui/core"
-import MuiAlert, { AlertProps } from "@material-ui/lab/Alert"
+import { Snackbar, Theme } from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
+import MuiAlert, { AlertProps } from "@mui/material/Alert"
+import { SnackbarProps } from "@mui/material/Snackbar/Snackbar"
 
 const Alert = (props: AlertProps) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -35,11 +37,16 @@ export const SnackbarContextProvider = (props: { children: ReactNode }) => {
         setIsError(isError)
         setText(text)
     }
-    const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+
+    const handleClose = () => {
+        setIsOpen(false)
+    }
+
+    const handleCloseSnack: SnackbarProps["onClose"] = (event, reason) => {
         if (reason === "clickaway") {
             return
         }
-        setIsOpen(false)
+        handleClose()
     }
 
     return (
@@ -53,7 +60,7 @@ export const SnackbarContextProvider = (props: { children: ReactNode }) => {
                 <Snackbar
                     open={isOpen}
                     autoHideDuration={6000}
-                    onClose={handleClose}
+                    onClose={handleCloseSnack}
                 >
                     <Alert
                         onClose={handleClose}

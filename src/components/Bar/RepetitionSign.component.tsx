@@ -1,6 +1,8 @@
 import React from "react"
-import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord"
-import { Box, makeStyles } from "@material-ui/core"
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord"
+import { Box } from "@mui/material";
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles({
     dot: {

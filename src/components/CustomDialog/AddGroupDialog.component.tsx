@@ -6,16 +6,17 @@ import {
     DialogTitle,
     FormControl,
     InputLabel,
-    makeStyles,
     MenuItem,
     Select,
     TextField,
     Typography,
-} from "@material-ui/core"
+} from "@mui/material";
+
+import makeStyles from '@mui/styles/makeStyles';
 
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { useTranslation } from "react-i18next"
-import { Autocomplete } from "@material-ui/lab"
+import { Autocomplete } from '@mui/material';
 import { IUser } from "../../models/IUser"
 import {
     useGetOrganisations,
@@ -121,8 +122,8 @@ export const AddGroupDialog = (props: {
                     <InputLabel>{t("AdminView.countries")}</InputLabel>
                     <Select
                         value={organisationInput}
-                        onChange={(e: React.ChangeEvent<{ value: any }>) => {
-                            setOrganisationInput(e.target.value)
+                        onChange={(e) => {
+                            setOrganisationInput(e.target.value as number)
                         }}
                         label={t("AdminView.countries")}
                     >

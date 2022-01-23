@@ -15,7 +15,7 @@ export const getChord = (notes: string[]): string => {
         })
     )
     if (result.length === 0) return notes[0]
-    return result[0].replace(/M/g, "").replace(/B/g, "H")
+    return result[0].replace(/M/g, "").replace(/B/g, "H");
 }
 
 export const getColor = (note: string): string => {

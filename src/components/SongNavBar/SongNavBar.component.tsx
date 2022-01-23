@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react"
-import {
-    AppBar,
-    Box,
-    makeStyles,
-    TextField,
-    Typography,
-    useMediaQuery,
-} from "@material-ui/core"
+import { AppBar, Box, TextField, Typography, useMediaQuery } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { MenuButton } from "../MenuButton/MenuButton.component"
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
 import { colors } from "../../utils/colors"

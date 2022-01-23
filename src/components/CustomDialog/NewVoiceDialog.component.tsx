@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react"
-import {
-    CircularProgress,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    makeStyles,
-    TextField,
-} from "@material-ui/core"
+import { CircularProgress, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+
+import makeStyles from '@mui/styles/makeStyles';
 
 import { useTranslation } from "react-i18next"
 import { RadioButtons } from "../CustomDialogComponents/RadioButtons.component"

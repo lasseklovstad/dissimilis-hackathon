@@ -1,11 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react"
-import {
-    Box,
-    DialogActions,
-    Grid,
-    makeStyles,
-    Typography,
-} from "@material-ui/core"
+import { Box, DialogActions, Grid, Typography } from "@mui/material";
+
+import makeStyles from '@mui/styles/makeStyles';
 
 import { useTranslation } from "react-i18next"
 
@@ -179,62 +175,60 @@ export const CustomVoiceDialog = (props: {
             return barNotesConverted
         })
 
-    return (
-        <>
-            <Box pl={6}>
-                <Typography variant="h1">{newVoice?.voiceName}</Typography>
-            </Box>
-            <Grid item xs={12} className={classes.body}>
-                <Song
-                    updatedVoice={updatedVoice}
-                    barsPerRow={barsPerRow}
-                    voice={baseVoice}
-                    getChordNameFromMainVoice={getChordNameFromMainVoice}
-                    timeSignature={{
-                        numerator: song?.numerator || 4,
-                        denominator: song?.denominator || 4,
-                    }}
-                    heightOfBar={185}
-                    lastPage={false}
-                />
-            </Grid>
-            <Grid
-                container
-                className={`mui-fixed ${classes.positioningContainer}`}
-            >
-                <Grid container justify="center">
-                    <Grid item xs={10} className={classes.outercontainer}>
-                        <Box className={classes.container}>
-                            <ChordOptions
-                                chord={getBiggestChordInSong().biggestChordName}
-                                customMode
-                                onChordNotesChange={() => {}}
-                                alwaysShow={getBiggestChordInSong().showMenu}
-                                indexArray={indexArray}
-                                changeComponentInterval={
-                                    changeComponentInterval
-                                }
-                            />
-                        </Box>
-                        <DialogActions className={classes.buttonContainer}>
-                            <DialogButton
-                                className={`${classes.confirmOrCancelButtons} ${classes.confirmButton}`}
-                                onClick={handleOnSave}
-                                variant="contained"
-                            >
-                                {t("Dialog.save")}
-                            </DialogButton>
-                            <DialogButton
-                                className={classes.confirmOrCancelButtons}
-                                onClick={handleOnCancel}
-                                variant="contained"
-                            >
-                                {t("Dialog.cancel")}
-                            </DialogButton>
-                        </DialogActions>
-                    </Grid>
+    return <>
+        <Box pl={6}>
+            <Typography variant="h1">{newVoice?.voiceName}</Typography>
+        </Box>
+        <Grid item xs={12} className={classes.body}>
+            <Song
+                updatedVoice={updatedVoice}
+                barsPerRow={barsPerRow}
+                voice={baseVoice}
+                getChordNameFromMainVoice={getChordNameFromMainVoice}
+                timeSignature={{
+                    numerator: song?.numerator || 4,
+                    denominator: song?.denominator || 4,
+                }}
+                heightOfBar={185}
+                lastPage={false}
+            />
+        </Grid>
+        <Grid
+            container
+            className={`mui-fixed ${classes.positioningContainer}`}
+        >
+            <Grid container justifyContent="center">
+                <Grid item xs={10} className={classes.outercontainer}>
+                    <Box className={classes.container}>
+                        <ChordOptions
+                            chord={getBiggestChordInSong().biggestChordName}
+                            customMode
+                            onChordNotesChange={() => {}}
+                            alwaysShow={getBiggestChordInSong().showMenu}
+                            indexArray={indexArray}
+                            changeComponentInterval={
+                                changeComponentInterval
+                            }
+                        />
+                    </Box>
+                    <DialogActions className={classes.buttonContainer}>
+                        <DialogButton
+                            className={`${classes.confirmOrCancelButtons} ${classes.confirmButton}`}
+                            onClick={handleOnSave}
+                            variant="contained"
+                        >
+                            {t("Dialog.save")}
+                        </DialogButton>
+                        <DialogButton
+                            className={classes.confirmOrCancelButtons}
+                            onClick={handleOnCancel}
+                            variant="contained"
+                        >
+                            {t("Dialog.cancel")}
+                        </DialogButton>
+                    </DialogActions>
                 </Grid>
             </Grid>
-        </>
-    )
+        </Grid>
+    </>;
 }

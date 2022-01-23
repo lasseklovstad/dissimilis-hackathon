@@ -1,5 +1,5 @@
 import React from "react"
-import { Box } from "@material-ui/core"
+import { Box } from "@mui/material"
 import { ReactComponent as Logo } from "../../assets/images/butterflyBlue.svg"
 import { useTranslation } from "react-i18next"
 

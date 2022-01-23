@@ -1,8 +1,8 @@
 import React, { FC } from "react"
 import { Link } from "react-router-dom"
-import { makeStyles } from "@material-ui/core/styles"
-import Typography from "@material-ui/core/Typography"
-import AddIcon from "@material-ui/icons/Add"
+import makeStyles from '@mui/styles/makeStyles';
+import Typography from "@mui/material/Typography"
+import AddIcon from "@mui/icons-material/Add"
 import {
     Box,
     Button,
@@ -11,10 +11,10 @@ import {
     Grid,
     Icon,
     IconButton,
-} from "@material-ui/core"
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore"
-import ExpandLess from "@material-ui/icons/ExpandLess"
+} from "@mui/material"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore"
+import ExpandLess from "@mui/icons-material/ExpandLess"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import butterflyBlue from "../../assets/images/butterflyBlue.svg"
@@ -343,10 +343,10 @@ export const DashboardTopBarIcon = (props: { onGoHome?: () => void }) => {
             to="/dashboard"
             onClick={onGoHome}
             aria-label={ariaProp}
-        >
+            size="large">
             <Icon fontSize="large">
                 <img src={butterflyBlue} alt={altProp} />
             </Icon>
         </IconButton>
-    )
+    );
 }

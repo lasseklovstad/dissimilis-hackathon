@@ -10,16 +10,16 @@ import {
     ListItem,
     ListItemSecondaryAction,
     ListItemText,
-    makeStyles,
     Typography,
-} from "@material-ui/core"
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { useTranslation } from "react-i18next"
 import { IOrganisation } from "../../models/IOrganisation"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
-import DeleteIcon from "@material-ui/icons/Delete"
+import DeleteIcon from "@mui/icons-material/Delete"
 import { IUser } from "../../models/IUser"
 import { colors } from "../../utils/colors"
-import AddIcon from "@material-ui/icons/Add"
+import AddIcon from "@mui/icons-material/Add"
 import { ChoiceDialog } from "./ChoiceDialog.component"
 import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
 import { IGroup } from "../../models/IGroup"
@@ -164,102 +164,100 @@ export const EditAdminsDialog = (props: {
         setConfirmationDialogIsOpen(false)
     }
 
-    return (
-        <>
-            <DialogTitle>{t("Dialog.editAdmins")}</DialogTitle>
-            <DialogContent>
-                <Typography variant="caption">
-                    {t("Dialog.adminsIn")}{" "}
-                    {group
-                        ? "groupName" in group
-                            ? group.groupName
-                            : group.organisationName
-                        : ""}
-                    :
-                </Typography>
-                <List dense={false}>
-                    {adminList.map((admin) => (
-                        <ListItem key={`${admin.email}-list-item`}>
-                            <ListItemText
-                                primary={admin.name}
-                                secondary={secondary ? admin.email : null}
-                                className={classes.iconButton}
-                                secondaryTypographyProps={{
-                                    className: classes.secondaryTypography,
-                                }}
-                            />
-                            <ListItemSecondaryAction
-                                onClick={() => {
-                                    setSelectedAdmin(admin)
-                                    setConfirmationDialogIsOpen(true)
-                                }}
-                            >
-                                <IconButton edge="end" aria-label="delete">
-                                    <DeleteIcon />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                    ))}
-                    <ListItem>
+    return <>
+        <DialogTitle>{t("Dialog.editAdmins")}</DialogTitle>
+        <DialogContent>
+            <Typography variant="caption">
+                {t("Dialog.adminsIn")}{" "}
+                {group
+                    ? "groupName" in group
+                        ? group.groupName
+                        : group.organisationName
+                    : ""}
+                :
+            </Typography>
+            <List dense={false}>
+                {adminList.map((admin) => (
+                    <ListItem key={`${admin.email}-list-item`}>
                         <ListItemText
-                            primary={
-                                <Button
-                                    disableFocusRipple
-                                    className={classes.button}
-                                    onClick={() =>
-                                        setAddAdminDialogIsOpen(true)
-                                    }
-                                >
-                                    <AddIcon />
-                                    <div className={classes.buttonText}>
-                                        {t("AdminView.addUser")}
-                                    </div>
-                                </Button>
-                            }
+                            primary={admin.name}
+                            secondary={secondary ? admin.email : null}
+                            className={classes.iconButton}
+                            secondaryTypographyProps={{
+                                className: classes.secondaryTypography,
+                            }}
                         />
+                        <ListItemSecondaryAction
+                            onClick={() => {
+                                setSelectedAdmin(admin)
+                                setConfirmationDialogIsOpen(true)
+                            }}
+                        >
+                            <IconButton edge="end" aria-label="delete" size="large">
+                                <DeleteIcon />
+                            </IconButton>
+                        </ListItemSecondaryAction>
                     </ListItem>
-                </List>
-            </DialogContent>
-            <DialogActions>
-                <DialogButton onClick={handleOnCloseClick}>
-                    {t("Dialog.close")}
-                </DialogButton>
-            </DialogActions>
-            <Dialog
-                open={addAdminDialogIsOpen}
-                onClose={handleCloseAddAdminDialog}
-                aria-label={t("Dialog.addAdmin")}
-                maxWidth="xs"
-                fullWidth
-            >
-                <UserAutoCompleteDialog
-                    handleOnCancelClick={handleCloseAddAdminDialog}
-                    handleOnSaveClick={handleAddAdmin}
-                    saveText={t("Dialog.add")}
-                    title={t("Dialog.addAdmin")}
-                    descriptionText={t("Dialog.emailOfNewAdmin")}
-                    userList={filterAdmins()}
-                />
-            </Dialog>
-            <Dialog
-                open={confirmationDialogIsOpen}
-                onClose={handleCloseConfirmationDialog}
-                aria-label={t("Dialog.addAdmin")}
-            >
-                <ChoiceDialog
-                    handleOnCancelClick={handleCloseConfirmationDialog}
-                    handleOnSaveClick={handleRemoveAdmin}
-                    ackText={t("Dialog.removeAdmin")}
-                    cancelText={t("Dialog.cancel")}
-                    headerText={t("Dialog.removeAdmin")}
-                    descriptionText={`
-                        ${t("Dialog.removeAdminDescription")} 
-                        ${selectedAdmin?.name || t("Dialog.thisUser")} 
-                        ${t("Dialog.asAdmin")} 
-                        ${t("Dialog.cannotUndo")}
-                    `}
-                />
-            </Dialog>
-        </>
-    )
+                ))}
+                <ListItem>
+                    <ListItemText
+                        primary={
+                            <Button
+                                disableFocusRipple
+                                className={classes.button}
+                                onClick={() =>
+                                    setAddAdminDialogIsOpen(true)
+                                }
+                            >
+                                <AddIcon />
+                                <div className={classes.buttonText}>
+                                    {t("AdminView.addUser")}
+                                </div>
+                            </Button>
+                        }
+                    />
+                </ListItem>
+            </List>
+        </DialogContent>
+        <DialogActions>
+            <DialogButton onClick={handleOnCloseClick}>
+                {t("Dialog.close")}
+            </DialogButton>
+        </DialogActions>
+        <Dialog
+            open={addAdminDialogIsOpen}
+            onClose={handleCloseAddAdminDialog}
+            aria-label={t("Dialog.addAdmin")}
+            maxWidth="xs"
+            fullWidth
+        >
+            <UserAutoCompleteDialog
+                handleOnCancelClick={handleCloseAddAdminDialog}
+                handleOnSaveClick={handleAddAdmin}
+                saveText={t("Dialog.add")}
+                title={t("Dialog.addAdmin")}
+                descriptionText={t("Dialog.emailOfNewAdmin")}
+                userList={filterAdmins()}
+            />
+        </Dialog>
+        <Dialog
+            open={confirmationDialogIsOpen}
+            onClose={handleCloseConfirmationDialog}
+            aria-label={t("Dialog.addAdmin")}
+        >
+            <ChoiceDialog
+                handleOnCancelClick={handleCloseConfirmationDialog}
+                handleOnSaveClick={handleRemoveAdmin}
+                ackText={t("Dialog.removeAdmin")}
+                cancelText={t("Dialog.cancel")}
+                headerText={t("Dialog.removeAdmin")}
+                descriptionText={`
+                    ${t("Dialog.removeAdminDescription")} 
+                    ${selectedAdmin?.name || t("Dialog.thisUser")} 
+                    ${t("Dialog.asAdmin")} 
+                    ${t("Dialog.cannotUndo")}
+                `}
+            />
+        </Dialog>
+    </>;
 }

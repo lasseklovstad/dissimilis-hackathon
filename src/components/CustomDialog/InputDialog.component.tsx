@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react"
-import {
-    CircularProgress,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    makeStyles,
-    TextField,
-} from "@material-ui/core"
+import { CircularProgress, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 
 const useStyles = makeStyles((theme) => {

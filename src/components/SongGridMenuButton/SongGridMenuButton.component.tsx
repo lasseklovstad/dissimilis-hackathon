@@ -1,6 +1,6 @@
 import React, { useState } from "react"
-import { IconButton, Menu, Dialog, MenuItem } from "@material-ui/core"
-import MoreVertIcon from "@material-ui/icons/MoreVert"
+import { IconButton, Menu, Dialog, MenuItem } from "@mui/material"
+import MoreVertIcon from "@mui/icons-material/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import {
@@ -135,146 +135,144 @@ export const SongGridMenuButton = (props: {
         }
     }
 
-    return (
-        <>
-            <div>
-                <IconButton
-                    aria-controls="menuBar"
-                    aria-haspopup="true"
-                    aria-label={t("MenuButton.song")}
-                    onClick={handleClick}
-                    disableFocusRipple
-                >
-                    <MoreVertIcon />
-                </IconButton>
-                <Menu
-                    id="menuBar"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={!!anchorEl}
-                    onClose={() => handleClose()}
-                    role="menu"
-                >
-                    <MenuItem onClick={() => handleClose("open")}>
-                        {t("DashboardView.open")}
-                    </MenuItem>
-                    <MenuItem onClick={() => handleClose("copy")}>
-                        {t("DashboardView.duplicate")}
-                    </MenuItem>
+    return <>
+        <div>
+            <IconButton
+                aria-controls="menuBar"
+                aria-haspopup="true"
+                aria-label={t("MenuButton.song")}
+                onClick={handleClick}
+                disableFocusRipple
+                size="large">
+                <MoreVertIcon />
+            </IconButton>
+            <Menu
+                id="menuBar"
+                anchorEl={anchorEl}
+                keepMounted
+                open={!!anchorEl}
+                onClose={() => handleClose()}
+                role="menu"
+            >
+                <MenuItem onClick={() => handleClose("open")}>
+                    {t("DashboardView.open")}
+                </MenuItem>
+                <MenuItem onClick={() => handleClose("copy")}>
+                    {t("DashboardView.duplicate")}
+                </MenuItem>
 
-                    {props.currentUserHasWriteAccess
-                        ? [
-                              <MenuItem
-                                  onClick={() => handleClose("delete")}
-                                  key="delete"
-                              >
-                                  {t("DashboardView.delete")}
-                              </MenuItem>,
-                              <MenuItem
-                                  onClick={() => handleClose("info")}
-                                  key="info"
-                              >
-                                  {t("Dialog.details")}
-                              </MenuItem>,
-                              <MenuItem
-                                  onClick={() => handleClose("share")}
-                                  key="share"
-                              >
-                                  {t("Dialog.share")}
-                              </MenuItem>,
-                          ]
-                        : [
-                              <MenuItem
-                                  onClick={() => handleClose("infoShow")}
-                                  key="infoShow"
-                              >
-                                  {t("Dialog.details")}
-                              </MenuItem>,
-                          ]}
-                </Menu>
-                <Dialog
-                    open={deleteSongDialogIsOpen}
-                    onClose={() => handleClose()}
-                    aria-label={t("Dialog.deleteSong")}
-                >
-                    <ChoiceDialog
-                        handleOnCancelClick={() => handleClose()}
-                        handleOnSaveClick={handleDeleteSong}
-                        ackText={t("Dialog.deleteSong")}
-                        cancelText={t("Dialog.cancel")}
-                        headerText={t("Dialog.deleteSong")}
-                        descriptionText={t("Dialog.deleteDescription")}
-                    />
-                </Dialog>
-            </div>
+                {props.currentUserHasWriteAccess
+                    ? [
+                          <MenuItem
+                              onClick={() => handleClose("delete")}
+                              key="delete"
+                          >
+                              {t("DashboardView.delete")}
+                          </MenuItem>,
+                          <MenuItem
+                              onClick={() => handleClose("info")}
+                              key="info"
+                          >
+                              {t("Dialog.details")}
+                          </MenuItem>,
+                          <MenuItem
+                              onClick={() => handleClose("share")}
+                              key="share"
+                          >
+                              {t("Dialog.share")}
+                          </MenuItem>,
+                      ]
+                    : [
+                          <MenuItem
+                              onClick={() => handleClose("infoShow")}
+                              key="infoShow"
+                          >
+                              {t("Dialog.details")}
+                          </MenuItem>,
+                      ]}
+            </Menu>
             <Dialog
-                open={songInfoDialogIsOpen}
-                onClose={() => handleCloseSongInfoDialog()}
+                open={deleteSongDialogIsOpen}
+                onClose={() => handleClose()}
+                aria-label={t("Dialog.deleteSong")}
             >
-                <EditSongInfoDialog
-                    songId={songId}
-                    handleOnCancelClick={() => handleCloseSongInfoDialog()}
-                    handleOnSaveClick={handleSaveSongInfo}
-                    isLoadingPatch={putSong.loading}
-                />
-            </Dialog>
-            <Dialog
-                open={readSongInfoDialogIsOpen}
-                onClose={() => setReadSongInfoDialogIsOpen(false)}
-                maxWidth="xs"
-                fullWidth
-            >
-                <ShowSongInfoDialog
-                    songId={songId}
-                    handleOnCancelClick={() =>
-                        setReadSongInfoDialogIsOpen(false)
-                    }
-                />
-            </Dialog>
-            <Dialog
-                open={duplicateSongDialogIsOpen}
-                onClose={handleCloseDuplicateDialog}
-                aria-label={t("DashboardView.duplicateText")}
-                maxWidth="sm"
-                fullWidth
-            >
-                <InputDialog
-                    handleOnCancelClick={handleCloseDuplicateDialog}
-                    handleOnSaveClick={handleDuplicateSong}
-                    saveText={t("Dialog.create")}
+                <ChoiceDialog
+                    handleOnCancelClick={() => handleClose()}
+                    handleOnSaveClick={handleDeleteSong}
+                    ackText={t("Dialog.deleteSong")}
                     cancelText={t("Dialog.cancel")}
-                    headerText={t("DashboardView.duplicateText")}
-                    labelText={t("Dialog.newVoiceName")}
-                    isLoading={duplicateSong.loading}
+                    headerText={t("Dialog.deleteSong")}
+                    descriptionText={t("Dialog.deleteDescription")}
                 />
             </Dialog>
-            <Dialog
-                open={shareSongDialogIsOpen}
-                onClose={() => setShareSongDialogIsOpen(false)}
-                aria-label={"Dialog.ShareSong"}
-                maxWidth="xs"
-                fullWidth
-            >
-                <ShareSongDialog
-                    handleOnCloseClick={() => setShareSongDialogIsOpen(false)}
-                    songId={songId}
-                />
-            </Dialog>
-            <Loading
-                isLoading={deleteSong.loading}
-                fullScreen
-                text={t("Dialog.deleteSongLoading")}
+        </div>
+        <Dialog
+            open={songInfoDialogIsOpen}
+            onClose={() => handleCloseSongInfoDialog()}
+        >
+            <EditSongInfoDialog
+                songId={songId}
+                handleOnCancelClick={() => handleCloseSongInfoDialog()}
+                handleOnSaveClick={handleSaveSongInfo}
+                isLoadingPatch={putSong.loading}
             />
-            <ErrorDialog
-                isError={deleteSong.isError}
-                error={deleteSong.error}
-                title={t("Dialog.deleteSongError")}
+        </Dialog>
+        <Dialog
+            open={readSongInfoDialogIsOpen}
+            onClose={() => setReadSongInfoDialogIsOpen(false)}
+            maxWidth="xs"
+            fullWidth
+        >
+            <ShowSongInfoDialog
+                songId={songId}
+                handleOnCancelClick={() =>
+                    setReadSongInfoDialogIsOpen(false)
+                }
             />
-            <ErrorDialog
-                isError={putSong.isError}
-                error={putSong.error}
-                title={t("Dialog.saveSongMetadataError")}
+        </Dialog>
+        <Dialog
+            open={duplicateSongDialogIsOpen}
+            onClose={handleCloseDuplicateDialog}
+            aria-label={t("DashboardView.duplicateText")}
+            maxWidth="sm"
+            fullWidth
+        >
+            <InputDialog
+                handleOnCancelClick={handleCloseDuplicateDialog}
+                handleOnSaveClick={handleDuplicateSong}
+                saveText={t("Dialog.create")}
+                cancelText={t("Dialog.cancel")}
+                headerText={t("DashboardView.duplicateText")}
+                labelText={t("Dialog.newVoiceName")}
+                isLoading={duplicateSong.loading}
             />
-        </>
-    )
+        </Dialog>
+        <Dialog
+            open={shareSongDialogIsOpen}
+            onClose={() => setShareSongDialogIsOpen(false)}
+            aria-label={"Dialog.ShareSong"}
+            maxWidth="xs"
+            fullWidth
+        >
+            <ShareSongDialog
+                handleOnCloseClick={() => setShareSongDialogIsOpen(false)}
+                songId={songId}
+            />
+        </Dialog>
+        <Loading
+            isLoading={deleteSong.loading}
+            fullScreen
+            text={t("Dialog.deleteSongLoading")}
+        />
+        <ErrorDialog
+            isError={deleteSong.isError}
+            error={deleteSong.error}
+            title={t("Dialog.deleteSongError")}
+        />
+        <ErrorDialog
+            isError={putSong.isError}
+            error={putSong.error}
+            title={t("Dialog.saveSongMetadataError")}
+        />
+    </>;
 }

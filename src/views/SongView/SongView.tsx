@@ -1,5 +1,6 @@
 import React, { MutableRefObject, useEffect, useRef } from "react"
-import { Grid, makeStyles, Slide, useScrollTrigger } from "@material-ui/core"
+import { Grid, Slide, useScrollTrigger } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.component"

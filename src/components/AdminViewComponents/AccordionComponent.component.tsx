@@ -6,10 +6,10 @@ import {
     Button,
     Dialog,
     Grid,
-    makeStyles,
     Typography,
-} from "@material-ui/core"
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router"
