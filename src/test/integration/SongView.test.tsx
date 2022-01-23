@@ -40,7 +40,7 @@ const selectChordDuration = (duration: string) => {
 
 describe("SongView", () => {
     it("Should add default note C", async () => {
-        await renderSongView("1")
+        await renderSongView(1)
         expect(screen.getByLabelText("Name of song")).toHaveValue(
             "Stairway to heaven"
         )
@@ -50,7 +50,7 @@ describe("SongView", () => {
         await waitFor(() => expect(firstNote).toHaveTextContent("C"))
     })
     it("Should add note D", async () => {
-        await renderSongView("1")
+        await renderSongView(1)
         selectNote("D")
         const bar = screen.getByLabelText("Bar")
         const firstNote = getAllByRole(bar, "button")[0]
@@ -59,7 +59,7 @@ describe("SongView", () => {
         await waitFor(() => expect(firstNote).toHaveTextContent("D"))
     })
     it("Should add chord D", async () => {
-        await renderSongView("1")
+        await renderSongView(1)
         selectChord("D")
         const bar = screen.getByLabelText("Bar")
         const firstNote = getAllByRole(bar, "button")[0]
@@ -68,7 +68,7 @@ describe("SongView", () => {
     })
 
     it("Should change note length and add note C", async () => {
-        await renderSongView("1")
+        await renderSongView(1)
         selectChordDuration("Half note")
         const bar = screen.getByLabelText("Bar")
         const emptyNotes = getAllByRole(bar, "button")
@@ -77,7 +77,7 @@ describe("SongView", () => {
     })
 
     it("Should delete note with right click", async () => {
-        await renderSongView("10")
+        await renderSongView(10)
         const bars = screen.getAllByLabelText("Bar")
         expect(bars).toHaveLength(4)
         const chord = getAllByRole(bars[0], "button")[0]
@@ -88,7 +88,7 @@ describe("SongView", () => {
     })
 
     it("Should delete note with menu button", async () => {
-        await renderSongView("10")
+        await renderSongView(10)
         const bars = screen.getAllByLabelText("Bar")
         expect(bars).toHaveLength(4)
         const chord = getAllByRole(bars[0], "button")[0]
@@ -101,7 +101,7 @@ describe("SongView", () => {
     })
 
     it("Should create new voice with same notes as main voice", async () => {
-        await renderSongView("10")
+        await renderSongView(10)
         const voiceMenu = screen.getByLabelText("Voice menu")
         userEvent.click(voiceMenu)
         const newVoiceDialog = screen.getByRole("menuitem", {
@@ -116,7 +116,7 @@ describe("SongView", () => {
         await screen.findByRole("tab", { name: "Test Ny Stemme" })
     })
     it("Should create new blank voice", async () => {
-        await renderSongView("10")
+        await renderSongView(10)
         const voiceMenu = screen.getByLabelText("Voice menu")
         userEvent.click(voiceMenu)
         const newVoiceDialog = screen.getByRole("menuitem", {
