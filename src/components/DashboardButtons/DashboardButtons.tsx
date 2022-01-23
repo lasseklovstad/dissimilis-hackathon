@@ -345,7 +345,7 @@ export const DashboardTopBarIcon = (props: { onGoHome?: () => void }) => {
             aria-label={ariaProp}
             size="large"
         >
-            <Icon fontSize="large">
+            <Icon fontSize="large" style={{ lineHeight: 0 }}>
                 <img src={butterflyBlue} alt={altProp} />
             </Icon>
         </IconButton>
