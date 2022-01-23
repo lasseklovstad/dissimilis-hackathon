@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event"
 import React from "react"
 import { waitDoneLoading } from "../../test/test-utils"
 import { DashboardMenu } from "./DashboardMenu.component"
+import { server } from "../../test/test-server"
 
 const renderDashboard = async () => {
     render(<DashboardMenu />, { wrapper: TestWrapper })

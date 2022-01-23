@@ -3,8 +3,9 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom/extend-expect"
-import { resetSongDB, server } from "./test/test-server"
+import { server } from "./test/test-server"
 import { login, logout, resetIndex } from "./test/test-utils"
+import { resetSongDB } from "./test/handlers/song-handlers"
 
 class SessionStorageMock implements Storage {
     private store: any = {}
