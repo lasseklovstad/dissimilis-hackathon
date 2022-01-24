@@ -3,20 +3,13 @@ import { useApiService } from "./useApiService"
 import { IAdminStatuses, IUser } from "../models/IUser"
 import { useHistory } from "react-router"
 
-const getHeaders = () => {
-    const apiKey = sessionStorage.getItem("apiKey") || ""
-    const userId = sessionStorage.getItem("userId") || ""
-    const headers = { "X-API-Key": apiKey, "X-User-ID": userId }
-    return headers
-}
-
 /**
  * Get current user
  */
 export const useGetUser = () => {
     const url = "user/currentUser"
-    const headers = getHeaders()
-    const { getData, state, data } = useApiService<IUser>(url, { headers })
+
+    const { getData, state, data } = useApiService<IUser>(url)
     useEffect(() => {
         getData()
     }, [getData])
@@ -28,9 +21,9 @@ export const useGetUser = () => {
 
 export const useLogout = () => {
     const url = "user/logout"
-    const headers = getHeaders()
+
     const history = useHistory()
-    const { postData, state } = useApiService(url, { headers })
+    const { postData, state } = useApiService(url)
 
     const logout = async () => {
         const { error, result } = await postData()
@@ -50,11 +43,8 @@ export const useLogout = () => {
  */
 export const useGetAdminStatuses = () => {
     const url = "user/currentUser/adminStatuses"
-    const headers = getHeaders()
 
-    const { getData, state, data } = useApiService<IAdminStatuses>(url, {
-        headers,
-    })
+    const { getData, state, data } = useApiService<IAdminStatuses>(url)
 
     useEffect(() => {
         getData()
@@ -71,10 +61,9 @@ export const useGetAdminStatuses = () => {
  */
 export const useGetUsers = () => {
     const url = "user"
-    const headers = getHeaders()
+
     const initialData: IUser[] = []
     const { getData, state, data } = useApiService<IUser[]>(url, {
-        headers,
         initialData,
     })
     useEffect(() => {
@@ -91,10 +80,9 @@ export const useGetUsers = () => {
  */
 export const useGetSysAdmins = () => {
     const url = "user/sysAdmins"
-    const headers = getHeaders()
+
     const initialData: IUser[] = []
     const { getData, state, data } = useApiService<IUser[]>(url, {
-        headers,
         initialData,
     })
 
@@ -114,11 +102,10 @@ export const useGetSysAdmins = () => {
  */
 export const useSetSysAdminStatus = () => {
     const url = "user/"
-    const headers = getHeaders()
+
     const body = {}
     const appendUrl = "/"
     const { putData, state } = useApiService<void>(url, {
-        headers,
         body,
         appendUrl,
     })

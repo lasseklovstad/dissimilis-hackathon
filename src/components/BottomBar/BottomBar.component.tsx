@@ -1,4 +1,4 @@
-import React, { RefObject, useRef } from "react"
+import React, { useRef } from "react"
 import {
     Button,
     ClickAwayListener,
@@ -11,7 +11,6 @@ import {
 } from "@mui/material"
 import makeStyles from "@mui/styles/makeStyles"
 import withStyles from "@mui/styles/withStyles"
-import MusicNoteIcon from "@mui/icons-material/MusicNote"
 import { Delete } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
@@ -141,12 +140,8 @@ const noteLengths = [
     },
 ]
 
-export const BottomBar = (props: {
-    voiceId: number
-    chordDropdownContent: string[]
-    chordOptionsRef: RefObject<any>
-}) => {
-    const { voiceId, chordDropdownContent, chordOptionsRef } = props
+export const BottomBar = (props: { voiceId: number }) => {
+    const { voiceId } = props
     const {
         setValuesForSelectedChord,
         song,
@@ -161,6 +156,7 @@ export const BottomBar = (props: {
     const { t } = useTranslation()
     const classes = useStyles()
     const container = useRef(null)
+    const chordOptionsRef = useRef<HTMLAnchorElement>()
     const { postBar } = useAddBar(songId, voiceId)
 
     const {
@@ -271,9 +267,6 @@ export const BottomBar = (props: {
                                     }
                                     selectedChord={chordMenuOptions?.chord}
                                     onChordChange={handleChangeChord}
-                                    icon={<MusicNoteIcon fontSize="small" />}
-                                    chordDropdownContent={chordDropdownContent}
-                                    noOptionsText={t("BottomBar.noOptions")}
                                 />
                             </div>
                             <StyledToggleButtonGroup

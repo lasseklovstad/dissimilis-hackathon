@@ -1,6 +1,6 @@
 import { Chord, Note } from "@tonaljs/tonal"
 
-export const chords = [
+export const commonChords = [
     "C",
     "Cm",
     "C7",

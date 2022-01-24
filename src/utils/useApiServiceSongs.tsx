@@ -21,20 +21,13 @@ const getArrangerId = () => {
     return sessionStorage.getItem("userId") || ""
 }
 
-const getHeaders = () => {
-    const apiKey = sessionStorage.getItem("apiKey") || ""
-    const userId = sessionStorage.getItem("userId") || ""
-    return { "X-API-Key": apiKey, "X-User-ID": userId }
-}
-
 /**
  * Get one song
  * @param songId songs id
  */
 export const useGetSong = (songId: number) => {
     const url = `song/${songId}`
-    const headers = getHeaders()
-    const { getData, state, data } = useApiService<ISong>(url, { headers })
+    const { getData, state, data } = useApiService<ISong>(url)
     useEffect(() => {
         getData()
     }, [getData])
@@ -50,10 +43,7 @@ export const useGetSong = (songId: number) => {
  */
 export const useGetSongMetadata = (songId: number) => {
     const url = `song/${songId}/metadata`
-    const headers = getHeaders()
-    const { getData, state, data } = useApiService<ISongMetadata>(url, {
-        headers,
-    })
+    const { getData, state, data } = useApiService<ISongMetadata>(url)
     useEffect(() => {
         getData()
     }, [getData])
@@ -79,10 +69,8 @@ export const useTransposeSong = (
         title,
         transpose,
     }
-    const headers = getHeaders()
     const { postData, state, data } = useApiService<ISong>(url, {
         body,
-        headers,
     })
 
     return {
@@ -101,11 +89,9 @@ export const useGetAllSongs = (orderTerm: string, orderDescending: boolean) => {
         orderDescending,
     }
     const initialData: ISongIndex[] = []
-    const headers = getHeaders()
     const { postData, state, data } = useApiService<ISongIndex[]>(url, {
         body,
         initialData,
-        headers,
     })
 
     useEffect(() => {
@@ -132,7 +118,6 @@ export const useGetFilteredSongs = (
 ) => {
     const url = "song/search"
     const initialData: ISongIndex[] = []
-    const headers = getHeaders()
     const body = {
         maxNumberOfSongs: numberOfResults,
         title,
@@ -144,7 +129,6 @@ export const useGetFilteredSongs = (
 
     const { postData, state, data } = useApiService<ISongIndex[]>(url, {
         initialData,
-        headers,
         body,
     })
 
@@ -173,11 +157,9 @@ export const useGetRecentSongs = (
         arrangerId: getArrangerId(),
     }
     const initialData: ISongIndex[] = []
-    const headers = getHeaders()
     const { postData, state, data } = useApiService<ISongIndex[]>(url, {
         body,
         initialData,
-        headers,
     })
 
     useEffect(() => {
@@ -196,8 +178,7 @@ export const useGetRecentSongs = (
  */
 export const usePostSong = () => {
     const url = "song"
-    const headers = getHeaders()
-    const api = useApiService<ISong>(url, { headers })
+    const api = useApiService<ISong>(url)
     return {
         postSong: { run: api.postData, ...api.state },
     }
@@ -208,8 +189,7 @@ export const usePostSong = () => {
  */
 export const useUpdateSong = (songId: number) => {
     const url = `song/${songId}`
-    const headers = getHeaders()
-    const api = useApiService<ISong>(url, { headers })
+    const api = useApiService<ISong>(url)
     return {
         putSong: { run: api.putData, ...api.state },
     }
@@ -221,8 +201,7 @@ export const useUpdateSong = (songId: number) => {
  */
 export const useDeleteSong = (songId: number) => {
     const url = `song/${songId}`
-    const headers = getHeaders()
-    const api = useApiService<ISong>(url, { headers })
+    const api = useApiService<ISong>(url)
     return {
         deleteSong: { run: api.deleteData, ...api.state },
     }
@@ -230,8 +209,7 @@ export const useDeleteSong = (songId: number) => {
 
 export const useCreateVoice = (songId: number) => {
     const url = `song/${songId}/voice`
-    const headers = getHeaders()
-    const api = useApiService<IVoice, IVoicePost>(url, { headers })
+    const api = useApiService<IVoice, IVoicePost>(url)
     return {
         postVoice: { run: api.postData, ...api.state },
     }
@@ -242,8 +220,7 @@ export const useDuplicateVoice = (
     voiceId: number | undefined
 ) => {
     const url = `song/${songId}/voice/${voiceId}/duplicate`
-    const headers = getHeaders()
-    const api = useApiService<IVoice, IVoiceDuplicatePost>(url, { headers })
+    const api = useApiService<IVoice, IVoiceDuplicatePost>(url)
     return {
         duplicateVoice: { run: api.postData, ...api.state },
     }
@@ -251,8 +228,7 @@ export const useDuplicateVoice = (
 
 export const useUpdateVoice = (songId: number, voiceId: number | undefined) => {
     const url = `song/${songId}/voice/${voiceId}`
-    const headers = getHeaders()
-    const api = useApiService<IVoice>(url, { headers })
+    const api = useApiService<IVoice>(url)
     return {
         putVoice: { run: api.putData, ...api.state },
     }
@@ -260,8 +236,7 @@ export const useUpdateVoice = (songId: number, voiceId: number | undefined) => {
 
 export const useDeleteVoice = (songId: number, voiceId: number | undefined) => {
     const url = `song/${songId}/voice/${voiceId}`
-    const headers = getHeaders()
-    const api = useApiService<void>(url, { headers })
+    const api = useApiService<void>(url)
     return {
         deleteVoice: { run: api.deleteData, ...api.state },
     }
@@ -273,8 +248,7 @@ export const useCreateChord = (
     barId: number
 ) => {
     const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note`
-    const headers = getHeaders()
-    const api = useApiService<IBar>(url, { headers })
+    const api = useApiService<IBar>(url)
 
     return {
         postChord: { run: api.postData, ...api.state },
@@ -283,11 +257,8 @@ export const useCreateChord = (
 
 export const useCopyBars = (songId: number | undefined) => {
     const url = `song/${songId}/copyBars`
-    const headers = getHeaders()
 
-    const api = useApiService<ISong>(url, {
-        headers,
-    })
+    const api = useApiService<ISong>(url)
     return {
         postCopyBars: {
             run: (body: {
@@ -302,11 +273,8 @@ export const useCopyBars = (songId: number | undefined) => {
 
 export const useDeleteBars = (songId: number) => {
     const url = `song/${songId}/deleteBars`
-    const headers = getHeaders()
 
-    const api = useApiService<ISong>(url, {
-        headers,
-    })
+    const api = useApiService<ISong>(url)
     return {
         postDeleteBars: {
             run: (body: { fromPosition: number; deleteLength: number }) =>
@@ -323,8 +291,7 @@ export const useDeleteChord = (
     chordId: number | null
 ) => {
     const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${chordId}`
-    const headers = getHeaders()
-    const api = useApiService<IBar>(url, { headers })
+    const api = useApiService<IBar>(url)
 
     return {
         deleteChord: { run: api.deleteData, ...api.state },
@@ -338,8 +305,7 @@ export const useUpdateChord = (
     noteId: number | undefined | null
 ) => {
     const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${noteId}`
-    const headers = getHeaders()
-    const api = useApiService<IBar>(url, { headers })
+    const api = useApiService<IBar>(url)
 
     return {
         updateChord: { run: api.putData, ...api.state },
@@ -352,8 +318,7 @@ export const useAddNote = (
     barPosition: number
 ) => {
     const url = `song/${songId}/voice/${voiceId}/bar/${barPosition}/note/addComponentInterval`
-    const headers = getHeaders()
-    const api = useApiService<IBar>(url, { headers })
+    const api = useApiService<IBar>(url)
 
     return {
         addNote: { run: api.postData, ...api.state },
@@ -366,8 +331,7 @@ export const useRemoveNote = (
     barPosition: number
 ) => {
     const url = `song/${songId}/voice/${voiceId}/bar/${barPosition}/note/removeComponentInterval`
-    const headers = getHeaders()
-    const api = useApiService<IBar>(url, { headers })
+    const api = useApiService<IBar>(url)
 
     return {
         removeNote: { run: api.postData, ...api.state },
@@ -376,13 +340,12 @@ export const useRemoveNote = (
 
 export const useAddBar = (songId: number, voiceId: number) => {
     const url = `song/${songId}/voice/${voiceId}/bar`
-    const headers = getHeaders()
     const body = {
         repBefore: false,
         repAfter: false,
         voltaBracket: 0,
     }
-    const api = useApiService<ISong>(url, { headers, body })
+    const api = useApiService<ISong>(url, { body })
 
     return {
         postBar: { run: api.postData, ...api.state },
@@ -391,8 +354,7 @@ export const useAddBar = (songId: number, voiceId: number) => {
 
 export const useDuplicateBar = (songId: number) => {
     const url = `song/${songId}/copyBars`
-    const headers = getHeaders()
-    const api = useApiService<ISong>(url, { headers })
+    const api = useApiService<ISong>(url)
     return {
         duplicateBar: { run: api.postData, ...api.state },
     }
@@ -404,8 +366,7 @@ export const useDeleteBar = (
     barId: number
 ) => {
     const url = `song/${songId}/voice/${voiceId}/bar/${barId}`
-    const headers = getHeaders()
-    const api = useApiService<IVoice>(url, { headers })
+    const api = useApiService<IVoice>(url)
 
     return {
         deleteBar: { run: api.deleteData, ...api.state },
@@ -418,8 +379,7 @@ export const useUpdateBar = (
     barId: number
 ) => {
     const url = `song/${songId}/voice/${voiceId}/bar/${barId}`
-    const headers = getHeaders()
-    const api = useApiService<IVoice>(url, { headers })
+    const api = useApiService<IVoice>(url)
 
     return {
         putBar: { run: api.putData, ...api.state },
@@ -432,9 +392,8 @@ export const useUpdateBar = (
  */
 export const useDuplicateSong = (songId: number) => {
     const url = `song/${songId}/duplicateSong`
-    const headers = getHeaders()
 
-    const api = useApiService<ISong>(url, { headers })
+    const api = useApiService<ISong>(url)
 
     return {
         duplicateSong: { run: api.postData, ...api.state },
@@ -443,9 +402,8 @@ export const useDuplicateSong = (songId: number) => {
 
 export const useUndoSong = (songId: number) => {
     const url = `song/${songId}/undo`
-    const headers = getHeaders()
 
-    const api = useApiService<ISong>(url, { headers })
+    const api = useApiService<ISong>(url)
 
     return {
         undoSong: { run: api.putData, ...api.state },
@@ -457,14 +415,13 @@ export const useUndoSong = (songId: number) => {
  */
 export const useSetGroupTags = (songId: number) => {
     const url = `song/${songId}/Tag/Group`
-    const headers = getHeaders()
 
     const emptyGroupTags: number[] = []
     const body = {
         tagIds: emptyGroupTags,
     }
 
-    const api = useApiService<IGroupIndex>(url, { headers, body })
+    const api = useApiService<IGroupIndex>(url, { body })
 
     return {
         setGroupTags: { run: api.putData, ...api.state },
@@ -477,14 +434,13 @@ export const useSetGroupTags = (songId: number) => {
  */
 export const useSetOrganisationTags = (songId: number) => {
     const url = `song/${songId}/Tag/Organisation`
-    const headers = getHeaders()
 
     const emptyOrganisationTags: number[] = []
     const body = {
         tagIds: emptyOrganisationTags,
     }
 
-    const api = useApiService<IOrganisationIndex>(url, { headers, body })
+    const api = useApiService<IOrganisationIndex>(url, { body })
 
     return {
         setOrganisationTags: { run: api.putData, ...api.state },
@@ -498,10 +454,9 @@ export const useSetOrganisationTags = (songId: number) => {
  */
 export const useShareSong = (songId: number) => {
     const url = `song/${songId}/shareSong/User`
-    const headers = getHeaders()
 
     const appendUrl = "/"
-    const api = useApiService<IUser[]>(url, { headers, appendUrl })
+    const api = useApiService<IUser[]>(url, { appendUrl })
 
     return {
         shareSong: { run: api.postData, ...api.state },
@@ -515,14 +470,13 @@ export const useShareSong = (songId: number) => {
  */
 export const useAddComponentInterval = (songId: number, voiceId: number) => {
     const url = `song/${songId}/voice/${voiceId}/addComponentInterval`
-    const headers = getHeaders()
+
     const body = {
         intervalPosition: 0,
         sourceVoiceId: 0,
     }
 
     const api = useApiService<IVoice>(url, {
-        headers,
         body,
     })
 
@@ -537,14 +491,13 @@ export const useAddComponentInterval = (songId: number, voiceId: number) => {
  */
 export const useRemoveComponentInterval = (songId: number, voiceId: number) => {
     const url = `song/${songId}/voice/${voiceId}/RemoveComponentInterval`
-    const headers = getHeaders()
+
     const body = {
         intervalPosition: 0,
         deleteChordsOnLastIntervalRemoved: true,
     }
 
     const api = useApiService<IVoice>(url, {
-        headers,
         body,
     })
 
@@ -564,10 +517,9 @@ export const useRemoveComponentInterval = (songId: number, voiceId: number) => {
  */
 export const useUnshareSong = (songId: number) => {
     const url = `song/${songId}/shareSong/User`
-    const headers = getHeaders()
 
     const appendUrl = "/"
-    const api = useApiService<IUser[]>(url, { headers, appendUrl })
+    const api = useApiService<IUser[]>(url, { appendUrl })
 
     return {
         unshareSong: { run: api.deleteData, ...api.state },
@@ -580,10 +532,10 @@ export const useUnshareSong = (songId: number) => {
  */
 export const useChangeSongProtectionLevel = (songId: number) => {
     const url = `song/${songId}/changeProtectionLevel`
-    const headers = getHeaders()
+
     const body = {}
 
-    const api = useApiService<void>(url, { headers, body })
+    const api = useApiService<void>(url, { body })
 
     return {
         changeSongProtectionLevel: { run: api.postData, ...api.state },
@@ -596,10 +548,8 @@ export const useChangeSongProtectionLevel = (songId: number) => {
  */
 export const useGetSongShareInfo = (songId: number) => {
     const url = `song/${songId}/getProtectionLevelSharedWithAndTags`
-    const headers = getHeaders()
-    const { getData, state, data } = useApiService<ISongShareData>(url, {
-        headers,
-    })
+
+    const { getData, state, data } = useApiService<ISongShareData>(url)
 
     useEffect(() => {
         getData()

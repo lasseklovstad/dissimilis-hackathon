@@ -13,13 +13,18 @@ import {
     PopperProps,
     TextField,
 } from "@mui/material"
-import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete"
+import Autocomplete from "@mui/material/Autocomplete"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import { getColor, tangentToNumber } from "../../utils/bar.util"
 import { ChordType } from "../../models/IChordMenuOptions"
-import { getNotesFromChord, toneNames } from "../../models/chords"
+import {
+    commonChords,
+    getNotesFromChord,
+    toneNames,
+} from "../../models/commonChords"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useOptions } from "../../utils/useApiServiceGlobalNote.util"
 
 const useStyles = makeStyles({
     button: {
@@ -146,39 +151,47 @@ export const MenuButtonWithAddIcon = (props: {
 const customPopperPlacement = (props: PopperProps) => {
     return <Popper {...props} placement="top" children={props.children} />
 }
-const filterOptions = createFilterOptions<string>({ matchFrom: "start" })
 
 export const DropdownAutocomplete = (props: {
-    icon: React.ReactNode
-    chordDropdownContent: string[]
-    noOptionsText: string
     onChordChange: (chord: string) => void
     selectedChordType?: ChordType
     selectedChord?: string | null
 }) => {
-    const {
-        selectedChordType,
-        selectedChord,
-        onChordChange,
-        chordDropdownContent,
-    } = props
+    const { selectedChordType, selectedChord, onChordChange } = props
     const styles = useStyles()
-
-    const showValue = selectedChord
+    const {
+        state,
+        optionData: { singleNoteOptions, chordOptions },
+    } = useOptions()
+    const dropdownOptions =
+        selectedChordType === "CHORD" ? chordOptions : singleNoteOptions
 
     const { t } = useTranslation()
-
+    console.log(selectedChord)
     useEffect(() => {
-        if (selectedChord && !chordDropdownContent.includes(selectedChord)) {
-            onChordChange(chordDropdownContent[0])
+        if (
+            dropdownOptions.length &&
+            selectedChord &&
+            !dropdownOptions.includes(selectedChord)
+        ) {
+            onChordChange(dropdownOptions[0])
         }
-    }, [selectedChord, chordDropdownContent, onChordChange])
+    }, [selectedChord, dropdownOptions, onChordChange])
 
     return (
         <Autocomplete<string>
-            options={chordDropdownContent}
-            value={showValue}
-            filterOptions={filterOptions}
+            options={dropdownOptions}
+            loading={state.loading}
+            value={selectedChord}
+            filterOptions={(options, selected) => {
+                if (selectedChordType === "CHORD" && !selected.inputValue) {
+                    // Chord list is too long to render on no input value
+                    return commonChords
+                }
+                return options.filter((option) => {
+                    return option.indexOf(selected.inputValue) === 0
+                })
+            }}
             onChange={(event, value) => {
                 if (typeof value === "string") {
                     onChordChange(value)
@@ -190,7 +203,7 @@ export const DropdownAutocomplete = (props: {
             clearIcon={false}
             className={styles.dropdown}
             classes={{ popupIndicator: styles.icon }}
-            noOptionsText={props.noOptionsText}
+            noOptionsText={t("BottomBar.noOptions")}
             renderInput={(params) => (
                 <TextField
                     {...params}

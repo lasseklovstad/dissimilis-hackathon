@@ -1,4 +1,4 @@
-import { getNotesFromChord } from "../models/chords"
+import { getNotesFromChord } from "../models/commonChords"
 import { IBar, IChord } from "../models/IBar"
 import { ChordType, IChordMenuOptions } from "../models/IChordMenuOptions"
 import { ISong } from "../models/ISong"

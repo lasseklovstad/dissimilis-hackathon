@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect, useRef } from "react"
+import React, { useEffect } from "react"
 import { Grid, Slide, useScrollTrigger } from "@mui/material"
 import makeStyles from "@mui/styles/makeStyles"
 import { useParams } from "react-router-dom"
@@ -10,9 +10,7 @@ import { useGetSong, useUndoSong } from "../../utils/useApiServiceSongs"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
 import { useSongContext } from "./SongContextProvider.component"
-import { chords, notes } from "../../models/chords"
 import { colors } from "../../utils/colors"
-import { ChordType } from "../../models/IChordMenuOptions"
 import { SongNavBar } from "../../components/SongNavBar/SongNavBar.component"
 import { useVoice } from "../../utils/useVoice"
 import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
@@ -51,11 +49,10 @@ export const SongView = () => {
     const { getSong, songInit } = useGetSong(songId)
     const barsPerRow = useBarsPerRow()
 
-    const { song, dispatchSong, chordMenuOptions } = useSongContext()
+    const { song, dispatchSong } = useSongContext()
     const { denominator, numerator, voices } = song!!
     const { undoSong } = useUndoSong(songId)
     const trigger = useScrollTrigger()
-    const chordOptionsRef = useRef() as MutableRefObject<HTMLAnchorElement>
 
     const { launchSnackbar } = useSnackbarContext()
 
@@ -143,15 +140,7 @@ export const SongView = () => {
                 </Grid>
             )}
             {selectedVoiceId && song?.currentUserHasWriteAccess && (
-                <BottomBar
-                    voiceId={selectedVoiceId}
-                    chordDropdownContent={
-                        chordMenuOptions?.chordType === ChordType.NOTE
-                            ? notes
-                            : chords
-                    }
-                    chordOptionsRef={chordOptionsRef}
-                />
+                <BottomBar voiceId={selectedVoiceId} />
             )}
         </>
     )

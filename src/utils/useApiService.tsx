@@ -26,6 +26,12 @@ const useDeepCallback = <T extends unknown>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
 ) => useCallback(cb, useDeepCompareMemoize(deps))
 
+const getHeaders = () => {
+    const apiKey = sessionStorage.getItem("apiKey") || ""
+    const userId = sessionStorage.getItem("userId") || ""
+    return { "X-API-Key": apiKey, "X-User-ID": userId }
+}
+
 /**
  * Params are added to the finalUrl
  * Body is sent as body to api
@@ -40,9 +46,9 @@ export type ApiServiceOptions<T, R> = {
 
 export const useApiService = <T extends unknown, R = Record<string, unknown>>(
     url: string,
-    options: ApiServiceOptions<T, R>
+    options?: ApiServiceOptions<T, R>
 ) => {
-    const { body: bodyInit, headers, initialData, params } = options
+    const { body: bodyInit, headers = {}, initialData, params } = options || {}
     const { push } = useHistory()
     const source = axios.CancelToken.source()
     const [error, setError] = useState<AxiosError<IServerError> | undefined>(
@@ -88,7 +94,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
                 switch (method) {
                     case "get":
                         result = await axios.get<T>(finalUrl, {
-                            headers,
+                            headers: { ...getHeaders(), ...headers },
                             cancelToken: source.token,
                         })
                         break
@@ -97,14 +103,14 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
                             finalUrl,
                             body || bodyInit,
                             {
-                                headers,
+                                headers: { ...getHeaders(), ...headers },
                                 cancelToken: source.token,
                             }
                         )
                         break
                     case "delete":
                         result = await axios.delete<T>(finalUrl, {
-                            headers,
+                            headers: { ...getHeaders(), ...headers },
                             cancelToken: source.token,
                         })
                         break
@@ -113,7 +119,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
                             finalUrl,
                             body || bodyInit,
                             {
-                                headers,
+                                headers: { ...getHeaders(), ...headers },
                                 cancelToken: source.token,
                             }
                         )

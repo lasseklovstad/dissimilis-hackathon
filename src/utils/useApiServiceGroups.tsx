@@ -20,12 +20,6 @@ export enum UserRole {
     Member = "Member",
 }
 
-const getHeaders = () => {
-    const apiKey = sessionStorage.getItem("apiKey") || ""
-    const userId = sessionStorage.getItem("userId") || ""
-    return { "X-API-Key": apiKey, "X-User-ID": userId }
-}
-
 /**
  * Get all groups based on different parameters
  * */
@@ -34,10 +28,9 @@ export const useGetGroups = (groupFilter?: GroupFilter) => {
         ? `organisations/groups?filterBy=${groupFilter}`
         : "organisations/groups"
     const initialData: IGroupIndex[] = []
-    const headers = getHeaders()
+
     const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
         initialData,
-        headers,
     })
 
     useEffect(() => {
@@ -62,10 +55,9 @@ export const useGetGroupsInOrganisation = (
         : `organisations/${organisationId}/groups`
 
     const initialData: IGroupIndex[] = []
-    const headers = getHeaders()
+
     const { getData, state, data } = useApiService<IGroupIndex[]>(url, {
         initialData,
-        headers,
     })
 
     useEffect(() => {
@@ -89,10 +81,9 @@ export const useGetOrganisations = (
         : "organisations"
 
     const initialData: IOrganisationIndex[] = []
-    const headers = getHeaders()
+
     const { getData, state, data } = useApiService<IOrganisationIndex[]>(url, {
         initialData,
-        headers,
     })
 
     useEffect(() => {
@@ -111,10 +102,8 @@ export const useGetOrganisations = (
  */
 export const useGetGroup = (groupId: number) => {
     const url = `organisations/groups/${groupId}`
-    const headers = getHeaders()
-    const { getData, state, data } = useApiService<IGroup>(url, {
-        headers,
-    })
+
+    const { getData, state, data } = useApiService<IGroup>(url, {})
 
     useEffect(() => {
         getData()
@@ -131,7 +120,7 @@ export const useGetGroup = (groupId: number) => {
  */
 export const usePostGroup = () => {
     const url = "organisations/groups/"
-    const headers = getHeaders()
+
     const body = {
         address: "",
         emailAddress: "",
@@ -140,7 +129,6 @@ export const usePostGroup = () => {
     }
     const { postData, state } = useApiService<IGroup>(url, {
         body,
-        headers,
     })
 
     return {
@@ -153,14 +141,14 @@ export const usePostGroup = () => {
  */
 export const useUpdateGroup = (groupId: number) => {
     const url = `organisations/groups/${groupId}`
-    const headers = getHeaders()
+
     const body = {
         address: "",
         emailAddress: "",
         description: "",
         phoneNumber: "",
     }
-    const { putData, state } = useApiService<IGroup>(url, { body, headers })
+    const { putData, state } = useApiService<IGroup>(url, { body })
     return {
         updateGroup: { run: putData, ...state },
     }
@@ -172,9 +160,8 @@ export const useUpdateGroup = (groupId: number) => {
  */
 export const useDeleteGroup = (groupId: number) => {
     const url = `organisations/groups/${groupId}`
-    const headers = getHeaders()
 
-    const { deleteData, state } = useApiService<IGroup>(url, { headers })
+    const { deleteData, state } = useApiService<IGroup>(url)
 
     return {
         deleteGroup: { run: deleteData, ...state },
@@ -186,7 +173,7 @@ export const useDeleteGroup = (groupId: number) => {
  */
 export const usePostOrganisation = () => {
     const url = "organisations/"
-    const headers = getHeaders()
+
     const body = {
         name: "",
         address: "",
@@ -196,7 +183,6 @@ export const usePostOrganisation = () => {
     }
     const { postData, state } = useApiService<IOrganisation>(url, {
         body,
-        headers,
     })
 
     return {
@@ -210,11 +196,8 @@ export const usePostOrganisation = () => {
  */
 export const useDeleteOrganisation = (organisationId: number) => {
     const url = `organisations/${organisationId}`
-    const headers = getHeaders()
 
-    const { deleteData, state } = useApiService<IOrganisation>(url, {
-        headers,
-    })
+    const { deleteData, state } = useApiService<IOrganisation>(url, {})
 
     return {
         deleteOrganisation: { run: deleteData, ...state },
@@ -227,10 +210,8 @@ export const useDeleteOrganisation = (organisationId: number) => {
  */
 export const useGetOrganisation = (organisationId: number) => {
     const url = `organisations/${organisationId}`
-    const headers = getHeaders()
-    const { getData, state, data } = useApiService<IOrganisation>(url, {
-        headers,
-    })
+
+    const { getData, state, data } = useApiService<IOrganisation>(url, {})
 
     useEffect(() => {
         getData()
@@ -247,7 +228,7 @@ export const useGetOrganisation = (organisationId: number) => {
  */
 export const useUpdateOrganisation = (organisationId: number) => {
     const url = `organisations/${organisationId}`
-    const headers = getHeaders()
+
     const body = {
         name: "",
         address: "",
@@ -257,7 +238,6 @@ export const useUpdateOrganisation = (organisationId: number) => {
     }
     const { putData, state } = useApiService<IOrganisation>(url, {
         body,
-        headers,
     })
     return {
         updateOrganisation: { run: putData, ...state },
@@ -270,11 +250,10 @@ export const useUpdateOrganisation = (organisationId: number) => {
  */
 export const useAddGroupMember = (groupId: number) => {
     const url = `organisations/groups/${groupId}/users`
-    const headers = getHeaders()
+
     const body = {}
     const { postData, state } = useApiService<void>(url, {
         body,
-        headers,
     })
 
     return {
@@ -287,12 +266,12 @@ export const useAddGroupMember = (groupId: number) => {
  */
 export const useRemoveGroupMember = (groupId: number) => {
     const url = `organisations/groups/${groupId}/users`
-    const headers = getHeaders()
+
     const body = {}
     const appendUrl = "/"
     const { deleteData, state } = useApiService<void>(url, {
         body,
-        headers,
+
         appendUrl,
     })
 
@@ -307,11 +286,10 @@ export const useRemoveGroupMember = (groupId: number) => {
  */
 export const useAddOrganisationMember = (organisationId: number) => {
     const url = `organisations/${organisationId}/users`
-    const headers = getHeaders()
+
     const body = {}
     const { postData, state } = useApiService<void>(url, {
         body,
-        headers,
     })
 
     return {
@@ -324,12 +302,12 @@ export const useAddOrganisationMember = (organisationId: number) => {
  */
 export const useRemoveOrganisationMember = (organisationId: number) => {
     const url = `organisations/${organisationId}/users`
-    const headers = getHeaders()
+
     const body = {}
     const appendUrl = "/"
     const { deleteData, state } = useApiService<void>(url, {
         body,
-        headers,
+
         appendUrl,
     })
 
@@ -344,11 +322,10 @@ export const useRemoveOrganisationMember = (organisationId: number) => {
  */
 export const useSetUserRoleInGroup = (groupId: number) => {
     const url = `organisations/groups/${groupId}/users/`
-    const headers = getHeaders()
+
     const body = {}
     const appendUrl = "/"
     const { putData, state } = useApiService<void>(url, {
-        headers,
         body,
         appendUrl,
     })
@@ -364,11 +341,10 @@ export const useSetUserRoleInGroup = (groupId: number) => {
  */
 export const useSetUserRoleInOrganisation = (organisationId: number) => {
     const url = `organisations/${organisationId}/users/`
-    const headers = getHeaders()
+
     const body = {}
     const appendUrl = "/"
     const { putData, state } = useApiService<void>(url, {
-        headers,
         body,
         appendUrl,
     })
@@ -388,9 +364,8 @@ export const useGetGroupOrOrganisationMembers = (
 ) => {
     const urlStart = isGroup ? "organisations/groups" : "organisations"
     const url = `${urlStart}/${groupId}/users`
-    const headers = getHeaders()
 
-    const { getData, state, data } = useApiService<IUser[]>(url, { headers })
+    const { getData, state, data } = useApiService<IUser[]>(url)
 
     useEffect(() => {
         getData()
