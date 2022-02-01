@@ -8,7 +8,6 @@ import { ChordMenu } from "./ChordMenu.component"
 import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
 import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
-import { getNotesFromChord } from "../../models/commonChords"
 import { ChordType } from "../../models/IChordMenuOptions"
 import makeStyles from "@mui/styles/makeStyles"
 import { colors } from "../../utils/colors"
@@ -187,7 +186,7 @@ export const Bar = (props: {
             const notes =
                 chordMenuOptions.chordType === ChordType.NOTE
                     ? [chordMenuOptions.chord]
-                    : getNotesFromChord(chordMenuOptions.chord)
+                    : null
 
             const position =
                 positionArray.length > 0 ? positionArray[0] : chord.position
@@ -205,17 +204,21 @@ export const Bar = (props: {
             } as IChord)
 
             if (!error && result) {
-                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-                dispatchChordMenuOptions({
-                    type: "UPDATE_CHORD_NOTES",
-                    chordNotes: notes as string[],
-                })
-                setValuesForSelectedChord(
-                    result.data.chords.find((c) => c.position === position)
-                        ?.chordId,
-                    result.data.barId,
-                    position
+                const createdChord = result.data.chords.find(
+                    (c) => c.position === position
                 )
+                if (createdChord) {
+                    dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+                    dispatchChordMenuOptions({
+                        type: "UPDATE_CHORD_NOTES",
+                        chordNotes: createdChord.notes,
+                    })
+                    setValuesForSelectedChord(
+                        createdChord.chordId,
+                        result.data.barId,
+                        position
+                    )
+                }
             }
         } else {
             updateMenuOptions(chord)

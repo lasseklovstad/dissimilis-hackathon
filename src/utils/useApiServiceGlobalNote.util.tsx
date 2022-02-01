@@ -16,3 +16,21 @@ export const useOptions = () => {
         optionData: data || { singleNoteOptions: [], chordOptions: [] },
     }
 }
+
+interface IIntervals {
+    intervalNames: string[]
+}
+
+export const useGetChordIntervals = (chordName: string) => {
+    const { getData, state, data } = useApiService<IIntervals>(
+        "note/chord/intervalNames",
+        { params: { chordName } }
+    )
+    useEffect(() => {
+        getData()
+    }, [getData])
+    return {
+        state,
+        chordIntervalsData: data,
+    }
+}

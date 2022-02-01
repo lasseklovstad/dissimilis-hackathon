@@ -67,7 +67,7 @@ export const useChords = (
             ? chordNotes
             : chordType === ChordType.NOTE
             ? [chord]
-            : getNotesFromChord(chord)
+            : null
         const chordName = chordType === ChordType.CHORD ? chord : null
 
         const { error, result } = await updateChord.run({
@@ -78,21 +78,26 @@ export const useChords = (
         })
 
         if (!error && result) {
-            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-            dispatchChordMenuOptions({
-                type: "UPDATE_OPTIONS",
-                menuOptions: {
-                    chordLength: length,
-                    chord: chord,
-                    chordType: chordType,
-                    chordNotes: notes as string[],
-                },
-            })
-            setValuesForSelectedChord(
-                selectedChordId,
-                result.data.barId,
-                position
+            const createdChord = result.data.chords.find(
+                (c) => c.position === position
             )
+            if (createdChord) {
+                dispatchSong({ type: "UPDATE_BAR", bar: result.data })
+                dispatchChordMenuOptions({
+                    type: "UPDATE_OPTIONS",
+                    menuOptions: {
+                        chordLength: length,
+                        chord: chord,
+                        chordType: chordType,
+                        chordNotes: createdChord.notes,
+                    },
+                })
+                setValuesForSelectedChord(
+                    createdChord.chordId,
+                    result.data.barId,
+                    position
+                )
+            }
         }
     }
 

@@ -203,13 +203,8 @@ export const CustomVoiceDialog = (props: {
                         <Box className={classes.container}>
                             <ChordOptions
                                 chord={getBiggestChordInSong().biggestChordName}
-                                customMode
-                                onChordNotesChange={() => {}}
-                                alwaysShow={getBiggestChordInSong().showMenu}
-                                indexArray={indexArray}
-                                changeComponentInterval={
-                                    changeComponentInterval
-                                }
+                                addChordInterval={changeComponentInterval}
+                                removeChordInterval={changeComponentInterval}
                             />
                         </Box>
                         <DialogActions className={classes.buttonContainer}>

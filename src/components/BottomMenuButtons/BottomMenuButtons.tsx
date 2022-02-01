@@ -9,6 +9,7 @@ import {
     FormControlLabel,
     FormGroup,
     Grid,
+    Paper,
     Popper,
     PopperProps,
     TextField,
@@ -24,7 +25,10 @@ import {
     toneNames,
 } from "../../models/commonChords"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
-import { useOptions } from "../../utils/useApiServiceGlobalNote.util"
+import {
+    useGetChordIntervals,
+    useOptions,
+} from "../../utils/useApiServiceGlobalNote.util"
 
 const useStyles = makeStyles({
     button: {
@@ -38,11 +42,6 @@ const useStyles = makeStyles({
         height: "56px",
         outline: "none",
     },
-    dropdown: {
-        "& .MuiOutlinedInput-notchedOutline": {
-            border: "0px",
-        },
-    },
     icon: {
         right: 7,
     },
@@ -55,69 +54,47 @@ const useStyles = makeStyles({
 })
 
 export const ChordOptions = (props: {
-    chord: string | null
-    onChordNotesChange: (clickedNote: string, checked: boolean) => void
-    changeComponentInterval?: (index: number) => void
-    alwaysShow: boolean
-    customMode?: boolean
-    indexArray?: boolean[]
+    chord: string
+    addChordInterval: (intervalPosition: number) => void
+    removeChordInterval: (intervalPosition: number) => void
 }) => {
-    const {
-        alwaysShow,
-        customMode = false,
-        indexArray = [],
-        changeComponentInterval = () => {},
-    } = props
+    const { chord, addChordInterval, removeChordInterval } = props
     const styles = useStyles()
-    const { chordMenuOptions } = useSongContext()
+    const { state, chordIntervalsData } = useGetChordIntervals(chord)
     const { t } = useTranslation()
 
-    if (!alwaysShow && chordMenuOptions?.chordType === ChordType.NOTE) {
-        return <></>
+    if (!chordIntervalsData) {
+        return null
     }
 
-    const allNotes = getNotesFromChord(props.chord)
-
     return (
-        <Box id="chordOptionsContainer" className={styles.root}>
-            <FormGroup id="chordOptions" row>
-                {allNotes.map((note, i) => {
-                    const chordContainsNote =
-                        chordMenuOptions?.chordNotes.includes(note as string)
-                    return (
-                        <FormControlLabel
-                            key={i}
-                            control={
-                                <Checkbox
-                                    id={toneNames[i]}
-                                    color="default"
-                                    disabled={
-                                        chordContainsNote &&
-                                        chordMenuOptions?.chordNotes.length ===
-                                            1 &&
-                                        !customMode
-                                    }
-                                    checked={
-                                        (customMode &&
-                                            indexArray.length > 0 &&
-                                            indexArray[i]) ||
-                                        (chordContainsNote && !customMode)
-                                    }
-                                    onChange={(e) =>
-                                        customMode
-                                            ? changeComponentInterval(i)
-                                            : props.onChordNotesChange(
-                                                  e.target.name,
-                                                  e.target.checked
-                                              )
-                                    }
-                                    name={note as string}
-                                />
-                            }
-                            label={t<string>(`BottomBar.${toneNames[i]}`)}
-                        />
-                    )
-                })}
+        <Box className={styles.root}>
+            <FormGroup row>
+                {chordIntervalsData.intervalNames.map(
+                    (interval, intervalPosition) => {
+                        return (
+                            <FormControlLabel
+                                key={interval}
+                                control={
+                                    <Checkbox
+                                        color="default"
+                                        onChange={(e) =>
+                                            e.target.checked
+                                                ? addChordInterval(
+                                                      intervalPosition
+                                                  )
+                                                : removeChordInterval(
+                                                      intervalPosition
+                                                  )
+                                        }
+                                        name={interval}
+                                    />
+                                }
+                                label={interval}
+                            />
+                        )
+                    }
+                )}
             </FormGroup>
         </Box>
     )
@@ -126,25 +103,18 @@ export const ChordOptions = (props: {
 export const MenuButtonWithAddIcon = (props: {
     text: string
     onClick?: () => void
-    selected?: boolean
 }) => {
-    const styles = useStyles()
     return (
-        <Button
-            variant="outlined"
-            size="large"
-            className={styles.addbutton}
-            disableFocusRipple
-            style={{
-                backgroundColor: props.selected
-                    ? colors.gray_200
-                    : colors.white,
-            }}
-            startIcon={<AddIcon />}
-            onClick={() => props.onClick && props.onClick()}
-        >
-            <Typography>{props.text}</Typography>
-        </Button>
+        <Paper elevation={6} sx={{ display: "flex", m: 1 }}>
+            <Button
+                disableFocusRipple
+                size={"large"}
+                startIcon={<AddIcon />}
+                onClick={() => props.onClick && props.onClick()}
+            >
+                {props.text}
+            </Button>
+        </Paper>
     )
 }
 
@@ -158,7 +128,6 @@ export const DropdownAutocomplete = (props: {
     selectedChord?: string | null
 }) => {
     const { selectedChordType, selectedChord, onChordChange } = props
-    const styles = useStyles()
     const {
         state,
         optionData: { singleNoteOptions, chordOptions },
@@ -167,7 +136,6 @@ export const DropdownAutocomplete = (props: {
         selectedChordType === "CHORD" ? chordOptions : singleNoteOptions
 
     const { t } = useTranslation()
-    console.log(selectedChord)
     useEffect(() => {
         if (
             dropdownOptions.length &&
@@ -180,6 +148,11 @@ export const DropdownAutocomplete = (props: {
 
     return (
         <Autocomplete<string>
+            sx={{
+                display: "flex",
+                alignItems: "center",
+                width: "150px"
+            }}
             options={dropdownOptions}
             loading={state.loading}
             value={selectedChord}
@@ -201,14 +174,17 @@ export const DropdownAutocomplete = (props: {
             openText={t("BottomBar.open")}
             PopperComponent={customPopperPlacement}
             clearIcon={false}
-            className={styles.dropdown}
-            classes={{ popupIndicator: styles.icon }}
             noOptionsText={t("BottomBar.noOptions")}
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    variant="outlined"
                     hiddenLabel
+                    sx={{
+                        "& .MuiOutlinedInput-notchedOutline": {
+                            border: "0px"
+                        },
+                    }}
+                    variant={"outlined"}
                     inputProps={{
                         ...params.inputProps,
                         "aria-label": t(
@@ -218,10 +194,6 @@ export const DropdownAutocomplete = (props: {
                                     : "chordLabel"
                             }`
                         ),
-                    }}
-                    InputProps={{
-                        ...params.InputProps,
-                        className: styles.dropdown,
                     }}
                 />
             )}

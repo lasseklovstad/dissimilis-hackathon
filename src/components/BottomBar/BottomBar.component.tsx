@@ -1,10 +1,12 @@
 import React, { useRef } from "react"
 import {
+    Box,
     Button,
     ClickAwayListener,
     FormControl,
     Grid,
     MenuItem,
+    Paper,
     Select,
     SvgIcon,
     Typography,
@@ -31,6 +33,7 @@ import { useAddBar } from "../../utils/useApiServiceSongs"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { useChords } from "../../utils/useChords"
+import { SelectedChordIntervals } from "./SelectedChordIntervals.component"
 
 const useStyles = makeStyles({
     outercontainer: {
@@ -45,23 +48,6 @@ const useStyles = makeStyles({
             flexDirection: "column",
             marginBottom: "16px",
         },
-    },
-    container: {
-        boxShadow: "0 1px 3px 1px rgba(0, 0, 0, 0.1)",
-        display: "flex",
-        justifyContent: "space-between",
-        flexWrap: "wrap",
-        backgroundColor: colors.white,
-        marginBottom: "8px",
-        marginLeft: "24px",
-        marginRight: "24px",
-    },
-    positioningContainer: {
-        width: "100%",
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        marginBottom: "24px",
     },
     flexelement: {
         flexDirection: "row",
@@ -94,17 +80,7 @@ const useStyles = makeStyles({
 })
 
 const StyledToggleButtonGroup = withStyles((theme) => ({
-    grouped: {
-        color: colors.black,
-        margin: theme.spacing(1),
-        border: "none",
-        "&:not(:first-child)": {
-            borderRadius: theme.shape.borderRadius,
-        },
-        "&:first-child": {
-            borderRadius: theme.shape.borderRadius,
-        },
-    },
+    grouped: {},
 }))(ToggleButtonGroup)
 
 const noteLengths = [
@@ -155,8 +131,7 @@ export const BottomBar = (props: { voiceId: number }) => {
     const { songId, numerator, denominator } = song!!
     const { t } = useTranslation()
     const classes = useStyles()
-    const container = useRef(null)
-    const chordOptionsRef = useRef<HTMLAnchorElement>()
+    const chordOptionsRef = useRef<HTMLDivElement>(null)
     const { postBar } = useAddBar(songId, voiceId)
 
     const {
@@ -205,41 +180,42 @@ export const BottomBar = (props: { voiceId: number }) => {
     const Menu = (
         <FormControl
             variant="outlined"
-            fullWidth
-            classes={{ root: classes.removeDefaultStyling }}
+            size={"small"}
+            sx={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "row",
+                pl: 1,
+                border: 0,
+                "& .MuiOutlinedInput-notchedOutline": { border: "0px" },
+                width: "100px",
+            }}
         >
-            <div ref={container} />
             <label id="selectChordLengthLabel" hidden>
                 {t("BottomBar.noteLength")}
             </label>
             <Select
                 labelId={"selectChordLengthLabel"}
                 id={"selectChordLength"}
+                fullWidth
                 value={chordMenuOptions?.chordLength}
                 onChange={(event) => {
                     handleChangeChordLength(event.target.value as number)
                 }}
-                inputProps={{ className: classes.input }}
-                classes={{ icon: classes.selectIcon }}
-                MenuProps={{ container: container.current }}
             >
-                {noteLengths.map(({ length, Icon, label }) => {
-                    return (
-                        <MenuItem
-                            value={length}
-                            key={length}
-                            aria-label={t(label)}
-                            style={{
-                                display:
-                                    timeSignatureNumerator < length
-                                        ? "none"
-                                        : "block",
-                            }}
-                        >
-                            <SvgIcon>{Icon}</SvgIcon>
-                        </MenuItem>
-                    )
-                })}
+                {noteLengths
+                    .filter(({ length }) => length < timeSignatureNumerator)
+                    .map(({ length, Icon, label }) => {
+                        return (
+                            <MenuItem
+                                value={length}
+                                key={length}
+                                aria-label={t(label)}
+                            >
+                                <SvgIcon>{Icon}</SvgIcon>
+                            </MenuItem>
+                        )
+                    })}
             </Select>
         </FormControl>
     )
@@ -254,77 +230,75 @@ export const BottomBar = (props: { voiceId: number }) => {
     }
 
     return (
-        <Grid container className={`mui-fixed ${classes.positioningContainer}`}>
-            <Grid container justifyContent="center">
-                <Grid item xs={12} sm={10} className={classes.outercontainer}>
-                    <ClickAwayListener onClickAway={clickOutsideListener}>
-                        <div className={classes.container}>
-                            <div className={classes.flexelement}>{Menu}</div>
-                            <div className={classes.flexelement}>
-                                <DropdownAutocomplete
-                                    selectedChordType={
-                                        chordMenuOptions?.chordType
-                                    }
-                                    selectedChord={chordMenuOptions?.chord}
-                                    onChordChange={handleChangeChord}
-                                />
-                            </div>
-                            <StyledToggleButtonGroup
-                                value={chordMenuOptions?.chordType}
-                                exclusive
-                                onChange={handleToggle}
-                                className={classes.flexelement}
-                                size="small"
-                            >
-                                <ToggleButton
-                                    value={ChordType.CHORD}
-                                    disableFocusRipple
-                                    className={classes.focusElement}
-                                >
-                                    <Typography>
-                                        {t("BottomBar.chord")}
-                                    </Typography>
-                                </ToggleButton>
-                                <ToggleButton
-                                    value={ChordType.NOTE}
-                                    disableFocusRipple
-                                    className={classes.focusElement}
-                                >
-                                    <Typography>
-                                        {t("BottomBar.note")}
-                                    </Typography>
-                                </ToggleButton>
-                            </StyledToggleButtonGroup>
-                            <Button
-                                disableFocusRipple
-                                onClick={handleDeleteSelectedChord}
-                                aria-label={t("BottomBar.deleteSelectedChord")}
-                            >
-                                <Delete />
-                            </Button>
-                        </div>
-                    </ClickAwayListener>
+        <ClickAwayListener onClickAway={clickOutsideListener}>
+            <Box
+                sx={{
+                    width: "100%",
+                    position: "fixed",
+                    bottom: 0,
+                    left: 0,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    pl: 3,
+                    pr: 3,
+                    mb: 3,
+                    flexWrap: "wrap",
+                }}
+            >
+                <Paper
+                    sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        m: 1,
+                        flexGrow: 0,
+                    }}
+                    elevation={6}
+                >
+                    {Menu}
+                    <DropdownAutocomplete
+                        selectedChordType={chordMenuOptions?.chordType}
+                        selectedChord={chordMenuOptions?.chord}
+                        onChordChange={handleChangeChord}
+                    />
+                    <ToggleButtonGroup
+                        sx={{ borderRadius: 0 }}
+                        value={chordMenuOptions?.chordType}
+                        exclusive
+                        onChange={handleToggle}
+                        size={"large"}
+                    >
+                        <ToggleButton
+                            sx={{ border: 0, borderRadius: 0 }}
+                            value={ChordType.CHORD}
+                            disableFocusRipple
+                            className={classes.focusElement}
+                        >
+                            {t("BottomBar.chord")}
+                        </ToggleButton>
+                        <ToggleButton
+                            sx={{ border: 0, borderRadius: 0 }}
+                            value={ChordType.NOTE}
+                            disableFocusRipple
+                            className={classes.focusElement}
+                        >
+                            {t("BottomBar.note")}
+                        </ToggleButton>
+                    </ToggleButtonGroup>
+                    <Button
+                        disableFocusRipple
+                        onClick={handleDeleteSelectedChord}
+                        aria-label={t("BottomBar.deleteSelectedChord")}
+                    >
+                        <Delete />
+                    </Button>
+                </Paper>
 
-                    {chordMenuOptions?.chordType === ChordType.CHORD &&
-                    selectedChordId ? (
-                        <>
-                            <div className={classes.container}>
-                                <ChordOptions
-                                    chord={chordMenuOptions?.chord}
-                                    onChordNotesChange={handleChordNotesChange}
-                                    alwaysShow={false}
-                                />
-                            </div>
-                        </>
-                    ) : undefined}
-                    <div className={classes.container}>
-                        <MenuButtonWithAddIcon
-                            text={t("BottomBar.addBar")}
-                            onClick={handleAddBar}
-                        />
-                    </div>
-                </Grid>
-            </Grid>
-        </Grid>
+                <SelectedChordIntervals />
+                <MenuButtonWithAddIcon
+                    text={t("BottomBar.addBar")}
+                    onClick={handleAddBar}
+                />
+            </Box>
+        </ClickAwayListener>
     )
 }

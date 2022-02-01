@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { Grid, Slide, useScrollTrigger } from "@mui/material"
+import { Box, Grid, Slide, useScrollTrigger } from "@mui/material"
 import makeStyles from "@mui/styles/makeStyles"
 import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -23,20 +23,7 @@ const useStyles = makeStyles({
             marginBottom: "250px",
         },
         width: "auto",
-    },
-    header: {
-        backgroundColor: colors.gray_100,
-        position: "sticky", // For Safari: -webkit-sticky
-        zIndex: 100,
-        top: "0",
-        paddingTop: "24px",
-        paddingLeft: "3.5vw",
-        paddingRight: "3.5vw",
-    },
-    body: {
-        marginLeft: "3.5vw",
-        marginRight: "3.5vw",
-    },
+    }
 })
 
 const heightOfBar = 185
@@ -99,45 +86,45 @@ export const SongView = () => {
                 title={t("Dialog.getSongError")}
             />
             {selectedVoiceId !== undefined && selectedVoice && (
-                <Grid container className={classes.root}>
+                <Box ml={3} mr={3}>
                     <Slide appear={false} direction="down" in={!trigger}>
-                        <Grid container className={classes.header}>
-                            <Grid item xs={12}>
-                                <SongNavBar
-                                    currentUserHasWriteAccess={
-                                        song?.currentUserHasWriteAccess
-                                    }
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <CreateSongTab
-                                    updateSong={getSong.run}
-                                    onUndo={undo}
-                                    undoIsLoading={undoSong.loading}
-                                    currentUserHasWriteAccess={
-                                        song?.currentUserHasWriteAccess
-                                    }
-                                />
-                            </Grid>
-                        </Grid>
+                        <Box
+                            sx={{
+                                backgroundColor: colors.gray_100,
+                                position: "sticky",
+                                zIndex: 100,
+                                top: "0",
+                                paddingTop: "24px",
+                            }}
+                        >
+                            <SongNavBar
+                                currentUserHasWriteAccess={
+                                    song?.currentUserHasWriteAccess
+                                }
+                            />
+                            <CreateSongTab
+                                updateSong={getSong.run}
+                                onUndo={undo}
+                                undoIsLoading={undoSong.loading}
+                                currentUserHasWriteAccess={
+                                    song?.currentUserHasWriteAccess
+                                }
+                            />
+                        </Box>
                     </Slide>
-                    <Grid item xs={12} className={classes.body}>
-                        <Song
-                            barsPerRow={barsPerRow}
-                            voice={selectedVoice}
-                            getChordNameFromMainVoice={
-                                getChordNameFromMainVoice
-                            }
-                            timeSignature={{ denominator, numerator }}
-                            heightOfBar={heightOfBar}
-                            exportMode={false}
-                            lastPage
-                            currentUserHasWriteAccess={
-                                song?.currentUserHasWriteAccess
-                            }
-                        />
-                    </Grid>
-                </Grid>
+                    <Song
+                        barsPerRow={barsPerRow}
+                        voice={selectedVoice}
+                        getChordNameFromMainVoice={getChordNameFromMainVoice}
+                        timeSignature={{ denominator, numerator }}
+                        heightOfBar={heightOfBar}
+                        exportMode={false}
+                        lastPage
+                        currentUserHasWriteAccess={
+                            song?.currentUserHasWriteAccess
+                        }
+                    />
+                </Box>
             )}
             {selectedVoiceId && song?.currentUserHasWriteAccess && (
                 <BottomBar voiceId={selectedVoiceId} />
