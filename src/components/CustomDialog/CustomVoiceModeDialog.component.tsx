@@ -124,13 +124,13 @@ export const CustomVoiceDialog = (props: {
             biggestChordName: chordName,
             value: biggestChordLength,
         }
-    }, [])
+    }, [baseVoice.bars])
 
     useEffect(() => {
         if (getBiggestChordInSong().showMenu) {
             setIndexArray(new Array(getBiggestChordInSong().value).fill(false))
         }
-    }, [])
+    }, [getBiggestChordInSong])
 
     const changeComponentInterval = async (index: number) => {
         var array = indexArray

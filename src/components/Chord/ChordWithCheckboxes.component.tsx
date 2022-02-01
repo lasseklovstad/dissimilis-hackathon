@@ -1,30 +1,30 @@
-import {Box} from "@mui/material";
-import React from "react";
-import {IChord} from "../../models/IBar";
-import {ChordCheckbox} from "./ChordCheckbox.component";
-import {useSongContext} from "../../views/SongView/SongContextProvider.component";
-import {useVoice} from "../../utils/useVoice";
-import {useAddNote, useRemoveNote} from "../../utils/useApiServiceSongs";
+import { Box } from "@mui/material"
+import React from "react"
+import { IChord } from "../../models/IBar"
+import { ChordCheckbox } from "./ChordCheckbox.component"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useVoice } from "../../utils/useVoice"
+import { useAddNote, useRemoveNote } from "../../utils/useApiServiceSongs"
 
 type ChordWithCheckboxesProps = {
-    chord: IChord,
+    chord: IChord
     showNoteText: boolean
     barPosition: number
 }
 
 export const ChordWithCheckboxes = (props: ChordWithCheckboxesProps) => {
-    const {chord, showNoteText, barPosition} = props
-    const {song, dispatchSong} = useSongContext()
+    const { chord, showNoteText, barPosition } = props
+    const { song, dispatchSong } = useSongContext()
     const selectedVoice = useVoice(song?.voices)
 
-    const {addNote} = useAddNote(
+    const { addNote } = useAddNote(
         song?.songId,
         selectedVoice?.songVoiceId,
         barPosition
     )
 
     const handleCustomVoiceAddClick = async (index: number) => {
-        const {error, result} = await addNote.run({
+        const { error, result } = await addNote.run({
             chordName: chord.chordName,
             notePosition: chord.position,
             length: chord.length,
@@ -32,19 +32,19 @@ export const ChordWithCheckboxes = (props: ChordWithCheckboxesProps) => {
             notes: chord.notes,
         })
         if (!error && result) {
-            dispatchSong({type: "UPDATE_BAR", bar: result.data})
+            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
             return true
         }
         return false
     }
 
-    const {removeNote} = useRemoveNote(
+    const { removeNote } = useRemoveNote(
         song?.songId,
         selectedVoice?.songVoiceId,
         barPosition
     )
     const handleCustomVoiceRemoveClick = async (index: number) => {
-        const {error, result} = await removeNote.run({
+        const { error, result } = await removeNote.run({
             deleteOnLastIntervalRemoved: true,
             chordName: chord.chordName,
             notePosition: chord.position,
@@ -53,7 +53,7 @@ export const ChordWithCheckboxes = (props: ChordWithCheckboxesProps) => {
             notes: chord.notes,
         })
         if (!error && result) {
-            dispatchSong({type: "UPDATE_BAR", bar: result.data})
+            dispatchSong({ type: "UPDATE_BAR", bar: result.data })
             return true
         }
         return false
@@ -67,21 +67,34 @@ export const ChordWithCheckboxes = (props: ChordWithCheckboxesProps) => {
         }
     }
 
-    return <Box sx={{
-        display: "flex",
-        flexDirection: "column",
-        height: "calc(100% - 25px)",
-        width: "100%",
-        minWidth: 0,
-        alignItems: "stretch",
-    }}>
-        {chord.notes
-            .map((note, i) => {
-                return <ChordCheckbox note={note}
-                                      key={i}
-                                      selected={chord.selectedNotes ? chord.selectedNotes[i] === note : false}
-                                      onChange={(checked) => handleChange(checked, i)} showNoteText={showNoteText}/>
-            })
-            .reverse()}
-    </Box>
+    return (
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                height: "calc(100% - 25px)",
+                width: "100%",
+                minWidth: 0,
+                alignItems: "stretch",
+            }}
+        >
+            {chord.notes
+                .map((note, i) => {
+                    return (
+                        <ChordCheckbox
+                            note={note}
+                            key={i}
+                            selected={
+                                chord.selectedNotes
+                                    ? chord.selectedNotes[i] === note
+                                    : false
+                            }
+                            onChange={(checked) => handleChange(checked, i)}
+                            showNoteText={showNoteText}
+                        />
+                    )
+                })
+                .reverse()}
+        </Box>
+    )
 }
