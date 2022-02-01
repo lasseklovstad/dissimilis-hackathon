@@ -1,19 +1,18 @@
-import React, { useState } from "react"
-import { Box } from "@mui/material"
-import { BarLine } from "../barLine/BarLine.component"
-import { BarMenu } from "../BarMenu/BarMenu.component"
-import { IBar } from "../../models/IBar"
+import React, {useState} from "react"
+import {Box} from "@mui/material"
+import {BarLine} from "../barLine/BarLine.component"
+import {BarMenu} from "../BarMenu/BarMenu.component"
+import {IBar} from "../../models/IBar"
 import {
     BarNumber,
     TimeSignature,
 } from "../SongViewComponents/SongView.component"
-import { Bar } from "../Bar/Bar.component"
-import { ITimeSignature } from "../../models/ITimeSignature"
-import { IVoice } from "../../models/IVoice"
+import {Bar} from "../Bar/Bar.component"
+import {ITimeSignature} from "../../models/ITimeSignature"
+import {IVoice} from "../../models/IVoice"
 
 type SongProps = {
     barsPerRow: number
-    updatedVoice?: boolean[][][]
     voice: IVoice
     getChordNameFromMainVoice: (
         barPosition: number,
@@ -31,13 +30,13 @@ type SongProps = {
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
-    const { index, timeSignature } = props
+    const {index, timeSignature} = props
 
     const getPrefixItem = () => {
         if (index === 0) {
-            return <TimeSignature timeSignature={timeSignature} />
+            return <TimeSignature timeSignature={timeSignature}/>
         }
-        return <BarNumber barNumber={index + 1} />
+        return <BarNumber barNumber={index + 1}/>
     }
     const PrefixItem = getPrefixItem()
 
@@ -51,14 +50,13 @@ const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
 export const Song = (props: SongProps) => {
     const {
         barsPerRow,
-        updatedVoice,
-        voice: { bars, isMain },
+        voice: {bars, isMain},
         getChordNameFromMainVoice,
         timeSignature,
         heightOfBar,
-        exportMode,
-        showChordLetters,
-        showNoteLetters,
+        exportMode = false,
+        showChordLetters = true,
+        showNoteLetters = true,
         lastPage,
         currentUserHasWriteAccess = false,
     } = props
@@ -104,7 +102,7 @@ export const Song = (props: SongProps) => {
                             index={barsInRow[0].position - 1}
                             timeSignature={timeSignature}
                         />
-                        <BarLine />
+                        <BarLine/>
                         <Box
                             display="flex"
                             flexGrow={barsInRow.length}
@@ -120,26 +118,14 @@ export const Song = (props: SongProps) => {
                                 return (
                                     <React.Fragment key={i}>
                                         <Bar
-                                            updatedBar={
-                                                updatedVoice
-                                                    ? updatedVoice[i]
-                                                    : undefined
-                                            }
-                                            // eslint-disable-next-line
                                             showVoltaBracketNumber={
                                                 showVoltaBracketNumber
                                             }
-                                            exportMode={!!exportMode}
-                                            showChordLetters={
-                                                showChordLetters === undefined
-                                                    ? true
-                                                    : showChordLetters
+                                            exportMode={exportMode}
+                                            showChordLetters={showChordLetters
                                             }
                                             showNoteLetters={
-                                                showNoteLetters === undefined
-                                                    ? true
-                                                    : showNoteLetters
-                                            }
+                                                showNoteLetters}
                                             masterSheet={!exportMode && isMain}
                                             getChordNameFromMainVoice={
                                                 getChordNameFromMainVoice
@@ -151,10 +137,10 @@ export const Song = (props: SongProps) => {
                                                 currentUserHasWriteAccess
                                             }
                                         />
-                                        <BarLine />
+                                        <BarLine/>
                                         {bar.position === lastBarPosition &&
                                             lastPage && (
-                                                <BarLine lastPosition />
+                                                <BarLine lastPosition/>
                                             )}
                                     </React.Fragment>
                                 )

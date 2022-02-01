@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useState } from "react"
-import { Box, DialogActions, Grid, Typography } from "@mui/material"
+import React, {useCallback, useEffect, useState} from "react"
+import {Box, DialogActions, Grid, Typography} from "@mui/material"
 
 import makeStyles from "@mui/styles/makeStyles"
 
-import { useTranslation } from "react-i18next"
+import {useTranslation} from "react-i18next"
 
-import { IVoice } from "../../models/IVoice"
-import { colors } from "../../utils/colors"
+import {IVoice} from "../../models/IVoice"
+import {colors} from "../../utils/colors"
 import {
     useAddComponentInterval,
     useRemoveComponentInterval,
 } from "../../utils/useApiServiceSongs"
-import { useBarsPerRow } from "../../utils/useBars"
-import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
-import { Song } from "../Song/Song.component"
-import { ChordOptions } from "../BottomMenuButtons/BottomMenuButtons"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import {useBarsPerRow} from "../../utils/useBars"
+import {DialogButton} from "../CustomDialogComponents/DialogButton.components"
+import {Song} from "../Song/Song.component"
+import {ChordOptions} from "../BottomMenuButtons/BottomMenuButtons"
+import {useSongContext} from "../../views/SongView/SongContextProvider.component"
 
 const useStyles = makeStyles(() => {
     return {
@@ -76,20 +76,21 @@ export const CustomVoiceDialog = (props: {
     handleOnSave: () => void
     handleOnCancel: () => void
     baseVoice: IVoice
-    newVoice: IVoice | undefined
+    newVoice: IVoice
 }) => {
-    const { t } = useTranslation()
+    const {t} = useTranslation()
     const classes = useStyles()
-    const { song } = useSongContext()
-    const { handleOnCancel, handleOnSave, baseVoice, newVoice } = props
+    const {song} = useSongContext()
+    const {handleOnCancel, handleOnSave, baseVoice, newVoice} = props
+    const [voice, setVoice] = useState(baseVoice)
     const [indexArray, setIndexArray] = useState<boolean[]>([])
-    const { addInterval } = useAddComponentInterval(
-        song?.songId ?? 0,
-        newVoice?.songVoiceId ?? 0
+    const {addInterval} = useAddComponentInterval(
+        newVoice.songId,
+        newVoice.songVoiceId
     )
-    const { removeInterval } = useRemoveComponentInterval(
-        song?.songId ?? 0,
-        newVoice?.songVoiceId ?? 0
+    const {removeInterval} = useRemoveComponentInterval(
+        newVoice.songId,
+        newVoice.songVoiceId
     )
     const [updatedVoice, setUpdatedVoice] = useState<boolean[][][] | undefined>(
         undefined
@@ -113,7 +114,7 @@ export const CustomVoiceDialog = (props: {
             bar.chords.forEach((chord) => {
                 if (
                     biggestChordLength <
-                        chord.notes.filter((note) => note !== "X").length &&
+                    chord.notes.filter((note) => note !== "X").length &&
                     chord.chordName !== null
                 ) {
                     biggestChordLength = chord.notes.length
@@ -137,43 +138,44 @@ export const CustomVoiceDialog = (props: {
     const changeComponentInterval = async (index: number) => {
         var array = indexArray
         if (array[index]) {
-            const { error, result } = await removeInterval.run({
+            const {error, result} = await removeInterval.run({
                 intervalPosition: index,
                 deleteChordsOnLastIntervalRemoved: true,
             })
             if (!error && result) {
                 array[index] = false
-                setUpdatedVoice(convertFromNotesToBoolean(result.data))
+                setVoice(convertFromNotesToBoolean(voice, result.data))
             }
         } else {
-            const { error, result } = await addInterval.run({
+            const {error, result} = await addInterval.run({
                 intervalPosition: index,
                 sourceVoiceId: baseVoice.songVoiceId,
             })
             if (!error && result) {
                 array[index] = true
-                setUpdatedVoice(convertFromNotesToBoolean(result.data))
+                setVoice(convertFromNotesToBoolean(voice, result.data))
             }
         }
         setIndexArray(array)
     }
 
-    const convertFromNotesToBoolean = (updatedIVoice: IVoice) =>
-        updatedIVoice.bars.map((bar) => {
-            var barNotesConverted: boolean[][] = []
-            bar.chords.forEach((chord) => {
-                if (chord.notes[0] === "Z") {
-                    new Array(chord.length)
-                        .fill(false)
-                        .forEach((empty) => barNotesConverted.push([empty]))
-                } else {
-                    barNotesConverted.push(
-                        chord.notes.map((note) => !(note === "X"))
-                    )
+    useEffect(() => {
+        console.log("voice", voice)
+    }, [voice])
+
+    const convertFromNotesToBoolean = (originalVoice: IVoice, updatedVoice: IVoice): IVoice => {
+        return {
+            ...originalVoice, bars: originalVoice.bars.map((bar, barIndex) => {
+                return {
+                    ...bar, chords: bar.chords.map((chord, chordIndex) => {
+                        const selectedChord = updatedVoice.bars[barIndex].chords[chordIndex]
+                        return {...chord, selectedNotes: selectedChord?.notes}
+                    })
                 }
             })
-            return barNotesConverted
-        })
+        }
+    }
+
 
     return (
         <>
@@ -182,9 +184,8 @@ export const CustomVoiceDialog = (props: {
             </Box>
             <Grid item xs={12} className={classes.body}>
                 <Song
-                    updatedVoice={updatedVoice}
                     barsPerRow={barsPerRow}
-                    voice={baseVoice}
+                    voice={voice}
                     getChordNameFromMainVoice={getChordNameFromMainVoice}
                     timeSignature={{
                         numerator: song?.numerator || 4,
@@ -204,7 +205,8 @@ export const CustomVoiceDialog = (props: {
                             <ChordOptions
                                 chord={getBiggestChordInSong().biggestChordName}
                                 customMode
-                                onChordNotesChange={() => {}}
+                                onChordNotesChange={() => {
+                                }}
                                 alwaysShow={getBiggestChordInSong().showMenu}
                                 indexArray={indexArray}
                                 changeComponentInterval={
