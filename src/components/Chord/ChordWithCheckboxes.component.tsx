@@ -78,7 +78,7 @@ export const ChordWithCheckboxes = (props: ChordWithCheckboxesProps) => {
         {chord.notes
             .map((note, i) => {
                 return <ChordCheckbox note={note}
-                                      key={note}
+                                      key={i}
                                       selected={chord.selectedNotes ? chord.selectedNotes[i] === note : false}
                                       onChange={(checked) => handleChange(checked, i)} showNoteText={showNoteText}/>
             })

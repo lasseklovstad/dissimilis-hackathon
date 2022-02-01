@@ -1,13 +1,21 @@
-import {ButtonBaseProps} from "@mui/material";
-import React from "react";
-import {IChord} from "../../models/IBar";
-import {getNoteText} from "./Chord.util";
-import {Note} from "./Note.component";
-import {ChordButton} from "./ChordButton.component";
+import { ButtonBaseProps } from "@mui/material"
+import React from "react"
+import { IChord } from "../../models/IBar"
+import { getNoteText } from "./Chord.util"
+import { Note } from "./Note.component"
+import { ChordButton } from "./ChordButton.component"
 
 type ChordAsButtonProps = {
     disabled: boolean
-    ButtonProps: Pick<ButtonBaseProps, "onClick" | "onContextMenu" | "onMouseEnter" | "onMouseLeave" | "onTouchEnd" | "onFocus">
+    ButtonProps: Pick<
+        ButtonBaseProps,
+        | "onClick"
+        | "onContextMenu"
+        | "onMouseEnter"
+        | "onMouseLeave"
+        | "onTouchEnd"
+        | "onFocus"
+    >
     chord: IChord
     showNoteLetters: boolean
     isSelected: boolean
@@ -15,19 +23,27 @@ type ChordAsButtonProps = {
 }
 
 export const ChordAsButton = (props: ChordAsButtonProps) => {
-    const {disabled, ButtonProps, chord, showNoteLetters, isSelected, highlight} = props
-    return <ChordButton
-        emptyChord={chord.notes[0] === "Z"}
-        isSelected={isSelected}
-        id="chordButton"
-        disabled={disabled}
-        disableRipple
-        {...ButtonProps}
-    >
-        {chord.notes
-            .map((note) => {
-                return (
-                    note !== "X" && (
+    const {
+        disabled,
+        ButtonProps,
+        chord,
+        showNoteLetters,
+        isSelected,
+        highlight,
+    } = props
+    return (
+        <ChordButton
+            emptyChord={chord.notes[0] === "Z"}
+            isSelected={isSelected}
+            id="chordButton"
+            disabled={disabled}
+            disableRipple
+            {...ButtonProps}
+        >
+            {chord.notes
+                .filter((note) => note !== "X")
+                .map((note) => {
+                    return (
                         <Note
                             highlight={highlight && note === "Z"}
                             variant={"main"}
@@ -39,10 +55,10 @@ export const ChordAsButton = (props: ChordAsButtonProps) => {
                             {getNoteText(note, showNoteLetters)}
                         </Note>
                     )
-                )
-            })
-            .reverse()}
-    </ChordButton>
+                })
+                .reverse()}
+        </ChordButton>
+    )
 }
 
 
