@@ -272,6 +272,7 @@ export const ExportView = () => {
                                 {t("ExportView.voice")}
                             </InputLabel>
                             <Select
+                                label={t("ExportView.voice")}
                                 labelId="voice"
                                 value={
                                     songInit ? selectedVoice?.songVoiceId : ""
@@ -310,6 +311,7 @@ export const ExportView = () => {
                                 {t("ExportView.barPerRow")}
                             </InputLabel>
                             <Select
+                                label={t("ExportView.barPerRow")}
                                 labelId="barPerRow"
                                 value={selectedBarConfig.barsPerRow}
                                 onChange={(ev) => {
@@ -349,6 +351,7 @@ export const ExportView = () => {
                             </InputLabel>
                             <Select
                                 labelId="rowsPerSheet"
+                                label={t("ExportView.rowsPerSheet")}
                                 value={selectedRowsPerSheetConfig.rowsPerSheet}
                                 onChange={(ev) =>
                                     setSelectedRowsPerSheetConfig(

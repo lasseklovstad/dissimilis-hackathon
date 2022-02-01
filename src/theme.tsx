@@ -1,4 +1,4 @@
-import { createTheme, adaptV4Theme, Theme } from "@mui/material/styles"
+import { createTheme, Theme } from "@mui/material/styles"
 import { colors } from "./utils/colors"
 
 declare module "@mui/styles/defaultTheme" {
@@ -16,7 +16,7 @@ export const theme = createTheme({
                         boxShadow: `0 0 0 4px ${colors.focus}`,
                     },
                 },
-            }
+            },
         },
         MuiIconButton: {
             styleOverrides: {
@@ -36,7 +36,7 @@ export const theme = createTheme({
                 },
             },
             defaultProps: {
-                color: "inherit"
+                color: "inherit",
             },
         },
         MuiSelect: {
