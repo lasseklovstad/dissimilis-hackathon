@@ -1,10 +1,10 @@
 import React from "react"
-import {Box} from "@mui/material"
-import {IChord} from "../../models/IBar"
-import {useSongContext} from "../../views/SongView/SongContextProvider.component"
-import {ChordWithCheckboxes} from "./ChordWithCheckboxes.component";
-import {ChordAsButton} from "./ChordAsButton.component";
-import {ChordText} from "./ChordText.component";
+import { Box } from "@mui/material"
+import { IChord } from "../../models/IBar"
+import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { ChordWithCheckboxes } from "./ChordWithCheckboxes.component"
+import { ChordAsButton } from "./ChordAsButton.component"
+import { ChordText } from "./ChordText.component"
 
 type ChordProps = {
     chord: IChord
@@ -48,7 +48,7 @@ export const Chord = (props: ChordProps) => {
     } = props
 
     const chordName = getChordNameFromMainVoice(barPosition, chord.position)
-    const {customMode} = useSongContext()
+    const { customMode } = useSongContext()
 
     return (
         <Box
@@ -64,19 +64,30 @@ export const Chord = (props: ChordProps) => {
             minWidth={0}
         >
             {chordName && showChordLetters && (
-                <ChordText chordName={chordName}/>
+                <ChordText chordName={chordName} />
             )}
             {customMode ? (
-                <ChordWithCheckboxes chord={chord} showNoteText={showNoteLetters} barPosition={barPosition}/>
+                <ChordWithCheckboxes
+                    chord={chord}
+                    showNoteText={showNoteLetters}
+                    barPosition={barPosition}
+                />
             ) : (
-                <ChordAsButton disabled={exportMode || barEditMode} ButtonProps={{
-                    onClick,
-                    onContextMenu,
-                    onMouseEnter,
-                    onMouseLeave,
-                    onTouchEnd,
-                    onFocus: handleChordFocus
-                }} chord={chord} showNoteLetters={showNoteLetters} isSelected={isSelected} highlight={highlight}/>
+                <ChordAsButton
+                    disabled={exportMode || barEditMode}
+                    ButtonProps={{
+                        onClick,
+                        onContextMenu,
+                        onMouseEnter,
+                        onMouseLeave,
+                        onTouchEnd,
+                        onFocus: handleChordFocus,
+                    }}
+                    chord={chord}
+                    showNoteLetters={showNoteLetters}
+                    isSelected={isSelected}
+                    highlight={highlight}
+                />
             )}
         </Box>
     )

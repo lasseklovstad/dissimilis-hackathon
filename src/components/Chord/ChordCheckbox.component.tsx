@@ -1,10 +1,10 @@
-import {ButtonBase} from "@mui/material";
-import {getNoteText, isEmptyNote} from "./Chord.util";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
-import React, {useEffect, useState} from "react";
-import {colors} from "../../utils/colors";
-import {Note} from "./Note.component";
+import { ButtonBase } from "@mui/material"
+import { getNoteText, isEmptyNote } from "./Chord.util"
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded"
+import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded"
+import React, { useEffect, useState } from "react"
+import { colors } from "../../utils/colors"
+import { Note } from "./Note.component"
 
 type ChordCheckboxProps = {
     note: string
@@ -14,7 +14,7 @@ type ChordCheckboxProps = {
 }
 
 export const ChordCheckbox = (props: ChordCheckboxProps) => {
-    const {note, showNoteText, onChange, selected} = props
+    const { note, showNoteText, onChange, selected } = props
     const [checked, setChecked] = useState(selected)
 
     const handleClick = async () => {
@@ -41,24 +41,33 @@ export const ChordCheckbox = (props: ChordCheckboxProps) => {
             }}
             onClick={handleClick}
         >
-            <Note variant={checked ? "main" : "opaque"} note={note} highlight={false} outline>
-                {!isEmptyNote(note) && (
-                    checked ? (
-                        <CheckCircleRoundedIcon sx={{
-                            color: colors.black,
-                            marginRight: "0.15rem",
-                            fontSize: "1.25rem",
-                        }}/>
+            <Note
+                variant={checked ? "main" : "opaque"}
+                note={note}
+                highlight={false}
+                outline
+            >
+                {!isEmptyNote(note) &&
+                    (checked ? (
+                        <CheckCircleRoundedIcon
+                            sx={{
+                                color: colors.black,
+                                marginRight: "0.15rem",
+                                fontSize: "1.25rem",
+                            }}
+                        />
                     ) : (
-                        <RadioButtonUncheckedRoundedIcon sx={{
-                            color: colors.gray_400,
-                            marginRight: "0.15rem",
-                            verticalAlign: "middle",
-                            fontSize: "1.25rem",
-                        }}/>
-                    )
-                )}
+                        <RadioButtonUncheckedRoundedIcon
+                            sx={{
+                                color: colors.gray_400,
+                                marginRight: "0.15rem",
+                                verticalAlign: "middle",
+                                fontSize: "1.25rem",
+                            }}
+                        />
+                    ))}
                 {getNoteText(note, showNoteText)}
             </Note>
-        </ButtonBase>)
+        </ButtonBase>
+    )
 }

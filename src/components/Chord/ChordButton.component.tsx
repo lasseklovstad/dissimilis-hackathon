@@ -1,5 +1,5 @@
-import {ButtonBase, ButtonBaseProps, styled} from "@mui/material";
-import {colors} from "../../utils/colors";
+import { ButtonBase, ButtonBaseProps, styled } from "@mui/material"
+import { colors } from "../../utils/colors"
 
 type ChordButtonProps = {
     emptyChord: boolean
@@ -7,10 +7,8 @@ type ChordButtonProps = {
 } & ButtonBaseProps
 export const ChordButton = styled(ButtonBase, {
     // Configure which props should be forwarded on DOM
-    shouldForwardProp: (prop) =>
-        prop !== 'emptyChord' && prop !== "isSelected"
-})<ChordButtonProps>(({emptyChord, isSelected}) => {
-
+    shouldForwardProp: (prop) => prop !== "emptyChord" && prop !== "isSelected",
+})<ChordButtonProps>(({ emptyChord, isSelected }) => {
     return {
         display: "flex",
         flexDirection: "column",
@@ -25,9 +23,8 @@ export const ChordButton = styled(ButtonBase, {
         "&:focus": {
             boxShadow: `0 0 0 4px ${colors.focus}`,
         },
-        ...isSelected && {
+        ...(isSelected && {
             boxShadow: `0 0 0 4px ${colors.focus}`,
-        }
-
+        }),
     }
-});
+})
