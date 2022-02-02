@@ -1,5 +1,5 @@
 # Setup 
-
+Install Nodejs/npm LTS
 To setup the project run `npm install` 
 
 # Development
