@@ -4,6 +4,7 @@ export interface IChord {
     length: number
     chordId: number | null
     chordName: string | null
+    selectedNotes?: string [] // Used in custom mode when choosing notes from main voice
 }
 
 export interface IChordPost {

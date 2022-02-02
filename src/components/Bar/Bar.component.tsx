@@ -3,7 +3,7 @@ import { Box, useMediaQuery } from "@mui/material"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { VoltaBracket } from "./VoltaBracket.component"
 import { IBar, IChord } from "../../models/IBar"
-import { Chord } from "./Chord.component"
+import { Chord } from "../Chord/Chord.component"
 import { ChordMenu } from "./ChordMenu.component"
 import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
 import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
@@ -38,7 +38,6 @@ const useStyle = makeStyles(() => ({
 }))
 
 export const Bar = (props: {
-    updatedBar?: boolean[][]
     bar: IBar
     height?: number
     exportMode: boolean
@@ -56,7 +55,6 @@ export const Bar = (props: {
     currentUserHasWriteAccess?: boolean
 }) => {
     const {
-        updatedBar,
         exportMode,
         showChordLetters,
         showNoteLetters,
@@ -324,11 +322,6 @@ export const Bar = (props: {
                                 )
                                 return (
                                     <Chord
-                                        updatedNoteValues={
-                                            updatedBar
-                                                ? updatedBar[i]
-                                                : undefined
-                                        }
                                         barPosition={position}
                                         showChordLetters={showChordLetters}
                                         getChordNameFromMainVoice={
