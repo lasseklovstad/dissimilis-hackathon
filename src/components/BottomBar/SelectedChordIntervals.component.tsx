@@ -1,17 +1,27 @@
 import { ChordOptions } from "../BottomMenuButtons/BottomMenuButtons"
 import React from "react"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongContext } from "../../context/song/SongContextProvider.component"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { Paper } from "@mui/material"
+import { useAddComponentInterval } from "../../utils/useApiServiceSongs"
+import { useSelectedChordContext } from "../../context/selectedChord/SelectedChordContextProvider.component"
 
 type SelectedChordIntervalsProps = {}
 
 export const SelectedChordIntervals = (props: SelectedChordIntervalsProps) => {
     const {} = props
-    const { chordMenuOptions, selectedChordId } = useSongContext()
+    const {
+        chordMenuOptions,
+        song: { songId },
+    } = useSongContext()
+    const { selectedChord } = useSelectedChordContext()
+
+    const handleAddInterval = () => {}
+
+    const handleRemoveInterval = () => {}
 
     if (
-        selectedChordId &&
+        selectedChord &&
         chordMenuOptions &&
         chordMenuOptions.chordType === ChordType.CHORD &&
         chordMenuOptions.chord
@@ -29,8 +39,8 @@ export const SelectedChordIntervals = (props: SelectedChordIntervalsProps) => {
             >
                 <ChordOptions
                     chord={chordMenuOptions.chord}
-                    addChordInterval={() => console.log("add")}
-                    removeChordInterval={() => console.log("Remove")}
+                    addChordInterval={handleAddInterval}
+                    removeChordInterval={handleRemoveInterval}
                 />
             </Paper>
         )

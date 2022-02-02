@@ -30,10 +30,14 @@ import { ReactComponent as EighthnoteIcon } from "../../assets/images/icon_eight
 import { ReactComponent as HalfnoteDottedIcon } from "../../assets/images/icon_half-note-dotted.svg"
 import { ReactComponent as QuarternoteDottedIcon } from "../../assets/images/icon_quarter-note-dotted.svg"
 import { useAddBar } from "../../utils/useApiServiceSongs"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongContext } from "../../context/song/SongContextProvider.component"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { useChords } from "../../utils/useChords"
 import { SelectedChordIntervals } from "./SelectedChordIntervals.component"
+import { useSelectedChordContext } from "../../context/selectedChord/SelectedChordContextProvider.component"
+import { DeleteSelectedChord } from "./DeleteSelectedChord.component"
+import { ChordTypeSelect } from "./ChordTypeSelect.component"
+import { useChordMenuOptionsContext } from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
 
 const useStyles = makeStyles({
     outercontainer: {
@@ -79,10 +83,6 @@ const useStyles = makeStyles({
     },
 })
 
-const StyledToggleButtonGroup = withStyles((theme) => ({
-    grouped: {},
-}))(ToggleButtonGroup)
-
 const noteLengths = [
     {
         length: 8,
@@ -118,37 +118,26 @@ const noteLengths = [
 
 export const BottomBar = (props: { voiceId: number }) => {
     const { voiceId } = props
-    const {
-        setValuesForSelectedChord,
-        song,
-        dispatchSong,
-        selectedBarId,
-        selectedChordId,
-        selectedChordPosition,
-        chordMenuOptions,
-        dispatchChordMenuOptions,
-    } = useSongContext()
+    const { song, dispatchSong, dispatchChordMenuOptions } =
+        useSongContext()
+    const { chordMenuOptions, setChordMenuOptions } =
+        useChordMenuOptionsContext()
     const { songId, numerator, denominator } = song!!
     const { t } = useTranslation()
     const classes = useStyles()
     const chordOptionsRef = useRef<HTMLDivElement>(null)
     const { postBar } = useAddBar(songId, voiceId)
-
+    const { setSelectedChord } = useSelectedChordContext()
     const {
         handleChangeChord,
         handleChangeChordLength,
-        handleChordNotesChange,
         handleDeleteSelectedChord,
         handleNoteSelectedChange,
     } = useChords(
         song,
-        selectedBarId,
-        selectedChordId,
-        selectedChordPosition,
         chordMenuOptions,
         dispatchChordMenuOptions,
-        dispatchSong,
-        setValuesForSelectedChord
+        dispatchSong
     )
 
     const scrollToBottom = () => {
@@ -173,7 +162,7 @@ export const BottomBar = (props: { voiceId: number }) => {
                 !chordOptionsRef.current.contains(e.target)) ||
                 !chordOptionsRef.current)
         ) {
-            setValuesForSelectedChord(undefined, undefined, 0)
+            setSelectedChord(null)
         }
     }
 
@@ -220,15 +209,6 @@ export const BottomBar = (props: { voiceId: number }) => {
         </FormControl>
     )
 
-    const handleToggle = (
-        event: React.MouseEvent<HTMLElement>,
-        chordType: ChordType | null
-    ) => {
-        if (chordType) {
-            handleNoteSelectedChange(chordType)
-        }
-    }
-
     return (
         <ClickAwayListener onClickAway={clickOutsideListener}>
             <Box
@@ -255,42 +235,9 @@ export const BottomBar = (props: { voiceId: number }) => {
                     elevation={6}
                 >
                     {Menu}
-                    <DropdownAutocomplete
-                        selectedChordType={chordMenuOptions?.chordType}
-                        selectedChord={chordMenuOptions?.chord}
-                        onChordChange={handleChangeChord}
-                    />
-                    <ToggleButtonGroup
-                        sx={{ borderRadius: 0 }}
-                        value={chordMenuOptions?.chordType}
-                        exclusive
-                        onChange={handleToggle}
-                        size={"large"}
-                    >
-                        <ToggleButton
-                            sx={{ border: 0, borderRadius: 0 }}
-                            value={ChordType.CHORD}
-                            disableFocusRipple
-                            className={classes.focusElement}
-                        >
-                            {t("BottomBar.chord")}
-                        </ToggleButton>
-                        <ToggleButton
-                            sx={{ border: 0, borderRadius: 0 }}
-                            value={ChordType.NOTE}
-                            disableFocusRipple
-                            className={classes.focusElement}
-                        >
-                            {t("BottomBar.note")}
-                        </ToggleButton>
-                    </ToggleButtonGroup>
-                    <Button
-                        disableFocusRipple
-                        onClick={handleDeleteSelectedChord}
-                        aria-label={t("BottomBar.deleteSelectedChord")}
-                    >
-                        <Delete />
-                    </Button>
+                    <DropdownAutocomplete/>
+                    <ChordTypeSelect />
+                    <DeleteSelectedChord />
                 </Paper>
 
                 <SelectedChordIntervals />

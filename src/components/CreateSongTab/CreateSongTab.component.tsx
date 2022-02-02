@@ -22,7 +22,7 @@ import {
 } from "../../utils/useApiServiceSongs"
 import { colors } from "../../utils/colors"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongContext } from "../../context/song/SongContextProvider.component"
 import { useVoice } from "../../utils/useVoice"
 import { CustomVoiceDialog } from "../CustomDialog/CustomVoiceModeDialog.component"
 import { Undo as UndoIcon, MoreVert as MoreVertIcon } from "@mui/icons-material"

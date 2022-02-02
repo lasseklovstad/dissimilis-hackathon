@@ -5,7 +5,6 @@ export enum ChordType {
 
 export interface IChordMenuOptions {
     chordLength: number
-    chord: string | null
+    chord: string
     chordType: ChordType.CHORD | ChordType.NOTE
-    chordNotes: string[]
 }

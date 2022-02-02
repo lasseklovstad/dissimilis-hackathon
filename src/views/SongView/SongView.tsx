@@ -9,12 +9,14 @@ import { Song } from "../../components/Song/Song.component"
 import { useGetSong, useUndoSong } from "../../utils/useApiServiceSongs"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
-import { useSongContext } from "./SongContextProvider.component"
+import { useSongContext } from "../../context/song/SongContextProvider.component"
 import { colors } from "../../utils/colors"
 import { SongNavBar } from "../../components/SongNavBar/SongNavBar.component"
 import { useVoice } from "../../utils/useVoice"
 import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 import { useBarsPerRow } from "../../utils/useBars"
+import { SelectedChordContextProvider } from "../../context/selectedChord/SelectedChordContextProvider.component"
+import { ChordMenuOptionsContextProvider } from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
 
 const useStyles = makeStyles({
     root: {
@@ -23,7 +25,7 @@ const useStyles = makeStyles({
             marginBottom: "250px",
         },
         width: "auto",
-    }
+    },
 })
 
 const heightOfBar = 185
@@ -79,56 +81,60 @@ export const SongView = () => {
     }
 
     return (
-        <>
-            <ErrorDialog
-                isError={getSong.isError}
-                error={getSong.error}
-                title={t("Dialog.getSongError")}
-            />
-            {selectedVoiceId !== undefined && selectedVoice && (
-                <Box ml={3} mr={3}>
-                    <Slide appear={false} direction="down" in={!trigger}>
-                        <Box
-                            sx={{
-                                backgroundColor: colors.gray_100,
-                                position: "sticky",
-                                zIndex: 100,
-                                top: "0",
-                                paddingTop: "24px",
-                            }}
-                        >
-                            <SongNavBar
-                                currentUserHasWriteAccess={
-                                    song?.currentUserHasWriteAccess
-                                }
-                            />
-                            <CreateSongTab
-                                updateSong={getSong.run}
-                                onUndo={undo}
-                                undoIsLoading={undoSong.loading}
-                                currentUserHasWriteAccess={
-                                    song?.currentUserHasWriteAccess
-                                }
-                            />
-                        </Box>
-                    </Slide>
-                    <Song
-                        barsPerRow={barsPerRow}
-                        voice={selectedVoice}
-                        getChordNameFromMainVoice={getChordNameFromMainVoice}
-                        timeSignature={{ denominator, numerator }}
-                        heightOfBar={heightOfBar}
-                        exportMode={false}
-                        lastPage
-                        currentUserHasWriteAccess={
-                            song?.currentUserHasWriteAccess
-                        }
-                    />
-                </Box>
-            )}
-            {selectedVoiceId && song?.currentUserHasWriteAccess && (
-                <BottomBar voiceId={selectedVoiceId} />
-            )}
-        </>
+        <SelectedChordContextProvider>
+            <ChordMenuOptionsContextProvider>
+                <ErrorDialog
+                    isError={getSong.isError}
+                    error={getSong.error}
+                    title={t("Dialog.getSongError")}
+                />
+                {selectedVoiceId !== undefined && selectedVoice && (
+                    <Box ml={3} mr={3}>
+                        <Slide appear={false} direction="down" in={!trigger}>
+                            <Box
+                                sx={{
+                                    backgroundColor: colors.gray_100,
+                                    position: "sticky",
+                                    zIndex: 100,
+                                    top: "0",
+                                    paddingTop: "24px",
+                                }}
+                            >
+                                <SongNavBar
+                                    currentUserHasWriteAccess={
+                                        song?.currentUserHasWriteAccess
+                                    }
+                                />
+                                <CreateSongTab
+                                    updateSong={getSong.run}
+                                    onUndo={undo}
+                                    undoIsLoading={undoSong.loading}
+                                    currentUserHasWriteAccess={
+                                        song?.currentUserHasWriteAccess
+                                    }
+                                />
+                            </Box>
+                        </Slide>
+                        <Song
+                            barsPerRow={barsPerRow}
+                            voice={selectedVoice}
+                            getChordNameFromMainVoice={
+                                getChordNameFromMainVoice
+                            }
+                            timeSignature={{ denominator, numerator }}
+                            heightOfBar={heightOfBar}
+                            exportMode={false}
+                            lastPage
+                            currentUserHasWriteAccess={
+                                song?.currentUserHasWriteAccess
+                            }
+                        />
+                    </Box>
+                )}
+                {selectedVoiceId && song?.currentUserHasWriteAccess && (
+                    <BottomBar voiceId={selectedVoiceId} />
+                )}
+            </ChordMenuOptionsContextProvider>
+        </SelectedChordContextProvider>
     )
 }

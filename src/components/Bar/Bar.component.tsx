@@ -7,13 +7,15 @@ import { Chord } from "./Chord.component"
 import { ChordMenu } from "./ChordMenu.component"
 import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
 import { useCreateChord, useDeleteChord } from "../../utils/useApiServiceSongs"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongContext } from "../../context/song/SongContextProvider.component"
 import { ChordType } from "../../models/IChordMenuOptions"
 import makeStyles from "@mui/styles/makeStyles"
 import { colors } from "../../utils/colors"
 import BarRightClickMenu from "./BarRightClickMenu.component"
 import { useTranslation } from "react-i18next"
 import { useBars } from "../../utils/useBars"
+import { useSelectedChordContext } from "../../context/selectedChord/SelectedChordContextProvider.component"
+import { useChordMenuOptionsContext } from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
 
 const useStyle = makeStyles(() => ({
     barContainer: {
@@ -91,16 +93,14 @@ export const Bar = (props: {
     const [positionArray, setPositionArray] = useState<number[]>([])
     const {
         dispatchSong,
-        chordMenuOptions,
-        setValuesForSelectedChord,
-        dispatchChordMenuOptions,
-        selectedChordId,
         barEditMode,
         setBarsClipboard,
         barsClipboard,
         selectedBars,
         setSelectedBars,
     } = useSongContext()
+    const { chordMenuOptions } = useChordMenuOptionsContext()
+    const { selectedChord, setSelectedChord } = useSelectedChordContext()
     const { copySelectedBars, barClicked, pasteBars, deleteBars } = useBars(
         songId,
         dispatchSong,
@@ -110,12 +110,7 @@ export const Bar = (props: {
         setBarsClipboard
     )
     const { postChord } = useCreateChord(songId, songVoiceId, barId)
-    const { deleteChord } = useDeleteChord(
-        songId,
-        songVoiceId,
-        barId,
-        rightClickedChordId
-    )
+    const { deleteChord } = useDeleteChord()
     const classes = useStyle()
 
     const handleChordRightClick =
@@ -142,7 +137,12 @@ export const Bar = (props: {
 
     const handleChordMenuSelect = async (method: string) => {
         if (method === "delete" && rightClickedChordId) {
-            const { error, result } = await deleteChord.run()
+            const { error, result } = await deleteChord.run({
+                songId,
+                voiceId: songVoiceId,
+                barId,
+                chordId: rightClickedChordId,
+            })
             if (!error && result) {
                 dispatchSong({ type: "UPDATE_BAR", bar: result.data })
             }
@@ -159,22 +159,6 @@ export const Bar = (props: {
         } else if (method === "delete") {
             deleteBars && deleteBars()
         }
-    }
-
-    const updateMenuOptions = (chord: IChord) => {
-        const chordType = !chord.chordName ? ChordType.NOTE : ChordType.CHORD
-        dispatchChordMenuOptions({
-            type: "UPDATE_OPTIONS",
-            menuOptions: {
-                chordLength: chord.length,
-                chord:
-                    chordType === ChordType.NOTE
-                        ? chord.notes[0]
-                        : chord.chordName,
-                chordType: chordType,
-                chordNotes: chord.notes,
-            },
-        })
     }
 
     const handleChordClick = async (chord: IChord) => {
@@ -207,35 +191,36 @@ export const Bar = (props: {
                 const createdChord = result.data.chords.find(
                     (c) => c.position === position
                 )
-                if (createdChord) {
+                if (createdChord && createdChord.chordId) {
                     dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-                    dispatchChordMenuOptions({
-                        type: "UPDATE_CHORD_NOTES",
-                        chordNotes: createdChord.notes,
+                    setSelectedChord({
+                        songId,
+                        voiceId: songVoiceId,
+                        barId,
+                        chordId: createdChord.chordId,
                     })
-                    setValuesForSelectedChord(
-                        createdChord.chordId,
-                        result.data.barId,
-                        position
-                    )
                 }
             }
-        } else {
-            updateMenuOptions(chord)
-            setValuesForSelectedChord(
-                chord.chordId,
-                props.bar.barId,
-                chord.position
-            )
+        } else if (chord.chordId) {
+            setSelectedChord({
+                songId,
+                voiceId: songVoiceId,
+                barId,
+                chordId: chord.chordId,
+            })
         }
     }
 
     const handleChordFocus = (chord: IChord) => {
-        if (chord.notes[0] !== "Z") {
-            setValuesForSelectedChord(chord.chordId, barId, chord.position)
-            updateMenuOptions(chord)
+        if (chord.notes[0] !== "Z" && chord.chordId) {
+            setSelectedChord({
+                songId,
+                voiceId: songVoiceId,
+                barId,
+                chordId: chord.chordId,
+            })
         } else {
-            setValuesForSelectedChord(undefined, undefined, chord.position)
+            setSelectedChord(null)
         }
     }
 
@@ -379,7 +364,8 @@ export const Bar = (props: {
                                             handleChordClick(chord)
                                         }
                                         isSelected={
-                                            selectedChordId === chord.chordId
+                                            selectedChord?.chordId ===
+                                            chord.chordId
                                         }
                                         handleChordFocus={() =>
                                             !barEditMode &&

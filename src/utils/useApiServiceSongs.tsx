@@ -6,11 +6,12 @@ import {
     ISongMetadata,
     ISongShareData,
 } from "../models/ISong"
-import { IBar } from "../models/IBar"
+import { IBar, IChordPost } from "../models/IBar"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../models/IVoice"
 import { IUser } from "../models/IUser"
 import { IGroupIndex } from "../models/IGroup"
 import { IOrganisationIndex } from "../models/IOrganisation"
+import { ISelectedChord } from "../models/ISelectedChord"
 
 export enum SongProtectionLevel {
     Public = "Public",
@@ -284,31 +285,29 @@ export const useDeleteBars = (songId: number) => {
     }
 }
 
-export const useDeleteChord = (
-    songId: number,
-    voiceId: number,
-    barId: number,
-    chordId: number | null
-) => {
-    const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${chordId}`
-    const api = useApiService<IBar>(url)
+export const useDeleteChord = () => {
+    const api = useApiService<IBar>("")
+    const run = ({ songId, voiceId, barId, chordId }: ISelectedChord) => {
+        const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${chordId}`
+        return api.deleteData(url)
+    }
 
     return {
-        deleteChord: { run: api.deleteData, ...api.state },
+        deleteChord: { run, ...api.state },
     }
 }
 
-export const useUpdateChord = (
-    songId: number,
-    voiceId: number | undefined,
-    barId: number | undefined,
-    noteId: number | undefined | null
-) => {
-    const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${noteId}`
-    const api = useApiService<IBar>(url)
-
+export const useUpdateChord = () => {
+    const api = useApiService<IBar>("")
+    const run = (
+        { songId, voiceId, barId, chordId }: ISelectedChord,
+        body: IChordPost
+    ) => {
+        const url = `song/${songId}/voice/${voiceId}/bar/${barId}/note/${chordId}`
+        return api.putData(body, url)
+    }
     return {
-        updateChord: { run: api.putData, ...api.state },
+        updateChord: { run, ...api.state },
     }
 }
 

@@ -15,7 +15,7 @@ import { useBarsPerRow } from "../../utils/useBars"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { Song } from "../Song/Song.component"
 import { ChordOptions } from "../BottomMenuButtons/BottomMenuButtons"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongContext } from "../../context/song/SongContextProvider.component"
 
 const useStyles = makeStyles(() => {
     return {

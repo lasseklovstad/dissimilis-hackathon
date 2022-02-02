@@ -7,7 +7,7 @@ import {
     useDuplicateBar,
     useUpdateBar,
 } from "../../utils/useApiServiceSongs"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongContext } from "../../context/song/SongContextProvider.component"
 
 type BarMenuProps = {
     bar: IBar

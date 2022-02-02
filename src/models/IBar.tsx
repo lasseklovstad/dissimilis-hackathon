@@ -6,6 +6,13 @@ export interface IChord {
     chordName: string | null
 }
 
+export interface IChordPost {
+    position: number
+    length: number
+    notes: string[] | null
+    chordName: string | null
+}
+
 export interface IBar {
     barId: number
     songId: number

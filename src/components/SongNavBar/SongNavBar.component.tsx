@@ -14,7 +14,7 @@ import { useGetUser, useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { useTranslation } from "react-i18next"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongContext } from "../../context/song/SongContextProvider.component"
 import { useUpdateSong } from "../../utils/useApiServiceSongs"
 import { useUser } from "../UserContextProvider/UserContextProvider"
 

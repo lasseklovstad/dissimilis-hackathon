@@ -24,11 +24,12 @@ import {
     getNotesFromChord,
     toneNames,
 } from "../../models/commonChords"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongContext } from "../../context/song/SongContextProvider.component"
 import {
     useGetChordIntervals,
     useOptions,
 } from "../../utils/useApiServiceGlobalNote.util"
+import { useChordMenuOptionsContext } from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
 
 const useStyles = makeStyles({
     button: {
@@ -122,42 +123,35 @@ const customPopperPlacement = (props: PopperProps) => {
     return <Popper {...props} placement="top" children={props.children} />
 }
 
-export const DropdownAutocomplete = (props: {
-    onChordChange: (chord: string) => void
-    selectedChordType?: ChordType
-    selectedChord?: string | null
-}) => {
-    const { selectedChordType, selectedChord, onChordChange } = props
+export const DropdownAutocomplete = () => {
+    const { chordMenuOptions, setChordMenuOptions } =
+        useChordMenuOptionsContext()
     const {
         state,
         optionData: { singleNoteOptions, chordOptions },
     } = useOptions()
     const dropdownOptions =
-        selectedChordType === "CHORD" ? chordOptions : singleNoteOptions
+        chordMenuOptions.chordType === "CHORD"
+            ? chordOptions
+            : singleNoteOptions
 
     const { t } = useTranslation()
-    useEffect(() => {
-        if (
-            dropdownOptions.length &&
-            selectedChord &&
-            !dropdownOptions.includes(selectedChord)
-        ) {
-            onChordChange(dropdownOptions[0])
-        }
-    }, [selectedChord, dropdownOptions, onChordChange])
 
     return (
         <Autocomplete<string>
             sx={{
                 display: "flex",
                 alignItems: "center",
-                width: "150px"
+                width: "150px",
             }}
             options={dropdownOptions}
             loading={state.loading}
-            value={selectedChord}
+            value={chordMenuOptions.chord}
             filterOptions={(options, selected) => {
-                if (selectedChordType === "CHORD" && !selected.inputValue) {
+                if (
+                    chordMenuOptions.chordType === "CHORD" &&
+                    !selected.inputValue
+                ) {
                     // Chord list is too long to render on no input value
                     return commonChords
                 }
@@ -167,7 +161,10 @@ export const DropdownAutocomplete = (props: {
             }}
             onChange={(event, value) => {
                 if (typeof value === "string") {
-                    onChordChange(value)
+                    setChordMenuOptions((options) => ({
+                        ...options,
+                        chord: value,
+                    }))
                 }
             }}
             blurOnSelect="touch"
@@ -181,7 +178,7 @@ export const DropdownAutocomplete = (props: {
                     hiddenLabel
                     sx={{
                         "& .MuiOutlinedInput-notchedOutline": {
-                            border: "0px"
+                            border: "0px",
                         },
                     }}
                     variant={"outlined"}
@@ -189,7 +186,7 @@ export const DropdownAutocomplete = (props: {
                         ...params.inputProps,
                         "aria-label": t(
                             `BottomBar.${
-                                selectedChordType === "NOTE"
+                                chordMenuOptions.chordType === "NOTE"
                                     ? "noteLabel"
                                     : "chordLabel"
                             }`
@@ -204,7 +201,7 @@ export const DropdownAutocomplete = (props: {
                             <Typography>{options}</Typography>
                         </Grid>
                         <Grid item xs={3} aria-hidden>
-                            {selectedChordType === ChordType.NOTE ? (
+                            {chordMenuOptions.chordType === ChordType.NOTE ? (
                                 <Box
                                     style={{
                                         height: "24px",
