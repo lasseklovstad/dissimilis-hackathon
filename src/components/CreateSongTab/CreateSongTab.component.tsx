@@ -392,12 +392,14 @@ export const CreateSongTab = (props: {
                 onClose={handleCustomVoiceDialogCancel}
                 aria-labelledby={t("Modal.CustomNewVoice")}
             >
-                <CustomVoiceDialog
-                    handleOnSave={handleCustomVoiceDialogSave}
-                    handleOnCancel={handleCustomVoiceDialogCancel}
-                    baseVoice={voices[0]}
-                    newVoice={clickedVoice}
-                />
+                {selectedVoice && (
+                    <CustomVoiceDialog
+                        handleOnSave={handleCustomVoiceDialogSave}
+                        handleOnCancel={handleCustomVoiceDialogCancel}
+                        baseVoice={voices[0]}
+                        newVoice={selectedVoice}
+                    />
+                )}
             </Dialog>
             <Menu
                 open={!!rightClickMenuPosition}

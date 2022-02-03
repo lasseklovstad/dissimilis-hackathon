@@ -13,7 +13,6 @@ import { IVoice } from "../../models/IVoice"
 
 type SongProps = {
     barsPerRow: number
-    updatedVoice?: boolean[][][]
     voice: IVoice
     getChordNameFromMainVoice: (
         barPosition: number,
@@ -51,14 +50,13 @@ const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
 export const Song = (props: SongProps) => {
     const {
         barsPerRow,
-        updatedVoice,
         voice: { bars, isMain },
         getChordNameFromMainVoice,
         timeSignature,
         heightOfBar,
-        exportMode,
-        showChordLetters,
-        showNoteLetters,
+        exportMode = false,
+        showChordLetters = true,
+        showNoteLetters = true,
         lastPage,
         currentUserHasWriteAccess = false,
     } = props
@@ -120,26 +118,12 @@ export const Song = (props: SongProps) => {
                                 return (
                                     <React.Fragment key={i}>
                                         <Bar
-                                            updatedBar={
-                                                updatedVoice
-                                                    ? updatedVoice[i]
-                                                    : undefined
-                                            }
-                                            // eslint-disable-next-line
                                             showVoltaBracketNumber={
                                                 showVoltaBracketNumber
                                             }
-                                            exportMode={!!exportMode}
-                                            showChordLetters={
-                                                showChordLetters === undefined
-                                                    ? true
-                                                    : showChordLetters
-                                            }
-                                            showNoteLetters={
-                                                showNoteLetters === undefined
-                                                    ? true
-                                                    : showNoteLetters
-                                            }
+                                            exportMode={exportMode}
+                                            showChordLetters={showChordLetters}
+                                            showNoteLetters={showNoteLetters}
                                             masterSheet={!exportMode && isMain}
                                             getChordNameFromMainVoice={
                                                 getChordNameFromMainVoice

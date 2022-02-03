@@ -200,9 +200,7 @@ export const ExportView = () => {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Grid container>
-                                        {selectedVoice?.bars.length === 0 ? (
-                                            <></>
-                                        ) : (
+                                        {selectedVoice?.bars.length && (
                                             <Song
                                                 barsPerRow={
                                                     selectedBarConfig.barsPerRow
