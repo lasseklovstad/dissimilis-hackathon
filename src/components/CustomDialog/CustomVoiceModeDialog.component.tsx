@@ -76,23 +76,21 @@ export const CustomVoiceDialog = (props: {
     handleOnSave: () => void
     handleOnCancel: () => void
     baseVoice: IVoice
-    newVoice: IVoice | undefined
+    newVoice: IVoice
 }) => {
     const { t } = useTranslation()
     const classes = useStyles()
     const { song } = useSongContext()
     const { handleOnCancel, handleOnSave, baseVoice, newVoice } = props
+    const [voice, setVoice] = useState(baseVoice)
     const [indexArray, setIndexArray] = useState<boolean[]>([])
     const { addInterval } = useAddComponentInterval(
-        song?.songId ?? 0,
-        newVoice?.songVoiceId ?? 0
+        newVoice.songId,
+        newVoice.songVoiceId
     )
     const { removeInterval } = useRemoveComponentInterval(
-        song?.songId ?? 0,
-        newVoice?.songVoiceId ?? 0
-    )
-    const [updatedVoice, setUpdatedVoice] = useState<boolean[][][] | undefined>(
-        undefined
+        newVoice.songId,
+        newVoice.songVoiceId
     )
 
     const getChordNameFromMainVoice = (
@@ -107,8 +105,8 @@ export const CustomVoiceDialog = (props: {
 
     const barsPerRow = useBarsPerRow()
     const getBiggestChordInSong = useCallback(() => {
-        var biggestChordLength = 0
-        var chordName = ""
+        let biggestChordLength = 0
+        let chordName = ""
         baseVoice.bars.forEach((bar) => {
             bar.chords.forEach((chord) => {
                 if (
@@ -126,13 +124,13 @@ export const CustomVoiceDialog = (props: {
             biggestChordName: chordName,
             value: biggestChordLength,
         }
-    }, [])
+    }, [baseVoice.bars])
 
     useEffect(() => {
         if (getBiggestChordInSong().showMenu) {
             setIndexArray(new Array(getBiggestChordInSong().value).fill(false))
         }
-    }, [])
+    }, [getBiggestChordInSong])
 
     const changeComponentInterval = async (index: number) => {
         var array = indexArray
@@ -143,7 +141,7 @@ export const CustomVoiceDialog = (props: {
             })
             if (!error && result) {
                 array[index] = false
-                setUpdatedVoice(convertFromNotesToBoolean(result.data))
+                setVoice(mergeOrignalVoiceWithUpdatedVoice(voice, result.data))
             }
         } else {
             const { error, result } = await addInterval.run({
@@ -152,28 +150,30 @@ export const CustomVoiceDialog = (props: {
             })
             if (!error && result) {
                 array[index] = true
-                setUpdatedVoice(convertFromNotesToBoolean(result.data))
+                setVoice(mergeOrignalVoiceWithUpdatedVoice(voice, result.data))
             }
         }
         setIndexArray(array)
     }
 
-    const convertFromNotesToBoolean = (updatedIVoice: IVoice) =>
-        updatedIVoice.bars.map((bar) => {
-            var barNotesConverted: boolean[][] = []
-            bar.chords.forEach((chord) => {
-                if (chord.notes[0] === "Z") {
-                    new Array(chord.length)
-                        .fill(false)
-                        .forEach((empty) => barNotesConverted.push([empty]))
-                } else {
-                    barNotesConverted.push(
-                        chord.notes.map((note) => !(note === "X"))
-                    )
+    const mergeOrignalVoiceWithUpdatedVoice = (
+        originalVoice: IVoice,
+        updatedVoice: IVoice
+    ): IVoice => {
+        return {
+            ...originalVoice,
+            bars: originalVoice.bars.map((bar, barIndex) => {
+                return {
+                    ...bar,
+                    chords: bar.chords.map((chord, chordIndex) => {
+                        const selectedChord =
+                            updatedVoice.bars[barIndex].chords[chordIndex]
+                        return { ...chord, selectedNotes: selectedChord?.notes }
+                    }),
                 }
-            })
-            return barNotesConverted
-        })
+            }),
+        }
+    }
 
     return (
         <>
@@ -182,9 +182,8 @@ export const CustomVoiceDialog = (props: {
             </Box>
             <Grid item xs={12} className={classes.body}>
                 <Song
-                    updatedVoice={updatedVoice}
                     barsPerRow={barsPerRow}
-                    voice={baseVoice}
+                    voice={voice}
                     getChordNameFromMainVoice={getChordNameFromMainVoice}
                     timeSignature={{
                         numerator: song?.numerator || 4,

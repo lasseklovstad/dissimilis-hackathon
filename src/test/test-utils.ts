@@ -1,8 +1,8 @@
 import { ISong, ISongPost } from "../models/ISong"
 import { IBar, IBarPost, IChord } from "../models/IBar"
 import { screen, waitFor } from "@testing-library/react"
-import { sessionStorageMock } from "../setupTests"
 import { IVoicePost, IVoice } from "../models/IVoice"
+import { sessionStorageMock } from "./mock/storage.mock"
 
 let chordId = 100
 
