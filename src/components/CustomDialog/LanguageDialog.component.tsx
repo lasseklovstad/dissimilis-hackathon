@@ -5,10 +5,11 @@ import {
     DialogContent,
     DialogTitle,
     FormControl,
-    makeStyles,
     MenuItem,
     Select,
-} from "@material-ui/core"
+} from "@mui/material"
+
+import makeStyles from "@mui/styles/makeStyles"
 
 import { useTranslation } from "react-i18next"
 import i18n from "../../i18n"
@@ -62,7 +63,7 @@ export const LanguageDialog = (props: {
                         inputProps={{
                             "aria-label": t("TopBar.languageSelect"),
                         }}
-                        onChange={(e: React.ChangeEvent<{ value: any }>) => {
+                        onChange={(e) => {
                             setLanguageChoice(e.target.value)
                         }}
                     >

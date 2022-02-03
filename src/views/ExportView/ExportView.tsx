@@ -8,13 +8,13 @@ import {
     FormGroup,
     Grid,
     InputLabel,
-    makeStyles,
     MenuItem,
     Select,
     Switch,
     Typography,
-    withStyles,
-} from "@material-ui/core"
+} from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
+import withStyles from "@mui/styles/withStyles"
 import { useHistory, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
@@ -254,7 +254,11 @@ export const ExportView = () => {
                 )
             })}
             <BottomNavigation className={`${classes.stickToBottom} no-print`}>
-                <Grid container style={{ margin: "auto" }} justify="center">
+                <Grid
+                    container
+                    style={{ margin: "auto" }}
+                    justifyContent="center"
+                >
                     <Grid
                         item
                         xs={2}
@@ -268,6 +272,7 @@ export const ExportView = () => {
                                 {t("ExportView.voice")}
                             </InputLabel>
                             <Select
+                                label={t("ExportView.voice")}
                                 labelId="voice"
                                 value={
                                     songInit ? selectedVoice?.songVoiceId : ""
@@ -306,6 +311,7 @@ export const ExportView = () => {
                                 {t("ExportView.barPerRow")}
                             </InputLabel>
                             <Select
+                                label={t("ExportView.barPerRow")}
                                 labelId="barPerRow"
                                 value={selectedBarConfig.barsPerRow}
                                 onChange={(ev) => {
@@ -345,6 +351,7 @@ export const ExportView = () => {
                             </InputLabel>
                             <Select
                                 labelId="rowsPerSheet"
+                                label={t("ExportView.rowsPerSheet")}
                                 value={selectedRowsPerSheetConfig.rowsPerSheet}
                                 onChange={(ev) =>
                                     setSelectedRowsPerSheetConfig(
@@ -387,8 +394,12 @@ export const ExportView = () => {
                             <FormControlLabel
                                 label={
                                     showChordLetters
-                                        ? t("ExportView.showChordLetters")
-                                        : t("ExportView.hideChordLetters")
+                                        ? t<string>(
+                                              "ExportView.showChordLetters"
+                                          )
+                                        : t<string>(
+                                              "ExportView.hideChordLetters"
+                                          )
                                 }
                                 className={classes.flexStart}
                                 style={{
@@ -427,8 +438,12 @@ export const ExportView = () => {
                             <FormControlLabel
                                 label={
                                     showNoteLetters
-                                        ? t("ExportView.showChordLetters")
-                                        : t("ExportView.hideChordLetters")
+                                        ? t<string>(
+                                              "ExportView.showChordLetters"
+                                          )
+                                        : t<string>(
+                                              "ExportView.hideChordLetters"
+                                          )
                                 }
                                 className={classes.flexStart}
                                 style={{

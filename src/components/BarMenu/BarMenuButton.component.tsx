@@ -1,6 +1,6 @@
 import React from "react"
-import { Box, IconButton } from "@material-ui/core"
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
+import { Box, IconButton } from "@mui/material"
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import { useTranslation } from "react-i18next"
 
 type BarMenuButtonProps = {
@@ -27,6 +27,7 @@ export const BarMenuButton = (props: BarMenuButtonProps) => {
                 onClick={handleClick}
                 aria-label={t("Song.barMenu")}
                 disableFocusRipple
+                size="large"
             >
                 <MoreHorizIcon />
             </IconButton>

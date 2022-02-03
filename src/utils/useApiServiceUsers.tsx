@@ -22,7 +22,7 @@ export const useGetUser = () => {
     }, [getData])
     return {
         getUser: { run: getData, ...state },
-        userInit: data,
+        user: data,
     }
 }
 

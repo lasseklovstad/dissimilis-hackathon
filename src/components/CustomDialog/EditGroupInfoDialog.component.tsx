@@ -4,9 +4,9 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    makeStyles,
     TextField,
-} from "@material-ui/core"
+} from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { useEffect } from "react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react"
-import { makeStyles } from "@material-ui/core/styles"
-import Button from "@material-ui/core/Button"
-import Grid from "@material-ui/core/Grid"
-import { Collapse, useMediaQuery } from "@material-ui/core"
+import makeStyles from "@mui/styles/makeStyles"
+import Button from "@mui/material/Button"
+import Grid from "@mui/material/Grid"
+import { Collapse, useMediaQuery } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router"
-import Alert from "@material-ui/lab/Alert"
-import IconButton from "@material-ui/core/IconButton"
-import CloseIcon from "@material-ui/icons/Close"
+import Alert from "@mui/material/Alert"
+import IconButton from "@mui/material/IconButton"
+import CloseIcon from "@mui/icons-material/Close"
 import { useLoginPost, useLoginRedirect } from "../../utils/useApiServiceLogin"
 import { colors } from "../../utils/colors"
 import { ReactComponent as LoginLogo } from "../../assets/images/LoginLogo.svg"
@@ -71,7 +71,9 @@ export const LoginView = () => {
 
     const tryLogin = () => {
         axiosGet().then(({ result }) => {
-            window.location.href = result?.headers.location
+            if (result) {
+                window.location.href = result.headers.location
+            }
         })
     }
     useEffect(() => {

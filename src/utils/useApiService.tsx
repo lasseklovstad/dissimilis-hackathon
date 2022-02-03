@@ -122,20 +122,20 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
                         break
                 }
             } catch (error) {
-                if (error?.response?.status === 401) {
+                axiosError = error as AxiosError
+                if (axiosError?.response?.status === 401) {
                     push("/")
                     sessionStorage.removeItem("apiKey")
                     sessionStorage.removeItem("userId")
                 }
                 isError = true
-                axiosError = error
             } finally {
                 updateStates(result, isError, axiosError)
                 setLoading(false)
             }
             return { result, isError, error: axiosError }
         },
-        [url, bodyInit, params, source, headers]
+        [url, bodyInit, params, headers]
     )
 
     const getData = useCallback(async () => fetchData("get"), [fetchData])

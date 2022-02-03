@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { Box, Dialog, Grid, makeStyles } from "@material-ui/core"
+import { Box, Dialog, Grid } from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import {
@@ -165,7 +166,11 @@ export const DashboardView = () => {
                 fullScreen
             />
             <Box mx={2}>
-                <Grid container justify="center" className={styles.container}>
+                <Grid
+                    container
+                    justifyContent="center"
+                    className={styles.container}
+                >
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
                             <DashboardTopBar

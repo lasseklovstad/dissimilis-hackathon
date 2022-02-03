@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from "react"
-import {
-    Box,
-    Button,
-    Dialog,
-    Grid,
-    makeStyles,
-    Typography,
-} from "@material-ui/core"
+import { Box, Button, Dialog, Grid, Typography } from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useHistory, useParams } from "react-router"
 import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
-import { Add as AddIcon } from "@material-ui/icons"
+import { Add as AddIcon } from "@mui/icons-material"
 import { colors } from "../../utils/colors"
 import { AddGroupDialog } from "../../components/CustomDialog/AddGroupDialog.component"
 import { AccordionGroupComponent } from "../../components/AdminViewComponents/AccordionGroupComponent.component"
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
 import { IGroupIndex } from "../../models/IGroup"
 import {
     GroupFilter,
@@ -61,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(4),
     },
     buttonGridComponent: {
-        [theme.breakpoints.down("sm")]: {
+        [theme.breakpoints.down("md")]: {
             paddingBottom: theme.spacing(2),
         },
         [theme.breakpoints.up("md")]: {
@@ -69,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     accordionComponent: {
-        [theme.breakpoints.down("md")]: {
+        [theme.breakpoints.down("lg")]: {
             paddingBottom: theme.spacing(2),
             paddingRight: theme.spacing(0),
             paddingLeft: theme.spacing(0),
@@ -170,7 +164,11 @@ export const GroupAdminView = () => {
     return (
         <>
             <Box mx={2}>
-                <Grid container justify="center" className={classes.container}>
+                <Grid
+                    container
+                    justifyContent="center"
+                    className={classes.container}
+                >
                     <Grid item xs={12}>
                         <Box mb={4}>
                             <DashboardTopBar

@@ -1,5 +1,5 @@
 import React from "react"
-import { Backdrop, Box, CircularProgress, Typography } from "@material-ui/core"
+import { Backdrop, Box, CircularProgress, Typography } from "@mui/material"
 
 type LoadingProps = {
     fullScreen?: boolean

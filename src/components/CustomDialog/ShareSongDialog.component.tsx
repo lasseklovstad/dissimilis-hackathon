@@ -11,15 +11,15 @@ import {
     ListItem,
     ListItemSecondaryAction,
     ListItemText,
-    makeStyles,
     DialogActions,
     Dialog,
     TextField,
     CircularProgress,
-} from "@material-ui/core"
+} from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { IUser } from "../../models/IUser"
-import { Delete as DeleteIcon, Add as AddIcon } from "@material-ui/icons"
+import { Delete as DeleteIcon, Add as AddIcon } from "@mui/icons-material"
 import { colors } from "../../utils/colors"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import {
@@ -40,7 +40,7 @@ import {
     useGetOrganisations,
     OrganisationFilter,
 } from "../../utils/useApiServiceGroups"
-import { Autocomplete } from "@material-ui/lab"
+import { Autocomplete } from "@mui/material"
 import { InputDialog } from "./InputDialog.component"
 import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 
@@ -307,6 +307,7 @@ export const ShareSongDialog = (props: {
                                             aria-label={t(
                                                 "Dialog.removePerson"
                                             )}
+                                            size="large"
                                         >
                                             <DeleteIcon />
                                         </IconButton>

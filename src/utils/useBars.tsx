@@ -1,4 +1,4 @@
-import { useMediaQuery } from "@material-ui/core"
+import { useMediaQuery } from "@mui/material"
 import { IBar } from "./../models/IBar"
 import { SongAction } from "./../views/SongView/SongContextProvider.component"
 import {

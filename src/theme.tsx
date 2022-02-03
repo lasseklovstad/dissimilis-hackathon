@@ -1,86 +1,111 @@
-import { createMuiTheme } from "@material-ui/core/styles"
+import { createTheme, Theme } from "@mui/material/styles"
 import { colors } from "./utils/colors"
 
-const defaultTheme = createMuiTheme()
+declare module "@mui/styles/defaultTheme" {
+    interface DefaultTheme extends Theme {}
+}
 
-export const theme = createMuiTheme({
-    overrides: {
-        MuiCssBaseline: {
-            "@global": {
-                html: {
-                    fontSize: "100%",
-                },
-            },
-        },
+const defaultTheme = createTheme()
+
+export const theme = createTheme({
+    components: {
         MuiTab: {
-            root: {
-                "&:focus": {
-                    boxShadow: `0 0 0 4px ${colors.focus}`,
+            styleOverrides: {
+                root: {
+                    "&.Mui-focusVisible": {
+                        boxShadow: `0 0 0 4px ${colors.focus}`,
+                    },
                 },
             },
         },
         MuiIconButton: {
-            root: {
-                "&:focus": {
-                    boxShadow: `0 0 0 4px ${colors.focus}`,
+            styleOverrides: {
+                root: {
+                    "&.Mui-focusVisible": {
+                        boxShadow: `0 0 0 4px ${colors.focus}`,
+                    },
                 },
             },
         },
         MuiButton: {
-            root: {
-                "&:focus": {
-                    boxShadow: `0 0 0 4px ${colors.focus}`,
+            styleOverrides: {
+                root: {
+                    "&.Mui-focusVisible": {
+                        boxShadow: `0 0 0 4px ${colors.focus}`,
+                    },
                 },
+            },
+            defaultProps: {
+                color: "inherit",
             },
         },
         MuiSelect: {
-            root: {
-                "&:focus": {
-                    boxShadow: `0 0 0 4px ${colors.focus}`,
+            styleOverrides: {
+                select: {
+                    "&.Mui-focused": {
+                        boxShadow: `0 0 0 4px ${colors.focus}`,
+                    },
                 },
             },
         },
         MuiInputBase: {
-            input: {
-                "&:focus": {
-                    boxShadow: `0 0 0 4px ${colors.focus}`,
+            styleOverrides: {
+                root: {
+                    "&.Mui-focused": {
+                        boxShadow: `0 0 0 4px ${colors.focus}`,
+                    },
                 },
+            },
+        },
+        MuiTextField: {
+            defaultProps: {
+                variant: "standard",
             },
         },
         MuiOutlinedInput: {
-            root: {
-                "&:hover:not($disabled):not($focused):not($error) $notchedOutline":
-                    {
-                        borderColor: `${colors.gray_500_dark}`,
-                    },
+            styleOverrides: {
+                root: {
+                    "&:hover:not(.MuiOutlinedInput-disabled):not(.MuiOutlinedInput-focused):not(.MuiOutlinedInput-error) .MuiOutlinedInput-notchedOutline":
+                        {
+                            borderColor: `${colors.gray_500_dark}`,
+                        },
+                },
             },
         },
         MuiCardActionArea: {
-            root: {
-                "&:focus $focusHighlight": {
-                    opacity: 0,
-                },
-                "&:focus:hover $focusHighlight": {
-                    opacity: 0.04,
+            styleOverrides: {
+                root: {
+                    "&.Mui-focused .MuiCardActionArea-focusHighlight": {
+                        opacity: 0,
+                    },
+                    "&.Mui-focused:hover .MuiCardActionArea-focusHighlight": {
+                        opacity: 0.04,
+                    },
                 },
             },
         },
         MuiDialog: {
-            paper: {
-                padding: defaultTheme.spacing(1),
+            styleOverrides: {
+                paper: {
+                    padding: defaultTheme.spacing(1),
+                },
             },
         },
         MuiDialogActions: {
-            root: {
-                padding: `${defaultTheme.spacing(1)}px ${defaultTheme.spacing(
-                    2
-                )}px`,
-                justifyContent: "flex-start",
+            styleOverrides: {
+                root: {
+                    padding: `${defaultTheme.spacing(
+                        1
+                    )}px ${defaultTheme.spacing(2)}px`,
+                    justifyContent: "flex-start",
+                },
             },
         },
         MuiDialogContentText: {
-            root: {
-                color: colors.black,
+            styleOverrides: {
+                root: {
+                    color: colors.black,
+                },
             },
         },
     },

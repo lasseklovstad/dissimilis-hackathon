@@ -1,6 +1,6 @@
 import React, { useState } from "react"
-import { IconButton, Menu, Dialog, MenuItem } from "@material-ui/core"
-import MoreVertIcon from "@material-ui/icons/MoreVert"
+import { IconButton, Menu, Dialog, MenuItem } from "@mui/material"
+import MoreVertIcon from "@mui/icons-material/MoreVert"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import {
@@ -144,6 +144,7 @@ export const SongGridMenuButton = (props: {
                     aria-label={t("MenuButton.song")}
                     onClick={handleClick}
                     disableFocusRipple
+                    size="large"
                 >
                     <MoreVertIcon />
                 </IconButton>

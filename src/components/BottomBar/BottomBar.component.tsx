@@ -4,19 +4,18 @@ import {
     ClickAwayListener,
     FormControl,
     Grid,
-    makeStyles,
     MenuItem,
-    RootRef,
     Select,
     SvgIcon,
     Typography,
-    withStyles,
-} from "@material-ui/core"
-import MusicNoteIcon from "@material-ui/icons/MusicNote"
-import { Delete } from "@material-ui/icons"
+} from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
+import withStyles from "@mui/styles/withStyles"
+import MusicNoteIcon from "@mui/icons-material/MusicNote"
+import { Delete } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup"
-import ToggleButton from "@material-ui/lab/ToggleButton"
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
+import ToggleButton from "@mui/material/ToggleButton"
 import {
     ChordOptions,
     DropdownAutocomplete,
@@ -221,7 +220,7 @@ export const BottomBar = (props: {
                 labelId={"selectChordLengthLabel"}
                 id={"selectChordLength"}
                 value={chordMenuOptions?.chordLength}
-                onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+                onChange={(event) => {
                     handleChangeChordLength(event.target.value as number)
                 }}
                 inputProps={{ className: classes.input }}
@@ -260,7 +259,7 @@ export const BottomBar = (props: {
 
     return (
         <Grid container className={`mui-fixed ${classes.positioningContainer}`}>
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
                 <Grid item xs={12} sm={10} className={classes.outercontainer}>
                     <ClickAwayListener onClickAway={clickOutsideListener}>
                         <div className={classes.container}>
@@ -315,7 +314,7 @@ export const BottomBar = (props: {
 
                     {chordMenuOptions?.chordType === ChordType.CHORD &&
                     selectedChordId ? (
-                        <RootRef rootRef={chordOptionsRef}>
+                        <>
                             <div className={classes.container}>
                                 <ChordOptions
                                     chord={chordMenuOptions?.chord}
@@ -323,7 +322,7 @@ export const BottomBar = (props: {
                                     alwaysShow={false}
                                 />
                             </div>
-                        </RootRef>
+                        </>
                     ) : undefined}
                     <div className={classes.container}>
                         <MenuButtonWithAddIcon

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react"
-import { Box, Grid, Typography } from "@material-ui/core"
+import { Box, Grid, Typography } from "@mui/material"
 import { ISongIndex } from "../../models/ISong"
 import { DashboardButton } from "../DashboardButtons/DashboardButtons"
 import { Loading } from "../loading/Loading.component"

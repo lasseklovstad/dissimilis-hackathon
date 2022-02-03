@@ -4,9 +4,10 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    makeStyles,
     TextField,
-} from "@material-ui/core"
+} from "@mui/material"
+
+import makeStyles from "@mui/styles/makeStyles"
 
 import { useTranslation } from "react-i18next"
 import { RadioButtons } from "../CustomDialogComponents/RadioButtons.component"

@@ -6,8 +6,8 @@ import {
     Menu,
     MenuItem,
     Typography,
-} from "@material-ui/core"
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
+} from "@mui/material"
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import { useTranslation } from "react-i18next"
 import { useHistory, useParams } from "react-router-dom"
 import { colors } from "../../utils/colors"
@@ -24,10 +24,10 @@ import { EditSongInfoDialog } from "../CustomDialog/EditSongInfoDialog.component
 import { TransposeDialog } from "../CustomDialog/TransposeDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
-import { useGetUser } from "../../utils/useApiServiceUsers"
 import { useVoice } from "../../utils/useVoice"
 import { ShareSongDialog } from "../CustomDialog/ShareSongDialog.component"
 import { ShowSongInfoDialog } from "../CustomDialog/ShowSongInfoDialog.component"
+import { useUser } from "../UserContextProvider/UserContextProvider"
 
 export const MenuButton = (props: {
     showName: boolean
@@ -46,7 +46,7 @@ export const MenuButton = (props: {
     } = useSongContext()
     const selectedVoice = useVoice(song?.voices)
     const { songVoiceId: voiceId } = selectedVoice || {}
-    const { userInit } = useGetUser()
+    const { user } = useUser()
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [deleteSongDialogIsOpen, setDeleteSongDialogIsOpen] = useState(false)
@@ -200,6 +200,7 @@ export const MenuButton = (props: {
                     aria-controls="songMenu"
                     onClick={handleClick}
                     aria-label={t("MenuButton.song")}
+                    size="large"
                 >
                     <MoreHorizIcon />
                 </IconButton>
@@ -265,7 +266,7 @@ export const MenuButton = (props: {
                         <>
                             <Divider variant="middle" />
                             <MenuItem disabled>
-                                <Typography>{userInit?.email}</Typography>
+                                <Typography>{user.email}</Typography>
                             </MenuItem>
                         </>
                     ) : undefined}

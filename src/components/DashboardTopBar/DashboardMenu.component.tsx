@@ -1,18 +1,13 @@
 import React, { useState } from "react"
-import {
-    Dialog,
-    IconButton,
-    makeStyles,
-    Menu,
-    MenuItem,
-} from "@material-ui/core"
-import SettingsIcon from "@material-ui/icons/Settings"
+import { Dialog, IconButton, Menu, MenuItem } from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
+import SettingsIcon from "@mui/icons-material/Settings"
 import { useTranslation } from "react-i18next"
 import { LanguageDialog } from "../CustomDialog/LanguageDialog.component"
 import { useLogout } from "../../utils/useApiServiceUsers"
 import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
-import LanguageIcon from "@material-ui/icons/Language"
-import AssignmentIndIcon from "@material-ui/icons/AssignmentInd"
+import LanguageIcon from "@mui/icons-material/Language"
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { useHistory } from "react-router"
@@ -82,6 +77,7 @@ export const DashboardMenu = (props: {}) => {
                 aria-controls="dashboardMenu"
                 aria-label={t("TopBar.settings")}
                 onClick={handleClick}
+                size="large"
             >
                 <SettingsIcon />
             </IconButton>

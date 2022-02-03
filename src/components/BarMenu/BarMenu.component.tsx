@@ -1,5 +1,5 @@
 import React from "react"
-import { Menu, MenuItem } from "@material-ui/core"
+import { Menu, MenuItem } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { IBar } from "../../models/IBar"
 import {

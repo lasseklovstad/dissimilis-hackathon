@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react"
 import {
     CircularProgress,
-    makeStyles,
     DialogContent,
     DialogActions,
     TextField,
     DialogTitle,
     DialogContentText,
-} from "@material-ui/core"
+} from "@mui/material"
+
+import makeStyles from "@mui/styles/makeStyles"
 
 import { useGetSongMetadata } from "../../utils/useApiServiceSongs"
 import { useTranslation } from "react-i18next"

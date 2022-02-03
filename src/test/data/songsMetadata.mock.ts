@@ -63,7 +63,8 @@ export const songsMetadata: ISongMetadata[] = [
         creatorEmail: "navn.navnesen@creator.com",
         updatedOn: "2020-10-18T15:00:26.2209039+00:00",
         composer: "Mrs. Testing",
-        songNotes: "Denne sangen er skrevet av fru Testing og arrangert av Test",
+        songNotes:
+            "Denne sangen er skrevet av fru Testing og arrangert av Test",
         speed: 250,
     },
 ]

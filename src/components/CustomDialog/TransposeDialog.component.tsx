@@ -5,11 +5,12 @@ import {
     DialogTitle,
     FormControl,
     InputLabel,
-    makeStyles,
     MenuItem,
     Select,
     TextField,
-} from "@material-ui/core"
+} from "@mui/material"
+
+import makeStyles from "@mui/styles/makeStyles"
 
 import { useTranslation } from "react-i18next"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
@@ -66,13 +67,16 @@ export const TransposeDialog = (props: {
                     style={{ width: "100%" }}
                 />
                 <FormControl variant="outlined" className={classes.formControl}>
-                    <InputLabel>{t("Dialog.semiNotes")}</InputLabel>
+                    <InputLabel id={"semitones-label"}>
+                        {t("Dialog.semiNotes")}
+                    </InputLabel>
                     <Select
+                        labelId={"semitones-label"}
                         value={transposeInput}
-                        onChange={(e: React.ChangeEvent<{ value: any }>) => {
+                        onChange={(e) => {
                             setTransposeInput(e.target.value)
                         }}
-                        label="semiNotes"
+                        label={t("Dialog.semiNotes")}
                     >
                         <MenuItem value={-6}>-6</MenuItem>
                         <MenuItem value={-5}>-5</MenuItem>

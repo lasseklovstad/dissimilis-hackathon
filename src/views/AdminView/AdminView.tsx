@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react"
-import {
-    Box,
-    Button,
-    Dialog,
-    Grid,
-    makeStyles,
-    Typography,
-} from "@material-ui/core"
+import { Box, Button, Dialog, Grid, Typography } from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
@@ -16,7 +10,7 @@ import {
     Add as AddIcon,
     Edit as EditIcon,
     List as ListIcon,
-} from "@material-ui/icons"
+} from "@mui/icons-material"
 import { colors } from "../../utils/colors"
 import { AddOrganisationDialog } from "../../components/CustomDialog/AddOrganisationDialog.component"
 import {
@@ -53,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(4),
     },
     buttonGridComponent: {
-        [theme.breakpoints.down("sm")]: {
+        [theme.breakpoints.down("md")]: {
             paddingBottom: theme.spacing(2),
         },
         [theme.breakpoints.up("md")]: {
@@ -61,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     accordionComponent: {
-        [theme.breakpoints.down("md")]: {
+        [theme.breakpoints.down("lg")]: {
             paddingBottom: theme.spacing(2),
             paddingRight: theme.spacing(0),
             paddingLeft: theme.spacing(0),
@@ -204,7 +198,11 @@ export const AdminView = () => {
     return (
         <>
             <Box mx={2}>
-                <Grid container justify="center" className={classes.container}>
+                <Grid
+                    container
+                    justifyContent="center"
+                    className={classes.container}
+                >
                     <Grid item xs={12}>
                         <Box mb={4}>
                             <DashboardTopBar

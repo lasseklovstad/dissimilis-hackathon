@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { Box, Grid, makeStyles } from "@material-ui/core"
+import { Box, Grid } from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useGetFilteredSongs } from "../../utils/useApiServiceSongs"
@@ -116,7 +117,11 @@ export const LibraryView = () => {
                 error={getFilteredSongs.error}
             />
             <Box mx={2}>
-                <Grid container justify="center" className={styles.container}>
+                <Grid
+                    container
+                    justifyContent="center"
+                    className={styles.container}
+                >
                     <Grid item xs={12}>
                         <Box mb={marginBottom}>
                             <DashboardTopBar

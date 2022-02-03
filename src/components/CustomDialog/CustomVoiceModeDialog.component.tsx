@@ -1,11 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react"
-import {
-    Box,
-    DialogActions,
-    Grid,
-    makeStyles,
-    Typography,
-} from "@material-ui/core"
+import { Box, DialogActions, Grid, Typography } from "@mui/material"
+
+import makeStyles from "@mui/styles/makeStyles"
 
 import { useTranslation } from "react-i18next"
 
@@ -202,7 +198,7 @@ export const CustomVoiceDialog = (props: {
                 container
                 className={`mui-fixed ${classes.positioningContainer}`}
             >
-                <Grid container justify="center">
+                <Grid container justifyContent="center">
                     <Grid item xs={10} className={classes.outercontainer}>
                         <Box className={classes.container}>
                             <ChordOptions

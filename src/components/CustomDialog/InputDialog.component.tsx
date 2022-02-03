@@ -4,9 +4,9 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    makeStyles,
     TextField,
-} from "@material-ui/core"
+} from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 
 const useStyles = makeStyles((theme) => {

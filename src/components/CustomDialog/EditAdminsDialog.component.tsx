@@ -10,16 +10,16 @@ import {
     ListItem,
     ListItemSecondaryAction,
     ListItemText,
-    makeStyles,
     Typography,
-} from "@material-ui/core"
+} from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { IOrganisation } from "../../models/IOrganisation"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
-import DeleteIcon from "@material-ui/icons/Delete"
+import DeleteIcon from "@mui/icons-material/Delete"
 import { IUser } from "../../models/IUser"
 import { colors } from "../../utils/colors"
-import AddIcon from "@material-ui/icons/Add"
+import AddIcon from "@mui/icons-material/Add"
 import { ChoiceDialog } from "./ChoiceDialog.component"
 import { UserAutoCompleteDialog } from "./UserAutoCompleteDialog.component"
 import { IGroup } from "../../models/IGroup"
@@ -194,7 +194,11 @@ export const EditAdminsDialog = (props: {
                                     setConfirmationDialogIsOpen(true)
                                 }}
                             >
-                                <IconButton edge="end" aria-label="delete">
+                                <IconButton
+                                    edge="end"
+                                    aria-label="delete"
+                                    size="large"
+                                >
                                     <DeleteIcon />
                                 </IconButton>
                             </ListItemSecondaryAction>
@@ -253,11 +257,11 @@ export const EditAdminsDialog = (props: {
                     cancelText={t("Dialog.cancel")}
                     headerText={t("Dialog.removeAdmin")}
                     descriptionText={`
-                        ${t("Dialog.removeAdminDescription")} 
-                        ${selectedAdmin?.name || t("Dialog.thisUser")} 
-                        ${t("Dialog.asAdmin")} 
-                        ${t("Dialog.cannotUndo")}
-                    `}
+                    ${t("Dialog.removeAdminDescription")} 
+                    ${selectedAdmin?.name || t("Dialog.thisUser")} 
+                    ${t("Dialog.asAdmin")} 
+                    ${t("Dialog.cannotUndo")}
+                `}
                 />
             </Dialog>
         </>

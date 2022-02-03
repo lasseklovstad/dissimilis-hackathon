@@ -5,12 +5,12 @@ import {
     CircularProgress,
     Dialog,
     IconButton,
-    makeStyles,
     Menu,
     MenuItem,
     Tab,
     Tabs,
-} from "@material-ui/core"
+} from "@mui/material"
+import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
 import { IVoice } from "../../models/IVoice"
@@ -25,7 +25,7 @@ import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { useVoice } from "../../utils/useVoice"
 import { CustomVoiceDialog } from "../CustomDialog/CustomVoiceModeDialog.component"
-import { Undo as UndoIcon, MoreVert as MoreVertIcon } from "@material-ui/icons"
+import { Undo as UndoIcon, MoreVert as MoreVertIcon } from "@mui/icons-material"
 import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
 import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
@@ -227,6 +227,7 @@ export const CreateSongTab = (props: {
                 <Tabs
                     value={selectedVoiceId}
                     variant="scrollable"
+                    textColor={"inherit"}
                     scrollButtons="auto"
                     TabIndicatorProps={{
                         style: {
@@ -269,6 +270,7 @@ export const CreateSongTab = (props: {
                             aria-label={t("CreateSongTab.menu")}
                             onClick={handleMenuClick}
                             disableFocusRipple
+                            size="large"
                         >
                             <MoreVertIcon />
                         </IconButton>

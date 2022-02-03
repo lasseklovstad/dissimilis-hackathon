@@ -4,14 +4,15 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    makeStyles,
     TextField,
     Typography,
-} from "@material-ui/core"
+} from "@mui/material"
+
+import makeStyles from "@mui/styles/makeStyles"
 
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { useTranslation } from "react-i18next"
-import { Autocomplete } from "@material-ui/lab"
+import { Autocomplete } from "@mui/material"
 import { IUser } from "../../models/IUser"
 
 const useStyles = makeStyles((theme) => {

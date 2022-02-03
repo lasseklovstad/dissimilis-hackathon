@@ -1,18 +1,12 @@
 import React from "react"
-import {
-    AppBar,
-    Box,
-    Grid,
-    Hidden,
-    makeStyles,
-    Typography,
-} from "@material-ui/core"
+import { AppBar, Box, Grid, Hidden, Typography } from "@mui/material"
+
+import makeStyles from "@mui/styles/makeStyles"
 
 import { DashboardTopBarIcon } from "../DashboardButtons/DashboardButtons"
-import { useGetUser } from "../../utils/useApiServiceUsers"
-import { Loading } from "../loading/Loading.component"
 import { SearchField } from "./SearchField"
 import { DashboardMenu } from "../DashboardTopBar/DashboardMenu.component"
+import { useUser } from "../UserContextProvider/UserContextProvider"
 
 const useStyles = makeStyles(() => ({
     background: {
@@ -28,27 +22,27 @@ export const DashboardTopBar = (props: {
 }) => {
     const classes = useStyles()
     const { onGoHome, searchTerm, handleOnSubmitSearch } = props
-    const { userInit, getUser } = useGetUser()
+    const { user } = useUser()
 
     return (
         <>
             <AppBar position="static" className={classes.background}>
                 <Box py={3}>
                     <Grid container spacing={2}>
-                        <Hidden xsDown>
+                        <Hidden smDown>
                             <Grid item sm={1} />
                         </Hidden>
                         <Grid item xs={1}>
                             <DashboardTopBarIcon onGoHome={onGoHome} />
                         </Grid>
-                        <Hidden mdDown>
+                        <Hidden lgDown>
                             <Grid item md={1} />
                         </Hidden>
                         <Grid item xs={10} sm={7} md={5} lg={4}>
                             <Grid
                                 container
                                 direction="row"
-                                justify="flex-end"
+                                justifyContent="flex-end"
                                 alignItems="center"
                                 style={{ height: "100%" }}
                             >
@@ -56,8 +50,7 @@ export const DashboardTopBar = (props: {
                                     style={{ marginRight: 8 }}
                                     component="div"
                                 >
-                                    <Loading isLoading={getUser.loading} />
-                                    {userInit?.email}
+                                    {user.email}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -68,7 +61,7 @@ export const DashboardTopBar = (props: {
                             <Grid
                                 container
                                 direction="row"
-                                justify="flex-end"
+                                justifyContent="flex-end"
                                 alignItems="center"
                                 item
                                 xs={1}
@@ -92,7 +85,7 @@ export const DashboardTopBar = (props: {
                             <Grid
                                 container
                                 direction="row"
-                                justify="flex-end"
+                                justifyContent="flex-end"
                                 alignItems="center"
                                 item
                                 xs={1}

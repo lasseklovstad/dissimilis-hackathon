@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react"
 import {
-    makeStyles,
     DialogContent,
     DialogActions,
     DialogTitle,
     DialogContentText,
     Grid,
-} from "@material-ui/core"
+} from "@mui/material"
+
+import makeStyles from "@mui/styles/makeStyles"
 
 import { useGetSongMetadata } from "../../utils/useApiServiceSongs"
 import { useTranslation } from "react-i18next"
@@ -76,7 +77,7 @@ export const ShowSongInfoDialog = (props: {
                 <DialogContentText>
                     <Grid
                         container
-                        justify="center"
+                        justifyContent="center"
                         className={classes.container}
                     >
                         <Grid container className={classes.row} xs={12} sm={12}>
