@@ -3,9 +3,9 @@ import { render, screen, waitFor } from "@testing-library/react"
 import { LoginView } from "./LoginView"
 import { TestWrapper } from "../../TestWrapper.komponent"
 import userEvent from "@testing-library/user-event"
-import { sessionStorageMock } from "../../setupTests"
 import { login, logout } from "../../test/test-utils"
 import { mockUrl } from "../../test/handlers/login-handlers"
+import { sessionStorageMock } from "../../test/mock/storage.mock"
 
 const mockReplaceHistory = jest.fn()
 
