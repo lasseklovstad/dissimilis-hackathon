@@ -3,7 +3,7 @@ import { Dialog, IconButton, Menu, MenuItem } from "@mui/material"
 import makeStyles from "@mui/styles/makeStyles"
 import SettingsIcon from "@mui/icons-material/Settings"
 import { useTranslation } from "react-i18next"
-import { LanguageDialog } from "../CustomDialog/LanguageDialog.component"
+import { LanguageDialog } from "../CustomDialog/LanguageDialog/LanguageDialog.component"
 import { useLogout } from "../../utils/useApiServiceUsers"
 import { ReactComponent as LogoutIcon } from "../../assets/images/LogoutIcon.svg"
 import LanguageIcon from "@mui/icons-material/Language"
@@ -115,13 +115,9 @@ export const DashboardMenu = (props: {}) => {
             </Menu>
             <Dialog
                 open={changeLanguageDialogIsOpen}
-                onClose={() => handleCloseChangeLanguageDialog}
+                onClose={handleCloseChangeLanguageDialog}
             >
-                <LanguageDialog
-                    handleOnCancelClick={handleClose}
-                    handleClosed={() => setChangeLanguageDialogIsOpen(false)}
-                    dialogIsOpen={changeLanguageDialogIsOpen}
-                />
+                <LanguageDialog onClose={handleCloseChangeLanguageDialog} />
             </Dialog>
             <Loading isLoading={logout.loading} fullScreen />
             <ErrorDialog

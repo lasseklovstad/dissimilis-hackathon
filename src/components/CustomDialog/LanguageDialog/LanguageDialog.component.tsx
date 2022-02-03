@@ -4,51 +4,23 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    FormControl,
+    FormControl, InputLabel,
     MenuItem,
     Select,
 } from "@mui/material"
 
-import makeStyles from "@mui/styles/makeStyles"
-
 import { useTranslation } from "react-i18next"
-import i18n from "../../i18n"
 
-const useStyles = makeStyles((theme) => {
-    return {
-        formControl: {
-            marginBottom: theme.spacing(3),
-            minWidth: 150,
-        },
-    }
-})
-
-const supportedLanguages = ["en", "no"]
-
-const getLanguage = () => {
-    const userLanguage = localStorage.getItem("userLanguage")
-    if (userLanguage && supportedLanguages.includes(userLanguage)) {
-        return userLanguage
-    }
-    return ""
-}
-
-export const LanguageDialog = (props: {
-    handleOnCancelClick: () => void
-    handleClosed: () => void
-    dialogIsOpen: boolean
-    defaultValue?: string
-}) => {
-    const classes = useStyles()
-    const [languageChoice, setLanguageChoice] = useState(getLanguage())
-    const { t } = useTranslation()
-    const { handleOnCancelClick } = props
+export const LanguageDialog = (props: { onClose: () => void }) => {
+    const { i18n, t } = useTranslation()
+    const [languageChoice, setLanguageChoice] = useState(i18n.resolvedLanguage)
+    const { onClose } = props
 
     const handleChangeLanguage = (language: string | null) => {
         if (language) {
             i18n.changeLanguage(language)
             localStorage.setItem("userLanguage", language)
-            handleOnCancelClick()
+            onClose()
         }
     }
 
@@ -57,12 +29,14 @@ export const LanguageDialog = (props: {
             <DialogTitle>{t("MenuButton.changeLanguage")}</DialogTitle>
 
             <DialogContent>
-                <FormControl variant="outlined" className={classes.formControl}>
+                <FormControl variant="outlined" margin={"normal"} sx={{ minWidth: 150 }}>
+                    <InputLabel id={"language-label"}>
+                        {t("TopBar.languageSelect")}
+                    </InputLabel>
                     <Select
                         value={languageChoice}
-                        inputProps={{
-                            "aria-label": t("TopBar.languageSelect"),
-                        }}
+                        labelId={"language-label"}
+                        label={t("TopBar.languageSelect")}
                         onChange={(e) => {
                             setLanguageChoice(e.target.value)
                         }}
@@ -86,13 +60,7 @@ export const LanguageDialog = (props: {
                     {t("Dialog.save")}
                 </Button>
 
-                <Button
-                    size="large"
-                    variant="outlined"
-                    onClick={() => {
-                        handleOnCancelClick()
-                    }}
-                >
+                <Button size="large" variant="outlined" onClick={onClose}>
                     {t("Dialog.cancel")}
                 </Button>
             </DialogActions>

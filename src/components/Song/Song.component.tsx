@@ -95,11 +95,11 @@ export const Song = (props: SongProps) => {
                         display="flex"
                         alignItems="flex-end"
                         mt={exportMode ? 5 : i === 0 ? 7 : 10}
-                        key={i}
+                        key={barsInRow[0].barId}
                         height={heightOfBar}
                     >
                         <BarPrefix
-                            index={barsInRow[0].position - 1}
+                            index={i * barsPerRow}
                             timeSignature={timeSignature}
                         />
                         <BarLine />
@@ -116,7 +116,7 @@ export const Song = (props: SongProps) => {
                                     (i === 0 || bars[i - 1].voltaBracket) !==
                                     bar.voltaBracket
                                 return (
-                                    <React.Fragment key={i}>
+                                    <React.Fragment key={bar.barId}>
                                         <Bar
                                             showVoltaBracketNumber={
                                                 showVoltaBracketNumber
