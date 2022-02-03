@@ -118,13 +118,10 @@ const noteLengths = [
 
 export const BottomBar = (props: { voiceId: number }) => {
     const { voiceId } = props
-    const { song, dispatchSong, dispatchChordMenuOptions } =
-        useSongContext()
-    const { chordMenuOptions, setChordMenuOptions } =
-        useChordMenuOptionsContext()
+    const { song, dispatchSong } = useSongContext()
+    const { chordMenuOptions } = useChordMenuOptionsContext()
     const { songId, numerator, denominator } = song!!
     const { t } = useTranslation()
-    const classes = useStyles()
     const chordOptionsRef = useRef<HTMLDivElement>(null)
     const { postBar } = useAddBar(songId, voiceId)
     const { setSelectedChord } = useSelectedChordContext()
@@ -133,12 +130,7 @@ export const BottomBar = (props: { voiceId: number }) => {
         handleChangeChordLength,
         handleDeleteSelectedChord,
         handleNoteSelectedChange,
-    } = useChords(
-        song,
-        chordMenuOptions,
-        dispatchChordMenuOptions,
-        dispatchSong
-    )
+    } = useChords(song, chordMenuOptions, dispatchSong)
 
     const scrollToBottom = () => {
         window.scrollTo(0, document.body.scrollHeight)
@@ -235,7 +227,7 @@ export const BottomBar = (props: { voiceId: number }) => {
                     elevation={6}
                 >
                     {Menu}
-                    <DropdownAutocomplete/>
+                    <DropdownAutocomplete />
                     <ChordTypeSelect />
                     <DeleteSelectedChord />
                 </Paper>

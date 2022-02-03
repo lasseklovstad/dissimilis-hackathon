@@ -1,10 +1,10 @@
 import React from "react"
 import { Box } from "@mui/material"
 import { IChord } from "../../models/IBar"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { ChordWithCheckboxes } from "./ChordWithCheckboxes.component"
 import { ChordAsButton } from "./ChordAsButton.component"
 import { ChordText } from "./ChordText.component"
+import { useSongContext } from "../../context/song/SongContextProvider.component"
 
 type ChordProps = {
     chord: IChord

@@ -11,7 +11,6 @@ import { useSelectedChordContext } from "../context/selectedChord/SelectedChordC
 export const useChords = (
     song: ISong | undefined,
     chordMenuOptions: IChordMenuOptions | undefined,
-    dispatchChordMenuOptions: React.Dispatch<ChordMenuAction>,
     dispatchSong: React.Dispatch<SongAction>
 ) => {
     const { selectedChord, setSelectedChord } = useSelectedChordContext()
@@ -29,11 +28,11 @@ export const useChords = (
             // )
         } else {
             const notes = getNotesFromChord(chord)
-            dispatchChordMenuOptions({
-                type: "UPDATE_CHORD",
-                chord,
-                chordNotes: notes as string[],
-            })
+            // dispatchChordMenuOptions({
+            //     type: "UPDATE_CHORD",
+            //     chord,
+            //     chordNotes: notes as string[],
+            // })
         }
     }
 

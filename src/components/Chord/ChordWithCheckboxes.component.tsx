@@ -2,9 +2,9 @@ import { Box } from "@mui/material"
 import React from "react"
 import { IChord } from "../../models/IBar"
 import { ChordCheckbox } from "./ChordCheckbox.component"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
 import { useVoice } from "../../utils/useVoice"
 import { useAddNote, useRemoveNote } from "../../utils/useApiServiceSongs"
+import { useSongContext } from "../../context/song/SongContextProvider.component"
 
 type ChordWithCheckboxesProps = {
     chord: IChord

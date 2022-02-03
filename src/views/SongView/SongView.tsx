@@ -81,8 +81,8 @@ export const SongView = () => {
     }
 
     return (
-        <SelectedChordContextProvider>
-            <ChordMenuOptionsContextProvider>
+        <ChordMenuOptionsContextProvider>
+            <SelectedChordContextProvider>
                 <ErrorDialog
                     isError={getSong.isError}
                     error={getSong.error}
@@ -134,7 +134,7 @@ export const SongView = () => {
                 {selectedVoiceId && song?.currentUserHasWriteAccess && (
                     <BottomBar voiceId={selectedVoiceId} />
                 )}
-            </ChordMenuOptionsContextProvider>
-        </SelectedChordContextProvider>
+            </SelectedChordContextProvider>
+        </ChordMenuOptionsContextProvider>
     )
 }

@@ -2,64 +2,28 @@ import ToggleButton from "@mui/material/ToggleButton"
 import { ChordType } from "../../models/IChordMenuOptions"
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
 import React from "react"
-import {
-    useChordMenuOptionsContext,
-    useSelectedChord,
-} from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
+import { useChordMenuOptionsContext } from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
-import { useUpdateChord } from "../../utils/useApiServiceSongs"
-import { useSelectedChordContext } from "../../context/selectedChord/SelectedChordContextProvider.component"
-import { useSongContext } from "../../context/song/SongContextProvider.component"
 
 export const ChordTypeSelect = () => {
     const { chordMenuOptions, setChordMenuOptions } =
         useChordMenuOptionsContext()
-    const { selectedChord } = useSelectedChordContext()
-    const { dispatchSong } = useSongContext()
-    const selectedChordAsChord = useSelectedChord()
     const { t } = useTranslation()
-    const { updateChord } = useUpdateChord()
     const handleToggle = async (
         event: React.MouseEvent<HTMLElement>,
         chordType: ChordType | null
     ) => {
         if (chordType) {
-            if (selectedChord && selectedChordAsChord) {
-                if (chordType === ChordType.CHORD) {
-                    const body = {
-                        position: selectedChordAsChord.position,
-                        length: selectedChordAsChord.length,
-                        notes: null,
-                        chordName: chordMenuOptions.chord,
-                    }
-                    const { error, result } = await updateChord.run(
-                        selectedChord,
-                        body
-                    )
-                    if (!error && result) {
-                        dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-                    }
-                } else {
+            if (chordType === ChordType.CHORD) {
+                setChordMenuOptions((options) => ({ ...options, chordType }))
+            } else {
+                setChordMenuOptions((options) => {
                     const noteFromChord = chordMenuOptions.chord.includes("#")
                         ? chordMenuOptions!!.chord.substring(0, 2)
                         : chordMenuOptions!!.chord?.charAt(0)
-                    const body = {
-                        position: selectedChordAsChord.position,
-                        length: selectedChordAsChord.length,
-                        notes: [noteFromChord],
-                        chordName: null,
-                    }
-                    const { error, result } = await updateChord.run(
-                        selectedChord,
-                        body
-                    )
-                    if (!error && result) {
-                        dispatchSong({ type: "UPDATE_BAR", bar: result.data })
-                    }
-                }
-            } else {
-                setChordMenuOptions((options) => ({ ...options, chordType }))
+                    return { ...options, chordType, chord: noteFromChord }
+                })
             }
         }
     }

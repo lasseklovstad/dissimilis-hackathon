@@ -5,6 +5,7 @@ import { ChordType } from "../../models/IChordMenuOptions"
 import { Paper } from "@mui/material"
 import { useAddComponentInterval } from "../../utils/useApiServiceSongs"
 import { useSelectedChordContext } from "../../context/selectedChord/SelectedChordContextProvider.component"
+import { useChordMenuOptionsContext } from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
 
 type SelectedChordIntervalsProps = {}
 
@@ -12,8 +13,7 @@ export const SelectedChordIntervals = (props: SelectedChordIntervalsProps) => {
     const {} = props
     const {
         chordMenuOptions,
-        song: { songId },
-    } = useSongContext()
+    } = useChordMenuOptionsContext()
     const { selectedChord } = useSelectedChordContext()
 
     const handleAddInterval = () => {}

@@ -1,17 +1,10 @@
 import React, { ReactNode, useContext, useReducer, useState } from "react"
 import { ISong } from "../../models/ISong"
-import { ChordType, IChordMenuOptions } from "../../models/IChordMenuOptions"
-import {
-    ChordMenuAction,
-    chordMenuReducer,
-} from "../../views/SongView/ChordMenuOptions.component"
 import { SongAction, songReducer } from "./songReducer"
 
 interface ISongContext {
     song: ISong
     dispatchSong: React.Dispatch<SongAction>
-    chordMenuOptions: IChordMenuOptions
-    dispatchChordMenuOptions: React.Dispatch<ChordMenuAction>
     barEditMode: boolean
     setBarEditMode: React.Dispatch<React.SetStateAction<boolean>>
     setCustomMode: React.Dispatch<React.SetStateAction<boolean>>
@@ -61,15 +54,6 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
         updatedOn: "",
         arrangerName: "",
     } as ISong)
-    const [chordMenuOptions, dispatchChordMenuOptions] = useReducer(
-        chordMenuReducer,
-        {
-            chordLength: 1,
-            chord: "C",
-            chordType: ChordType.NOTE,
-            chordNotes: ["C"],
-        }
-    )
     const [barEditMode, setBarEditMode] = useState(false)
     const [barsClipboard, setBarsClipboard] = useState<
         | {
@@ -95,8 +79,6 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
             value={{
                 song,
                 dispatchSong,
-                chordMenuOptions,
-                dispatchChordMenuOptions,
                 barEditMode,
                 setBarEditMode,
                 barsClipboard,
