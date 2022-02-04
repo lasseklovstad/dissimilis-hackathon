@@ -2,6 +2,7 @@ import { useUpdateChord } from "../../utils/useApiServiceSongs"
 import { ChordType, IChordMenuOptions } from "../../models/IChordMenuOptions"
 import { useSelectedChordContext } from "./SelectedChordContextProvider.component"
 import { useSongDispatchContext } from "../song/SongContextProvider.component"
+import { NoteTypes } from "../../models/IChord"
 
 export const useUpdateSelectedChord = () => {
     const { selectedChord, selectedChordAsChord } = useSelectedChordContext()
@@ -21,7 +22,7 @@ export const useUpdateSelectedChord = () => {
                     : {
                           position: selectedChordAsChord.position,
                           length: chordMenuOptions.chordLength,
-                          notes: [chordMenuOptions.chord],
+                          notes: [chordMenuOptions.chord as NoteTypes],
                           chordName: null,
                       }
             const response = await updateChord.run(selectedChord, body)

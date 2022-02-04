@@ -1,8 +1,9 @@
 import { ISong, ISongPost } from "../models/ISong"
-import { IBar, IBarPost, IChord } from "../models/IBar"
+import { IBar } from "../models/IBar"
 import { screen, waitFor } from "@testing-library/react"
 import { IVoicePost, IVoice } from "../models/IVoice"
 import { sessionStorageMock } from "./mock/storage.mock"
+import { IChord, IChordPost, NoteTypes } from "../models/IChord"
 
 let chordId = 100
 
@@ -90,15 +91,29 @@ const compareChord = (a: IChord, b: IChord) => {
     return 0
 }
 
+const chordNotes: Record<string, NoteTypes[]> = {
+    C: ["C", "E", "G"],
+    D: ["D", "F", "A"],
+}
+
+const createChordNotes = ({ notes, chordName }: IChordPost): NoteTypes[] => {
+    if (notes !== null) {
+        return notes
+    } else if (chordName !== null) {
+        return chordNotes[chordName]
+    }
+    throw new Error("Invalid code when creating notes from chord")
+}
+
 export const addChordToBar = (
     bar: IBar,
-    newChord: IBarPost,
+    newChord: IChordPost,
     barLength: number
 ) => {
     chordId = chordId + 1
     const chords: IChord[] = [
         ...removeEmptyChords(bar.chords),
-        { ...newChord, chordId },
+        { ...newChord, chordId, notes: createChordNotes(newChord) },
     ].sort(compareChord)
     return { ...bar, chords: fillWithEmptyChords(chords, barLength) }
 }
@@ -117,7 +132,7 @@ const removeEmptyChords = (chords: IChord[]) => {
 const createEmptyChord = (position: number, length: number) => {
     return {
         position,
-        notes: ["Z"],
+        notes: ["Z" as const],
         length,
         chordId: null,
         chordName: null,

@@ -8,9 +8,10 @@ import {
     generateNewVoice,
 } from "../test-utils"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../../models/IVoice"
-import { IBar, IBarPost } from "../../models/IBar"
+import { IBar } from "../../models/IBar"
 import { emptySong, songWithChords } from "../data/song.mock"
 import { songsMetadata } from "../data/songsMetadata.mock"
+import { IChordPost } from "../../models/IChord"
 
 const apiUrl = process.env.REACT_APP_API_URL
 
@@ -105,7 +106,7 @@ export const songHandlers = [
             }
         }
     ),
-    rest.post<IBarPost, never, IBar>(
+    rest.post<IChordPost, never, IBar>(
         `${apiUrl}song/:songId/voice/:voiceId/bar/:barId/note`,
         (req, res, ctx) => {
             const { songId, voiceId, barId } = req.params
@@ -130,7 +131,7 @@ export const songHandlers = [
             }
         }
     ),
-    rest.delete<IBarPost, never, IBar>(
+    rest.delete<IChordPost, never, IBar>(
         `${apiUrl}song/:songId/voice/:voiceId/bar/:barId/note/:noteId`,
         (req, res, ctx) => {
             const { songId, voiceId, barId, noteId } = req.params

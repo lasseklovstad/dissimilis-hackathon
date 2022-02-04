@@ -1,5 +1,3 @@
-import { Chord, Note } from "@tonaljs/tonal"
-
 export const commonChords = [
     "C",
     "Cm",
@@ -278,41 +276,3 @@ export const commonChords = [
     "Haug",
     "Haug7",
 ]
-
-export const notes = [
-    "C",
-    "C#",
-    "D",
-    "D#",
-    "E",
-    "F",
-    "F#",
-    "G",
-    "G#",
-    "A",
-    "A#",
-    "H",
-]
-
-export const toneNames = [
-    "keynote",
-    "third",
-    "fifth",
-    "seventh",
-    "ninth",
-    "eleventh",
-]
-
-const simplifyNote = (note: string) => {
-    const chroma = Note.chroma(note)
-    return chroma !== undefined && notes[chroma]
-}
-
-export const getNotesFromChord = (chord: string | null) => {
-    if (!chord) {
-        return []
-    }
-    return Chord.get(chord.replace("H", "B")).notes.map((note) => {
-        return simplifyNote(note)
-    })
-}

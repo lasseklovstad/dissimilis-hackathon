@@ -1,4 +1,4 @@
-import { IChord } from "../../models/IBar"
+import { IChord } from "../../models/IChord"
 
 export const fillBarWithEmptyChords = (chords: IChord[]) => {
     return chords.reduce((noter: IChord[], note) => {
@@ -8,7 +8,7 @@ export const fillBarWithEmptyChords = (chords: IChord[]) => {
             for (let i = 0; i < numberOfRests; i++) {
                 rests.push({
                     length: 1,
-                    notes: ["Z"],
+                    notes: ["Z" as const],
                     position: note.position + i,
                     chordId: null,
                     chordName: "",

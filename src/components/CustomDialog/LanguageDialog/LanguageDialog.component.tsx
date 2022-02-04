@@ -4,7 +4,8 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    FormControl, InputLabel,
+    FormControl,
+    InputLabel,
     MenuItem,
     Select,
 } from "@mui/material"
@@ -29,7 +30,11 @@ export const LanguageDialog = (props: { onClose: () => void }) => {
             <DialogTitle>{t("MenuButton.changeLanguage")}</DialogTitle>
 
             <DialogContent>
-                <FormControl variant="outlined" margin={"normal"} sx={{ minWidth: 150 }}>
+                <FormControl
+                    variant="outlined"
+                    margin={"normal"}
+                    sx={{ minWidth: 150 }}
+                >
                     <InputLabel id={"language-label"}>
                         {t("TopBar.languageSelect")}
                     </InputLabel>

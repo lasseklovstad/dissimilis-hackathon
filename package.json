@@ -12,7 +12,6 @@
         "@mui/lab": "5.0.0-alpha.65",
         "@mui/material": "5.3.0",
         "@mui/styles": "5.3.0",
-        "@tonaljs/tonal": "^4.6.0",
         "axios": "0.25.0",
         "env-cmd": "10.1.0",
         "i18next": "21.6.7",

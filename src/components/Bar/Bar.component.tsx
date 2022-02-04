@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { useMediaQuery } from "@mui/material"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { VoltaBracket } from "./VoltaBracket.component"
-import { IBar, IChord } from "../../models/IBar"
+import { IBar} from "../../models/IBar"
 import { Chord } from "../Chord/Chord.component"
 import { ChordMenu } from "./ChordMenu.component"
 import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
@@ -16,6 +16,7 @@ import { BarContainer } from "./BarContainer.component"
 import { fillBarWithEmptyChords } from "./barUtils"
 import { IPosition } from "../../models/IPosition"
 import { SongVariantType } from "../Song/SongVariantType"
+import { IChord } from "../../models/IChord"
 
 type BarProps = {
     bar: IBar

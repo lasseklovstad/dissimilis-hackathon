@@ -1,9 +1,9 @@
 import { ButtonBaseProps } from "@mui/material"
 import React from "react"
-import { IChord } from "../../models/IBar"
 import { getNoteText } from "./Chord.util"
 import { Note } from "./Note.component"
 import { ChordButton } from "./ChordButton.component"
+import { IChord } from "../../models/IChord"
 
 type ChordAsButtonProps = {
     ButtonProps: Pick<

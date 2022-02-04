@@ -1,10 +1,11 @@
 import React from "react"
 import { Paper } from "@mui/material"
 import { ISelectedChord } from "../../models/ISelectedChord"
-import { IBar, IChord } from "../../models/IBar"
+import { IBar} from "../../models/IBar"
 import { useAddNote, useRemoveNote } from "../../utils/useApiServiceSongs"
 import { useSongDispatchContext } from "../../context/song/SongContextProvider.component"
 import { ChordOptions } from "../ChordOptions/ChordOptions"
+import { IChord } from "../../models/IChord"
 
 const getSelectedIntervalIndexes = (notes: string[]) => {
     return notes

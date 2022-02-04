@@ -1,18 +1,4 @@
-export interface IChord {
-    position: number
-    notes: string[]
-    length: number
-    chordId: number | null
-    chordName: string | null
-    selectedNotes?: string [] // Used in custom mode when choosing notes from main voice
-}
-
-export interface IChordPost {
-    position: number
-    length: number
-    notes: string[] | null
-    chordName: string | null
-}
+import { IChord } from "./IChord"
 
 export interface IBar {
     barId: number
@@ -23,11 +9,4 @@ export interface IBar {
     repBefore: boolean
     repAfter: boolean
     chords: IChord[]
-}
-
-export interface IBarPost {
-    position: number
-    length: number
-    notes: string[]
-    chordName: string | null
 }

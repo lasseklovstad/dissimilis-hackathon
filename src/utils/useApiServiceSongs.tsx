@@ -6,7 +6,7 @@ import {
     ISongMetadata,
     ISongShareData,
 } from "../models/ISong"
-import { IBar, IChordPost } from "../models/IBar"
+import { IBar} from "../models/IBar"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../models/IVoice"
 import { IUser } from "../models/IUser"
 import { IGroupIndex } from "../models/IGroup"
@@ -14,6 +14,7 @@ import { IOrganisationIndex } from "../models/IOrganisation"
 import { ISelectedChord } from "../models/ISelectedChord"
 import { IAddComponentIntervallPost } from "../models/IAddComponentIntervall"
 import { IRemoveComponentIntervall } from "../models/IRemoveComponentIntervall"
+import { IChordPost } from "../models/IChord"
 
 export enum SongProtectionLevel {
     Public = "Public",

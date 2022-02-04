@@ -1,8 +1,8 @@
 import React from "react"
-import { IChord } from "../../models/IBar"
 import { ChordText } from "./ChordText.component"
 import { ChordAsBox } from "./ChordAsBox.component"
 import { ChordContainer } from "./ChordContainer.component"
+import { IChord } from "../../models/IChord"
 
 type ChordReadOnlyProps = {
     chord: IChord

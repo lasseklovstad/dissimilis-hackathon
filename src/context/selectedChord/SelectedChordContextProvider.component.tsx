@@ -7,9 +7,10 @@ import React, {
     useState,
 } from "react"
 import { ISelectedChord } from "../../models/ISelectedChord"
-import { IBar, IChord } from "../../models/IBar"
+import { IBar} from "../../models/IBar"
 import { useSelectedChordAsChord } from "./useSelectedChordAsChord"
 import { useSongContext } from "../song/SongContextProvider.component"
+import { IChord } from "../../models/IChord"
 
 interface ISelectedChordContext {
     selectedChord: ISelectedChord | null

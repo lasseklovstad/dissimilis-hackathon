@@ -1,9 +1,9 @@
 import React from "react"
-import { IChord } from "../../models/IBar"
 import { ChordWithCheckboxes } from "./ChordWithCheckboxes.component"
 import { ChordAsButton } from "./ChordAsButton.component"
 import { ChordText } from "./ChordText.component"
 import { ChordContainer } from "./ChordContainer.component"
+import { IChord } from "../../models/IChord"
 
 export type ChordDisplayVariant = "note-checkbox" | "chord-button"
 
