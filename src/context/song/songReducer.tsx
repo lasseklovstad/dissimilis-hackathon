@@ -57,18 +57,9 @@ export const songReducer = (song: ISong, action: SongAction) => {
             return {
                 ...song,
                 voices: song.voices.map((voice) => {
-                    return {
-                        ...voice,
-                        bars: voice.bars.map((bar, index) => {
-                            const actionBar = action.voice.bars[index]
-                            return {
-                                ...bar,
-                                voltaBracket: actionBar.voltaBracket,
-                                repAfter: actionBar.repAfter,
-                                repBefore: actionBar.repBefore,
-                            }
-                        }),
-                    }
+                    return voice.songVoiceId === action.voice.songVoiceId
+                        ? action.voice
+                        : voice
                 }),
             }
         case "UPDATE_VOICE_NAME":

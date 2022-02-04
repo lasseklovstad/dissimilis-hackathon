@@ -17,8 +17,8 @@ export const BarMenuButton = (props: BarMenuButtonProps) => {
             width="0px"
             display="flex"
             position="relative"
-            bottom="-47px"
-            left="-11px"
+            bottom="-40px"
+            left="-8px"
             alignItems="flex-end"
         >
             <IconButton
@@ -27,7 +27,6 @@ export const BarMenuButton = (props: BarMenuButtonProps) => {
                 onClick={handleClick}
                 aria-label={t("Song.barMenu")}
                 disableFocusRipple
-                size="large"
             >
                 <MoreHorizIcon />
             </IconButton>

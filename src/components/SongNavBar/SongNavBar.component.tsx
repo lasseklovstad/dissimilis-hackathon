@@ -14,7 +14,7 @@ import { useLogout } from "../../utils/useApiServiceUsers"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { useTranslation } from "react-i18next"
-import { useSongContext } from "../../context/song/SongContextProvider.component"
+import { useSongContext, useSongDispatchContext } from "../../context/song/SongContextProvider.component"
 import { useUpdateSong } from "../../utils/useApiServiceSongs"
 import { useUser } from "../UserContextProvider/UserContextProvider"
 
@@ -63,9 +63,14 @@ const useStyles = makeStyles({
     },
 })
 
-export const SongNavBar = (props: { currentUserHasWriteAccess?: boolean }) => {
-    const { song, dispatchSong } = useSongContext()
-    const { currentUserHasWriteAccess } = props
+export const SongNavBar = (props: {
+    currentUserHasWriteAccess?: boolean
+    barEditMode: boolean
+    setBarEditMode: (mode: boolean) => void
+}) => {
+    const { song } = useSongContext()
+    const { dispatchSong } = useSongDispatchContext()
+    const { currentUserHasWriteAccess, barEditMode, setBarEditMode } = props
     const classes = useStyles()
     const matches = useMediaQuery("(max-width:600px)")
     const [title, setTitle] = useState(song?.title)
@@ -140,6 +145,8 @@ export const SongNavBar = (props: { currentUserHasWriteAccess?: boolean }) => {
                         updateSongTitle={handleTitleBlur}
                         songTitle={song!!.title}
                         currentUserHasWriteAccess={currentUserHasWriteAccess}
+                        barEditMode={barEditMode}
+                        setBarEditMode={setBarEditMode}
                     />
                 </Box>
             </AppBar>

@@ -34,16 +34,18 @@ export const MenuButton = (props: {
     updateSongTitle: (title: string) => void
     songTitle: string
     currentUserHasWriteAccess?: boolean
+    barEditMode: boolean
+    setBarEditMode: (mode: boolean) => void
 }) => {
-    const { showName, updateSongTitle, songTitle, currentUserHasWriteAccess } =
-        props
     const {
-        song,
-        setBarEditMode,
+        showName,
+        updateSongTitle,
+        songTitle,
+        currentUserHasWriteAccess,
         barEditMode,
-        setSelectedBars,
-        setBarsClipboard,
-    } = useSongContext()
+        setBarEditMode,
+    } = props
+    const { song, setSelectedBars, setBarsClipboard } = useSongContext()
     const selectedVoice = useVoice(song?.voices)
     const { songVoiceId: voiceId } = selectedVoice || {}
     const { user } = useUser()

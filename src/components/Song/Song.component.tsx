@@ -10,6 +10,9 @@ import {
 import { Bar } from "../Bar/Bar.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
 import { IVoice } from "../../models/IVoice"
+import { BarReadOnly } from "../Bar/BarReadOnly.component"
+import { SongVariantType } from "./SongVariantType"
+import { BarEdit } from "../Bar/BarEdit.component"
 
 type SongProps = {
     barsPerRow: number
@@ -20,13 +23,12 @@ type SongProps = {
     ) => string | null | undefined
     timeSignature: ITimeSignature
     heightOfBar: number
-    exportMode?: boolean
+    variant: SongVariantType
     showChordLetters?: boolean
     showNoteLetters?: boolean
     lastPage: boolean
     pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
     deleteBars?: () => void
-    currentUserHasWriteAccess?: boolean
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
@@ -54,11 +56,10 @@ export const Song = (props: SongProps) => {
         getChordNameFromMainVoice,
         timeSignature,
         heightOfBar,
-        exportMode = false,
+        variant,
         showChordLetters = true,
         showNoteLetters = true,
         lastPage,
-        currentUserHasWriteAccess = false,
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
@@ -94,7 +95,7 @@ export const Song = (props: SongProps) => {
                     <Box
                         display="flex"
                         alignItems="flex-end"
-                        mt={exportMode ? 5 : i === 0 ? 7 : 10}
+                        mt={variant === "normal-edit" ? 7 : 5}
                         key={barsInRow[0].barId}
                         height={heightOfBar}
                     >
@@ -115,25 +116,76 @@ export const Song = (props: SongProps) => {
                                 const showVoltaBracketNumber =
                                     (i === 0 || bars[i - 1].voltaBracket) !==
                                     bar.voltaBracket
+
+                                if (variant === "read-only") {
+                                    return (
+                                        <React.Fragment key={bar.barId}>
+                                            <BarReadOnly
+                                                bar={bar}
+                                                showVoltaBracketNumber={
+                                                    showVoltaBracketNumber
+                                                }
+                                                showChordLetters={
+                                                    showChordLetters
+                                                }
+                                                showNoteLetters={
+                                                    showNoteLetters
+                                                }
+                                                getChordNameFromMainVoice={
+                                                    getChordNameFromMainVoice
+                                                }
+                                            />
+                                            <BarLine />
+                                            {bar.position === lastBarPosition &&
+                                                lastPage && (
+                                                    <BarLine lastPosition />
+                                                )}
+                                        </React.Fragment>
+                                    )
+                                }
+                                if (variant === "bar-edit") {
+                                    return (
+                                        <React.Fragment key={bar.barId}>
+                                            <BarEdit
+                                                showVoltaBracketNumber={
+                                                    showVoltaBracketNumber
+                                                }
+                                                showChordLetters={
+                                                    showChordLetters
+                                                }
+                                                showNoteLetters={
+                                                    showNoteLetters
+                                                }
+                                                getChordNameFromMainVoice={
+                                                    getChordNameFromMainVoice
+                                                }
+                                                bar={bar}
+                                                height={heightOfBar}
+                                            />
+                                            <BarLine />
+                                            {bar.position === lastBarPosition &&
+                                                lastPage && (
+                                                    <BarLine lastPosition />
+                                                )}
+                                        </React.Fragment>
+                                    )
+                                }
                                 return (
                                     <React.Fragment key={bar.barId}>
                                         <Bar
                                             showVoltaBracketNumber={
                                                 showVoltaBracketNumber
                                             }
-                                            exportMode={exportMode}
                                             showChordLetters={showChordLetters}
                                             showNoteLetters={showNoteLetters}
-                                            masterSheet={!exportMode && isMain}
+                                            masterSheet={isMain}
                                             getChordNameFromMainVoice={
                                                 getChordNameFromMainVoice
                                             }
                                             onMenuClick={openMenu(bar)}
                                             bar={bar}
                                             height={heightOfBar}
-                                            currentUserHasWriteAccess={
-                                                currentUserHasWriteAccess
-                                            }
+                                            variant={variant}
                                         />
                                         <BarLine />
                                         {bar.position === lastBarPosition &&
@@ -152,7 +204,7 @@ export const Song = (props: SongProps) => {
                 ))}
             </Box>
 
-            {selectedBar && currentUserHasWriteAccess && (
+            {selectedBar && variant === "normal-edit" && (
                 <BarMenu
                     bar={selectedBar}
                     anchorEl={anchorEl}

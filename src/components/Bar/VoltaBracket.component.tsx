@@ -23,7 +23,6 @@ const useStyle = makeStyles((theme: Theme) => {
                 borderBottom: "2px solid black",
                 position: "relative",
                 left: "-30px",
-                bottom: "-2px",
             },
         },
     }
@@ -43,17 +42,17 @@ export const VoltaBracket = (props: {
         props.showVoltaBracketNumber ? `${props.voltaBracketOrder}.` : ""
 
     return (
-        <Box position="relative" top="-5px" height={0}>
+        <Box
+            position="absolute"
+            top="-5px"
+            height={0}
+            width={props.showVoltaBracketNumber ? "100%" : "calc(100% + 30px)"}
+            left={props.showVoltaBracketNumber ? "0px" : "-30px"}
+        >
             <Typography variant="body1" component="div">
                 {props.voltaBracketOrder !== undefined && (
                     <Box className={classes.voltaBracketContainer}>
-                        <Box
-                            className={`${classes.voltaBracketLine} ${
-                                props.showVoltaBracketNumber
-                                    ? ""
-                                    : classes.voltaBracketBefore
-                            }`}
-                        >
+                        <Box className={`${classes.voltaBracketLine}`}>
                             <span
                                 style={{ position: "relative", top: "-10px" }}
                             >

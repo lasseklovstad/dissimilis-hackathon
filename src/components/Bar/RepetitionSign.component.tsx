@@ -2,24 +2,17 @@ import React from "react"
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord"
 import { Box } from "@mui/material"
 
-import makeStyles from "@mui/styles/makeStyles"
-
-const useStyles = makeStyles({
-    dot: {
-        width: "12px",
-        height: "12px",
-    },
-})
+const dotStyle = {
+    width: "12px",
+    height: "12px",
+}
 
 export const RepetitionSign = (props: { display: boolean }) => {
-    const classes = useStyles()
     if (!props.display) {
         return <></>
     }
     return (
         <Box
-            pr={0.5}
-            pl={0.5}
             display="flex"
             flexDirection="column"
             justifyContent="center"
@@ -27,10 +20,10 @@ export const RepetitionSign = (props: { display: boolean }) => {
             alignSelf="flex-end"
         >
             <Box>
-                <FiberManualRecordIcon className={classes.dot} />
+                <FiberManualRecordIcon sx={dotStyle} />
             </Box>
             <Box>
-                <FiberManualRecordIcon className={classes.dot} />
+                <FiberManualRecordIcon sx={dotStyle} />
             </Box>
         </Box>
     )

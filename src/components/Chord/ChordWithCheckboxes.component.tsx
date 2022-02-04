@@ -2,28 +2,30 @@ import { Box } from "@mui/material"
 import React from "react"
 import { IChord } from "../../models/IBar"
 import { ChordCheckbox } from "./ChordCheckbox.component"
-import { useVoice } from "../../utils/useVoice"
 import { useAddNote, useRemoveNote } from "../../utils/useApiServiceSongs"
-import { useSongContext } from "../../context/song/SongContextProvider.component"
+import { useSongDispatchContext } from "../../context/song/SongContextProvider.component"
 
 type ChordWithCheckboxesProps = {
     chord: IChord
     showNoteText: boolean
     barPosition: number
+    songVoiceId: number
+    songId: number
 }
 
 export const ChordWithCheckboxes = (props: ChordWithCheckboxesProps) => {
-    const { chord, showNoteText, barPosition } = props
-    const { song, dispatchSong } = useSongContext()
-    const selectedVoice = useVoice(song?.voices)
-
-    const { addNote } = useAddNote(
-        song?.songId,
-        selectedVoice?.songVoiceId,
-        barPosition
-    )
+    const { chord, showNoteText, barPosition, songVoiceId, songId } = props
+    const { dispatchSong } = useSongDispatchContext()
+    const { removeNote } = useRemoveNote(songId, songVoiceId, barPosition)
+    const { addNote } = useAddNote(songId, songVoiceId, barPosition)
 
     const handleCustomVoiceAddClick = async (index: number) => {
+        if (!chord.chordName) {
+            console.error(
+                "Can't add note in chord, because this is not a chord!"
+            )
+            return false
+        }
         const { error, result } = await addNote.run({
             chordName: chord.chordName,
             notePosition: chord.position,
@@ -37,13 +39,13 @@ export const ChordWithCheckboxes = (props: ChordWithCheckboxesProps) => {
         }
         return false
     }
-
-    const { removeNote } = useRemoveNote(
-        song?.songId,
-        selectedVoice?.songVoiceId,
-        barPosition
-    )
     const handleCustomVoiceRemoveClick = async (index: number) => {
+        if (!chord.chordName) {
+            console.error(
+                "Can't remove note in chord, because this is not a chord!"
+            )
+            return false
+        }
         const { error, result } = await removeNote.run({
             deleteOnLastIntervalRemoved: true,
             chordName: chord.chordName,
@@ -79,6 +81,7 @@ export const ChordWithCheckboxes = (props: ChordWithCheckboxesProps) => {
             }}
         >
             {chord.notes
+                .filter((note) => note !== "X")
                 .map((note, i) => {
                     return (
                         <ChordCheckbox

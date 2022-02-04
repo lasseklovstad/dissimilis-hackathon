@@ -1,131 +1,23 @@
-import React, { useEffect } from "react"
-import makeStyles from "@mui/styles/makeStyles"
-import Typography from "@mui/material/Typography"
-import AddIcon from "@mui/icons-material/Add"
-import {
-    Box,
-    Button,
-    Checkbox,
-    FormControlLabel,
-    FormGroup,
-    Grid,
-    Paper,
-    Popper,
-    PopperProps,
-    TextField,
-} from "@mui/material"
-import Autocomplete from "@mui/material/Autocomplete"
-import { useTranslation } from "react-i18next"
-import { colors } from "../../utils/colors"
-import { getColor, tangentToNumber } from "../../utils/bar.util"
-import { ChordType } from "../../models/IChordMenuOptions"
-import {
-    commonChords,
-    getNotesFromChord,
-    toneNames,
-} from "../../models/commonChords"
-import { useSongContext } from "../../context/song/SongContextProvider.component"
-import {
-    useGetChordIntervals,
-    useOptions,
-} from "../../utils/useApiServiceGlobalNote.util"
+import { Box, Grid, Popper, PopperProps, TextField } from "@mui/material"
+import React from "react"
 import { useChordMenuOptionsContext } from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
-
-const useStyles = makeStyles({
-    button: {
-        backgroundColor: colors.white,
-        boxShadow: "0px 0px 0px rgba(255, 255, 255, 0)",
-        margin: "auto",
-    },
-    addbutton: {
-        backgroundColor: colors.white,
-        border: "none",
-        height: "56px",
-        outline: "none",
-    },
-    icon: {
-        right: 7,
-    },
-    root: {
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "7px 8px",
-        height: "auto",
-    },
-})
-
-export const ChordOptions = (props: {
-    chord: string
-    addChordInterval: (intervalPosition: number) => void
-    removeChordInterval: (intervalPosition: number) => void
-}) => {
-    const { chord, addChordInterval, removeChordInterval } = props
-    const styles = useStyles()
-    const { state, chordIntervalsData } = useGetChordIntervals(chord)
-    const { t } = useTranslation()
-
-    if (!chordIntervalsData) {
-        return null
-    }
-
-    return (
-        <Box className={styles.root}>
-            <FormGroup row>
-                {chordIntervalsData.intervalNames.map(
-                    (interval, intervalPosition) => {
-                        return (
-                            <FormControlLabel
-                                key={interval}
-                                control={
-                                    <Checkbox
-                                        color="default"
-                                        onChange={(e) =>
-                                            e.target.checked
-                                                ? addChordInterval(
-                                                      intervalPosition
-                                                  )
-                                                : removeChordInterval(
-                                                      intervalPosition
-                                                  )
-                                        }
-                                        name={interval}
-                                    />
-                                }
-                                label={interval}
-                            />
-                        )
-                    }
-                )}
-            </FormGroup>
-        </Box>
-    )
-}
-
-export const MenuButtonWithAddIcon = (props: {
-    text: string
-    onClick?: () => void
-}) => {
-    return (
-        <Paper elevation={6} sx={{ display: "flex", m: 1 }}>
-            <Button
-                disableFocusRipple
-                size={"large"}
-                startIcon={<AddIcon />}
-                onClick={() => props.onClick && props.onClick()}
-            >
-                {props.text}
-            </Button>
-        </Paper>
-    )
-}
+import { useUpdateSelectedChord } from "../../context/selectedChord/useUpdateSelectedChord"
+import { useOptions } from "../../utils/useApiServiceGlobalNote.util"
+import { useTranslation } from "react-i18next"
+import Autocomplete from "@mui/material/Autocomplete"
+import { commonChords } from "../../models/commonChords"
+import Typography from "@mui/material/Typography"
+import { ChordType } from "../../models/IChordMenuOptions"
+import { getColor, tangentToNumber } from "../../utils/bar.util"
+import { colors } from "../../utils/colors"
 
 const customPopperPlacement = (props: PopperProps) => {
     return <Popper {...props} placement="top" children={props.children} />
 }
-
-export const DropdownAutocomplete = () => {
+export const ChordNameAutocomplete = () => {
     const { chordMenuOptions, setChordMenuOptions } =
         useChordMenuOptionsContext()
+    const { updateSelectedChord } = useUpdateSelectedChord()
     const {
         state,
         optionData: { singleNoteOptions, chordOptions },
@@ -137,6 +29,14 @@ export const DropdownAutocomplete = () => {
 
     const { t } = useTranslation()
 
+    const handleUpdateChord = async (chord: string) => {
+        const newOptions = {
+            ...chordMenuOptions,
+            chord,
+        }
+        await updateSelectedChord(newOptions)
+        setChordMenuOptions(newOptions)
+    }
     return (
         <Autocomplete<string>
             sx={{
@@ -161,10 +61,7 @@ export const DropdownAutocomplete = () => {
             }}
             onChange={(event, value) => {
                 if (typeof value === "string") {
-                    setChordMenuOptions((options) => ({
-                        ...options,
-                        chord: value,
-                    }))
+                    handleUpdateChord(value)
                 }
             }}
             blurOnSelect="touch"

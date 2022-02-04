@@ -12,6 +12,8 @@ import { IUser } from "../models/IUser"
 import { IGroupIndex } from "../models/IGroup"
 import { IOrganisationIndex } from "../models/IOrganisation"
 import { ISelectedChord } from "../models/ISelectedChord"
+import { IAddComponentIntervallPost } from "../models/IAddComponentIntervall"
+import { IRemoveComponentIntervall } from "../models/IRemoveComponentIntervall"
 
 export enum SongProtectionLevel {
     Public = "Public",
@@ -35,6 +37,20 @@ export const useGetSong = (songId: number) => {
     return {
         getSong: { run: getData, ...state },
         songInit: data,
+    }
+}
+
+export const useGetVoice = (songId: number, songVoiceId?: number) => {
+    const url = `song/${songId}/voice/${songVoiceId}`
+    const { getData, state, data } = useApiService<IVoice>(url)
+    useEffect(() => {
+        if (songVoiceId) {
+            getData()
+        }
+    }, [getData, songVoiceId])
+    return {
+        getVoice: { run: getData, ...state },
+        voiceInit: data,
     }
 }
 
@@ -312,28 +328,36 @@ export const useUpdateChord = () => {
 }
 
 export const useAddNote = (
-    songId: number | undefined,
-    voiceId: number | undefined,
+    songId: number,
+    voiceId: number,
     barPosition: number
 ) => {
     const url = `song/${songId}/voice/${voiceId}/bar/${barPosition}/note/addComponentInterval`
     const api = useApiService<IBar>(url)
 
+    const run = (body: IAddComponentIntervallPost) => {
+        return api.postData(body)
+    }
+
     return {
-        addNote: { run: api.postData, ...api.state },
+        addNote: { run, ...api.state },
     }
 }
 
 export const useRemoveNote = (
-    songId: number | undefined,
-    voiceId: number | undefined,
+    songId: number,
+    voiceId: number,
     barPosition: number
 ) => {
     const url = `song/${songId}/voice/${voiceId}/bar/${barPosition}/note/removeComponentInterval`
     const api = useApiService<IBar>(url)
 
+    const run = (body: IRemoveComponentIntervall) => {
+        return api.postData(body)
+    }
+
     return {
-        removeNote: { run: api.postData, ...api.state },
+        removeNote: { run, ...api.state },
     }
 }
 

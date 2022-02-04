@@ -4,11 +4,11 @@ import React from "react"
 import { useDeleteChord } from "../../utils/useApiServiceSongs"
 import { useTranslation } from "react-i18next"
 import { useSelectedChordContext } from "../../context/selectedChord/SelectedChordContextProvider.component"
-import { useSongContext } from "../../context/song/SongContextProvider.component"
+import { useSongDispatchContext } from "../../context/song/SongContextProvider.component"
 
 export const DeleteSelectedChord = () => {
     const { selectedChord, setSelectedChord } = useSelectedChordContext()
-    const { dispatchSong } = useSongContext()
+    const { dispatchSong } = useSongDispatchContext()
     const { deleteChord } = useDeleteChord()
     const { t } = useTranslation()
 

@@ -19,7 +19,7 @@ export interface IBar {
     songId: number
     songVoiceId: number
     position: number
-    voltaBracket?: number | undefined | null
+    voltaBracket: number | null
     repBefore: boolean
     repAfter: boolean
     chords: IChord[]

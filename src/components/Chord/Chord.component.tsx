@@ -1,20 +1,21 @@
 import React from "react"
-import { Box } from "@mui/material"
 import { IChord } from "../../models/IBar"
 import { ChordWithCheckboxes } from "./ChordWithCheckboxes.component"
 import { ChordAsButton } from "./ChordAsButton.component"
 import { ChordText } from "./ChordText.component"
-import { useSongContext } from "../../context/song/SongContextProvider.component"
+import { ChordContainer } from "./ChordContainer.component"
+
+export type ChordDisplayVariant = "note-checkbox" | "chord-button"
 
 type ChordProps = {
     chord: IChord
+    songVoiceId: number
     barPosition: number
     onContextMenu: (event: React.MouseEvent) => void
     onClick: (event: React.MouseEvent) => void
     onMouseEnter: () => void
     onMouseLeave: () => void
     highlight: boolean
-    exportMode: boolean
     showChordLetters: boolean
     showNoteLetters: boolean
     isSelected: boolean
@@ -23,9 +24,10 @@ type ChordProps = {
         barPosition: number,
         chordPosition: number
     ) => string | null | undefined
-    barEditMode: boolean
     barId: number
     onTouchEnd: () => void
+    variant: ChordDisplayVariant
+    songId: number
 }
 
 export const Chord = (props: ChordProps) => {
@@ -38,43 +40,33 @@ export const Chord = (props: ChordProps) => {
         onMouseLeave,
         getChordNameFromMainVoice,
         highlight,
-        exportMode,
         showChordLetters,
         showNoteLetters,
         isSelected,
         handleChordFocus,
-        barEditMode,
         onTouchEnd,
+        songVoiceId,
+        variant = "chord-button",
+        songId,
     } = props
 
     const chordName = getChordNameFromMainVoice(barPosition, chord.position)
-    const { customMode } = useSongContext()
 
     return (
-        <Box
-            flexGrow={chord.length}
-            display="flex"
-            flexDirection="column"
-            position="relative"
-            height="100%"
-            justifyContent="flex-end"
-            flexBasis="0"
-            mr={0.5}
-            ml={0.5}
-            minWidth={0}
-        >
+        <ChordContainer chordLength={chord.length}>
             {chordName && showChordLetters && (
                 <ChordText chordName={chordName} />
             )}
-            {customMode ? (
+            {variant === "note-checkbox" ? (
                 <ChordWithCheckboxes
                     chord={chord}
                     showNoteText={showNoteLetters}
                     barPosition={barPosition}
+                    songVoiceId={songVoiceId}
+                    songId={songId}
                 />
             ) : (
                 <ChordAsButton
-                    disabled={exportMode || barEditMode}
                     ButtonProps={{
                         onClick,
                         onContextMenu,
@@ -89,6 +81,6 @@ export const Chord = (props: ChordProps) => {
                     highlight={highlight}
                 />
             )}
-        </Box>
+        </ChordContainer>
     )
 }

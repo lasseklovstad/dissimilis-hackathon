@@ -19,7 +19,7 @@ const getColor = (note: string) => {
 type NoteProps = {
     note: string
     variant: "main" | "opaque"
-    highlight: boolean
+    highlight?: boolean
     outline: boolean
 }
 export const Note = styled("div", {

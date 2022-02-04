@@ -5,25 +5,33 @@ import React from "react"
 import { useChordMenuOptionsContext } from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
+import { useUpdateSelectedChord } from "../../context/selectedChord/useUpdateSelectedChord"
 
 export const ChordTypeSelect = () => {
     const { chordMenuOptions, setChordMenuOptions } =
         useChordMenuOptionsContext()
     const { t } = useTranslation()
+    const { updateSelectedChord } = useUpdateSelectedChord()
     const handleToggle = async (
         event: React.MouseEvent<HTMLElement>,
         chordType: ChordType | null
     ) => {
         if (chordType) {
             if (chordType === ChordType.CHORD) {
-                setChordMenuOptions((options) => ({ ...options, chordType }))
+                const newOptions = { ...chordMenuOptions, chordType }
+                await updateSelectedChord(newOptions)
+                setChordMenuOptions(newOptions)
             } else {
-                setChordMenuOptions((options) => {
-                    const noteFromChord = chordMenuOptions.chord.includes("#")
-                        ? chordMenuOptions!!.chord.substring(0, 2)
-                        : chordMenuOptions!!.chord?.charAt(0)
-                    return { ...options, chordType, chord: noteFromChord }
-                })
+                const noteFromChord = chordMenuOptions.chord.includes("#")
+                    ? chordMenuOptions!!.chord.substring(0, 2)
+                    : chordMenuOptions!!.chord?.charAt(0)
+                const newOptions = {
+                    ...chordMenuOptions,
+                    chordType,
+                    chord: noteFromChord,
+                }
+                await updateSelectedChord(newOptions)
+                setChordMenuOptions(newOptions)
             }
         }
     }

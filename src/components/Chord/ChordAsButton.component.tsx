@@ -6,7 +6,6 @@ import { Note } from "./Note.component"
 import { ChordButton } from "./ChordButton.component"
 
 type ChordAsButtonProps = {
-    disabled: boolean
     ButtonProps: Pick<
         ButtonBaseProps,
         | "onClick"
@@ -23,20 +22,12 @@ type ChordAsButtonProps = {
 }
 
 export const ChordAsButton = (props: ChordAsButtonProps) => {
-    const {
-        disabled,
-        ButtonProps,
-        chord,
-        showNoteLetters,
-        isSelected,
-        highlight,
-    } = props
+    const { ButtonProps, chord, showNoteLetters, isSelected, highlight } = props
     return (
         <ChordButton
             emptyChord={chord.notes[0] === "Z"}
-            isSelected={isSelected}
+            aria-selected={isSelected}
             id="chordButton"
-            disabled={disabled}
             disableRipple
             {...ButtonProps}
         >

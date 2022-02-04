@@ -1,46 +1,32 @@
-import React, { ReactNode, useContext, useReducer, useState } from "react"
+import React, {
+    Dispatch,
+    ReactNode,
+    SetStateAction,
+    useContext,
+    useReducer,
+    useState,
+} from "react"
 import { ISong } from "../../models/ISong"
 import { SongAction, songReducer } from "./songReducer"
+import { ISelectedBarsPosition } from "../../models/ISelectedBarsPosition"
 
 interface ISongContext {
     song: ISong
-    dispatchSong: React.Dispatch<SongAction>
-    barEditMode: boolean
-    setBarEditMode: React.Dispatch<React.SetStateAction<boolean>>
-    setCustomMode: React.Dispatch<React.SetStateAction<boolean>>
-    customMode: boolean
-    barsClipboard:
-        | {
-              fromPosition: number
-              toPosition: number
-          }
-        | undefined
-    setBarsClipboard: React.Dispatch<
-        React.SetStateAction<
-            | {
-                  fromPosition: number
-                  toPosition: number
-              }
-            | undefined
-        >
+    barsClipboard: ISelectedBarsPosition | undefined
+    setBarsClipboard: Dispatch<
+        SetStateAction<ISelectedBarsPosition | undefined>
     >
-    selectedBars:
-        | {
-              fromPosition: number
-              toPosition: number
-          }
-        | undefined
-    setSelectedBars: React.Dispatch<
-        React.SetStateAction<
-            | {
-                  fromPosition: number
-                  toPosition: number
-              }
-            | undefined
-        >
-    >
+    selectedBars: ISelectedBarsPosition | undefined
+    setSelectedBars: Dispatch<SetStateAction<ISelectedBarsPosition | undefined>>
 }
 
+interface ISongDispatchContext {
+    dispatchSong: React.Dispatch<SongAction>
+}
+
+const SongDispatchContext = React.createContext<
+    ISongDispatchContext | undefined
+>(undefined)
 const SongContext = React.createContext<ISongContext | undefined>(undefined)
 
 export const SongContextProvider = (props: { children: ReactNode }) => {
@@ -53,43 +39,25 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
         voices: [],
         updatedOn: "",
         arrangerName: "",
+        currentUserHasWriteAccess: false,
     } as ISong)
-    const [barEditMode, setBarEditMode] = useState(false)
-    const [barsClipboard, setBarsClipboard] = useState<
-        | {
-              fromPosition: number
-              toPosition: number
-          }
-        | undefined
-    >(undefined)
+    const [barsClipboard, setBarsClipboard] = useState<ISelectedBarsPosition>()
 
-    const [selectedBars, setSelectedBars] = useState<
-        | {
-              fromPosition: number
-              toPosition: number
-          }
-        | undefined
-    >(undefined)
-
-
-    const [customMode, setCustomMode] = useState(false)
+    const [selectedBars, setSelectedBars] = useState<ISelectedBarsPosition>()
 
     return (
         <SongContext.Provider
             value={{
                 song,
-                dispatchSong,
-                barEditMode,
-                setBarEditMode,
                 barsClipboard,
                 setBarsClipboard,
                 selectedBars,
                 setSelectedBars,
-                customMode,
-                setCustomMode,
             }}
         >
-            {children}
+            <SongDispatchContext.Provider value={{ dispatchSong }}>
+                {children}
+            </SongDispatchContext.Provider>
         </SongContext.Provider>
     )
 }
@@ -99,6 +67,16 @@ export const useSongContext = () => {
     if (!context) {
         throw new Error(
             "useSongContext must be used within SongContextProvider"
+        )
+    }
+    return context
+}
+
+export const useSongDispatchContext = () => {
+    const context = useContext(SongDispatchContext)
+    if (!context) {
+        throw new Error(
+            "useSongDispatchContext must be used within SongDispatchContext"
         )
     }
     return context

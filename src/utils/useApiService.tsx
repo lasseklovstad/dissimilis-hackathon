@@ -50,10 +50,11 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
 ) => {
     const { body: bodyInit, headers = {}, initialData, params } = options || {}
     const { push } = useHistory()
-    const source = axios.CancelToken.source()
     const [error, setError] = useState<AxiosError<IServerError> | undefined>(
         undefined
     )
+    const controller = useRef(new AbortController())
+
     const [data, setData] = useState<T | undefined>(initialData)
     const [isError, setIsError] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -63,6 +64,10 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
         isError: boolean,
         error: AxiosError<IServerError> | undefined
     ) => {
+        if (controller.current.signal.aborted) {
+            return
+        }
+        setLoading(false)
         setError(error)
         if (result?.data) {
             setData(result?.data)
@@ -86,16 +91,18 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
             let isError = false
 
             // reset states
-            setIsError(false)
-            setError(undefined)
-            setLoading(true)
+            if (!controller.current.signal.aborted) {
+                setIsError(false)
+                setError(undefined)
+                setLoading(true)
+            }
 
             try {
                 switch (method) {
                     case "get":
                         result = await axios.get<T>(finalUrl, {
                             headers: { ...getHeaders(), ...headers },
-                            cancelToken: source.token,
+                            signal: controller.current.signal,
                         })
                         break
                     case "patch":
@@ -104,14 +111,14 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
                             body || bodyInit,
                             {
                                 headers: { ...getHeaders(), ...headers },
-                                cancelToken: source.token,
+                                signal: controller.current.signal,
                             }
                         )
                         break
                     case "delete":
                         result = await axios.delete<T>(finalUrl, {
                             headers: { ...getHeaders(), ...headers },
-                            cancelToken: source.token,
+                            signal: controller.current.signal,
                         })
                         break
                     case "post":
@@ -120,7 +127,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
                             body || bodyInit,
                             {
                                 headers: { ...getHeaders(), ...headers },
-                                cancelToken: source.token,
+                                signal: controller.current.signal,
                             }
                         )
                         break
@@ -137,7 +144,6 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
                 isError = true
             } finally {
                 updateStates(result, isError, axiosError)
-                setLoading(false)
             }
             return { result, isError, error: axiosError }
         },
@@ -165,9 +171,9 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
 
     useEffect(() => {
         return () => {
-            source.cancel()
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            controller.current.abort()
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return {
