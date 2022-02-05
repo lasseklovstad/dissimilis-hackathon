@@ -83,7 +83,7 @@ export const BarEdit = (props: BarEditProps) => {
                         props.bar.position <= selectedBars.toPosition,
                     onContextMenu: handleBarRightClick,
                 }}
-                aria-label={t("Song.bar")}
+                aria-label={`${t("Song.bar")} ${position}`}
                 button
             >
                 <VoltaBracket

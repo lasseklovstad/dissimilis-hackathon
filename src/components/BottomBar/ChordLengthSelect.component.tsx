@@ -10,6 +10,7 @@ import { ReactComponent as HalfnoteIcon } from "../../assets/images/icon_half-no
 import { ReactComponent as QuarternoteDottedIcon } from "../../assets/images/icon_quarter-note-dotted.svg"
 import { ReactComponent as QuarternoteIcon } from "../../assets/images/icon_quarter-note.svg"
 import { ReactComponent as EighthnoteIcon } from "../../assets/images/icon_eighth-note.svg"
+import { useSelectedChordContext } from "../../context/selectedChord/SelectedChordContextProvider.component"
 
 const noteLengths = [
     {
@@ -48,7 +49,11 @@ export const ChordLengthSelect = () => {
     const { chordMenuOptions, setChordMenuOptions } =
         useChordMenuOptionsContext()
     const { t } = useTranslation()
-    const { updateSelectedChord } = useUpdateSelectedChord()
+    const { selectedChord, selectedChordAsChord } = useSelectedChordContext()
+    const { updateSelectedChord } = useUpdateSelectedChord({
+        selectedChord,
+        selectedChordAsChord,
+    })
     // This container is used so that the Menu og the select is inside the Click-listener and not placed on the body.
     const container = useRef(null)
     const {
@@ -59,10 +64,12 @@ export const ChordLengthSelect = () => {
 
     const handleChangeChordLength = async (chordLength: number) => {
         const newOptions = { ...chordMenuOptions, chordLength }
-        const response = await updateSelectedChord(newOptions)
-        if (response && response.error) {
-            // Selected Chord has tried to update but failed
-            return
+        if (selectedChord) {
+            const response = await updateSelectedChord(newOptions)
+            if (response && response.error) {
+                // Selected Chord has tried to update but failed
+                return
+            }
         }
         setChordMenuOptions(newOptions)
     }

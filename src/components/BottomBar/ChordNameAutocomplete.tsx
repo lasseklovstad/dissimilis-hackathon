@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography"
 import { ChordType } from "../../models/IChordMenuOptions"
 import { getColor, tangentToNumber } from "../../utils/bar.util"
 import { colors } from "../../utils/colors"
+import { useSelectedChordContext } from "../../context/selectedChord/SelectedChordContextProvider.component"
 
 const customPopperPlacement = (props: PopperProps) => {
     return <Popper {...props} placement="top" children={props.children} />
@@ -17,7 +18,11 @@ const customPopperPlacement = (props: PopperProps) => {
 export const ChordNameAutocomplete = () => {
     const { chordMenuOptions, setChordMenuOptions } =
         useChordMenuOptionsContext()
-    const { updateSelectedChord } = useUpdateSelectedChord()
+    const { selectedChord, selectedChordAsChord } = useSelectedChordContext()
+    const { updateSelectedChord } = useUpdateSelectedChord({
+        selectedChord,
+        selectedChordAsChord,
+    })
     const {
         state,
         optionData: { singleNoteOptions, chordOptions },
@@ -28,13 +33,14 @@ export const ChordNameAutocomplete = () => {
             : singleNoteOptions
 
     const { t } = useTranslation()
-
     const handleUpdateChord = async (chord: string) => {
         const newOptions = {
             ...chordMenuOptions,
             chord,
         }
-        await updateSelectedChord(newOptions)
+        if (selectedChord) {
+            await updateSelectedChord(newOptions)
+        }
         setChordMenuOptions(newOptions)
     }
     return (

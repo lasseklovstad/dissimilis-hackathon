@@ -93,7 +93,7 @@ const compareChord = (a: IChord, b: IChord) => {
 
 const chordNotes: Record<string, NoteTypes[]> = {
     C: ["C", "E", "G"],
-    D: ["D", "F", "A"],
+    D: ["D", "F#", "A"],
 }
 
 const createChordNotes = ({ notes, chordName }: IChordPost): NoteTypes[] => {

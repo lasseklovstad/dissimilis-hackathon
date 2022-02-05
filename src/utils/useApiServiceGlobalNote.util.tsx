@@ -1,10 +1,7 @@
 import { useApiService } from "./useApiService"
 import { useEffect } from "react"
-
-interface IOptions {
-    singleNoteOptions: string[]
-    chordOptions: string[]
-}
+import { IOptions } from "../models/IOptions"
+import { IIntervals } from "../models/IIntervals"
 
 export const useOptions = () => {
     const { getData, state, data } = useApiService<IOptions>("note/options")
@@ -15,10 +12,6 @@ export const useOptions = () => {
         state,
         optionData: data || { singleNoteOptions: [], chordOptions: [] },
     }
-}
-
-interface IIntervals {
-    intervalNames: string[]
 }
 
 export const useGetChordIntervals = (chordName: string) => {

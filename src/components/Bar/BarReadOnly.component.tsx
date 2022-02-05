@@ -38,7 +38,7 @@ export const BarReadOnly = (props: BarReadOnlyProps) => {
 
     return (
         <>
-            <BarContainer height={height} aria-label={t("Song.bar")}>
+            <BarContainer height={height} aria-label={`${t("Song.bar")} ${barPosition}`}>
                 <VoltaBracket
                     voltaBracketOrder={voltaBracket}
                     showVoltaBracketNumber={showVoltaBracketNumber}

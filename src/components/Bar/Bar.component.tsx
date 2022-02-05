@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { useMediaQuery } from "@mui/material"
 import { RepetitionSign } from "./RepetitionSign.component"
 import { VoltaBracket } from "./VoltaBracket.component"
-import { IBar} from "../../models/IBar"
+import { IBar } from "../../models/IBar"
 import { Chord } from "../Chord/Chord.component"
 import { ChordMenu } from "./ChordMenu.component"
 import { BarMenuButton } from "../BarMenu/BarMenuButton.component"
@@ -191,7 +191,10 @@ export const Bar = (props: BarProps) => {
                 <BarMenuButton onMenuClick={onMenuClick} />
             )}
 
-            <BarContainer height={height} aria-label={t("Song.bar")}>
+            <BarContainer
+                height={height}
+                aria-label={`${t("Song.bar")} ${position}`}
+            >
                 <VoltaBracket
                     voltaBracketOrder={voltaBracket}
                     showVoltaBracketNumber={showVoltaBracketNumber}

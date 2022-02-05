@@ -1,11 +1,16 @@
 import { useUpdateChord } from "../../utils/useApiServiceSongs"
 import { ChordType, IChordMenuOptions } from "../../models/IChordMenuOptions"
-import { useSelectedChordContext } from "./SelectedChordContextProvider.component"
 import { useSongDispatchContext } from "../song/SongContextProvider.component"
-import { NoteTypes } from "../../models/IChord"
+import { IChord, NoteTypes } from "../../models/IChord"
+import { ISelectedChord } from "../../models/ISelectedChord"
 
-export const useUpdateSelectedChord = () => {
-    const { selectedChord, selectedChordAsChord } = useSelectedChordContext()
+export const useUpdateSelectedChord = ({
+    selectedChord,
+    selectedChordAsChord,
+}: {
+    selectedChord: ISelectedChord | null
+    selectedChordAsChord: IChord | null
+}) => {
     const { dispatchSong } = useSongDispatchContext()
     const { updateChord } = useUpdateChord()
 
