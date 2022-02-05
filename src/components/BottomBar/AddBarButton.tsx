@@ -4,7 +4,7 @@ import React from "react"
 
 export const AddBarButton = (props: { text: string; onClick: () => void }) => {
     return (
-        <Paper elevation={6} sx={{ display: "flex", m: 1 }}>
+        <Paper elevation={6} sx={{ display: "flex", m: 1, height: "56px" }}>
             <Button
                 disableFocusRipple
                 size={"large"}

@@ -19,10 +19,6 @@ type BarEditProps = {
     height?: number
     showChordLetters: boolean
     showNoteLetters: boolean
-    getChordNameFromMainVoice: (
-        barPosition: number,
-        chordPosition: number
-    ) => string | undefined | null
     showVoltaBracketNumber: boolean
 }
 
@@ -30,7 +26,6 @@ export const BarEdit = (props: BarEditProps) => {
     const {
         showChordLetters,
         showNoteLetters,
-        getChordNameFromMainVoice,
         showVoltaBracketNumber,
         bar: { chords, repAfter, repBefore, voltaBracket, songId, position },
         height,
@@ -99,9 +94,6 @@ export const BarEdit = (props: BarEditProps) => {
                             barPosition={position}
                             showChordLetters={showChordLetters}
                             showNoteLetters={showNoteLetters}
-                            getChordNameFromMainVoice={
-                                getChordNameFromMainVoice
-                            }
                         />
                     )
                 })}

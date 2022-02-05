@@ -24,10 +24,6 @@ type BarProps = {
     showChordLetters: boolean
     showNoteLetters: boolean
     onMenuClick: (anchorEl: HTMLElement) => void
-    getChordNameFromMainVoice: (
-        barPosition: number,
-        chordPosition: number
-    ) => string | undefined | null
     masterSheet: boolean
     showVoltaBracketNumber: boolean
     variant: SongVariantType
@@ -37,7 +33,6 @@ export const Bar = (props: BarProps) => {
     const {
         showChordLetters,
         showNoteLetters,
-        getChordNameFromMainVoice,
         onMenuClick,
         masterSheet,
         showVoltaBracketNumber,
@@ -96,7 +91,7 @@ export const Bar = (props: BarProps) => {
     }
 
     const handleChordClick = async (chord: IChord) => {
-        if (chord.notes[0] === "Z" && chordMenuOptions) {
+        if (chord.notes[0] === "Z") {
             const notes =
                 chordMenuOptions.chordType === ChordType.NOTE
                     ? [chordMenuOptions.chord]
@@ -159,7 +154,7 @@ export const Bar = (props: BarProps) => {
         indexOfChord: number,
         allChords: IChord[]
     ) => {
-        if (usingTouchScreen && chord.notes[0] === "Z" && chordMenuOptions) {
+        if (!usingTouchScreen && chord.notes[0] === "Z") {
             let i = 0
             while (i <= chordMenuOptions.chordLength) {
                 const start = indexOfChord - i
@@ -208,9 +203,6 @@ export const Bar = (props: BarProps) => {
                             barPosition={position}
                             songId={songId}
                             showChordLetters={showChordLetters}
-                            getChordNameFromMainVoice={
-                                getChordNameFromMainVoice
-                            }
                             showNoteLetters={showNoteLetters}
                             onMouseLeave={() => setPositionArray([])}
                             onMouseEnter={() =>

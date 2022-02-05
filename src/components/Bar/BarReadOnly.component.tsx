@@ -13,10 +13,6 @@ type BarReadOnlyProps = {
     showVoltaBracketNumber: boolean
     showChordLetters: boolean
     showNoteLetters: boolean
-    getChordNameFromMainVoice: (
-        barPosition: number,
-        chordPosition: number
-    ) => string | undefined | null
 }
 
 export const BarReadOnly = (props: BarReadOnlyProps) => {
@@ -24,7 +20,6 @@ export const BarReadOnly = (props: BarReadOnlyProps) => {
         showVoltaBracketNumber,
         showChordLetters,
         showNoteLetters,
-        getChordNameFromMainVoice,
         bar: {
             chords,
             repAfter,
@@ -38,7 +33,10 @@ export const BarReadOnly = (props: BarReadOnlyProps) => {
 
     return (
         <>
-            <BarContainer height={height} aria-label={`${t("Song.bar")} ${barPosition}`}>
+            <BarContainer
+                height={height}
+                aria-label={`${t("Song.bar")} ${barPosition}`}
+            >
                 <VoltaBracket
                     voltaBracketOrder={voltaBracket}
                     showVoltaBracketNumber={showVoltaBracketNumber}
@@ -52,9 +50,6 @@ export const BarReadOnly = (props: BarReadOnlyProps) => {
                             barPosition={barPosition}
                             showChordLetters={showChordLetters}
                             showNoteLetters={showNoteLetters}
-                            getChordNameFromMainVoice={
-                                getChordNameFromMainVoice
-                            }
                         />
                     )
                 })}

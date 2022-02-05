@@ -38,22 +38,11 @@ export const SongView = () => {
     const { voiceInit, getVoice } = useGetVoice(songId, selectedVoiceId)
     const barsPerRow = useBarsPerRow()
     const [barEditMode, setBarEditMode] = useState(false)
-    const { denominator, numerator, voices } = song!!
+    const { denominator, numerator } = song!!
     const { undoSong } = useUndoSong(songId)
     const trigger = useScrollTrigger()
 
     const { launchSnackbar } = useSnackbarContext()
-
-    const mainVoice = voices.find((voice) => voice.isMain)
-    const getChordNameFromMainVoice = (
-        barPosition: number,
-        chordPosition: number
-    ) => {
-        return mainVoice?.bars
-            .find((mainBar) => mainBar.position === barPosition)
-            ?.chords.find((mainChord) => mainChord.position === chordPosition)
-            ?.chordName
-    }
 
     const getSongVariant = (): SongVariantType => {
         if (!song.currentUserHasWriteAccess) {
@@ -131,9 +120,6 @@ export const SongView = () => {
                             <Song
                                 barsPerRow={barsPerRow}
                                 voice={selectedVoice}
-                                getChordNameFromMainVoice={
-                                    getChordNameFromMainVoice
-                                }
                                 timeSignature={{ denominator, numerator }}
                                 heightOfBar={185}
                                 lastPage

@@ -17,18 +17,12 @@ import { BarEdit } from "../Bar/BarEdit.component"
 type SongProps = {
     barsPerRow: number
     voice: IVoice
-    getChordNameFromMainVoice: (
-        barPosition: number,
-        chordPosition: number
-    ) => string | null | undefined
     timeSignature: ITimeSignature
     heightOfBar: number
     variant: SongVariantType
     showChordLetters?: boolean
     showNoteLetters?: boolean
     lastPage: boolean
-    pasteBars?: (type: "pasteBefore" | "pasteAfter", bar: IBar) => void
-    deleteBars?: () => void
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
@@ -53,7 +47,6 @@ export const Song = (props: SongProps) => {
     const {
         barsPerRow,
         voice: { bars, isMain },
-        getChordNameFromMainVoice,
         timeSignature,
         heightOfBar,
         variant,
@@ -131,9 +124,6 @@ export const Song = (props: SongProps) => {
                                                 showNoteLetters={
                                                     showNoteLetters
                                                 }
-                                                getChordNameFromMainVoice={
-                                                    getChordNameFromMainVoice
-                                                }
                                             />
                                             <BarLine />
                                             {bar.position === lastBarPosition &&
@@ -156,9 +146,6 @@ export const Song = (props: SongProps) => {
                                                 showNoteLetters={
                                                     showNoteLetters
                                                 }
-                                                getChordNameFromMainVoice={
-                                                    getChordNameFromMainVoice
-                                                }
                                                 bar={bar}
                                                 height={heightOfBar}
                                             />
@@ -179,9 +166,6 @@ export const Song = (props: SongProps) => {
                                             showChordLetters={showChordLetters}
                                             showNoteLetters={showNoteLetters}
                                             masterSheet={isMain}
-                                            getChordNameFromMainVoice={
-                                                getChordNameFromMainVoice
-                                            }
                                             onMenuClick={openMenu(bar)}
                                             bar={bar}
                                             height={heightOfBar}

@@ -20,10 +20,6 @@ type ChordProps = {
     showNoteLetters: boolean
     isSelected: boolean
     handleChordFocus: () => void
-    getChordNameFromMainVoice: (
-        barPosition: number,
-        chordPosition: number
-    ) => string | null | undefined
     barId: number
     onTouchEnd: () => void
     variant: ChordDisplayVariant
@@ -38,7 +34,6 @@ export const Chord = (props: ChordProps) => {
         onContextMenu,
         onMouseEnter,
         onMouseLeave,
-        getChordNameFromMainVoice,
         highlight,
         showChordLetters,
         showNoteLetters,
@@ -50,12 +45,13 @@ export const Chord = (props: ChordProps) => {
         songId,
     } = props
 
-    const chordName = getChordNameFromMainVoice(barPosition, chord.position)
-
     return (
         <ChordContainer chordLength={chord.length}>
-            {chordName && showChordLetters && (
-                <ChordText chordName={chordName} />
+            {showChordLetters && (
+                <ChordText
+                    barPosition={barPosition}
+                    chordPosition={chord.position}
+                />
             )}
             {variant === "note-checkbox" ? (
                 <ChordWithCheckboxes

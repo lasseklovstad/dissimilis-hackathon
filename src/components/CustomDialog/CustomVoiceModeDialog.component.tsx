@@ -93,16 +93,6 @@ export const CustomVoiceDialog = (props: {
         newVoice.songVoiceId
     )
 
-    const getChordNameFromMainVoice = (
-        barPosition: number,
-        chordPosition: number
-    ) => {
-        return baseVoice?.bars
-            .find((mainBar) => mainBar.position === barPosition)
-            ?.chords.find((mainChord) => mainChord.position === chordPosition)
-            ?.chordName
-    }
-
     const barsPerRow = useBarsPerRow()
     const biggestChordName = useMemo(() => {
         let biggestChordLength = 0
@@ -174,7 +164,6 @@ export const CustomVoiceDialog = (props: {
                 <Song
                     barsPerRow={barsPerRow}
                     voice={voice}
-                    getChordNameFromMainVoice={getChordNameFromMainVoice}
                     timeSignature={{
                         numerator: song.numerator || 4,
                         denominator: song.denominator || 4,

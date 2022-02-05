@@ -50,17 +50,13 @@ export const VoltaBracket = (props: {
             left={props.showVoltaBracketNumber ? "0px" : "-30px"}
         >
             <Typography variant="body1" component="div">
-                {props.voltaBracketOrder !== undefined && (
-                    <Box className={classes.voltaBracketContainer}>
-                        <Box className={`${classes.voltaBracketLine}`}>
-                            <span
-                                style={{ position: "relative", top: "-10px" }}
-                            >
-                                {getVoltaBracketNumber()}
-                            </span>
-                        </Box>
+                <Box className={classes.voltaBracketContainer}>
+                    <Box className={`${classes.voltaBracketLine}`}>
+                        <span style={{ position: "relative", top: "-10px" }}>
+                            {getVoltaBracketNumber()}
+                        </span>
                     </Box>
-                )}
+                </Box>
             </Typography>
         </Box>
     )
