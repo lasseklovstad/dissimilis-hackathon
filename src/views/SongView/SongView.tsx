@@ -41,7 +41,6 @@ export const SongView = () => {
     const { denominator, numerator } = song!!
     const { undoSong } = useUndoSong(songId)
     const trigger = useScrollTrigger()
-
     const { launchSnackbar } = useSnackbarContext()
 
     const getSongVariant = (): SongVariantType => {
