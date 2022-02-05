@@ -7,7 +7,7 @@ import React, {
     useState,
 } from "react"
 import { ISelectedChord } from "../../models/ISelectedChord"
-import { IBar} from "../../models/IBar"
+import { IBar } from "../../models/IBar"
 import { useSelectedChordAsChord } from "./useSelectedChordAsChord"
 import { useSongContext } from "../song/SongContextProvider.component"
 import { IChord } from "../../models/IChord"
@@ -40,11 +40,17 @@ export const SelectedChordContextProvider = (props: {
         null
     )
     const { song } = useSongContext()
-    const { chord: selectedChordAsChord, bar: selectedChordBar } = useSelectedChordAsChord(selectedChord, song)
+    const { chord: selectedChordAsChord, bar: selectedChordBar } =
+        useSelectedChordAsChord(selectedChord, song)
 
     return (
         <SelectedChordContext.Provider
-            value={{ selectedChord, setSelectedChord, selectedChordAsChord, selectedChordBar }}
+            value={{
+                selectedChord,
+                setSelectedChord,
+                selectedChordAsChord,
+                selectedChordBar,
+            }}
         >
             {props.children}
         </SelectedChordContext.Provider>

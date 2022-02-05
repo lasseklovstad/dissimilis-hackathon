@@ -6,7 +6,7 @@ import {
     ISongMetadata,
     ISongShareData,
 } from "../models/ISong"
-import { IBar} from "../models/IBar"
+import { IBar } from "../models/IBar"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../models/IVoice"
 import { IUser } from "../models/IUser"
 import { IGroupIndex } from "../models/IGroup"
