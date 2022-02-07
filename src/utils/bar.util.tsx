@@ -1,22 +1,5 @@
-import { Chord as TonalChord } from "@tonaljs/tonal"
 import { colors } from "./colors"
 import { ITimeSignature } from "../models/ITimeSignature"
-
-/* Gets the chord based on notes. The package we use (tonaljs) uses the tone "B" instead of "H" so we need
-to replace H with B to get the right chord.
-*/
-export const getChord = (notes: string[]): string => {
-    if (notes.length === 1) {
-        return notes[0]
-    }
-    const result = TonalChord.detect(
-        notes.map((note) => {
-            return note === "H" ? "B" : note
-        })
-    )
-    if (result.length === 0) return notes[0]
-    return result[0].replace(/M/g, "").replace(/B/g, "H")
-}
 
 export const getColor = (note: string): string => {
     let newColor = "transparent"

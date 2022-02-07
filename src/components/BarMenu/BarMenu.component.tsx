@@ -7,7 +7,7 @@ import {
     useDuplicateBar,
     useUpdateBar,
 } from "../../utils/useApiServiceSongs"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongDispatchContext } from "../../context/song/SongContextProvider.component"
 
 type BarMenuProps = {
     bar: IBar
@@ -20,7 +20,7 @@ export const BarMenu = (props: BarMenuProps) => {
     const { deleteBar } = useDeleteBar(bar.songId, bar.songVoiceId, bar.barId)
     const { putBar } = useUpdateBar(bar.songId, bar.songVoiceId, bar.barId)
     const { duplicateBar } = useDuplicateBar(bar.songId)
-    const { dispatchSong } = useSongContext()
+    const { dispatchSong } = useSongDispatchContext()
 
     const { t } = useTranslation()
 
@@ -28,7 +28,7 @@ export const BarMenu = (props: BarMenuProps) => {
         if (method === "delete") {
             const { error, result } = await deleteBar.run()
             if (!error && result) {
-                dispatchSong({ type: "DELETE_BAR", barPosition: bar.position })
+                dispatchSong({ type: "UPDATE_VOICE", voice: result.data })
             }
         }
         if (method === "duplicate") {

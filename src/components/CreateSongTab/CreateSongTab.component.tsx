@@ -22,7 +22,7 @@ import {
 } from "../../utils/useApiServiceSongs"
 import { colors } from "../../utils/colors"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongDispatchContext } from "../../context/song/SongContextProvider.component"
 import { useVoice } from "../../utils/useVoice"
 import { CustomVoiceDialog } from "../CustomDialog/CustomVoiceModeDialog.component"
 import { Undo as UndoIcon, MoreVert as MoreVertIcon } from "@mui/icons-material"
@@ -30,6 +30,7 @@ import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
 import { NewVoiceDialog } from "../CustomDialog/NewVoiceDialog.component"
 import { useHotkeys } from "react-hotkeys-hook"
+import { ISong } from "../../models/ISong"
 
 const useStyles = makeStyles({
     root: {
@@ -71,9 +72,16 @@ export const CreateSongTab = (props: {
     onUndo: () => void
     undoIsLoading?: boolean
     currentUserHasWriteAccess?: boolean
+    song: ISong
 }) => {
-    const { song, dispatchSong, setCustomMode } = useSongContext()
-    const { currentUserHasWriteAccess, onUndo, undoIsLoading } = props
+    const { dispatchSong } = useSongDispatchContext()
+    const {
+        currentUserHasWriteAccess,
+        onUndo,
+        undoIsLoading,
+        song,
+        updateSong,
+    } = props
     const selectedVoice = useVoice(song?.voices)
     const { songVoiceId: selectedVoiceId } = selectedVoice || {}
     const { songId, voices } = song!!
@@ -150,7 +158,6 @@ export const CreateSongTab = (props: {
                     setCustomVoiceDialogIsOpen(true)
                     onAddVoice(result.data)
                     setClickedId(result.data.songVoiceId)
-                    setCustomMode(true)
                 }
                 break
             }
@@ -212,13 +219,11 @@ export const CreateSongTab = (props: {
     const handleCustomVoiceDialogCancel = async () => {
         handleDeleteVoice()
         setCustomVoiceDialogIsOpen(false)
-        setCustomMode(false)
     }
 
     const handleCustomVoiceDialogSave = () => {
         setCustomVoiceDialogIsOpen(false)
-        setCustomMode(false)
-        props.updateSong()
+        updateSong()
     }
 
     return (

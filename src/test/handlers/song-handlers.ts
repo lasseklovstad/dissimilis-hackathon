@@ -8,9 +8,10 @@ import {
     generateNewVoice,
 } from "../test-utils"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../../models/IVoice"
-import { IBar, IBarPost } from "../../models/IBar"
+import { IBar } from "../../models/IBar"
 import { emptySong, songWithChords } from "../data/song.mock"
 import { songsMetadata } from "../data/songsMetadata.mock"
+import { IChordPost } from "../../models/IChord"
 
 const apiUrl = process.env.REACT_APP_API_URL
 
@@ -67,6 +68,23 @@ export const songHandlers = [
     rest.delete(`${apiUrl}song/:songId`, (req, res, ctx) => {
         return res(ctx.status(204))
     }),
+    rest.get<IVoice>(
+        `${apiUrl}song/:songId/voice/:voiceId`,
+        (req, res, ctx) => {
+            const { songId, voiceId } = req.params
+            const song = songDB.find(
+                (song) => song.songId.toString() === songId
+            )
+            const voice = song?.voices.find(
+                (voice) => voice.songVoiceId.toString() === voiceId
+            )
+            if (voice) {
+                return res(ctx.json(voice))
+            } else {
+                return res(ctx.status(404))
+            }
+        }
+    ),
     rest.post<IVoiceDuplicatePost, never, IVoice>(
         `${apiUrl}song/:songId/voice/:voiceId/duplicate`,
         (req, res, ctx) => {
@@ -77,13 +95,15 @@ export const songHandlers = [
             const voice = song?.voices.find(
                 (voice) => voice.songVoiceId.toString() === voiceId
             )
-            if (voice) {
+            if (voice && song) {
                 const newVoice: IVoice = {
                     ...voice,
                     songVoiceId: voiceId + 1,
                     voiceName: req.body.voiceName,
+                    voiceNumber: voice.voiceNumber + 1,
                     isMain: false,
                 }
+                song.voices = [...song.voices, newVoice]
                 return res(ctx.json(newVoice), ctx.status(201))
             } else {
                 res(ctx.status(404))
@@ -99,13 +119,14 @@ export const songHandlers = [
             )
             if (song) {
                 const newVoice = generateNewVoice(song, req.body)
+                song.voices = [...song.voices, newVoice]
                 return res(ctx.json(newVoice), ctx.status(201))
             } else {
                 res(ctx.status(404))
             }
         }
     ),
-    rest.post<IBarPost, never, IBar>(
+    rest.post<IChordPost, never, IBar>(
         `${apiUrl}song/:songId/voice/:voiceId/bar/:barId/note`,
         (req, res, ctx) => {
             const { songId, voiceId, barId } = req.params
@@ -130,7 +151,7 @@ export const songHandlers = [
             }
         }
     ),
-    rest.delete<IBarPost, never, IBar>(
+    rest.delete<IChordPost, never, IBar>(
         `${apiUrl}song/:songId/voice/:voiceId/bar/:barId/note/:noteId`,
         (req, res, ctx) => {
             const { songId, voiceId, barId, noteId } = req.params

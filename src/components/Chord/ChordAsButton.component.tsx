@@ -1,12 +1,11 @@
 import { ButtonBaseProps } from "@mui/material"
 import React from "react"
-import { IChord } from "../../models/IBar"
 import { getNoteText } from "./Chord.util"
 import { Note } from "./Note.component"
 import { ChordButton } from "./ChordButton.component"
+import { IChord } from "../../models/IChord"
 
 type ChordAsButtonProps = {
-    disabled: boolean
     ButtonProps: Pick<
         ButtonBaseProps,
         | "onClick"
@@ -23,20 +22,12 @@ type ChordAsButtonProps = {
 }
 
 export const ChordAsButton = (props: ChordAsButtonProps) => {
-    const {
-        disabled,
-        ButtonProps,
-        chord,
-        showNoteLetters,
-        isSelected,
-        highlight,
-    } = props
+    const { ButtonProps, chord, showNoteLetters, isSelected, highlight } = props
     return (
         <ChordButton
             emptyChord={chord.notes[0] === "Z"}
-            isSelected={isSelected}
+            aria-selected={isSelected}
             id="chordButton"
-            disabled={disabled}
             disableRipple
             {...ButtonProps}
         >

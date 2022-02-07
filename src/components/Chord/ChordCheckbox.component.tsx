@@ -29,6 +29,7 @@ export const ChordCheckbox = (props: ChordCheckboxProps) => {
 
     return (
         <ButtonBase
+            disabled={isEmptyNote(note)}
             sx={{
                 marginTop: "1px",
                 borderRadius: "3px",
@@ -37,8 +38,9 @@ export const ChordCheckbox = (props: ChordCheckboxProps) => {
                 justifyContent: "center",
                 alignItems: "center",
                 color: "white",
-                boxShadow: `inset 0px 0px 0px 1px ${colors.gray_200}`,
+                boxShadow: `inset 0px 0px 0px 2px ${colors.gray_200}`,
             }}
+            focusRipple
             onClick={handleClick}
         >
             <Note

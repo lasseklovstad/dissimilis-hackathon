@@ -23,7 +23,7 @@ import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { EditSongInfoDialog } from "../CustomDialog/EditSongInfoDialog.component"
 import { TransposeDialog } from "../CustomDialog/TransposeDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
-import { useSongContext } from "../../views/SongView/SongContextProvider.component"
+import { useSongContext } from "../../context/song/SongContextProvider.component"
 import { useVoice } from "../../utils/useVoice"
 import { ShareSongDialog } from "../CustomDialog/ShareSongDialog.component"
 import { ShowSongInfoDialog } from "../CustomDialog/ShowSongInfoDialog.component"
@@ -34,16 +34,18 @@ export const MenuButton = (props: {
     updateSongTitle: (title: string) => void
     songTitle: string
     currentUserHasWriteAccess?: boolean
+    barEditMode: boolean
+    setBarEditMode: (mode: boolean) => void
 }) => {
-    const { showName, updateSongTitle, songTitle, currentUserHasWriteAccess } =
-        props
     const {
-        song,
-        setBarEditMode,
+        showName,
+        updateSongTitle,
+        songTitle,
+        currentUserHasWriteAccess,
         barEditMode,
-        setSelectedBars,
-        setBarsClipboard,
-    } = useSongContext()
+        setBarEditMode,
+    } = props
+    const { song, setSelectedBars, setBarsClipboard } = useSongContext()
     const selectedVoice = useVoice(song?.voices)
     const { songVoiceId: voiceId } = selectedVoice || {}
     const { user } = useUser()

@@ -34,7 +34,6 @@ export const chordMenuReducer = (
                 chordLength: action.menuOptions.chordLength,
                 chord: action.menuOptions.chord,
                 chordType: action.menuOptions.chordType,
-                chordNotes: action.menuOptions.chordNotes,
             }
         case "UPDATE_CHORD_LENGTH":
             return {

@@ -1,10 +1,10 @@
 import { useMediaQuery } from "@mui/material"
 import { IBar } from "./../models/IBar"
-import { SongAction } from "./../views/SongView/SongContextProvider.component"
 import {
     useCopyBars,
     useDeleteBars as useDeleteBarsApi,
 } from "./useApiServiceSongs"
+import { SongAction } from "../context/song/songReducer"
 
 export const useBarsPerRow = () => {
     const xs = useMediaQuery("(max-width: 600px)")

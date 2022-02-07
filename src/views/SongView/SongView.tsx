@@ -1,73 +1,53 @@
-import React, { MutableRefObject, useEffect, useRef } from "react"
-import { Grid, Slide, useScrollTrigger } from "@mui/material"
-import makeStyles from "@mui/styles/makeStyles"
+import React, { useEffect, useState } from "react"
+import { Box, Slide, useScrollTrigger } from "@mui/material"
 import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { CreateSongTab } from "../../components/CreateSongTab/CreateSongTab.component"
 import { BottomBar } from "../../components/BottomBar/BottomBar.component"
 import { Song } from "../../components/Song/Song.component"
-import { useGetSong, useUndoSong } from "../../utils/useApiServiceSongs"
+import {
+    useGetSong,
+    useGetVoice,
+    useUndoSong,
+} from "../../utils/useApiServiceSongs"
 import { ErrorDialog } from "../../components/errorDialog/ErrorDialog.component"
 import { LoadingLogo } from "../../components/loadingLogo/LoadingLogo.component"
-import { useSongContext } from "./SongContextProvider.component"
-import { chords, notes } from "../../models/chords"
+import {
+    useSongContext,
+    useSongDispatchContext,
+} from "../../context/song/SongContextProvider.component"
 import { colors } from "../../utils/colors"
-import { ChordType } from "../../models/IChordMenuOptions"
 import { SongNavBar } from "../../components/SongNavBar/SongNavBar.component"
 import { useVoice } from "../../utils/useVoice"
 import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
 import { useBarsPerRow } from "../../utils/useBars"
-
-const useStyles = makeStyles({
-    root: {
-        marginBottom: "200px",
-        "@media (max-width: 1080px)": {
-            marginBottom: "250px",
-        },
-        width: "auto",
-    },
-    header: {
-        backgroundColor: colors.gray_100,
-        position: "sticky", // For Safari: -webkit-sticky
-        zIndex: 100,
-        top: "0",
-        paddingTop: "24px",
-        paddingLeft: "3.5vw",
-        paddingRight: "3.5vw",
-    },
-    body: {
-        marginLeft: "3.5vw",
-        marginRight: "3.5vw",
-    },
-})
-
-const heightOfBar = 185
+import { SelectedChordContextProvider } from "../../context/selectedChord/SelectedChordContextProvider.component"
+import { ChordMenuOptionsContextProvider } from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
+import { SelectedChordListener } from "../../context/selectedChord/SelectedChordListener.component"
+import { SongVariantType } from "../../components/Song/SongVariantType"
 
 export const SongView = () => {
-    const classes = useStyles()
     const { t } = useTranslation()
     const { songId: songIdString } = useParams<{ songId: string }>()
     const songId = Number(songIdString)
     const { getSong, songInit } = useGetSong(songId)
+    const { song } = useSongContext()
+    const { dispatchSong } = useSongDispatchContext()
+    const selectedVoice = useVoice(song!!.voices)
+    const { songVoiceId: selectedVoiceId } = selectedVoice || {}
+    const { voiceInit, getVoice } = useGetVoice(songId, selectedVoiceId)
     const barsPerRow = useBarsPerRow()
-
-    const { song, dispatchSong, chordMenuOptions } = useSongContext()
-    const { denominator, numerator, voices } = song!!
+    const [barEditMode, setBarEditMode] = useState(false)
+    const { denominator, numerator } = song!!
     const { undoSong } = useUndoSong(songId)
     const trigger = useScrollTrigger()
-    const chordOptionsRef = useRef() as MutableRefObject<HTMLAnchorElement>
-
     const { launchSnackbar } = useSnackbarContext()
 
-    const mainVoice = voices.find((voice) => voice.isMain)
-    const getChordNameFromMainVoice = (
-        barPosition: number,
-        chordPosition: number
-    ) => {
-        return mainVoice?.bars
-            .find((mainBar) => mainBar.position === barPosition)
-            ?.chords.find((mainChord) => mainChord.position === chordPosition)
-            ?.chordName
+    const getSongVariant = (): SongVariantType => {
+        if (!song.currentUserHasWriteAccess) {
+            return "read-only"
+        }
+        return barEditMode ? "bar-edit" : "normal-edit"
     }
 
     useEffect(() => {
@@ -76,9 +56,11 @@ export const SongView = () => {
         }
     }, [songInit, dispatchSong])
 
-    const selectedVoice = useVoice(song!!.voices)
-
-    const { songVoiceId: selectedVoiceId } = selectedVoice || {}
+    useEffect(() => {
+        if (voiceInit) {
+            dispatchSong({ type: "UPDATE_VOICE", voice: voiceInit })
+        }
+    }, [voiceInit, dispatchSong])
 
     const undo = async () => {
         const { result, isError } = await undoSong.run()
@@ -95,64 +77,64 @@ export const SongView = () => {
     }
 
     return (
-        <>
-            <ErrorDialog
-                isError={getSong.isError}
-                error={getSong.error}
-                title={t("Dialog.getSongError")}
-            />
-            {selectedVoiceId !== undefined && selectedVoice && (
-                <Grid container className={classes.root}>
-                    <Slide appear={false} direction="down" in={!trigger}>
-                        <Grid container className={classes.header}>
-                            <Grid item xs={12}>
+        <ChordMenuOptionsContextProvider>
+            <SelectedChordContextProvider>
+                <SelectedChordListener />
+                <ErrorDialog
+                    isError={getSong.isError}
+                    error={getSong.error}
+                    title={t("Dialog.getSongError")}
+                />
+                {selectedVoiceId !== undefined && selectedVoice && (
+                    <Box ml={3} mr={3}>
+                        <Slide appear={false} direction="down" in={!trigger}>
+                            <Box
+                                sx={{
+                                    backgroundColor: colors.gray_100,
+                                    position: "sticky",
+                                    zIndex: 100,
+                                    top: "0",
+                                    paddingTop: "24px",
+                                }}
+                            >
                                 <SongNavBar
                                     currentUserHasWriteAccess={
-                                        song?.currentUserHasWriteAccess
+                                        song.currentUserHasWriteAccess
                                     }
+                                    setBarEditMode={setBarEditMode}
+                                    barEditMode={barEditMode}
                                 />
-                            </Grid>
-                            <Grid item xs={12}>
                                 <CreateSongTab
                                     updateSong={getSong.run}
                                     onUndo={undo}
                                     undoIsLoading={undoSong.loading}
                                     currentUserHasWriteAccess={
-                                        song?.currentUserHasWriteAccess
+                                        song.currentUserHasWriteAccess
                                     }
+                                    song={song}
                                 />
-                            </Grid>
-                        </Grid>
-                    </Slide>
-                    <Grid item xs={12} className={classes.body}>
-                        <Song
-                            barsPerRow={barsPerRow}
-                            voice={selectedVoice}
-                            getChordNameFromMainVoice={
-                                getChordNameFromMainVoice
-                            }
-                            timeSignature={{ denominator, numerator }}
-                            heightOfBar={heightOfBar}
-                            exportMode={false}
-                            lastPage
-                            currentUserHasWriteAccess={
-                                song?.currentUserHasWriteAccess
-                            }
-                        />
-                    </Grid>
-                </Grid>
-            )}
-            {selectedVoiceId && song?.currentUserHasWriteAccess && (
-                <BottomBar
-                    voiceId={selectedVoiceId}
-                    chordDropdownContent={
-                        chordMenuOptions?.chordType === ChordType.NOTE
-                            ? notes
-                            : chords
-                    }
-                    chordOptionsRef={chordOptionsRef}
-                />
-            )}
-        </>
+                            </Box>
+                        </Slide>
+                        {!getVoice.loading ? (
+                            <Song
+                                barsPerRow={barsPerRow}
+                                voice={selectedVoice}
+                                timeSignature={{ denominator, numerator }}
+                                heightOfBar={185}
+                                lastPage
+                                variant={getSongVariant()}
+                            />
+                        ) : (
+                            <LoadingLogo />
+                        )}
+                    </Box>
+                )}
+                {selectedVoiceId && song.currentUserHasWriteAccess && (
+                    <Box mt={"200px"}>
+                        <BottomBar voiceId={selectedVoiceId} songId={songId} />
+                    </Box>
+                )}
+            </SelectedChordContextProvider>
+        </ChordMenuOptionsContextProvider>
     )
 }

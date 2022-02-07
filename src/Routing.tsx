@@ -8,7 +8,7 @@ import { ExportView } from "./views/ExportView/ExportView"
 import { LibraryView } from "./views/LibrayView/LibraryView"
 import { AdminView } from "./views/AdminView/AdminView"
 import { GroupAdminView } from "./views/AdminView/GroupAdminView"
-import { SongContextProvider } from "./views/SongView/SongContextProvider.component"
+import { SongContextProvider } from "./context/song/SongContextProvider.component"
 import { UserContextProvider } from "./components/UserContextProvider/UserContextProvider"
 
 export const SongRouting = () => {
