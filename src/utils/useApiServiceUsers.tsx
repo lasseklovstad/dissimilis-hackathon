@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useApiService } from "./useApiService"
 import { IAdminStatuses, IUser } from "../models/IUser"
-import { useHistory } from "react-router"
+import { useNavigate } from "react-router"
 
 /**
  * Get current user
@@ -22,14 +22,14 @@ export const useGetUser = () => {
 export const useLogout = () => {
     const url = "user/logout"
 
-    const history = useHistory()
+    const navigate = useNavigate()
     const { postData, state } = useApiService(url)
 
     const logout = async () => {
         const { error, result } = await postData()
         if (!error && result) {
             sessionStorage.clear()
-            history.replace("/login")
+            navigate("/")
         }
     }
 

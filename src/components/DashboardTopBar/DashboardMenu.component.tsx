@@ -10,7 +10,7 @@ import LanguageIcon from "@mui/icons-material/Language"
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { Loading } from "../loading/Loading.component"
-import { useHistory } from "react-router"
+import { useNavigate } from "react-router"
 import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles({
@@ -34,7 +34,7 @@ export const DashboardMenu = (props: {}) => {
     const { t } = useTranslation()
     const classes = useStyles()
     const { logout } = useLogout()
-    const history = useHistory()
+    const navigate = useNavigate()
     const { adminStatuses } = useGetAdminStatuses()
 
     const userIsAnyAdmin = () =>
@@ -63,7 +63,7 @@ export const DashboardMenu = (props: {}) => {
                 logout.run()
                 break
             case "admin":
-                history.push("/admin")
+                navigate("/admin")
                 break
             default:
                 break

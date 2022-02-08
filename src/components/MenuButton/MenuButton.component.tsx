@@ -9,7 +9,7 @@ import {
 } from "@mui/material"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import { useTranslation } from "react-i18next"
-import { useHistory, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { colors } from "../../utils/colors"
 import {
     useDeleteSong,
@@ -59,7 +59,7 @@ export const MenuButton = (props: {
         useState(false)
     const [shareSongDialogIsOpen, setShareSongDialogIsOpen] = useState(false)
     const { t } = useTranslation()
-    const history = useHistory()
+    const navigate = useNavigate()
     const {
         songId: songIdString,
         title,
@@ -85,12 +85,12 @@ export const MenuButton = (props: {
         setDeleteSongDialogIsOpen(false)
         const { isError } = await deleteSong.run()
         if (!isError) {
-            history.replace("/dashboard")
+            navigate("/dashboard")
         }
     }
 
     const exportSong = async () => {
-        history.push(`/song/${songId}/export?voice=${voiceId}`)
+        navigate(`/song/${songId}/export?voice=${voiceId}`)
     }
 
     const handleOpenTransposeSongDialog = async () => {
@@ -103,7 +103,7 @@ export const MenuButton = (props: {
             transpose,
         })
         if (!isError) {
-            history.push(`/song/${result?.data?.songId}`)
+            navigate(`/song/${result?.data?.songId}`)
         }
     }
 
@@ -168,7 +168,7 @@ export const MenuButton = (props: {
 
         if (!error && result) {
             setDuplicateSongDialogIsOpen(false)
-            history.push(`/song/${result.data.songId.toString()}`)
+            navigate(`/song/${result.data.songId.toString()}`)
         }
     }
 

@@ -1,6 +1,5 @@
 import React from "react"
-import { Redirect, Route, Switch } from "react-router-dom"
-
+import { Route, Routes, Navigate } from "react-router-dom"
 import { DashboardView } from "./views/DashboardView/DashboardView"
 import { LoginView } from "./views/LoginView/LoginView"
 import { SongView } from "./views/SongView/SongView"
@@ -14,50 +13,40 @@ import { UserContextProvider } from "./components/UserContextProvider/UserContex
 export const SongRouting = () => {
     return (
         <SongContextProvider>
-            <Switch>
-                <Route
-                    exact
-                    path="/song/:songId/export"
-                    component={ExportView}
-                />
-                <Route exact path="/song/:songId" component={SongView} />
-            </Switch>
+            <Routes>
+                <Route path={":songId"} element={<SongView />} />
+                <Route path=":songId/export" element={<ExportView />} />
+            </Routes>
         </SongContextProvider>
     )
 }
 
 export const Routing = () => {
-    const PrivateRoutes = () => {
-        if (
-            sessionStorage.getItem("apiKey") &&
-            sessionStorage.getItem("userId")
-        ) {
-            return (
-                <UserContextProvider>
-                    <Switch>
-                        <Route
-                            exact
-                            path="/dashboard"
-                            component={DashboardView}
-                        />
-                        <Route exact path="/library" component={LibraryView} />
-                        <Route exact path="/admin" component={AdminView} />
-                        <Route
-                            exact
-                            path="/admin/organisation/:organisationId"
-                            component={GroupAdminView}
-                        />
-                        <Route path="/song" component={SongRouting} />
-                    </Switch>
-                </UserContextProvider>
-            )
-        }
-        return <Redirect to={"/"} />
-    }
     return (
-        <Switch>
-            <Route exact path="/" component={LoginView} />
-            <Route path={"/**"} component={PrivateRoutes} />
-        </Switch>
+        <Routes>
+            <Route path="/" element={<LoginView />} />
+            <Route path={"/*"} element={<PrivateRoutes />} />
+        </Routes>
     )
+}
+
+const PrivateRoutes = () => {
+    if (sessionStorage.getItem("apiKey") && sessionStorage.getItem("userId")) {
+        return (
+            <UserContextProvider>
+                <Routes>
+                    <Route path="dashboard" element={<DashboardView />} />
+                    <Route path="library" element={<LibraryView />} />
+                    <Route path="admin" element={<AdminView />} />
+                    <Route
+                        path="admin/organisation/:organisationId"
+                        element={<GroupAdminView />}
+                    />
+
+                    <Route path="song/*" element={<SongRouting />} />
+                </Routes>
+            </UserContextProvider>
+        )
+    }
+    return <Navigate to={"/"} replace />
 }

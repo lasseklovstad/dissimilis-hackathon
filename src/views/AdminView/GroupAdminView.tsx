@@ -3,7 +3,7 @@ import { Box, Button, Dialog, Grid, Typography } from "@mui/material"
 import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
-import { useHistory, useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 import { Add as AddIcon } from "@mui/icons-material"
 import { colors } from "../../utils/colors"
@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
 export const GroupAdminView = () => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const history = useHistory()
+    const navigate = useNavigate()
     const { launchSnackbar } = useSnackbarContext()
     const { organisationId } = useParams<{ organisationId: string }>()
 
@@ -92,7 +92,7 @@ export const GroupAdminView = () => {
     const { adminStatuses } = useGetAdminStatuses()
     const userId = sessionStorage.getItem("userId") || ""
 
-    const { organisationFetched } = useGetOrganisation(parseInt(organisationId))
+    const { organisationFetched } = useGetOrganisation(organisationId)
 
     const userIsSystemAdmin = () => adminStatuses?.systemAdmin || false
 
@@ -104,7 +104,7 @@ export const GroupAdminView = () => {
             : false) || userIsSystemAdmin()
 
     const { getAllGroups, allGroupsFetched } = useGetGroupsInOrganisation(
-        parseInt(organisationId),
+        organisationId,
         userIsAdminInCurrentOrganisation() ? undefined : GroupFilter.Admin
     )
 
@@ -158,7 +158,7 @@ export const GroupAdminView = () => {
         }
     }
     const handleSearchTerm = (searchTerm: string) => {
-        history.push(`/library?search=${searchTerm}`)
+        navigate(`/library?search=${searchTerm}`)
     }
 
     return (
@@ -182,7 +182,7 @@ export const GroupAdminView = () => {
                                 <Grid item xs={12}>
                                     <Button
                                         disableFocusRipple
-                                        onClick={() => history.push("/admin")}
+                                        onClick={() => navigate("/admin")}
                                         className={classes.returnButton}
                                     >
                                         <ArrowBackIosIcon />
@@ -236,6 +236,7 @@ export const GroupAdminView = () => {
                                 {userIsGroupAdmin() &&
                                     groups?.map((group) => (
                                         <Grid
+                                            key={group.groupId}
                                             item
                                             className={
                                                 classes.accordionComponent

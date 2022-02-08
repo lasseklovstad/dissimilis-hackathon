@@ -27,7 +27,7 @@ import { EditMembersDialog } from "../CustomDialog/EditMembersDialog.component"
 import { AddGroupMemberDialog } from "../CustomDialog/AddGroupMemberDialog.component"
 import { IGroup } from "../../models/IGroup"
 import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
-import { useHistory } from "react-router"
+import { useNavigate } from "react-router"
 
 const useStyles = makeStyles({
     root: {
@@ -85,7 +85,7 @@ export const AccordionGroupComponent = (props: {
     const { deleteGroup } = useDeleteGroup(groupId)
     const { addGroupMember } = useAddGroupMember(groupId)
     const { updateGroup } = useUpdateGroup(groupId)
-    const history = useHistory()
+    const navigate = useNavigate()
     const handleAddMemberClose = () => {
         setAddMemberDialogIsOpen(false)
     }
@@ -185,7 +185,7 @@ export const AccordionGroupComponent = (props: {
     }
 
     const handleSeeAllSongs = () => {
-        history.push(`/library?groupId=${groupId}`)
+        navigate(`/library?groupId=${groupId}`)
     }
 
     useEffect(() => {

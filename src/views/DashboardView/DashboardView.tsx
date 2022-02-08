@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Box, Dialog, Grid } from "@mui/material"
 import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
-import { useHistory } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import {
     DashboardButtonSearch,
     DashboardButtonWithAddIconNoLink,
@@ -83,7 +83,7 @@ export const DashboardView = () => {
     >()
 
     const { postSong } = usePostSong()
-    const history = useHistory()
+    const navigate = useNavigate()
     const measureText = t("DashboardView.measure")
 
     const { getRecentSongs, recentSongsFetched } = useGetRecentSongs(
@@ -114,7 +114,7 @@ export const DashboardView = () => {
         setAddSongDialogIsOpen(false)
         const { result } = await postSong.run({ ...timeSignature, title })
         if (result?.status === 201) {
-            history.push(`/song/${result.data.songId}`)
+            navigate(`/song/${result.data.songId}`)
         }
     }
 
@@ -128,7 +128,7 @@ export const DashboardView = () => {
     }
 
     const handleSearchTerm = (searchTerm: string) => {
-        history.push(`/library?search=${searchTerm}`)
+        navigate(`/library?search=${searchTerm}`)
     }
 
     const { getAllGroups, allGroupsFetched } = useGetGroups(GroupFilter.Member)
@@ -197,7 +197,7 @@ export const DashboardView = () => {
                                 <DashboardButtonSearch
                                     key={item.groupId}
                                     func={() =>
-                                        history.push(
+                                        navigate(
                                             `/library?groupId=${item.groupId}`
                                         )
                                     }
@@ -207,7 +207,7 @@ export const DashboardView = () => {
                                 <DashboardButtonSearch
                                     key={item.organisationId}
                                     func={() =>
-                                        history.push(
+                                        navigate(
                                             `/library?organisationId=${item.organisationId}`
                                         )
                                     }

@@ -12,7 +12,7 @@ import makeStyles from "@mui/styles/makeStyles"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
-import { useHistory } from "react-router"
+import { useNavigate } from "react-router"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
 import {
@@ -121,7 +121,7 @@ export const AccordionComponent = (props: {
         setOrganisationInfoDialogIsOpen(false)
     }
 
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const [addMemberDialogIsOpen, setAddMemberDialogIsOpen] = useState(false)
 
@@ -195,7 +195,7 @@ export const AccordionComponent = (props: {
     }
 
     const handleSeeAllSongs = () => {
-        history.push(`/library?organisationId=${organisationId}`)
+        navigate(`/library?organisationId=${organisationId}`)
     }
 
     useEffect(() => {
@@ -269,7 +269,7 @@ export const AccordionComponent = (props: {
                                 disableFocusRipple
                                 className={classes.button}
                                 onClick={() =>
-                                    history.push(
+                                    navigate(
                                         `/admin/organisation/${organisationId}`
                                     )
                                 }

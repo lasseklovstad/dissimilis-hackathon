@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios"
-import { useHistory } from "react-router"
+import { useNavigate } from "react-router"
 import { DependencyList, useCallback, useEffect, useRef, useState } from "react"
 import { IServerError } from "../models/IServerError"
 
@@ -49,11 +49,11 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
     options?: ApiServiceOptions<T, R>
 ) => {
     const { body: bodyInit, headers = {}, initialData, params } = options || {}
-    const { push } = useHistory()
+    const navigate = useNavigate()
     const [error, setError] = useState<AxiosError<IServerError> | undefined>(
         undefined
     )
-    const controller = useRef(new AbortController())
+    const controller = useRef<AbortController>()
 
     const [data, setData] = useState<T | undefined>(initialData)
     const [isError, setIsError] = useState(false)
@@ -64,7 +64,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
         isError: boolean,
         error: AxiosError<IServerError> | undefined
     ) => {
-        if (controller.current.signal.aborted) {
+        if (controller.current?.signal.aborted) {
             return
         }
         setLoading(false)
@@ -79,6 +79,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
 
     const fetchData = useDeepCallback<T>(
         async (method, body?: unknown, appendUrl?: string) => {
+            controller.current = new AbortController()
             // Add params to the url
             const baseUrl = process.env.REACT_APP_API_URL as string
             let finalUrl = baseUrl + url + (appendUrl || "")
@@ -137,7 +138,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
             } catch (error) {
                 axiosError = error as AxiosError
                 if (axiosError?.response?.status === 401) {
-                    push("/")
+                    navigate("/")
                     sessionStorage.removeItem("apiKey")
                     sessionStorage.removeItem("userId")
                 }
@@ -171,8 +172,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
 
     useEffect(() => {
         return () => {
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            controller.current.abort()
+            controller.current?.abort()
         }
     }, [])
 

@@ -4,7 +4,7 @@ import Button from "@mui/material/Button"
 import Grid from "@mui/material/Grid"
 import { Collapse, useMediaQuery } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import { useHistory } from "react-router"
+import { useNavigate } from "react-router"
 import Alert from "@mui/material/Alert"
 import IconButton from "@mui/material/IconButton"
 import CloseIcon from "@mui/icons-material/Close"
@@ -61,7 +61,7 @@ export const LoginView = () => {
 
     const { t } = useTranslation()
     const matches = useMediaQuery("(min-width:600px)")
-    const history = useHistory()
+    const navigate = useNavigate()
     const axiosGet = useLoginRedirect()
 
     const url = new URLSearchParams(window.location.search)
@@ -81,7 +81,7 @@ export const LoginView = () => {
             sessionStorage.getItem("apiKey") &&
             sessionStorage.getItem("userId")
         ) {
-            history.replace("/dashboard")
+            navigate("/dashboard")
         } else if (code !== null) {
             setIsLoading(true)
             axiosPost().then(({ result }) => {
@@ -91,11 +91,11 @@ export const LoginView = () => {
                         "userId",
                         result.data.userID?.toString()
                     )
-                    history.replace("/dashboard")
+                    navigate("/dashboard")
                 }
             })
         }
-    }, [history, axiosPost, code])
+    }, [navigate, axiosPost, code])
 
     const warning = (
         <Collapse in={warningDisplayed}>

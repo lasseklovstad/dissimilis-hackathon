@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { IconButton, Menu, Dialog, MenuItem } from "@mui/material"
 import MoreVertIcon from "@mui/icons-material/MoreVert"
 import { useTranslation } from "react-i18next"
-import { useHistory } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import {
     useDeleteSong,
     useDuplicateSong,
@@ -32,7 +32,7 @@ export const SongGridMenuButton = (props: {
     const [deleteSongDialogIsOpen, setDeleteSongDialogIsOpen] = useState(false)
     const [shareSongDialogIsOpen, setShareSongDialogIsOpen] = useState(false)
     const { t } = useTranslation()
-    const history = useHistory()
+    const navigate = useNavigate()
     const { songId } = props
     const { deleteSong } = useDeleteSong(songId)
     const { duplicateSong } = useDuplicateSong(songId)
@@ -55,7 +55,7 @@ export const SongGridMenuButton = (props: {
     }
 
     const handleOpenSong = () => {
-        history.push(props.link)
+        navigate(props.link)
     }
 
     const handleDuplicateSong = async (title: string) => {
@@ -65,7 +65,7 @@ export const SongGridMenuButton = (props: {
 
         if (!error && result) {
             setDuplicateSongDialogIsOpen(false)
-            history.push(`song/${result.data.songId.toString()}`)
+            navigate(`song/${result.data.songId.toString()}`)
         }
     }
 

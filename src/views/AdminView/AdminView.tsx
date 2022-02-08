@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 import { DashboardTopBar } from "../../components/DashboardTopBar/DashboardTopBar"
 import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 import { AccordionComponent } from "../../components/AdminViewComponents/AccordionComponent.component"
-import { useHistory } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import {
     Add as AddIcon,
     Edit as EditIcon,
@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 export const AdminView = () => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const { launchSnackbar } = useSnackbarContext()
 
@@ -155,7 +155,7 @@ export const AdminView = () => {
         setEditMembersDialogIsOpen(false)
     }
     const handleSearchTerm = (searchTerm: string) => {
-        history.push(`/library?search=${searchTerm}`)
+        navigate(`/library?search=${searchTerm}`)
     }
     const handleAddOrganisationDialogSave = async (
         name: string,
@@ -293,6 +293,7 @@ export const AdminView = () => {
                                 )
                                 return (
                                     <Grid
+                                        key={organisation.organisationId}
                                         item
                                         className={classes.accordionComponent}
                                         xs={12}
@@ -320,6 +321,7 @@ export const AdminView = () => {
                                         organisation.organisationId
                                     ) && (
                                         <Grid
+                                            key={organisation.organisationId}
                                             className={
                                                 classes.accordionComponent
                                             }
