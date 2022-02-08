@@ -1,10 +1,15 @@
 import { render, screen } from "@testing-library/react"
 import { TestWrapper } from "../../TestWrapper.komponent"
 import userEvent from "@testing-library/user-event"
-import React from "react"
 import { waitDoneLoading } from "../../test/test-utils"
 import { DashboardMenu } from "./DashboardMenu.component"
-import { server } from "../../test/test-server"
+
+const mockNavigation = jest.fn()
+
+jest.mock("react-router", () => ({
+    ...(jest.requireActual("react-router") as any),
+    useNavigate: () => mockNavigation,
+}))
 
 const renderDashboard = async () => {
     render(<DashboardMenu />, { wrapper: TestWrapper })
