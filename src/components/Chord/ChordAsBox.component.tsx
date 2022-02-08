@@ -12,7 +12,7 @@ export const chordStyles = {
     minWidth: 0,
     alignItems: "stretch",
     borderRadius: "3px",
-}
+} as const
 
 type ChordAsBoxProps = {
     chord: IChord

@@ -15,7 +15,7 @@ import {
 } from "@mui/material"
 import makeStyles from "@mui/styles/makeStyles"
 import withStyles from "@mui/styles/withStyles"
-import { useHistory, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
 import { Song } from "../../components/Song/Song.component"
@@ -136,7 +136,7 @@ export const ExportView = () => {
     const selectedVoice = useVoice(songInit?.voices)
 
     const classes = useStyles()
-    const history = useHistory()
+    const navigate = useNavigate()
     const { t } = useTranslation()
 
     useEffect(() => {
@@ -263,7 +263,7 @@ export const ExportView = () => {
                                     songInit ? selectedVoice?.songVoiceId : ""
                                 }
                                 onChange={(ev) => {
-                                    history.push(
+                                    navigate(
                                         `/song/${songId}/export?voice=${ev.target.value}`
                                     )
                                 }}
@@ -458,7 +458,7 @@ export const ExportView = () => {
                         <Button
                             className={classes.confirmOrCancelButtons}
                             disableFocusRipple
-                            onClick={() => history.push(`/song/${songId}/`)}
+                            onClick={() => navigate(`/song/${songId}/`)}
                         >
                             {t("ExportView.cancel")}
                         </Button>

@@ -7,14 +7,11 @@ import { login, logout } from "../../test/test-utils"
 import { mockUrl } from "../../test/handlers/login-handlers"
 import { sessionStorageMock } from "../../test/mock/storage.mock"
 
-const mockReplaceHistory = jest.fn()
+const mockNavigation = jest.fn()
 
 jest.mock("react-router", () => ({
     ...(jest.requireActual("react-router") as any),
-    useHistory: () => ({
-        replace: mockReplaceHistory,
-        push: jest.fn(),
-    }),
+    useNavigate: () => mockNavigation,
 }))
 
 describe("LoginView", () => {
@@ -52,7 +49,7 @@ describe("LoginView", () => {
         window.location.search = "code=abc-123"
         render(<LoginView />, { wrapper: TestWrapper })
         await waitFor(() => {
-            expect(mockReplaceHistory).toHaveBeenCalledWith("/dashboard")
+            expect(mockNavigation).toHaveBeenCalledWith("/dashboard")
         })
         expect(sessionStorageMock.getItem("apiKey")).toBe(
             "36476d21801ece54d1f967d89c01cdd5"
@@ -63,6 +60,6 @@ describe("LoginView", () => {
     it("should route user to /dashboard if already logged inn", () => {
         login()
         render(<LoginView />, { wrapper: TestWrapper })
-        expect(mockReplaceHistory).toHaveBeenCalledWith("/dashboard")
+        expect(mockNavigation).toHaveBeenCalledWith("/dashboard")
     })
 })

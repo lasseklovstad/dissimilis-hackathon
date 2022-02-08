@@ -79,8 +79,8 @@ export const useGetSongMetadata = (songId: number) => {
  */
 export const useTransposeSong = (
     songId: number,
-    title: string,
-    transpose: string
+    title: string | undefined,
+    transpose: string | undefined
 ) => {
     const url = `song/${songId}/transpose`
     const body = {

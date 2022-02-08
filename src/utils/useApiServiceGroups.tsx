@@ -47,7 +47,7 @@ export const useGetGroups = (groupFilter?: GroupFilter) => {
  * Get all groups in an organisation, based on different parameters
  * */
 export const useGetGroupsInOrganisation = (
-    organisationId: number,
+    organisationId: string | undefined,
     groupFilter?: GroupFilter
 ) => {
     const url = groupFilter
@@ -208,10 +208,12 @@ export const useDeleteOrganisation = (organisationId: number) => {
  * Get one organisation and its metadata
  * @param organisationId organisation's id
  */
-export const useGetOrganisation = (organisationId: number) => {
+export const useGetOrganisation = (
+    organisationId: string | number | undefined
+) => {
     const url = `organisations/${organisationId}`
 
-    const { getData, state, data } = useApiService<IOrganisation>(url, {})
+    const { getData, state, data } = useApiService<IOrganisation>(url)
 
     useEffect(() => {
         getData()

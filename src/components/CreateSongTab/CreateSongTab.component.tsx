@@ -12,7 +12,7 @@ import {
 } from "@mui/material"
 import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
-import { useHistory } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { IVoice } from "../../models/IVoice"
 import {
     useCreateVoice,
@@ -103,19 +103,19 @@ export const CreateSongTab = (props: {
     const { deleteVoice } = useDeleteVoice(songId, clickedId)
     const { duplicateVoice } = useDuplicateVoice(songId, clickedId)
     const classes = useStyles()
-    const history = useHistory()
+    const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
     const onAddVoice = (voice: IVoice) => {
         dispatchSong({ type: "ADD_VOICE", voice })
-        history.push(`?voice=${voice.songVoiceId}`)
+        navigate(`?voice=${voice.songVoiceId}`)
     }
 
     const onDeleteVoice = (voice: IVoice) => {
         dispatchSong({ type: "DELETE_VOICE", songVoiceId: voice.songVoiceId })
 
         if (voice.songVoiceId === selectedVoiceId) {
-            history.push(`/song/${songId}`)
+            navigate(`/song/${songId}`)
         }
     }
 
@@ -251,7 +251,7 @@ export const CreateSongTab = (props: {
                                 label={label}
                                 disableFocusRipple
                                 onClick={() =>
-                                    history.push(`?voice=${voice.songVoiceId}`)
+                                    navigate(`?voice=${voice.songVoiceId}`)
                                 }
                                 onContextMenu={
                                     !voice.isMain

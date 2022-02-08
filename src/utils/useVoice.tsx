@@ -1,11 +1,9 @@
-import { useHistory } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { IVoice } from "../models/IVoice"
 
 export const useVoice = (voices: IVoice[] | undefined) => {
-    const history = useHistory()
-    const voiceIdString = new URLSearchParams(history.location.search).get(
-        "voice"
-    )
+    const location = useLocation()
+    const voiceIdString = new URLSearchParams(location.search).get("voice")
     const voiceId = voiceIdString ? parseInt(voiceIdString, 10) : undefined
 
     const voiceExists = voices?.find((voice) => voice.songVoiceId === voiceId)
