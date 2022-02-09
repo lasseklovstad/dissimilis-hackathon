@@ -13,7 +13,6 @@ import {
     ListItemText,
     DialogActions,
     Dialog,
-    TextField,
     CircularProgress,
 } from "@mui/material"
 import makeStyles from "@mui/styles/makeStyles"
@@ -27,22 +26,15 @@ import {
     useChangeSongProtectionLevel,
     useGetSongShareInfo,
     useSetGroupTags,
-    useSetOrganisationTags,
     useShareSong,
     useUnshareSong,
 } from "../../utils/useApiServiceSongs"
 import { ChoiceDialog } from "./ChoiceDialog.component"
 import { IGroupIndex } from "../../models/IGroup"
-import { IOrganisationIndex } from "../../models/IOrganisation"
-import {
-    useGetGroups,
-    GroupFilter,
-    useGetOrganisations,
-    OrganisationFilter,
-} from "../../utils/useApiServiceGroups"
-import { Autocomplete } from "@mui/material"
 import { InputDialog } from "./InputDialog.component"
 import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
+import { GroupAutocomplete } from "../GroupAutocomplete/GroupAutocomplet.component"
+import { GroupFilter } from "../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -85,94 +77,27 @@ export const ShareSongDialog = (props: {
     const { shareSong } = useShareSong(songId)
     const { unshareSong } = useUnshareSong(songId)
     const { setGroupTags } = useSetGroupTags(songId)
-    const { setOrganisationTags } = useSetOrganisationTags(songId)
-    const { organisationsFetched } = useGetOrganisations(
-        OrganisationFilter.Member
-    )
-    const { allGroupsFetched } = useGetGroups(GroupFilter.Member)
-
     const [sharedWithUserList, setSharedWithUserList] = useState<IUser[]>([])
     const [selectedUser, setSelectedUser] = useState<IUser>()
     const [confirmRemoveUserDialogIsOpen, setConfirmRemoveUserDialogIsOpen] =
         useState(false)
     const [addUserDialogIsOpen, setAddUserDialogIsOpen] = useState(false)
-
     const [publicSong, setPublicSong] = useState(false)
-
-    const [groups, setGroups] = useState<IGroupIndex[] | undefined>()
-    const [organisations, setOrganisations] = useState<
-        IOrganisationIndex[] | undefined
-    >()
-    const [defaultGroupTagIds, setDefaultGroupTagIds] = useState<number[]>()
-    const [defaultOrgTagIds, setDefaultOrgTagIds] = useState<number[]>()
-    const [filteredGroupTags, setFilteredGroupTags] = useState<IGroupIndex[]>()
-    const [filteredOrgTags, setFilteredOrgTags] =
-        useState<IOrganisationIndex[]>()
-    const [tags, setTags] = useState<(IGroupIndex | IOrganisationIndex)[]>()
-    const tagOptions = [...(groups || []), ...(organisations || [])]
+    const [filteredGroupTags, setFilteredGroupTags] = useState<IGroupIndex[]>(
+        []
+    )
 
     const { launchSnackbar } = useSnackbarContext()
 
     useEffect(() => {
-        if (allGroupsFetched) {
-            setGroups(allGroupsFetched)
-        }
-    }, [allGroupsFetched])
-
-    useEffect(() => {
-        if (organisationsFetched) {
-            setOrganisations(organisationsFetched)
-        }
-    }, [organisationsFetched])
-
-    useEffect(() => {
         if (songShareInfo) {
-            const {
-                groupTags,
-                organisationTags,
-                protectionLevel,
-                sharedWithUsers,
-            } = songShareInfo
+            const { groupTags, protectionLevel, sharedWithUsers } =
+                songShareInfo
             setPublicSong(protectionLevel === SongProtectionLevel.Public)
             setSharedWithUserList(sharedWithUsers)
-            setDefaultGroupTagIds(
-                groupTags.map((group) => {
-                    return group.groupId
-                })
-            )
-            setDefaultOrgTagIds(
-                organisationTags.map((organisation) => {
-                    return organisation.organisationId
-                })
-            )
+            setFilteredGroupTags(groupTags)
         }
     }, [songShareInfo])
-
-    useEffect(() => {
-        if (defaultGroupTagIds && groups) {
-            setFilteredGroupTags(
-                groups.filter(
-                    (group) => defaultGroupTagIds.indexOf(group.groupId) > -1
-                )
-            )
-        }
-    }, [defaultGroupTagIds, groups])
-
-    useEffect(() => {
-        if (defaultOrgTagIds && organisations) {
-            setFilteredOrgTags(
-                organisations.filter(
-                    (organisations) =>
-                        defaultOrgTagIds.indexOf(organisations.organisationId) >
-                        -1
-                )
-            )
-        }
-    }, [defaultOrgTagIds, organisations])
-
-    useEffect(() => {
-        setTags([...(filteredGroupTags || []), ...(filteredOrgTags || [])])
-    }, [filteredOrgTags, filteredGroupTags])
 
     const handleCloseAddUserDialog = () => {
         setAddUserDialogIsOpen(false)
@@ -231,28 +156,15 @@ export const ShareSongDialog = (props: {
         }
     }
 
-    const onTagChange = async (
-        event: any,
-        value: (IGroupIndex | IOrganisationIndex)[]
-    ) => {
-        setTags(value)
-        const orgTagList: number[] = []
-        const groupTagList: number[] = []
-        value.forEach((group) => {
-            "groupName" in group
-                ? groupTagList.push(group.groupId)
-                : orgTagList.push(group.organisationId)
-        })
-        const { error: groupError } = await setGroupTags.run({
-            tagIds: groupTagList,
+    const onGroupChange = async (selectedGroups: IGroupIndex[]) => {
+        const { error } = await setGroupTags.run({
+            tagIds: selectedGroups.map((group) => group.groupId),
         })
 
-        const { error: orgError } = await setOrganisationTags.run({
-            tagIds: orgTagList,
-        })
-
-        if (groupError || orgError) {
+        if (error) {
             launchSnackbar(t("Snackbar.addTag"), true)
+        } else {
+            setFilteredGroupTags(selectedGroups)
         }
     }
 
@@ -362,39 +274,20 @@ export const ShareSongDialog = (props: {
                         <Grid item>{t("Dialog.everyone")}</Grid>
                     </Grid>
                 )}
-                {publicSong ? (
+                {publicSong && (
                     <>
                         <Typography variant="caption">
                             {t("Dialog.tagsDescription")}
                         </Typography>
-                        <Autocomplete
-                            style={{
-                                marginBottom: "1.5em",
-                                maxHeight: 150,
-                                overflow: "auto",
-                            }}
-                            multiple
-                            id="tags-outlined"
-                            options={tagOptions}
-                            value={tags}
-                            getOptionLabel={(option) =>
-                                "groupName" in option
-                                    ? option.groupName
-                                    : option.organisationName
-                            }
-                            filterSelectedOptions
-                            onChange={onTagChange}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    variant="outlined"
-                                    placeholder={t("Dialog.tags")}
-                                />
+                        <GroupAutocomplete
+                            selectedGroups={filteredGroupTags.map((group) =>
+                                group.groupId.toString()
                             )}
+                            placeholder={t<string>("Dialog.tags")}
+                            onGroupChange={onGroupChange}
+                            groupFilter={GroupFilter.Member}
                         />
                     </>
-                ) : (
-                    ""
                 )}
             </DialogContent>
             <DialogActions>

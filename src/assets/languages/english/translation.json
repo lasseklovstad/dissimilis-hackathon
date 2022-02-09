@@ -18,7 +18,7 @@
         "date": "Date changed",
         "user": "User",
         "song": "Song",
-        "autoCompleteLabel": "Select a filter"
+        "autoCompleteLabel": "Select groups"
     },
     "AdminView": {
         "adminPanel": "Admin panel",

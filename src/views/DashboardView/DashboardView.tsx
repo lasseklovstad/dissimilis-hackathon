@@ -17,14 +17,7 @@ import { getTimeSignatureText } from "../../utils/bar.util"
 import { ISongIndex } from "../../models/ISong"
 import { Loading } from "../../components/loading/Loading.component"
 import { updateSongTitleInListOfSongs } from "../../utils/dashboard.util"
-import {
-    GroupFilter,
-    OrganisationFilter,
-    useGetGroups,
-    useGetOrganisations,
-} from "../../utils/useApiServiceGroups"
-import { IGroupIndex } from "../../models/IGroup"
-import { IOrganisationIndex } from "../../models/IOrganisation"
+import { GroupFilter, useGetGroups } from "../../utils/useApiServiceGroups"
 import { ButtonGrid } from "../../components/buttonGrid/buttonGrid.component"
 import { InputDialog } from "../../components/CustomDialog/InputDialog.component"
 
@@ -132,37 +125,11 @@ export const DashboardView = () => {
     }
 
     const { getAllGroups, allGroupsFetched } = useGetGroups(GroupFilter.Member)
-    const [groups, setGroups] = useState<IGroupIndex[] | undefined>()
-    useEffect(() => {
-        if (allGroupsFetched) {
-            setGroups(allGroupsFetched)
-        }
-    }, [allGroupsFetched])
-    const { getOrganisations, organisationsFetched } = useGetOrganisations(
-        OrganisationFilter.Member
-    )
-    const [organisations, setorganisations] = useState<
-        IOrganisationIndex[] | undefined
-    >()
-    useEffect(() => {
-        if (organisationsFetched) {
-            setorganisations(organisationsFetched)
-        }
-    }, [organisationsFetched])
-
-    const groupsAndOrganisations = [
-        ...(groups ? groups : []),
-        ...(organisations ? organisations : []),
-    ]
 
     return (
         <>
             <Loading
-                isLoading={
-                    postSong.loading ||
-                    getAllGroups.loading ||
-                    getOrganisations.loading
-                }
+                isLoading={postSong.loading || getAllGroups.loading}
                 fullScreen
             />
             <Box mx={2}>
@@ -192,29 +159,15 @@ export const DashboardView = () => {
                     </ButtonGrid>
 
                     <ButtonGrid title={t("DashboardView.songSearchFilter")}>
-                        {groupsAndOrganisations.map((item, i) =>
-                            "groupId" in item ? (
-                                <DashboardButtonSearch
-                                    key={item.groupId}
-                                    func={() =>
-                                        navigate(
-                                            `/library?groupId=${item.groupId}`
-                                        )
-                                    }
-                                    text={item.groupName}
-                                />
-                            ) : (
-                                <DashboardButtonSearch
-                                    key={item.organisationId}
-                                    func={() =>
-                                        navigate(
-                                            `/library?organisationId=${item.organisationId}`
-                                        )
-                                    }
-                                    text={item.organisationName}
-                                />
-                            )
-                        )}
+                        {allGroupsFetched?.map((item) => (
+                            <DashboardButtonSearch
+                                key={item.groupId}
+                                func={() =>
+                                    navigate(`/library?groupId=${item.groupId}`)
+                                }
+                                text={item.groupName}
+                            />
+                        ))}
                     </ButtonGrid>
 
                     <SongGrid

@@ -16,7 +16,7 @@
         "date": "Dato endret",
         "user": "Bruker",
         "song": "Sang",
-        "autoCompleteLabel": "Velg et filter"
+        "autoCompleteLabel": "Velg grupper"
     },
     "AdminView": {
         "adminPanel": "Adminpanel",

@@ -145,7 +145,6 @@ export const LibraryView = () => {
                         orderDescending={orderDescending}
                         searchFilter
                         initialGroupIds={includedGroupIdArray}
-                        initialOrganisationIds={includedOrganisationIdArray}
                         onSubmitAutocomplete={handleAddFilterUrl}
                     />
                 </Grid>
