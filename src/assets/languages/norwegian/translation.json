@@ -224,6 +224,7 @@
         "readRightsDescription": "Hvem skal kunne se sangen, annet enn personer den er delt med?",
         "noOne": "Ingen",
         "everyone": "Alle",
+        "everyoneLabel": "Del med alle",
         "tagsDescription": "Gjør det enklere for folk å finne sangen ved å legge til grupper",
         "unshare": "Slutt å dele sang",
         "removePerson": "Fjern person",

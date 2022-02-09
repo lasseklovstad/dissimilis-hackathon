@@ -17,10 +17,10 @@ import {
 } from "@mui/material"
 import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
-import { IUser } from "../../models/IUser"
+import { IUser } from "../../../models/IUser"
 import { Delete as DeleteIcon, Add as AddIcon } from "@mui/icons-material"
-import { colors } from "../../utils/colors"
-import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
+import { colors } from "../../../utils/colors"
+import { DialogButton } from "../../CustomDialogComponents/DialogButton.components"
 import {
     SongProtectionLevel,
     useChangeSongProtectionLevel,
@@ -28,13 +28,13 @@ import {
     useSetGroupTags,
     useShareSong,
     useUnshareSong,
-} from "../../utils/useApiServiceSongs"
-import { ChoiceDialog } from "./ChoiceDialog.component"
-import { IGroupIndex } from "../../models/IGroup"
-import { InputDialog } from "./InputDialog.component"
-import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
-import { GroupAutocomplete } from "../GroupAutocomplete/GroupAutocomplet.component"
-import { GroupFilter } from "../../utils/useApiServiceGroups"
+} from "../../../utils/useApiServiceSongs"
+import { ChoiceDialog } from "../ChoiceDialog.component"
+import { IGroupIndex } from "../../../models/IGroup"
+import { InputDialog } from "../InputDialog.component"
+import { useSnackbarContext } from "../../../utils/snackbarContextProvider.component"
+import { GroupAutocomplete } from "../../GroupAutocomplete/GroupAutocomplet.component"
+import { GroupFilter } from "../../../utils/useApiServiceGroups"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -246,7 +246,7 @@ export const ShareSongDialog = (props: {
                 <Typography variant="body1" className={classes.item}>
                     {t("Dialog.readRights")}
                 </Typography>
-                <Typography variant="caption">
+                <Typography variant="caption" id="share-description">
                     {t("Dialog.readRightsDescription")}
                 </Typography>
                 {getSongShareInfo.loading ? (
@@ -269,6 +269,12 @@ export const ShareSongDialog = (props: {
                                 onChange={handleChangePublicPrivate}
                                 name="publicSongState"
                                 color={"secondary"}
+                                inputProps={{
+                                    "aria-label": t<string>(
+                                        "Dialog.everyoneLabel"
+                                    ),
+                                    "aria-describedby": "share-description",
+                                }}
                             />
                         </Grid>
                         <Grid item>{t("Dialog.everyone")}</Grid>

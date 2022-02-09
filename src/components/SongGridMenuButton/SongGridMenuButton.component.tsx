@@ -13,7 +13,7 @@ import { ChoiceDialog } from "../CustomDialog/ChoiceDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
 import { Loading } from "../loading/Loading.component"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
-import { ShareSongDialog } from "../CustomDialog/ShareSongDialog.component"
+import { ShareSongDialog } from "../CustomDialog/ShareSongDialog/ShareSongDialog.component"
 import { ShowSongInfoDialog } from "../CustomDialog/ShowSongInfoDialog.component"
 
 export const SongGridMenuButton = (props: {

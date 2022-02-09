@@ -25,7 +25,7 @@ import { TransposeDialog } from "../CustomDialog/TransposeDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
 import { useSongContext } from "../../context/song/SongContextProvider.component"
 import { useVoice } from "../../utils/useVoice"
-import { ShareSongDialog } from "../CustomDialog/ShareSongDialog.component"
+import { ShareSongDialog } from "../CustomDialog/ShareSongDialog/ShareSongDialog.component"
 import { ShowSongInfoDialog } from "../CustomDialog/ShowSongInfoDialog.component"
 import { useUser } from "../UserContextProvider/UserContextProvider"
 
