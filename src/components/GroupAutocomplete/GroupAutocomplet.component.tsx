@@ -17,9 +17,9 @@ export const GroupAutocomplete = (props: GroupAutocompleteProps) => {
         <Autocomplete
             sx={{
                 mb: "1.5em",
-                maxHeight: 150,
-                overflow: "auto",
+                mt: 1,
             }}
+            id={"groups-autocomplete"}
             multiple
             options={allGroupsFetched || []}
             value={allGroupsFetched?.filter((group) =>
@@ -31,6 +31,7 @@ export const GroupAutocomplete = (props: GroupAutocompleteProps) => {
             renderInput={(params) => (
                 <TextField
                     {...params}
+                    label={placeholder}
                     variant="outlined"
                     placeholder={placeholder}
                 />

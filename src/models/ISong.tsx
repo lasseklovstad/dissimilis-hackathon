@@ -1,4 +1,4 @@
-import { SongProtectionLevel } from "../utils/useApiServiceSongs"
+import { SongProtectionLevel } from "./SongProtectionLevel"
 import { IGroupIndex } from "./IGroup"
 import { IOrganisationIndex } from "./IOrganisation"
 import { IUser } from "./IUser"

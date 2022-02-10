@@ -222,6 +222,7 @@
         "shareSong": "Share song",
         "editRights": "Edit rights",
         "editRightsDescription": "People the song is shared with who have edit rights",
+        "editRightsList": "People with edit rights",
         "addPerson": "Add person",
         "readRights": "Read rights",
         "readRightsDescription": "Who should be able to view the song, other than the specific people it's shared with?",

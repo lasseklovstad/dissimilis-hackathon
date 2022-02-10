@@ -22,19 +22,20 @@ import { Delete as DeleteIcon, Add as AddIcon } from "@mui/icons-material"
 import { colors } from "../../../utils/colors"
 import { DialogButton } from "../../CustomDialogComponents/DialogButton.components"
 import {
-    SongProtectionLevel,
     useChangeSongProtectionLevel,
     useGetSongShareInfo,
     useSetGroupTags,
     useShareSong,
     useUnshareSong,
 } from "../../../utils/useApiServiceSongs"
+import { SongProtectionLevel } from "../../../models/SongProtectionLevel"
 import { ChoiceDialog } from "../ChoiceDialog.component"
 import { IGroupIndex } from "../../../models/IGroup"
 import { InputDialog } from "../InputDialog.component"
 import { useSnackbarContext } from "../../../utils/snackbarContextProvider.component"
 import { GroupAutocomplete } from "../../GroupAutocomplete/GroupAutocomplet.component"
 import { GroupFilter } from "../../../utils/useApiServiceGroups"
+import { Loading } from "../../loading/Loading.component"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -145,14 +146,16 @@ export const ShareSongDialog = (props: {
     const handleChangePublicPrivate = async (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        setPublicSong(event.target.checked)
+        const isPublic = event.target.checked
         const { error } = await changeSongProtectionLevel.run({
-            protectionLevel: event.target.checked
+            protectionLevel: isPublic
                 ? SongProtectionLevel.Public
                 : SongProtectionLevel.Private,
         })
         if (error) {
             launchSnackbar(t("Snackbar.changeProtectionLevel"), true)
+        } else {
+            setPublicSong(isPublic)
         }
     }
 
@@ -189,14 +192,27 @@ export const ShareSongDialog = (props: {
                 ) : sharedWithUserList &&
                   sharedWithUserList !== undefined &&
                   sharedWithUserList.length > 0 ? (
-                    <List
-                        dense={false}
-                        className={classes.item}
-                        style={{ maxHeight: 150, overflow: "auto" }}
-                    >
+                    <List dense={false} className={classes.item} aria-label={t("Dialog.editRightsList")}>
                         {sharedWithUserList.map((user) => {
                             return (
-                                <ListItem key={user.email + "-list-item"}>
+                                <ListItem
+                                    key={user.userId}
+                                    secondaryAction={
+                                        <IconButton
+                                            aria-label={t(
+                                                "Dialog.removePerson"
+                                            )}
+                                            onClick={() => {
+                                                setSelectedUser(user)
+                                                setConfirmRemoveUserDialogIsOpen(
+                                                    true
+                                                )
+                                            }}
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    }
+                                >
                                     <ListItemText
                                         primary={user.name}
                                         secondary={user.email}
@@ -206,24 +222,6 @@ export const ShareSongDialog = (props: {
                                                 classes.secondaryTypography,
                                         }}
                                     />
-                                    <ListItemSecondaryAction
-                                        onClick={() => {
-                                            setSelectedUser(user)
-                                            setConfirmRemoveUserDialogIsOpen(
-                                                true
-                                            )
-                                        }}
-                                    >
-                                        <IconButton
-                                            edge="end"
-                                            aria-label={t(
-                                                "Dialog.removePerson"
-                                            )}
-                                            size="large"
-                                        >
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
                                 </ListItem>
                             )
                         })}
@@ -278,6 +276,11 @@ export const ShareSongDialog = (props: {
                             />
                         </Grid>
                         <Grid item>{t("Dialog.everyone")}</Grid>
+                        {changeSongProtectionLevel.loading && (
+                            <Grid>
+                                <Loading isLoading />
+                            </Grid>
+                        )}
                     </Grid>
                 )}
                 {publicSong && (

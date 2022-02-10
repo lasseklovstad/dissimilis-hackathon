@@ -15,11 +15,7 @@ import { ISelectedChord } from "../models/ISelectedChord"
 import { IAddComponentIntervallPost } from "../models/IAddComponentIntervall"
 import { IRemoveComponentIntervall } from "../models/IRemoveComponentIntervall"
 import { IChordPost } from "../models/IChord"
-
-export enum SongProtectionLevel {
-    Public = "Public",
-    Private = "Private",
-}
+import { ChangeSongProtectionLevel } from "../models/SongProtectionLevel"
 
 const getArrangerId = () => {
     return sessionStorage.getItem("userId") || ""
@@ -559,7 +555,7 @@ export const useChangeSongProtectionLevel = (songId: number) => {
 
     const body = {}
 
-    const api = useApiService<void>(url, { body })
+    const api = useApiService<ChangeSongProtectionLevel>(url, { body })
 
     return {
         changeSongProtectionLevel: { run: api.postData, ...api.state },
