@@ -171,6 +171,10 @@ export const ShareSongDialog = (props: {
         }
     }
 
+    if (getSongShareInfo.loading) {
+        return <Loading isLoading />
+    }
+
     return (
         <>
             <DialogTitle>{t("Dialog.shareSong")}</DialogTitle>
@@ -181,18 +185,13 @@ export const ShareSongDialog = (props: {
                 <Typography variant="caption">
                     {t("Dialog.editRightsDescription")}
                 </Typography>
-                {getSongShareInfo.loading ? (
-                    <Grid item xs={12}>
-                        <CircularProgress
-                            aria-label="Loading"
-                            size={50}
-                            style={{ margin: "30px" }}
-                        />
-                    </Grid>
-                ) : sharedWithUserList &&
-                  sharedWithUserList !== undefined &&
-                  sharedWithUserList.length > 0 ? (
-                    <List dense={false} className={classes.item} aria-label={t("Dialog.editRightsList")}>
+
+                {sharedWithUserList?.length && (
+                    <List
+                        dense={false}
+                        className={classes.item}
+                        aria-label={t("Dialog.editRightsList")}
+                    >
                         {sharedWithUserList.map((user) => {
                             return (
                                 <ListItem
@@ -226,8 +225,6 @@ export const ShareSongDialog = (props: {
                             )
                         })}
                     </List>
-                ) : (
-                    ""
                 )}
                 <Button
                     disableFocusRipple
@@ -247,42 +244,28 @@ export const ShareSongDialog = (props: {
                 <Typography variant="caption" id="share-description">
                     {t("Dialog.readRightsDescription")}
                 </Typography>
-                {getSongShareInfo.loading ? (
-                    <Grid item xs={12}>
-                        <CircularProgress
-                            aria-label="Loading"
-                            size={30}
-                            style={{
-                                marginTop: "20px",
-                                marginLeft: "20px",
+
+                <Grid container alignItems="center" spacing={1}>
+                    <Grid item>{t("Dialog.noOne")}</Grid>
+                    <Grid item>
+                        <Switch
+                            checked={publicSong}
+                            onChange={handleChangePublicPrivate}
+                            name="publicSongState"
+                            color={"secondary"}
+                            inputProps={{
+                                "aria-label": t<string>("Dialog.everyoneLabel"),
+                                "aria-describedby": "share-description",
                             }}
                         />
                     </Grid>
-                ) : (
-                    <Grid container alignItems="center" spacing={1}>
-                        <Grid item>{t("Dialog.noOne")}</Grid>
-                        <Grid item>
-                            <Switch
-                                checked={publicSong}
-                                onChange={handleChangePublicPrivate}
-                                name="publicSongState"
-                                color={"secondary"}
-                                inputProps={{
-                                    "aria-label": t<string>(
-                                        "Dialog.everyoneLabel"
-                                    ),
-                                    "aria-describedby": "share-description",
-                                }}
-                            />
+                    <Grid item>{t("Dialog.everyone")}</Grid>
+                    {changeSongProtectionLevel.loading && (
+                        <Grid>
+                            <Loading isLoading />
                         </Grid>
-                        <Grid item>{t("Dialog.everyone")}</Grid>
-                        {changeSongProtectionLevel.loading && (
-                            <Grid>
-                                <Loading isLoading />
-                            </Grid>
-                        )}
-                    </Grid>
-                )}
+                    )}
+                </Grid>
                 {publicSong && (
                     <>
                         <Typography variant="caption">
