@@ -9,23 +9,8 @@ import {
     Select,
     TextField,
 } from "@mui/material"
-
-import makeStyles from "@mui/styles/makeStyles"
-
 import { useTranslation } from "react-i18next"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
-
-const useStyles = makeStyles((theme) => {
-    return {
-        insertName: {
-            marginBottom: theme.spacing(2),
-        },
-        formControl: {
-            marginBottom: theme.spacing(2),
-            minWidth: 120,
-        },
-    }
-})
 
 const characterLimit = 250
 
@@ -34,7 +19,6 @@ export const TransposeDialog = (props: {
     handleOnCancelClick: () => void
     handleOnSaveClick: (title: string, transpose: string) => void
 }) => {
-    const classes = useStyles()
     const [titleInput, setTitleInput] = useState("")
     const [transposeInput, setTransposeInput] = useState("")
     const { t } = useTranslation()
@@ -56,7 +40,7 @@ export const TransposeDialog = (props: {
                     inputProps={{ maxLength: characterLimit }}
                     helperText={`${titleInput.length}/${characterLimit}`}
                     defaultValue={defaultValue}
-                    className={classes.insertName}
+                    margin="normal"
                     autoFocus
                     value={titleInput}
                     variant="filled"
@@ -64,9 +48,9 @@ export const TransposeDialog = (props: {
                         setTitleInput(e.target.value)
                     }}
                     label={t("Dialog.nameOfSong")}
-                    style={{ width: "100%" }}
+                    fullWidth
                 />
-                <FormControl variant="outlined" className={classes.formControl}>
+                <FormControl variant="outlined" margin="normal" fullWidth>
                     <InputLabel id={"semitones-label"}>
                         {t("Dialog.semiNotes")}
                     </InputLabel>

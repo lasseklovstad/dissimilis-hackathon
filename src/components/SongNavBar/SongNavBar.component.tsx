@@ -119,6 +119,8 @@ export const SongNavBar = (props: {
                                         "aria-label": t("Dialog.nameOfSong"),
                                     },
                                 }}
+                                placeholder={t("Dialog.nameOfSong")}
+                                variant="standard"
                                 value={title}
                                 onBlur={(ev) =>
                                     handleTitleBlur(ev.target.value)

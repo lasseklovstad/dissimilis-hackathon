@@ -13,68 +13,35 @@ import {
     DialogActions,
     Dialog,
 } from "@mui/material"
-import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
 import { IUser } from "../../../models/IUser"
 import { Delete as DeleteIcon, Add as AddIcon } from "@mui/icons-material"
-import { colors } from "../../../utils/colors"
 import { DialogButton } from "../../CustomDialogComponents/DialogButton.components"
 import {
     useChangeSongProtectionLevel,
     useGetSongShareInfo,
     useSetGroupTags,
-    useShareSong,
     useUnshareSong,
 } from "../../../utils/useApiServiceSongs"
 import { SongProtectionLevel } from "../../../models/SongProtectionLevel"
 import { ChoiceDialog } from "../ChoiceDialog.component"
 import { IGroupIndex } from "../../../models/IGroup"
-import { InputDialog } from "../InputDialog.component"
 import { useSnackbarContext } from "../../../utils/snackbarContextProvider.component"
 import { GroupAutocomplete } from "../../GroupAutocomplete/GroupAutocomplet.component"
 import { GroupFilter } from "../../../utils/useApiServiceGroups"
 import { Loading } from "../../loading/Loading.component"
-import { GroupUsersAutocomplete } from "./GroupUsersAutocomplete.component"
-
-const useStyles = makeStyles((theme) => {
-    return {
-        iconButton: {
-            marginRight: theme.spacing(5),
-        },
-        secondaryTypography: {
-            marginTop: theme.spacing(0.5),
-        },
-        button: {
-            backgroundColor: colors.white,
-            height: "100%",
-            justifyContent: "left",
-            fontSize: "0.9rem",
-            padding: theme.spacing(1),
-            "&:hover": {
-                backgroundColor: colors.white,
-            },
-        },
-        buttonText: {
-            paddingLeft: "8px",
-        },
-        item: {
-            marginBottom: theme.spacing(2),
-        },
-    }
-})
+import { GroupUsersDialog } from "./GroupUsersDialog.component"
 
 export const ShareSongDialog = (props: {
     handleOnCloseClick: () => void
     songId: number
 }) => {
-    const classes = useStyles()
     const { t } = useTranslation()
 
     const { handleOnCloseClick, songId } = props
 
     const { changeSongProtectionLevel } = useChangeSongProtectionLevel(songId)
     const { getSongShareInfo, songShareInfo } = useGetSongShareInfo(songId)
-    const { shareSong } = useShareSong(songId)
     const { unshareSong } = useUnshareSong(songId)
     const { setGroupTags } = useSetGroupTags(songId)
     const [sharedWithUserList, setSharedWithUserList] = useState<IUser[]>([])
@@ -108,19 +75,8 @@ export const ShareSongDialog = (props: {
         setConfirmRemoveUserDialogIsOpen(false)
     }
 
-    const handleAddUser = async (userEmail: string) => {
-        if (userEmail) {
-            const { error, result } = await shareSong.run(
-                null,
-                `?userEmail=${userEmail}`
-            )
-            if (!error && result) {
-                setSharedWithUserList(result.data)
-            }
-            if (error) {
-                launchSnackbar(t("Snackbar.addShareUser"), true)
-            }
-        }
+    const handleAddUser = (users: IUser[]) => {
+        setSharedWithUserList(users)
         handleCloseAddUserDialog()
     }
 
@@ -177,26 +133,15 @@ export const ShareSongDialog = (props: {
         <>
             <DialogTitle>{t("Dialog.shareSong")}</DialogTitle>
             <DialogContent>
-                <Typography variant="body1" className={classes.item}>
+                <Typography variant="body1">
                     {t("Dialog.editRights")}
                 </Typography>
                 <Typography variant="caption">
                     {t("Dialog.editRightsDescription")}
                 </Typography>
-                <GroupUsersAutocomplete
-                    disableUsers={
-                        sharedWithUserList?.map((user) => user.userId) || []
-                    }
-                    selectedUser={selectedUser}
-                    setSelectedUser={setSelectedUser}
-                />
 
-                {sharedWithUserList?.length && (
-                    <List
-                        dense={false}
-                        className={classes.item}
-                        aria-label={t("Dialog.editRightsList")}
-                    >
+                {!!sharedWithUserList?.length && (
+                    <List aria-label={t("Dialog.editRightsList")}>
                         {sharedWithUserList.map((user) => {
                             return (
                                 <ListItem
@@ -220,11 +165,6 @@ export const ShareSongDialog = (props: {
                                     <ListItemText
                                         primary={user.name}
                                         secondary={user.email}
-                                        className={classes.iconButton}
-                                        secondaryTypographyProps={{
-                                            className:
-                                                classes.secondaryTypography,
-                                        }}
                                     />
                                 </ListItem>
                             )
@@ -233,17 +173,14 @@ export const ShareSongDialog = (props: {
                 )}
                 <Button
                     disableFocusRipple
-                    className={classes.button + " " + classes.item}
                     variant="outlined"
+                    startIcon={<AddIcon />}
                     onClick={() => setAddUserDialogIsOpen(true)}
                 >
-                    <AddIcon />
-                    <div className={classes.buttonText}>
-                        {t("Dialog.addPerson")}
-                    </div>
+                    {t("Dialog.addPerson")}
                 </Button>
 
-                <Typography variant="body1" className={classes.item}>
+                <Typography variant="body1" sx={{ mt: 3 }}>
                     {t("Dialog.readRights")}
                 </Typography>
                 <Typography variant="caption" id="share-description">
@@ -280,7 +217,7 @@ export const ShareSongDialog = (props: {
                             selectedGroups={filteredGroupTags.map((group) =>
                                 group.groupId.toString()
                             )}
-                            placeholder={t<string>("Dialog.tags")}
+                            label={t<string>("Dialog.tags")}
                             onGroupChange={onGroupChange}
                             groupFilter={GroupFilter.Member}
                         />
@@ -300,21 +237,20 @@ export const ShareSongDialog = (props: {
                 open={addUserDialogIsOpen}
                 onClose={handleCloseAddUserDialog}
                 aria-label={t("Dialog.shareWithPerson")}
+                fullWidth
+                maxWidth={"sm"}
             >
-                <InputDialog
-                    handleOnSaveClick={handleAddUser}
-                    handleOnCancelClick={handleCloseAddUserDialog}
-                    headerText={t("Dialog.shareWithPerson")}
-                    saveText={t("Dialog.addPerson")}
-                    cancelText={t("Dialog.cancel")}
-                    labelText={t("Dialog.email")}
-                    characterLimit={250}
+                <GroupUsersDialog
+                    sharedWithUser={sharedWithUserList || []}
+                    onClose={handleCloseAddUserDialog}
+                    onAddUser={handleAddUser}
+                    songId={songId}
                 />
             </Dialog>
             <Dialog
                 open={confirmRemoveUserDialogIsOpen}
                 onClose={handleCloseConfirmRemoveUserDialog}
-                aria-label={t("Dialog.unshare")}
+                aria-label={t("Dialog.removePersonShare")}
             >
                 <ChoiceDialog
                     handleOnSaveClick={handleRemoveUser}
@@ -325,7 +261,7 @@ export const ShareSongDialog = (props: {
                         t("Dialog.removePersonShareDescription") +
                         selectedUser?.name
                     }
-                    headerText={t("Dialog.removePerson")}
+                    headerText={t("Dialog.removePersonShare")}
                 />
             </Dialog>
         </>

@@ -7,23 +7,9 @@ import {
     DialogTitle,
     DialogContentText,
 } from "@mui/material"
-
-import makeStyles from "@mui/styles/makeStyles"
-
 import { useGetSongMetadata } from "../../utils/useApiServiceSongs"
 import { useTranslation } from "react-i18next"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
-
-const useStyles = makeStyles((theme) => {
-    return {
-        textFields: {
-            marginBottom: theme.spacing(0.5),
-        },
-        arranger: {
-            marginBottom: theme.spacing(4),
-        },
-    }
-})
 
 export const EditSongInfoDialog = (props: {
     songId: number
@@ -49,7 +35,6 @@ export const EditSongInfoDialog = (props: {
         numberMin = 0,
         isLoadingPatch,
     } = props
-    const classes = useStyles()
     const [songNameTextFieldInput, setSongNameTextFieldInput] = useState("")
     const [arrangerTextFieldInput, setArrangerTextFieldInput] = useState("")
     const [composerTextFieldInput, setComposerTextFieldInput] = useState("")
@@ -102,6 +87,7 @@ export const EditSongInfoDialog = (props: {
                     helperText={`${songNameTextFieldInput.length}/${characterLimit}`}
                     autoFocus
                     variant="filled"
+                    margin="normal"
                     value={songNameTextFieldInput}
                     onChange={(e) => {
                         setSongNameTextFieldInput(e.target.value)
@@ -109,7 +95,7 @@ export const EditSongInfoDialog = (props: {
                     label={t("Dialog.nameOfSong")}
                     fullWidth
                 />
-                <DialogContentText className={classes.arranger}>
+                <DialogContentText sx={{ m: 1 }}>
                     {t("Song.arranger") + ": " + arrangerTextFieldInput}
                 </DialogContentText>
                 <TextField
@@ -117,8 +103,8 @@ export const EditSongInfoDialog = (props: {
                     inputProps={{
                         maxLength: characterLimit,
                     }}
+                    margin="normal"
                     helperText={`${composerTextFieldInput.length}/${characterLimit}`}
-                    className={classes.textFields}
                     value={composerTextFieldInput}
                     variant="filled"
                     onChange={(e) => {
@@ -130,9 +116,9 @@ export const EditSongInfoDialog = (props: {
                 <TextField
                     id="song-info-dialog-song-speed-textfield"
                     value={speedTextFieldInput}
-                    className={classes.textFields}
                     helperText={t("Song.bpm")}
                     variant="filled"
+                    margin="normal"
                     onChange={(e) => {
                         e.target.value = Math.max(
                             numberMin,
@@ -149,9 +135,9 @@ export const EditSongInfoDialog = (props: {
                     inputProps={{
                         maxLength: characterLimit,
                     }}
-                    className={classes.textFields}
                     helperText={`${songNotesTextFieldInput.length}/${characterLimit}`}
                     multiline
+                    margin="normal"
                     value={songNotesTextFieldInput}
                     variant="filled"
                     onChange={(e) => {

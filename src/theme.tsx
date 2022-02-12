@@ -57,21 +57,6 @@ export const theme = createTheme({
                 },
             },
         },
-        MuiTextField: {
-            defaultProps: {
-                variant: "standard",
-            },
-        },
-        MuiOutlinedInput: {
-            styleOverrides: {
-                root: {
-                    "&:hover:not(.MuiOutlinedInput-disabled):not(.MuiOutlinedInput-focused):not(.MuiOutlinedInput-error) .MuiOutlinedInput-notchedOutline":
-                        {
-                            borderColor: `${colors.gray_500_dark}`,
-                        },
-                },
-            },
-        },
         MuiCardActionArea: {
             styleOverrides: {
                 root: {
@@ -153,7 +138,6 @@ export const theme = createTheme({
             textTransform: "none",
         },
         body2: {
-            lineHeight: 0,
             fontSize: "0.875rem",
         },
     },

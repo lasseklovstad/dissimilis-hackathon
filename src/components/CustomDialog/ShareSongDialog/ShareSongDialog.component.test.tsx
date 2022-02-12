@@ -13,6 +13,9 @@ import {
 import { ShareSongDialog } from "./ShareSongDialog.component"
 import userEvent from "@testing-library/user-event"
 import { IUser } from "../../../models/IUser"
+import { IMyGroupUsersPayload } from "../../../models/IMyGroupUsersPayload"
+import { ISearchWithPagination } from "../../../models/ISearchWithPagination"
+import { user } from "../../../test/data/user.mock"
 
 const mockNavigation = jest.fn()
 
@@ -95,7 +98,14 @@ describe("SharSongDialog", () => {
                         return res(ctx.status(404))
                     }
                 }
-            )
+            ),
+            rest.post<
+                IMyGroupUsersPayload,
+                never,
+                ISearchWithPagination<IUser, IMyGroupUsersPayload>
+            >("*/user/myGroupUsers", (req, res, ctx) => {
+                return res(ctx.json(generateSearchPagination([user], req.body)))
+            })
         )
     })
 
@@ -139,7 +149,13 @@ describe("SharSongDialog", () => {
         userEvent.click(screen.getByRole("button", { name: /add person/i }))
         userEvent.type(
             screen.getByRole("textbox", { name: /email/i }),
-            "test.testersen@gmail.com"
+            "test",
+            { skipAutoClose: true }
+        )
+        userEvent.click(
+            await screen.findByRole("option", {
+                name: /test\.testesen@ciber\.no/i,
+            })
         )
         userEvent.click(screen.getByRole("button", { name: /add person/i }))
         await screen.findByRole("listitem")
@@ -148,3 +164,22 @@ describe("SharSongDialog", () => {
         ).toHaveTextContent("Test Testersen")
     })
 })
+
+const generateSearchPagination = <
+    SearchItem extends unknown,
+    Payload extends { pageSize: number; page: number }
+>(
+    results: SearchItem[],
+    queryDto: Payload
+): ISearchWithPagination<SearchItem, Payload> => {
+    return {
+        queryDto,
+        results,
+        currentPage: 1,
+        pageCount: results.length,
+        pageSize: results.length,
+        rowCount: results.length,
+        firstRowOnPage: 1,
+        lastRowOnPage: results.length,
+    }
+}

@@ -31,7 +31,7 @@ export const LanguageDialog = (props: { onClose: () => void }) => {
 
             <DialogContent>
                 <FormControl
-                    variant="outlined"
+                    variant="filled"
                     margin={"normal"}
                     sx={{ minWidth: 150 }}
                 >

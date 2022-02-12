@@ -2,6 +2,8 @@ import { useEffect } from "react"
 import { useApiService } from "./useApiService"
 import { IAdminStatuses, IUser } from "../models/IUser"
 import { useNavigate } from "react-router"
+import { ISearchWithPagination } from "../models/ISearchWithPagination"
+import { IMyGroupUsersPayload } from "../models/IMyGroupUsersPayload"
 
 /**
  * Get current user
@@ -113,26 +115,6 @@ export const useSetSysAdminStatus = () => {
     return {
         setSysAdminStatus: { run: putData, ...state },
     }
-}
-
-interface IMyGroupUsersPayload {
-    searchText: string
-    pageSize: number
-    page: number
-}
-
-interface ISearchWithPagination<
-    SearchItem extends unknown,
-    Payload extends { pageSize: number; page: number }
-> {
-    queryDto: Payload
-    results: SearchItem[]
-    currentPage: number
-    pageCount: number
-    pageSize: number
-    rowCount: number
-    firstRowOnPage: number
-    lastRowOnPage: number
 }
 
 export const useGetMyGroupUsers = () => {

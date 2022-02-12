@@ -1,5 +1,5 @@
 import { Autocomplete, TextField } from "@mui/material"
-import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { IUser } from "../../../models/IUser"
 import { useGetMyGroupUsers } from "../../../utils/useApiServiceUsers"
 
@@ -12,6 +12,7 @@ type GroupUsersAutocompleteProps = {
 export const GroupUsersAutocomplete = (props: GroupUsersAutocompleteProps) => {
     const { disableUsers, setSelectedUser, selectedUser } = props
     const { myGroupUsers, getMyGroupUsers } = useGetMyGroupUsers()
+    const { t } = useTranslation()
 
     return (
         <Autocomplete
@@ -23,8 +24,21 @@ export const GroupUsersAutocomplete = (props: GroupUsersAutocompleteProps) => {
             value={selectedUser}
             onChange={(e, selected) => setSelectedUser(selected)}
             onInputChange={(e, value) => getMyGroupUsers.run(value)}
+            isOptionEqualToValue={(option, value) =>
+                option.email === value.email
+            }
             renderInput={(params) => (
-                <TextField {...params} variant="outlined" />
+                <TextField
+                    {...params}
+                    fullWidth
+                    autoFocus
+                    margin={"normal"}
+                    placeholder={t("Dialog.email")}
+                    inputProps={{
+                        ...params.inputProps,
+                        "aria-label": t("Dialog.email"),
+                    }}
+                />
             )}
         />
     )

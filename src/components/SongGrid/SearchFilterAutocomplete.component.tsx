@@ -24,7 +24,7 @@ export const SearchFilterAutocomplete = (props: {
         <>
             <GroupAutocomplete
                 selectedGroups={initialGroupIds}
-                placeholder={t<string>("DashboardView.autoCompleteLabel")}
+                label={t<string>("DashboardView.autoCompleteLabel")}
                 onGroupChange={onSubmit}
             />
             {orderTerm && changeOrderTerm && orderDescending !== undefined ? (
