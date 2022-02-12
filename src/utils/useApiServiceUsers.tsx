@@ -114,3 +114,48 @@ export const useSetSysAdminStatus = () => {
         setSysAdminStatus: { run: putData, ...state },
     }
 }
+
+interface IMyGroupUsersPayload {
+    searchText: string
+    pageSize: number
+    page: number
+}
+
+interface ISearchWithPagination<
+    SearchItem extends unknown,
+    Payload extends { pageSize: number; page: number }
+> {
+    queryDto: Payload
+    results: SearchItem[]
+    currentPage: number
+    pageCount: number
+    pageSize: number
+    rowCount: number
+    firstRowOnPage: number
+    lastRowOnPage: number
+}
+
+export const useGetMyGroupUsers = () => {
+    const body: IMyGroupUsersPayload = {
+        searchText: "",
+        pageSize: 10,
+        page: 1,
+    }
+    const { postData, state, data } = useApiService<
+        ISearchWithPagination<IUser, IMyGroupUsersPayload>,
+        IMyGroupUsersPayload
+    >("user/myGroupUsers", { body })
+
+    useEffect(() => {
+        postData()
+    }, [postData])
+
+    const run = (searchText = "") => {
+        return postData({ ...body, searchText })
+    }
+
+    return {
+        getMyGroupUsers: { run, ...state },
+        myGroupUsers: data,
+    }
+}

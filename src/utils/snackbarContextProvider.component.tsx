@@ -1,12 +1,6 @@
 import React, { ReactNode, useContext, useState } from "react"
-import { Snackbar, Theme } from "@mui/material"
+import { Alert, Snackbar, SnackbarProps, Theme } from "@mui/material"
 import makeStyles from "@mui/styles/makeStyles"
-import MuiAlert, { AlertProps } from "@mui/material/Alert"
-import { SnackbarProps } from "@mui/material/Snackbar/Snackbar"
-
-const Alert = (props: AlertProps) => {
-    return <MuiAlert elevation={6} variant="filled" {...props} />
-}
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -63,6 +57,8 @@ export const SnackbarContextProvider = (props: { children: ReactNode }) => {
                     onClose={handleCloseSnack}
                 >
                     <Alert
+                        elevation={6}
+                        variant="filled"
                         onClose={handleClose}
                         severity={isError ? "error" : "success"}
                     >

@@ -56,7 +56,7 @@ export const generateNewVoice = (song: ISong, voice: IVoicePost): IVoice => {
         songId: song.songId,
         voiceName: voice.voiceName,
         isMain: false,
-        voiceNumber: voice.voiceId,
+        voiceNumber: voice.voiceNumber,
         bars: [
             {
                 barId: 3000,

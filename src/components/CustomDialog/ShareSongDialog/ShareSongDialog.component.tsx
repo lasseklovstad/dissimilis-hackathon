@@ -9,11 +9,9 @@ import {
     IconButton,
     List,
     ListItem,
-    ListItemSecondaryAction,
     ListItemText,
     DialogActions,
     Dialog,
-    CircularProgress,
 } from "@mui/material"
 import makeStyles from "@mui/styles/makeStyles"
 import { useTranslation } from "react-i18next"
@@ -36,6 +34,7 @@ import { useSnackbarContext } from "../../../utils/snackbarContextProvider.compo
 import { GroupAutocomplete } from "../../GroupAutocomplete/GroupAutocomplet.component"
 import { GroupFilter } from "../../../utils/useApiServiceGroups"
 import { Loading } from "../../loading/Loading.component"
+import { GroupUsersAutocomplete } from "./GroupUsersAutocomplete.component"
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -79,7 +78,7 @@ export const ShareSongDialog = (props: {
     const { unshareSong } = useUnshareSong(songId)
     const { setGroupTags } = useSetGroupTags(songId)
     const [sharedWithUserList, setSharedWithUserList] = useState<IUser[]>([])
-    const [selectedUser, setSelectedUser] = useState<IUser>()
+
     const [confirmRemoveUserDialogIsOpen, setConfirmRemoveUserDialogIsOpen] =
         useState(false)
     const [addUserDialogIsOpen, setAddUserDialogIsOpen] = useState(false)
@@ -87,6 +86,7 @@ export const ShareSongDialog = (props: {
     const [filteredGroupTags, setFilteredGroupTags] = useState<IGroupIndex[]>(
         []
     )
+    const [selectedUser, setSelectedUser] = useState<IUser | null>(null)
 
     const { launchSnackbar } = useSnackbarContext()
 
@@ -116,14 +116,12 @@ export const ShareSongDialog = (props: {
             )
             if (!error && result) {
                 setSharedWithUserList(result.data)
-                handleCloseAddUserDialog()
             }
             if (error) {
                 launchSnackbar(t("Snackbar.addShareUser"), true)
             }
-        } else {
-            handleCloseAddUserDialog()
         }
+        handleCloseAddUserDialog()
     }
 
     const handleRemoveUser = async () => {
@@ -185,6 +183,13 @@ export const ShareSongDialog = (props: {
                 <Typography variant="caption">
                     {t("Dialog.editRightsDescription")}
                 </Typography>
+                <GroupUsersAutocomplete
+                    disableUsers={
+                        sharedWithUserList?.map((user) => user.userId) || []
+                    }
+                    selectedUser={selectedUser}
+                    setSelectedUser={setSelectedUser}
+                />
 
                 {sharedWithUserList?.length && (
                     <List
