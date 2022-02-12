@@ -1,9 +1,12 @@
-import { render, screen, waitFor, within } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
 import { rest } from "msw"
 import { IGroupIndex } from "../../../models/IGroup"
 import { ISongShareData } from "../../../models/ISong"
 import { server } from "../../../test/test-server"
-import { waitDoneLoading } from "../../../test/test-utils"
+import {
+    generateSearchPagination,
+    waitDoneLoading,
+} from "../../../test/test-utils"
 import { ComponentTestWrapper } from "../../../TestWrapper.komponent"
 import {
     ChangeSongProtectionLevel,
@@ -88,12 +91,8 @@ describe("SharSongDialog", () => {
                 "*/song/:songId/shareSong/User",
                 (req, res, ctx) => {
                     const email = req.url.searchParams.get("userEmail")
-                    if (email) {
-                        return res(
-                            ctx.json([
-                                { email, userId: 1, name: "Test Testersen" },
-                            ])
-                        )
+                    if (email === user.email) {
+                        return res(ctx.json([user]))
                     } else {
                         return res(ctx.status(404))
                     }
@@ -164,22 +163,3 @@ describe("SharSongDialog", () => {
         ).toHaveTextContent("Test Testersen")
     })
 })
-
-const generateSearchPagination = <
-    SearchItem extends unknown,
-    Payload extends { pageSize: number; page: number }
->(
-    results: SearchItem[],
-    queryDto: Payload
-): ISearchWithPagination<SearchItem, Payload> => {
-    return {
-        queryDto,
-        results,
-        currentPage: 1,
-        pageCount: results.length,
-        pageSize: results.length,
-        rowCount: results.length,
-        firstRowOnPage: 1,
-        lastRowOnPage: results.length,
-    }
-}

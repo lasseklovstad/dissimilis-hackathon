@@ -4,6 +4,7 @@ import { screen, waitFor } from "@testing-library/react"
 import { IVoicePost, IVoice } from "../models/IVoice"
 import { sessionStorageMock } from "./mock/storage.mock"
 import { IChord, IChordPost, NoteTypes } from "../models/IChord"
+import { ISearchWithPagination } from "../models/ISearchWithPagination"
 
 let chordId = 100
 
@@ -216,4 +217,23 @@ export const login = () => {
 
 export const logout = () => {
     sessionStorageMock.clear()
+}
+
+export const generateSearchPagination = <
+    SearchItem extends unknown,
+    Payload extends { pageSize: number; page: number }
+>(
+    results: SearchItem[],
+    queryDto: Payload
+): ISearchWithPagination<SearchItem, Payload> => {
+    return {
+        queryDto,
+        results,
+        currentPage: 1,
+        pageCount: results.length,
+        pageSize: results.length,
+        rowCount: results.length,
+        firstRowOnPage: 1,
+        lastRowOnPage: results.length,
+    }
 }
