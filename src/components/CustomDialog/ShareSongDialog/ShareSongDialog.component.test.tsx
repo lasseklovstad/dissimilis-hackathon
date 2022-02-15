@@ -160,6 +160,6 @@ describe("SharSongDialog", () => {
         await screen.findByRole("listitem")
         expect(
             screen.getByRole("list", { name: /People with edit rights/i })
-        ).toHaveTextContent("Test Testersen")
+        ).toHaveTextContent("Test Testesen")
     })
 })
