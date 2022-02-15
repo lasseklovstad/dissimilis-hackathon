@@ -23,7 +23,6 @@ type SongGridProps = {
         React.SetStateAction<(IGroupIndex | IOrganisationIndex)[]>
     >
     initialGroupIds?: string[]
-    initialOrganisationIds?: string[]
     onSubmitAutocomplete?: (
         newValue: (IGroupIndex | IOrganisationIndex)[]
     ) => void
@@ -39,7 +38,6 @@ export const SongGrid = (props: SongGridProps) => {
         orderDescending,
         searchFilter,
         initialGroupIds,
-        initialOrganisationIds,
         onSubmitAutocomplete,
     } = props
 
@@ -49,17 +47,14 @@ export const SongGrid = (props: SongGridProps) => {
                 <Box m={2}>
                     <Typography variant="h1">{title}</Typography>
                 </Box>
-                {searchFilter ? (
+                {searchFilter && onSubmitAutocomplete && (
                     <SearchFilterAutocomplete
-                        initialGroupIds={initialGroupIds}
-                        initialOrganisationIds={initialOrganisationIds}
+                        initialGroupIds={initialGroupIds || []}
                         orderTerm={orderTerm}
                         changeOrderTerm={changeOrderTerm}
                         orderDescending={orderDescending}
                         onSubmit={onSubmitAutocomplete}
                     />
-                ) : (
-                    ""
                 )}
                 <Grid container spacing={3}>
                     {songs?.map((song) => (

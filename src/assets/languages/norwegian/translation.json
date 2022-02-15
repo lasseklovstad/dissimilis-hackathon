@@ -16,7 +16,7 @@
         "date": "Dato endret",
         "user": "Bruker",
         "song": "Sang",
-        "autoCompleteLabel": "Velg et filter"
+        "autoCompleteLabel": "Velg grupper"
     },
     "AdminView": {
         "adminPanel": "Adminpanel",
@@ -217,13 +217,15 @@
         "asMember": "som medlem?",
         "share": "Del",
         "shareSong": "Del sang",
-        "editRights": "Redigeringsrettingheter",
+        "editRights": "Redigeringsrettigheter",
         "editRightsDescription": "Personer sangen er delt med, som kan redigere",
+        "editRightsList": "Person med rediger redigeringsrettigheter",
         "addPerson": "Legg til person",
         "readRights": "Leserettigheter",
         "readRightsDescription": "Hvem skal kunne se sangen, annet enn personer den er delt med?",
         "noOne": "Ingen",
         "everyone": "Alle",
+        "everyoneLabel": "Del med alle",
         "tagsDescription": "Gjør det enklere for folk å finne sangen ved å legge til grupper",
         "unshare": "Slutt å dele sang",
         "removePerson": "Fjern person",
