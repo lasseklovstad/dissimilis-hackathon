@@ -116,7 +116,7 @@ describe("SongView", () => {
         userEvent.click(screen.getByRole("button", { name: "Create" }))
         await waitDoneLoading()
         await screen.findByRole("tab", {
-            name: "Test Ny Stemme"
+            name: "Test Ny Stemme",
         })
     })
     it("Should create new blank voice", async () => {
