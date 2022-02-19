@@ -1,0 +1,24 @@
+pool:
+    name: Azure Pipelines
+    demands: npm
+    vmImage: ubuntu-latest
+
+steps:
+    - task: Npm@1
+      displayName: "npm ci"
+      inputs:
+          verbose: false
+
+    - task: Npm@1
+      displayName: "npm run build"
+      inputs:
+          command: custom
+          verbose: false
+          customCommand: "run build:development"
+
+    - task: Npm@1
+      displayName: "npm run test-final"
+      inputs:
+          command: custom
+          verbose: false
+          customCommand: "run test-final"
