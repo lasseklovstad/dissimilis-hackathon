@@ -23,6 +23,7 @@ type SongProps = {
     showChordLetters?: boolean
     showNoteLetters?: boolean
     lastPage: boolean
+    barIndexOffset?: number
 }
 
 const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
@@ -53,6 +54,7 @@ export const Song = (props: SongProps) => {
         showChordLetters = true,
         showNoteLetters = true,
         lastPage,
+        barIndexOffset = 0,
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
@@ -93,7 +95,7 @@ export const Song = (props: SongProps) => {
                         height={heightOfBar}
                     >
                         <BarPrefix
-                            index={i * barsPerRow}
+                            index={i * barsPerRow + barIndexOffset}
                             timeSignature={timeSignature}
                         />
                         <BarLine />
