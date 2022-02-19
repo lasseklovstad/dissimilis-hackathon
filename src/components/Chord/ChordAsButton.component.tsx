@@ -37,7 +37,7 @@ export const ChordAsButton = (props: ChordAsButtonProps) => {
                     return (
                         <Note
                             highlight={highlight && note === "Z"}
-                            variant={"main"}
+                            variant="main"
                             note={note}
                             id="singleChord"
                             key={note}

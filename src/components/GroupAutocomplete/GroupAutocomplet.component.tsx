@@ -15,7 +15,7 @@ export const GroupAutocomplete = (props: GroupAutocompleteProps) => {
 
     return (
         <Autocomplete
-            id={"groups-autocomplete"}
+            id="groups-autocomplete"
             multiple
             options={allGroupsFetched || []}
             value={allGroupsFetched?.filter((group) =>

@@ -14,8 +14,12 @@ type GroupUsersDialogProps = {
     songId: number
 }
 
-export const GroupUsersDialog = (props: GroupUsersDialogProps) => {
-    const { onClose, onAddUser, sharedWithUser, songId } = props
+export const GroupUsersDialog = ({
+    onClose,
+    onAddUser,
+    sharedWithUser,
+    songId,
+}: GroupUsersDialogProps) => {
     const [selectedUser, setSelectedUser] = useState<IUser | null>(null)
     const { shareSong } = useShareSong(songId)
     const { launchSnackbar } = useSnackbarContext()

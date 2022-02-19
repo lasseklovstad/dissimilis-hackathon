@@ -7,7 +7,7 @@ export const AddBarButton = (props: { text: string; onClick: () => void }) => {
         <Paper elevation={6} sx={{ display: "flex", m: 1, height: "56px" }}>
             <Button
                 disableFocusRipple
-                size={"large"}
+                size="large"
                 startIcon={<AddIcon />}
                 onClick={props.onClick}
             >

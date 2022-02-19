@@ -194,7 +194,7 @@ export const ShareSongDialog = (props: {
                             checked={publicSong}
                             onChange={handleChangePublicPrivate}
                             name="publicSongState"
-                            color={"secondary"}
+                            color="secondary"
                             inputProps={{
                                 "aria-label": t<string>("Dialog.everyoneLabel"),
                                 "aria-describedby": "share-description",
@@ -238,7 +238,7 @@ export const ShareSongDialog = (props: {
                 onClose={handleCloseAddUserDialog}
                 aria-label={t("Dialog.shareWithPerson")}
                 fullWidth
-                maxWidth={"sm"}
+                maxWidth="sm"
             >
                 <GroupUsersDialog
                     sharedWithUser={sharedWithUserList || []}

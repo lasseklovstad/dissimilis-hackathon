@@ -9,14 +9,17 @@ type GroupUsersAutocompleteProps = {
     setSelectedUser: (selectedUser: IUser | null) => void
 }
 
-export const GroupUsersAutocomplete = (props: GroupUsersAutocompleteProps) => {
-    const { disableUsers, setSelectedUser, selectedUser } = props
+export const GroupUsersAutocomplete = ({
+    disableUsers,
+    setSelectedUser,
+    selectedUser,
+}: GroupUsersAutocompleteProps) => {
     const { myGroupUsers, getMyGroupUsers } = useGetMyGroupUsers()
     const { t } = useTranslation()
 
     return (
         <Autocomplete
-            id={"my-group-users-autocomplete"}
+            id="my-group-users-autocomplete"
             loading={getMyGroupUsers.loading}
             options={myGroupUsers?.results || []}
             getOptionLabel={(option) => option.email}
@@ -32,7 +35,7 @@ export const GroupUsersAutocomplete = (props: GroupUsersAutocompleteProps) => {
                     {...params}
                     fullWidth
                     autoFocus
-                    margin={"normal"}
+                    margin="normal"
                     placeholder={t("Dialog.email")}
                     inputProps={{
                         ...params.inputProps,

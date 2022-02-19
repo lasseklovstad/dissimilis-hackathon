@@ -84,7 +84,7 @@ export const ChordNameAutocomplete = () => {
                             border: "0px",
                         },
                     }}
-                    variant={"outlined"}
+                    variant="outlined"
                     inputProps={{
                         ...params.inputProps,
                         "aria-label": t(

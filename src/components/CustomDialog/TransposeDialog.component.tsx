@@ -51,11 +51,11 @@ export const TransposeDialog = (props: {
                     fullWidth
                 />
                 <FormControl variant="outlined" margin="normal" fullWidth>
-                    <InputLabel id={"semitones-label"}>
+                    <InputLabel id="semitones-label">
                         {t("Dialog.semiNotes")}
                     </InputLabel>
                     <Select
-                        labelId={"semitones-label"}
+                        labelId="semitones-label"
                         value={transposeInput}
                         onChange={(e) => {
                             setTransposeInput(e.target.value)

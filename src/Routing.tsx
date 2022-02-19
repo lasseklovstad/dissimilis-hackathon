@@ -14,7 +14,7 @@ export const SongRouting = () => {
     return (
         <SongContextProvider>
             <Routes>
-                <Route path={":songId"} element={<SongView />} />
+                <Route path=":songId" element={<SongView />} />
                 <Route path=":songId/export" element={<ExportView />} />
             </Routes>
         </SongContextProvider>
@@ -48,5 +48,5 @@ const PrivateRoutes = () => {
             </UserContextProvider>
         )
     }
-    return <Navigate to={"/"} replace />
+    return <Navigate to="/" replace />
 }

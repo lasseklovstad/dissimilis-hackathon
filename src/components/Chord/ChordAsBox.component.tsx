@@ -28,7 +28,7 @@ export const ChordAsBox = (props: ChordAsBoxProps) => {
                 .map((note) => {
                     return (
                         <Note
-                            variant={"main"}
+                            variant="main"
                             note={note}
                             id="singleChord"
                             key={note}

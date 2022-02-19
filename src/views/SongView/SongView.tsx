@@ -130,7 +130,7 @@ export const SongView = () => {
                     </Box>
                 )}
                 {selectedVoiceId && song.currentUserHasWriteAccess && (
-                    <Box mt={"200px"}>
+                    <Box mt="200px">
                         <BottomBar voiceId={selectedVoiceId} songId={songId} />
                     </Box>
                 )}
