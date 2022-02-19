@@ -28,7 +28,7 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "test-final": "react-scripts test --watchAll=false",
+        "test-final": "react-scripts test --watchAll=false --coverage --reporters=jest-junit",
         "eject": "react-scripts eject",
         "format": "prettier --write src/**/*.ts{,x}",
         "lint": "tsc --noEmit && eslint --fix src/**/*.ts{,x}",
@@ -60,7 +60,13 @@
         "@types/react-router-dom": "5.3.3",
         "eslint-config-prettier": "8.4.0",
         "eslint-plugin-prettier": "4.0.0",
+        "jest-junit": "13.0.0",
         "msw": "0.38.1",
         "prettier": "2.5.1"
+    },
+    "jest": {
+        "coverageReporters": [
+            "cobertura"
+        ]
     }
 }
