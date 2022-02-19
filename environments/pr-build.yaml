@@ -3,6 +3,8 @@ pool:
     demands: npm
     vmImage: ubuntu-latest
 
+trigger: none
+
 steps:
     - task: Npm@1
       displayName: "npm ci"

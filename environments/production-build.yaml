@@ -1,23 +1,22 @@
 pool:
-  name: Azure Pipelines
-  demands: npm
-  vmImage: ubuntu-latest
+    name: Azure Pipelines
+    demands: npm
+    vmImage: ubuntu-latest
 
 steps:
-- task: Npm@1
-  displayName: 'npm ci'
-  inputs:
-    verbose: false
+    - task: Npm@1
+      displayName: "npm ci"
+      inputs:
+          verbose: false
 
-- task: Npm@1
-  displayName: 'npm run build'
-  inputs:
-    command: custom
-    verbose: false
-    customCommand: 'run build:production'
+    - task: Npm@1
+      displayName: "npm run build"
+      inputs:
+          command: custom
+          verbose: false
+          customCommand: "run build:production"
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
-  inputs:
-    PathtoPublish: build
-
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Artifact: drop"
+      inputs:
+          PathtoPublish: build
