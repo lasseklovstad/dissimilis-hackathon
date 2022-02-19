@@ -26,13 +26,12 @@ steps:
           customCommand: "run test-final"
 
     - task: PublishTestResults@2
-      condition: succeededOrFailed()
       inputs:
           testRunner: JUnit
           testResultsFiles: "**/junit.xml"
 
     - task: PublishCodeCoverageResults@1
       inputs:
-          codeCoverageTool: Cobertura # or JaCoCo
+          codeCoverageTool: Cobertura
           summaryFileLocation: "$(System.DefaultWorkingDirectory)/**/*coverage.xml"
           reportDirectory: "$(System.DefaultWorkingDirectory)/**/coverage"

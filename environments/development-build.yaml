@@ -1,31 +1,40 @@
 pool:
-  name: Azure Pipelines
-  demands: npm
-  vmImage: ubuntu-latest
+    name: Azure Pipelines
+    demands: npm
+    vmImage: ubuntu-latest
 
 steps:
-- task: Npm@1
-  displayName: 'npm ci'
-  inputs:
-    verbose: false
+    - task: Npm@1
+      displayName: "npm ci"
+      inputs:
+          verbose: false
 
-- task: Npm@1
-  displayName: 'npm run build'
-  inputs:
-    command: custom
-    verbose: false
-    customCommand: 'run build:development'
+    - task: Npm@1
+      displayName: "npm run build"
+      inputs:
+          command: custom
+          verbose: false
+          customCommand: "run build:development"
 
-- task: Npm@1
-  displayName: 'npm run test-final'
-  inputs:
-    command: custom
-    verbose: false
-    customCommand: 'run test-final'
+    - task: Npm@1
+      displayName: "npm run test-final"
+      inputs:
+          command: custom
+          verbose: false
+          customCommand: "run test-final"
 
+    - task: PublishTestResults@2
+      inputs:
+          testRunner: JUnit
+          testResultsFiles: "**/junit.xml"
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
-  inputs:
-    PathtoPublish: build
+    - task: PublishCodeCoverageResults@1
+      inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: "$(System.DefaultWorkingDirectory)/**/*coverage.xml"
+          reportDirectory: "$(System.DefaultWorkingDirectory)/**/coverage"
 
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Artifact: drop"
+      inputs:
+          PathtoPublish: build
