@@ -119,11 +119,11 @@ export const AddGroupDialog = (props: {
                     {t("AdminView.newGroupCountry")}
                 </Typography>
                 <FormControl variant="outlined" className={classes.formControl}>
-                    <InputLabel id={"countries-label"}>
+                    <InputLabel id="countries-label">
                         {t("AdminView.countries")}
                     </InputLabel>
                     <Select
-                        labelId={"countries-label"}
+                        labelId="countries-label"
                         value={organisationInput}
                         onChange={(e) => {
                             setOrganisationInput(e.target.value as number)

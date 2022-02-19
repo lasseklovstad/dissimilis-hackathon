@@ -31,25 +31,25 @@ export const LanguageDialog = (props: { onClose: () => void }) => {
 
             <DialogContent>
                 <FormControl
-                    variant="outlined"
-                    margin={"normal"}
+                    variant="filled"
+                    margin="normal"
                     sx={{ minWidth: 150 }}
                 >
-                    <InputLabel id={"language-label"}>
+                    <InputLabel id="language-label">
                         {t("TopBar.languageSelect")}
                     </InputLabel>
                     <Select
                         value={languageChoice}
-                        labelId={"language-label"}
+                        labelId="language-label"
                         label={t("TopBar.languageSelect")}
                         onChange={(e) => {
                             setLanguageChoice(e.target.value)
                         }}
                     >
-                        <MenuItem value={"no"}>
+                        <MenuItem value="no">
                             {t("TopBar.languageNorwegian")}
                         </MenuItem>
-                        <MenuItem value={"en"}>
+                        <MenuItem value="en">
                             {t("TopBar.languageEnglish")}
                         </MenuItem>
                     </Select>

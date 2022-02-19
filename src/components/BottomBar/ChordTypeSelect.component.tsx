@@ -50,7 +50,7 @@ export const ChordTypeSelect = () => {
             value={chordMenuOptions.chordType}
             exclusive
             onChange={handleToggle}
-            size={"large"}
+            size="large"
         >
             <ToggleButton
                 sx={{

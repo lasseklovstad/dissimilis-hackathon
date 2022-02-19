@@ -17,7 +17,7 @@ export const UserContextProvider = (props: { children?: ReactNode }) => {
         return <Loading isLoading={true} />
     }
     if (getUser.error) {
-        return <Alert severity={"error"}>{getUser.error.message}</Alert>
+        return <Alert severity="error">{getUser.error.message}</Alert>
     }
     if (user) {
         return (

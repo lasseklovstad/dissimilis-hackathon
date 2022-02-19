@@ -232,7 +232,7 @@ export const CreateSongTab = (props: {
                 <Tabs
                     value={selectedVoiceId}
                     variant="scrollable"
-                    textColor={"inherit"}
+                    textColor="inherit"
                     scrollButtons="auto"
                     TabIndicatorProps={{
                         style: {

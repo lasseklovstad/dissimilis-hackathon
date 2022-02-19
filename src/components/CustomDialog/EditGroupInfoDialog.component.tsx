@@ -6,21 +6,12 @@ import {
     DialogTitle,
     TextField,
 } from "@mui/material"
-import makeStyles from "@mui/styles/makeStyles"
 import { useEffect } from "react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { IOrganisation } from "../../models/IOrganisation"
 import { DialogButton } from "../CustomDialogComponents/DialogButton.components"
 import { IGroup } from "../../models/IGroup"
-
-const useStyles = makeStyles((theme) => {
-    return {
-        textFields: {
-            marginBottom: theme.spacing(0.5),
-        },
-    }
-})
 
 export const EditGroupInfoDialog = (props: {
     groupId: number
@@ -45,7 +36,6 @@ export const EditGroupInfoDialog = (props: {
         characterLimit = 250,
         isLoadingPatch,
     } = props
-    const classes = useStyles()
     const { t } = useTranslation()
     const [groupNameTextFieldInput, setGroupNameTextFieldInput] = useState(
         group
@@ -100,7 +90,7 @@ export const EditGroupInfoDialog = (props: {
                         maxLength: characterLimit,
                     }}
                     helperText={`${groupNameTextFieldInput.length}/${characterLimit}`}
-                    className={classes.textFields}
+                    margin="dense"
                     autoFocus
                     variant="filled"
                     value={groupNameTextFieldInput}
@@ -121,7 +111,7 @@ export const EditGroupInfoDialog = (props: {
                         maxLength: characterLimit,
                     }}
                     helperText={`${groupAddressTextFieldInput.length}/${characterLimit}`}
-                    className={classes.textFields}
+                    margin="dense"
                     variant="filled"
                     value={groupAddressTextFieldInput}
                     onChange={(e) => {
@@ -136,7 +126,7 @@ export const EditGroupInfoDialog = (props: {
                         maxLength: characterLimit,
                     }}
                     helperText={`${groupPhoneNumberTextFieldInput.length}/${characterLimit}`}
-                    className={classes.textFields}
+                    margin="dense"
                     variant="filled"
                     value={groupPhoneNumberTextFieldInput}
                     onChange={(e) => {
@@ -152,7 +142,7 @@ export const EditGroupInfoDialog = (props: {
                         maxLength: characterLimit,
                     }}
                     helperText={`${groupEmailTextFieldInput.length}/${characterLimit}`}
-                    className={classes.textFields}
+                    margin="dense"
                     variant="filled"
                     value={groupEmailTextFieldInput}
                     onChange={(e) => {
@@ -168,7 +158,7 @@ export const EditGroupInfoDialog = (props: {
                         maxLength: characterLimit,
                     }}
                     helperText={`${groupNotesTextFieldInput.length}/${characterLimit}`}
-                    className={classes.textFields}
+                    margin="dense"
                     variant="filled"
                     value={groupNotesTextFieldInput}
                     onChange={(e) => {

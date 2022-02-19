@@ -1,24 +1,5 @@
 import React, { ReactNode, useContext, useState } from "react"
-import { Snackbar, Theme } from "@mui/material"
-import makeStyles from "@mui/styles/makeStyles"
-import MuiAlert, { AlertProps } from "@mui/material/Alert"
-import { SnackbarProps } from "@mui/material/Snackbar/Snackbar"
-
-const Alert = (props: AlertProps) => {
-    return <MuiAlert elevation={6} variant="filled" {...props} />
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-    root: {
-        width: "100%",
-        "& > * + *": {
-            marginTop: theme.spacing(2),
-        },
-    },
-    alertText: {
-        marginTop: theme.spacing(1.2),
-    },
-}))
+import { Alert, Snackbar, SnackbarProps } from "@mui/material"
 
 interface ISnackbar {
     launchSnackbar: (text: string, isError: boolean) => void
@@ -31,7 +12,6 @@ export const SnackbarContextProvider = (props: { children: ReactNode }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [isError, setIsError] = useState(false)
     const [text, setText] = useState("")
-    const classes = useStyles()
     const launchSnackbar = (text: string, isError: boolean) => {
         setIsOpen(true)
         setIsError(isError)
@@ -56,20 +36,20 @@ export const SnackbarContextProvider = (props: { children: ReactNode }) => {
             }}
         >
             {children}
-            <div className={classes.root}>
-                <Snackbar
-                    open={isOpen}
-                    autoHideDuration={6000}
-                    onClose={handleCloseSnack}
+            <Snackbar
+                open={isOpen}
+                autoHideDuration={6000}
+                onClose={handleCloseSnack}
+            >
+                <Alert
+                    elevation={6}
+                    variant="filled"
+                    onClose={handleClose}
+                    severity={isError ? "error" : "success"}
                 >
-                    <Alert
-                        onClose={handleClose}
-                        severity={isError ? "error" : "success"}
-                    >
-                        <div className={classes.alertText}>{text}</div>
-                    </Alert>
-                </Snackbar>
-            </div>
+                    {text}
+                </Alert>
+            </Snackbar>
         </SnackbarContext.Provider>
     )
 }

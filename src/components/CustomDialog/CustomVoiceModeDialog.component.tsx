@@ -168,7 +168,7 @@ export const CustomVoiceDialog = (props: {
                         numerator: song.numerator || 4,
                         denominator: song.denominator || 4,
                     }}
-                    variant={"chord-interval-edit"}
+                    variant="chord-interval-edit"
                     heightOfBar={185}
                     lastPage={false}
                 />

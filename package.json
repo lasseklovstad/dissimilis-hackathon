@@ -31,7 +31,7 @@
         "test-final": "react-scripts test --watchAll=false --coverage --reporters=jest-junit",
         "eject": "react-scripts eject",
         "format": "prettier --write src/**/*.ts{,x}",
-        "lint": "tsc --noEmit && eslint --fix src/**/*.ts{,x}",
+        "lint": "eslint --fix src/**/*.ts{,x}",
         "build:testing": "env-cmd -f .env.testing react-scripts build",
         "build:staging": "env-cmd -f .env.staging react-scripts build",
         "build:test": "env-cmd -f ./environments/.env.test react-scripts build",

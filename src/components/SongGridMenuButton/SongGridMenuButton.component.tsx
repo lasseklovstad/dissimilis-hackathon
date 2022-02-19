@@ -252,7 +252,7 @@ export const SongGridMenuButton = (props: {
             <Dialog
                 open={shareSongDialogIsOpen}
                 onClose={() => setShareSongDialogIsOpen(false)}
-                aria-label={"Dialog.ShareSong"}
+                aria-label="Dialog.ShareSong"
                 maxWidth="xs"
                 fullWidth
             >

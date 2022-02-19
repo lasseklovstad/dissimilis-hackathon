@@ -15,5 +15,5 @@ export interface IVoiceDuplicatePost {
 
 export interface IVoicePost {
     voiceName: string
-    voiceId: number
+    voiceNumber: number
 }

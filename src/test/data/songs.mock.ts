@@ -1,4 +1,4 @@
-import { ISong, ISongIndex } from "../../models/ISong"
+import { ISongIndex } from "../../models/ISong"
 
 export const songs: ISongIndex[] = [
     {

@@ -78,7 +78,7 @@ export const ChordLengthSelect = () => {
             <div ref={container} />
             <FormControl
                 variant="outlined"
-                size={"small"}
+                size="small"
                 sx={{
                     display: "flex",
                     alignItems: "center",
@@ -93,8 +93,8 @@ export const ChordLengthSelect = () => {
                     {t("BottomBar.noteLength")}
                 </label>
                 <Select
-                    labelId={"selectChordLengthLabel"}
-                    id={"selectChordLength"}
+                    labelId="selectChordLengthLabel"
+                    id="selectChordLength"
                     fullWidth
                     value={chordMenuOptions?.chordLength}
                     onChange={(event) => {

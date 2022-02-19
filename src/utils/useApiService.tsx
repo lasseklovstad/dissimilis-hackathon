@@ -44,9 +44,12 @@ export type ApiServiceOptions<T, R> = {
     headers?: Record<string, string>
 }
 
-export const useApiService = <T extends unknown, R = Record<string, unknown>>(
+export const useApiService = <
+    ResponseBody extends unknown,
+    RequestBody = unknown
+>(
     url: string,
-    options?: ApiServiceOptions<T, R>
+    options?: ApiServiceOptions<ResponseBody, RequestBody>
 ) => {
     const { body: bodyInit, headers = {}, initialData, params } = options || {}
     const navigate = useNavigate()
@@ -55,12 +58,12 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
     )
     const controller = useRef<AbortController>()
 
-    const [data, setData] = useState<T | undefined>(initialData)
+    const [data, setData] = useState<ResponseBody | undefined>(initialData)
     const [isError, setIsError] = useState(false)
     const [loading, setLoading] = useState(false)
 
     const updateStates = (
-        result: AxiosResponse<T> | undefined,
+        result: AxiosResponse<ResponseBody> | undefined,
         isError: boolean,
         error: AxiosError<IServerError> | undefined
     ) => {
@@ -77,7 +80,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
         setIsError(isError)
     }
 
-    const fetchData = useDeepCallback<T>(
+    const fetchData = useDeepCallback<ResponseBody>(
         async (method, body?: unknown, appendUrl?: string) => {
             controller.current = new AbortController()
             // Add params to the url
@@ -87,7 +90,7 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
                 finalUrl += `?${new URLSearchParams(params).toString()}`
             }
 
-            let result: AxiosResponse<T> | undefined
+            let result: AxiosResponse<ResponseBody> | undefined
             let axiosError: AxiosError<IServerError> | undefined
             let isError = false
 
@@ -101,13 +104,13 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
             try {
                 switch (method) {
                     case "get":
-                        result = await axios.get<T>(finalUrl, {
+                        result = await axios.get<ResponseBody>(finalUrl, {
                             headers: { ...getHeaders(), ...headers },
                             signal: controller.current.signal,
                         })
                         break
                     case "patch":
-                        result = await axios.patch<T>(
+                        result = await axios.patch<ResponseBody>(
                             finalUrl,
                             body || bodyInit,
                             {
@@ -117,13 +120,13 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
                         )
                         break
                     case "delete":
-                        result = await axios.delete<T>(finalUrl, {
+                        result = await axios.delete<ResponseBody>(finalUrl, {
                             headers: { ...getHeaders(), ...headers },
                             signal: controller.current.signal,
                         })
                         break
                     case "post":
-                        result = await axios.post<T>(
+                        result = await axios.post<ResponseBody>(
                             finalUrl,
                             body || bodyInit,
                             {
@@ -154,13 +157,13 @@ export const useApiService = <T extends unknown, R = Record<string, unknown>>(
     const getData = useCallback(async () => fetchData("get"), [fetchData])
 
     const postData = useCallback(
-        async (body?: unknown, appendUrl?: string) =>
+        async (body?: RequestBody, appendUrl?: string) =>
             fetchData("post", body, appendUrl),
         [fetchData]
     )
 
     const putData = useCallback(
-        async (body?: unknown, appendUrl?: string) =>
+        async (body?: RequestBody, appendUrl?: string) =>
             fetchData("patch", body, appendUrl),
         [fetchData]
     )

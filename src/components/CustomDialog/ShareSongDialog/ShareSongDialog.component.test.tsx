@@ -1,9 +1,12 @@
-import { render, screen, waitFor, within } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
 import { rest } from "msw"
 import { IGroupIndex } from "../../../models/IGroup"
 import { ISongShareData } from "../../../models/ISong"
 import { server } from "../../../test/test-server"
-import { waitDoneLoading } from "../../../test/test-utils"
+import {
+    generateSearchPagination,
+    waitDoneLoading,
+} from "../../../test/test-utils"
 import { ComponentTestWrapper } from "../../../TestWrapper.komponent"
 import {
     ChangeSongProtectionLevel,
@@ -13,6 +16,9 @@ import {
 import { ShareSongDialog } from "./ShareSongDialog.component"
 import userEvent from "@testing-library/user-event"
 import { IUser } from "../../../models/IUser"
+import { IMyGroupUsersPayload } from "../../../models/IMyGroupUsersPayload"
+import { ISearchWithPagination } from "../../../models/ISearchWithPagination"
+import { user } from "../../../test/data/user.mock"
 
 const mockNavigation = jest.fn()
 
@@ -85,17 +91,20 @@ describe("SharSongDialog", () => {
                 "*/song/:songId/shareSong/User",
                 (req, res, ctx) => {
                     const email = req.url.searchParams.get("userEmail")
-                    if (email) {
-                        return res(
-                            ctx.json([
-                                { email, userId: 1, name: "Test Testersen" },
-                            ])
-                        )
+                    if (email === user.email) {
+                        return res(ctx.json([user]))
                     } else {
                         return res(ctx.status(404))
                     }
                 }
-            )
+            ),
+            rest.post<
+                IMyGroupUsersPayload,
+                never,
+                ISearchWithPagination<IUser, IMyGroupUsersPayload>
+            >("*/user/myGroupUsers", (req, res, ctx) => {
+                return res(ctx.json(generateSearchPagination([user], req.body)))
+            })
         )
     })
 
@@ -139,12 +148,18 @@ describe("SharSongDialog", () => {
         userEvent.click(screen.getByRole("button", { name: /add person/i }))
         userEvent.type(
             screen.getByRole("textbox", { name: /email/i }),
-            "test.testersen@gmail.com"
+            "test",
+            { skipAutoClose: true }
+        )
+        userEvent.click(
+            await screen.findByRole("option", {
+                name: /test\.testesen@ciber\.no/i,
+            })
         )
         userEvent.click(screen.getByRole("button", { name: /add person/i }))
         await screen.findByRole("listitem")
         expect(
             screen.getByRole("list", { name: /People with edit rights/i })
-        ).toHaveTextContent("Test Testersen")
+        ).toHaveTextContent("Test Testesen")
     })
 })

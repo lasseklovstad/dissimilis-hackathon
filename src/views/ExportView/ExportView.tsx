@@ -195,7 +195,7 @@ export const ExportView = () => {
                                                 barsPerRow={
                                                     selectedBarConfig.barsPerRow
                                                 }
-                                                variant={"read-only"}
+                                                variant="read-only"
                                                 showChordLetters={
                                                     showChordLetters
                                                 }

@@ -19,7 +19,7 @@ export const ChordContainer = (props: ChordContainerProps) => {
             mr={0.5}
             ml={0.5}
             minWidth={0}
-            textAlign={"left"}
+            textAlign="left"
         >
             {children}
         </Box>
