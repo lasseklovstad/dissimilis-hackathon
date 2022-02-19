@@ -166,6 +166,15 @@ export const ExportView = () => {
     return (
         <>
             {Array.from(Array(amountOfPages), (e, pageIndex) => {
+                const barsPerPage =
+                    selectedRowsPerSheetConfig.rowsPerSheet *
+                    selectedBarConfig.barsPerRow
+
+                const barsInPage =
+                    selectedVoice?.bars.slice(
+                        pageIndex * barsPerPage,
+                        (pageIndex + 1) * barsPerPage
+                    ) || []
                 return (
                     <Box className={`${classes.root} page`} key={pageIndex}>
                         {selectedVoice && songInit && (
@@ -195,6 +204,9 @@ export const ExportView = () => {
                                                 barsPerRow={
                                                     selectedBarConfig.barsPerRow
                                                 }
+                                                barIndexOffset={
+                                                    pageIndex * barsPerPage
+                                                }
                                                 variant="read-only"
                                                 showChordLetters={
                                                     showChordLetters
@@ -204,15 +216,7 @@ export const ExportView = () => {
                                                 }
                                                 voice={{
                                                     ...selectedVoice,
-                                                    bars:
-                                                        selectedVoice.bars.slice(
-                                                            pageIndex *
-                                                                (selectedRowsPerSheetConfig.rowsPerSheet *
-                                                                    selectedBarConfig.barsPerRow),
-                                                            (pageIndex + 1) *
-                                                                selectedRowsPerSheetConfig.rowsPerSheet *
-                                                                selectedBarConfig.barsPerRow
-                                                        ) || [],
+                                                    bars: barsInPage,
                                                 }}
                                                 timeSignature={{
                                                     denominator:
