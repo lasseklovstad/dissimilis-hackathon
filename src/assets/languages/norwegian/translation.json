@@ -182,7 +182,7 @@
         "semiNotes": "Halvtoner",
         "customNewVoice": "Spesifikasjon av ny stemme",
         "duplicateFullVoice": "Duplikat av valgt stemme",
-        "duplicateEmptyVoice": "Stemme med tomme takter og besifring fra partitur", 
+        "duplicateEmptyVoice": "Stemme med tomme takter og besifring fra partitur",
         "duplicateCustomVoice": "Egendefinert basert på partituret",
         "newVoiceError": "Det oppsto en feil ved oppretting av ny stemme",
         "loading": "Laster",
@@ -209,7 +209,7 @@
         "asSysAdmin": "som systemadministrator?",
         "cannotUndo": "Denne handlingen kan ikke angres.",
         "thisUser": "denne brukeren",
-        "deleteCountryDescription": "Denne handlingen vil slette landet, og er irreversibel",        
+        "deleteCountryDescription": "Denne handlingen vil slette landet, og er irreversibel",
         "deleteGroupDescription": "Denne handlingen vil slette gruppen, og er irreversibel",
         "editGroupMembers": "Rediger gruppemedlemmer",
         "membersIn": "Medlemmer i ",
@@ -252,7 +252,10 @@
         "barNumber": "Taktnummer",
         "undo": "Angre",
         "barMenu": "Taktmeny",
-        "bpm": "BPM"
+        "bpm": "BPM",
+        "emptyChord": "Tom, trykk for å lage ny akkord eller note",
+        "chordLabel": "Akkord som heter",
+        "noteLabel": "Note som heter"
     },
     "TopBar": {
         "languageNorwegian": "Norsk",
