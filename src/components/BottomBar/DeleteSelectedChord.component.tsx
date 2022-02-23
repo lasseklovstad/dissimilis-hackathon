@@ -1,6 +1,5 @@
 import { Delete } from "@mui/icons-material"
 import { Button } from "@mui/material"
-import React from "react"
 import { useDeleteChord } from "../../utils/useApiServiceSongs"
 import { useTranslation } from "react-i18next"
 import { useSelectedChordContext } from "../../context/selectedChord/SelectedChordContextProvider.component"

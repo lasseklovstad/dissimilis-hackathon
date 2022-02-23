@@ -1,27 +1,44 @@
-import React from "react"
 import { Box, ClickAwayListener, Paper } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useAddBar } from "../../utils/useApiServiceSongs"
-import { useSongDispatchContext } from "../../context/song/SongContextProvider.component"
+import {
+    useSongContext,
+    useSongDispatchContext,
+} from "../../context/song/SongContextProvider.component"
 import { SelectedChordIntervals } from "./SelectedChordIntervals.component"
 import { useSelectedChordContext } from "../../context/selectedChord/SelectedChordContextProvider.component"
 import { DeleteSelectedChord } from "./DeleteSelectedChord.component"
 import { ChordTypeSelect } from "./ChordTypeSelect.component"
-import { ChordLengthSelect } from "./ChordLengthSelect.component"
+import { ChordLengthSelect } from "./ChordLengthSelect/ChordLengthSelect.component"
 import { AddBarButton } from "./AddBarButton"
 import { ChordNameAutocomplete } from "./ChordNameAutocomplete"
+import { useUpdateSelectedChord } from "../../context/selectedChord/useUpdateSelectedChord"
+import { useChordMenuOptionsContext } from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
+import { IChordMenuOptions } from "../../models/IChordMenuOptions"
 
-export const BottomBar = (props: { voiceId: number; songId: number }) => {
+type BottomBarProps = {
+    voiceId: number
+    songId: number
+}
+
+export const BottomBar = (props: BottomBarProps) => {
     const { voiceId, songId } = props
     const { dispatchSong } = useSongDispatchContext()
+    const { song } = useSongContext()
     const { t } = useTranslation()
-    const { postBar } = useAddBar(songId, voiceId)
     const {
         setSelectedChord,
         selectedChord,
         selectedChordAsChord,
         selectedChordBar,
     } = useSelectedChordContext()
+    const { chordMenuOptions, setChordMenuOptions } =
+        useChordMenuOptionsContext()
+    const { updateSelectedChord } = useUpdateSelectedChord({
+        selectedChord,
+        selectedChordAsChord,
+    })
+    const { postBar } = useAddBar(songId, voiceId)
 
     const scrollToBottom = () => {
         window.scrollTo(0, document.body.scrollHeight)
@@ -39,6 +56,19 @@ export const BottomBar = (props: { voiceId: number; songId: number }) => {
         if (e.target.id !== "chordButton" && e.target.id !== "singleChord") {
             setSelectedChord(null)
         }
+    }
+
+    const handleChangeMenuOptionChange = async (
+        newOptions: IChordMenuOptions
+    ) => {
+        if (selectedChord) {
+            const response = await updateSelectedChord(newOptions)
+            if (response && response.error) {
+                // Selected Chord has tried to update but failed
+                return
+            }
+        }
+        setChordMenuOptions(newOptions)
     }
 
     return (
@@ -66,9 +96,19 @@ export const BottomBar = (props: { voiceId: number; songId: number }) => {
                     }}
                     elevation={6}
                 >
-                    <ChordLengthSelect />
-                    <ChordNameAutocomplete />
-                    <ChordTypeSelect />
+                    <ChordLengthSelect
+                        chordMenuOptions={chordMenuOptions}
+                        onChordMenuOptionChange={handleChangeMenuOptionChange}
+                        song={song}
+                    />
+                    <ChordNameAutocomplete
+                        chordMenuOptions={chordMenuOptions}
+                        onChordMenuOptionChange={handleChangeMenuOptionChange}
+                    />
+                    <ChordTypeSelect
+                        chordMenuOptions={chordMenuOptions}
+                        onChordMenuOptionChange={handleChangeMenuOptionChange}
+                    />
                     <DeleteSelectedChord />
                 </Paper>
 

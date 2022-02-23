@@ -1,46 +1,39 @@
 import ToggleButton from "@mui/material/ToggleButton"
-import { ChordType } from "../../models/IChordMenuOptions"
+import { ChordType, IChordMenuOptions } from "../../models/IChordMenuOptions"
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
 import React from "react"
-import { useChordMenuOptionsContext } from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
 import { useTranslation } from "react-i18next"
 import { colors } from "../../utils/colors"
-import { useUpdateSelectedChord } from "../../context/selectedChord/useUpdateSelectedChord"
-import { useSelectedChordContext } from "../../context/selectedChord/SelectedChordContextProvider.component"
 
-export const ChordTypeSelect = () => {
-    const { chordMenuOptions, setChordMenuOptions } =
-        useChordMenuOptionsContext()
-    const { selectedChord, selectedChordAsChord } = useSelectedChordContext()
+type ChordTypeSelectProps = {
+    chordMenuOptions: IChordMenuOptions
+    onChordMenuOptionChange: (
+        chordMenuOptions: IChordMenuOptions
+    ) => Promise<void>
+}
+
+export const ChordTypeSelect = ({
+    chordMenuOptions,
+    onChordMenuOptionChange,
+}: ChordTypeSelectProps) => {
     const { t } = useTranslation()
-    const { updateSelectedChord } = useUpdateSelectedChord({
-        selectedChord,
-        selectedChordAsChord,
-    })
     const handleToggle = async (
         event: React.MouseEvent<HTMLElement>,
         chordType: ChordType | null
     ) => {
         if (chordType) {
             if (chordType === ChordType.CHORD) {
-                const newOptions = { ...chordMenuOptions, chordType }
-                if (selectedChord) {
-                    await updateSelectedChord(newOptions)
-                }
-                setChordMenuOptions(newOptions)
+                onChordMenuOptionChange({ ...chordMenuOptions, chordType })
             } else {
                 const noteFromChord = chordMenuOptions.chord.includes("#")
                     ? chordMenuOptions!!.chord.substring(0, 2)
                     : chordMenuOptions!!.chord?.charAt(0)
-                const newOptions = {
+
+                onChordMenuOptionChange({
                     ...chordMenuOptions,
                     chordType,
                     chord: noteFromChord,
-                }
-                if (selectedChord) {
-                    await updateSelectedChord(newOptions)
-                }
-                setChordMenuOptions(newOptions)
+                })
             }
         }
     }
