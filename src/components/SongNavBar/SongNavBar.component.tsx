@@ -97,7 +97,12 @@ export const SongNavBar = (props: {
 
     return (
         <Box className={classes.root} mb={matches ? 2 : 4}>
-            <AppBar position="static" elevation={0} className={classes.appbar}>
+            <AppBar
+                component="header"
+                position="static"
+                elevation={0}
+                className={classes.appbar}
+            >
                 <Box
                     display="flex"
                     justifyContent="space-between"

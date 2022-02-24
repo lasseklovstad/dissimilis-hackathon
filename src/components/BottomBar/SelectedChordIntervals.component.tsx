@@ -24,8 +24,11 @@ type SelectedChordIntervalsProps = {
     selectedChordBar: IBar
 }
 
-export const SelectedChordIntervals = (props: SelectedChordIntervalsProps) => {
-    const { selectedChord, selectedChordAsChord, selectedChordBar } = props
+export const SelectedChordIntervals = ({
+    selectedChord,
+    selectedChordAsChord,
+    selectedChordBar,
+}: SelectedChordIntervalsProps) => {
     const { dispatchSong } = useSongDispatchContext()
     const selected = getSelectedIntervalIndexes(selectedChordAsChord.notes)
     const { addNote } = useAddNote(

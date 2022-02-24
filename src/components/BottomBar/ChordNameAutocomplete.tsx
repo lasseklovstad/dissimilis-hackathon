@@ -1,28 +1,28 @@
 import { Box, Grid, Popper, PopperProps, TextField } from "@mui/material"
-import React from "react"
-import { useChordMenuOptionsContext } from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
-import { useUpdateSelectedChord } from "../../context/selectedChord/useUpdateSelectedChord"
 import { useOptions } from "../../utils/useApiServiceGlobalNote.util"
 import { useTranslation } from "react-i18next"
 import Autocomplete from "@mui/material/Autocomplete"
 import { commonChords } from "../../models/commonChords"
 import Typography from "@mui/material/Typography"
-import { ChordType } from "../../models/IChordMenuOptions"
+import { ChordType, IChordMenuOptions } from "../../models/IChordMenuOptions"
 import { getColor, tangentToNumber } from "../../utils/bar.util"
 import { colors } from "../../utils/colors"
-import { useSelectedChordContext } from "../../context/selectedChord/SelectedChordContextProvider.component"
 
 const customPopperPlacement = (props: PopperProps) => {
     return <Popper {...props} placement="top" children={props.children} />
 }
-export const ChordNameAutocomplete = () => {
-    const { chordMenuOptions, setChordMenuOptions } =
-        useChordMenuOptionsContext()
-    const { selectedChord, selectedChordAsChord } = useSelectedChordContext()
-    const { updateSelectedChord } = useUpdateSelectedChord({
-        selectedChord,
-        selectedChordAsChord,
-    })
+
+type ChordNameAutocompleteProps = {
+    chordMenuOptions: IChordMenuOptions
+    onChordMenuOptionChange: (
+        chordMenuOptions: IChordMenuOptions
+    ) => Promise<void>
+}
+
+export const ChordNameAutocomplete = ({
+    chordMenuOptions,
+    onChordMenuOptionChange,
+}: ChordNameAutocompleteProps) => {
     const {
         state,
         optionData: { singleNoteOptions, chordOptions },
@@ -33,15 +33,11 @@ export const ChordNameAutocomplete = () => {
             : singleNoteOptions
 
     const { t } = useTranslation()
-    const handleUpdateChord = async (chord: string) => {
-        const newOptions = {
+    const handleUpdateChord = (chord: string) => {
+        onChordMenuOptionChange({
             ...chordMenuOptions,
             chord,
-        }
-        if (selectedChord) {
-            await updateSelectedChord(newOptions)
-        }
-        setChordMenuOptions(newOptions)
+        })
     }
     return (
         <Autocomplete<string>

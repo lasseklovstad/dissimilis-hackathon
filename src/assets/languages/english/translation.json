@@ -184,7 +184,7 @@
         "semiNotes": "Semi notes",
         "customNewVoice": "Spesification of new voice",
         "duplicateFullVoice": "Duplicate of selected voice",
-        "duplicateEmptyVoice": "New voice with empty bars and chord names", 
+        "duplicateEmptyVoice": "New voice with empty bars and chord names",
         "duplicateCustomVoice": "Custom based on main voice",
         "newVoiceError": "An error occured while creating new voice",
         "loading": "Loading",
@@ -212,7 +212,7 @@
         "asSysAdmin": "as system administrator?",
         "cannotUndo": "This action can not be undone.",
         "thisUser": "this user",
-        "deleteCountryDescription": "This action will delete the country, this action is irreversible.",        
+        "deleteCountryDescription": "This action will delete the country, this action is irreversible.",
         "deleteGroupDescription": "This action will delete the group, this action is irreversible.",
         "editGroupMembers": "Edit group members",
         "membersIn": "Members in ",
@@ -255,7 +255,10 @@
         "barNumber": "Bar number",
         "barMenu": "Bar menu",
         "undo": "Undo",
-        "bpm": "BPM"
+        "bpm": "BPM",
+        "emptyChord": "Empty, click to create chord or note",
+        "chordLabel": "Chord with name",
+        "noteLabel": "Note with name"
     },
     "TopBar": {
         "languageNorwegian": "Norsk",
