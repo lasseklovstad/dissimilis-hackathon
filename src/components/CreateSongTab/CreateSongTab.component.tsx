@@ -119,7 +119,7 @@ export const CreateSongTab = (props: {
         }
     }
 
-    useHotkeys("ctrl+z", () => {
+    useHotkeys("ctrl+z, cmd+z", () => {
         onUndo()
     })
 
