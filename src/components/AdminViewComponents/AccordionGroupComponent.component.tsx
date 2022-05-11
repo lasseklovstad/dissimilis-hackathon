@@ -27,7 +27,7 @@ import { EditMembersDialog } from "../CustomDialog/EditMembersDialog.component"
 import { AddGroupMemberDialog } from "../CustomDialog/AddGroupMemberDialog.component"
 import { IGroup } from "../../models/IGroup"
 import { useSnackbarContext } from "../../utils/snackbarContextProvider.component"
-import { useNavigate } from "react-router"
+import { useNavigate } from "react-router-dom"
 
 const useStyles = makeStyles({
     root: {

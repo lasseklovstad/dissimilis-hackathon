@@ -12,7 +12,7 @@ import makeStyles from "@mui/styles/makeStyles"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import { colors } from "../../utils/colors"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router"
+import { useNavigate } from "react-router-dom"
 import { EditGroupInfoDialog } from "../CustomDialog/EditGroupInfoDialog.component"
 import { EditAdminsDialog } from "../CustomDialog/EditAdminsDialog.component"
 import {

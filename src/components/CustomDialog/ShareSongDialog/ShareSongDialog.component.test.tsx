@@ -22,8 +22,8 @@ import { user } from "../../../test/data/user.mock"
 
 const mockNavigation = jest.fn()
 
-jest.mock("react-router", () => ({
-    ...(jest.requireActual("react-router") as any),
+jest.mock("react-router-dom", () => ({
+    ...(jest.requireActual("react-router-dom") as any),
     useNavigate: () => mockNavigation,
 }))
 

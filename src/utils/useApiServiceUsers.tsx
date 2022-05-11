@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useApiService } from "./useApiService"
 import { IAdminStatuses, IUser } from "../models/IUser"
-import { useNavigate } from "react-router"
+import { useNavigate } from "react-router-dom"
 import { ISearchWithPagination } from "../models/ISearchWithPagination"
 import { IMyGroupUsersPayload } from "../models/IMyGroupUsersPayload"
 

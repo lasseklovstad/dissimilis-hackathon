@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios"
-import { useNavigate } from "react-router"
+import { useNavigate } from "react-router-dom"
 import { DependencyList, useCallback, useEffect, useRef, useState } from "react"
 import { IServerError } from "../models/IServerError"
 
