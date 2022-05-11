@@ -13,7 +13,7 @@ import { IServerError } from "../../models/IServerError"
 
 type ErrorDialogProps = {
     isError: boolean
-    error: AxiosError<IServerError> | undefined
+    error: AxiosError<IServerError | undefined> | undefined
     title?: string
 }
 
@@ -27,7 +27,7 @@ export const ErrorDialog = (props: ErrorDialogProps) => {
     }
 
     const getErrorMessage = () => {
-        return error?.response?.data.title || error?.message
+        return error?.response?.data?.title || error?.message
     }
 
     // Open dialog if error is present

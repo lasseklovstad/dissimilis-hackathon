@@ -7,7 +7,7 @@ type HTTPMethod = "get" | "patch" | "delete" | "post"
 type FetchReturn<T> = {
     result: AxiosResponse<T> | undefined
     isError: boolean
-    error: AxiosError<IServerError> | undefined
+    error: AxiosError<IServerError | undefined> | undefined
 }
 const useDeepCompareMemoize = (value: DependencyList) => {
     const ref = useRef<DependencyList>()
@@ -53,9 +53,9 @@ export const useApiService = <
 ) => {
     const { body: bodyInit, headers = {}, initialData, params } = options || {}
     const navigate = useNavigate()
-    const [error, setError] = useState<AxiosError<IServerError> | undefined>(
-        undefined
-    )
+    const [error, setError] = useState<
+        AxiosError<IServerError | undefined> | undefined
+    >(undefined)
     const controller = useRef<AbortController>()
 
     const [data, setData] = useState<ResponseBody | undefined>(initialData)
@@ -65,7 +65,7 @@ export const useApiService = <
     const updateStates = (
         result: AxiosResponse<ResponseBody> | undefined,
         isError: boolean,
-        error: AxiosError<IServerError> | undefined
+        error: AxiosError<IServerError | undefined> | undefined
     ) => {
         if (controller.current?.signal.aborted) {
             return
@@ -91,7 +91,7 @@ export const useApiService = <
             }
 
             let result: AxiosResponse<ResponseBody> | undefined
-            let axiosError: AxiosError<IServerError> | undefined
+            let axiosError: AxiosError<IServerError | undefined> | undefined
             let isError = false
 
             // reset states
@@ -139,7 +139,7 @@ export const useApiService = <
                         break
                 }
             } catch (error) {
-                axiosError = error as AxiosError
+                axiosError = error as AxiosError<undefined>
                 if (axiosError?.response?.status === 401) {
                     navigate("/")
                     sessionStorage.removeItem("apiKey")

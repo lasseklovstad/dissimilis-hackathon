@@ -122,7 +122,7 @@ describe("SharSongDialog", () => {
         await waitDoneLoading()
         expect(switchButton).not.toBeChecked()
         // Should not be able to add groups if private song
-        expect(screen.queryByRole("textbox", { name: /Groups/i })).toBeNull()
+        expect(screen.queryByRole("combobox", { name: /Groups/i })).toBeNull()
     })
 
     it("Should share song with group Sandefjord", async () => {
@@ -130,14 +130,14 @@ describe("SharSongDialog", () => {
             wrapper: ComponentTestWrapper,
         })
         await waitDoneLoading()
-        const groupInput = screen.getByRole("textbox", {
+        const groupInput = screen.getByRole("combobox", {
             name: /Groups/i,
         })
         expect(groupInput).toHaveValue("")
         userEvent.click(groupInput)
         userEvent.click(screen.getByRole("option", { name: /sandefjord/i }))
-        const combobox = screen.getByRole("combobox")
-        await waitFor(() => expect(combobox).toHaveTextContent(/sandefjord/i))
+        // Wait for button chip to apear
+        await screen.findByRole("button", { name: /sandefjord/i })
     })
 
     it("Should share with user", async () => {
@@ -147,7 +147,7 @@ describe("SharSongDialog", () => {
         await waitDoneLoading()
         userEvent.click(screen.getByRole("button", { name: /add person/i }))
         userEvent.type(
-            screen.getByRole("textbox", { name: /email/i }),
+            screen.getByRole("combobox", { name: /email/i }),
             "test",
             { skipAutoClose: true }
         )

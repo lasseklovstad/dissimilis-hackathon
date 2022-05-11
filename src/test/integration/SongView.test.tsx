@@ -20,7 +20,7 @@ const renderSongView = async (songId: number) => {
 
 const selectNote = (note: string) => {
     userEvent.click(screen.getByRole("button", { name: "Note" }))
-    const selectNote = screen.getByRole("textbox", { name: "Select note" })
+    const selectNote = screen.getByRole("combobox", { name: "Select note" })
     userEvent.click(selectNote)
     userEvent.click(screen.getByRole("option", { name: note }))
     expect(selectNote).toHaveValue(note)
@@ -28,7 +28,7 @@ const selectNote = (note: string) => {
 
 const selectChord = (chord: string) => {
     userEvent.click(screen.getByRole("button", { name: "Chord" }))
-    const selectNote = screen.getByRole("textbox", { name: "Select chord" })
+    const selectNote = screen.getByRole("combobox", { name: "Select chord" })
     userEvent.click(selectNote)
     userEvent.click(screen.getByRole("option", { name: chord }))
     expect(selectNote).toHaveValue(chord)
