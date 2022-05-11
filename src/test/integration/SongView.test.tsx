@@ -18,25 +18,25 @@ const renderSongView = async (songId: number) => {
     await waitDoneLoading()
 }
 
-const selectNote = (note: string) => {
-    userEvent.click(screen.getByRole("button", { name: "Note" }))
+const selectNote = async (note: string) => {
+    await userEvent.click(screen.getByRole("button", { name: "Note" }))
     const selectNote = screen.getByRole("combobox", { name: "Select note" })
-    userEvent.click(selectNote)
-    userEvent.click(screen.getByRole("option", { name: note }))
+    await userEvent.click(selectNote)
+    await userEvent.click(screen.getByRole("option", { name: note }))
     expect(selectNote).toHaveValue(note)
 }
 
-const selectChord = (chord: string) => {
-    userEvent.click(screen.getByRole("button", { name: "Chord" }))
+const selectChord = async (chord: string) => {
+    await userEvent.click(screen.getByRole("button", { name: "Chord" }))
     const selectNote = screen.getByRole("combobox", { name: "Select chord" })
-    userEvent.click(selectNote)
-    userEvent.click(screen.getByRole("option", { name: chord }))
+    await userEvent.click(selectNote)
+    await userEvent.click(screen.getByRole("option", { name: chord }))
     expect(selectNote).toHaveValue(chord)
 }
 
-const selectChordDuration = (duration: string) => {
-    userEvent.click(screen.getByLabelText("Note duration"))
-    userEvent.click(screen.getByRole("option", { name: duration }))
+const selectChordDuration = async (duration: string) => {
+    await userEvent.click(screen.getByLabelText("Note duration"))
+    await userEvent.click(screen.getByRole("option", { name: duration }))
 }
 
 describe("SongView", () => {
@@ -47,32 +47,32 @@ describe("SongView", () => {
         )
         const bar = screen.getByLabelText("Bar 1")
         const firstNote = within(bar).getAllByRole("button")[0]
-        userEvent.click(firstNote)
+        await userEvent.click(firstNote)
         await waitFor(() => expect(firstNote).toHaveTextContent("C"))
     })
     it("Should add note D", async () => {
         await renderSongView(1)
-        selectNote("D")
+        await selectNote("D")
         const bar = screen.getByLabelText("Bar 1")
         const firstNote = within(bar).getAllByRole("button")[0]
-        userEvent.click(firstNote)
+        await userEvent.click(firstNote)
         await waitFor(() => expect(firstNote).toHaveTextContent("D"))
     })
     it("Should add chord D", async () => {
         await renderSongView(1)
-        selectChord("D")
+        await selectChord("D")
         const bar = screen.getByLabelText("Bar 1")
         const firstNote = within(bar).getAllByRole("button")[0]
-        userEvent.click(firstNote)
+        await userEvent.click(firstNote)
         await waitFor(() => expect(firstNote).toHaveTextContent("A1D"))
     })
 
     it("Should change note length and add note C", async () => {
         await renderSongView(1)
-        selectChordDuration("Half note")
+        await selectChordDuration("Half note")
         const bar = screen.getByLabelText("Bar 1")
         const emptyNotes = within(bar).getAllByRole("button")
-        userEvent.click(emptyNotes[0])
+        await userEvent.click(emptyNotes[0])
         await waitFor(() =>
             expect(within(bar).getAllByRole("button")).toHaveLength(5)
         )
@@ -85,7 +85,7 @@ describe("SongView", () => {
         const chord = within(bars[0]).getAllByRole("button")[0]
         expect(chord).toHaveTextContent("C")
         fireEvent.contextMenu(chord)
-        userEvent.click(screen.getByRole("menuitem", { name: "Delete" }))
+        await userEvent.click(screen.getByRole("menuitem", { name: "Delete" }))
         await waitFor(() => expect(chord).toHaveTextContent(""))
     })
 
@@ -95,8 +95,8 @@ describe("SongView", () => {
         expect(bars).toHaveLength(4)
         const chord = within(bars[0]).getAllByRole("button")[0]
         expect(chord).toHaveTextContent("C")
-        userEvent.click(chord) // Select chord
-        userEvent.click(
+        await userEvent.click(chord) // Select chord
+        await userEvent.click(
             screen.getByRole("button", { name: "Delete selected chord" })
         )
         await waitFor(() => expect(chord).toHaveTextContent(""))
@@ -105,15 +105,18 @@ describe("SongView", () => {
     it("Should create new voice with same notes as main voice", async () => {
         await renderSongView(10)
         const voiceMenu = screen.getByLabelText("Voice menu")
-        userEvent.click(voiceMenu)
+        await userEvent.click(voiceMenu)
         const newVoiceDialog = screen.getByRole("menuitem", {
             name: "New Voice",
         })
-        userEvent.click(newVoiceDialog)
+        await userEvent.click(newVoiceDialog)
         const title = screen.getByRole("heading")
         expect(title).toHaveTextContent("Add a new voice")
-        userEvent.type(screen.getByLabelText("Name of voice"), "Test Ny Stemme")
-        userEvent.click(screen.getByRole("button", { name: "Create" }))
+        await userEvent.type(
+            screen.getByLabelText("Name of voice"),
+            "Test Ny Stemme"
+        )
+        await userEvent.click(screen.getByRole("button", { name: "Create" }))
         await waitDoneLoading()
         await screen.findByRole("tab", {
             name: "Test Ny Stemme",
@@ -122,20 +125,23 @@ describe("SongView", () => {
     it("Should create new blank voice", async () => {
         await renderSongView(10)
         const voiceMenu = screen.getByLabelText("Voice menu")
-        userEvent.click(voiceMenu)
+        await userEvent.click(voiceMenu)
         const newVoiceDialog = screen.getByRole("menuitem", {
             name: "New Voice",
         })
-        userEvent.click(newVoiceDialog)
+        await userEvent.click(newVoiceDialog)
         const title = screen.getByRole("heading")
         expect(title).toHaveTextContent("Add a new voice")
-        userEvent.type(screen.getByLabelText("Name of voice"), "Test Ny Stemme")
-        userEvent.click(
+        await userEvent.type(
+            screen.getByLabelText("Name of voice"),
+            "Test Ny Stemme"
+        )
+        await userEvent.click(
             screen.getByRole("radio", {
                 name: "Radio: New voice with empty bars and chord names",
             })
         )
-        userEvent.click(screen.getByRole("button", { name: "Create" }))
+        await userEvent.click(screen.getByRole("button", { name: "Create" }))
         await waitDoneLoading()
         await screen.findByRole("tab", {
             name: "Test Ny Stemme",

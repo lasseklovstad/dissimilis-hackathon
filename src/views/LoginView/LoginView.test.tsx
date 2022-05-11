@@ -36,7 +36,7 @@ describe("LoginView", () => {
     it("should login user and redirect", async () => {
         logout()
         render(<LoginView />, { wrapper: TestWrapper })
-        userEvent.click(
+        await userEvent.click(
             screen.getByRole("button", {
                 name: /Sign in with Microsoft/i,
             })

@@ -118,7 +118,7 @@ describe("SharSongDialog", () => {
             name: /Share with everyone/i,
         })
         expect(switchButton).toBeChecked()
-        userEvent.click(switchButton)
+        await userEvent.click(switchButton)
         await waitDoneLoading()
         expect(switchButton).not.toBeChecked()
         // Should not be able to add groups if private song
@@ -134,8 +134,10 @@ describe("SharSongDialog", () => {
             name: /Groups/i,
         })
         expect(groupInput).toHaveValue("")
-        userEvent.click(groupInput)
-        userEvent.click(screen.getByRole("option", { name: /sandefjord/i }))
+        await userEvent.click(groupInput)
+        await userEvent.click(
+            screen.getByRole("option", { name: /sandefjord/i })
+        )
         // Wait for button chip to apear
         await screen.findByRole("button", { name: /sandefjord/i })
     })
@@ -145,18 +147,22 @@ describe("SharSongDialog", () => {
             wrapper: ComponentTestWrapper,
         })
         await waitDoneLoading()
-        userEvent.click(screen.getByRole("button", { name: /add person/i }))
-        userEvent.type(
+        await userEvent.click(
+            screen.getByRole("button", { name: /add person/i })
+        )
+        await userEvent.type(
             screen.getByRole("combobox", { name: /email/i }),
             "test",
             { skipAutoClose: true }
         )
-        userEvent.click(
+        await userEvent.click(
             await screen.findByRole("option", {
                 name: /test\.testesen@ciber\.no/i,
             })
         )
-        userEvent.click(screen.getByRole("button", { name: /add person/i }))
+        await userEvent.click(
+            screen.getByRole("button", { name: /add person/i })
+        )
         await screen.findByRole("listitem")
         expect(
             screen.getByRole("list", { name: /People with edit rights/i })

@@ -19,26 +19,30 @@ const renderDashboard = async () => {
 describe("DashboardMenu", () => {
     it("Should change language in settings", async () => {
         await renderDashboard()
-        userEvent.click(screen.getByRole("button", { name: "Settings" }))
-        userEvent.click(
+        await userEvent.click(screen.getByRole("button", { name: "Settings" }))
+        await userEvent.click(
             screen.getByRole("menuitem", { name: "Change language" })
         )
         //expect(screen.getByLabelText("Dialog")).toBeInTheDocument()
         expect(screen.getByRole("dialog")).toBeInTheDocument()
 
-        userEvent.click(screen.getByLabelText("Select language"))
-        userEvent.click(screen.getByRole("option", { name: "Norsk" }))
+        await userEvent.click(screen.getByLabelText("Select language"))
+        await userEvent.click(screen.getByRole("option", { name: "Norsk" }))
 
-        userEvent.click(screen.getByRole("button", { name: "Save" }))
+        await userEvent.click(screen.getByRole("button", { name: "Save" }))
 
         await screen.findByRole("button", { name: "Innstillinger" })
-        userEvent.click(screen.getByRole("button", { name: "Innstillinger" }))
-        userEvent.click(screen.getByRole("menuitem", { name: "Endre språk" }))
-        userEvent.click(screen.getByLabelText("Språkvalg"))
+        await userEvent.click(
+            screen.getByRole("button", { name: "Innstillinger" })
+        )
+        await userEvent.click(
+            screen.getByRole("menuitem", { name: "Endre språk" })
+        )
+        await userEvent.click(screen.getByLabelText("Språkvalg"))
 
-        userEvent.click(screen.getByRole("option", { name: "English" }))
-        userEvent.click(screen.getByRole("button", { name: "Lagre" }))
+        await userEvent.click(screen.getByRole("option", { name: "English" }))
+        await userEvent.click(screen.getByRole("button", { name: "Lagre" }))
         await screen.findByRole("button", { name: "Settings" })
-        userEvent.click(screen.getByRole("button", { name: "Settings" }))
+        await userEvent.click(screen.getByRole("button", { name: "Settings" }))
     })
 })
