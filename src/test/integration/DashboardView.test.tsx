@@ -35,12 +35,14 @@ describe("Dashboard", () => {
 
     it("Should create 4/4 song", async () => {
         await renderDashboard()
-        userEvent.click(screen.getByRole("button", { name: /4\/4-measure/i }))
-        userEvent.type(
+        await userEvent.click(
+            screen.getByRole("button", { name: /4\/4-measure/i })
+        )
+        await userEvent.type(
             await screen.findByLabelText("Name of song"),
             "Test song 4/4"
         )
-        userEvent.click(screen.getByRole("button", { name: "Create" }))
+        await userEvent.click(screen.getByRole("button", { name: "Create" }))
         await screen.findByLabelText("Loading")
         await waitDoneLoading()
         screen.getByRole("tab", { name: "Song" })
@@ -52,9 +54,14 @@ describe("Dashboard", () => {
 
     it("Should create 3/4 song", async () => {
         await renderDashboard()
-        userEvent.click(screen.getByRole("button", { name: /3\/4-measure/i }))
-        userEvent.type(await screen.findByLabelText("Name of song"), "Test 3/4")
-        userEvent.click(screen.getByRole("button", { name: "Create" }))
+        await userEvent.click(
+            screen.getByRole("button", { name: /3\/4-measure/i })
+        )
+        await userEvent.type(
+            await screen.findByLabelText("Name of song"),
+            "Test 3/4"
+        )
+        await userEvent.click(screen.getByRole("button", { name: "Create" }))
         await screen.findByLabelText("Loading")
         await waitDoneLoading()
         screen.getByRole("tab", { name: "Song" })
@@ -67,9 +74,13 @@ describe("Dashboard", () => {
         const songToDelete = screen.getByRole("link", {
             name: /Stairway to heaven/i,
         })
-        userEvent.click(screen.getAllByRole("button", { name: "Song menu" })[0])
-        userEvent.click(screen.getByRole("menuitem", { name: "Delete" }))
-        userEvent.click(screen.getByRole("button", { name: "Delete song" }))
+        await userEvent.click(
+            screen.getAllByRole("button", { name: "Song menu" })[0]
+        )
+        await userEvent.click(screen.getByRole("menuitem", { name: "Delete" }))
+        await userEvent.click(
+            screen.getByRole("button", { name: "Delete song" })
+        )
         await waitDoneLoading()
         expect(songToDelete).not.toBeInTheDocument()
     })
@@ -78,8 +89,8 @@ describe("Dashboard", () => {
         await renderDashboard()
 
         const menus = screen.getAllByRole("button", { name: "Song menu" })
-        userEvent.click(menus[0])
-        userEvent.click(
+        await userEvent.click(menus[0])
+        await userEvent.click(
             screen.getByRole("menuitem", { name: "Information about song" })
         )
 
@@ -100,10 +111,10 @@ describe("Dashboard", () => {
         screen.getByRole("spinbutton", {
             name: "Tempo",
         })
-        userEvent.click(screen.getByRole("button", { name: "Cancel" }))
-        userEvent.click(menus[1])
+        await userEvent.click(screen.getByRole("button", { name: "Cancel" }))
+        await userEvent.click(menus[1])
 
-        userEvent.click(
+        await userEvent.click(
             screen.getByRole("menuitem", { name: "Information about song" })
         )
         await waitDoneLoading()
@@ -124,8 +135,8 @@ describe("Dashboard", () => {
         await renderDashboard()
 
         const menus = screen.getAllByRole("button", { name: "Song menu" })
-        userEvent.click(menus[0])
-        userEvent.click(
+        await userEvent.click(menus[0])
+        await userEvent.click(
             screen.getByRole("menuitem", { name: "Information about song" })
         )
 
@@ -143,29 +154,29 @@ describe("Dashboard", () => {
         expect(nameTextbox).toHaveValue("Stairway to heaven")
         expect(composerTextbox).toHaveValue("Johan Gambolputty")
         expect(speedSpinbutton).toHaveValue(134)
-        userEvent.clear(nameTextbox)
-        userEvent.clear(composerTextbox)
-        userEvent.type(speedSpinbutton, "{backspace}{backspace}")
+        await userEvent.clear(nameTextbox)
+        await userEvent.clear(composerTextbox)
+        await userEvent.type(speedSpinbutton, "{backspace}{backspace}")
         const newName = "Escalator to heaven"
         const newComposer = "Bach"
         const newSpeed = 1
-        userEvent.type(nameTextbox, newName)
-        userEvent.type(composerTextbox, newComposer)
+        await userEvent.type(nameTextbox, newName)
+        await userEvent.type(composerTextbox, newComposer)
         expect(nameTextbox).toHaveValue(newName)
         expect(composerTextbox).toHaveValue(newComposer)
         expect(speedSpinbutton).toHaveValue(newSpeed)
 
-        userEvent.click(screen.getByRole("button", { name: "Save" }))
+        await userEvent.click(screen.getByRole("button", { name: "Save" }))
         await waitDoneLoading()
-        userEvent.click(menus[1])
-        userEvent.click(
+        await userEvent.click(menus[1])
+        await userEvent.click(
             screen.getByRole("menuitem", { name: "Information about song" })
         )
         await waitDoneLoading()
-        userEvent.click(screen.getByRole("button", { name: "Cancel" }))
+        await userEvent.click(screen.getByRole("button", { name: "Cancel" }))
         await waitDoneLoading()
-        userEvent.click(menus[0])
-        userEvent.click(
+        await userEvent.click(menus[0])
+        await userEvent.click(
             screen.getByRole("menuitem", { name: "Information about song" })
         )
         await waitDoneLoading()
@@ -178,8 +189,11 @@ describe("Dashboard", () => {
 describe("Search", () => {
     it("Should search for songs by title", async () => {
         await renderDashboard()
-        userEvent.type(screen.getByRole("textbox", { name: /Search/i }), "sang")
-        userEvent.click(screen.getByRole("button", { name: /Search/i }))
+        await userEvent.type(
+            screen.getByRole("textbox", { name: /Search/i }),
+            "sang"
+        )
+        await userEvent.click(screen.getByRole("button", { name: /Search/i }))
         await waitDoneLoading()
         expect(
             screen.getByRole("link", { name: /Stairway to heaven/i })

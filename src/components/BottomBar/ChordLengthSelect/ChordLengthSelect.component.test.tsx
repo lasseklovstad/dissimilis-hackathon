@@ -5,7 +5,7 @@ import { ComponentTestWrapper } from "../../../TestWrapper.komponent"
 import { ChordLengthSelect } from "./ChordLengthSelect.component"
 
 describe("ChordLengthSelect", () => {
-    it("should render chord lengths for song in 4/4 and select whole note", () => {
+    it("should render chord lengths for song in 4/4 and select whole note", async () => {
         const mockOnChange = jest.fn()
         render(
             <ChordLengthSelect
@@ -21,12 +21,14 @@ describe("ChordLengthSelect", () => {
         )
         const input = screen.getByLabelText(/note duration/i)
         expect(input).toContainElement(screen.getByTitle(/Eighth note/i))
-        userEvent.click(input)
+        await userEvent.click(input)
         expect(screen.getAllByRole("option")).toHaveLength(6)
-        userEvent.click(screen.getByRole("option", { name: /Whole note/i }))
+        await userEvent.click(
+            screen.getByRole("option", { name: /Whole note/i })
+        )
         expect(mockOnChange).toHaveBeenCalled()
     })
-    it("should render chord lengths for song in 3/4", () => {
+    it("should render chord lengths for song in 3/4", async () => {
         const mockOnChange = jest.fn()
         render(
             <ChordLengthSelect
@@ -42,11 +44,11 @@ describe("ChordLengthSelect", () => {
         )
         const input = screen.getByLabelText(/note duration/i)
         expect(input).toContainElement(screen.getByTitle(/Quarter note/i))
-        userEvent.click(input)
+        await userEvent.click(input)
         expect(screen.getAllByRole("option")).toHaveLength(4)
     })
 
-    it("should render chord lengths for song in 6/8", () => {
+    it("should render chord lengths for song in 6/8", async () => {
         const mockOnChange = jest.fn()
         render(
             <ChordLengthSelect
@@ -62,7 +64,7 @@ describe("ChordLengthSelect", () => {
         )
         const input = screen.getByLabelText(/note duration/i)
         expect(input).toContainElement(screen.getByTitle(/Quarter note/i))
-        userEvent.click(input)
+        await userEvent.click(input)
         expect(screen.getAllByRole("option")).toHaveLength(5)
     })
 })

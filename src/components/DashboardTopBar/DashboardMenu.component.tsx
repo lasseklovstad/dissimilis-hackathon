@@ -10,7 +10,7 @@ import LanguageIcon from "@mui/icons-material/Language"
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd"
 import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { Loading } from "../loading/Loading.component"
-import { useNavigate } from "react-router"
+import { useNavigate } from "react-router-dom"
 import { useGetAdminStatuses } from "../../utils/useApiServiceUsers"
 
 const useStyles = makeStyles({
