@@ -90,7 +90,7 @@ export const SongNavBar = (props: {
         if (newTitle !== song?.title) {
             const { error, result } = await putSong.run({ title: newTitle })
             if (!error && result) {
-                dispatchSong({ type: "UPDATE_SONG", song: result.data })
+                dispatchSong({ type: "UPDATE_META_DATA", meta: result.data })
             }
         }
     }

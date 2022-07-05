@@ -1,18 +1,13 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import { Box } from "@mui/material"
-import { BarLine } from "../barLine/BarLine.component"
 import { BarMenu } from "../BarMenu/BarMenu.component"
 import { IBar } from "../../models/IBar"
-import {
-    BarNumber,
-    TimeSignature,
-} from "../SongViewComponents/SongView.component"
-import { Bar } from "../Bar/Bar.component"
 import { ITimeSignature } from "../../models/ITimeSignature"
 import { IVoice } from "../../models/IVoice"
-import { BarReadOnly } from "../Bar/BarReadOnly.component"
 import { SongVariantType } from "./SongVariantType"
-import { BarEdit } from "../Bar/BarEdit.component"
+import { BarRowComponent } from "../Bar/BarRow.component"
+import { useHotkeys } from "react-hotkeys-hook"
+import { usePlaySong } from "../../utils/usePlaySong.util"
 
 type SongProps = {
     barsPerRow: number
@@ -24,24 +19,6 @@ type SongProps = {
     showNoteLetters?: boolean
     lastPage: boolean
     barIndexOffset?: number
-}
-
-const BarPrefix = (props: { index: number; timeSignature: ITimeSignature }) => {
-    const { index, timeSignature } = props
-
-    const getPrefixItem = () => {
-        if (index === 0) {
-            return <TimeSignature timeSignature={timeSignature} />
-        }
-        return <BarNumber barNumber={index + 1} />
-    }
-    const PrefixItem = getPrefixItem()
-
-    return (
-        <Box flexGrow={0} height="calc(100% - 25px)">
-            {PrefixItem}
-        </Box>
-    )
 }
 
 export const Song = (props: SongProps) => {
@@ -58,6 +35,11 @@ export const Song = (props: SongProps) => {
     } = props
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [selectedBar, setSelectedBar] = useState<IBar | undefined>()
+    const { playPosition } = usePlaySong(
+        barsPerRow,
+        bars.length,
+        props.voice.songId
+    )
 
     const getBarRows = (bars: IBar[]): IBar[][] => {
         // array of N elements, where N is the number of rows needed
@@ -87,106 +69,22 @@ export const Song = (props: SongProps) => {
         <>
             <Box width="100%">
                 {getBarRows(bars).map((barsInRow, i) => (
-                    <Box
-                        display="flex"
-                        alignItems="flex-end"
-                        mt={variant === "normal-edit" ? 7 : 5}
+                    <BarRowComponent
                         key={barsInRow[0].barId}
-                        height={heightOfBar}
-                    >
-                        <BarPrefix
-                            index={i * barsPerRow + barIndexOffset}
-                            timeSignature={timeSignature}
-                        />
-                        <BarLine />
-                        <Box
-                            display="flex"
-                            flexGrow={barsInRow.length}
-                            minWidth={0}
-                            flexBasis="0"
-                            alignItems="flex-end"
-                            height="100%"
-                        >
-                            {barsInRow.map((bar, i, bars) => {
-                                const showVoltaBracketNumber =
-                                    (i === 0 || bars[i - 1].voltaBracket) !==
-                                    bar.voltaBracket
-
-                                if (variant === "read-only") {
-                                    return (
-                                        <React.Fragment key={bar.barId}>
-                                            <BarReadOnly
-                                                bar={bar}
-                                                showVoltaBracketNumber={
-                                                    showVoltaBracketNumber
-                                                }
-                                                showChordLetters={
-                                                    showChordLetters
-                                                }
-                                                showNoteLetters={
-                                                    showNoteLetters
-                                                }
-                                            />
-                                            <BarLine />
-                                            {bar.position === lastBarPosition &&
-                                                lastPage && (
-                                                    <BarLine lastPosition />
-                                                )}
-                                        </React.Fragment>
-                                    )
-                                }
-                                if (variant === "bar-edit") {
-                                    return (
-                                        <React.Fragment key={bar.barId}>
-                                            <BarEdit
-                                                showVoltaBracketNumber={
-                                                    showVoltaBracketNumber
-                                                }
-                                                showChordLetters={
-                                                    showChordLetters
-                                                }
-                                                showNoteLetters={
-                                                    showNoteLetters
-                                                }
-                                                bar={bar}
-                                                height={heightOfBar}
-                                            />
-                                            <BarLine />
-                                            {bar.position === lastBarPosition &&
-                                                lastPage && (
-                                                    <BarLine lastPosition />
-                                                )}
-                                        </React.Fragment>
-                                    )
-                                }
-                                return (
-                                    <React.Fragment key={bar.barId}>
-                                        <Bar
-                                            showVoltaBracketNumber={
-                                                showVoltaBracketNumber
-                                            }
-                                            showChordLetters={showChordLetters}
-                                            showNoteLetters={showNoteLetters}
-                                            masterSheet={isMain}
-                                            onMenuClick={openMenu(bar)}
-                                            bar={bar}
-                                            height={heightOfBar}
-                                            variant={variant}
-                                        />
-                                        <BarLine />
-                                        {bar.position === lastBarPosition &&
-                                            lastPage && (
-                                                <BarLine lastPosition />
-                                            )}
-                                    </React.Fragment>
-                                )
-                            })}
-                        </Box>
-                        <Box
-                            flexGrow={barsPerRow - barsInRow.length}
-                            flexBasis="0"
-                        />
-                    </Box>
+                        variant={variant}
+                        barsInRow={barsInRow}
+                        heightOfBar={heightOfBar}
+                        index={i * barsPerRow + barIndexOffset}
+                        timeSignature={timeSignature}
+                        showChordLetters={showChordLetters}
+                        showNoteLetters={showNoteLetters}
+                        lastPage={lastPage}
+                        lastBarPosition={lastBarPosition}
+                        isMain={isMain}
+                        openMenu={openMenu}
+                        barsPerRow={barsPerRow}
+                        playPosition={playPosition}
+                    />
                 ))}
             </Box>
 

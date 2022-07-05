@@ -23,7 +23,10 @@ import { ErrorDialog } from "../errorDialog/ErrorDialog.component"
 import { EditSongInfoDialog } from "../CustomDialog/EditSongInfoDialog.component"
 import { TransposeDialog } from "../CustomDialog/TransposeDialog.component"
 import { InputDialog } from "../CustomDialog/InputDialog.component"
-import { useSongContext } from "../../context/song/SongContextProvider.component"
+import {
+    useSongContext,
+    useSongDispatchContext,
+} from "../../context/song/SongContextProvider.component"
 import { useVoice } from "../../utils/useVoice"
 import { ShareSongDialog } from "../CustomDialog/ShareSongDialog/ShareSongDialog.component"
 import { ShowSongInfoDialog } from "../CustomDialog/ShowSongInfoDialog.component"
@@ -45,6 +48,7 @@ export const MenuButton = (props: {
         barEditMode,
         setBarEditMode,
     } = props
+    const { dispatchSong } = useSongDispatchContext()
     const { song, setSelectedBars, setBarsClipboard } = useSongContext()
     const selectedVoice = useVoice(song?.voices)
     const { songVoiceId: voiceId } = selectedVoice || {}
@@ -189,6 +193,7 @@ export const MenuButton = (props: {
 
         if (!error && result) {
             setSongInfoDialogIsOpen(false)
+            dispatchSong({ type: "UPDATE_META_DATA", meta: result.data })
             updateSongTitle(title)
         }
     }

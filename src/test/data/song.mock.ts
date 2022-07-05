@@ -7,6 +7,7 @@ export const emptySong: ISong = {
     denominator: 4,
     arrangerName: "Test Testesen",
     updatedOn: "2021-06-18T18:02:25.1719881+00:00",
+    speed: 120,
     voices: [
         {
             songVoiceId: 1,
@@ -46,6 +47,7 @@ export const songWithChords: ISong = {
     denominator: 4,
     arrangerName: null,
     updatedOn: "2021-06-20T17:15:43.2854204+00:00",
+    speed: 120,
     voices: [
         {
             songVoiceId: 10,

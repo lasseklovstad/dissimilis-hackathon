@@ -1,4 +1,4 @@
-import { ISong } from "../../models/ISong"
+import { ISong, ISongMetadata, IUpdateSongResponse } from "../../models/ISong"
 import { IBar } from "../../models/IBar"
 import { IVoice } from "../../models/IVoice"
 
@@ -11,8 +11,11 @@ export type SongAction =
     | { type: "ADD_VOICE"; voice: IVoice }
     | { type: "UPDATE_SONG"; song: ISong }
     | { type: "UPDATE_VOICE_NAME"; voice: IVoice }
-export const songReducer = (song: ISong, action: SongAction) => {
+    | { type: "UPDATE_META_DATA"; meta: IUpdateSongResponse }
+export const songReducer = (song: ISong, action: SongAction): ISong => {
     switch (action.type) {
+        case "UPDATE_META_DATA":
+            return { ...song, ...action.meta }
         case "UPDATE_SONG":
             return action.song
         case "ADD_BAR":

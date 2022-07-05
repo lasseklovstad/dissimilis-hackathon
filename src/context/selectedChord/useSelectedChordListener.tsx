@@ -11,6 +11,7 @@ export const useSelectedChordListener = () => {
             setChordMenuOptions((options) => {
                 if (selectedChordAsChord) {
                     return {
+                        ...options,
                         chordLength: selectedChordAsChord.length,
                         chord:
                             selectedChordAsChord.chordName ||

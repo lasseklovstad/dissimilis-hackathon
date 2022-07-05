@@ -40,6 +40,7 @@ export const SongContextProvider = (props: { children: ReactNode }) => {
         updatedOn: "",
         arrangerName: "",
         currentUserHasWriteAccess: false,
+        speed: 120,
     } as ISong)
     const [barsClipboard, setBarsClipboard] = useState<ISelectedBarsPosition>()
 

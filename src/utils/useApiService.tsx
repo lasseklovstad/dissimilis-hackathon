@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios"
+import axios, { AxiosError, AxiosResponse, ResponseType } from "axios"
 import { useNavigate } from "react-router-dom"
 import { DependencyList, useCallback, useEffect, useRef, useState } from "react"
 import { IServerError } from "../models/IServerError"
@@ -42,6 +42,8 @@ export type ApiServiceOptions<T, R> = {
     appendUrl?: string
     params?: Record<string, string>
     headers?: Record<string, string>
+    type?: ResponseType
+    includeApiPrefix?: boolean
 }
 
 export const useApiService = <
@@ -51,7 +53,13 @@ export const useApiService = <
     url: string,
     options?: ApiServiceOptions<ResponseBody, RequestBody>
 ) => {
-    const { body: bodyInit, headers = {}, initialData, params } = options || {}
+    const {
+        body: bodyInit,
+        headers = {},
+        initialData,
+        params,
+        includeApiPrefix = true,
+    } = options || {}
     const navigate = useNavigate()
     const [error, setError] = useState<
         AxiosError<IServerError | undefined> | undefined
@@ -84,7 +92,9 @@ export const useApiService = <
         async (method, body?: unknown, appendUrl?: string) => {
             controller.current = new AbortController()
             // Add params to the url
-            const baseUrl = process.env.REACT_APP_API_URL as string
+            const baseUrl = includeApiPrefix
+                ? (process.env.REACT_APP_API_URL as string)
+                : ""
             let finalUrl = baseUrl + url + (appendUrl || "")
             if (params) {
                 finalUrl += `?${new URLSearchParams(params).toString()}`
@@ -107,6 +117,7 @@ export const useApiService = <
                         result = await axios.get<ResponseBody>(finalUrl, {
                             headers: { ...getHeaders(), ...headers },
                             signal: controller.current.signal,
+                            responseType: options?.type || "json",
                         })
                         break
                     case "patch":

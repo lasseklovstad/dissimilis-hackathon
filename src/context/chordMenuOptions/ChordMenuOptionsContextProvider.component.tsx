@@ -4,9 +4,11 @@ import {
     ReactNode,
     SetStateAction,
     useContext,
+    useEffect,
     useState,
 } from "react"
 import { ChordType, IChordMenuOptions } from "../../models/IChordMenuOptions"
+import { useMetronome } from "../../utils/useMetronome.util"
 
 interface IChordMenuOptionsContext {
     chordMenuOptions: IChordMenuOptions
@@ -30,13 +32,24 @@ export const useChordMenuOptionsContext = () => {
 export const ChordMenuOptionsContextProvider = (props: {
     children?: ReactNode
 }) => {
+    const [isPlaying, togglePlay] = useMetronome()
     const [chordMenuOptions, setChordMenuOptions] = useState<IChordMenuOptions>(
         {
             chordLength: 1,
             chord: "C",
             chordType: ChordType.NOTE,
+            playMetronome: false,
         }
     )
+
+    useEffect(() => {
+        if (chordMenuOptions.playMetronome && !isPlaying) {
+            togglePlay()
+        }
+        if (!chordMenuOptions.playMetronome && isPlaying) {
+            togglePlay()
+        }
+    }, [chordMenuOptions.playMetronome])
 
     return (
         <ChordMenuOptionsContext.Provider

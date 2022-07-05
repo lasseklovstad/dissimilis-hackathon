@@ -13,6 +13,15 @@ export interface ISong {
     updatedOn: string
     arrangerName: string | null
     currentUserHasWriteAccess: boolean
+    speed: number
+}
+
+export interface IUpdateSongResponse {
+    arrangerName: string
+    composer: string
+    songNotes: string
+    speed: number
+    title: string
 }
 
 export interface ISongIndex {

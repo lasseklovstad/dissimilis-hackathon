@@ -1,4 +1,4 @@
-import { Box, ClickAwayListener, Paper } from "@mui/material"
+import { Box, ClickAwayListener, IconButton, Paper } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useAddBar } from "../../utils/useApiServiceSongs"
 import {
@@ -15,6 +15,9 @@ import { ChordNameAutocomplete } from "./ChordNameAutocomplete"
 import { useUpdateSelectedChord } from "../../context/selectedChord/useUpdateSelectedChord"
 import { useChordMenuOptionsContext } from "../../context/chordMenuOptions/ChordMenuOptionsContextProvider.component"
 import { IChordMenuOptions } from "../../models/IChordMenuOptions"
+import { Speed } from "@mui/icons-material"
+import { useMetronome } from "../../utils/useMetronome.util"
+import { colors } from "../../utils/colors"
 
 type BottomBarProps = {
     voiceId: number
@@ -32,6 +35,7 @@ export const BottomBar = (props: BottomBarProps) => {
         selectedChordAsChord,
         selectedChordBar,
     } = useSelectedChordContext()
+
     const { chordMenuOptions, setChordMenuOptions } =
         useChordMenuOptionsContext()
     const { updateSelectedChord } = useUpdateSelectedChord({
@@ -91,6 +95,7 @@ export const BottomBar = (props: BottomBarProps) => {
                     sx={{
                         display: "flex",
                         flexWrap: "wrap",
+                        alignItems: "center",
                         m: 1,
                         flexGrow: 0,
                     }}
@@ -110,6 +115,21 @@ export const BottomBar = (props: BottomBarProps) => {
                         onChordMenuOptionChange={handleChangeMenuOptionChange}
                     />
                     <DeleteSelectedChord />
+                    <IconButton
+                        onClick={() =>
+                            setChordMenuOptions((options) => ({
+                                ...options,
+                                playMetronome: !options.playMetronome,
+                            }))
+                        }
+                        sx={{
+                            color: chordMenuOptions.playMetronome
+                                ? colors.focus
+                                : undefined,
+                        }}
+                    >
+                        <Speed />
+                    </IconButton>
                 </Paper>
 
                 {selectedChord && selectedChordAsChord && selectedChordBar && (
