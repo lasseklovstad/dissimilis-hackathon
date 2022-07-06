@@ -5,6 +5,7 @@ import {
     ISongIndex,
     ISongMetadata,
     ISongShareData,
+    IUpdateSongResponse,
 } from "../models/ISong"
 import { IBar } from "../models/IBar"
 import { IVoice, IVoiceDuplicatePost, IVoicePost } from "../models/IVoice"
@@ -34,6 +35,18 @@ export const useGetSong = (songId: number) => {
     return {
         getSong: { run: getData, ...state },
         songInit: data,
+    }
+}
+
+export const useGetGenerateSong = (songId: number) => {
+    const url = `song/${songId}/Generate`
+    const { getData, state, data } = useApiService<Blob>(url, {
+        type: "blob",
+    })
+
+    return {
+        getSong: { run: getData, ...state },
+        songFile: data,
     }
 }
 
@@ -203,7 +216,7 @@ export const usePostSong = () => {
  */
 export const useUpdateSong = (songId: number) => {
     const url = `song/${songId}`
-    const api = useApiService<ISong>(url)
+    const api = useApiService<IUpdateSongResponse>(url)
     return {
         putSong: { run: api.putData, ...api.state },
     }

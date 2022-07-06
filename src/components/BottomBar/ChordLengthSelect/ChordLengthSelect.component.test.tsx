@@ -13,6 +13,7 @@ describe("ChordLengthSelect", () => {
                     chordLength: 1,
                     chord: "C",
                     chordType: ChordType.NOTE,
+                    playMetronome: false,
                 }}
                 onChordMenuOptionChange={mockOnChange}
                 song={{ numerator: 4, denominator: 4 }}
@@ -36,6 +37,7 @@ describe("ChordLengthSelect", () => {
                     chordLength: 2,
                     chord: "C",
                     chordType: ChordType.NOTE,
+                    playMetronome: false,
                 }}
                 onChordMenuOptionChange={mockOnChange}
                 song={{ numerator: 2, denominator: 4 }}
@@ -56,6 +58,7 @@ describe("ChordLengthSelect", () => {
                     chordLength: 2,
                     chord: "C",
                     chordType: ChordType.NOTE,
+                    playMetronome: false,
                 }}
                 onChordMenuOptionChange={mockOnChange}
                 song={{ numerator: 6, denominator: 8 }}
